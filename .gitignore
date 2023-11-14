@@ -1,0 +1,10 @@
+.vs
+.vscode
+bin
+obj
+*.user
+credentials.json
+GoogleDriveClientSecrets.Hidden.cs
+*.keystore
+*.pfx
+Package.StoreAssociation.xml
