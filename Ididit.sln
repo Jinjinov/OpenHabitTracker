@@ -5,21 +5,27 @@ VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit", "Ididit\Ididit.csproj", "{EB300DAE-CC72-4C0D-B93F-8E7719901F3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.Blazor", "Ididit.Blazor\Ididit.Blazor.csproj", "{3CF485FC-FF40-438D-829C-2BB55A7646F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor", "Ididit.Blazor\Ididit.Blazor.csproj", "{3CF485FC-FF40-438D-829C-2BB55A7646F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.IndexedDB", "Ididit.IndexedDB\Ididit.IndexedDB.csproj", "{C1B727AE-C62B-4A93-BE98-3435BEC1025D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.IndexedDB", "Ididit.IndexedDB\Ididit.IndexedDB.csproj", "{C1B727AE-C62B-4A93-BE98-3435BEC1025D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.LocalStorage", "Ididit.LocalStorage\Ididit.LocalStorage.csproj", "{77791CD1-2EDC-45CE-96FC-1ED391568B51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.LocalStorage", "Ididit.LocalStorage\Ididit.LocalStorage.csproj", "{77791CD1-2EDC-45CE-96FC-1ED391568B51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.EntityFrameworkCore", "Ididit.EntityFrameworkCore\Ididit.EntityFrameworkCore.csproj", "{A166BA91-F664-44CE-A741-EA110FC02258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.EntityFrameworkCore", "Ididit.EntityFrameworkCore\Ididit.EntityFrameworkCore.csproj", "{A166BA91-F664-44CE-A741-EA110FC02258}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.Blazor.Wasm", "Ididit.Blazor.Wasm\Ididit.Blazor.Wasm.csproj", "{40BD5EF3-6A17-49F2-87C3-BA119A51B545}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wasm", "Ididit.Blazor.Wasm\Ididit.Blazor.Wasm.csproj", "{40BD5EF3-6A17-49F2-87C3-BA119A51B545}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.Blazor.Maui", "Ididit.Blazor.Maui\Ididit.Blazor.Maui.csproj", "{D0071377-3D33-41EE-A22F-586BDDE64A5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Maui", "Ididit.Blazor.Maui\Ididit.Blazor.Maui.csproj", "{D0071377-3D33-41EE-A22F-586BDDE64A5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.Blazor.WebView", "Ididit.Blazor.WebView\Ididit.Blazor.WebView.csproj", "{7D620792-F86D-4CFF-8D9C-51668FA08D6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.WebView", "Ididit.Blazor.WebView\Ididit.Blazor.WebView.csproj", "{7D620792-F86D-4CFF-8D9C-51668FA08D6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.Google.Apis", "Ididit.Google.Apis\Ididit.Google.Apis.csproj", "{F631C389-EECB-41E4-95AE-341C3CBF284F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Google.Apis", "Ididit.Google.Apis\Ididit.Google.Apis.csproj", "{F631C389-EECB-41E4-95AE-341C3CBF284F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{36C1DB59-1758-4659-BA71-5289BD204001}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		TODO.md = TODO.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
