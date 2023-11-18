@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TODO.md = TODO.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.Backup", "Ididit.Backup\Ididit.Backup.csproj", "{963111F0-2C40-4468-8AC7-211FC9A79BE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{F631C389-EECB-41E4-95AE-341C3CBF284F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F631C389-EECB-41E4-95AE-341C3CBF284F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F631C389-EECB-41E4-95AE-341C3CBF284F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{963111F0-2C40-4468-8AC7-211FC9A79BE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{963111F0-2C40-4468-8AC7-211FC9A79BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{963111F0-2C40-4468-8AC7-211FC9A79BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{963111F0-2C40-4468-8AC7-211FC9A79BE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
