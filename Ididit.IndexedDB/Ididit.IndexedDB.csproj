@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DnetIndexedDb" Version="2.4.1" />
+  </ItemGroup>
+
 </Project>
