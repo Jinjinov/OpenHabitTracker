@@ -31,4 +31,9 @@ builder.Services.AddIndexedDbDatabase<IndexedDb>(options =>
 
 builder.Services.AddScoped<IDataAccess, DataAccess>();
 
-await builder.Build().RunAsync();
+WebAssemblyHost host = builder.Build();
+
+IDataAccess dataAccess = host.Services.GetRequiredService<IDataAccess>();
+await dataAccess.Initialize();
+
+await host.RunAsync();

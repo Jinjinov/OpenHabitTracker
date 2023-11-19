@@ -3,16 +3,11 @@ using Ididit.Data.Entities;
 
 namespace Ididit.IndexedDB;
 
-public class DataAccess : IDataAccess
+public class DataAccess(IndexedDb indexedDb) : IDataAccess
 {
-    private int _dbModelId = -1;
+    private readonly IndexedDb _indexedDb = indexedDb;
 
-    private readonly IndexedDb _indexedDb;
-
-    public DataAccess(IndexedDb indexedDb)
-    {
-        _indexedDb = indexedDb;
-    }
+    private int? _dbModelId;
 
     private async ValueTask<List<TEntity>> GetAll<TEntity>()
     {
@@ -51,10 +46,21 @@ public class DataAccess : IDataAccess
 
     public async Task Initialize()
     {
-        if (_dbModelId != -1)
-            throw new InvalidOperationException("IndexedDb is already open");
+        _dbModelId ??= await _indexedDb.OpenIndexedDb();
+    }
 
-        _dbModelId = await _indexedDb.OpenIndexedDb();
+    public async Task AddHabit(HabitEntity habit)
+    {
+        await _indexedDb.AddItems(new List<HabitEntity> { habit });
+    }
+    public async Task AddNote(NoteEntity note)
+    {
+    }
+    public async Task AddTask(TaskEntity task)
+    {
+    }
+    public async Task AddTime(TimeEntity time)
+    {
     }
 
     public async Task<IReadOnlyList<HabitEntity>> GetHabits()
@@ -75,5 +81,31 @@ public class DataAccess : IDataAccess
     public async Task<IReadOnlyList<TimeEntity>> GetTimes(long? habitId = null)
     {
         return await _indexedDb.GetAll<TimeEntity>();
+    }
+
+    public async Task UpdateHabit(HabitEntity habit)
+    {
+    }
+    public async Task UpdateNote(NoteEntity note)
+    {
+    }
+    public async Task UpdateTask(TaskEntity task)
+    {
+    }
+    public async Task UpdateTime(TimeEntity time)
+    {
+    }
+
+    public async Task RemoveHabit(HabitEntity habit)
+    {
+    }
+    public async Task RemoveNote(NoteEntity note)
+    {
+    }
+    public async Task RemoveTask(TaskEntity task)
+    {
+    }
+    public async Task RemoveTime(TimeEntity time)
+    {
     }
 }

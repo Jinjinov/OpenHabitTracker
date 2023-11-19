@@ -6,12 +6,8 @@ using Microsoft.JSInterop;
 
 namespace Ididit.IndexedDB;
 
-public class IndexedDb : IndexedDbInterop
+public class IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options) : IndexedDbInterop(jsRuntime, options)
 {
-    public IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options) : base(jsRuntime, options)
-    {
-    }
-
     public static IndexedDbDatabaseModel GetDatabaseModel()
     {
         IndexedDbDatabaseModel indexedDbDatabaseModel = new()
@@ -19,13 +15,13 @@ public class IndexedDb : IndexedDbInterop
             Name = "Ididit",
             Version = 1,
             DbModelId = 0,
-            //UseKeyGenerator = true - Unable to use AutoIncrement = false and AutoIncrement = true in the same IndexedDbDatabaseModel
+            UseKeyGenerator = true // Unable to use AutoIncrement = false and AutoIncrement = true in the same IndexedDbDatabaseModel
         };
 
-        indexedDbDatabaseModel.AddStore<HabitEntity>();
-        indexedDbDatabaseModel.AddStore<NoteEntity>();
-        indexedDbDatabaseModel.AddStore<TaskEntity>();
-        indexedDbDatabaseModel.AddStore<TimeEntity>();
+        indexedDbDatabaseModel.AddStore(nameof(HabitEntity))
+            .WithAutoIncrementingKey(nameof(HabitEntity.Id))
+            .AddUniqueIndex(nameof(HabitEntity.Id))
+            .AddIndex(nameof(HabitEntity.Title));
 
         return indexedDbDatabaseModel;
     }
