@@ -12,35 +12,30 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     private async ValueTask<List<TEntity>> GetAll<TEntity>()
     {
         List<TEntity> result = await _indexedDb.GetAll<TEntity>();
-
         return result;
     }
 
     private async ValueTask<string> UpdateItems<TEntity>(List<TEntity> items)
     {
         string result = await _indexedDb.UpdateItems(items);
-
         return result; // 'DB_DATA_UPDATED'
     }
 
     private async ValueTask<string> AddItems<TEntity>(List<TEntity> items)
     {
         string result = await _indexedDb.AddItems(items);
-
         return result; // 'DB_DATA_ADDED'
     }
 
     private async ValueTask<string> DeleteByKey<TKey, TEntity>(TKey key)
     {
         string result = await _indexedDb.DeleteByKey<TKey, TEntity>(key);
-
         return result; // 'DB_DELETEOBJECT_SUCCESS'
     }
 
     private async ValueTask<string> DeleteAll<TEntity>()
     {
         string result = await _indexedDb.DeleteAll<TEntity>();
-
         return result; // 'DB_DELETEOBJECT_SUCCESS'
     }
 

@@ -23,6 +23,20 @@ public class IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options
             .AddUniqueIndex(nameof(HabitEntity.Id))
             .AddIndex(nameof(HabitEntity.Title));
 
+        indexedDbDatabaseModel.AddStore(nameof(NoteEntity))
+            .WithAutoIncrementingKey(nameof(NoteEntity.Id))
+            .AddUniqueIndex(nameof(NoteEntity.Id))
+            .AddIndex(nameof(NoteEntity.Title));
+
+        indexedDbDatabaseModel.AddStore(nameof(TaskEntity))
+            .WithAutoIncrementingKey(nameof(TaskEntity.Id))
+            .AddUniqueIndex(nameof(TaskEntity.Id))
+            .AddIndex(nameof(TaskEntity.Title));
+
+        indexedDbDatabaseModel.AddStore(nameof(TimeEntity))
+            .AddUniqueIndex(nameof(TimeEntity.Time))
+            .AddIndex(nameof(TimeEntity.HabitId));
+
         return indexedDbDatabaseModel;
     }
 }
