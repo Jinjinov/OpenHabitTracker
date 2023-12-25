@@ -22,6 +22,7 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TimeEntity>().HasKey(x => x.Time);
+        modelBuilder.Entity<TimeEntity>().HasIndex(x => x.HabitId);
 
         base.OnModelCreating(modelBuilder);
     }

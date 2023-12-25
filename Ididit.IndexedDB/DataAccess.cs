@@ -65,45 +65,53 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     {
         return await _indexedDb.GetAll<HabitEntity>();
     }
-
     public async Task<IReadOnlyList<NoteEntity>> GetNotes()
     {
         return await _indexedDb.GetAll<NoteEntity>();
     }
-
     public async Task<IReadOnlyList<TaskEntity>> GetTasks()
     {
         return await _indexedDb.GetAll<TaskEntity>();
     }
-
     public async Task<IReadOnlyList<TimeEntity>> GetTimes(long? habitId = null)
     {
-        return await _indexedDb.GetAll<TimeEntity>();
+        if (habitId is null)
+            return await _indexedDb.GetAll<TimeEntity>();
+        else
+            return await _indexedDb.GetByIndex<long?, TimeEntity>(lowerBound: habitId, upperBound: null, dbIndex: nameof(TimeEntity.HabitId), isRange: false);
     }
 
     public async Task UpdateHabit(HabitEntity habit)
     {
+        await _indexedDb.UpdateItems(new List<HabitEntity> { habit });
     }
     public async Task UpdateNote(NoteEntity note)
     {
+        await _indexedDb.UpdateItems(new List<NoteEntity> { note });
     }
     public async Task UpdateTask(TaskEntity task)
     {
+        await _indexedDb.UpdateItems(new List<TaskEntity> { task });
     }
     public async Task UpdateTime(TimeEntity time)
     {
+        await _indexedDb.UpdateItems(new List<TimeEntity> { time });
     }
 
     public async Task RemoveHabit(HabitEntity habit)
     {
+        await _indexedDb.DeleteByKey<long, HabitEntity>(habit.Id);
     }
     public async Task RemoveNote(NoteEntity note)
     {
+        await _indexedDb.DeleteByKey<long, NoteEntity>(note.Id);
     }
     public async Task RemoveTask(TaskEntity task)
     {
+        await _indexedDb.DeleteByKey<long, TaskEntity>(task.Id);
     }
     public async Task RemoveTime(TimeEntity time)
     {
+        await _indexedDb.DeleteByKey<DateTime, TimeEntity>(time.Time);
     }
 }

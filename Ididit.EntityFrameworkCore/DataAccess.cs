@@ -54,32 +54,51 @@ public class DataAccess : IDataAccess
     }
     public async Task<IReadOnlyList<TimeEntity>> GetTimes(long? habitId = null)
     {
-        return await _dataContext.Times.ToListAsync();
+        if (habitId is null)
+            return await _dataContext.Times.ToListAsync();
+        else
+            return await _dataContext.Times.Where(t => t.HabitId == habitId).ToListAsync();
     }
 
     public async Task RemoveHabit(HabitEntity habit)
     {
+        _dataContext.Remove(habit);
+        await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveNote(NoteEntity note)
     {
+        _dataContext.Remove(note);
+        await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveTask(TaskEntity task)
     {
+        _dataContext.Remove(task);
+        await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveTime(TimeEntity time)
     {
+        _dataContext.Remove(time);
+        await _dataContext.SaveChangesAsync();
     }
 
     public async Task UpdateHabit(HabitEntity habit)
     {
+        _dataContext.Update(habit);
+        await _dataContext.SaveChangesAsync();
     }
     public async Task UpdateNote(NoteEntity note)
     {
+        _dataContext.Update(note);
+        await _dataContext.SaveChangesAsync();
     }
     public async Task UpdateTask(TaskEntity task)
     {
+        _dataContext.Update(task);
+        await _dataContext.SaveChangesAsync();
     }
     public async Task UpdateTime(TimeEntity time)
     {
+        _dataContext.Update(time);
+        await _dataContext.SaveChangesAsync();
     }
 }
