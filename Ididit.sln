@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Chromely", "I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wasm.Chromely", "Ididit.Blazor.Wasm.Chromely\Ididit.Blazor.Wasm.Chromely.csproj", "{3D26A83E-0986-470C-8AC6-33793570B3D1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Electron", "Ididit.Blazor.Electron\Ididit.Blazor.Electron.csproj", "{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{3D26A83E-0986-470C-8AC6-33793570B3D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D26A83E-0986-470C-8AC6-33793570B3D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D26A83E-0986-470C-8AC6-33793570B3D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
