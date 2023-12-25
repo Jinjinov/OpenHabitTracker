@@ -35,6 +35,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wpf", "Ididit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Photino", "Ididit.Blazor.Photino\Ididit.Blazor.Photino.csproj", "{48B5D138-3C1B-4325-B821-F915F993D51F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Chromely", "Ididit.Blazor.Chromely\Ididit.Blazor.Chromely.csproj", "{1BE64410-6A93-462C-AFCE-1805E6E3504E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wasm.Chromely", "Ididit.Blazor.Wasm.Chromely\Ididit.Blazor.Wasm.Chromely.csproj", "{3D26A83E-0986-470C-8AC6-33793570B3D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +99,14 @@ Global
 		{48B5D138-3C1B-4325-B821-F915F993D51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48B5D138-3C1B-4325-B821-F915F993D51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48B5D138-3C1B-4325-B821-F915F993D51F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BE64410-6A93-462C-AFCE-1805E6E3504E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BE64410-6A93-462C-AFCE-1805E6E3504E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BE64410-6A93-462C-AFCE-1805E6E3504E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BE64410-6A93-462C-AFCE-1805E6E3504E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D26A83E-0986-470C-8AC6-33793570B3D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D26A83E-0986-470C-8AC6-33793570B3D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D26A83E-0986-470C-8AC6-33793570B3D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D26A83E-0986-470C-8AC6-33793570B3D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
