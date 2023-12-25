@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.WinForms", "I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wpf", "Ididit.Blazor.Wpf\Ididit.Blazor.Wpf.csproj", "{7C93A366-D320-414F-BB50-72E35FFA29F0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Photino", "Ididit.Blazor.Photino\Ididit.Blazor.Photino.csproj", "{48B5D138-3C1B-4325-B821-F915F993D51F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,10 @@ Global
 		{7C93A366-D320-414F-BB50-72E35FFA29F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C93A366-D320-414F-BB50-72E35FFA29F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C93A366-D320-414F-BB50-72E35FFA29F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48B5D138-3C1B-4325-B821-F915F993D51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48B5D138-3C1B-4325-B821-F915F993D51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48B5D138-3C1B-4325-B821-F915F993D51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48B5D138-3C1B-4325-B821-F915F993D51F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

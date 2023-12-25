@@ -1,4 +1,3 @@
-using Ididit.Blazor;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +5,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Ididit.WebView.WinForms;
+namespace Ididit.Blazor.WinForms;
 
 public partial class MainForm : Form
 {

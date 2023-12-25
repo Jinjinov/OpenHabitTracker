@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 
-namespace Ididit.WebView.Wpf;
+namespace Ididit.Blazor.Wpf;
 
 /// <summary>
 /// Interaction logic for App.xaml

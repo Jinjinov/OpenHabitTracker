@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Ididit.WebView.WinForms;
+namespace Ididit.Blazor.WinForms;
 
 static class Program
 {

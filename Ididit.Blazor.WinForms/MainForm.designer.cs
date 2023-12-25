@@ -1,4 +1,4 @@
-namespace Ididit.WebView.WinForms;
+namespace Ididit.Blazor.WinForms;
 
 partial class MainForm
 {
