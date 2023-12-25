@@ -20,7 +20,7 @@ public class ExampleJsInterop : IAsyncDisposable
 
     public async ValueTask<string> Prompt(string message)
     {
-        var module = await moduleTask.Value;
+        IJSObjectReference module = await moduleTask.Value;
         return await module.InvokeAsync<string>("showPrompt", message);
     }
 
@@ -28,7 +28,7 @@ public class ExampleJsInterop : IAsyncDisposable
     {
         if (moduleTask.IsValueCreated)
         {
-            var module = await moduleTask.Value;
+            IJSObjectReference module = await moduleTask.Value;
             await module.DisposeAsync();
         }
     }

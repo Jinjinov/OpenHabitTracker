@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-var builder = WebAssemblyHostBuilder.CreateDefault(args);
+WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
@@ -24,10 +24,7 @@ builder.Services.AddScoped<HabitService>();
 builder.Services.AddScoped<NoteService>();
 builder.Services.AddScoped<TaskService>();
 
-builder.Services.AddIndexedDbDatabase<IndexedDb>(options =>
-{
-    options.UseDatabase(IndexedDb.GetDatabaseModel());
-});
+builder.Services.AddIndexedDbDatabase<IndexedDb>(options => options.UseDatabase(IndexedDb.GetDatabaseModel()));
 
 builder.Services.AddScoped<IDataAccess, DataAccess>();
 

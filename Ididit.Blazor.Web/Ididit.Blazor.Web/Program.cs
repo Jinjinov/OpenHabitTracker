@@ -2,8 +2,10 @@ using Ididit.Blazor.Web.Components;
 using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -16,7 +18,9 @@ builder.Services.AddScoped<TaskService>();
 
 builder.Services.AddScoped<IDataAccess, DataAccess>();
 
-var app = builder.Build();
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=Ididit.db"));
+
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,92 +1,85 @@
 ﻿using Ididit.Data;
 using Ididit.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ididit.EntityFrameworkCore;
 
 public class DataAccess : IDataAccess
 {
-    public Task AddHabit(HabitEntity habit)
+    private readonly ApplicationDbContext _dataContext;
+
+    public DataAccess(ApplicationDbContext dataContext)
     {
-        throw new NotImplementedException();
+        _dataContext = dataContext;
+        _dataContext.Database.EnsureCreated();
     }
 
-    public Task AddNote(NoteEntity note)
+    public async Task Initialize()
     {
-        throw new NotImplementedException();
+        await _dataContext.Database.EnsureCreatedAsync();
     }
 
-    public Task AddTask(TaskEntity task)
+    public async Task AddHabit(HabitEntity habit)
     {
-        throw new NotImplementedException();
+        _dataContext.Add(habit);
+        await _dataContext.SaveChangesAsync();
+    }
+    public async Task AddNote(NoteEntity note)
+    {
+        _dataContext.Add(note);
+        await _dataContext.SaveChangesAsync();
+    }
+    public async Task AddTask(TaskEntity task)
+    {
+        _dataContext.Add(task);
+        await _dataContext.SaveChangesAsync();
+    }
+    public async Task AddTime(TimeEntity time)
+    {
+        _dataContext.Add(time);
+        await _dataContext.SaveChangesAsync();
     }
 
-    public Task AddTime(TimeEntity time)
+    public async Task<IReadOnlyList<HabitEntity>> GetHabits()
     {
-        throw new NotImplementedException();
+        return await _dataContext.Habits.ToListAsync();
+    }
+    public async Task<IReadOnlyList<NoteEntity>> GetNotes()
+    {
+        return await _dataContext.Notes.ToListAsync();
+    }
+    public async Task<IReadOnlyList<TaskEntity>> GetTasks()
+    {
+        return await _dataContext.Tasks.ToListAsync();
+    }
+    public async Task<IReadOnlyList<TimeEntity>> GetTimes(long? habitId = null)
+    {
+        return await _dataContext.Times.ToListAsync();
     }
 
-    public Task<IReadOnlyList<HabitEntity>> GetHabits()
+    public async Task RemoveHabit(HabitEntity habit)
     {
-        throw new NotImplementedException();
+    }
+    public async Task RemoveNote(NoteEntity note)
+    {
+    }
+    public async Task RemoveTask(TaskEntity task)
+    {
+    }
+    public async Task RemoveTime(TimeEntity time)
+    {
     }
 
-    public Task<IReadOnlyList<NoteEntity>> GetNotes()
+    public async Task UpdateHabit(HabitEntity habit)
     {
-        throw new NotImplementedException();
     }
-
-    public Task<IReadOnlyList<TaskEntity>> GetTasks()
+    public async Task UpdateNote(NoteEntity note)
     {
-        throw new NotImplementedException();
     }
-
-    public Task<IReadOnlyList<TimeEntity>> GetTimes(long? habitId = null)
+    public async Task UpdateTask(TaskEntity task)
     {
-        throw new NotImplementedException();
     }
-
-    public Task Initialize()
+    public async Task UpdateTime(TimeEntity time)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task RemoveHabit(HabitEntity habit)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task RemoveNote(NoteEntity note)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task RemoveTask(TaskEntity task)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task RemoveTime(TimeEntity time)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateHabit(HabitEntity habit)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateNote(NoteEntity note)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateTask(TaskEntity task)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateTime(TimeEntity time)
-    {
-        throw new NotImplementedException();
     }
 }

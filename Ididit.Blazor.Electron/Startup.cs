@@ -5,6 +5,7 @@ using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,6 +34,8 @@ public class Startup
         services.AddScoped<TaskService>();
 
         services.AddScoped<IDataAccess, DataAccess>();
+
+        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=Ididit.db"));
 
         //services.AddServices();
         //services.AddWebViewServices();

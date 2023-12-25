@@ -1,6 +1,7 @@
 ﻿using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ididit.Blazor.Chromely;
 
@@ -26,6 +27,8 @@ public class Startup
         services.AddScoped<TaskService>();
 
         services.AddScoped<IDataAccess, DataAccess>();
+
+        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=Ididit.db"));
 
         //services.AddServices();
         //services.AddWebViewServices();

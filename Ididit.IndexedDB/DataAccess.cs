@@ -55,12 +55,15 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     }
     public async Task AddNote(NoteEntity note)
     {
+        await _indexedDb.AddItems(new List<NoteEntity> { note });
     }
     public async Task AddTask(TaskEntity task)
     {
+        await _indexedDb.AddItems(new List<TaskEntity> { task });
     }
     public async Task AddTime(TimeEntity time)
     {
+        await _indexedDb.AddItems(new List<TimeEntity> { time });
     }
 
     public async Task<IReadOnlyList<HabitEntity>> GetHabits()

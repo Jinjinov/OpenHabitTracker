@@ -1,6 +1,7 @@
 ﻿using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Ididit.Blazor.Maui;
@@ -9,7 +10,7 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
-        var builder = MauiApp.CreateBuilder();
+        MauiAppBuilder builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
@@ -29,6 +30,8 @@ public static class MauiProgram
         builder.Services.AddScoped<TaskService>();
 
         builder.Services.AddScoped<IDataAccess, DataAccess>();
+
+        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=Ididit.db"));
 
         return builder.Build();
     }

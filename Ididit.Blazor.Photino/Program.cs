@@ -2,6 +2,7 @@
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
 using System;
@@ -22,6 +23,8 @@ class Program
         builder.Services.AddScoped<TaskService>();
 
         builder.Services.AddScoped<IDataAccess, DataAccess>();
+
+        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=Ididit.db"));
 
         //builder.Services.AddServices();
         //builder.Services.AddWebViewServices();
