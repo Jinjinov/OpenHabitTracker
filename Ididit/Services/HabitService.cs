@@ -17,7 +17,7 @@ public class HabitService(IDataAccess dataAccess)
         if (Habits is null)
         {
             IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
-            Habits = habits.Select(h => new HabitModel { Title = "Habit" }).ToList();
+            Habits = habits.Select(h => new HabitModel { Title = h.Title }).ToList();
         }
     }
 

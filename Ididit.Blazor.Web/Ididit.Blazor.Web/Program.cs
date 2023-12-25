@@ -3,7 +3,6 @@ using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

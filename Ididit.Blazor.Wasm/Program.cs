@@ -5,7 +5,6 @@ using Ididit.IndexedDB;
 using Ididit.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 
 WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
