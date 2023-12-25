@@ -66,6 +66,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Ididit.Blazor.WebView\Ididit.Blazor.WebView.csproj" />
+      <ProjectReference Include="..\Ididit.Blazor\Ididit.Blazor.csproj" />
     </ItemGroup>
 
 </Project>
