@@ -8,3 +8,4 @@ GoogleDriveClientSecrets.Hidden.cs
 *.keystore
 *.pfx
 Package.StoreAssociation.xml
+Ididit.db*
