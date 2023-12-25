@@ -1,4 +1,8 @@
-﻿namespace Ididit.Blazor.Chromely;
+﻿using Ididit.Data;
+using Ididit.EntityFrameworkCore;
+using Ididit.Services;
+
+namespace Ididit.Blazor.Chromely;
 
 public class Startup
 {
@@ -16,6 +20,12 @@ public class Startup
         services.AddRazorPages();
         services.AddServerSideBlazor();
         services.AddHttpContextAccessor();
+
+        services.AddScoped<HabitService>();
+        services.AddScoped<NoteService>();
+        services.AddScoped<TaskService>();
+
+        services.AddScoped<IDataAccess, DataAccess>();
 
         //services.AddServices();
         //services.AddWebViewServices();

@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Ididit.Blazor.WebView\Ididit.Blazor.WebView.csproj" />
     <ProjectReference Include="..\Ididit.Blazor\Ididit.Blazor.csproj" />
+    <ProjectReference Include="..\Ididit.EntityFrameworkCore\Ididit.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Ididit\Ididit.csproj" />
   </ItemGroup>
 

@@ -1,5 +1,8 @@
 using ElectronNET.API;
 using ElectronNET.API.Entities;
+using Ididit.Data;
+using Ididit.EntityFrameworkCore;
+using Ididit.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +27,12 @@ public class Startup
         services.AddRazorPages();
         services.AddServerSideBlazor();
         services.AddHttpContextAccessor();
+
+        services.AddScoped<HabitService>();
+        services.AddScoped<NoteService>();
+        services.AddScoped<TaskService>();
+
+        services.AddScoped<IDataAccess, DataAccess>();
 
         //services.AddServices();
         //services.AddWebViewServices();

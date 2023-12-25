@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Components.Web;
+﻿using Ididit.Data;
+using Ididit.EntityFrameworkCore;
+using Ididit.Services;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
 using System;
@@ -10,18 +13,24 @@ class Program
     [STAThread]
     static void Main(string[] args)
     {
-        PhotinoBlazorAppBuilder appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
+        PhotinoBlazorAppBuilder builder = PhotinoBlazorAppBuilder.CreateDefault(args);
 
-        appBuilder.Services.AddLogging();
+        builder.Services.AddLogging();
 
-        //appBuilder.Services.AddServices();
-        //appBuilder.Services.AddWebViewServices();
+        builder.Services.AddScoped<HabitService>();
+        builder.Services.AddScoped<NoteService>();
+        builder.Services.AddScoped<TaskService>();
+
+        builder.Services.AddScoped<IDataAccess, DataAccess>();
+
+        //builder.Services.AddServices();
+        //builder.Services.AddWebViewServices();
 
         // register root component and selector
-        appBuilder.RootComponents.Add<Routes>("app");
-        appBuilder.RootComponents.Add<HeadOutlet>("head::after");
+        builder.RootComponents.Add<Routes>("app");
+        builder.RootComponents.Add<HeadOutlet>("head::after");
 
-        PhotinoBlazorApp app = appBuilder.Build();
+        PhotinoBlazorApp app = builder.Build();
 
         // customize window
         //if (!OperatingSystem.IsLinux()) // TODO: find out why this works in Photino sample

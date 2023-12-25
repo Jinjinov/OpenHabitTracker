@@ -1,6 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Ididit.Data;
+using Ididit.EntityFrameworkCore;
+using Ididit.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Ididit.Blazor.Maui;
+
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
@@ -19,6 +23,12 @@ public static class MauiProgram
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 #endif
+
+        builder.Services.AddScoped<HabitService>();
+        builder.Services.AddScoped<NoteService>();
+        builder.Services.AddScoped<TaskService>();
+
+        builder.Services.AddScoped<IDataAccess, DataAccess>();
 
         return builder.Build();
     }
