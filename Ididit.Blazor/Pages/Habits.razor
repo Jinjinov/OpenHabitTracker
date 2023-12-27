@@ -18,7 +18,7 @@ else
 {
     <p>Habits: @HabitService.Habits.Count</p>
 
-    foreach (HabitModel habit in HabitService.Habits)
+    foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
     {
         if (habit.Id == Id)
         {

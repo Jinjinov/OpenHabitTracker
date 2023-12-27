@@ -66,6 +66,10 @@ public class TaskService(IDataAccess dataAccess)
 
         Tasks.RemoveAll(t => t.Id == id);
 
-        await _dataAccess.RemoveTask(id);
+        if (await _dataAccess.GetTask(id) is TaskEntity task)
+        {
+            task.IsDeleted = true;
+            await _dataAccess.UpdateTask(task);
+        }
     }
 }

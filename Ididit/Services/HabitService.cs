@@ -68,6 +68,10 @@ public class HabitService(IDataAccess dataAccess)
 
         Habits.RemoveAll(h => h.Id == id);
 
-        await _dataAccess.RemoveHabit(id);
+        if (await _dataAccess.GetHabit(id) is HabitEntity habit)
+        {
+            habit.IsDeleted = true;
+            await _dataAccess.UpdateHabit(habit);
+        }
     }
 }

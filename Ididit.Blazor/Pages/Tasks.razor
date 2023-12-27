@@ -18,7 +18,7 @@ else
 {
     <p>Tasks: @TaskService.Tasks.Count</p>
 
-    foreach (TaskModel task in TaskService.Tasks)
+    foreach (TaskModel task in TaskService.Tasks.Where(t => !t.IsDeleted))
     {
         if (task.Id == Id)
         {

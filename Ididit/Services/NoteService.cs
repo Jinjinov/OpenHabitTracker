@@ -64,6 +64,10 @@ public class NoteService(IDataAccess dataAccess)
 
         Notes.RemoveAll(n => n.Id == id);
 
-        await _dataAccess.RemoveNote(id);
+        if (await _dataAccess.GetNote(id) is NoteEntity note)
+        {
+            note.IsDeleted = true;
+            await _dataAccess.UpdateNote(note);
+        }
     }
 }

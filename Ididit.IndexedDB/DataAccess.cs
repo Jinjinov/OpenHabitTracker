@@ -100,14 +100,17 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
 
     public async Task UpdateHabit(HabitEntity habit)
     {
+        habit.UpdatedAt = DateTime.UtcNow;
         await _indexedDb.UpdateItems(new List<HabitEntity> { habit });
     }
     public async Task UpdateNote(NoteEntity note)
     {
+        note.UpdatedAt = DateTime.UtcNow;
         await _indexedDb.UpdateItems(new List<NoteEntity> { note });
     }
     public async Task UpdateTask(TaskEntity task)
     {
+        task.UpdatedAt = DateTime.UtcNow;
         await _indexedDb.UpdateItems(new List<TaskEntity> { task });
     }
     public async Task UpdateTime(TimeEntity time)
