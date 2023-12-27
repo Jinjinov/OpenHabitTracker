@@ -34,5 +34,7 @@ public class HabitService(IDataAccess dataAccess)
         Habits.Add(EditHabit);
 
         await _dataAccess.AddHabit(new HabitEntity { Title = EditHabit.Title });
+
+        EditHabit = new();
     }
 }

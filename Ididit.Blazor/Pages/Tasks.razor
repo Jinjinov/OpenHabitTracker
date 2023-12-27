@@ -1,4 +1,5 @@
 ﻿@page "/tasks"
+@using Ididit.Data.Models
 @using Ididit.Services
 @inject TaskService TaskService
 
@@ -6,8 +7,30 @@
 
 <h1>Tasks</h1>
 
-<h3>Tasks</h3>
+@if (TaskService.Tasks is null || TaskService.EditTask is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>Tasks: @TaskService.Tasks.Count</p>
+
+    foreach (TaskModel task in TaskService.Tasks)
+    {
+        <p>@task.Title</p>
+    }
+
+    <div>
+        <label for="titleInput">Title:</label>
+        <input id="titleInput" type="text" @bind="TaskService.EditTask.Title" />
+
+        <button @onclick="TaskService.AddTask">Add Task</button>
+    </div>
+}
 
 @code {
-
+    protected override async Task OnInitializedAsync()
+    {
+        await TaskService.Initialize();
+    }
 }
