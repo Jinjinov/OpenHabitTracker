@@ -17,7 +17,7 @@ goals: (high priority)
 maintenance: (normal priority)
 
 Make a concrete plan so that the habit is not just waiting to be done:
-- for habits: split the day in 24 hours, like in callendar
+- for habits: split the day in 24 hours, like in calendar
 - split the week in 7 days, like in Habits app
 
 tabs - routes
@@ -101,6 +101,8 @@ what is wrong with ididit:
 - no consequences (interval doesn't change)
 - show only highest priority overdue tasks 
 - refresh is too slow
+
+showing DesiredInterval is a bad idea - no consequences (interval doesn't change) - show AverageInterval
 
 task is either ASAP or habit
 use either checkbox [] or one time action to permanently create a habit
