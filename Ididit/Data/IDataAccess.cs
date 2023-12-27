@@ -16,6 +16,11 @@ public interface IDataAccess
     Task<IReadOnlyList<TaskEntity>> GetTasks();
     Task<IReadOnlyList<TimeEntity>> GetTimes(long? habitId = null);
 
+    Task<HabitEntity?> GetHabit(long id);
+    Task<NoteEntity?> GetNote(long id);
+    Task<TaskEntity?> GetTask(long id);
+    Task<TimeEntity?> GetTime(DateTime time);
+
     Task UpdateHabit(HabitEntity habit);
     Task UpdateNote(NoteEntity note);
     Task UpdateTask(TaskEntity task);
@@ -25,4 +30,9 @@ public interface IDataAccess
     Task RemoveNote(long id);
     Task RemoveTask(long id);
     Task RemoveTime(DateTime time);
+
+    Task RemoveHabits();
+    Task RemoveNotes();
+    Task RemoveTasks();
+    Task RemoveTimes();
 }

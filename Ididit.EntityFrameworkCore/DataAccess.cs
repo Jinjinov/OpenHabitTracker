@@ -60,6 +60,23 @@ public class DataAccess : IDataAccess
             return await _dataContext.Times.Where(t => t.HabitId == habitId).ToListAsync();
     }
 
+    public async Task<HabitEntity?> GetHabit(long id)
+    {
+        return await _dataContext.Habits.FindAsync(id);
+    }
+    public async Task<NoteEntity?> GetNote(long id)
+    {
+        return await _dataContext.Notes.FindAsync(id);
+    }
+    public async Task<TaskEntity?> GetTask(long id)
+    {
+        return await _dataContext.Tasks.FindAsync(id);
+    }
+    public async Task<TimeEntity?> GetTime(DateTime time)
+    {
+        return await _dataContext.Times.FindAsync(time);
+    }
+
     public async Task UpdateHabit(HabitEntity habit)
     {
         _dataContext.Update(habit);
@@ -100,5 +117,22 @@ public class DataAccess : IDataAccess
     {
         _dataContext.Remove(new TimeEntity { Time = time });
         await _dataContext.SaveChangesAsync();
+    }
+
+    public async Task RemoveHabits()
+    {
+        await _dataContext.Habits.ExecuteDeleteAsync();
+    }
+    public async Task RemoveNotes()
+    {
+        await _dataContext.Notes.ExecuteDeleteAsync();
+    }
+    public async Task RemoveTasks()
+    {
+        await _dataContext.Tasks.ExecuteDeleteAsync();
+    }
+    public async Task RemoveTimes()
+    {
+        await _dataContext.Times.ExecuteDeleteAsync();
     }
 }
