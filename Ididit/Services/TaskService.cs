@@ -17,7 +17,18 @@ public class TaskService(IDataAccess dataAccess)
         if (Tasks is null)
         {
             IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
-            Tasks = tasks.Select(h => new TaskModel { Title = h.Title }).ToList();
+            Tasks = tasks.Select(t => new TaskModel
+            {
+                Id = t.Id,
+                IsDeleted = t.IsDeleted,
+                Title = t.Title,
+                CreatedAt = t.CreatedAt,
+                UpdatedAt = t.UpdatedAt,
+                Priority = t.Priority,
+
+                IsDone = t.IsDone,
+                Date = t.Date
+            }).ToList();
         }
 
         if (EditTask is null)
@@ -33,7 +44,18 @@ public class TaskService(IDataAccess dataAccess)
 
         Tasks.Add(EditTask);
 
-        await _dataAccess.AddTask(new TaskEntity { Title = EditTask.Title });
+        await _dataAccess.AddTask(new TaskEntity
+        {
+            Id = EditTask.Id,
+            IsDeleted = EditTask.IsDeleted,
+            Title = EditTask.Title,
+            CreatedAt = EditTask.CreatedAt,
+            UpdatedAt = EditTask.UpdatedAt,
+            Priority = EditTask.Priority,
+
+            IsDone = EditTask.IsDone,
+            Date = EditTask.Date
+        });
 
         EditTask = new();
     }

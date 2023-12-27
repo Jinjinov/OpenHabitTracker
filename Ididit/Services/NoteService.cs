@@ -17,7 +17,17 @@ public class NoteService(IDataAccess dataAccess)
         if (Notes is null)
         {
             IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
-            Notes = notes.Select(h => new NoteModel { Title = h.Title }).ToList();
+            Notes = notes.Select(n => new NoteModel
+            {
+                Id = n.Id,
+                IsDeleted = n.IsDeleted,
+                Title = n.Title,
+                CreatedAt = n.CreatedAt,
+                UpdatedAt = n.UpdatedAt,
+                Priority = n.Priority,
+
+                Content = n.Content
+            }).ToList();
         }
 
         if (EditNote is null)
@@ -33,7 +43,17 @@ public class NoteService(IDataAccess dataAccess)
 
         Notes.Add(EditNote);
 
-        await _dataAccess.AddNote(new NoteEntity { Title = EditNote.Title });
+        await _dataAccess.AddNote(new NoteEntity
+        {
+            Id = EditNote.Id,
+            IsDeleted = EditNote.IsDeleted,
+            Title = EditNote.Title,
+            CreatedAt = EditNote.CreatedAt,
+            UpdatedAt = EditNote.UpdatedAt,
+            Priority = EditNote.Priority,
+
+            Content = EditNote.Content
+        });
 
         EditNote = new();
     }

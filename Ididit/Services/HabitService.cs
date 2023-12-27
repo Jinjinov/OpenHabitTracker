@@ -17,7 +17,19 @@ public class HabitService(IDataAccess dataAccess)
         if (Habits is null)
         {
             IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
-            Habits = habits.Select(h => new HabitModel { Title = h.Title }).ToList();
+            Habits = habits.Select(h => new HabitModel
+            {
+                Id  = h.Id,
+                IsDeleted  = h.IsDeleted,
+                Title  = h.Title,
+                CreatedAt  = h.CreatedAt,
+                UpdatedAt  = h.UpdatedAt,
+                Priority  = h.Priority,
+
+                AverageInterval = h.AverageInterval,
+                DesiredInterval = h.DesiredInterval,
+                LastTimeDoneAt = h.LastTimeDoneAt
+            }).ToList();
         }
 
         if (EditHabit is null)
@@ -33,7 +45,19 @@ public class HabitService(IDataAccess dataAccess)
 
         Habits.Add(EditHabit);
 
-        await _dataAccess.AddHabit(new HabitEntity { Title = EditHabit.Title });
+        await _dataAccess.AddHabit(new HabitEntity
+        {
+            Id = EditHabit.Id,
+            IsDeleted = EditHabit.IsDeleted,
+            Title = EditHabit.Title,
+            CreatedAt = EditHabit.CreatedAt,
+            UpdatedAt = EditHabit.UpdatedAt,
+            Priority = EditHabit.Priority,
+
+            AverageInterval = EditHabit.AverageInterval,
+            DesiredInterval = EditHabit.DesiredInterval,
+            LastTimeDoneAt = EditHabit.LastTimeDoneAt
+        });
 
         EditHabit = new();
     }
