@@ -58,4 +58,14 @@ public class TaskService(IDataAccess dataAccess)
 
         EditTask = new();
     }
+
+    public async Task DeleteTask(long id)
+    {
+        if (Tasks is null)
+            return;
+
+        Tasks.RemoveAll(t => t.Id == id);
+
+        await _dataAccess.RemoveTask(id);
+    }
 }

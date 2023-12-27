@@ -56,4 +56,14 @@ public class NoteService(IDataAccess dataAccess)
 
         EditNote = new();
     }
+
+    public async Task DeleteNote(long id)
+    {
+        if (Notes is null)
+            return;
+
+        Notes.RemoveAll(n => n.Id == id);
+
+        await _dataAccess.RemoveNote(id);
+    }
 }

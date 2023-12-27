@@ -24,6 +24,8 @@ else
         {
             <p><a href="/habits">@habit.Title</a></p>
 
+            <button @onclick="() => HabitService.DeleteHabit(habit.Id)">Delete Habit</button>
+
             <p>@habit.CreatedAt</p>
             <p>@habit.UpdatedAt</p>
             <p>@habit.Priority</p>

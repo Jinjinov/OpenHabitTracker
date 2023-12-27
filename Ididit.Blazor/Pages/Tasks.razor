@@ -24,6 +24,8 @@ else
         {
             <p><a href="/tasks">@task.Title</a></p>
 
+            <button @onclick="() => TaskService.DeleteTask(task.Id)">Delete Task</button>
+
             <p>@task.CreatedAt</p>
             <p>@task.UpdatedAt</p>
             <p>@task.Priority</p>

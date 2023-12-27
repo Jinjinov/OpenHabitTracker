@@ -60,4 +60,14 @@ public class HabitService(IDataAccess dataAccess)
 
         EditHabit = new();
     }
+
+    public async Task DeleteHabit(long id)
+    {
+        if (Habits is null)
+            return;
+
+        Habits.RemoveAll(h => h.Id == id);
+
+        await _dataAccess.RemoveHabit(id);
+    }
 }

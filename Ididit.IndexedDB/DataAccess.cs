@@ -98,20 +98,20 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         await _indexedDb.UpdateItems(new List<TimeEntity> { time });
     }
 
-    public async Task RemoveHabit(HabitEntity habit)
+    public async Task RemoveHabit(long id)
     {
-        await _indexedDb.DeleteByKey<long, HabitEntity>(habit.Id);
+        await _indexedDb.DeleteByKey<long, HabitEntity>(id);
     }
-    public async Task RemoveNote(NoteEntity note)
+    public async Task RemoveNote(long id)
     {
-        await _indexedDb.DeleteByKey<long, NoteEntity>(note.Id);
+        await _indexedDb.DeleteByKey<long, NoteEntity>(id);
     }
-    public async Task RemoveTask(TaskEntity task)
+    public async Task RemoveTask(long id)
     {
-        await _indexedDb.DeleteByKey<long, TaskEntity>(task.Id);
+        await _indexedDb.DeleteByKey<long, TaskEntity>(id);
     }
-    public async Task RemoveTime(TimeEntity time)
+    public async Task RemoveTime(DateTime time)
     {
-        await _indexedDb.DeleteByKey<DateTime, TimeEntity>(time.Time);
+        await _indexedDb.DeleteByKey<DateTime, TimeEntity>(time);
     }
 }

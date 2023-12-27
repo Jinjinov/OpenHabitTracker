@@ -21,8 +21,8 @@ public interface IDataAccess
     Task UpdateTask(TaskEntity task);
     Task UpdateTime(TimeEntity time);
 
-    Task RemoveHabit(HabitEntity habit);
-    Task RemoveNote(NoteEntity note);
-    Task RemoveTask(TaskEntity task);
-    Task RemoveTime(TimeEntity time);
+    Task RemoveHabit(long id);
+    Task RemoveNote(long id);
+    Task RemoveTask(long id);
+    Task RemoveTime(DateTime time);
 }
