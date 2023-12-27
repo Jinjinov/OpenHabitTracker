@@ -41,9 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wasm.Chromely
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Electron", "Ididit.Blazor.Electron\Ididit.Blazor.Electron.csproj", "{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.Blazor.Web", "Ididit.Blazor.Web\Ididit.Blazor.Web\Ididit.Blazor.Web.csproj", "{523B1887-ACE7-4231-9C39-BBC834C2CFC4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.Blazor.Web.Client", "Ididit.Blazor.Web\Ididit.Blazor.Web.Client\Ididit.Blazor.Web.Client.csproj", "{925816B1-0ECD-4ADA-8055-27CB8DA1B409}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.Blazor.Web", "Ididit.Blazor.Web\Ididit.Blazor.Web.csproj", "{543B00FA-D387-4ECF-96ED-12FA92B15C08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,14 +115,10 @@ Global
 		{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{523B1887-ACE7-4231-9C39-BBC834C2CFC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{523B1887-ACE7-4231-9C39-BBC834C2CFC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{523B1887-ACE7-4231-9C39-BBC834C2CFC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{523B1887-ACE7-4231-9C39-BBC834C2CFC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{925816B1-0ECD-4ADA-8055-27CB8DA1B409}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{925816B1-0ECD-4ADA-8055-27CB8DA1B409}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{925816B1-0ECD-4ADA-8055-27CB8DA1B409}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{925816B1-0ECD-4ADA-8055-27CB8DA1B409}.Release|Any CPU.Build.0 = Release|Any CPU
+		{543B00FA-D387-4ECF-96ED-12FA92B15C08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{543B00FA-D387-4ECF-96ED-12FA92B15C08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{543B00FA-D387-4ECF-96ED-12FA92B15C08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{543B00FA-D387-4ECF-96ED-12FA92B15C08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

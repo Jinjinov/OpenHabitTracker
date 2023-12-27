@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="Ididit.Blazor.Web.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    <HeadOutlet />
+    <HeadOutlet @rendermode="@InteractiveServer" />
 </head>
 
 <body>
-    <Ididit.Blazor.Web.Components.Routes />
+    <Ididit.Blazor.Web.Components.Routes @rendermode="@InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
 </body>
 
