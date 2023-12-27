@@ -1,6 +1,9 @@
 ﻿@page "/tasks"
+@page "/tasks/{Id:long}"
+
 @using Ididit.Data.Models
 @using Ididit.Services
+
 @inject TaskService TaskService
 
 <PageTitle>Tasks</PageTitle>
@@ -17,7 +20,18 @@ else
 
     foreach (TaskModel task in TaskService.Tasks)
     {
-        <p>@task.Title</p>
+        if (task.Id == Id)
+        {
+            <p><a href="/tasks">@task.Title</a></p>
+
+            <p>@task.CreatedAt</p>
+            <p>@task.UpdatedAt</p>
+            <p>@task.Priority</p>
+        }
+        else
+        {
+            <p><a href="/tasks/@task.Id">@task.Title</a></p>
+        }
     }
 
     <div>
@@ -29,6 +43,9 @@ else
 }
 
 @code {
+    [Parameter]
+    public long? Id { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await TaskService.Initialize();

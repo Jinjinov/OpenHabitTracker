@@ -1,6 +1,9 @@
 ﻿@page "/notes"
+@page "/notes/{Id:long}"
+
 @using Ididit.Data.Models
 @using Ididit.Services
+
 @inject NoteService NoteService
 
 <PageTitle>Notes</PageTitle>
@@ -17,7 +20,18 @@ else
 
     foreach (NoteModel note in NoteService.Notes)
     {
-        <p>@note.Title</p>
+        if (note.Id == Id)
+        {
+            <p><a href="/notes">@note.Title</a></p>
+
+            <p>@note.CreatedAt</p>
+            <p>@note.UpdatedAt</p>
+            <p>@note.Priority</p>
+        }
+        else
+        {
+            <p><a href="/notes/@note.Id">@note.Title</a></p>
+        }
     }
 
     <div>
@@ -29,6 +43,9 @@ else
 }
 
 @code {
+    [Parameter]
+    public long? Id { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await NoteService.Initialize();
