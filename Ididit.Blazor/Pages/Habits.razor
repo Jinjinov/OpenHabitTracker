@@ -7,9 +7,7 @@
 
 <h1>Habits</h1>
 
-<h3>Habits</h3>
-
-@if (HabitService.Habits is null)
+@if (HabitService.Habits is null || HabitService.EditHabit is null)
 {
     <p>Loading...</p>
 }
@@ -21,31 +19,18 @@ else
     {
         <p>@habit.Title</p>
     }
+
+    <div>
+        <label for="titleInput">Title:</label>
+        <input id="titleInput" type="text" @bind="HabitService.EditHabit.Title" />
+
+        <button @onclick="HabitService.AddHabit">Add Habit</button>
+    </div>
 }
 
-<div>
-    <label for="nameInput">Enter name:</label>
-    <input id="nameInput" type="text" @bind="name" />
-
-    <button @onclick="AddHabit">Add Habit</button>
-</div>
-
 @code {
-
-    private string name = "";
-
-    private async Task AddHabit()
-    {
-        HabitService.EditHabit = new HabitModel { Title = name };
-
-        await HabitService.SaveHabit();
-    }
-
     protected override async Task OnInitializedAsync()
     {
-        if (HabitService.Habits is null)
-        {
-            await HabitService.Initialize();
-        }
+        await HabitService.Initialize();
     }
 }

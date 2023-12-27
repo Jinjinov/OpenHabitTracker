@@ -19,11 +19,16 @@ public class HabitService(IDataAccess dataAccess)
             IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
             Habits = habits.Select(h => new HabitModel { Title = h.Title }).ToList();
         }
+
+        if (EditHabit is null)
+        {
+            EditHabit = new();
+        }
     }
 
-    public async Task SaveHabit()
+    public async Task AddHabit()
     {
-        if (EditHabit is null || Habits is null)
+        if (Habits is null || EditHabit is null)
             return;
 
         Habits.Add(EditHabit);
