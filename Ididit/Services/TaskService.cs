@@ -46,14 +46,13 @@ public class TaskService(IDataAccess dataAccess)
 
         await _dataAccess.AddTask(new TaskEntity
         {
-            Id = EditTask.Id,
-            IsDeleted = EditTask.IsDeleted,
+            IsDeleted = false,
             Title = EditTask.Title,
-            CreatedAt = EditTask.CreatedAt,
-            UpdatedAt = EditTask.UpdatedAt,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
             Priority = EditTask.Priority,
 
-            IsDone = EditTask.IsDone,
+            IsDone = false,
             Date = EditTask.Date
         });
 

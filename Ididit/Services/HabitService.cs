@@ -47,16 +47,15 @@ public class HabitService(IDataAccess dataAccess)
 
         await _dataAccess.AddHabit(new HabitEntity
         {
-            Id = EditHabit.Id,
-            IsDeleted = EditHabit.IsDeleted,
+            IsDeleted = false,
             Title = EditHabit.Title,
-            CreatedAt = EditHabit.CreatedAt,
-            UpdatedAt = EditHabit.UpdatedAt,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
             Priority = EditHabit.Priority,
 
             AverageInterval = EditHabit.AverageInterval,
             DesiredInterval = EditHabit.DesiredInterval,
-            LastTimeDoneAt = EditHabit.LastTimeDoneAt
+            LastTimeDoneAt = null
         });
 
         EditHabit = new();

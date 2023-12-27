@@ -45,11 +45,10 @@ public class NoteService(IDataAccess dataAccess)
 
         await _dataAccess.AddNote(new NoteEntity
         {
-            Id = EditNote.Id,
-            IsDeleted = EditNote.IsDeleted,
+            IsDeleted = false,
             Title = EditNote.Title,
-            CreatedAt = EditNote.CreatedAt,
-            UpdatedAt = EditNote.UpdatedAt,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
             Priority = EditNote.Priority,
 
             Content = EditNote.Content
