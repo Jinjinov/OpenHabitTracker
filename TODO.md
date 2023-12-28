@@ -1,15 +1,16 @@
 # TODO:
 
 - online sync - server with SQL
+- no css / js downloads, everything is local
 - calendar streak - load on demand
 - average interval
 - sub-tasks for exercises, chores, ...
-- trash, restore, delete from trash
+! - trash, restore, delete from trash
 - drag & drop reorder
 - keyboard navigation
 - benchmark: methods & render
 - copy all features of Google Keep
-- don't list habits that i always do / never do - or find a solution for displaying them - HIGH / LOW priority - NEED / WANT to do
+! - don't list habits that i always do / never do - or find a solution for displaying them - HIGH / LOW priority - NEED / WANT to do importance
 
 color coded priorities
 
@@ -18,6 +19,20 @@ appointments: (very high priority)
 ASAP tasks: (shopping, etc, ...)
 goals: (high priority)
 maintenance: (normal priority)
+
+- note
+- task
+    - ASAP
+    - date and time - appointment
+- habit
+    - repeating interval
+    - always / every opportunity / occasion - NOTE ?
+
+- ASAP tasks
+	- with subtasks but not really?
+	- more: where, when, address, email, phone
+- date & time tasks? do i really need this? why not google calendar
+	- the only reason would be details
 
 1. online sync (c# backend with sql)
 2. new hosting provider - ASP net core
@@ -64,12 +79,6 @@ load on demand - List = null / List = new()
 several exercises should not be several tasks
 several cleaning chores should not be several tasks
 - should be one task with interval and sub-tasks
-
-- ASAP tasks
-	- subtasks but not really?
-	- more: where, when, address, email, phone
-- date & time tasks? really? google calendar
-	- the only reason would be details
 
 - import google keep notes with all features
 - organize notes
