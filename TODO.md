@@ -1,5 +1,24 @@
 # TODO:
 
+- online sync - server with SQL
+- calendar streak - load on demand
+- average interval
+- sub-tasks for exercises, chores, ...
+- trash, restore, delete from trash
+- drag & drop reorder
+- keyboard navigation
+- benchmark: methods & render
+- copy all features of Google Keep
+- don't list habits that i always do / never do - or find a solution for displaying them - HIGH / LOW priority - NEED / WANT to do
+
+color coded priorities
+
+essentials: (highest priority)
+appointments: (very high priority)
+ASAP tasks: (shopping, etc, ...)
+goals: (high priority)
+maintenance: (normal priority)
+
 1. online sync (c# backend with sql)
 2. new hosting provider - ASP net core
 3. make it very simple
@@ -10,22 +29,12 @@
 		- never done
 		- speed - blazor profiler
 
-essentials: (highest priority)
-appointments: (very high priority)
-ASAP tasks: (shopping, etc, ...)
-goals: (high priority)
-maintenance: (normal priority)
-
 Make a concrete plan so that the habit is not just waiting to be done:
 - for habits: split the day in 24 hours, like in calendar
 - split the week in 7 days, like in Habits app
 
-tabs - routes
-category - route friendly
-there is no point in accordian component - it is not url route friendly
-child of (task, habit, note) doesn't need a route
 categories are filters
-filters are query parameters 
+filters are query parameters
 
 there is no point in accordian component - one action to open and one action to close is the same as next, previous - and it is not url route friendly 
 
@@ -37,8 +46,6 @@ load on demand - List = null / List = new()
 - [ ] task - "done times list" should load on demand - on Task done - on show Task details
 
 - [ ] restore deleted Goals from Trash
-
-color coded priorities
 
 - ReplaceTab in MemoEdit
 
@@ -63,8 +70,6 @@ several cleaning chores should not be several tasks
 	- more: where, when, address, email, phone
 - date & time tasks? really? google calendar
 	- the only reason would be details
-
-Google Keep import = first class citizen
 
 - import google keep notes with all features
 - organize notes
@@ -115,15 +120,11 @@ category - in your face, route friendly
 [X] Category must be set when creating a new note
 
 copy Loop Habit Tracker
+- History (done count grouped by week, month, quarter, year)
+- Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
+- Best straks (from date - to date)
+- Frequency (by day of the week - continuous calendar, without dates, done count grouped by days of the week)
 
-keep it simple, stupid!
-
-blazor united
-asp net core
-sql server
-markdown notes that don't truncate
-tabs - routes
-load on demand
 virtualized container
 method trace logging - performance 
 
