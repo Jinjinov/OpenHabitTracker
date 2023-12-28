@@ -2,8 +2,7 @@
 
 - /add
 - /update
-- restore
-- empty trash
+- restore from trash
 - AddServices()
 - read Settings from DB before Run()
 - common:
@@ -18,12 +17,11 @@
 - calendar streak - load on demand
 - average interval
 - sub-tasks for exercises, chores, ...
-! - trash, restore, delete from trash
 - drag & drop reorder
 - keyboard navigation
 - benchmark: methods & render
 - copy all features of Google Keep
-! - don't list habits that i always do / never do - or find a solution for displaying them - HIGH / LOW priority - NEED / WANT to do importance
+- don't list habits that i always do / never do - or find a solution for displaying them - HIGH / LOW priority - NEED / WANT to do importance
 
 color coded priorities
 

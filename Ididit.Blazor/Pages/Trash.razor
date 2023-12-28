@@ -9,6 +9,8 @@
 
 <h1>Trash</h1>
 
+<button @onclick="TrashService.DeleteAll">Empty trash</button>
+
 @if (TrashService.Models is null)
 {
     <p>Loading...</p>
