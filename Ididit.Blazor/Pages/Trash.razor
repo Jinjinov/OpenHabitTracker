@@ -9,6 +9,20 @@
 
 <h1>Trash</h1>
 
+@if (TrashService.Models is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>Count: @TrashService.Models.Count</p>
+
+    foreach (Model model in TrashService.Models.Where(t => t.IsDeleted))
+    {
+        <p>@model.Title</p>
+    }
+}
+
 @code {
     protected override async Task OnInitializedAsync()
     {
