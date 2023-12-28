@@ -13,4 +13,6 @@ public class Entity
     public DateTime UpdatedAt { get; set; }
 
     public Priority Priority { get; set; }
+
+    public Importance Importance { get; set; }
 }

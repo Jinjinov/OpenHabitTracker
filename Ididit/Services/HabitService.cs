@@ -25,6 +25,7 @@ public class HabitService(IDataAccess dataAccess)
                 CreatedAt  = h.CreatedAt,
                 UpdatedAt  = h.UpdatedAt,
                 Priority  = h.Priority,
+                Importance = h.Importance,
 
                 AverageInterval = h.AverageInterval,
                 DesiredInterval = h.DesiredInterval,
@@ -52,6 +53,7 @@ public class HabitService(IDataAccess dataAccess)
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Priority = EditHabit.Priority,
+            Importance = EditHabit.Importance,
 
             AverageInterval = EditHabit.AverageInterval,
             DesiredInterval = EditHabit.DesiredInterval,

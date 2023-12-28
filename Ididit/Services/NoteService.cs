@@ -25,6 +25,7 @@ public class NoteService(IDataAccess dataAccess)
                 CreatedAt = n.CreatedAt,
                 UpdatedAt = n.UpdatedAt,
                 Priority = n.Priority,
+                Importance = n.Importance,
 
                 Content = n.Content
             }).ToList();
@@ -50,6 +51,7 @@ public class NoteService(IDataAccess dataAccess)
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Priority = EditNote.Priority,
+            Importance = EditNote.Importance,
 
             Content = EditNote.Content
         });

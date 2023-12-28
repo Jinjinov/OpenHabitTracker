@@ -25,6 +25,7 @@ public class TaskService(IDataAccess dataAccess)
                 CreatedAt = t.CreatedAt,
                 UpdatedAt = t.UpdatedAt,
                 Priority = t.Priority,
+                Importance = t.Importance,
 
                 IsDone = t.IsDone,
                 Date = t.Date
@@ -51,6 +52,7 @@ public class TaskService(IDataAccess dataAccess)
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Priority = EditTask.Priority,
+            Importance = EditTask.Importance,
 
             IsDone = false,
             Date = EditTask.Date
