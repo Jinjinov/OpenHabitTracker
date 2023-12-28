@@ -1,5 +1,18 @@
 # TODO:
 
+- /add
+- /update
+- restore
+- empty trash
+- AddServices()
+- read Settings from DB before Run()
+- common:
+	- app.css
+	- bootstrap.css
+	- Routes.razor
+	- MainLayout.razor
+	- NavMenu.razor
+
 - online sync - server with SQL
 - no css / js downloads, everything is local
 - calendar streak - load on demand
