@@ -67,6 +67,23 @@ public class TaskService(IDataAccess dataAccess)
     {
         if (Tasks is null || EditTask is null)
             return;
+
+        if (await _dataAccess.GetTask(EditTask.Id) is TaskEntity task)
+        {
+            task.IsDeleted = EditTask.IsDeleted;
+            task.Title = EditTask.Title;
+            task.CreatedAt = EditTask.CreatedAt;
+            task.UpdatedAt = EditTask.UpdatedAt;
+            task.Priority = EditTask.Priority;
+            task.Importance = EditTask.Importance;
+
+            task.IsDone = EditTask.IsDone;
+            task.Date = EditTask.Date;
+
+            await _dataAccess.UpdateTask(task);
+        }
+
+        EditTask = null;
     }
 
     public async Task DeleteTask(long id)

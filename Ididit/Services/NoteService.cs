@@ -65,6 +65,22 @@ public class NoteService(IDataAccess dataAccess)
     {
         if (Notes is null || EditNote is null)
             return;
+
+        if (await _dataAccess.GetNote(EditNote.Id) is NoteEntity note)
+        {
+            note.IsDeleted = EditNote.IsDeleted;
+            note.Title = EditNote.Title;
+            note.CreatedAt = EditNote.CreatedAt;
+            note.UpdatedAt = EditNote.UpdatedAt;
+            note.Priority = EditNote.Priority;
+            note.Importance = EditNote.Importance;
+
+            note.Content = EditNote.Content;
+
+            await _dataAccess.UpdateNote(note);
+        }
+
+        EditNote = null;
     }
 
     public async Task DeleteNote(long id)

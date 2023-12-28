@@ -69,6 +69,24 @@ public class HabitService(IDataAccess dataAccess)
     {
         if (Habits is null || EditHabit is null)
             return;
+
+        if (await _dataAccess.GetHabit(EditHabit.Id) is HabitEntity habit)
+        {
+            habit.IsDeleted = EditHabit.IsDeleted;
+            habit.Title = EditHabit.Title;
+            habit.CreatedAt = EditHabit.CreatedAt;
+            habit.UpdatedAt = EditHabit.UpdatedAt;
+            habit.Priority = EditHabit.Priority;
+            habit.Importance = EditHabit.Importance;
+
+            habit.AverageInterval = EditHabit.AverageInterval;
+            habit.DesiredInterval = EditHabit.DesiredInterval;
+            habit.LastTimeDoneAt = EditHabit.LastTimeDoneAt;
+
+            await _dataAccess.UpdateHabit(habit);
+        }
+
+        EditHabit = null;
     }
 
     public async Task DeleteHabit(long id)
