@@ -10,7 +10,7 @@
 
 <h1>Habits</h1>
 
-@if (HabitService.Habits is null || HabitService.EditHabit is null)
+@if (HabitService.Habits is null || HabitService.NewHabit is null)
 {
     <p>Loading...</p>
 }
@@ -38,7 +38,7 @@ else
 
     <div>
         <label for="titleInput">Title:</label>
-        <input id="titleInput" type="text" @bind="HabitService.EditHabit.Title" />
+        <input id="titleInput" type="text" @bind="HabitService.NewHabit.Title" />
 
         <button @onclick="HabitService.AddHabit">Add Habit</button>
     </div>

@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wasm.Chromely
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Electron", "Ididit.Blazor.Electron\Ididit.Blazor.Electron.csproj", "{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ididit.Blazor.Web", "Ididit.Blazor.Web\Ididit.Blazor.Web.csproj", "{543B00FA-D387-4ECF-96ED-12FA92B15C08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Web", "Ididit.Blazor.Web\Ididit.Blazor.Web.csproj", "{543B00FA-D387-4ECF-96ED-12FA92B15C08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

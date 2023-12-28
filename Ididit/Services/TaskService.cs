@@ -10,6 +10,8 @@ public class TaskService(IDataAccess dataAccess)
 
     public List<TaskModel>? Tasks { get; set; }
 
+    public TaskModel? NewTask { get; set; }
+
     public TaskModel? EditTask { get; set; }
 
     public async Task Initialize()
@@ -32,33 +34,38 @@ public class TaskService(IDataAccess dataAccess)
             }).ToList();
         }
 
-        if (EditTask is null)
+        if (NewTask is null)
         {
-            EditTask = new();
+            NewTask = new();
         }
     }
 
     public async Task AddTask()
     {
-        if (Tasks is null || EditTask is null)
+        if (Tasks is null || NewTask is null)
             return;
 
-        Tasks.Add(EditTask);
+        Tasks.Add(NewTask);
 
         await _dataAccess.AddTask(new TaskEntity
         {
             IsDeleted = false,
-            Title = EditTask.Title,
+            Title = NewTask.Title,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            Priority = EditTask.Priority,
-            Importance = EditTask.Importance,
+            Priority = NewTask.Priority,
+            Importance = NewTask.Importance,
 
             IsDone = false,
-            Date = EditTask.Date
+            Date = NewTask.Date
         });
 
-        EditTask = new();
+        NewTask = new();
+    }
+
+    public async Task UpdateTask()
+    {
+
     }
 
     public async Task DeleteTask(long id)

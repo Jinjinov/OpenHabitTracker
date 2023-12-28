@@ -10,7 +10,7 @@
 
 <h1>Notes</h1>
 
-@if (NoteService.Notes is null || NoteService.EditNote is null)
+@if (NoteService.Notes is null || NoteService.NewNote is null)
 {
     <p>Loading...</p>
 }
@@ -38,7 +38,7 @@ else
 
     <div>
         <label for="titleInput">Title:</label>
-        <input id="titleInput" type="text" @bind="NoteService.EditNote.Title" />
+        <input id="titleInput" type="text" @bind="NoteService.NewNote.Title" />
 
         <button @onclick="NoteService.AddNote">Add Note</button>
     </div>

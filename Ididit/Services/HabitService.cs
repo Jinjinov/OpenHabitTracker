@@ -10,6 +10,8 @@ public class HabitService(IDataAccess dataAccess)
 
     public List<HabitModel>? Habits { get; set; }
 
+    public HabitModel? NewHabit { get; set; }
+
     public HabitModel? EditHabit { get; set; }
 
     public async Task Initialize()
@@ -33,34 +35,39 @@ public class HabitService(IDataAccess dataAccess)
             }).ToList();
         }
 
-        if (EditHabit is null)
+        if (NewHabit is null)
         {
-            EditHabit = new();
+            NewHabit = new();
         }
     }
 
     public async Task AddHabit()
     {
-        if (Habits is null || EditHabit is null)
+        if (Habits is null || NewHabit is null)
             return;
 
-        Habits.Add(EditHabit);
+        Habits.Add(NewHabit);
 
         await _dataAccess.AddHabit(new HabitEntity
         {
             IsDeleted = false,
-            Title = EditHabit.Title,
+            Title = NewHabit.Title,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            Priority = EditHabit.Priority,
-            Importance = EditHabit.Importance,
+            Priority = NewHabit.Priority,
+            Importance = NewHabit.Importance,
 
-            AverageInterval = EditHabit.AverageInterval,
-            DesiredInterval = EditHabit.DesiredInterval,
+            AverageInterval = NewHabit.AverageInterval,
+            DesiredInterval = NewHabit.DesiredInterval,
             LastTimeDoneAt = null
         });
 
-        EditHabit = new();
+        NewHabit = new();
+    }
+
+    public async Task UpdateHabit()
+    {
+
     }
 
     public async Task DeleteHabit(long id)

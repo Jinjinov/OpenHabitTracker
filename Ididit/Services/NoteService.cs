@@ -10,6 +10,8 @@ public class NoteService(IDataAccess dataAccess)
 
     public List<NoteModel>? Notes { get; set; }
 
+    public NoteModel? NewNote { get; set; }
+
     public NoteModel? EditNote { get; set; }
 
     public async Task Initialize()
@@ -31,32 +33,37 @@ public class NoteService(IDataAccess dataAccess)
             }).ToList();
         }
 
-        if (EditNote is null)
+        if (NewNote is null)
         {
-            EditNote = new();
+            NewNote = new();
         }
     }
 
     public async Task AddNote()
     {
-        if (Notes is null || EditNote is null)
+        if (Notes is null || NewNote is null)
             return;
 
-        Notes.Add(EditNote);
+        Notes.Add(NewNote);
 
         await _dataAccess.AddNote(new NoteEntity
         {
             IsDeleted = false,
-            Title = EditNote.Title,
+            Title = NewNote.Title,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            Priority = EditNote.Priority,
-            Importance = EditNote.Importance,
+            Priority = NewNote.Priority,
+            Importance = NewNote.Importance,
 
-            Content = EditNote.Content
+            Content = NewNote.Content
         });
 
-        EditNote = new();
+        NewNote = new();
+    }
+
+    public async Task UpdateNote()
+    {
+
     }
 
     public async Task DeleteNote(long id)
