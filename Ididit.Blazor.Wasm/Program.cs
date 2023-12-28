@@ -22,6 +22,7 @@ builder.Services.AddOidcAuthentication(options =>
 builder.Services.AddScoped<HabitService>();
 builder.Services.AddScoped<NoteService>();
 builder.Services.AddScoped<TaskService>();
+builder.Services.AddScoped<TrashService>();
 
 builder.Services.AddIndexedDbDatabase<IndexedDb>(options => options.UseDatabase(IndexedDb.GetDatabaseModel()));
 

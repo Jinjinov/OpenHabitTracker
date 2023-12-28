@@ -28,6 +28,7 @@ public static class MauiProgram
         builder.Services.AddScoped<HabitService>();
         builder.Services.AddScoped<NoteService>();
         builder.Services.AddScoped<TaskService>();
+        builder.Services.AddScoped<TrashService>();
 
         builder.Services.AddScoped<IDataAccess, DataAccess>();
 

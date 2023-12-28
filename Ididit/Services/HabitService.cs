@@ -67,7 +67,8 @@ public class HabitService(IDataAccess dataAccess)
 
     public async Task UpdateHabit()
     {
-
+        if (Habits is null || EditHabit is null)
+            return;
     }
 
     public async Task DeleteHabit(long id)

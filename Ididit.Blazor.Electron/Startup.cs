@@ -32,6 +32,7 @@ public class Startup
         services.AddScoped<HabitService>();
         services.AddScoped<NoteService>();
         services.AddScoped<TaskService>();
+        services.AddScoped<TrashService>();
 
         services.AddScoped<IDataAccess, DataAccess>();
 

@@ -65,7 +65,8 @@ public class TaskService(IDataAccess dataAccess)
 
     public async Task UpdateTask()
     {
-
+        if (Tasks is null || EditTask is null)
+            return;
     }
 
     public async Task DeleteTask(long id)

@@ -63,7 +63,8 @@ public class NoteService(IDataAccess dataAccess)
 
     public async Task UpdateNote()
     {
-
+        if (Notes is null || EditNote is null)
+            return;
     }
 
     public async Task DeleteNote(long id)

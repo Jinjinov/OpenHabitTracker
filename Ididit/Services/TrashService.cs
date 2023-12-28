@@ -1,7 +1,6 @@
 ﻿using Ididit.Data;
 using Ididit.Data.Entities;
 using Ididit.Data.Models;
-using System.Threading.Tasks;
 
 namespace Ididit.Services;
 
@@ -34,33 +33,52 @@ public class TrashService(IDataAccess dataAccess)
         }
     }
 
-    public async Task RestoreHabit()
+    public async Task RestoreHabit(long id)
     {
-
+        if (await _dataAccess.GetHabit(id) is HabitEntity habit)
+        {
+            habit.IsDeleted = false;
+            await _dataAccess.UpdateHabit(habit);
+        }
     }
 
-    public async Task RestoreNote()
+    public async Task RestoreNote(long id)
     {
-
+        if (await _dataAccess.GetNote(id) is NoteEntity note)
+        {
+            note.IsDeleted = false;
+            await _dataAccess.UpdateNote(note);
+        }
     }
 
-    public async Task RestoreTask()
+    public async Task RestoreTask(long id)
     {
-
+        if (await _dataAccess.GetTask(id) is TaskEntity task)
+        {
+            task.IsDeleted = false;
+            await _dataAccess.UpdateTask(task);
+        }
     }
 
-    public async Task DeleteHabit()
+    public async Task DeleteHabit(long id)
     {
-
+        await _dataAccess.RemoveHabit(id);
     }
 
-    public async Task DeleteNote()
+    public async Task DeleteNote(long id)
     {
-
+        await _dataAccess.RemoveNote(id);
     }
 
-    public async Task DeleteTask()
+    public async Task DeleteTask(long id)
     {
+        await _dataAccess.RemoveTask(id);
+    }
 
+    public async Task DeleteAll()
+    {
+        await _dataAccess.RemoveHabits();
+        await _dataAccess.RemoveNotes();
+        await _dataAccess.RemoveTasks();
     }
 }

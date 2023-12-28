@@ -1,9 +1,17 @@
 ﻿@page "/trash"
 
+@using Ididit.Data.Models
+@using Ididit.Services
+
+@inject TrashService TrashService
+
 <PageTitle>Trash</PageTitle>
 
 <h1>Trash</h1>
 
 @code {
-
+    protected override async Task OnInitializedAsync()
+    {
+        await TrashService.Initialize();
+    }
 }
