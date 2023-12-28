@@ -15,7 +15,7 @@
 }
 else
 {
-    <p>Count: @TrashService.Models.Count</p>
+    <p>Count: @TrashService.Models.Where(t => t.IsDeleted).Count</p>
 
     foreach (Model model in TrashService.Models.Where(t => t.IsDeleted))
     {
