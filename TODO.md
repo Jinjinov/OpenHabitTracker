@@ -19,8 +19,8 @@
 - sub-tasks for exercises, chores, ...
 - drag & drop reorder
 - keyboard navigation
-- benchmark: methods & render
-- copy all features of Google Keep
+- benchmark: method time & render time
+- Google Keep - copy all features
 - don't list habits that i always do / never do - or find a solution for displaying them - HIGH / LOW priority - NEED / WANT to do importance
 
 color coded priorities
