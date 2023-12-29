@@ -34,6 +34,7 @@ public class IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options
             .AddIndex(nameof(TaskEntity.Title));
 
         indexedDbDatabaseModel.AddStore(nameof(TimeEntity))
+            .WithKey(nameof(TimeEntity.Time))
             .AddUniqueIndex(nameof(TimeEntity.Time))
             .AddIndex(nameof(TimeEntity.HabitId));
 
