@@ -1,7 +1,5 @@
 # TODO:
 
-- /add
-- /update
 - restore from trash
 - AddServices()
 - read Settings from DB before Run()
@@ -11,6 +9,28 @@
 	- Routes.razor
 	- MainLayout.razor
 	- NavMenu.razor
+
+- settings
+	- theme
+	- size
+	- background
+	- language
+- localization
+
+- categories
+- tree view
+- bread crumbs
+
+- filter
+- sort
+
+- import
+- export
+- load examples
+- delete all
+
+- about
+- help
 
 - online sync - server with SQL
 - no css / js downloads, everything is local
