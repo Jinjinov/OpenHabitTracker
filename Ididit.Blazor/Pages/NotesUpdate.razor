@@ -7,6 +7,22 @@
 
 <h3>NotesUpdate</h3>
 
-@code {
+@if (NoteService.EditNote is not null)
+{
+    <div>
+        <label for="titleInput">Title:</label>
+        <input id="titleInput" type="text" @bind="NoteService.EditNote.Title" />
 
+        <button @onclick="NoteService.UpdateNote">Update Note</button>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        NoteService.EditNote = NoteService.Notes?.FirstOrDefault(n => n.Id == Id);
+    }
 }

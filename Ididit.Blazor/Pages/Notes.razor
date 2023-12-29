@@ -10,6 +10,8 @@
 
 <h1>Notes</h1>
 
+<p><a href="/notes/add">Add note</a></p>
+
 @if (NoteService.Notes is null || NoteService.NewNote is null)
 {
     <p>Loading...</p>
@@ -24,6 +26,8 @@ else
         {
             <p><a href="/notes">@note.Title</a></p>
 
+            <p><a href="/notes/@note.Id/update">Update</a></p>
+
             <button @onclick="() => NoteService.DeleteNote(note.Id)">Delete Note</button>
 
             <p>@note.CreatedAt</p>
@@ -35,13 +39,6 @@ else
             <p><a href="/notes/@note.Id">@note.Title</a></p>
         }
     }
-
-    <div>
-        <label for="titleInput">Title:</label>
-        <input id="titleInput" type="text" @bind="NoteService.NewNote.Title" />
-
-        <button @onclick="NoteService.AddNote">Add Note</button>
-    </div>
 }
 
 @code {

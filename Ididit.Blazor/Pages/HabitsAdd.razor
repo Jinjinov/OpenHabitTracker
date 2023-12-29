@@ -7,6 +7,12 @@
 
 <h3>HabitsAdd</h3>
 
-@code {
+@if (HabitService.NewHabit is not null)
+{
+    <div>
+        <label for="titleInput">Title:</label>
+        <input id="titleInput" type="text" @bind="HabitService.NewHabit.Title" />
 
+        <button @onclick="HabitService.AddHabit">Add Habit</button>
+    </div>
 }

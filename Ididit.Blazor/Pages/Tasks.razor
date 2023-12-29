@@ -10,6 +10,8 @@
 
 <h1>Tasks</h1>
 
+<p><a href="/tasks/add">Add task</a></p>
+
 @if (TaskService.Tasks is null || TaskService.NewTask is null)
 {
     <p>Loading...</p>
@@ -24,6 +26,8 @@ else
         {
             <p><a href="/tasks">@task.Title</a></p>
 
+            <p><a href="/tasks/@task.Id/update">Update</a></p>
+
             <button @onclick="() => TaskService.DeleteTask(task.Id)">Delete Task</button>
 
             <p>@task.CreatedAt</p>
@@ -35,13 +39,6 @@ else
             <p><a href="/tasks/@task.Id">@task.Title</a></p>
         }
     }
-
-    <div>
-        <label for="titleInput">Title:</label>
-        <input id="titleInput" type="text" @bind="TaskService.NewTask.Title" />
-
-        <button @onclick="TaskService.AddTask">Add Task</button>
-    </div>
 }
 
 @code {

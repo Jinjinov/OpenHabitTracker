@@ -7,6 +7,12 @@
 
 <h3>NotesAdd</h3>
 
-@code {
+@if (NoteService.NewNote is not null)
+{
+    <div>
+        <label for="titleInput">Title:</label>
+        <input id="titleInput" type="text" @bind="NoteService.NewNote.Title" />
 
+        <button @onclick="NoteService.AddNote">Add Note</button>
+    </div>
 }

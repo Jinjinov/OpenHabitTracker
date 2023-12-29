@@ -7,6 +7,12 @@
 
 <h3>TasksAdd</h3>
 
-@code {
+@if (TaskService.NewTask is not null)
+{
+    <div>
+        <label for="titleInput">Title:</label>
+        <input id="titleInput" type="text" @bind="TaskService.NewTask.Title" />
 
+        <button @onclick="TaskService.AddTask">Add Task</button>
+    </div>
 }

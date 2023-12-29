@@ -10,6 +10,8 @@
 
 <h1>Habits</h1>
 
+<p><a href="/habits/add">Add habit</a></p>
+
 @if (HabitService.Habits is null || HabitService.NewHabit is null)
 {
     <p>Loading...</p>
@@ -24,6 +26,8 @@ else
         {
             <p><a href="/habits">@habit.Title</a></p>
 
+            <p><a href="/habits/@habit.Id/update">Update</a></p>
+
             <button @onclick="() => HabitService.DeleteHabit(habit.Id)">Delete Habit</button>
 
             <p>@habit.CreatedAt</p>
@@ -35,13 +39,6 @@ else
             <p><a href="/habits/@habit.Id">@habit.Title</a></p>
         }
     }
-
-    <div>
-        <label for="titleInput">Title:</label>
-        <input id="titleInput" type="text" @bind="HabitService.NewHabit.Title" />
-
-        <button @onclick="HabitService.AddHabit">Add Habit</button>
-    </div>
 }
 
 @code {
