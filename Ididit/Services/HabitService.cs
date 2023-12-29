@@ -89,17 +89,40 @@ public class HabitService(IDataAccess dataAccess)
         EditHabit = null;
     }
 
-    public async Task DeleteHabit(long id)
+    public async Task MarkAsDone(HabitModel habit)
     {
         if (Habits is null)
             return;
 
-        Habits.RemoveAll(h => h.Id == id);
+        DateTime utcNow = DateTime.UtcNow;
 
-        if (await _dataAccess.GetHabit(id) is HabitEntity habit)
+        habit.LastTimeDoneAt = utcNow;
+
+        if (habit.TimesDone is null)
+            habit.TimesDone = new();
+
+        habit.TimesDone.Add(utcNow);
+
+        await _dataAccess.AddTime(new TimeEntity { HabitId = habit.Id, Time = utcNow });
+
+        if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
         {
-            habit.IsDeleted = true;
-            await _dataAccess.UpdateHabit(habit);
+            habitEntity.LastTimeDoneAt = utcNow;
+            await _dataAccess.UpdateHabit(habitEntity);
+        }
+    }
+
+    public async Task DeleteHabit(HabitModel habit)
+    {
+        if (Habits is null)
+            return;
+
+        Habits.Remove(habit);
+
+        if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
+        {
+            habitEntity.IsDeleted = true;
+            await _dataAccess.UpdateHabit(habitEntity);
         }
     }
 }

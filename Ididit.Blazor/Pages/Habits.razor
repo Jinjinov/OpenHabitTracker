@@ -18,17 +18,17 @@
 }
 else
 {
-    <p>Habits: @HabitService.Habits.Count</p>
+    <p>Habits: @HabitService.Habits.Where(h => !h.IsDeleted).Count()</p>
 
     foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
     {
         if (habit.Id == Id)
         {
-            <p><a href="/habits">@habit.Title</a></p>
+            <p><a href="/habits">@habit.Title</a><button @onclick="() => HabitService.MarkAsDone(habit)">Done</button></p>
 
             <p><a href="/habits/@habit.Id/update">Update</a></p>
 
-            <button @onclick="() => HabitService.DeleteHabit(habit.Id)">Delete Habit</button>
+            <button @onclick="() => HabitService.DeleteHabit(habit)">Delete Habit</button>
 
             <p>@habit.CreatedAt</p>
             <p>@habit.UpdatedAt</p>
@@ -36,7 +36,7 @@ else
         }
         else
         {
-            <p><a href="/habits/@habit.Id">@habit.Title</a></p>
+            <p><a href="/habits/@habit.Id">@habit.Title</a><button @onclick="() => HabitService.MarkAsDone(habit)">Done</button></p>
         }
     }
 }
