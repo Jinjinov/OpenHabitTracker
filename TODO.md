@@ -7,8 +7,6 @@
 - AddServices()
 - read Settings from DB before Run()
 - common:
-	- app.css
-	- bootstrap.css
 	- Routes.razor
 	- MainLayout.razor
 	- NavMenu.razor
