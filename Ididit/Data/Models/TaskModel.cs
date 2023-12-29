@@ -2,7 +2,7 @@
 
 public class TaskModel : Model
 {
-    public bool IsDone { get; set; }
+    public DateTime? DoneAt { get; set; }
 
     public DateTime? Date { get; set; }
 }

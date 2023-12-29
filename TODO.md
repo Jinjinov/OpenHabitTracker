@@ -17,9 +17,11 @@
 	- language
 - localization
 
-- categories
-- tree view
-- bread crumbs
+- task / habit: list item
+
+- categories - NO nesting
+- tree view - NO!
+- bread crumbs - NO!
 
 - filter
 - sort

@@ -29,7 +29,7 @@ public class TaskService(IDataAccess dataAccess)
                 Priority = t.Priority,
                 Importance = t.Importance,
 
-                IsDone = t.IsDone,
+                DoneAt = t.DoneAt,
                 Date = t.Date
             }).ToList();
         }
@@ -56,7 +56,7 @@ public class TaskService(IDataAccess dataAccess)
             Priority = NewTask.Priority,
             Importance = NewTask.Importance,
 
-            IsDone = false,
+            DoneAt = null,
             Date = NewTask.Date
         });
 
@@ -77,7 +77,7 @@ public class TaskService(IDataAccess dataAccess)
             task.Priority = EditTask.Priority;
             task.Importance = EditTask.Importance;
 
-            task.IsDone = EditTask.IsDone;
+            task.DoneAt = EditTask.DoneAt;
             task.Date = EditTask.Date;
 
             await _dataAccess.UpdateTask(task);
