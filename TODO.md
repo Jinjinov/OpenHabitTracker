@@ -8,8 +8,6 @@
 - read Settings from DB before Run()
 - common:
 	- Routes.razor
-	- MainLayout.razor
-	- NavMenu.razor
 
 - settings
 	- theme
