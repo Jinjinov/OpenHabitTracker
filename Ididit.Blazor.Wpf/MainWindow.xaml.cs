@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Ididit.Data;
+using Ididit.EntityFrameworkCore;
+using Ididit.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 
@@ -11,15 +15,25 @@ public partial class MainWindow : Window
 {
     public MainWindow()
     {
-        IServiceCollection serviceCollection = new ServiceCollection();
-        serviceCollection.AddWpfBlazorWebView();
+        IServiceCollection services = new ServiceCollection();
+        services.AddWpfBlazorWebView();
 #if DEBUG
-        serviceCollection.AddBlazorWebViewDeveloperTools();
+        services.AddBlazorWebViewDeveloperTools();
 #endif
-        //serviceCollection.AddServices();
-        //serviceCollection.AddWebViewServices();
 
-        IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
+        services.AddScoped<HabitService>();
+        services.AddScoped<NoteService>();
+        services.AddScoped<TaskService>();
+        services.AddScoped<TrashService>();
+
+        services.AddScoped<IDataAccess, DataAccess>();
+
+        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=Ididit.db"));
+
+        //services.AddServices();
+        //services.AddWebViewServices();
+
+        IServiceProvider serviceProvider = services.BuildServiceProvider();
         Resources.Add("services", serviceProvider);
 
         InitializeComponent();
