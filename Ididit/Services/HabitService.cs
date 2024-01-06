@@ -41,6 +41,23 @@ public class HabitService(IDataAccess dataAccess)
         }
     }
 
+    public async Task LoadTimesDone(long? id)
+    {
+        if (Habits is null)
+            return;
+
+        HabitModel? habit = Habits.FirstOrDefault(h => h.Id == id);
+
+        if (habit is not null)
+        {
+            if (habit.TimesDone is null)
+            {
+                IReadOnlyList<TimeEntity> timesDone = await _dataAccess.GetTimes(habit.Id);
+                habit.TimesDone = timesDone.Select(t => t.Time).ToList();
+            }
+        }
+    }
+
     public async Task AddHabit()
     {
         if (Habits is null || NewHabit is null)

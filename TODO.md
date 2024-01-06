@@ -1,7 +1,5 @@
 # TODO:
 
-- load TimesDone on demand
-
 - AddServices()
 - common:
 	- Routes.razor
@@ -9,8 +7,8 @@
 columns:
 	tasks, sub items
 	habits, sub items
-	notes, chapters? paragraphs?
-	habits calendar
+		habits calendar - own column?
+	notes, sub items: chapters? paragraphs?
 	categories - flat, no tree!!!
 	search, filter, sort
 
