@@ -1,10 +1,18 @@
 # TODO:
 
-- TimesDone
+- load TimesDone on demand
 
 - AddServices()
 - common:
 	- Routes.razor
+
+columns:
+	tasks, sub items
+	habits, sub items
+	notes, chapters? paragraphs?
+	habits calendar
+	categories - flat, no tree!!!
+	search, filter, sort
 
 - Note Content
 - restore from trash
