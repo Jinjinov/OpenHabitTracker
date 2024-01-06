@@ -46,15 +46,10 @@ public class HabitService(IDataAccess dataAccess)
         if (Habits is null)
             return;
 
-        HabitModel? habit = Habits.FirstOrDefault(h => h.Id == id);
-
-        if (habit is not null)
+        if (Habits.FirstOrDefault(h => h.Id == id) is HabitModel habit && habit.TimesDone is null)
         {
-            if (habit.TimesDone is null)
-            {
-                IReadOnlyList<TimeEntity> timesDone = await _dataAccess.GetTimes(habit.Id);
-                habit.TimesDone = timesDone.Select(t => t.Time).ToList();
-            }
+            IReadOnlyList<TimeEntity> timesDone = await _dataAccess.GetTimes(habit.Id);
+            habit.TimesDone = timesDone.Select(t => t.Time).ToList();
         }
     }
 
