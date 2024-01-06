@@ -1,11 +1,9 @@
 using ElectronNET.API;
 using ElectronNET.API.Entities;
-using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,14 +27,9 @@ public class Startup
         services.AddServerSideBlazor();
         services.AddHttpContextAccessor();
 
-        services.AddScoped<HabitService>();
-        services.AddScoped<NoteService>();
-        services.AddScoped<TaskService>();
-        services.AddScoped<TrashService>();
+        services.AddServices();
 
-        services.AddScoped<IDataAccess, DataAccess>();
-
-        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=Ididit.db"));
+        services.AddDataAccess();
 
         //services.AddServices();
         //services.AddWebViewServices();

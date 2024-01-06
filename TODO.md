@@ -1,8 +1,10 @@
 # TODO:
 
-- AddServices()
 - common:
-	- Routes.razor
+	- Routes.razor </Router>
+		- Ididit.Blazor.Maui
+		- Ididit.Blazor.Wasm
+		- Ididit.Blazor
 
 columns:
 	tasks, sub items

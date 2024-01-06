@@ -1,9 +1,7 @@
-using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Drawing;
@@ -21,14 +19,9 @@ public partial class MainForm : Form
         services.AddBlazorWebViewDeveloperTools();
 #endif
 
-        services.AddScoped<HabitService>();
-        services.AddScoped<NoteService>();
-        services.AddScoped<TaskService>();
-        services.AddScoped<TrashService>();
+        services.AddServices();
 
-        services.AddScoped<IDataAccess, DataAccess>();
-
-        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=Ididit.db"));
+        services.AddDataAccess();
 
         //services.AddServices();
         //services.AddWebViewServices();

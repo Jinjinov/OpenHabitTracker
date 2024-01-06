@@ -1,4 +1,3 @@
-using DnetIndexedDb;
 using Ididit.Blazor.Wasm;
 using Ididit.Data;
 using Ididit.IndexedDB;
@@ -19,14 +18,9 @@ builder.Services.AddOidcAuthentication(options =>
     builder.Configuration.Bind("Local", options.ProviderOptions);
 });
 
-builder.Services.AddScoped<HabitService>();
-builder.Services.AddScoped<NoteService>();
-builder.Services.AddScoped<TaskService>();
-builder.Services.AddScoped<TrashService>();
+builder.Services.AddServices();
 
-builder.Services.AddIndexedDbDatabase<IndexedDb>(options => options.UseDatabase(IndexedDb.GetDatabaseModel()));
-
-builder.Services.AddScoped<IDataAccess, DataAccess>();
+builder.Services.AddDataAccess();
 
 WebAssemblyHost host = builder.Build();
 

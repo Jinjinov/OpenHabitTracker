@@ -1,7 +1,5 @@
-﻿using Ididit.Data;
-using Ididit.EntityFrameworkCore;
+﻿using Ididit.EntityFrameworkCore;
 using Ididit.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Ididit.Blazor.Maui;
@@ -25,14 +23,9 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
-        builder.Services.AddScoped<HabitService>();
-        builder.Services.AddScoped<NoteService>();
-        builder.Services.AddScoped<TaskService>();
-        builder.Services.AddScoped<TrashService>();
+        builder.Services.AddServices();
 
-        builder.Services.AddScoped<IDataAccess, DataAccess>();
-
-        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=Ididit.db"));
+        builder.Services.AddDataAccess();
 
         return builder.Build();
     }
