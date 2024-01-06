@@ -24,19 +24,24 @@ else
     {
         if (task.Id == Id)
         {
-            <p><a href="/tasks">@task.Title</a></p>
+            <p><a href="/tasks">@task.Title</a><button @onclick="() => TaskService.MarkAsDone(task)">Done</button></p>
 
             <p><a href="/tasks/@task.Id/update">Update</a></p>
 
             <button @onclick="() => TaskService.DeleteTask(task.Id)">Delete Task</button>
 
-            <p>@task.CreatedAt</p>
-            <p>@task.UpdatedAt</p>
-            <p>@task.Priority</p>
+            <p>CreatedAt: @task.CreatedAt</p>
+            <p>UpdatedAt: @task.UpdatedAt</p>
+            <p>Priority: @task.Priority</p>
+
+            if (task.DoneAt is not null)
+            {
+                <p>DoneAt: @task.DoneAt</p>
+            }
         }
         else
         {
-            <p><a href="/tasks/@task.Id">@task.Title</a></p>
+            <p><a href="/tasks/@task.Id">@task.Title</a><button @onclick="() => TaskService.MarkAsDone(task)">Done</button></p>
         }
     }
 }

@@ -30,9 +30,24 @@ else
 
             <button @onclick="() => HabitService.DeleteHabit(habit)">Delete Habit</button>
 
-            <p>@habit.CreatedAt</p>
-            <p>@habit.UpdatedAt</p>
-            <p>@habit.Priority</p>
+            <p>CreatedAt: @habit.CreatedAt</p>
+            <p>UpdatedAt: @habit.UpdatedAt</p>
+            <p>Priority: @habit.Priority</p>
+
+            if (habit.LastTimeDoneAt is not null)
+            {
+                <p>LastTimeDoneAt: @habit.LastTimeDoneAt</p>
+            }
+
+            if (habit.TimesDone is not null)
+            {
+                <p>Times done: @habit.TimesDone.Count</p>
+
+                foreach(DateTime time in habit.TimesDone)
+                {
+                    <p>@time</p>
+                }
+            }
         }
         else
         {

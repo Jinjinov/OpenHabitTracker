@@ -1,13 +1,14 @@
 # TODO:
 
-- button Done
 - TimesDone
-- Note Content
-- restore from trash
+
 - AddServices()
-- read Settings from DB before Run()
 - common:
 	- Routes.razor
+
+- Note Content
+- restore from trash
+- read Settings from DB before Run()
 
 - settings
 	- theme

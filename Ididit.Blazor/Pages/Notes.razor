@@ -30,9 +30,9 @@ else
 
             <button @onclick="() => NoteService.DeleteNote(note.Id)">Delete Note</button>
 
-            <p>@note.CreatedAt</p>
-            <p>@note.UpdatedAt</p>
-            <p>@note.Priority</p>
+            <p>CreatedAt: @note.CreatedAt</p>
+            <p>UpdatedAt: @note.UpdatedAt</p>
+            <p>Priority: @note.Priority</p>
         }
         else
         {

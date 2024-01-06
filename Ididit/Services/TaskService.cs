@@ -86,6 +86,22 @@ public class TaskService(IDataAccess dataAccess)
         EditTask = null;
     }
 
+    public async Task MarkAsDone(TaskModel task)
+    {
+        if (Tasks is null)
+            return;
+
+        DateTime utcNow = DateTime.UtcNow;
+
+        task.DoneAt = utcNow;
+
+        if (await _dataAccess.GetTask(task.Id) is TaskEntity taskEntity)
+        {
+            taskEntity.DoneAt = utcNow;
+            await _dataAccess.UpdateTask(taskEntity);
+        }
+    }
+
     public async Task DeleteTask(long id)
     {
         if (Tasks is null)
