@@ -8,7 +8,7 @@ public class TrashService(IDataAccess dataAccess)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public List<Model>? Models { get; set; }
+    public List<TrashModel>? Models { get; set; }
 
     public async Task Initialize()
     {
@@ -18,18 +18,22 @@ public class TrashService(IDataAccess dataAccess)
             IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
             IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
 
-            List<Entity> entities = [.. habits, .. notes, .. tasks];
+            Models = [.. habits.Select(e => ToTrashModel(e, ModelType.Habit)), .. notes.Select(e => ToTrashModel(e, ModelType.Note)), .. tasks.Select(e => ToTrashModel(e, ModelType.Task))];
+        }
 
-            Models = entities.Select(t => new Model
+        static TrashModel ToTrashModel(Entity entity, ModelType modelType)
+        {
+            return new TrashModel
             {
-                Id = t.Id,
-                IsDeleted = t.IsDeleted,
-                Title = t.Title,
-                CreatedAt = t.CreatedAt,
-                UpdatedAt = t.UpdatedAt,
-                Priority = t.Priority,
-                Importance = t.Importance
-            }).ToList();
+                Id = entity.Id,
+                IsDeleted = entity.IsDeleted,
+                Title = entity.Title,
+                CreatedAt = entity.CreatedAt,
+                UpdatedAt = entity.UpdatedAt,
+                Priority = entity.Priority,
+                Importance = entity.Importance,
+                ModelType = modelType
+            };
         }
     }
 

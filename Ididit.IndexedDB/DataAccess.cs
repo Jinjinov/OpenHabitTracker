@@ -47,14 +47,17 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     public async Task AddHabit(HabitEntity habit)
     {
         await _indexedDb.AddItems(new List<HabitEntity> { habit });
+        habit.Id = await _indexedDb.GetMaxKey<long, HabitEntity>();
     }
     public async Task AddNote(NoteEntity note)
     {
         await _indexedDb.AddItems(new List<NoteEntity> { note });
+        note.Id = await _indexedDb.GetMaxKey<long, NoteEntity>();
     }
     public async Task AddTask(TaskEntity task)
     {
         await _indexedDb.AddItems(new List<TaskEntity> { task });
+        task.Id = await _indexedDb.GetMaxKey<long, TaskEntity>();
     }
     public async Task AddTime(TimeEntity time)
     {

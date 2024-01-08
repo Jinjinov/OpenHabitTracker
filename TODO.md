@@ -1,5 +1,12 @@
 # TODO:
 
+maui file picker
+maui file saver
+blazor file picker
+blazor file saver
+
+restore from trash
+
 - common:
 	- Routes.razor </Router>
 		- Ididit.Blazor.Maui

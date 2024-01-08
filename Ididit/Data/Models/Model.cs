@@ -2,7 +2,7 @@
 
 public class Model
 {
-    public long Id { get; init; }
+    public long Id { get; set; }
 
     public bool IsDeleted { get; set; }
 

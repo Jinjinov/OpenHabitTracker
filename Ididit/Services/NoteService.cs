@@ -44,19 +44,28 @@ public class NoteService(IDataAccess dataAccess)
         if (Notes is null || NewNote is null)
             return;
 
+        DateTime utcNow = DateTime.UtcNow;
+
+        NewNote.CreatedAt = utcNow;
+        NewNote.UpdatedAt = utcNow;
+
         Notes.Add(NewNote);
 
-        await _dataAccess.AddNote(new NoteEntity
+        NoteEntity note = new()
         {
             IsDeleted = false,
             Title = NewNote.Title,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
+            CreatedAt = utcNow,
+            UpdatedAt = utcNow,
             Priority = NewNote.Priority,
             Importance = NewNote.Importance,
 
             Content = NewNote.Content
-        });
+        };
+
+        await _dataAccess.AddNote(note);
+
+        NewNote.Id = note.Id;
 
         NewNote = new();
     }

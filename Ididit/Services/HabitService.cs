@@ -58,21 +58,30 @@ public class HabitService(IDataAccess dataAccess)
         if (Habits is null || NewHabit is null)
             return;
 
+        DateTime utcNow = DateTime.UtcNow;
+
+        NewHabit.CreatedAt = utcNow;
+        NewHabit.UpdatedAt = utcNow;
+
         Habits.Add(NewHabit);
 
-        await _dataAccess.AddHabit(new HabitEntity
+        HabitEntity habit = new()
         {
             IsDeleted = false,
             Title = NewHabit.Title,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
+            CreatedAt = utcNow,
+            UpdatedAt = utcNow,
             Priority = NewHabit.Priority,
             Importance = NewHabit.Importance,
 
             AverageInterval = NewHabit.AverageInterval,
             DesiredInterval = NewHabit.DesiredInterval,
             LastTimeDoneAt = null
-        });
+        };
+
+        await _dataAccess.AddHabit(habit);
+
+        NewHabit.Id = habit.Id;
 
         NewHabit = new();
     }
@@ -115,7 +124,13 @@ public class HabitService(IDataAccess dataAccess)
 
         habit.TimesDone.Add(utcNow);
 
-        await _dataAccess.AddTime(new TimeEntity { HabitId = habit.Id, Time = utcNow });
+        TimeEntity time = new()
+        {
+            HabitId = habit.Id,
+            Time = utcNow
+        };
+
+        await _dataAccess.AddTime(time);
 
         if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
         {

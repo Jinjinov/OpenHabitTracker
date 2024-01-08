@@ -45,20 +45,29 @@ public class TaskService(IDataAccess dataAccess)
         if (Tasks is null || NewTask is null)
             return;
 
+        DateTime utcNow = DateTime.UtcNow;
+
+        NewTask.CreatedAt = utcNow;
+        NewTask.UpdatedAt = utcNow;
+
         Tasks.Add(NewTask);
 
-        await _dataAccess.AddTask(new TaskEntity
+        TaskEntity task = new()
         {
             IsDeleted = false,
             Title = NewTask.Title,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
+            CreatedAt = utcNow,
+            UpdatedAt = utcNow,
             Priority = NewTask.Priority,
             Importance = NewTask.Importance,
 
             DoneAt = null,
             Date = NewTask.Date
-        });
+        };
+
+        await _dataAccess.AddTask(task);
+
+        NewTask.Id = task.Id;
 
         NewTask = new();
     }
