@@ -5,6 +5,8 @@ maui file saver
 blazor file picker
 blazor file saver
 
+EF Core: use DbContextFactory
+
 restore from trash
 	TrashService Restore() restores only Entity -> must also restore Model / reload?
 
