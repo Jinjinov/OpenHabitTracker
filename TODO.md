@@ -6,6 +6,7 @@ blazor file picker
 blazor file saver
 
 restore from trash
+	TrashService Restore() restores only Entity -> must also restore Model / reload?
 
 - common:
 	- Routes.razor </Router>
