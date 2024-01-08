@@ -9,6 +9,7 @@ EF Core: use DbContextFactory
 
 restore from trash
 	TrashService Restore() restores only Entity -> must also restore Model / reload?
+	TrashService List is updated only on Initialize -> must also update it on second load / reload?
 
 - common:
 	- Routes.razor </Router>
@@ -25,7 +26,7 @@ columns:
 	search, filter, sort
 
 - Note Content
-- restore from trash
+
 - read Settings from DB before Run()
 
 - settings
@@ -35,7 +36,9 @@ columns:
 	- language
 - localization
 
-- task / habit: list item
+- task / habit: ListItem
+
+- TimeEntity -> DoneEntity - StartedAt, CompletedAt
 
 - categories - NO nesting
 - tree view - NO!

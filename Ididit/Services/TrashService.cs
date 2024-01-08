@@ -51,9 +51,11 @@ public class TrashService(IDataAccess dataAccess)
                 await RestoreHabit(id);
                 break;
         };
+
+        Models?.RemoveAll(m => m.Id == id);
     }
 
-    public async Task RestoreHabit(long id)
+    private async Task RestoreHabit(long id)
     {
         if (await _dataAccess.GetHabit(id) is HabitEntity habit)
         {
@@ -62,7 +64,7 @@ public class TrashService(IDataAccess dataAccess)
         }
     }
 
-    public async Task RestoreNote(long id)
+    private async Task RestoreNote(long id)
     {
         if (await _dataAccess.GetNote(id) is NoteEntity note)
         {
@@ -71,7 +73,7 @@ public class TrashService(IDataAccess dataAccess)
         }
     }
 
-    public async Task RestoreTask(long id)
+    private async Task RestoreTask(long id)
     {
         if (await _dataAccess.GetTask(id) is TaskEntity task)
         {
@@ -94,19 +96,21 @@ public class TrashService(IDataAccess dataAccess)
                 await DeleteHabit(id);
                 break;
         };
+
+        Models?.RemoveAll(m => m.Id == id);
     }
 
-    public async Task DeleteHabit(long id)
+    private async Task DeleteHabit(long id)
     {
         await _dataAccess.RemoveHabit(id);
     }
 
-    public async Task DeleteNote(long id)
+    private async Task DeleteNote(long id)
     {
         await _dataAccess.RemoveNote(id);
     }
 
-    public async Task DeleteTask(long id)
+    private async Task DeleteTask(long id)
     {
         await _dataAccess.RemoveTask(id);
     }
@@ -116,5 +120,7 @@ public class TrashService(IDataAccess dataAccess)
         await _dataAccess.RemoveHabits();
         await _dataAccess.RemoveNotes();
         await _dataAccess.RemoveTasks();
+
+        Models?.Clear();
     }
 }
