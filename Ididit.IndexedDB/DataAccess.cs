@@ -46,18 +46,18 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
 
     public async Task AddHabit(HabitEntity habit)
     {
+        habit.Id = 1 + await _indexedDb.GetMaxKey<long, HabitEntity>();
         await _indexedDb.AddItems(new List<HabitEntity> { habit });
-        habit.Id = await _indexedDb.GetMaxKey<long, HabitEntity>();
     }
     public async Task AddNote(NoteEntity note)
     {
+        note.Id = 1 + await _indexedDb.GetMaxKey<long, NoteEntity>();
         await _indexedDb.AddItems(new List<NoteEntity> { note });
-        note.Id = await _indexedDb.GetMaxKey<long, NoteEntity>();
     }
     public async Task AddTask(TaskEntity task)
     {
+        task.Id = 1 + await _indexedDb.GetMaxKey<long, TaskEntity>();
         await _indexedDb.AddItems(new List<TaskEntity> { task });
-        task.Id = await _indexedDb.GetMaxKey<long, TaskEntity>();
     }
     public async Task AddTime(TimeEntity time)
     {
@@ -81,7 +81,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         if (habitId is null)
             return await _indexedDb.GetAll<TimeEntity>();
         else
-            return await _indexedDb.GetByIndex<long?, TimeEntity>(lowerBound: habitId, upperBound: null, dbIndex: nameof(TimeEntity.HabitId), isRange: false);
+            return await _indexedDb.GetByIndex<long?, TimeEntity>(lowerBound: habitId, upperBound: null, dbIndex: "habitId", isRange: false);
     }
 
     public async Task<HabitEntity?> GetHabit(long id)

@@ -15,28 +15,28 @@ public class IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options
             Name = "Ididit",
             Version = 1,
             DbModelId = 0,
-            UseKeyGenerator = true // Unable to use AutoIncrement = false and AutoIncrement = true in the same IndexedDbDatabaseModel
+            UseKeyGenerator = false // Unable to use AutoIncrement = false and AutoIncrement = true in the same IndexedDbDatabaseModel
         };
 
         indexedDbDatabaseModel.AddStore(nameof(HabitEntity))
-            .WithAutoIncrementingKey(nameof(HabitEntity.Id))
+            .WithKey(nameof(HabitEntity.Id))
             .AddUniqueIndex(nameof(HabitEntity.Id))
-            .AddIndex(nameof(HabitEntity.Title));
+            .AddIndex(nameof(HabitEntity.Title)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(NoteEntity))
-            .WithAutoIncrementingKey(nameof(NoteEntity.Id))
+            .WithKey(nameof(NoteEntity.Id))
             .AddUniqueIndex(nameof(NoteEntity.Id))
-            .AddIndex(nameof(NoteEntity.Title));
+            .AddIndex(nameof(NoteEntity.Title)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(TaskEntity))
-            .WithAutoIncrementingKey(nameof(TaskEntity.Id))
+            .WithKey(nameof(TaskEntity.Id))
             .AddUniqueIndex(nameof(TaskEntity.Id))
-            .AddIndex(nameof(TaskEntity.Title));
+            .AddIndex(nameof(TaskEntity.Title)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(TimeEntity))
             .WithKey(nameof(TimeEntity.Time))
             .AddUniqueIndex(nameof(TimeEntity.Time))
-            .AddIndex(nameof(TimeEntity.HabitId));
+            .AddIndex(nameof(TimeEntity.HabitId)); // warning: name.ToCamelCase();
 
         return indexedDbDatabaseModel;
     }

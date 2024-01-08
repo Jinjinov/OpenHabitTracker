@@ -19,9 +19,9 @@ else
 {
     <p>Count: @TrashService.Models.Where(t => t.IsDeleted).Count()</p>
 
-    foreach (Model model in TrashService.Models.Where(t => t.IsDeleted))
+    foreach (TrashModel model in TrashService.Models.Where(t => t.IsDeleted))
     {
-        <p>@model.Title</p>
+        <p>@model.Title <button @onclick="() => TrashService.Restore(model.Id, model.ModelType)">Restore</button> <button @onclick="() => TrashService.Delete(model.Id, model.ModelType)">Delete</button></p>
     }
 }
 

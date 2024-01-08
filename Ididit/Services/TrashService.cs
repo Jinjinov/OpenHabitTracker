@@ -37,6 +37,22 @@ public class TrashService(IDataAccess dataAccess)
         }
     }
 
+    public async Task Restore(long id, ModelType modelType)
+    {
+        switch (modelType)
+        {
+            case ModelType.Note:
+                await RestoreNote(id);
+                break;
+            case ModelType.Task:
+                await RestoreTask(id);
+                break;
+            case ModelType.Habit:
+                await RestoreHabit(id);
+                break;
+        };
+    }
+
     public async Task RestoreHabit(long id)
     {
         if (await _dataAccess.GetHabit(id) is HabitEntity habit)
@@ -62,6 +78,22 @@ public class TrashService(IDataAccess dataAccess)
             task.IsDeleted = false;
             await _dataAccess.UpdateTask(task);
         }
+    }
+
+    public async Task Delete(long id, ModelType modelType)
+    {
+        switch (modelType)
+        {
+            case ModelType.Note:
+                await DeleteNote(id);
+                break;
+            case ModelType.Task:
+                await DeleteTask(id);
+                break;
+            case ModelType.Habit:
+                await DeleteHabit(id);
+                break;
+        };
     }
 
     public async Task DeleteHabit(long id)
