@@ -13,32 +13,27 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
 
     public async Task Initialize()
     {
-        if (Models is null)
-        {
-            IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
-            IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
-            IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
-
-            _appData.Trash = [.. habits.Select(e => e.ToModel(ModelType.Habit)), .. notes.Select(e => e.ToModel(ModelType.Note)), .. tasks.Select(e => e.ToModel(ModelType.Task))];
-        }
+        await _appData.InitializeTrash();
     }
 
-    public async Task Restore(long id, ModelType modelType)
+    public async Task Restore(Model model)
     {
-        switch (modelType)
-        {
-            case ModelType.Note:
-                await RestoreNote(id);
-                break;
-            case ModelType.Task:
-                await RestoreTask(id);
-                break;
-            case ModelType.Habit:
-                await RestoreHabit(id);
-                break;
-        };
+        model.IsDeleted = false;
 
-        _appData.Trash?.RemoveAll(m => m.Id == id);
+        if (model is NoteModel)
+        {
+            await RestoreNote(model.Id);
+        }
+        else if (model is TaskModel)
+        {
+            await RestoreTask(model.Id);
+        }
+        else if (model is HabitModel)
+        {
+            await RestoreHabit(model.Id);
+        }
+
+        _appData.Trash?.Remove(model);
     }
 
     private async Task RestoreHabit(long id)
@@ -68,22 +63,22 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
         }
     }
 
-    public async Task Delete(long id, ModelType modelType)
+    public async Task Delete(Model model)
     {
-        switch (modelType)
+        if (model is NoteModel)
         {
-            case ModelType.Note:
-                await DeleteNote(id);
-                break;
-            case ModelType.Task:
-                await DeleteTask(id);
-                break;
-            case ModelType.Habit:
-                await DeleteHabit(id);
-                break;
-        };
+            await DeleteNote(model.Id);
+        }
+        else if (model is TaskModel)
+        {
+            await DeleteTask(model.Id);
+        }
+        else if (model is HabitModel)
+        {
+            await DeleteHabit(model.Id);
+        }
 
-        _appData.Trash?.RemoveAll(m => m.Id == id);
+        _appData.Trash?.Remove(model);
     }
 
     private async Task DeleteHabit(long id)

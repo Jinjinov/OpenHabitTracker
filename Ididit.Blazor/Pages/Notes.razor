@@ -12,7 +12,7 @@
 
 <p><a href="/notes/add">Add note</a></p>
 
-@if (NoteService.Notes is null || NoteService.NewNote is null)
+@if (NoteService.Notes is null)
 {
     <p>Loading...</p>
 }
@@ -28,7 +28,7 @@ else
 
             <p><a href="/notes/@note.Id/update">Update</a></p>
 
-            <button @onclick="() => NoteService.DeleteNote(note.Id)">Delete Note</button>
+            <button @onclick="() => NoteService.DeleteNote(note)">Delete Note</button>
 
             <p>CreatedAt: @note.CreatedAt</p>
             <p>UpdatedAt: @note.UpdatedAt</p>

@@ -17,28 +17,9 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
     public async Task Initialize()
     {
-        if (Tasks is null)
-        {
-            IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
-            _appData.Tasks = tasks.Select(t => new TaskModel
-            {
-                Id = t.Id,
-                IsDeleted = t.IsDeleted,
-                Title = t.Title,
-                CreatedAt = t.CreatedAt,
-                UpdatedAt = t.UpdatedAt,
-                Priority = t.Priority,
-                Importance = t.Importance,
+        await _appData.InitializeTasks();
 
-                DoneAt = t.DoneAt,
-                Date = t.Date
-            }).ToList();
-        }
-
-        if (NewTask is null)
-        {
-            NewTask = new();
-        }
+        NewTask ??= new();
     }
 
     public async Task AddTask()
@@ -112,17 +93,20 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         }
     }
 
-    public async Task DeleteTask(long id)
+    public async Task DeleteTask(TaskModel task)
     {
         if (_appData.Tasks is null)
             return;
 
-        _appData.Tasks.RemoveAll(t => t.Id == id);
+        task.IsDeleted = true;
 
-        if (await _dataAccess.GetTask(id) is TaskEntity task)
+        // add to Trash if it not null (if Trash is null, it will add this on Initialize)
+        _appData.Trash?.Add(task);
+
+        if (await _dataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
-            task.IsDeleted = true;
-            await _dataAccess.UpdateTask(task);
+            taskEntity.IsDeleted = true;
+            await _dataAccess.UpdateTask(taskEntity);
         }
     }
 }

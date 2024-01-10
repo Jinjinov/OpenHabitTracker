@@ -17,29 +17,9 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
     public async Task Initialize()
     {
-        if (Habits is null)
-        {
-            IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
-            _appData.Habits = habits.Select(h => new HabitModel
-            {
-                Id  = h.Id,
-                IsDeleted  = h.IsDeleted,
-                Title  = h.Title,
-                CreatedAt  = h.CreatedAt,
-                UpdatedAt  = h.UpdatedAt,
-                Priority  = h.Priority,
-                Importance = h.Importance,
+        await _appData.InitializeHabits();
 
-                AverageInterval = h.AverageInterval,
-                DesiredInterval = h.DesiredInterval,
-                LastTimeDoneAt = h.LastTimeDoneAt
-            }).ToList();
-        }
-
-        if (NewHabit is null)
-        {
-            NewHabit = new();
-        }
+        NewHabit ??= new();
     }
 
     public async Task LoadTimesDone(long? id)
@@ -145,7 +125,10 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         if (_appData.Habits is null)
             return;
 
-        _appData.Habits.Remove(habit);
+        habit.IsDeleted = true;
+
+        // add to Trash if it not null (if Trash is null, it will add this on Initialize)
+        _appData.Trash?.Add(habit);
 
         if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
         {

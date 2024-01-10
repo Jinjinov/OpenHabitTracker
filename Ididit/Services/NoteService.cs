@@ -17,27 +17,9 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
     public async Task Initialize()
     {
-        if (Notes is null)
-        {
-            IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
-            _appData.Notes = notes.Select(n => new NoteModel
-            {
-                Id = n.Id,
-                IsDeleted = n.IsDeleted,
-                Title = n.Title,
-                CreatedAt = n.CreatedAt,
-                UpdatedAt = n.UpdatedAt,
-                Priority = n.Priority,
-                Importance = n.Importance,
+        await _appData.InitializeNotes();
 
-                Content = n.Content
-            }).ToList();
-        }
-
-        if (NewNote is null)
-        {
-            NewNote = new();
-        }
+        NewNote ??= new();
     }
 
     public async Task AddNote()
@@ -93,17 +75,20 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         EditNote = null;
     }
 
-    public async Task DeleteNote(long id)
+    public async Task DeleteNote(NoteModel note)
     {
         if (_appData.Notes is null)
             return;
 
-        _appData.Notes.RemoveAll(n => n.Id == id);
+        note.IsDeleted = true;
 
-        if (await _dataAccess.GetNote(id) is NoteEntity note)
+        // add to Trash if it not null (if Trash is null, it will add this on Initialize)
+        _appData.Trash?.Add(note);
+
+        if (await _dataAccess.GetNote(note.Id) is NoteEntity noteEntity)
         {
-            note.IsDeleted = true;
-            await _dataAccess.UpdateNote(note);
+            noteEntity.IsDeleted = true;
+            await _dataAccess.UpdateNote(noteEntity);
         }
     }
 }

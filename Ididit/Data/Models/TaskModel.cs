@@ -2,11 +2,6 @@
 
 public class TaskModel : Model
 {
-    public TaskModel()
-    {
-        ModelType = ModelType.Task;
-    }
-
     public DateTime? DoneAt { get; set; }
 
     public DateTime? Date { get; set; }

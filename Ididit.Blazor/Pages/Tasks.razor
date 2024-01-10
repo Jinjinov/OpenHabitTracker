@@ -12,7 +12,7 @@
 
 <p><a href="/tasks/add">Add task</a></p>
 
-@if (TaskService.Tasks is null || TaskService.NewTask is null)
+@if (TaskService.Tasks is null)
 {
     <p>Loading...</p>
 }
@@ -28,7 +28,7 @@ else
 
             <p><a href="/tasks/@task.Id/update">Update</a></p>
 
-            <button @onclick="() => TaskService.DeleteTask(task.Id)">Delete Task</button>
+            <button @onclick="() => TaskService.DeleteTask(task)">Delete Task</button>
 
             <p>CreatedAt: @task.CreatedAt</p>
             <p>UpdatedAt: @task.UpdatedAt</p>
