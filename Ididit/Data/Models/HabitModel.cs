@@ -8,5 +8,5 @@ public class HabitModel : Model
 
     public DateTime? LastTimeDoneAt { get; set; }
 
-    public List<DateTime>? TimesDone { get; set; }
+    public List<TimeModel>? TimesDone { get; set; }
 }

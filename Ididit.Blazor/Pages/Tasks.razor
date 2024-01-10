@@ -34,9 +34,9 @@ else
             <p>UpdatedAt: @task.UpdatedAt</p>
             <p>Priority: @task.Priority</p>
 
-            if (task.DoneAt is not null)
+            if (task.CompletedAt is not null)
             {
-                <p>DoneAt: @task.DoneAt</p>
+                <p>CompletedAt: @task.CompletedAt</p>
             }
         }
         else

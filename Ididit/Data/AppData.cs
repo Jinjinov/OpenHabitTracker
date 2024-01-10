@@ -69,7 +69,8 @@ public class AppData(IDataAccess dataAccess)
                 Priority = t.Priority,
                 Importance = t.Importance,
 
-                DoneAt = t.DoneAt,
+                StartedAt = t.StartedAt,
+                CompletedAt = t.CompletedAt,
                 Date = t.Date
             }).ToList();
         }

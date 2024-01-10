@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazorise" Version="1.4.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.57" />
     <PackageReference Include="Markdig" Version="0.34.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />

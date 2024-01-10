@@ -1,5 +1,9 @@
 # TODO:
 
+- task / habit: ListItem
+
+- TimeEntity -> DoneEntity - StartedAt, CompletedAt
+
 maui file picker
 maui file saver
 blazor file picker
@@ -31,10 +35,6 @@ columns:
 	- background
 	- language
 - localization
-
-- task / habit: ListItem
-
-- TimeEntity -> DoneEntity - StartedAt, CompletedAt
 
 - categories - NO nesting
 - tree view - NO!

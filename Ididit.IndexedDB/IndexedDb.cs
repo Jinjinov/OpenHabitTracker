@@ -34,8 +34,8 @@ public class IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options
             .AddIndex(nameof(TaskEntity.Title)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(TimeEntity))
-            .WithKey(nameof(TimeEntity.Time))
-            .AddUniqueIndex(nameof(TimeEntity.Time))
+            .WithKey(nameof(TimeEntity.StartedAt))
+            .AddUniqueIndex(nameof(TimeEntity.StartedAt))
             .AddIndex(nameof(TimeEntity.HabitId)); // warning: name.ToCamelCase();
 
         return indexedDbDatabaseModel;

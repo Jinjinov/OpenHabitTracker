@@ -43,7 +43,8 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
             Priority = NewTask.Priority,
             Importance = NewTask.Importance,
 
-            DoneAt = null,
+            StartedAt = null,
+            CompletedAt = null,
             Date = NewTask.Date
         };
 
@@ -68,13 +69,30 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
             task.Priority = EditTask.Priority;
             task.Importance = EditTask.Importance;
 
-            task.DoneAt = EditTask.DoneAt;
+            task.StartedAt = EditTask.StartedAt;
+            task.CompletedAt = EditTask.CompletedAt;
             task.Date = EditTask.Date;
 
             await _dataAccess.UpdateTask(task);
         }
 
         EditTask = null;
+    }
+
+    public async Task Start(TaskModel task)
+    {
+        if (Tasks is null)
+            return;
+
+        DateTime utcNow = DateTime.UtcNow;
+
+        task.StartedAt = utcNow;
+
+        if (await _dataAccess.GetTask(task.Id) is TaskEntity taskEntity)
+        {
+            taskEntity.StartedAt = utcNow;
+            await _dataAccess.UpdateTask(taskEntity);
+        }
     }
 
     public async Task MarkAsDone(TaskModel task)
@@ -84,11 +102,17 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
         DateTime utcNow = DateTime.UtcNow;
 
-        task.DoneAt = utcNow;
+        if (task.StartedAt is null)
+            task.StartedAt = utcNow;
+
+        task.CompletedAt = utcNow;
 
         if (await _dataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
-            taskEntity.DoneAt = utcNow;
+            if (taskEntity.StartedAt is null)
+                taskEntity.StartedAt = utcNow;
+
+            taskEntity.CompletedAt = utcNow;
             await _dataAccess.UpdateTask(taskEntity);
         }
     }

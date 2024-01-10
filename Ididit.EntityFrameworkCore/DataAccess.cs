@@ -118,7 +118,7 @@ public class DataAccess : IDataAccess
     }
     public async Task RemoveTime(DateTime time)
     {
-        _dataContext.Remove(new TimeEntity { Time = time });
+        _dataContext.Remove(new TimeEntity { StartedAt = time });
         await _dataContext.SaveChangesAsync();
     }
 

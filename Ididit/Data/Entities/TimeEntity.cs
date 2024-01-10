@@ -4,5 +4,7 @@ public class TimeEntity
 {
     public long HabitId { get; init; }
 
-    public DateTime Time { get; set; }
+    public DateTime StartedAt { get; set; }
+
+    public DateTime? CompletedAt { get; set; }
 }
