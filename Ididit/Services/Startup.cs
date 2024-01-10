@@ -7,7 +7,7 @@ public static class Startup
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<UserData>();
+        services.AddScoped<AppData>();
 
         services.AddScoped<HabitService>();
         services.AddScoped<NoteService>();

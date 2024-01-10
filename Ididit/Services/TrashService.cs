@@ -4,12 +4,12 @@ using Ididit.Data.Models;
 
 namespace Ididit.Services;
 
-public class TrashService(UserData userData, IDataAccess dataAccess)
+public class TrashService(AppData appData, IDataAccess dataAccess)
 {
-    private readonly UserData _userData = userData;
+    private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public IReadOnlyList<TrashModel>? Models => _userData.Models;
+    public IReadOnlyList<TrashModel>? Models => _appData.Models;
 
     public async Task Initialize()
     {
@@ -19,7 +19,7 @@ public class TrashService(UserData userData, IDataAccess dataAccess)
             IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
             IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
 
-            _userData.Models = [.. habits.Select(e => ToTrashModel(e, ModelType.Habit)), .. notes.Select(e => ToTrashModel(e, ModelType.Note)), .. tasks.Select(e => ToTrashModel(e, ModelType.Task))];
+            _appData.Models = [.. habits.Select(e => ToTrashModel(e, ModelType.Habit)), .. notes.Select(e => ToTrashModel(e, ModelType.Note)), .. tasks.Select(e => ToTrashModel(e, ModelType.Task))];
         }
 
         static TrashModel ToTrashModel(Entity entity, ModelType modelType)
@@ -53,7 +53,7 @@ public class TrashService(UserData userData, IDataAccess dataAccess)
                 break;
         };
 
-        _userData.Models?.RemoveAll(m => m.Id == id);
+        _appData.Models?.RemoveAll(m => m.Id == id);
     }
 
     private async Task RestoreHabit(long id)
@@ -98,7 +98,7 @@ public class TrashService(UserData userData, IDataAccess dataAccess)
                 break;
         };
 
-        _userData.Models?.RemoveAll(m => m.Id == id);
+        _appData.Models?.RemoveAll(m => m.Id == id);
     }
 
     private async Task DeleteHabit(long id)
@@ -122,6 +122,6 @@ public class TrashService(UserData userData, IDataAccess dataAccess)
         await _dataAccess.RemoveNotes();
         await _dataAccess.RemoveTasks();
 
-        _userData.Models?.Clear();
+        _appData.Models?.Clear();
     }
 }

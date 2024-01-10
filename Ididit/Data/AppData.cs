@@ -2,7 +2,7 @@
 
 namespace Ididit.Data;
 
-public class UserData
+public class AppData
 {
     public List<HabitModel>? Habits { get; set; }
     public List<NoteModel>? Notes { get; set; }

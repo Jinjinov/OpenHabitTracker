@@ -4,12 +4,12 @@ using Ididit.Data.Models;
 
 namespace Ididit.Services;
 
-public class TaskService(UserData userData, IDataAccess dataAccess)
+public class TaskService(AppData appData, IDataAccess dataAccess)
 {
-    private readonly UserData _userData = userData;
+    private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public IReadOnlyList<TaskModel>? Tasks => _userData.Tasks;
+    public IReadOnlyList<TaskModel>? Tasks => _appData.Tasks;
 
     public TaskModel? NewTask { get; set; }
 
@@ -20,7 +20,7 @@ public class TaskService(UserData userData, IDataAccess dataAccess)
         if (Tasks is null)
         {
             IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
-            _userData.Tasks = tasks.Select(t => new TaskModel
+            _appData.Tasks = tasks.Select(t => new TaskModel
             {
                 Id = t.Id,
                 IsDeleted = t.IsDeleted,
@@ -43,7 +43,7 @@ public class TaskService(UserData userData, IDataAccess dataAccess)
 
     public async Task AddTask()
     {
-        if (_userData.Tasks is null || NewTask is null)
+        if (_appData.Tasks is null || NewTask is null)
             return;
 
         DateTime utcNow = DateTime.UtcNow;
@@ -51,7 +51,7 @@ public class TaskService(UserData userData, IDataAccess dataAccess)
         NewTask.CreatedAt = utcNow;
         NewTask.UpdatedAt = utcNow;
 
-        _userData.Tasks.Add(NewTask);
+        _appData.Tasks.Add(NewTask);
 
         TaskEntity task = new()
         {
@@ -114,10 +114,10 @@ public class TaskService(UserData userData, IDataAccess dataAccess)
 
     public async Task DeleteTask(long id)
     {
-        if (_userData.Tasks is null)
+        if (_appData.Tasks is null)
             return;
 
-        _userData.Tasks.RemoveAll(t => t.Id == id);
+        _appData.Tasks.RemoveAll(t => t.Id == id);
 
         if (await _dataAccess.GetTask(id) is TaskEntity task)
         {

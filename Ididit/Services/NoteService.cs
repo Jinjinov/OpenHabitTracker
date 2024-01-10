@@ -4,12 +4,12 @@ using Ididit.Data.Models;
 
 namespace Ididit.Services;
 
-public class NoteService(UserData userData, IDataAccess dataAccess)
+public class NoteService(AppData appData, IDataAccess dataAccess)
 {
-    private readonly UserData _userData = userData;
+    private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public IReadOnlyList<NoteModel>? Notes => _userData.Notes;
+    public IReadOnlyList<NoteModel>? Notes => _appData.Notes;
 
     public NoteModel? NewNote { get; set; }
 
@@ -20,7 +20,7 @@ public class NoteService(UserData userData, IDataAccess dataAccess)
         if (Notes is null)
         {
             IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
-            _userData.Notes = notes.Select(n => new NoteModel
+            _appData.Notes = notes.Select(n => new NoteModel
             {
                 Id = n.Id,
                 IsDeleted = n.IsDeleted,
@@ -42,7 +42,7 @@ public class NoteService(UserData userData, IDataAccess dataAccess)
 
     public async Task AddNote()
     {
-        if (_userData.Notes is null || NewNote is null)
+        if (_appData.Notes is null || NewNote is null)
             return;
 
         DateTime utcNow = DateTime.UtcNow;
@@ -50,7 +50,7 @@ public class NoteService(UserData userData, IDataAccess dataAccess)
         NewNote.CreatedAt = utcNow;
         NewNote.UpdatedAt = utcNow;
 
-        _userData.Notes.Add(NewNote);
+        _appData.Notes.Add(NewNote);
 
         NoteEntity note = new()
         {
@@ -95,10 +95,10 @@ public class NoteService(UserData userData, IDataAccess dataAccess)
 
     public async Task DeleteNote(long id)
     {
-        if (_userData.Notes is null)
+        if (_appData.Notes is null)
             return;
 
-        _userData.Notes.RemoveAll(n => n.Id == id);
+        _appData.Notes.RemoveAll(n => n.Id == id);
 
         if (await _dataAccess.GetNote(id) is NoteEntity note)
         {
