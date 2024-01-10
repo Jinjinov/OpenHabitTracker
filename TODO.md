@@ -7,6 +7,8 @@ blazor file saver
 
 EF Core: use DbContextFactory
 
+Shared State !!!
+
 restore from trash
 	TrashService Restore() restores only Entity -> must also restore Model / reload?
 	TrashService List is updated only on Initialize -> must also update it on second load / reload?
