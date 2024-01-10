@@ -9,7 +9,7 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
     private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public IReadOnlyList<TrashModel>? Models => _appData.Models;
+    public IReadOnlyList<Model>? Models => _appData.Trash;
 
     public async Task Initialize()
     {
@@ -19,22 +19,7 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
             IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
             IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
 
-            _appData.Models = [.. habits.Select(e => ToTrashModel(e, ModelType.Habit)), .. notes.Select(e => ToTrashModel(e, ModelType.Note)), .. tasks.Select(e => ToTrashModel(e, ModelType.Task))];
-        }
-
-        static TrashModel ToTrashModel(Entity entity, ModelType modelType)
-        {
-            return new TrashModel
-            {
-                Id = entity.Id,
-                IsDeleted = entity.IsDeleted,
-                Title = entity.Title,
-                CreatedAt = entity.CreatedAt,
-                UpdatedAt = entity.UpdatedAt,
-                Priority = entity.Priority,
-                Importance = entity.Importance,
-                ModelType = modelType
-            };
+            _appData.Trash = [.. habits.Select(e => e.ToModel(ModelType.Habit)), .. notes.Select(e => e.ToModel(ModelType.Note)), .. tasks.Select(e => e.ToModel(ModelType.Task))];
         }
     }
 
@@ -53,7 +38,7 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
                 break;
         };
 
-        _appData.Models?.RemoveAll(m => m.Id == id);
+        _appData.Trash?.RemoveAll(m => m.Id == id);
     }
 
     private async Task RestoreHabit(long id)
@@ -98,7 +83,7 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
                 break;
         };
 
-        _appData.Models?.RemoveAll(m => m.Id == id);
+        _appData.Trash?.RemoveAll(m => m.Id == id);
     }
 
     private async Task DeleteHabit(long id)
@@ -122,6 +107,6 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
         await _dataAccess.RemoveNotes();
         await _dataAccess.RemoveTasks();
 
-        _appData.Models?.Clear();
+        _appData.Trash?.Clear();
     }
 }
