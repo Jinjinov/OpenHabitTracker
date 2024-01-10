@@ -7,10 +7,6 @@ blazor file saver
 
 EF Core: use DbContextFactory
 
-restore from trash
-	TrashService Restore() restores only Entity -> must also restore Model / reload?
-	TrashService List is updated only on Initialize -> must also update it on second load / reload?
-
 - common:
 	- Routes.razor </Router>
 		- Ididit.Blazor.Maui
