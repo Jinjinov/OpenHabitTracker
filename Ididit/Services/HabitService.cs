@@ -4,11 +4,12 @@ using Ididit.Data.Models;
 
 namespace Ididit.Services;
 
-public class HabitService(IDataAccess dataAccess)
+public class HabitService(UserData userData, IDataAccess dataAccess)
 {
+    private readonly UserData _userData = userData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public List<HabitModel>? Habits { get; set; }
+    public IReadOnlyList<HabitModel>? Habits => _userData.Habits;
 
     public HabitModel? NewHabit { get; set; }
 
@@ -19,7 +20,7 @@ public class HabitService(IDataAccess dataAccess)
         if (Habits is null)
         {
             IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
-            Habits = habits.Select(h => new HabitModel
+            _userData.Habits = habits.Select(h => new HabitModel
             {
                 Id  = h.Id,
                 IsDeleted  = h.IsDeleted,
@@ -55,7 +56,7 @@ public class HabitService(IDataAccess dataAccess)
 
     public async Task AddHabit()
     {
-        if (Habits is null || NewHabit is null)
+        if (_userData.Habits is null || NewHabit is null)
             return;
 
         DateTime utcNow = DateTime.UtcNow;
@@ -63,7 +64,7 @@ public class HabitService(IDataAccess dataAccess)
         NewHabit.CreatedAt = utcNow;
         NewHabit.UpdatedAt = utcNow;
 
-        Habits.Add(NewHabit);
+        _userData.Habits.Add(NewHabit);
 
         HabitEntity habit = new()
         {
@@ -141,10 +142,10 @@ public class HabitService(IDataAccess dataAccess)
 
     public async Task DeleteHabit(HabitModel habit)
     {
-        if (Habits is null)
+        if (_userData.Habits is null)
             return;
 
-        Habits.Remove(habit);
+        _userData.Habits.Remove(habit);
 
         if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
         {

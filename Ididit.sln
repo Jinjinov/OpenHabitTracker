@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wasm", "Ididi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Maui", "Ididit.Blazor.Maui\Ididit.Blazor.Maui.csproj", "{D0071377-3D33-41EE-A22F-586BDDE64A5E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.WebView", "Ididit.Blazor.WebView\Ididit.Blazor.WebView.csproj", "{7D620792-F86D-4CFF-8D9C-51668FA08D6A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Google.Apis", "Ididit.Google.Apis\Ididit.Google.Apis.csproj", "{F631C389-EECB-41E4-95AE-341C3CBF284F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{36C1DB59-1758-4659-BA71-5289BD204001}"
@@ -79,10 +77,6 @@ Global
 		{D0071377-3D33-41EE-A22F-586BDDE64A5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0071377-3D33-41EE-A22F-586BDDE64A5E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0071377-3D33-41EE-A22F-586BDDE64A5E}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{7D620792-F86D-4CFF-8D9C-51668FA08D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D620792-F86D-4CFF-8D9C-51668FA08D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D620792-F86D-4CFF-8D9C-51668FA08D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D620792-F86D-4CFF-8D9C-51668FA08D6A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F631C389-EECB-41E4-95AE-341C3CBF284F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F631C389-EECB-41E4-95AE-341C3CBF284F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F631C389-EECB-41E4-95AE-341C3CBF284F}.Release|Any CPU.ActiveCfg = Release|Any CPU

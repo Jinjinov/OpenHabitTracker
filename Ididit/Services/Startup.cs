@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Ididit.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Ididit.Services;
 
@@ -6,6 +7,8 @@ public static class Startup
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddScoped<UserData>();
+
         services.AddScoped<HabitService>();
         services.AddScoped<NoteService>();
         services.AddScoped<TaskService>();

@@ -4,11 +4,12 @@ using Ididit.Data.Models;
 
 namespace Ididit.Services;
 
-public class TrashService(IDataAccess dataAccess)
+public class TrashService(UserData userData, IDataAccess dataAccess)
 {
+    private readonly UserData _userData = userData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public List<TrashModel>? Models { get; set; }
+    public IReadOnlyList<TrashModel>? Models => _userData.Models;
 
     public async Task Initialize()
     {
@@ -18,7 +19,7 @@ public class TrashService(IDataAccess dataAccess)
             IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
             IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
 
-            Models = [.. habits.Select(e => ToTrashModel(e, ModelType.Habit)), .. notes.Select(e => ToTrashModel(e, ModelType.Note)), .. tasks.Select(e => ToTrashModel(e, ModelType.Task))];
+            _userData.Models = [.. habits.Select(e => ToTrashModel(e, ModelType.Habit)), .. notes.Select(e => ToTrashModel(e, ModelType.Note)), .. tasks.Select(e => ToTrashModel(e, ModelType.Task))];
         }
 
         static TrashModel ToTrashModel(Entity entity, ModelType modelType)
@@ -52,7 +53,7 @@ public class TrashService(IDataAccess dataAccess)
                 break;
         };
 
-        Models?.RemoveAll(m => m.Id == id);
+        _userData.Models?.RemoveAll(m => m.Id == id);
     }
 
     private async Task RestoreHabit(long id)
@@ -97,7 +98,7 @@ public class TrashService(IDataAccess dataAccess)
                 break;
         };
 
-        Models?.RemoveAll(m => m.Id == id);
+        _userData.Models?.RemoveAll(m => m.Id == id);
     }
 
     private async Task DeleteHabit(long id)
@@ -121,6 +122,6 @@ public class TrashService(IDataAccess dataAccess)
         await _dataAccess.RemoveNotes();
         await _dataAccess.RemoveTasks();
 
-        Models?.Clear();
+        _userData.Models?.Clear();
     }
 }
