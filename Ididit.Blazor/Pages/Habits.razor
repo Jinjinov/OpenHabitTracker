@@ -43,9 +43,14 @@ else
             {
                 <p>Times done: @habit.TimesDone.Count</p>
 
-                foreach(DateTime time in habit.TimesDone)
+                foreach(TimeModel time in habit.TimesDone)
                 {
-                    <p>@time</p>
+                    <p>StartedAt: @time.StartedAt</p>
+
+                    if (time.CompletedAt is not null)
+                    {
+                        <p>CompletedAt: @time.CompletedAt</p>
+                    }
                 }
             }
         }

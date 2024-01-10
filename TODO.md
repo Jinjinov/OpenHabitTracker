@@ -2,8 +2,6 @@
 
 - task / habit: ListItem
 
-- TimeEntity -> DoneEntity - StartedAt, CompletedAt
-
 maui file picker
 maui file saver
 blazor file picker
