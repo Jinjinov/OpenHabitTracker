@@ -7,4 +7,6 @@ public class TaskModel : Model
     public DateTime? CompletedAt { get; set; }
 
     public DateTime? Date { get; set; }
+
+    public List<ItemModel>? Items { get; set; }
 }

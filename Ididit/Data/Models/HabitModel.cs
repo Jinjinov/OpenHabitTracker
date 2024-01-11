@@ -9,4 +9,6 @@ public class HabitModel : Model
     public DateTime? LastTimeDoneAt { get; set; }
 
     public List<TimeModel>? TimesDone { get; set; }
+
+    public List<ItemModel>? Items { get; set; }
 }
