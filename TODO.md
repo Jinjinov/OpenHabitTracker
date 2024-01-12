@@ -5,9 +5,21 @@
 - Settings
 
 - remove css
+- remove razor.css
+- remove NavMenu.razor
 - remove Bootstrap
 
 - Calendar
+
+- common:
+	- Routes.razor </Router>
+		- Ididit.Blazor.Maui
+		- Ididit.Blazor.Wasm
+		- Ididit.Blazor
+
+- host 24/7 on Raspberry Pi
+
+---------------------------------------------------------------------------------------------------
 
 maui file picker
 maui file saver
@@ -15,12 +27,6 @@ blazor file picker
 blazor file saver
 
 EF Core: use DbContextFactory
-
-- common:
-	- Routes.razor </Router>
-		- Ididit.Blazor.Maui
-		- Ididit.Blazor.Wasm
-		- Ididit.Blazor
 
 columns:
 	tasks, sub items
