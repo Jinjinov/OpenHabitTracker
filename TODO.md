@@ -1,6 +1,13 @@
 # TODO:
 
-- task / habit: ListItem
+- task / habit: List<Item>, common base class?
+- Category
+- Settings
+
+- remove css
+- remove Bootstrap
+
+- Calendar
 
 maui file picker
 maui file saver
@@ -38,6 +45,9 @@ columns:
 - tree view - NO!
 - bread crumbs - NO!
 
+- categories are filters
+- filters are query parameters
+
 - filter
 - sort
 
@@ -48,6 +58,8 @@ columns:
 
 - about
 - help
+
+---------------------------------------------------------------------------------------------------
 
 - online sync - server with SQL
 - no css / js downloads, everything is local
@@ -96,23 +108,15 @@ Make a concrete plan so that the habit is not just waiting to be done:
 - for habits: split the day in 24 hours, like in calendar
 - split the week in 7 days, like in Habits app
 
-categories are filters
-filters are query parameters
-
 there is no point in accordian component - one action to open and one action to close is the same as next, previous - and it is not url route friendly 
 
 - don't use `event` to refresh everything on every change
 - don't use `StateHasChanged()`
 - don't do this: current screen changed -> save current screen to settings -> data changed -> refresh all
 
-load on demand - List = null / List = new()
 - [ ] task - "done times list" should load on demand - on Task done - on show Task details
 
-- [ ] restore deleted Goals from Trash
-
 - ReplaceTab in MemoEdit
-
-- [ ] don't add Category/Goal until (name is set) / (Save button is clicked) - no need to undo adding empty objects = easy discard
 
 - habits that i really want to do more frequently
 	- chores, cleaning 
@@ -146,9 +150,7 @@ what i had as goals are actually subcategories
 what is wrong with ididit:
 
 - one in all, jack of all trades, master of none
-- tasks and habits mixed
 - too many tasks - should be one task with interval and sub-tasks
-- missing Trash
 
 - category tree -> breadcrumbs with dropdown
 
