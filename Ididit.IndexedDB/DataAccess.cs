@@ -76,12 +76,18 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     }
     public async Task AddItem(ItemEntity item)
     {
+        item.Id = 1 + await MaxKey();
+        await _indexedDb.AddItems(new List<ItemEntity> { item });
     }
     public async Task AddCategory(CategoryEntity category)
     {
+        category.Id = 1 + await MaxKey();
+        await _indexedDb.AddItems(new List<CategoryEntity> { category });
     }
     public async Task AddSettings(SettingsEntity settings)
     {
+        settings.Id = 1 + await MaxKey();
+        await _indexedDb.AddItems(new List<SettingsEntity> { settings });
     }
 
     public async Task<IReadOnlyList<HabitEntity>> GetHabits()
@@ -166,12 +172,15 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     }
     public async Task UpdateItem(ItemEntity item)
     {
+        await _indexedDb.UpdateItems(new List<ItemEntity> { item });
     }
     public async Task UpdateCategory(CategoryEntity category)
     {
+        await _indexedDb.UpdateItems(new List<CategoryEntity> { category });
     }
     public async Task UpdateSettings(SettingsEntity settings)
     {
+        await _indexedDb.UpdateItems(new List<SettingsEntity> { settings });
     }
 
     public async Task RemoveHabit(long id)
@@ -192,12 +201,15 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     }
     public async Task RemoveItem(long id)
     {
+        await _indexedDb.DeleteByKey<long, ItemEntity>(id);
     }
     public async Task RemoveCategory(long id)
     {
+        await _indexedDb.DeleteByKey<long, CategoryEntity>(id);
     }
     public async Task RemoveSettings(long id)
     {
+        await _indexedDb.DeleteByKey<long, SettingsEntity>(id);
     }
 
     public async Task RemoveHabits()
@@ -218,11 +230,14 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     }
     public async Task RemoveItems()
     {
+        await _indexedDb.DeleteAll<ItemEntity>();
     }
     public async Task RemoveCategories()
     {
+        await _indexedDb.DeleteAll<CategoryEntity>();
     }
     public async Task RemoveSettings()
     {
+        await _indexedDb.DeleteAll<SettingsEntity>();
     }
 }

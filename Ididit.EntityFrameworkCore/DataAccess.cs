@@ -41,12 +41,18 @@ public class DataAccess : IDataAccess
     }
     public async Task AddItem(ItemEntity item)
     {
+        _dataContext.Add(item);
+        await _dataContext.SaveChangesAsync();
     }
     public async Task AddCategory(CategoryEntity category)
     {
+        _dataContext.Add(category);
+        await _dataContext.SaveChangesAsync();
     }
     public async Task AddSettings(SettingsEntity settings)
     {
+        _dataContext.Add(settings);
+        await _dataContext.SaveChangesAsync();
     }
 
     public async Task<IReadOnlyList<HabitEntity>> GetHabits()
@@ -135,12 +141,18 @@ public class DataAccess : IDataAccess
     }
     public async Task UpdateItem(ItemEntity item)
     {
+        _dataContext.Update(item);
+        await _dataContext.SaveChangesAsync();
     }
     public async Task UpdateCategory(CategoryEntity category)
     {
+        _dataContext.Update(category);
+        await _dataContext.SaveChangesAsync();
     }
     public async Task UpdateSettings(SettingsEntity settings)
     {
+        _dataContext.Update(settings);
+        await _dataContext.SaveChangesAsync();
     }
 
     public async Task RemoveHabit(long id)
@@ -165,12 +177,18 @@ public class DataAccess : IDataAccess
     }
     public async Task RemoveItem(long id)
     {
+        _dataContext.Remove(new ItemEntity { Id = id });
+        await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveCategory(long id)
     {
+        _dataContext.Remove(new CategoryEntity { Id = id });
+        await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveSettings(long id)
     {
+        _dataContext.Remove(new SettingsEntity { Id = id });
+        await _dataContext.SaveChangesAsync();
     }
 
     public async Task RemoveHabits()
@@ -191,11 +209,14 @@ public class DataAccess : IDataAccess
     }
     public async Task RemoveItems()
     {
+        await _dataContext.Items.ExecuteDeleteAsync();
     }
     public async Task RemoveCategories()
     {
+        await _dataContext.Categories.ExecuteDeleteAsync();
     }
     public async Task RemoveSettings()
     {
+        await _dataContext.Settings.ExecuteDeleteAsync();
     }
 }
