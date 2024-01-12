@@ -1,16 +1,6 @@
 # TODO:
 
 - task / habit: ListItem
-- single Id for all ListItems? no so hard, since they are all in the same table :)
-- single Id for every ParentId? harder:
-- single Id for all Models - per User? (wasm) - for all users? (sql server)
-	TPH - one table for all derived classes? a lot of empty columns!
-	TPT - one table for base class, one additional table for each derived class? slow, always update 2 tables, always read 2 tables
-	TPC - one table for each derived class? can't have single Id
-		save max id separately
-		get max id from all derived tables every time
-		get max id from all derived tables on app start, them maintain it - this probably won't work for all users
-		different implementation for EF core and IndexedDb?
 
 maui file picker
 maui file saver

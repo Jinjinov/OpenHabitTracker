@@ -39,6 +39,17 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         return result; // 'DB_DELETEOBJECT_SUCCESS'
     }
 
+    private static long GetMax(long a, long b, long c) => Math.Max(a, Math.Max(b, c));
+
+    private async Task<long> MaxKey()
+    {
+        return GetMax(
+            await _indexedDb.GetMaxKey<long, NoteEntity>(),
+            await _indexedDb.GetMaxKey<long, TaskEntity>(),
+            await _indexedDb.GetMaxKey<long, HabitEntity>()
+        );
+    }
+
     public async Task Initialize()
     {
         _dbModelId ??= await _indexedDb.OpenIndexedDb();
@@ -46,17 +57,17 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
 
     public async Task AddHabit(HabitEntity habit)
     {
-        habit.Id = 1 + await _indexedDb.GetMaxKey<long, HabitEntity>();
+        habit.Id = 1 + await MaxKey();
         await _indexedDb.AddItems(new List<HabitEntity> { habit });
     }
     public async Task AddNote(NoteEntity note)
     {
-        note.Id = 1 + await _indexedDb.GetMaxKey<long, NoteEntity>();
+        note.Id = 1 + await MaxKey();
         await _indexedDb.AddItems(new List<NoteEntity> { note });
     }
     public async Task AddTask(TaskEntity task)
     {
-        task.Id = 1 + await _indexedDb.GetMaxKey<long, TaskEntity>();
+        task.Id = 1 + await MaxKey();
         await _indexedDb.AddItems(new List<TaskEntity> { task });
     }
     public async Task AddTime(TimeEntity time)
