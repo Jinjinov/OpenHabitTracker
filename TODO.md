@@ -1,7 +1,6 @@
 # TODO:
 
-- remove css
-- remove razor.css
+- remove app.css
 
 - Calendar
 

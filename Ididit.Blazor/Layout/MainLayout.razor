@@ -1,19 +1,15 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavLink class="nav-link" href="habits">Habits</NavLink>
-        <NavLink class="nav-link" href="notes">Notes</NavLink>
-        <NavLink class="nav-link" href="tasks">Tasks</NavLink>
-        <NavLink class="nav-link" href="trash">Trash</NavLink>
-    </div>
-
+<div>
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        <div>
+            <NavLink class="nav-link" href="habits">Habits</NavLink>
+            <NavLink class="nav-link" href="notes">Notes</NavLink>
+            <NavLink class="nav-link" href="tasks">Tasks</NavLink>
+            <NavLink class="nav-link" href="trash">Trash</NavLink>
         </div>
 
-        <article class="content px-4">
+        <article>
             @Body
         </article>
     </main>
