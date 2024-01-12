@@ -1,6 +1,6 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Ididit.Blazor.Web</a>
+        <a class="navbar-brand" href="">ididit!</a>
     </div>
 </div>
 
@@ -8,38 +8,11 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="habits">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Habits
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="notes">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Notes
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="tasks">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Tasks
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="trash">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Trash
-            </NavLink>
-        </div>
+        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">Home</NavLink>
+        <NavLink class="nav-link" href="habits">Habits</NavLink>
+        <NavLink class="nav-link" href="notes">Notes</NavLink>
+        <NavLink class="nav-link" href="tasks">Tasks</NavLink>
+        <NavLink class="nav-link" href="trash">Trash</NavLink>
     </nav>
 </div>
 

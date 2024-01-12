@@ -1,9 +1,5 @@
 # TODO:
 
-- task / habit: List<Item>, common base class?
-- Category
-- Settings
-
 - remove css
 - remove razor.css
 - remove NavMenu.razor
@@ -16,10 +12,21 @@
 		- Ididit.Blazor.Maui
 		- Ididit.Blazor.Wasm
 		- Ididit.Blazor
+	- NavMenu.razor
+		- Ididit.Blazor.Wasm
+		- Ididit.Blazor
+	- MainLayout.razor
+		- Ididit.Blazor.Wasm
+		- Ididit.Blazor
+
+- List<Item> UI
+- Category UI
 
 - host 24/7 on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
+
+- Settings UI
 
 maui file picker
 maui file saver
