@@ -39,6 +39,15 @@ public class DataAccess : IDataAccess
         _dataContext.Add(time);
         await _dataContext.SaveChangesAsync();
     }
+    public async Task AddItem(ItemEntity item)
+    {
+    }
+    public async Task AddCategory(CategoryEntity category)
+    {
+    }
+    public async Task AddSettings(SettingsEntity settings)
+    {
+    }
 
     public async Task<IReadOnlyList<HabitEntity>> GetHabits()
     {
@@ -59,6 +68,18 @@ public class DataAccess : IDataAccess
         else
             return await _dataContext.Times.Where(t => t.HabitId == habitId).ToListAsync();
     }
+    public async Task<IReadOnlyList<ItemEntity>> GetItems(long? parentId = null)
+    {
+        return await _dataContext.Items.ToListAsync();
+    }
+    public async Task<IReadOnlyList<CategoryEntity>> GetCategories()
+    {
+        return await _dataContext.Categories.ToListAsync();
+    }
+    public async Task<IReadOnlyList<SettingsEntity>> GetSettings()
+    {
+        return await _dataContext.Settings.ToListAsync();
+    }
 
     public async Task<HabitEntity?> GetHabit(long id)
     {
@@ -75,6 +96,18 @@ public class DataAccess : IDataAccess
     public async Task<TimeEntity?> GetTime(DateTime time)
     {
         return await _dataContext.Times.FindAsync(time);
+    }
+    public async Task<ItemEntity?> GetItem(long id)
+    {
+        return await _dataContext.Items.FindAsync(id);
+    }
+    public async Task<CategoryEntity?> GetCategory(long id)
+    {
+        return await _dataContext.Categories.FindAsync(id);
+    }
+    public async Task<SettingsEntity?> GetSettings(long id)
+    {
+        return await _dataContext.Settings.FindAsync(id);
     }
 
     public async Task UpdateHabit(HabitEntity habit)
@@ -100,6 +133,15 @@ public class DataAccess : IDataAccess
         _dataContext.Update(time);
         await _dataContext.SaveChangesAsync();
     }
+    public async Task UpdateItem(ItemEntity item)
+    {
+    }
+    public async Task UpdateCategory(CategoryEntity category)
+    {
+    }
+    public async Task UpdateSettings(SettingsEntity settings)
+    {
+    }
 
     public async Task RemoveHabit(long id)
     {
@@ -121,6 +163,15 @@ public class DataAccess : IDataAccess
         _dataContext.Remove(new TimeEntity { StartedAt = time });
         await _dataContext.SaveChangesAsync();
     }
+    public async Task RemoveItem(long id)
+    {
+    }
+    public async Task RemoveCategory(long id)
+    {
+    }
+    public async Task RemoveSettings(long id)
+    {
+    }
 
     public async Task RemoveHabits()
     {
@@ -137,5 +188,14 @@ public class DataAccess : IDataAccess
     public async Task RemoveTimes()
     {
         await _dataContext.Times.ExecuteDeleteAsync();
+    }
+    public async Task RemoveItems()
+    {
+    }
+    public async Task RemoveCategories()
+    {
+    }
+    public async Task RemoveSettings()
+    {
     }
 }

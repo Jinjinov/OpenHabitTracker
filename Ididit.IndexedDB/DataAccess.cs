@@ -74,6 +74,15 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     {
         await _indexedDb.AddItems(new List<TimeEntity> { time });
     }
+    public async Task AddItem(ItemEntity item)
+    {
+    }
+    public async Task AddCategory(CategoryEntity category)
+    {
+    }
+    public async Task AddSettings(SettingsEntity settings)
+    {
+    }
 
     public async Task<IReadOnlyList<HabitEntity>> GetHabits()
     {
@@ -94,6 +103,18 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         else
             return await _indexedDb.GetByIndex<long?, TimeEntity>(lowerBound: habitId, upperBound: null, dbIndex: "habitId", isRange: false);
     }
+    public async Task<IReadOnlyList<ItemEntity>> GetItems(long? parentId = null)
+    {
+        return await _indexedDb.GetAll<ItemEntity>();
+    }
+    public async Task<IReadOnlyList<CategoryEntity>> GetCategories()
+    {
+        return await _indexedDb.GetAll<CategoryEntity>();
+    }
+    public async Task<IReadOnlyList<SettingsEntity>> GetSettings()
+    {
+        return await _indexedDb.GetAll<SettingsEntity>();
+    }
 
     public async Task<HabitEntity?> GetHabit(long id)
     {
@@ -110,6 +131,18 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     public async Task<TimeEntity?> GetTime(DateTime time)
     {
         return await _indexedDb.GetByKey<DateTime, TimeEntity>(time);
+    }
+    public async Task<ItemEntity?> GetItem(long id)
+    {
+        return await _indexedDb.GetByKey<long, ItemEntity>(id);
+    }
+    public async Task<CategoryEntity?> GetCategory(long id)
+    {
+        return await _indexedDb.GetByKey<long, CategoryEntity>(id);
+    }
+    public async Task<SettingsEntity?> GetSettings(long id)
+    {
+        return await _indexedDb.GetByKey<long, SettingsEntity>(id);
     }
 
     public async Task UpdateHabit(HabitEntity habit)
@@ -131,6 +164,15 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     {
         await _indexedDb.UpdateItems(new List<TimeEntity> { time });
     }
+    public async Task UpdateItem(ItemEntity item)
+    {
+    }
+    public async Task UpdateCategory(CategoryEntity category)
+    {
+    }
+    public async Task UpdateSettings(SettingsEntity settings)
+    {
+    }
 
     public async Task RemoveHabit(long id)
     {
@@ -148,6 +190,15 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     {
         await _indexedDb.DeleteByKey<DateTime, TimeEntity>(time);
     }
+    public async Task RemoveItem(long id)
+    {
+    }
+    public async Task RemoveCategory(long id)
+    {
+    }
+    public async Task RemoveSettings(long id)
+    {
+    }
 
     public async Task RemoveHabits()
     {
@@ -164,5 +215,14 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     public async Task RemoveTimes()
     {
         await _indexedDb.DeleteAll<TimeEntity>();
+    }
+    public async Task RemoveItems()
+    {
+    }
+    public async Task RemoveCategories()
+    {
+    }
+    public async Task RemoveSettings()
+    {
     }
 }
