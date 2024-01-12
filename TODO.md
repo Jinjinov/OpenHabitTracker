@@ -2,7 +2,6 @@
 
 - remove css
 - remove razor.css
-- remove NavMenu.razor
 - remove Bootstrap
 
 - Calendar
