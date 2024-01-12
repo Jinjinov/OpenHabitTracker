@@ -12,9 +12,6 @@
 		- Ididit.Blazor.Maui
 		- Ididit.Blazor.Wasm
 		- Ididit.Blazor
-	- NavMenu.razor
-		- Ididit.Blazor.Wasm
-		- Ididit.Blazor
 	- MainLayout.razor
 		- Ididit.Blazor.Wasm
 		- Ididit.Blazor
