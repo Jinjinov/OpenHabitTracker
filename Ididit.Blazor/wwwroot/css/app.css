@@ -2,6 +2,25 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.nav-link {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    background-color: #4CAF50;
+    color: #fff;
+    border: 1px solid #4CAF50;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+    .nav-link:hover {
+        background-color: #45a049;
+    }
+
+    .nav-link.active {
+        background-color: #aaa;
+    }
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

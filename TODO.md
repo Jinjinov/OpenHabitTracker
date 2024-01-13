@@ -1,9 +1,9 @@
 # TODO:
 
-- Calendar
-
-- List<Item> UI
 - Category UI
+- List<Item> UI
+
+- Calendar
 
 - host 24/7 on Raspberry Pi
 
@@ -27,9 +27,12 @@
 	- @page "/Error"
 	- app.UseExceptionHandler("/Error");
 
-- list of all Blazor magic strings: blazor-error-ui , --blazor-load-percentage , --blazor-load-percentage-text
+- list of all Blazor magic strings: blazor-error-ui , --blazor-load-percentage , --blazor-load-percentage-text , blazor-error-boundary , validation-errors , validation-message
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web.JS/src/BootErrors.ts
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web.JS/src/Platform/Mono/MonoPlatform.ts#L230
+https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web/src/Web/ErrorBoundary.cs#L48
+https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web/src/Forms/ValidationSummary.cs#L76
+https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web/src/Forms/ValidationMessage.cs#L74
 
 - list of all Microsoft Blazor components: NavLink, ...
 
