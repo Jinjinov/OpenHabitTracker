@@ -1,9 +1,27 @@
 # TODO:
 
 - Category UI
+	- Category.razor - display list, add, update, delete
+	- select > option in *Add.razor *Update.razor - Category dropdown component?
+	- CategoryId in Model
 - List<Item> UI
+	- Habits.razor , Tasks.razor
+	- Model with List<Item> ?
+	- display list, add, update, delete - component?
 
 - Calendar
+	- Habits.razor
+	- DateTime.Now
+	- List<TimeModel>? TimesDone
+	- 7 row, one for each day of the week
+	- 6 columns = one month - 4 full weeks = 28 - another 0/1/2/3 days can take max 2 weeks more
+	- find the last monday of the previous month
+		DateTime currentDate = DateTime.Now;
+        DateTime lastDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+        DateTime lastMonday = lastDayOfMonth.AddDays((int)DayOfWeek.Monday - (int)lastDayOfMonth.DayOfWeek);
+	- previous month DaysInMonth
+	- this month DaysInMonth
+	- next month until sunday - until max 14.
 
 - host 24/7 on Raspberry Pi
 

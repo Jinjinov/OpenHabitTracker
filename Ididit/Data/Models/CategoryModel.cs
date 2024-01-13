@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ididit.Data.Models;
+﻿namespace Ididit.Data.Models;
 
 public class CategoryModel
 {
+    public long Id { get; set; }
+
+    public string Title { get; set; } = string.Empty;
 }
