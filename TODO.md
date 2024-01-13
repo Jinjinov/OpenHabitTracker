@@ -1,7 +1,5 @@
 # TODO:
 
-- remove app.css
-
 - Calendar
 
 - common:
