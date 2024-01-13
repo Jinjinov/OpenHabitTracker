@@ -20,11 +20,7 @@ public partial class MainForm : Form
 #endif
 
         services.AddServices();
-
         services.AddDataAccess();
-
-        //services.AddServices();
-        //services.AddWebViewServices();
 
         InitializeComponent();
         Icon = new Icon("favicon.ico");

@@ -19,7 +19,6 @@ builder.Services.AddOidcAuthentication(options =>
 });
 
 builder.Services.AddServices();
-
 builder.Services.AddDataAccess();
 
 WebAssemblyHost host = builder.Build();

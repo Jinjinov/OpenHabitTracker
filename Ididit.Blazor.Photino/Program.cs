@@ -17,11 +17,7 @@ class Program
         builder.Services.AddLogging();
 
         builder.Services.AddServices();
-
         builder.Services.AddDataAccess();
-
-        //builder.Services.AddServices();
-        //builder.Services.AddWebViewServices();
 
         // register root component and selector
         builder.RootComponents.Add<Routes>("app");

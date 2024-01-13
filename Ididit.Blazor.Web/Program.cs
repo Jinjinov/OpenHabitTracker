@@ -9,7 +9,6 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddServices();
-
 builder.Services.AddDataAccess();
 
 WebApplication app = builder.Build();

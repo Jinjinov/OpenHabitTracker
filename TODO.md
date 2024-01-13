@@ -10,6 +10,11 @@
 	- MainLayout.razor
 		- Ididit.Blazor.Wasm
 		- Ididit.Blazor
+	- _Imports.razor
+		- Ididit.Blazor.Maui
+		- Ididit.Blazor.Wasm
+		- Ididit.Blazor.Web
+		- Ididit.Blazor
 
 - List<Item> UI
 - Category UI
@@ -17,6 +22,10 @@
 - host 24/7 on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
+
+- Ididit.Blazor.Server:
+	- @page "/Error"
+	- app.UseExceptionHandler("/Error");
 
 - Settings UI
 

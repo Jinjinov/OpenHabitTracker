@@ -20,11 +20,7 @@ public partial class MainWindow : Window
 #endif
 
         services.AddServices();
-
         services.AddDataAccess();
-
-        //services.AddServices();
-        //services.AddWebViewServices();
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         Resources.Add("services", serviceProvider);

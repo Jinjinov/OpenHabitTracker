@@ -28,11 +28,7 @@ public class Startup
         services.AddHttpContextAccessor();
 
         services.AddServices();
-
         services.AddDataAccess();
-
-        //services.AddServices();
-        //services.AddWebViewServices();
 
         if (HybridSupport.IsElectronActive)
         {

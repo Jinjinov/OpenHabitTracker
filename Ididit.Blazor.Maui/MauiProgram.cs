@@ -24,7 +24,6 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddServices();
-
         builder.Services.AddDataAccess();
 
         return builder.Build();
