@@ -23,7 +23,7 @@
             <InputCheckbox Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
             @if (item.Id == _selectedId)
             {
-                <InputText Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem()" />
+                <InputText Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem()" @onfocusout="(args) => SetSelectedId(0)" />
             }
             else
             {

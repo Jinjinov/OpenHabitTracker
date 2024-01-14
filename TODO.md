@@ -4,7 +4,32 @@
 	- Category.razor - display list, add, update, delete
 	- select > option in *Add.razor *Update.razor - Category dropdown component?
 - List<Item> UI
-	- _selectedId / EditItem ?
+	- _selectedId / EditItem ? url parameter id ?
+
+<input @ref="inputElement" />
+
+@code {
+    private ElementReference inputElement;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("focusElement", inputElement);
+        }
+    }
+}
+
+window.focusElement = (element) => {
+    element.focus();
+};
+
+- remove enum Importance
+- remove enum Priority
+- add class PriorityEntity
+- add class PriorityModel
+
+- advanced repeating interval setting
 
 - Calendar
 	- Habits.razor
@@ -24,11 +49,6 @@
 - host 24/7 on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
-
-- remove enum Importance
-- remove enum Priority
-- add class PriorityEntity
-- add class PriorityModel
 
 - common:
 	- Routes.razor </Router>
