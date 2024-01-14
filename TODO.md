@@ -5,7 +5,6 @@
 	- select > option in *Add.razor *Update.razor - Category dropdown component?
 - List<Item> UI
 	- Habits.razor , Tasks.razor
-	- Model with List<Item> ?
 	- display list, add, update, delete - component?
 
 - Calendar

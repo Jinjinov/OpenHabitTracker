@@ -1,6 +1,6 @@
 ﻿namespace Ididit.Data.Models;
 
-public class HabitModel : Model
+public class HabitModel : ItemsModel
 {
     public TimeSpan AverageInterval { get; set; }
 
@@ -9,6 +9,4 @@ public class HabitModel : Model
     public DateTime? LastTimeDoneAt { get; set; }
 
     public List<TimeModel>? TimesDone { get; set; }
-
-    public List<ItemModel>? Items { get; set; }
 }
