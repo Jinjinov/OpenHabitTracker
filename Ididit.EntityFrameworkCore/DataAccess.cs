@@ -76,7 +76,10 @@ public class DataAccess : IDataAccess
     }
     public async Task<IReadOnlyList<ItemEntity>> GetItems(long? parentId = null)
     {
-        return await _dataContext.Items.ToListAsync();
+        if (parentId is null)
+            return await _dataContext.Items.ToListAsync();
+        else
+            return await _dataContext.Items.Where(i => i.ParentId == parentId).ToListAsync();
     }
     public async Task<IReadOnlyList<CategoryEntity>> GetCategories()
     {

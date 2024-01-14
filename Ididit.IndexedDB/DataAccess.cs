@@ -111,7 +111,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     }
     public async Task<IReadOnlyList<ItemEntity>> GetItems(long? parentId = null)
     {
-        return await _indexedDb.GetAll<ItemEntity>();
+        if (parentId is null)
+            return await _indexedDb.GetAll<ItemEntity>();
+        else
+            return await _indexedDb.GetByIndex<long?, ItemEntity>(lowerBound: parentId, upperBound: null, dbIndex: "parentId", isRange: false);
     }
     public async Task<IReadOnlyList<CategoryEntity>> GetCategories()
     {
