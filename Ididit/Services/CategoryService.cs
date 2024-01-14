@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ididit.Data;
 
 namespace Ididit.Services;
 
-public class CategoryService
+public class CategoryService(IDataAccess dataAccess)
 {
+    private readonly IDataAccess _dataAccess = dataAccess;
 }

@@ -11,7 +11,7 @@
 {
     <div>
         <label for="titleInput">Title:</label>
-        <input id="titleInput" type="text" @bind="NoteService.NewNote.Title" />
+        <InputText id="titleInput" @bind-Value="NoteService.NewNote.Title" />
 
         <button @onclick="NoteService.AddNote">Add Note</button>
     </div>

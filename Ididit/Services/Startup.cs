@@ -9,7 +9,9 @@ public static class Startup
     {
         services.AddScoped<AppData>();
 
+        services.AddScoped<CategoryService>();
         services.AddScoped<HabitService>();
+        services.AddScoped<ItemService>();
         services.AddScoped<NoteService>();
         services.AddScoped<TaskService>();
         services.AddScoped<TrashService>();

@@ -1,15 +1,27 @@
 ﻿@using Ididit.Data.Models
+@using Ididit.Services
+
+@inject ItemService ItemService
 
 <h3>ItemsComponent</h3>
 
-<button @onclick=@Add>Add</button>
+@if (ItemService.NewItem is not null)
+{
+    <div>
+        <label for="titleInput">Title:</label>
+        <InputText id="titleInput" @bind-Value="ItemService.NewItem.Title" />
+
+        <button @onclick=@(() => ItemService.AddItem(Items))>Add</button>
+    </div>
+}
 
 @if (Items?.Items is not null)
 {
-
     foreach (ItemModel item in Items.Items)
     {
-        <p>@item.Title</p>
+        <div>
+            <label><InputCheckbox @bind-Value=@item.IsDone />@item.Title</label>
+        </div>
     }
 }
 
@@ -18,14 +30,8 @@
     [Parameter]
     public ItemsModel? Items { get; set; }
 
-    async Task Add()
+    protected override async Task OnParametersSetAsync()
     {
-        if (Items is null)
-            return;
-
-        if (Items.Items is null)
-            Items.Items = new();
-
-        Items.Items.Add(new ItemModel { Title = "Item" });
+        await ItemService.Initialize(Items);
     }
 }
