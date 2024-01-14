@@ -7,7 +7,6 @@
 	- Habits.razor , Tasks.razor
 	- Model with List<Item> ?
 	- display list, add, update, delete - component?
-	- index Item.ParentId
 
 - Calendar
 	- Habits.razor

@@ -40,7 +40,8 @@ public class IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options
 
         indexedDbDatabaseModel.AddStore(nameof(ItemEntity))
             .WithKey(nameof(ItemEntity.Id))
-            .AddUniqueIndex(nameof(ItemEntity.Id));
+            .AddUniqueIndex(nameof(ItemEntity.Id))
+            .AddIndex(nameof(ItemEntity.ParentId)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(CategoryEntity))
             .WithKey(nameof(CategoryEntity.Id))

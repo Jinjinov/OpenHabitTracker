@@ -30,6 +30,8 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<TimeEntity>().HasKey(x => x.StartedAt);
         modelBuilder.Entity<TimeEntity>().HasIndex(x => x.HabitId);
 
+        modelBuilder.Entity<ItemEntity>().HasIndex(x => x.ParentId);
+
         base.OnModelCreating(modelBuilder);
     }
 }
