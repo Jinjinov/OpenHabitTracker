@@ -36,6 +36,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
         TaskEntity task = new()
         {
+            CategoryId = NewTask.CategoryId,
             IsDeleted = false,
             Title = NewTask.Title,
             CreatedAt = utcNow,
@@ -62,6 +63,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
         if (await _dataAccess.GetTask(EditTask.Id) is TaskEntity task)
         {
+            task.CategoryId = EditTask.CategoryId;
             task.IsDeleted = EditTask.IsDeleted;
             task.Title = EditTask.Title;
             task.CreatedAt = EditTask.CreatedAt;

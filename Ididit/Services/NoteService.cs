@@ -36,6 +36,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
         NoteEntity note = new()
         {
+            CategoryId = NewNote.CategoryId,
             IsDeleted = false,
             Title = NewNote.Title,
             CreatedAt = utcNow,
@@ -60,6 +61,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
         if (await _dataAccess.GetNote(EditNote.Id) is NoteEntity note)
         {
+            note.CategoryId = EditNote.CategoryId;
             note.IsDeleted = EditNote.IsDeleted;
             note.Title = EditNote.Title;
             note.CreatedAt = EditNote.CreatedAt;

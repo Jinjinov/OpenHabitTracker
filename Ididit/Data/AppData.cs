@@ -20,6 +20,7 @@ public class AppData(IDataAccess dataAccess)
             Habits = habits.Select(h => new HabitModel
             {
                 Id = h.Id,
+                CategoryId = h.CategoryId,
                 IsDeleted = h.IsDeleted,
                 Title = h.Title,
                 CreatedAt = h.CreatedAt,
@@ -42,6 +43,7 @@ public class AppData(IDataAccess dataAccess)
             Notes = notes.Select(n => new NoteModel
             {
                 Id = n.Id,
+                CategoryId = n.CategoryId,
                 IsDeleted = n.IsDeleted,
                 Title = n.Title,
                 CreatedAt = n.CreatedAt,
@@ -62,6 +64,7 @@ public class AppData(IDataAccess dataAccess)
             Tasks = tasks.Select(t => new TaskModel
             {
                 Id = t.Id,
+                CategoryId = t.CategoryId,
                 IsDeleted = t.IsDeleted,
                 Title = t.Title,
                 CreatedAt = t.CreatedAt,

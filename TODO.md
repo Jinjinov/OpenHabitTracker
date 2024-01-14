@@ -3,7 +3,6 @@
 - Category UI
 	- Category.razor - display list, add, update, delete
 	- select > option in *Add.razor *Update.razor - Category dropdown component?
-	- index Model.CategoryId
 - List<Item> UI
 	- Habits.razor , Tasks.razor
 	- Model with List<Item> ?

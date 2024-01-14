@@ -20,15 +20,18 @@ public class IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options
 
         indexedDbDatabaseModel.AddStore(nameof(HabitEntity))
             .WithKey(nameof(HabitEntity.Id))
-            .AddUniqueIndex(nameof(HabitEntity.Id));
+            .AddUniqueIndex(nameof(HabitEntity.Id))
+            .AddIndex(nameof(HabitEntity.CategoryId)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(NoteEntity))
             .WithKey(nameof(NoteEntity.Id))
-            .AddUniqueIndex(nameof(NoteEntity.Id));
+            .AddUniqueIndex(nameof(NoteEntity.Id))
+            .AddIndex(nameof(NoteEntity.CategoryId)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(TaskEntity))
             .WithKey(nameof(TaskEntity.Id))
-            .AddUniqueIndex(nameof(TaskEntity.Id));
+            .AddUniqueIndex(nameof(TaskEntity.Id))
+            .AddIndex(nameof(TaskEntity.CategoryId)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(TimeEntity))
             .WithKey(nameof(TimeEntity.StartedAt))

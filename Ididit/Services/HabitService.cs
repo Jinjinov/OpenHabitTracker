@@ -52,6 +52,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         HabitEntity habit = new()
         {
+            CategoryId = NewHabit.CategoryId,
             IsDeleted = false,
             Title = NewHabit.Title,
             CreatedAt = utcNow,
@@ -78,6 +79,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         if (await _dataAccess.GetHabit(EditHabit.Id) is HabitEntity habit)
         {
+            habit.CategoryId = EditHabit.CategoryId;
             habit.IsDeleted = EditHabit.IsDeleted;
             habit.Title = EditHabit.Title;
             habit.CreatedAt = EditHabit.CreatedAt;
