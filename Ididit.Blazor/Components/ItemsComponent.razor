@@ -1,0 +1,33 @@
+﻿@using Ididit.Data.Models
+
+<h3>ItemsComponent</h3>
+
+@if (Items?.Items is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <button @onclick=@Add>Add</button>
+
+    foreach (ItemModel item in Items.Items)
+    {
+        <p>@item.Title</p>
+    }
+}
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public ItemsModel? Items { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback<ItemsModel?> ItemsChanged { get; set; }
+
+    async Task Add()
+    {
+        Items?.Items?.Add(new ItemModel { Title = "Item" });
+        await ItemsChanged.InvokeAsync(Items);
+    }
+}

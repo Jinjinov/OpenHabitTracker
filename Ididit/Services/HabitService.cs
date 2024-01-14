@@ -9,7 +9,9 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
     private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public IReadOnlyList<HabitModel>? Habits => _appData.Habits;
+    public IReadOnlyCollection<HabitModel>? Habits => _appData.Habits?.Values;
+
+    public HabitModel? SelectedHabit { get; set; }
 
     public HabitModel? NewHabit { get; set; }
 
@@ -22,12 +24,17 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         NewHabit ??= new();
     }
 
-    public async Task LoadTimesDone(long? id)
+    public void SetSelectedHabit(long? id)
     {
-        if (Habits is null)
+        if (_appData.Habits is null)
             return;
 
-        if (Habits.FirstOrDefault(h => h.Id == id) is HabitModel habit && habit.TimesDone is null)
+        SelectedHabit = id.HasValue && _appData.Habits.TryGetValue(id.Value, out HabitModel? habit) ? habit : null;
+    }
+
+    public async Task LoadTimesDone(HabitModel? habit)
+    {
+        if (habit is not null && habit.TimesDone is null)
         {
             IReadOnlyList<TimeEntity> timesDone = await _dataAccess.GetTimes(habit.Id);
             habit.TimesDone = timesDone.Select(t => new TimeModel
@@ -48,8 +55,6 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         NewHabit.CreatedAt = utcNow;
         NewHabit.UpdatedAt = utcNow;
 
-        _appData.Habits.Add(NewHabit);
-
         HabitEntity habit = new()
         {
             CategoryId = NewHabit.CategoryId,
@@ -68,6 +73,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         await _dataAccess.AddHabit(habit);
 
         NewHabit.Id = habit.Id;
+
+        _appData.Habits.Add(NewHabit.Id, NewHabit);
 
         NewHabit = new();
     }

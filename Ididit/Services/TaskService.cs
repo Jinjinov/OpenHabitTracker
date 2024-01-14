@@ -9,7 +9,9 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
     private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public IReadOnlyList<TaskModel>? Tasks => _appData.Tasks;
+    public IReadOnlyCollection<TaskModel>? Tasks => _appData.Tasks?.Values;
+
+    public TaskModel? SelectedTask { get; set; }
 
     public TaskModel? NewTask { get; set; }
 
@@ -22,6 +24,14 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         NewTask ??= new();
     }
 
+    public void SetSelectedTask(long? id)
+    {
+        if (_appData.Tasks is null)
+            return;
+
+        SelectedTask = id.HasValue && _appData.Tasks.TryGetValue(id.Value, out TaskModel? task) ? task : null;
+    }
+
     public async Task AddTask()
     {
         if (_appData.Tasks is null || NewTask is null)
@@ -31,8 +41,6 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
         NewTask.CreatedAt = utcNow;
         NewTask.UpdatedAt = utcNow;
-
-        _appData.Tasks.Add(NewTask);
 
         TaskEntity task = new()
         {
@@ -52,6 +60,8 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         await _dataAccess.AddTask(task);
 
         NewTask.Id = task.Id;
+
+        _appData.Tasks.Add(NewTask.Id, NewTask);
 
         NewTask = new();
     }

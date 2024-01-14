@@ -7,9 +7,9 @@ public class AppData(IDataAccess dataAccess)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public List<HabitModel>? Habits { get; set; }
-    public List<NoteModel>? Notes { get; set; }
-    public List<TaskModel>? Tasks { get; set; }
+    public Dictionary<long, HabitModel>? Habits { get; set; }
+    public Dictionary<long, NoteModel>? Notes { get; set; }
+    public Dictionary<long, TaskModel>? Tasks { get; set; }
     public List<Model>? Trash { get; set; }
 
     public async Task InitializeHabits()
@@ -31,7 +31,7 @@ public class AppData(IDataAccess dataAccess)
                 AverageInterval = h.AverageInterval,
                 DesiredInterval = h.DesiredInterval,
                 LastTimeDoneAt = h.LastTimeDoneAt
-            }).ToList();
+            }).ToDictionary(x => x.Id);
         }
     }
 
@@ -52,7 +52,7 @@ public class AppData(IDataAccess dataAccess)
                 Importance = n.Importance,
 
                 Content = n.Content
-            }).ToList();
+            }).ToDictionary(x => x.Id);
         }
     }
 
@@ -75,7 +75,7 @@ public class AppData(IDataAccess dataAccess)
                 StartedAt = t.StartedAt,
                 CompletedAt = t.CompletedAt,
                 Date = t.Date
-            }).ToList();
+            }).ToDictionary(x => x.Id);
         }
     }
 
@@ -87,7 +87,7 @@ public class AppData(IDataAccess dataAccess)
 
         if (Trash is null && Habits is not null && Notes is not null && Tasks is not null)
         {
-            Trash = [.. Habits.Where(m => m.IsDeleted), .. Notes.Where(m => m.IsDeleted), .. Tasks.Where(m => m.IsDeleted)];
+            Trash = [.. Habits.Values.Where(m => m.IsDeleted), .. Notes.Values.Where(m => m.IsDeleted), .. Tasks.Values.Where(m => m.IsDeleted)];
         }
     }
 }

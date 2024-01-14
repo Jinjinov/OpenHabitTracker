@@ -1,6 +1,7 @@
 ﻿@page "/habits"
 @page "/habits/{Id:long}"
 
+@using Ididit.Blazor.Components
 @using Ididit.Data.Models
 @using Ididit.Services
 
@@ -39,6 +40,8 @@ else
                 <p>LastTimeDoneAt: @habit.LastTimeDoneAt</p>
             }
 
+            <ItemsComponent @bind-Items=HabitService.SelectedHabit />
+
             if (habit.TimesDone is not null)
             {
                 <p>Times done: @habit.TimesDone.Count</p>
@@ -72,6 +75,7 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        await HabitService.LoadTimesDone(Id);
+        HabitService.SetSelectedHabit(Id);
+        await HabitService.LoadTimesDone(HabitService.SelectedHabit);
     }
 }

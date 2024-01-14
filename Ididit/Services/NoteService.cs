@@ -9,7 +9,9 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
     private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public IReadOnlyList<NoteModel>? Notes => _appData.Notes;
+    public IReadOnlyCollection<NoteModel>? Notes => _appData.Notes?.Values;
+
+    public NoteModel? SelectedNote { get; set; }
 
     public NoteModel? NewNote { get; set; }
 
@@ -32,8 +34,6 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         NewNote.CreatedAt = utcNow;
         NewNote.UpdatedAt = utcNow;
 
-        _appData.Notes.Add(NewNote);
-
         NoteEntity note = new()
         {
             CategoryId = NewNote.CategoryId,
@@ -50,6 +50,8 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         await _dataAccess.AddNote(note);
 
         NewNote.Id = note.Id;
+
+        _appData.Notes.Add(NewNote.Id, NewNote);
 
         NewNote = new();
     }

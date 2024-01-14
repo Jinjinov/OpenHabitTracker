@@ -1,6 +1,7 @@
 ﻿@page "/tasks"
 @page "/tasks/{Id:long}"
 
+@using Ididit.Blazor.Components
 @using Ididit.Data.Models
 @using Ididit.Services
 
@@ -38,6 +39,8 @@ else
             {
                 <p>CompletedAt: @task.CompletedAt</p>
             }
+
+            <ItemsComponent @bind-Items=TaskService.SelectedTask />
         }
         else
         {
@@ -53,5 +56,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         await TaskService.Initialize();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        TaskService.SetSelectedTask(Id);
     }
 }
