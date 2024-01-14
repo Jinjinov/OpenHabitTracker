@@ -4,8 +4,7 @@
 	- Category.razor - display list, add, update, delete
 	- select > option in *Add.razor *Update.razor - Category dropdown component?
 - List<Item> UI
-	- Habits.razor , Tasks.razor
-	- display list, add, update, delete - component?
+	- _selectedId / EditItem ?
 
 - Calendar
 	- Habits.razor
@@ -25,6 +24,11 @@
 - host 24/7 on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
+
+- remove enum Importance
+- remove enum Priority
+- add class PriorityEntity
+- add class PriorityModel
 
 - common:
 	- Routes.razor </Router>

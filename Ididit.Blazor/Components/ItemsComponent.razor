@@ -11,7 +11,7 @@
         <label for="titleInput">Title:</label>
         <InputText id="titleInput" @bind-Value="ItemService.NewItem.Title" />
 
-        <button @onclick=@(() => ItemService.AddItem(Items))>Add</button>
+        <button @onclick="() => ItemService.AddItem(Items)">Add</button>
     </div>
 }
 
@@ -20,7 +20,16 @@
     foreach (ItemModel item in Items.Items)
     {
         <div>
-            <label><InputCheckbox @bind-Value=@item.IsDone />@item.Title</label>
+            <InputCheckbox Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
+            @if (item.Id == _selectedId)
+            {
+                <InputText Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem()" />
+            }
+            else
+            {
+                <span @onclick="() => SetSelectedId(item.Id)">@item.Title</span>
+            }
+            <button @onclick="() => ItemService.DeleteItem(Items, item)">Delete</button>
         </div>
     }
 }
@@ -30,8 +39,15 @@
     [Parameter]
     public ItemsModel? Items { get; set; }
 
+    long _selectedId;
+
     protected override async Task OnParametersSetAsync()
     {
         await ItemService.Initialize(Items);
+    }
+
+    void SetSelectedId(long id)
+    {
+        _selectedId = id;
     }
 }
