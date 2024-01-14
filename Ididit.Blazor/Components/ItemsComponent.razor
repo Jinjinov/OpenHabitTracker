@@ -2,13 +2,10 @@
 
 <h3>ItemsComponent</h3>
 
-@if (Items?.Items is null)
+<button @onclick=@Add>Add</button>
+
+@if (Items?.Items is not null)
 {
-    <p>Loading...</p>
-}
-else
-{
-    <button @onclick=@Add>Add</button>
 
     foreach (ItemModel item in Items.Items)
     {
@@ -21,13 +18,14 @@ else
     [Parameter]
     public ItemsModel? Items { get; set; }
 
-    [EditorRequired]
-    [Parameter]
-    public EventCallback<ItemsModel?> ItemsChanged { get; set; }
-
     async Task Add()
     {
-        Items?.Items?.Add(new ItemModel { Title = "Item" });
-        await ItemsChanged.InvokeAsync(Items);
+        if (Items is null)
+            return;
+
+        if (Items.Items is null)
+            Items.Items = new();
+
+        Items.Items.Add(new ItemModel { Title = "Item" });
     }
 }

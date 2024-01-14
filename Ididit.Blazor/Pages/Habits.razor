@@ -40,7 +40,7 @@ else
                 <p>LastTimeDoneAt: @habit.LastTimeDoneAt</p>
             }
 
-            <ItemsComponent @bind-Items=HabitService.SelectedHabit />
+            <ItemsComponent Items=HabitService.SelectedHabit />
 
             if (habit.TimesDone is not null)
             {

@@ -24,6 +24,14 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         NewNote ??= new();
     }
 
+    public void SetSelectedNote(long? id)
+    {
+        if (_appData.Notes is null)
+            return;
+
+        SelectedNote = id.HasValue && _appData.Notes.TryGetValue(id.Value, out NoteModel? note) ? note : null;
+    }
+
     public async Task AddNote()
     {
         if (_appData.Notes is null || NewNote is null)

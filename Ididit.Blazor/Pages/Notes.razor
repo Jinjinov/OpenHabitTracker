@@ -49,4 +49,9 @@ else
     {
         await NoteService.Initialize();
     }
+
+    protected override void OnParametersSet()
+    {
+        NoteService.SetSelectedNote(Id);
+    }
 }

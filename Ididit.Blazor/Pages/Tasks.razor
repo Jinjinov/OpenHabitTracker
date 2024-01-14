@@ -40,7 +40,7 @@ else
                 <p>CompletedAt: @task.CompletedAt</p>
             }
 
-            <ItemsComponent @bind-Items=TaskService.SelectedTask />
+            <ItemsComponent Items=TaskService.SelectedTask />
         }
         else
         {
@@ -58,7 +58,7 @@ else
         await TaskService.Initialize();
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         TaskService.SetSelectedTask(Id);
     }
