@@ -3,11 +3,12 @@
 - Category UI
 	- Category.razor - display list, add, update, delete
 	- select > option in *Add.razor *Update.razor - Category dropdown component?
-	- CategoryId in Model
+	- index Model.CategoryId
 - List<Item> UI
 	- Habits.razor , Tasks.razor
 	- Model with List<Item> ?
 	- display list, add, update, delete - component?
+	- index Item.ParentId
 
 - Calendar
 	- Habits.razor
@@ -22,6 +23,7 @@
 	- previous month DaysInMonth
 	- this month DaysInMonth
 	- next month until sunday - until max 14.
+	- each day is a toggle button
 
 - host 24/7 on Raspberry Pi
 
