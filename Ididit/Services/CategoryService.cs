@@ -14,8 +14,6 @@ public class CategoryService(IDataAccess dataAccess)
 
     public CategoryModel? NewCategory { get; set; }
 
-    public CategoryModel? EditCategory { get; set; }
-
     public async Task Initialize()
     {
         if (Categories is null)
@@ -58,19 +56,21 @@ public class CategoryService(IDataAccess dataAccess)
         NewCategory = new();
     }
 
-    public async Task UpdateCategory()
+    public async Task UpdateCategory(string title)
     {
-        if (Categories is null || EditCategory is null)
+        if (Categories is null || SelectedCategory is null)
             return;
 
-        if (await _dataAccess.GetCategory(EditCategory.Id) is CategoryEntity category)
+        SelectedCategory.Title = title;
+
+        if (await _dataAccess.GetCategory(SelectedCategory.Id) is CategoryEntity category)
         {
-            category.Title = EditCategory.Title;
+            category.Title = SelectedCategory.Title;
 
             await _dataAccess.UpdateCategory(category);
         }
 
-        EditCategory = null;
+        SelectedCategory = null;
     }
 
     public async Task DeleteCategory(CategoryModel category)

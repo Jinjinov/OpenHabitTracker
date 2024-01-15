@@ -12,8 +12,6 @@ public class ItemService(IDataAccess dataAccess)
 
     public ItemModel? NewItem { get; set; }
 
-    public ItemModel? EditItem { get; set; }
-
     public async Task Initialize(ItemsModel? items)
     {
         if (items is not null)
@@ -58,15 +56,16 @@ public class ItemService(IDataAccess dataAccess)
         NewItem = new();
     }
 
-    public async Task UpdateItem()
+    public async Task UpdateItem(string title)
     {
-        if (EditItem is null)
+        if (SelectedItem is null)
             return;
 
-        if (await _dataAccess.GetItem(EditItem.Id) is ItemEntity item)
+        SelectedItem.Title = title;
+
+        if (await _dataAccess.GetItem(SelectedItem.Id) is ItemEntity item)
         {
-            item.Title = EditItem.Title;
-            item.IsDone = EditItem.IsDone;
+            item.Title = SelectedItem.Title;
 
             await _dataAccess.UpdateItem(item);
         }

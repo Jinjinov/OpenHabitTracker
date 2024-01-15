@@ -23,11 +23,11 @@
             <InputCheckbox Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
             @if (item == ItemService.SelectedItem)
             {
-                <InputText Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem()" @onfocusout="(args) => ItemService.SelectedItem = null" />
+                <InputText @ref="inputElement" Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem(title)" @onfocusout="(args) => ItemService.SelectedItem = null" />
             }
             else
             {
-                <span @onclick="() => ItemService.SelectedItem = item">@item.Title</span>
+                <span @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@item.Title</span>
             }
             <button @onclick="() => ItemService.DeleteItem(Items, item)">Delete</button>
         </div>
@@ -39,8 +39,21 @@
     [Parameter]
     public ItemsModel? Items { get; set; }
 
+    InputText? inputElement;
+
+    bool shouldFocus;
+
     protected override async Task OnParametersSetAsync()
     {
         await ItemService.Initialize(Items);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (shouldFocus && inputElement?.Element is not null)
+        {
+            shouldFocus = false;
+            await inputElement.Element.Value.FocusAsync();
+        }
     }
 }

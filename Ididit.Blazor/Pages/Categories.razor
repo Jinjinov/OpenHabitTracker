@@ -33,11 +33,11 @@ else
         <div>
             @if (category == CategoryService.SelectedCategory)
             {
-                <InputText Value="@category.Title" ValueExpression="() => category.Title" ValueChanged="(string title) => CategoryService.UpdateCategory()" @onfocusout="(args) => CategoryService.SelectedCategory = null" />
+                <InputText @ref="inputElement" Value="@category.Title" ValueExpression="() => category.Title" ValueChanged="(string title) => CategoryService.UpdateCategory(title)" @onfocusout="(args) => CategoryService.SelectedCategory = null" />
             }
             else
             {
-                <span @onclick="() => CategoryService.SelectedCategory = category">@category.Title</span>
+                <span @onclick="() => { CategoryService.SelectedCategory = category; shouldFocus = true; }">@category.Title</span>
             }
             <button @onclick="() => CategoryService.DeleteCategory(category)">Delete</button>
         </div>
@@ -48,6 +48,10 @@ else
     [Parameter]
     public long? Id { get; set; }
 
+    InputText? inputElement;
+
+    bool shouldFocus;
+
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.Initialize();
@@ -56,5 +60,14 @@ else
     protected override void OnParametersSet()
     {
         CategoryService.SetSelectedCategory(Id);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (shouldFocus && inputElement?.Element is not null)
+        {
+            shouldFocus = false;
+            await inputElement.Element.Value.FocusAsync();
+        }
     }
 }
