@@ -1,23 +1,5 @@
 # TODO:
 
-<input @ref="inputElement" />
-
-@code {
-    private ElementReference inputElement;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("focusElement", inputElement);
-        }
-    }
-}
-
-window.focusElement = (element) => {
-    element.focus();
-};
-
 - Priority and Category are exactly the same: Id, Title, Dropdown box
 	- remove enum Importance , enum Priority
 	- add class PriorityEntity , PriorityModel
