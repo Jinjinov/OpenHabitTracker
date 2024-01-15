@@ -2,7 +2,6 @@
 
 - Category UI
 	- update
-	- select > option in *Add.razor *Update.razor - Category dropdown component?
 - List<Item> UI
 	- _selectedId / EditItem ? url parameter id ?
 
@@ -24,12 +23,8 @@ window.focusElement = (element) => {
     element.focus();
 };
 
-- remove enum Importance
-- remove enum Priority
-- add class PriorityEntity
-- add class PriorityModel
-
-- advanced repeating interval setting
+- remove enum Importance , enum Priority
+- add class PriorityEntity , PriorityModel
 
 - Calendar
 	- Habits.razor

@@ -65,8 +65,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
             Priority = NewHabit.Priority,
             Importance = NewHabit.Importance,
 
-            AverageInterval = NewHabit.AverageInterval,
-            DesiredInterval = NewHabit.DesiredInterval,
+            RepeatCount = NewHabit.RepeatCount,
+            RepeatInterval = NewHabit.RepeatInterval,
             LastTimeDoneAt = null
         };
 
@@ -94,8 +94,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
             habit.Priority = EditHabit.Priority;
             habit.Importance = EditHabit.Importance;
 
-            habit.AverageInterval = EditHabit.AverageInterval;
-            habit.DesiredInterval = EditHabit.DesiredInterval;
+            habit.RepeatCount = EditHabit.RepeatCount;
+            habit.RepeatInterval = EditHabit.RepeatInterval;
             habit.LastTimeDoneAt = EditHabit.LastTimeDoneAt;
 
             await _dataAccess.UpdateHabit(habit);

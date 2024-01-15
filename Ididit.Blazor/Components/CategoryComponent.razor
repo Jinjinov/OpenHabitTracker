@@ -1,0 +1,20 @@
+﻿@using Ididit.Data.Models
+@using Ididit.Services
+
+@inject CategoryService CategoryService
+
+@if (CategoryService.Categories is not null && Model is not null)
+{
+    <InputSelect @bind-Value="Model.CategoryId">
+        @foreach (CategoryModel category in CategoryService.Categories.Values)
+        {
+            <option value="@category.Id">@category.Title</option>
+        }
+    </InputSelect>
+}
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public Model? Model { get; set; }
+}

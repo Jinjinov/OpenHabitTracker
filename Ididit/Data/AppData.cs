@@ -28,8 +28,8 @@ public class AppData(IDataAccess dataAccess)
                 Priority = h.Priority,
                 Importance = h.Importance,
 
-                AverageInterval = h.AverageInterval,
-                DesiredInterval = h.DesiredInterval,
+                RepeatCount = h.RepeatCount,
+                RepeatInterval = h.RepeatInterval,
                 LastTimeDoneAt = h.LastTimeDoneAt
             }).ToDictionary(x => x.Id);
         }
