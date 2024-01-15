@@ -10,6 +10,16 @@
 
 <h3>Categories</h3>
 
+@if (CategoryService.NewCategory is not null)
+{
+    <div>
+        <label for="titleInput">Title:</label>
+        <InputText id="titleInput" @bind-Value="CategoryService.NewCategory.Title" />
+
+        <button @onclick="() => CategoryService.AddCategory()">Add</button>
+    </div>
+}
+
 @if (CategoryService.Categories is null)
 {
     <p>Loading...</p>
@@ -20,7 +30,10 @@ else
 
     foreach (CategoryModel category in CategoryService.Categories.Values)
     {
-        <p>@category.Title</p>
+        <div>
+            <span>@category.Title</span>
+            <button @onclick="() => CategoryService.DeleteCategory(category)">Delete</button>
+        </div>
     }
 }
 
