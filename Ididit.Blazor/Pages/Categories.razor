@@ -31,7 +31,14 @@ else
     foreach (CategoryModel category in CategoryService.Categories.Values)
     {
         <div>
-            <span>@category.Title</span>
+            @if (category == CategoryService.SelectedCategory)
+            {
+                <InputText Value="@category.Title" ValueExpression="() => category.Title" ValueChanged="(string title) => CategoryService.UpdateCategory()" @onfocusout="(args) => CategoryService.SelectedCategory = null" />
+            }
+            else
+            {
+                <span @onclick="() => CategoryService.SelectedCategory = category">@category.Title</span>
+            }
             <button @onclick="() => CategoryService.DeleteCategory(category)">Delete</button>
         </div>
     }

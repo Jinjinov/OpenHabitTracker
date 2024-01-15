@@ -21,13 +21,13 @@
     {
         <div>
             <InputCheckbox Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
-            @if (item.Id == _selectedId)
+            @if (item == ItemService.SelectedItem)
             {
-                <InputText Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem()" @onfocusout="(args) => SetSelectedId(0)" />
+                <InputText Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem()" @onfocusout="(args) => ItemService.SelectedItem = null" />
             }
             else
             {
-                <span @onclick="() => SetSelectedId(item.Id)">@item.Title</span>
+                <span @onclick="() => ItemService.SelectedItem = item">@item.Title</span>
             }
             <button @onclick="() => ItemService.DeleteItem(Items, item)">Delete</button>
         </div>
@@ -39,15 +39,8 @@
     [Parameter]
     public ItemsModel? Items { get; set; }
 
-    long _selectedId;
-
     protected override async Task OnParametersSetAsync()
     {
         await ItemService.Initialize(Items);
-    }
-
-    void SetSelectedId(long id)
-    {
-        _selectedId = id;
     }
 }

@@ -1,10 +1,5 @@
 # TODO:
 
-- Category UI
-	- update
-- List<Item> UI
-	- _selectedId / EditItem ? url parameter id ?
-
 <input @ref="inputElement" />
 
 @code {
@@ -23,8 +18,9 @@ window.focusElement = (element) => {
     element.focus();
 };
 
-- remove enum Importance , enum Priority
-- add class PriorityEntity , PriorityModel
+- Priority and Category are exactly the same: Id, Title, Dropdown box
+	- remove enum Importance , enum Priority
+	- add class PriorityEntity , PriorityModel
 
 - Calendar
 	- Habits.razor
