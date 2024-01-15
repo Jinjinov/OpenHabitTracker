@@ -1,7 +1,7 @@
 # TODO:
 
 - Category UI
-	- Category.razor - display list, add, update, delete
+	- update
 	- select > option in *Add.razor *Update.razor - Category dropdown component?
 - List<Item> UI
 	- _selectedId / EditItem ? url parameter id ?

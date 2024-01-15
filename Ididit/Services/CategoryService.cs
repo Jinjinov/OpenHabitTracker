@@ -55,7 +55,7 @@ public class CategoryService(IDataAccess dataAccess)
 
         Categories.Add(NewCategory.Id, NewCategory);
 
-        NewCategory = null;
+        NewCategory = new();
     }
 
     public async Task UpdateCategory()
