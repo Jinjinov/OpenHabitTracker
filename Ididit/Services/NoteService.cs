@@ -45,12 +45,11 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         NoteEntity note = new()
         {
             CategoryId = NewNote.CategoryId,
+            PriorityId = NewNote.PriorityId,
             IsDeleted = false,
             Title = NewNote.Title,
             CreatedAt = utcNow,
             UpdatedAt = utcNow,
-            Priority = NewNote.Priority,
-            Importance = NewNote.Importance,
 
             Content = NewNote.Content
         };
@@ -72,12 +71,11 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         if (await _dataAccess.GetNote(EditNote.Id) is NoteEntity note)
         {
             note.CategoryId = EditNote.CategoryId;
+            note.PriorityId = EditNote.PriorityId;
             note.IsDeleted = EditNote.IsDeleted;
             note.Title = EditNote.Title;
             note.CreatedAt = EditNote.CreatedAt;
             note.UpdatedAt = EditNote.UpdatedAt;
-            note.Priority = EditNote.Priority;
-            note.Importance = EditNote.Importance;
 
             note.Content = EditNote.Content;
 

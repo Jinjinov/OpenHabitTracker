@@ -1,8 +1,22 @@
 # TODO:
 
 - Priority and Category are exactly the same: Id, Title, Dropdown box
-	- remove enum Importance , enum Priority
-	- add class PriorityEntity , PriorityModel
+	- service
+	- razor page
+
+Model -> PriorityModel Priority
+
+inverse List<> properties for CategoryId and PriorityId ?
+
+prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
+
+public enum Period
+{
+	Day,
+	Week,
+	Month,
+	Year
+}
 
 - Calendar
 	- Habits.razor

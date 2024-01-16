@@ -45,12 +45,11 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         TaskEntity task = new()
         {
             CategoryId = NewTask.CategoryId,
+            PriorityId = NewTask.PriorityId,
             IsDeleted = false,
             Title = NewTask.Title,
             CreatedAt = utcNow,
             UpdatedAt = utcNow,
-            Priority = NewTask.Priority,
-            Importance = NewTask.Importance,
 
             StartedAt = null,
             CompletedAt = null,
@@ -74,12 +73,11 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         if (await _dataAccess.GetTask(EditTask.Id) is TaskEntity task)
         {
             task.CategoryId = EditTask.CategoryId;
+            task.PriorityId = EditTask.PriorityId;
             task.IsDeleted = EditTask.IsDeleted;
             task.Title = EditTask.Title;
             task.CreatedAt = EditTask.CreatedAt;
             task.UpdatedAt = EditTask.UpdatedAt;
-            task.Priority = EditTask.Priority;
-            task.Importance = EditTask.Importance;
 
             task.StartedAt = EditTask.StartedAt;
             task.CompletedAt = EditTask.CompletedAt;

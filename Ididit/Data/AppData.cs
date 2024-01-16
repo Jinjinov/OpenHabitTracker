@@ -21,12 +21,11 @@ public class AppData(IDataAccess dataAccess)
             {
                 Id = h.Id,
                 CategoryId = h.CategoryId,
+                PriorityId = h.PriorityId,
                 IsDeleted = h.IsDeleted,
                 Title = h.Title,
                 CreatedAt = h.CreatedAt,
                 UpdatedAt = h.UpdatedAt,
-                Priority = h.Priority,
-                Importance = h.Importance,
 
                 RepeatCount = h.RepeatCount,
                 RepeatInterval = h.RepeatInterval,
@@ -44,12 +43,11 @@ public class AppData(IDataAccess dataAccess)
             {
                 Id = n.Id,
                 CategoryId = n.CategoryId,
+                PriorityId = n.PriorityId,
                 IsDeleted = n.IsDeleted,
                 Title = n.Title,
                 CreatedAt = n.CreatedAt,
                 UpdatedAt = n.UpdatedAt,
-                Priority = n.Priority,
-                Importance = n.Importance,
 
                 Content = n.Content
             }).ToDictionary(x => x.Id);
@@ -65,12 +63,11 @@ public class AppData(IDataAccess dataAccess)
             {
                 Id = t.Id,
                 CategoryId = t.CategoryId,
+                PriorityId = t.PriorityId,
                 IsDeleted = t.IsDeleted,
                 Title = t.Title,
                 CreatedAt = t.CreatedAt,
                 UpdatedAt = t.UpdatedAt,
-                Priority = t.Priority,
-                Importance = t.Importance,
 
                 StartedAt = t.StartedAt,
                 CompletedAt = t.CompletedAt,

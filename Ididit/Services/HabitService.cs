@@ -58,12 +58,11 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         HabitEntity habit = new()
         {
             CategoryId = NewHabit.CategoryId,
+            PriorityId = NewHabit.PriorityId,
             IsDeleted = false,
             Title = NewHabit.Title,
             CreatedAt = utcNow,
             UpdatedAt = utcNow,
-            Priority = NewHabit.Priority,
-            Importance = NewHabit.Importance,
 
             RepeatCount = NewHabit.RepeatCount,
             RepeatInterval = NewHabit.RepeatInterval,
@@ -87,12 +86,11 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         if (await _dataAccess.GetHabit(EditHabit.Id) is HabitEntity habit)
         {
             habit.CategoryId = EditHabit.CategoryId;
+            habit.PriorityId = EditHabit.PriorityId;
             habit.IsDeleted = EditHabit.IsDeleted;
             habit.Title = EditHabit.Title;
             habit.CreatedAt = EditHabit.CreatedAt;
             habit.UpdatedAt = EditHabit.UpdatedAt;
-            habit.Priority = EditHabit.Priority;
-            habit.Importance = EditHabit.Importance;
 
             habit.RepeatCount = EditHabit.RepeatCount;
             habit.RepeatInterval = EditHabit.RepeatInterval;
