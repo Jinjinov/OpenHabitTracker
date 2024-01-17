@@ -1,5 +1,6 @@
 ﻿@page "/habits/{Id:long}/update"
 
+@using Ididit.Data
 @using Ididit.Data.Models
 @using Ididit.Services
 
@@ -16,7 +17,24 @@
         <button @onclick="HabitService.UpdateHabit">Update Habit</button>
     </div>
 
-    <CategoryComponent Model="HabitService.NewHabit" />
+    <CategoryComponent Model="HabitService.EditHabit" />
+
+    <PriorityComponent Model="HabitService.EditHabit" />
+
+    <div>
+        <label for="countInput">RepeatCount:</label>
+        <InputNumber id="countInput" @bind-Value="HabitService.EditHabit.RepeatCount" />
+
+        <label for="intervalInput">RepeatInterval:</label>
+        <InputNumber id="intervalInput" @bind-Value="HabitService.EditHabit.RepeatInterval" />
+    </div>
+
+    <InputSelect @bind-Value="HabitService.EditHabit.RepeatPeriod">
+        @foreach (Period period in Enum.GetValues<Period>())
+        {
+            <option value="@period">@period</option>
+        }
+    </InputSelect>
 }
 
 @code {

@@ -16,7 +16,14 @@
         <button @onclick="NoteService.UpdateNote">Update Note</button>
     </div>
 
-    <CategoryComponent Model="NoteService.NewNote" />
+    <CategoryComponent Model="NoteService.EditNote" />
+
+    <PriorityComponent Model="NoteService.EditNote" />
+
+    <div>
+        <label for="contentInput">Content:</label>
+        <InputTextArea id="contentInput" @bind-Value="NoteService.EditNote.Content" />
+    </div>
 }
 
 @code {

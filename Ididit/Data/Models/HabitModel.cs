@@ -4,7 +4,9 @@ public class HabitModel : ItemsModel
 {
     public int RepeatCount { get; set; }
 
-    public TimeSpan RepeatInterval { get; set; }
+    public int RepeatInterval { get; set; }
+
+    public Period RepeatPeriod { get; set; }
 
     public DateTime? LastTimeDoneAt { get; set; }
 

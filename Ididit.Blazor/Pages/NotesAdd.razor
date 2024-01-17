@@ -17,4 +17,11 @@
     </div>
 
     <CategoryComponent Model="NoteService.NewNote" />
+
+    <PriorityComponent Model="NoteService.NewNote" />
+
+    <div>
+        <label for="contentInput">Content:</label>
+        <InputTextArea id="contentInput" @bind-Value="NoteService.NewNote.Content" />
+    </div>
 }

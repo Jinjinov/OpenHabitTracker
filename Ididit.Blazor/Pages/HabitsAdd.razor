@@ -1,5 +1,6 @@
 ﻿@page "/habits/add"
 
+@using Ididit.Data
 @using Ididit.Data.Models
 @using Ididit.Services
 
@@ -17,4 +18,21 @@
     </div>
 
     <CategoryComponent Model="HabitService.NewHabit" />
+
+    <PriorityComponent Model="HabitService.NewHabit" />
+
+    <div>
+        <label for="countInput">RepeatCount:</label>
+        <InputNumber id="countInput" @bind-Value="HabitService.NewHabit.RepeatCount" />
+
+        <label for="intervalInput">RepeatInterval:</label>
+        <InputNumber id="intervalInput" @bind-Value="HabitService.NewHabit.RepeatInterval" />
+    </div>
+
+    <InputSelect @bind-Value="HabitService.NewHabit.RepeatPeriod">
+        @foreach (Period period in Enum.GetValues<Period>())
+        {
+            <option value="@period">@period</option>
+        }
+    </InputSelect>
 }

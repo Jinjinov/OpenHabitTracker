@@ -1,9 +1,5 @@
 # TODO:
 
-add all fields for
-	Display
-	Add
-	Update
 update css, html
 
 Model -> CategoryModel Category ?
@@ -14,13 +10,6 @@ update TSV habits table
 add TSV backup service - import, export
 
 prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
-public enum Period
-{
-	Day,
-	Week,
-	Month,
-	Year
-}
 
 - Calendar
 	- Habits.razor

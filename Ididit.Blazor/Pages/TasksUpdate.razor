@@ -16,7 +16,14 @@
         <button @onclick="TaskService.UpdateTask">Update Task</button>
     </div>
 
-    <CategoryComponent Model="TaskService.NewTask" />
+    <CategoryComponent Model="TaskService.EditTask" />
+
+    <PriorityComponent Model="TaskService.EditTask" />
+
+    <div>
+        <label for="dateInput">Date:</label>
+        <InputDate Type="InputDateType.DateTimeLocal" id="dateInput" @bind-Value="TaskService.EditTask.Date" />
+    </div>
 }
 
 @code {

@@ -17,4 +17,11 @@
     </div>
 
     <CategoryComponent Model="TaskService.NewTask" />
+
+    <PriorityComponent Model="TaskService.NewTask" />
+
+    <div>
+        <label for="dateInput">Date:</label>
+        <InputDate Type="InputDateType.DateTimeLocal" id="dateInput" @bind-Value="TaskService.NewTask.Date" />
+    </div>
 }
