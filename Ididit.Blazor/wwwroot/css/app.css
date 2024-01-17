@@ -19,7 +19,7 @@ html, body {
     }
 
     .nav-link.active {
-        background-color: #aaa;
+        background-color: #1C5F20;
     }
 
 #blazor-error-ui {
