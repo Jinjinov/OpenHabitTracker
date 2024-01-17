@@ -1,0 +1,20 @@
+﻿@using Ididit.Data.Models
+@using Ididit.Services
+
+@inject PriorityService PriorityService
+
+@if (PriorityService.Priorities is not null && Model is not null)
+{
+    <InputSelect @bind-Value="Model.PriorityId">
+        @foreach (PriorityModel priority in PriorityService.Priorities.Values)
+        {
+            <option value="@priority.Id">@priority.Title</option>
+        }
+    </InputSelect>
+}
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public Model? Model { get; set; }
+}

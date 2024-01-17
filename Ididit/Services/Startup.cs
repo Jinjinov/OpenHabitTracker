@@ -10,6 +10,7 @@ public static class Startup
         services.AddScoped<AppData>();
 
         services.AddScoped<CategoryService>();
+        services.AddScoped<PriorityService>();
         services.AddScoped<HabitService>();
         services.AddScoped<ItemService>();
         services.AddScoped<NoteService>();

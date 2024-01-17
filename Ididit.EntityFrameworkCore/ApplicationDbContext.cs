@@ -12,6 +12,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<TimeEntity> Times { get; set; }
     public DbSet<ItemEntity> Items { get; set; }
     public DbSet<CategoryEntity> Categories { get; set; }
+    public DbSet<PriorityEntity> Priorities { get; set; }
     public DbSet<SettingsEntity> Settings { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)

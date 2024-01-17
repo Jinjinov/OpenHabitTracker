@@ -84,6 +84,11 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         category.Id = 1 + await MaxKey();
         await _indexedDb.AddItems(new List<CategoryEntity> { category });
     }
+    public async Task AddPriority(PriorityEntity priority)
+    {
+        priority.Id = 1 + await MaxKey();
+        await _indexedDb.AddItems(new List<PriorityEntity> { priority });
+    }
     public async Task AddSettings(SettingsEntity settings)
     {
         settings.Id = 1 + await MaxKey();
@@ -120,6 +125,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     {
         return await _indexedDb.GetAll<CategoryEntity>();
     }
+    public async Task<IReadOnlyList<PriorityEntity>> GetPriorities()
+    {
+        return await _indexedDb.GetAll<PriorityEntity>();
+    }
     public async Task<IReadOnlyList<SettingsEntity>> GetSettings()
     {
         return await _indexedDb.GetAll<SettingsEntity>();
@@ -148,6 +157,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     public async Task<CategoryEntity?> GetCategory(long id)
     {
         return await _indexedDb.GetByKey<long, CategoryEntity>(id);
+    }
+    public async Task<PriorityEntity?> GetPriority(long id)
+    {
+        return await _indexedDb.GetByKey<long, PriorityEntity>(id);
     }
     public async Task<SettingsEntity?> GetSettings(long id)
     {
@@ -181,6 +194,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     {
         await _indexedDb.UpdateItems(new List<CategoryEntity> { category });
     }
+    public async Task UpdatePriority(PriorityEntity priority)
+    {
+        await _indexedDb.UpdateItems(new List<PriorityEntity> { priority });
+    }
     public async Task UpdateSettings(SettingsEntity settings)
     {
         await _indexedDb.UpdateItems(new List<SettingsEntity> { settings });
@@ -210,6 +227,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     {
         await _indexedDb.DeleteByKey<long, CategoryEntity>(id);
     }
+    public async Task RemovePriority(long id)
+    {
+        await _indexedDb.DeleteByKey<long, PriorityEntity>(id);
+    }
     public async Task RemoveSettings(long id)
     {
         await _indexedDb.DeleteByKey<long, SettingsEntity>(id);
@@ -238,6 +259,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     public async Task RemoveCategories()
     {
         await _indexedDb.DeleteAll<CategoryEntity>();
+    }
+    public async Task RemovePriorities()
+    {
+        await _indexedDb.DeleteAll<PriorityEntity>();
     }
     public async Task RemoveSettings()
     {

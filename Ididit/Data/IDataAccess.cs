@@ -12,6 +12,7 @@ public interface IDataAccess
     Task AddTime(TimeEntity time);
     Task AddItem(ItemEntity item);
     Task AddCategory(CategoryEntity category);
+    Task AddPriority(PriorityEntity priority);
     Task AddSettings(SettingsEntity settings);
 
     Task<IReadOnlyList<HabitEntity>> GetHabits();
@@ -20,6 +21,7 @@ public interface IDataAccess
     Task<IReadOnlyList<TimeEntity>> GetTimes(long? habitId = null);
     Task<IReadOnlyList<ItemEntity>> GetItems(long? parentId = null);
     Task<IReadOnlyList<CategoryEntity>> GetCategories();
+    Task<IReadOnlyList<PriorityEntity>> GetPriorities();
     Task<IReadOnlyList<SettingsEntity>> GetSettings();
 
     Task<HabitEntity?> GetHabit(long id);
@@ -28,6 +30,7 @@ public interface IDataAccess
     Task<TimeEntity?> GetTime(DateTime time);
     Task<ItemEntity?> GetItem(long id);
     Task<CategoryEntity?> GetCategory(long id);
+    Task<PriorityEntity?> GetPriority(long id);
     Task<SettingsEntity?> GetSettings(long id);
 
     Task UpdateHabit(HabitEntity habit);
@@ -36,6 +39,7 @@ public interface IDataAccess
     Task UpdateTime(TimeEntity time);
     Task UpdateItem(ItemEntity item);
     Task UpdateCategory(CategoryEntity category);
+    Task UpdatePriority(PriorityEntity priority);
     Task UpdateSettings(SettingsEntity settings);
 
     Task RemoveHabit(long id);
@@ -44,6 +48,7 @@ public interface IDataAccess
     Task RemoveTime(DateTime time);
     Task RemoveItem(long id);
     Task RemoveCategory(long id);
+    Task RemovePriority(long id);
     Task RemoveSettings(long id);
 
     Task RemoveHabits();
@@ -52,5 +57,6 @@ public interface IDataAccess
     Task RemoveTimes();
     Task RemoveItems();
     Task RemoveCategories();
+    Task RemovePriorities();
     Task RemoveSettings();
 }

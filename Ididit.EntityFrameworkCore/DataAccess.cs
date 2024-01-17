@@ -49,6 +49,11 @@ public class DataAccess : IDataAccess
         _dataContext.Add(category);
         await _dataContext.SaveChangesAsync();
     }
+    public async Task AddPriority(PriorityEntity priority)
+    {
+        _dataContext.Add(priority);
+        await _dataContext.SaveChangesAsync();
+    }
     public async Task AddSettings(SettingsEntity settings)
     {
         _dataContext.Add(settings);
@@ -85,6 +90,10 @@ public class DataAccess : IDataAccess
     {
         return await _dataContext.Categories.ToListAsync();
     }
+    public async Task<IReadOnlyList<PriorityEntity>> GetPriorities()
+    {
+        return await _dataContext.Priorities.ToListAsync();
+    }
     public async Task<IReadOnlyList<SettingsEntity>> GetSettings()
     {
         return await _dataContext.Settings.ToListAsync();
@@ -113,6 +122,10 @@ public class DataAccess : IDataAccess
     public async Task<CategoryEntity?> GetCategory(long id)
     {
         return await _dataContext.Categories.FindAsync(id);
+    }
+    public async Task<PriorityEntity?> GetPriority(long id)
+    {
+        return await _dataContext.Priorities.FindAsync(id);
     }
     public async Task<SettingsEntity?> GetSettings(long id)
     {
@@ -152,6 +165,11 @@ public class DataAccess : IDataAccess
         _dataContext.Update(category);
         await _dataContext.SaveChangesAsync();
     }
+    public async Task UpdatePriority(PriorityEntity priority)
+    {
+        _dataContext.Update(priority);
+        await _dataContext.SaveChangesAsync();
+    }
     public async Task UpdateSettings(SettingsEntity settings)
     {
         _dataContext.Update(settings);
@@ -188,6 +206,11 @@ public class DataAccess : IDataAccess
         _dataContext.Remove(new CategoryEntity { Id = id });
         await _dataContext.SaveChangesAsync();
     }
+    public async Task RemovePriority(long id)
+    {
+        _dataContext.Remove(new PriorityEntity { Id = id });
+        await _dataContext.SaveChangesAsync();
+    }
     public async Task RemoveSettings(long id)
     {
         _dataContext.Remove(new SettingsEntity { Id = id });
@@ -217,6 +240,10 @@ public class DataAccess : IDataAccess
     public async Task RemoveCategories()
     {
         await _dataContext.Categories.ExecuteDeleteAsync();
+    }
+    public async Task RemovePriorities()
+    {
+        await _dataContext.Priorities.ExecuteDeleteAsync();
     }
     public async Task RemoveSettings()
     {

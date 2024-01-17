@@ -1,15 +1,16 @@
 # TODO:
 
-- Priority and Category are exactly the same: Id, Title, Dropdown box
-	- service
-	- razor page
+add all fields for Add, Update
+update css, html
 
+update TSV habits table
+add TSV backup service - import, export
+
+Model -> CategoryModel Category ?
 Model -> PriorityModel Priority
-
 inverse List<> properties for CategoryId and PriorityId ?
 
 prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
-
 public enum Period
 {
 	Day,
