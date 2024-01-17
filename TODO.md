@@ -6,12 +6,12 @@ add all fields for
 	Update
 update css, html
 
-update TSV habits table
-add TSV backup service - import, export
-
 Model -> CategoryModel Category ?
 Model -> PriorityModel Priority
 inverse List<> properties for CategoryId and PriorityId ?
+
+update TSV habits table
+add TSV backup service - import, export
 
 prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
 public enum Period
@@ -40,6 +40,8 @@ public enum Period
 - host 24/7 on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
+
+- pin razor page to Home - in a column - max 4 columns ?
 
 - common:
 	- Routes.razor </Router>
