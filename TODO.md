@@ -1,5 +1,13 @@
 # TODO:
 
+- settings
+	- theme
+	- size
+	- background
+	- language
+	- Note, Task, Habit background color
+- localization
+
 update css, html
 	Model -> CategoryModel Category ?
 	Model -> PriorityModel Priority
@@ -34,7 +42,6 @@ TSV habits table
 
 ---------------------------------------------------------------------------------------------------
 
-Note background color
 Note markdown
 
 import Google Keep repeating reminder 
@@ -121,13 +128,6 @@ columns:
 
 - read Settings from DB before Run()
 
-- settings
-	- theme
-	- size
-	- background
-	- language
-- localization
-
 - categories are filters
 - filters are query parameters
 
@@ -153,9 +153,7 @@ columns:
 - keyboard navigation
 - benchmark: method time & render time
 - Google Keep - copy all features
-- don't list habits that i always do / never do - or find a solution for displaying them - HIGH / LOW priority - NEED / WANT to do importance
-
-color coded priorities
+- don't list habits that i always do / never do - or find a solution for displaying them
 
 essentials: (highest priority)
 appointments: (very high priority)
@@ -196,8 +194,6 @@ there is no point in accordian component - one action to open and one action to 
 - don't use `event` to refresh everything on every change
 - don't use `StateHasChanged()`
 - don't do this: current screen changed -> save current screen to settings -> data changed -> refresh all
-
-- [ ] task - "done times list" should load on demand - on Task done - on show Task details
 
 - ReplaceTab in MemoEdit
 
@@ -245,20 +241,15 @@ what is wrong with ididit:
 - too many options / settings
 
 - I'm not doing the critical tasks
-- no consequences (interval doesn't change)
 - show only highest priority overdue tasks 
-- refresh is too slow
 
 showing DesiredInterval is a bad idea - no consequences (interval doesn't change) - show AverageInterval
 
-task is either ASAP or habit
 use either checkbox [] or one time action to permanently create a habit
 
 email: copy task list as HTML with checkboxes to clipboard
-sms, message: copy task list with Unicode checkboxes 
+sms, message: copy task list with Unicode checkboxes
 
-copy Google Keep - don't truncate
-category - in your face, route friendly 
 [X] Category must be set when creating a new note
 
 copy Loop Habit Tracker
@@ -268,8 +259,6 @@ copy Loop Habit Tracker
 - Frequency (by day of the week - continuous calendar, without dates, done count grouped by days of the week)
 
 virtualized container
-method trace logging - performance 
 
-- [ ] benchmark method performance
-
+method trace logging - benchmark method performance
 https://learn.microsoft.com/en-us/aspnet/core/blazor/performance
