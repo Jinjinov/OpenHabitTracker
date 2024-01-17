@@ -1,13 +1,13 @@
 # TODO:
 
 update css, html
-Model -> CategoryModel Category ?
-Model -> PriorityModel Priority
-inverse List<> properties for CategoryId and PriorityId ?
+	Model -> CategoryModel Category ?
+	Model -> PriorityModel Priority
+	inverse List<> properties for CategoryId and PriorityId ?
 
-prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
-update TSV habits table
-add TSV backup service - import, export
+TSV habits table
+	prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
+	add TSV backup service - import, export
 
 - Calendar
 	- Habits.razor
@@ -25,8 +25,20 @@ add TSV backup service - import, export
 	- each day is a toggle button
 
 - host 24/7 on Raspberry Pi
+	valid LAN IP
+	test HDMI cable
+	test fan
+	always on
+	install VS code
+	install NET 8 sdk
 
 ---------------------------------------------------------------------------------------------------
+
+Note background color
+Note markdown
+
+import Google Keep repeating reminder 
+import Google Keep h1 h2 bold italic underline
 
 - pin razor page to Home - in a column - max 4 columns ?
 
