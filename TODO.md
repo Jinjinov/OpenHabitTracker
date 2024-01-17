@@ -1,15 +1,13 @@
 # TODO:
 
 update css, html
-
 Model -> CategoryModel Category ?
 Model -> PriorityModel Priority
 inverse List<> properties for CategoryId and PriorityId ?
 
+prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
 update TSV habits table
 add TSV backup service - import, export
-
-prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
 
 - Calendar
 	- Habits.razor
