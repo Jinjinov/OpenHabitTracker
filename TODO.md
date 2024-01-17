@@ -1,6 +1,9 @@
 # TODO:
 
-add all fields for Add, Update
+add all fields for
+	Display
+	Add
+	Update
 update css, html
 
 update TSV habits table
@@ -100,8 +103,6 @@ SectionContent		https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcor
 SectionOutlet		https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.sections.sectionoutlet?view=aspnetcore-8.0
 Virtualize			https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.web.virtualization.virtualize-1?view=aspnetcore-8.0
 
-- Settings UI
-
 maui file picker
 maui file saver
 blazor file picker
@@ -117,8 +118,6 @@ columns:
 	categories - flat, no tree!!!
 	search, filter, sort
 
-- Note Content
-
 - read Settings from DB before Run()
 
 - settings
@@ -127,10 +126,6 @@ columns:
 	- background
 	- language
 - localization
-
-- categories - NO nesting
-- tree view - NO!
-- bread crumbs - NO!
 
 - categories are filters
 - filters are query parameters
