@@ -1,11 +1,12 @@
 # TODO:
 
 - settings
-	- theme
-	- size
-	- background
+	- CSS
+		- theme
+		- font size
+		- background color
+		- Note, Task, Habit background color
 	- language
-	- Note, Task, Habit background color
 - localization
 
 update css, html
@@ -25,8 +26,8 @@ TSV habits table
 	- 6 columns = one month - 4 full weeks = 28 - another 0/1/2/3 days can take max 2 weeks more
 	- find the last monday of the previous month
 		DateTime currentDate = DateTime.Now;
-        DateTime lastDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-        DateTime lastMonday = lastDayOfMonth.AddDays((int)DayOfWeek.Monday - (int)lastDayOfMonth.DayOfWeek);
+		DateTime lastDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+		DateTime lastMonday = lastDayOfMonth.AddDays((int)DayOfWeek.Monday - (int)lastDayOfMonth.DayOfWeek);
 	- previous month DaysInMonth
 	- this month DaysInMonth
 	- next month until sunday - until max 14.
