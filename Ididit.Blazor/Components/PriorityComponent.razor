@@ -17,4 +17,9 @@
     [EditorRequired]
     [Parameter]
     public Model? Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await PriorityService.Initialize();
+    }
 }
