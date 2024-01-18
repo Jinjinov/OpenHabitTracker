@@ -16,7 +16,7 @@ bootstrap-icons.min.css
 fonts\bootstrap-icons.woff
 fonts\bootstrap-icons.woff2
 
-style="font-family: 'Caveat', cursive; font-size: 1.5em;"
+<Span style="font-family: 'Caveat', cursive; font-size: 1.5em;">ididit!</Span>
 
 text: ¡!
 background shape: Circle

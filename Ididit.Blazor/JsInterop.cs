@@ -12,7 +12,7 @@ namespace Ididit.Blazor;
 
 public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
 {
-    private readonly Lazy<Task<IJSObjectReference>> _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Ididit.Blazor/exampleJsInterop.js").AsTask());
+    private readonly Lazy<Task<IJSObjectReference>> _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Ididit.Blazor/jsInterop.js").AsTask());
 
     public async ValueTask<string> Prompt(string message)
     {
