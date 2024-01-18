@@ -1,3 +1,27 @@
+@font-face{
+    font-family: "Caveat";
+    src: url("./Caveat/Caveat.eot");
+    src: url("./Caveat/Caveat.eot?#iefix")format("embedded-opentype"),
+         url("./Caveat/Caveat.woff")format("woff"),
+         url("./Caveat/Caveat.woff2")format("woff2"),
+         url("./Caveat/Caveat.ttf")format("truetype"),
+         url("./Caveat/Caveat.svg#Caveat")format("svg");
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face{
+    font-family: "Miltonian";
+    src: url("./Miltonian/Miltonian.eot");
+    src: url("./Miltonian/Miltonian.eot?#iefix")format("embedded-opentype"),
+         url("./Miltonian/Miltonian.woff")format("woff"),
+         url("./Miltonian/Miltonian.woff2")format("woff2"),
+         url("./Miltonian/Miltonian.ttf")format("truetype"),
+         url("./Miltonian/Miltonian.svg#Miltonian")format("svg");
+    font-weight:normal;
+    font-style:normal;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
