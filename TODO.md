@@ -1,13 +1,5 @@
 # TODO:
 
-text: ¡!
-background shape: Circle
-font: Miltonian
-Regular 400 Normal
-font size: 110
-font color: #EEEEEE
-background color: #333333
-
 - settings
 	- CSS
 		- theme
@@ -271,3 +263,13 @@ virtualized container
 
 method trace logging - benchmark method performance
 https://learn.microsoft.com/en-us/aspnet/core/blazor/performance
+
+---------------------------------------------------------------------------------------------------
+
+text: ¡!
+background shape: Circle
+font: Miltonian
+Regular 400 Normal
+font size: 110
+font color: #EEEEEE
+background color: #333333
