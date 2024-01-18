@@ -1,5 +1,31 @@
 # TODO:
 
+https://getbootstrap.com/docs/5.3/getting-started/download/
+bootstrap.min.css
+bootstrap.min.css.map
+
+bootstrap.min.js
+bootstrap.min.js.map
+
+bootstrap.bundle.min.js
+bootstrap.bundle.min.js.map
+
+https://icons.getbootstrap.com/#install
+https://github.com/twbs/icons/releases/tag/v1.11.3
+bootstrap-icons.min.css
+fonts\bootstrap-icons.woff
+fonts\bootstrap-icons.woff2
+
+style="font-family: 'Caveat', cursive; font-size: 1.5em;"
+
+text: ¡!
+background shape: Circle
+font: Miltonian
+Regular 400 Normal
+font size: 110
+font color: #EEEEEE
+background color: #333333
+
 - settings
 	- CSS
 		- theme
