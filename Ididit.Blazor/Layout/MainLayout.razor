@@ -2,13 +2,17 @@
 
 <div>
     <main>
-        <div>
-            <NavLink class="nav-link" href="menu">Menu</NavLink>
-            <span>ididit!</span>
-            <NavLink class="nav-link" href="habits">Habits</NavLink>
-            <NavLink class="nav-link" href="notes">Notes</NavLink>
-            <NavLink class="nav-link" href="tasks">Tasks</NavLink>
-        </div>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <div class="navbar-nav">
+                    <NavLink class="nav-link" href="menu">Menu</NavLink>
+                    <span class="navbar-text">ididit!</span>
+                    <NavLink class="nav-link" href="habits"><i class="bi bi-card-list" style="font-size: 2em"></i> Habits</NavLink>
+                    <NavLink class="nav-link" href="notes"><i class="bi bi-card-text" style="font-size: 2em"></i> Notes</NavLink>
+                    <NavLink class="nav-link" href="tasks"><i class="bi bi-card-checklist" style="font-size: 2em"></i> Tasks</NavLink>
+                </div>
+            </div>
+        </nav>
 
         <article>
             @Body
