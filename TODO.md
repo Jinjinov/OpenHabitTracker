@@ -1,16 +1,24 @@
 # TODO:
 
-do not allow adding empty text
+class AppData - always load every Category and Priority
+	Model -> CategoryModel Category ?
+	Model -> PriorityModel Priority
+
+display Category
+
+display Priority
 
 read only ItemsComponent
 
+
+
 enum Priority
-
-
 
 load examples
 
 Note Markdown
+
+do not allow adding empty text
 
 - settings
 	- CSS
@@ -22,10 +30,7 @@ Note Markdown
 - localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
 - https://github.com/xaviersolau/BlazorJsonLocalization
 
-update css, html
-	Model -> CategoryModel Category ?
-	Model -> PriorityModel Priority
-	inverse List<> properties for CategoryId and PriorityId ?
+CategoryModel, PriorityModel - inverse List<Model> property for CategoryId and PriorityId ?
 
 TSV habits table
 	prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
