@@ -26,9 +26,6 @@ else
 
             <button @onclick="() => HabitService.DeleteHabit(habit)">Delete Habit</button>
 
-            <p>CreatedAt: @habit.CreatedAt</p>
-            <p>UpdatedAt: @habit.UpdatedAt</p>
-
             <p>CategoryId: @habit.CategoryId</p>
             <p>PriorityId: @habit.PriorityId</p>
 
@@ -57,6 +54,11 @@ else
                     }
                 }
             }
+
+            <div>
+                <small>Created: @habit.CreatedAt</small>
+                <small>Updated: @habit.UpdatedAt</small>
+            </div>
         }
         else
         {

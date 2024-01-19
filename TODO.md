@@ -4,8 +4,6 @@ on Add go to List/{id}
 
 update and delete icons in the Title line
 
-created, updated - small, bottom
-
 category, priority - ... ?
 
 - settings
