@@ -1,5 +1,7 @@
 # TODO:
 
+do not allow adding empty text
+
 read only ItemsComponent
 
 on Add go to List/{id}
@@ -10,7 +12,7 @@ enum Priority
 
 load examples
 
-note Markdown
+Note Markdown
 
 - settings
 	- CSS
@@ -56,8 +58,6 @@ TSV habits table
 
 ---------------------------------------------------------------------------------------------------
 
-Note markdown
-
 import Google Keep repeating reminder 
 import Google Keep h1 h2 bold italic underline
 
@@ -81,18 +81,17 @@ import Google Keep h1 h2 bold italic underline
 	- @page "/Error"
 	- app.UseExceptionHandler("/Error");
 
-- list of all Blazor magic strings: blazor-error-ui , --blazor-load-percentage , --blazor-load-percentage-text , blazor-error-boundary , validation-errors , validation-message
+Blazor magic strings: blazor-error-ui , --blazor-load-percentage , --blazor-load-percentage-text , blazor-error-boundary , validation-errors , validation-message
+
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web.JS/src/BootErrors.ts
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web.JS/src/Platform/Mono/MonoPlatform.ts#L230
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web/src/Web/ErrorBoundary.cs#L48
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web/src/Forms/ValidationSummary.cs#L76
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web/src/Forms/ValidationMessage.cs#L74
 
-- list of all Microsoft Blazor components: NavLink, ...
+The following built-in Razor components are provided by the Blazor framework:
 
 https://learn.microsoft.com/en-us/aspnet/core/blazor/components/built-in-components?view=aspnetcore-8.0
-
-The following built-in Razor components are provided by the Blazor framework:
 
 App
 AntiforgeryToken	https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.forms.antiforgerytoken?view=aspnetcore-8.0
@@ -133,11 +132,7 @@ blazor file saver
 EF Core: use DbContextFactory
 
 columns:
-	tasks, sub items
-	habits, sub items
-		habits calendar - own column?
-	notes, sub items: chapters? paragraphs?
-	categories - flat, no tree!!!
+	habits calendar - own column?
 	search, filter, sort
 
 - read Settings from DB before Run()
@@ -159,7 +154,6 @@ columns:
 ---------------------------------------------------------------------------------------------------
 
 - online sync - server with SQL
-- no css / js downloads, everything is local
 - calendar streak - load on demand
 - average interval
 - sub-tasks for exercises, chores, ...
