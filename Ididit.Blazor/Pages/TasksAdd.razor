@@ -13,7 +13,7 @@
         <div>
             <InputText @bind-Value="TaskService.NewTask.Title" placeholder="Title" />
 
-            <button @onclick="TaskService.AddTask"><i class="bi bi-plus-square"></i></button>
+            <button @onclick="AddTask"><i class="bi bi-plus-square"></i></button>
         </div>
 
         <CategoryComponent Model="TaskService.NewTask" />
@@ -24,4 +24,16 @@
             <InputDate Type="InputDateType.DateTimeLocal" id="dateInput" @bind-Value="TaskService.NewTask.Date" />
         </div>
     </div>
+}
+
+@code {
+    [Inject]
+    private NavigationManager? NavigationManager { get; set; }
+
+    private async Task AddTask()
+    {
+        await TaskService.AddTask();
+
+        NavigationManager?.NavigateTo("/tasks");
+    }
 }

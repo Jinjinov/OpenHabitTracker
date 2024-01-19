@@ -14,7 +14,7 @@
         <div>
             <InputText @bind-Value="HabitService.EditHabit.Title" placeholder="Title" />
 
-            <button @onclick="HabitService.UpdateHabit"><i class="bi bi-floppy"></i></button>
+            <button @onclick="UpdateHabit"><i class="bi bi-floppy"></i></button>
         </div>
 
         <CategoryComponent Model="HabitService.EditHabit" />
@@ -45,5 +45,15 @@
     protected override void OnParametersSet()
     {
         HabitService.EditHabit = HabitService.Habits?.FirstOrDefault(h => h.Id == Id);
+    }
+
+    [Inject]
+    private NavigationManager? NavigationManager { get; set; }
+
+    private async Task UpdateHabit()
+    {
+        await HabitService.UpdateHabit();
+
+        NavigationManager?.NavigateTo("/habits");
     }
 }

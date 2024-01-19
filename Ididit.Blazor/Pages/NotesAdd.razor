@@ -13,7 +13,7 @@
         <div>
             <InputText @bind-Value="NoteService.NewNote.Title" placeholder="Title" />
 
-            <button @onclick="NoteService.AddNote"><i class="bi bi-plus-square"></i></button>
+            <button @onclick="AddNote"><i class="bi bi-plus-square"></i></button>
         </div>
 
         <CategoryComponent Model="NoteService.NewNote" />
@@ -24,4 +24,16 @@
             <InputTextArea @bind-Value="NoteService.NewNote.Content" placeholder="Note" />
         </div>
     </div>
+}
+
+@code {
+    [Inject]
+    private NavigationManager? NavigationManager { get; set; }
+
+    private async Task AddNote()
+    {
+        await NoteService.AddNote();
+
+        NavigationManager?.NavigateTo("/notes");
+    }
 }

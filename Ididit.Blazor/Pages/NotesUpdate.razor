@@ -13,7 +13,7 @@
         <div>
             <InputText @bind-Value="NoteService.EditNote.Title" placeholder="Title" />
 
-            <button @onclick="NoteService.UpdateNote"><i class="bi bi-floppy"></i></button>
+            <button @onclick="UpdateNote"><i class="bi bi-floppy"></i></button>
         </div>
 
         <CategoryComponent Model="NoteService.EditNote" />
@@ -33,5 +33,15 @@
     protected override void OnParametersSet()
     {
         NoteService.EditNote = NoteService.Notes?.FirstOrDefault(n => n.Id == Id);
+    }
+
+    [Inject]
+    private NavigationManager? NavigationManager { get; set; }
+
+    private async Task UpdateNote()
+    {
+        await NoteService.UpdateNote();
+
+        NavigationManager?.NavigateTo("/notes");
     }
 }

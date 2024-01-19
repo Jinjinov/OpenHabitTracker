@@ -14,7 +14,7 @@
         <div>
             <InputText @bind-Value="HabitService.NewHabit.Title" placeholder="Title" />
 
-            <button @onclick="HabitService.AddHabit"><i class="bi bi-plus-square"></i></button>
+            <button @onclick="AddHabit"><i class="bi bi-plus-square"></i></button>
         </div>
 
         <CategoryComponent Model="HabitService.NewHabit" />
@@ -36,4 +36,16 @@
             </InputSelect>
         </div>
     </div>
+}
+
+@code {
+    [Inject]
+    private NavigationManager? NavigationManager { get; set; }
+
+    private async Task AddHabit()
+    {
+        await HabitService.AddHabit();
+
+        NavigationManager?.NavigateTo("/habits");
+    }
 }

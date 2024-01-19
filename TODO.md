@@ -4,8 +4,6 @@ do not allow adding empty text
 
 read only ItemsComponent
 
-on Add go to List/{id}
-
 enum Priority
 
 
