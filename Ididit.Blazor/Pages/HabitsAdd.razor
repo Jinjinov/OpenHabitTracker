@@ -10,29 +10,30 @@
 
 @if (HabitService.NewHabit is not null)
 {
-    <div>
-        <label for="titleInput">Title:</label>
-        <InputText id="titleInput" @bind-Value="HabitService.NewHabit.Title" />
+    <div class="bg-body-tertiary my-1 p-1">
+        <div>
+            <InputText @bind-Value="HabitService.NewHabit.Title" />
 
-        <button @onclick="HabitService.AddHabit"><i class="bi bi-plus-square"></i></button>
+            <button @onclick="HabitService.AddHabit"><i class="bi bi-plus-square"></i></button>
+        </div>
+
+        <CategoryComponent Model="HabitService.NewHabit" />
+
+        <PriorityComponent Model="HabitService.NewHabit" />
+
+        <div>
+            <label for="countInput">Repeat</label>
+            <InputNumber id="countInput" @bind-Value="HabitService.NewHabit.RepeatCount" />
+
+            <label for="intervalInput">times every</label>
+            <InputNumber id="intervalInput" @bind-Value="HabitService.NewHabit.RepeatInterval" />
+
+            <InputSelect @bind-Value="HabitService.NewHabit.RepeatPeriod">
+                @foreach (Period period in Enum.GetValues<Period>())
+                {
+                    <option value="@period">@period</option>
+                }
+            </InputSelect>
+        </div>
     </div>
-
-    <CategoryComponent Model="HabitService.NewHabit" />
-
-    <PriorityComponent Model="HabitService.NewHabit" />
-
-    <div>
-        <label for="countInput">RepeatCount:</label>
-        <InputNumber id="countInput" @bind-Value="HabitService.NewHabit.RepeatCount" />
-
-        <label for="intervalInput">RepeatInterval:</label>
-        <InputNumber id="intervalInput" @bind-Value="HabitService.NewHabit.RepeatInterval" />
-    </div>
-
-    <InputSelect @bind-Value="HabitService.NewHabit.RepeatPeriod">
-        @foreach (Period period in Enum.GetValues<Period>())
-        {
-            <option value="@period">@period</option>
-        }
-    </InputSelect>
 }

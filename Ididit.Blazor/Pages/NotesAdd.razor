@@ -9,19 +9,17 @@
 
 @if (NoteService.NewNote is not null)
 {
-    <div>
-        <label for="titleInput">Title:</label>
-        <InputText id="titleInput" @bind-Value="NoteService.NewNote.Title" />
+    <div class="bg-body-tertiary my-1 p-1">
+        <div>
+            <InputText @bind-Value="NoteService.NewNote.Title" />
 
-        <button @onclick="NoteService.AddNote"><i class="bi bi-plus-square"></i></button>
-    </div>
+            <button @onclick="NoteService.AddNote"><i class="bi bi-plus-square"></i></button>
+        </div>
 
-    <CategoryComponent Model="NoteService.NewNote" />
+        <CategoryComponent Model="NoteService.NewNote" />
 
-    <PriorityComponent Model="NoteService.NewNote" />
+        <PriorityComponent Model="NoteService.NewNote" />
 
-    <div>
-        <label for="contentInput">Content:</label>
-        <InputTextArea id="contentInput" @bind-Value="NoteService.NewNote.Content" />
+        <InputTextArea @bind-Value="NoteService.NewNote.Content" />
     </div>
 }

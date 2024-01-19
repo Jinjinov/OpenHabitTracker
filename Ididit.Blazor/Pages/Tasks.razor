@@ -19,7 +19,7 @@ else
 {
     foreach (TaskModel task in TaskService.Tasks.Where(t => !t.IsDeleted))
     {
-        <div class="bg-body-tertiary my-1">
+        <div class="bg-body-tertiary my-1 p-1">
             @if (task.Id == Id)
             {
                 <p>

@@ -2,11 +2,11 @@
 
 update Add, Edit css
 
+placeholders
+
 load examples
 
-content always visible:
-	task, habit items / note content
-	read only ItemsComponent
+read only ItemsComponent
 
 on Add go to List/{id}
 

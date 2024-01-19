@@ -18,7 +18,7 @@ else
 {
     foreach (NoteModel note in NoteService.Notes.Where(n => !n.IsDeleted))
     {
-        <div class="bg-body-tertiary my-1">
+        <div class="bg-body-tertiary my-1 p-1">
             @if (note.Id == Id)
             {
                 <p>

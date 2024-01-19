@@ -9,19 +9,17 @@
 
 @if (TaskService.EditTask is not null)
 {
-    <div>
-        <label for="titleInput">Title:</label>
-        <InputText id="titleInput" @bind-Value="TaskService.EditTask.Title" />
+    <div class="bg-body-tertiary my-1 p-1">
+        <div>
+            <InputText @bind-Value="TaskService.EditTask.Title" />
 
-        <button @onclick="TaskService.UpdateTask"><i class="bi bi-floppy"></i></button>
-    </div>
+            <button @onclick="TaskService.UpdateTask"><i class="bi bi-floppy"></i></button>
+        </div>
 
-    <CategoryComponent Model="TaskService.EditTask" />
+        <CategoryComponent Model="TaskService.EditTask" />
 
-    <PriorityComponent Model="TaskService.EditTask" />
+        <PriorityComponent Model="TaskService.EditTask" />
 
-    <div>
-        <label for="dateInput">Date:</label>
         <InputDate Type="InputDateType.DateTimeLocal" id="dateInput" @bind-Value="TaskService.EditTask.Date" />
     </div>
 }
