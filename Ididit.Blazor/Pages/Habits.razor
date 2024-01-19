@@ -22,40 +22,46 @@ else
             @if (habit.Id == Id)
             {
                 <p>
+                    <span>Priority: @habit.PriorityId</span>
                     <a href="/habits">@habit.Title</a>
                     <a href="/habits/@habit.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                 </p>
 
-                <p>CategoryId: @habit.CategoryId</p>
-                <p>PriorityId: @habit.PriorityId</p>
-
-                <p>RepeatCount: @habit.RepeatCount</p>
-                <p>RepeatInterval: @habit.RepeatInterval</p>
-                <p>RepeatPeriod: @habit.RepeatPeriod</p>
+                <ItemsComponent Items=habit />
 
                 if (habit.LastTimeDoneAt is not null)
                 {
-                    <p>LastTimeDoneAt: @habit.LastTimeDoneAt</p>
+                    <small>LastTimeDoneAt: @habit.LastTimeDoneAt</small>
                 }
-
-                <ItemsComponent Items=habit />
 
                 if (habit.TimesDone is not null)
                 {
-                    <p>Times done: @habit.TimesDone.Count</p>
+                    <div>Times done: @habit.TimesDone.Count</div>
 
                     foreach(TimeModel time in habit.TimesDone)
                     {
-                        <p>StartedAt: @time.StartedAt</p>
+                        <div>
+                            <small>Started: @time.StartedAt</small>
 
-                        if (time.CompletedAt is not null)
-                        {
-                            <p>CompletedAt: @time.CompletedAt</p>
-                        }
+                            @if (time.CompletedAt is not null)
+                            {
+                                <small> Completed: @time.CompletedAt</small>
+                            }
+                        </div>
                     }
                 }
+
+                <div>
+                    <small>Repeat @habit.RepeatCount times</small>
+                    <small>every @habit.RepeatInterval</small>
+                    <small>@habit.RepeatPeriod</small>
+                </div>
+
+                <div>
+                    <small>Category: @habit.CategoryId</small>
+                </div>
 
                 <div>
                     <small>Created: @habit.CreatedAt</small>
@@ -65,6 +71,7 @@ else
             else
             {
                 <p>
+                    <span>Priority: @habit.PriorityId</span>
                     <a href="/habits/@habit.Id">@habit.Title</a>
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                 </p>

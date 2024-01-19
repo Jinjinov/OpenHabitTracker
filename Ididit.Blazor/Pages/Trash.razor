@@ -17,7 +17,7 @@ else
 {
     foreach (Model model in TrashService.Models)
     {
-        <p>@model.Title <button @onclick="() => TrashService.Restore(model)">Restore</button> <button @onclick="() => TrashService.Delete(model)">Delete</button></p>
+        <p>@model.Title <button @onclick="() => TrashService.Restore(model)">Restore</button> <button @onclick="() => TrashService.Delete(model)"><i class="bi bi-trash"></i></button></p>
     }
 }
 

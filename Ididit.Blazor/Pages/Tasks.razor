@@ -23,31 +23,33 @@ else
             @if (task.Id == Id)
             {
                 <p>
+                    <span>Priority: @task.PriorityId</span>
                     <a href="/tasks">@task.Title</a>
                     <a href="/tasks/@task.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
                     <button @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                 </p>
 
-                <p>CategoryId: @task.CategoryId</p>
-                <p>PriorityId: @task.PriorityId</p>
+                <ItemsComponent Items=task />
 
                 if (task.Date is not null)
                 {
-                    <p>Date: @task.Date</p>
+                    <small>Date: @task.Date</small>
                 }
 
                 if (task.StartedAt is not null)
                 {
-                    <p>StartedAt: @task.StartedAt</p>
+                    <small>StartedAt: @task.StartedAt</small>
                 }
 
                 if (task.CompletedAt is not null)
                 {
-                    <p>CompletedAt: @task.CompletedAt</p>
+                    <small>CompletedAt: @task.CompletedAt</small>
                 }
 
-                <ItemsComponent Items=task />
+                <div>
+                    <small>Category: @task.CategoryId</small>
+                </div>
 
                 <div>
                     <small>Created: @task.CreatedAt</small>
@@ -57,6 +59,7 @@ else
             else
             {
                 <p>
+                    <span>Priority: @task.PriorityId</span>
                     <a href="/tasks/@task.Id">@task.Title</a>
                     <button @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                 </p>

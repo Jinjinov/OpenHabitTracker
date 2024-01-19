@@ -8,7 +8,9 @@ content always visible:
 
 on Add go to List/{id}
 
-category, priority - ... ?
+enum Priority
+
+note Markdown
 
 - settings
 	- CSS

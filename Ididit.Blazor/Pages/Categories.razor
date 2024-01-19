@@ -35,7 +35,7 @@ else
             {
                 <span @onclick="() => { CategoryService.SelectedCategory = category; shouldFocus = true; }">@category.Title</span>
             }
-            <button @onclick="() => CategoryService.DeleteCategory(category)">Delete</button>
+            <button @onclick="() => CategoryService.DeleteCategory(category)"><i class="bi bi-trash"></i></button>
         </div>
     }
 }

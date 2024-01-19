@@ -35,7 +35,7 @@ else
             {
                 <span @onclick="() => { PriorityService.SelectedPriority = priority; shouldFocus = true; }">@priority.Title</span>
             }
-            <button @onclick="() => PriorityService.DeletePriority(priority)">Delete</button>
+            <button @onclick="() => PriorityService.DeletePriority(priority)"><i class="bi bi-trash"></i></button>
         </div>
     }
 }
