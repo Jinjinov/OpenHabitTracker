@@ -11,7 +11,7 @@
 {
     <div class="bg-body-tertiary my-1 p-1">
         <div>
-            <InputText @bind-Value="TaskService.EditTask.Title" />
+            <InputText @bind-Value="TaskService.EditTask.Title" placeholder="Title" />
 
             <button @onclick="TaskService.UpdateTask"><i class="bi bi-floppy"></i></button>
         </div>
@@ -20,7 +20,9 @@
 
         <PriorityComponent Model="TaskService.EditTask" />
 
-        <InputDate Type="InputDateType.DateTimeLocal" id="dateInput" @bind-Value="TaskService.EditTask.Date" />
+        <div>
+            <InputDate Type="InputDateType.DateTimeLocal" id="dateInput" @bind-Value="TaskService.EditTask.Date" />
+        </div>
     </div>
 }
 

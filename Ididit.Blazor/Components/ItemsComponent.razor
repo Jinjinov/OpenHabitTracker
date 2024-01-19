@@ -6,7 +6,7 @@
 @if (ItemService.NewItem is not null)
 {
     <div>
-        <InputText @bind-Value="ItemService.NewItem.Title" />
+        <InputText @bind-Value="ItemService.NewItem.Title" placeholder="Title" />
 
         <button @onclick="() => ItemService.AddItem(Items)"><i class="bi bi-plus-square"></i></button>
     </div>

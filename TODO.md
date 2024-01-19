@@ -1,16 +1,14 @@
 # TODO:
 
-update Add, Edit css
-
-placeholders
-
-load examples
-
 read only ItemsComponent
 
 on Add go to List/{id}
 
 enum Priority
+
+
+
+load examples
 
 note Markdown
 

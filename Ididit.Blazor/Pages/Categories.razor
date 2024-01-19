@@ -11,7 +11,7 @@
 @if (CategoryService.NewCategory is not null)
 {
     <div>
-        <InputText @bind-Value="CategoryService.NewCategory.Title" />
+        <InputText @bind-Value="CategoryService.NewCategory.Title" placeholder="Title" />
 
         <button @onclick="() => CategoryService.AddCategory()"><i class="bi bi-plus-square"></i></button>
     </div>

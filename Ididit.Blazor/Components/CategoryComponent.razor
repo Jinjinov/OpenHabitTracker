@@ -6,6 +6,7 @@
 @if (CategoryService.Categories is not null && Model is not null)
 {
     <InputSelect @bind-Value="Model.CategoryId">
+        <option value="0" disabled selected hidden>Select a category</option>
         @foreach (CategoryModel category in CategoryService.Categories.Values)
         {
             <option value="@category.Id">@category.Title</option>

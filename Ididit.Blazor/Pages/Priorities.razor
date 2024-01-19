@@ -11,7 +11,7 @@
 @if (PriorityService.NewPriority is not null)
 {
     <div>
-        <InputText @bind-Value="PriorityService.NewPriority.Title" />
+        <InputText @bind-Value="PriorityService.NewPriority.Title" placeholder="Title" />
 
         <button @onclick="() => PriorityService.AddPriority()"><i class="bi bi-plus-square"></i></button>
     </div>

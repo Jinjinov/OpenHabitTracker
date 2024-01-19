@@ -11,7 +11,7 @@
 {
     <div class="bg-body-tertiary my-1 p-1">
         <div>
-            <InputText @bind-Value="NoteService.EditNote.Title" />
+            <InputText @bind-Value="NoteService.EditNote.Title" placeholder="Title" />
 
             <button @onclick="NoteService.UpdateNote"><i class="bi bi-floppy"></i></button>
         </div>
@@ -20,7 +20,9 @@
 
         <PriorityComponent Model="NoteService.EditNote" />
 
-        <InputTextArea id="contentInput" @bind-Value="NoteService.EditNote.Content" />
+        <div>
+            <InputTextArea id="contentInput" @bind-Value="NoteService.EditNote.Content" placeholder="Note" />
+        </div>
     </div>
 }
 
