@@ -11,9 +11,9 @@
 @if (CategoryService.NewCategory is not null)
 {
     <div>
-        <InputText @bind-Value="CategoryService.NewCategory.Title" placeholder="Title" />
+        <InputTextImmediate @bind-Value="CategoryService.NewCategory.Title" placeholder="Title" />
 
-        <button @onclick="() => CategoryService.AddCategory()"><i class="bi bi-plus-square"></i></button>
+        <button @onclick="() => CategoryService.AddCategory()" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
     </div>
 }
 

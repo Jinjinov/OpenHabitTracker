@@ -12,13 +12,14 @@ read only ItemsComponent
 
 
 
+NO: display -> show details -> edit
+YES: display -> show details & edit
+
 enum Priority
 
 load examples
 
 Note Markdown
-
-do not allow adding empty text
 
 - settings
 	- CSS

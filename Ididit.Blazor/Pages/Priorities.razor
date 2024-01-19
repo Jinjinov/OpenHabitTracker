@@ -11,9 +11,9 @@
 @if (PriorityService.NewPriority is not null)
 {
     <div>
-        <InputText @bind-Value="PriorityService.NewPriority.Title" placeholder="Title" />
+        <InputTextImmediate @bind-Value="PriorityService.NewPriority.Title" placeholder="Title" />
 
-        <button @onclick="() => PriorityService.AddPriority()"><i class="bi bi-plus-square"></i></button>
+        <button @onclick="() => PriorityService.AddPriority()" disabled="@string.IsNullOrWhiteSpace(PriorityService.NewPriority.Title)"><i class="bi bi-plus-square"></i></button>
     </div>
 }
 

@@ -12,9 +12,9 @@
 {
     <div class="bg-body-tertiary my-1 p-1">
         <div>
-            <InputText @bind-Value="HabitService.NewHabit.Title" placeholder="Title" />
+            <InputTextImmediate @bind-Value="HabitService.NewHabit.Title" placeholder="Title" />
 
-            <button @onclick="AddHabit"><i class="bi bi-plus-square"></i></button>
+            <button @onclick="AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.NewHabit.Title)"><i class="bi bi-plus-square"></i></button>
         </div>
 
         <CategoryComponent Model="HabitService.NewHabit" />

@@ -11,9 +11,9 @@
 {
     <div class="bg-body-tertiary my-1 p-1">
         <div>
-            <InputText @bind-Value="TaskService.EditTask.Title" placeholder="Title" />
+            <InputTextImmediate @bind-Value="TaskService.EditTask.Title" placeholder="Title" />
 
-            <button @onclick="UpdateTask"><i class="bi bi-floppy"></i></button>
+            <button @onclick="UpdateTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
         </div>
 
         <CategoryComponent Model="TaskService.EditTask" />

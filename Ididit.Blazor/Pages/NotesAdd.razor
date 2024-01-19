@@ -11,9 +11,9 @@
 {
     <div class="bg-body-tertiary my-1 p-1">
         <div>
-            <InputText @bind-Value="NoteService.NewNote.Title" placeholder="Title" />
+            <InputTextImmediate @bind-Value="NoteService.NewNote.Title" placeholder="Title" />
 
-            <button @onclick="AddNote"><i class="bi bi-plus-square"></i></button>
+            <button @onclick="AddNote" disabled="@string.IsNullOrWhiteSpace(NoteService.NewNote.Title)"><i class="bi bi-plus-square"></i></button>
         </div>
 
         <CategoryComponent Model="NoteService.NewNote" />
