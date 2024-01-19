@@ -13,7 +13,7 @@
         <label for="titleInput">Title:</label>
         <InputText id="titleInput" @bind-Value="TaskService.NewTask.Title" />
 
-        <button @onclick="TaskService.AddTask">Add Task</button>
+        <button @onclick="TaskService.AddTask"><i class="bi bi-plus-square"></i></button>
     </div>
 
     <CategoryComponent Model="TaskService.NewTask" />

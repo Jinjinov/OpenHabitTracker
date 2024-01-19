@@ -14,7 +14,7 @@
         <label for="titleInput">Title:</label>
         <InputText id="titleInput" @bind-Value="HabitService.EditHabit.Title" />
 
-        <button @onclick="HabitService.UpdateHabit">Update Habit</button>
+        <button @onclick="HabitService.UpdateHabit"><i class="bi bi-floppy"></i></button>
     </div>
 
     <CategoryComponent Model="HabitService.EditHabit" />

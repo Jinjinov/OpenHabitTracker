@@ -13,7 +13,7 @@
         <label for="titleInput">Title:</label>
         <InputText id="titleInput" @bind-Value="NoteService.NewNote.Title" />
 
-        <button @onclick="NoteService.AddNote">Add Note</button>
+        <button @onclick="NoteService.AddNote"><i class="bi bi-plus-square"></i></button>
     </div>
 
     <CategoryComponent Model="NoteService.NewNote" />
