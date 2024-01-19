@@ -1,8 +1,12 @@
 # TODO:
 
-on Add go to List/{id}
+load examples
 
-update and delete icons in the Title line
+content always visible:
+	task, habit items / note content
+	read only ItemsComponent
+
+on Add go to List/{id}
 
 category, priority - ... ?
 

@@ -18,52 +18,60 @@ else
 {
     foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
     {
-        if (habit.Id == Id)
-        {
-            <p><a href="/habits">@habit.Title</a><button @onclick="() => HabitService.MarkAsDone(habit)">Done</button></p>
-
-            <p><a href="/habits/@habit.Id/update">Update</a></p>
-
-            <button @onclick="() => HabitService.DeleteHabit(habit)">Delete Habit</button>
-
-            <p>CategoryId: @habit.CategoryId</p>
-            <p>PriorityId: @habit.PriorityId</p>
-
-            <p>RepeatCount: @habit.RepeatCount</p>
-            <p>RepeatInterval: @habit.RepeatInterval</p>
-            <p>RepeatPeriod: @habit.RepeatPeriod</p>
-
-            if (habit.LastTimeDoneAt is not null)
+        <div class="bg-body-tertiary my-1">
+            @if (habit.Id == Id)
             {
-                <p>LastTimeDoneAt: @habit.LastTimeDoneAt</p>
-            }
+                <p>
+                    <a href="/habits">@habit.Title</a>
+                    <a href="/habits/@habit.Id/update"><i class="bi bi-pencil-square"></i></a>
+                    <button @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
+                    <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                </p>
 
-            <ItemsComponent Items=HabitService.SelectedHabit />
+                <p>CategoryId: @habit.CategoryId</p>
+                <p>PriorityId: @habit.PriorityId</p>
 
-            if (habit.TimesDone is not null)
-            {
-                <p>Times done: @habit.TimesDone.Count</p>
+                <p>RepeatCount: @habit.RepeatCount</p>
+                <p>RepeatInterval: @habit.RepeatInterval</p>
+                <p>RepeatPeriod: @habit.RepeatPeriod</p>
 
-                foreach(TimeModel time in habit.TimesDone)
+                if (habit.LastTimeDoneAt is not null)
                 {
-                    <p>StartedAt: @time.StartedAt</p>
+                    <p>LastTimeDoneAt: @habit.LastTimeDoneAt</p>
+                }
 
-                    if (time.CompletedAt is not null)
+                <ItemsComponent Items=habit />
+
+                if (habit.TimesDone is not null)
+                {
+                    <p>Times done: @habit.TimesDone.Count</p>
+
+                    foreach(TimeModel time in habit.TimesDone)
                     {
-                        <p>CompletedAt: @time.CompletedAt</p>
+                        <p>StartedAt: @time.StartedAt</p>
+
+                        if (time.CompletedAt is not null)
+                        {
+                            <p>CompletedAt: @time.CompletedAt</p>
+                        }
                     }
                 }
-            }
 
-            <div>
-                <small>Created: @habit.CreatedAt</small>
-                <small>Updated: @habit.UpdatedAt</small>
-            </div>
-        }
-        else
-        {
-            <p><a href="/habits/@habit.Id">@habit.Title</a><button @onclick="() => HabitService.MarkAsDone(habit)">Done</button></p>
-        }
+                <div>
+                    <small>Created: @habit.CreatedAt</small>
+                    <small>Updated: @habit.UpdatedAt</small>
+                </div>
+            }
+            else
+            {
+                <p>
+                    <a href="/habits/@habit.Id">@habit.Title</a>
+                    <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                </p>
+
+                <ItemsComponent Items=habit />
+            }
+        </div>
     }
 }
 
