@@ -4,11 +4,12 @@ using Ididit.Data.Models;
 
 namespace Ididit.Services;
 
-public class CategoryService(IDataAccess dataAccess)
+public class CategoryService(AppData appData, IDataAccess dataAccess)
 {
+    private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public Dictionary<long, CategoryModel>? Categories { get; set; }
+    public IReadOnlyCollection<CategoryModel>? Categories => _appData.Categories?.Values;
 
     public CategoryModel? SelectedCategory { get; set; }
 
@@ -16,30 +17,22 @@ public class CategoryService(IDataAccess dataAccess)
 
     public async Task Initialize()
     {
-        if (Categories is null)
-        {
-            IReadOnlyList<CategoryEntity> categories = await _dataAccess.GetCategories();
-            Categories = categories.Select(c => new CategoryModel
-            {
-                Id = c.Id,
-                Title = c.Title,
-            }).ToDictionary(x => x.Id);
-        }
+        await _appData.InitializeCategories();
 
         NewCategory ??= new();
     }
 
     public void SetSelectedCategory(long? id)
     {
-        if (Categories is null)
+        if (_appData.Categories is null)
             return;
 
-        SelectedCategory = id.HasValue && Categories.TryGetValue(id.Value, out CategoryModel? category) ? category : null;
+        SelectedCategory = id.HasValue && _appData.Categories.TryGetValue(id.Value, out CategoryModel? category) ? category : null;
     }
 
     public async Task AddCategory()
     {
-        if (Categories is null || NewCategory is null)
+        if (_appData.Categories is null || NewCategory is null)
             return;
 
         CategoryEntity category = new()
@@ -51,7 +44,7 @@ public class CategoryService(IDataAccess dataAccess)
 
         NewCategory.Id = category.Id;
 
-        Categories.Add(NewCategory.Id, NewCategory);
+        _appData.Categories.Add(NewCategory.Id, NewCategory);
 
         NewCategory = new();
     }
@@ -75,10 +68,10 @@ public class CategoryService(IDataAccess dataAccess)
 
     public async Task DeleteCategory(CategoryModel category)
     {
-        if (Categories is null)
+        if (_appData.Categories is null)
             return;
 
-        Categories.Remove(category.Id);
+        _appData.Categories.Remove(category.Id);
 
         await _dataAccess.RemoveCategory(category.Id);
     }

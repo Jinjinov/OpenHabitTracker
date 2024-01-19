@@ -10,6 +10,8 @@ public class AppData(IDataAccess dataAccess)
     public Dictionary<long, HabitModel>? Habits { get; set; }
     public Dictionary<long, NoteModel>? Notes { get; set; }
     public Dictionary<long, TaskModel>? Tasks { get; set; }
+    public Dictionary<long, CategoryModel>? Categories { get; set; }
+    public Dictionary<long, PriorityModel>? Priorities { get; set; }
     public List<Model>? Trash { get; set; }
 
     public async Task InitializeHabits()
@@ -72,6 +74,32 @@ public class AppData(IDataAccess dataAccess)
                 StartedAt = t.StartedAt,
                 CompletedAt = t.CompletedAt,
                 Date = t.Date
+            }).ToDictionary(x => x.Id);
+        }
+    }
+
+    public async Task InitializeCategories()
+    {
+        if (Categories is null)
+        {
+            IReadOnlyList<CategoryEntity> categories = await _dataAccess.GetCategories();
+            Categories = categories.Select(c => new CategoryModel
+            {
+                Id = c.Id,
+                Title = c.Title,
+            }).ToDictionary(x => x.Id);
+        }
+    }
+
+    public async Task InitializePriorities()
+    {
+        if (Priorities is null)
+        {
+            IReadOnlyList<PriorityEntity> priorities = await _dataAccess.GetPriorities();
+            Priorities = priorities.Select(c => new PriorityModel
+            {
+                Id = c.Id,
+                Title = c.Title,
             }).ToDictionary(x => x.Id);
         }
     }

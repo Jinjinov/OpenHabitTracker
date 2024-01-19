@@ -17,8 +17,15 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
     public TaskModel? EditTask { get; set; }
 
+    public CategoryModel? Category(long id) => _appData.Categories?.GetValueOrDefault(id);
+
+    public PriorityModel? Priority(long id) => _appData.Priorities?.GetValueOrDefault(id);
+
     public async Task Initialize()
     {
+        await _appData.InitializeCategories();
+        await _appData.InitializePriorities();
+
         await _appData.InitializeTasks();
 
         NewTask ??= new();

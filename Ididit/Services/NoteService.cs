@@ -17,8 +17,15 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
     public NoteModel? EditNote { get; set; }
 
+    public CategoryModel? Category(long id) => _appData.Categories?.GetValueOrDefault(id);
+
+    public PriorityModel? Priority(long id) => _appData.Priorities?.GetValueOrDefault(id);
+
     public async Task Initialize()
     {
+        await _appData.InitializeCategories();
+        await _appData.InitializePriorities();
+
         await _appData.InitializeNotes();
 
         NewNote ??= new();

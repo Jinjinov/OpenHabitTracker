@@ -4,11 +4,12 @@ using Ididit.Data.Models;
 
 namespace Ididit.Services;
 
-public class PriorityService(IDataAccess dataAccess)
+public class PriorityService(AppData appData, IDataAccess dataAccess)
 {
+    private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public Dictionary<long, PriorityModel>? Priorities { get; set; }
+    public IReadOnlyCollection<PriorityModel>? Priorities => _appData.Priorities?.Values;
 
     public PriorityModel? SelectedPriority { get; set; }
 
@@ -16,30 +17,22 @@ public class PriorityService(IDataAccess dataAccess)
 
     public async Task Initialize()
     {
-        if (Priorities is null)
-        {
-            IReadOnlyList<PriorityEntity> priorities = await _dataAccess.GetPriorities();
-            Priorities = priorities.Select(c => new PriorityModel
-            {
-                Id = c.Id,
-                Title = c.Title,
-            }).ToDictionary(x => x.Id);
-        }
+        await _appData.InitializePriorities();
 
         NewPriority ??= new();
     }
 
     public void SetSelectedPriority(long? id)
     {
-        if (Priorities is null)
+        if (_appData.Priorities is null)
             return;
 
-        SelectedPriority = id.HasValue && Priorities.TryGetValue(id.Value, out PriorityModel? priority) ? priority : null;
+        SelectedPriority = id.HasValue && _appData.Priorities.TryGetValue(id.Value, out PriorityModel? priority) ? priority : null;
     }
 
     public async Task AddPriority()
     {
-        if (Priorities is null || NewPriority is null)
+        if (_appData.Priorities is null || NewPriority is null)
             return;
 
         PriorityEntity priority = new()
@@ -51,7 +44,7 @@ public class PriorityService(IDataAccess dataAccess)
 
         NewPriority.Id = priority.Id;
 
-        Priorities.Add(NewPriority.Id, NewPriority);
+        _appData.Priorities.Add(NewPriority.Id, NewPriority);
 
         NewPriority = new();
     }
@@ -75,10 +68,10 @@ public class PriorityService(IDataAccess dataAccess)
 
     public async Task DeletePriority(PriorityModel priority)
     {
-        if (Priorities is null)
+        if (_appData.Priorities is null)
             return;
 
-        Priorities.Remove(priority.Id);
+        _appData.Priorities.Remove(priority.Id);
 
         await _dataAccess.RemovePriority(priority.Id);
     }

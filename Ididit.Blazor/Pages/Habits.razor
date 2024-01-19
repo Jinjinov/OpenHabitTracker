@@ -22,7 +22,7 @@ else
             @if (habit.Id == Id)
             {
                 <p>
-                    <span>Priority: @habit.PriorityId</span>
+                    <span>Priority: @HabitService.Priority(habit.PriorityId)?.Title</span>
                     <a href="/habits">@habit.Title</a>
                     <a href="/habits/@habit.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
@@ -60,7 +60,7 @@ else
                 </div>
 
                 <div>
-                    <small>Category: @habit.CategoryId</small>
+                    <small>Category: @HabitService.Category(habit.CategoryId)?.Title</small>
                 </div>
 
                 <div>
@@ -71,7 +71,7 @@ else
             else
             {
                 <p>
-                    <span>Priority: @habit.PriorityId</span>
+                    <span>Priority: @HabitService.Priority(habit.PriorityId)?.Title</span>
                     <a href="/habits/@habit.Id">@habit.Title</a>
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                 </p>

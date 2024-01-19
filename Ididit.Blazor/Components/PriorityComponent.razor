@@ -7,7 +7,7 @@
 {
     <InputSelect @bind-Value="Model.PriorityId">
         <option value="0" disabled selected hidden>Select a priority</option>
-        @foreach (PriorityModel priority in PriorityService.Priorities.Values)
+        @foreach (PriorityModel priority in PriorityService.Priorities)
         {
             <option value="@priority.Id">@priority.Title</option>
         }

@@ -7,7 +7,7 @@
 {
     <InputSelect @bind-Value="Model.CategoryId">
         <option value="0" disabled selected hidden>Select a category</option>
-        @foreach (CategoryModel category in CategoryService.Categories.Values)
+        @foreach (CategoryModel category in CategoryService.Categories)
         {
             <option value="@category.Id">@category.Title</option>
         }

@@ -1,12 +1,9 @@
 # TODO:
 
 class AppData - always load every Category and Priority
-	Model -> CategoryModel Category ?
-	Model -> PriorityModel Priority
 
-display Category
-
-display Priority
+Model -> CategoryModel Category ?
+Model -> PriorityModel Priority
 
 
 

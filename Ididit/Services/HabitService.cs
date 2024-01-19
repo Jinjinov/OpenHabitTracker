@@ -17,8 +17,15 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
     public HabitModel? EditHabit { get; set; }
 
+    public CategoryModel? Category(long id) => _appData.Categories?.GetValueOrDefault(id);
+
+    public PriorityModel? Priority(long id) => _appData.Priorities?.GetValueOrDefault(id);
+
     public async Task Initialize()
     {
+        await _appData.InitializeCategories();
+        await _appData.InitializePriorities();
+
         await _appData.InitializeHabits();
 
         NewHabit ??= new();
