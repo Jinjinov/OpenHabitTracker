@@ -9,8 +9,6 @@
 
 <PageTitle>Tasks</PageTitle>
 
-<h1>Tasks</h1>
-
 <p><a href="/tasks/add">Add task</a></p>
 
 @if (TaskService.Tasks is null)
@@ -19,8 +17,6 @@
 }
 else
 {
-    <p>Tasks: @TaskService.Tasks.Where(t => !t.IsDeleted).Count()</p>
-
     foreach (TaskModel task in TaskService.Tasks.Where(t => !t.IsDeleted))
     {
         if (task.Id == Id)

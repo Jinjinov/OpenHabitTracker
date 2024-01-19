@@ -8,8 +8,6 @@
 
 <PageTitle>Notes</PageTitle>
 
-<h1>Notes</h1>
-
 <p><a href="/notes/add">Add note</a></p>
 
 @if (NoteService.Notes is null)
@@ -18,8 +16,6 @@
 }
 else
 {
-    <p>Notes: @NoteService.Notes.Where(n => !n.IsDeleted).Count()</p>
-
     foreach (NoteModel note in NoteService.Notes.Where(n => !n.IsDeleted))
     {
         if (note.Id == Id)

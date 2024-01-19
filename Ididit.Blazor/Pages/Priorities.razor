@@ -8,8 +8,6 @@
 
 <PageTitle>Priorities</PageTitle>
 
-<h3>Priorities</h3>
-
 @if (PriorityService.NewPriority is not null)
 {
     <div>
@@ -26,8 +24,6 @@
 }
 else
 {
-    <p>Priorities: @PriorityService.Priorities.Count</p>
-
     foreach (PriorityModel priority in PriorityService.Priorities.Values)
     {
         <div>

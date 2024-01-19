@@ -8,8 +8,6 @@
 
 <PageTitle>Habits</PageTitle>
 
-<h1>Habits</h1>
-
 <p><a href="/habits/add">Add habit</a></p>
 
 @if (HabitService.Habits is null)
@@ -18,8 +16,6 @@
 }
 else
 {
-    <p>Habits: @HabitService.Habits.Where(h => !h.IsDeleted).Count()</p>
-
     foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
     {
         if (habit.Id == Id)

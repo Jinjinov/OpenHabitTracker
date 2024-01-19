@@ -8,8 +8,6 @@
 
 <PageTitle>Categories</PageTitle>
 
-<h3>Categories</h3>
-
 @if (CategoryService.NewCategory is not null)
 {
     <div>
@@ -26,8 +24,6 @@
 }
 else
 {
-    <p>Categories: @CategoryService.Categories.Count</p>
-
     foreach (CategoryModel category in CategoryService.Categories.Values)
     {
         <div>

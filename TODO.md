@@ -1,7 +1,5 @@
 # TODO:
 
-no title, no count
-
 on Add go to List/{id}
 
 update and delete icons in the Title line

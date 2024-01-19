@@ -7,8 +7,6 @@
 
 <PageTitle>Trash</PageTitle>
 
-<h1>Trash</h1>
-
 <button @onclick="TrashService.DeleteAll">Empty trash</button>
 
 @if (TrashService.Models is null)
@@ -17,8 +15,6 @@
 }
 else
 {
-    <p>Count: @TrashService.Models.Count</p>
-
     foreach (Model model in TrashService.Models)
     {
         <p>@model.Title <button @onclick="() => TrashService.Restore(model)">Restore</button> <button @onclick="() => TrashService.Delete(model)">Delete</button></p>
