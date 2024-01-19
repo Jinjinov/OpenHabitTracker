@@ -3,7 +3,7 @@
 
 @inject ItemService ItemService
 
-@if (ItemService.NewItem is not null)
+@if (!IsReadOnly && ItemService.NewItem is not null)
 {
     <div>
         <InputTextImmediate @bind-Value="ItemService.NewItem.Title" placeholder="Title" />
@@ -18,7 +18,7 @@
     {
         <div>
             <InputCheckbox Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
-            @if (item == ItemService.SelectedItem)
+            @if (!IsReadOnly && item == ItemService.SelectedItem)
             {
                 <InputText @ref="inputElement" Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem(title)" @onfocusout="(args) => ItemService.SelectedItem = null" />
             }
@@ -26,7 +26,10 @@
             {
                 <span @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@item.Title</span>
             }
-            <button @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
+            @if (!IsReadOnly)
+            {
+                <button @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
+            }
         </div>
     }
 }
@@ -35,6 +38,9 @@
     [EditorRequired]
     [Parameter]
     public ItemsModel? Items { get; set; }
+
+    [Parameter]
+    public bool IsReadOnly { get; set; }
 
     InputText? inputElement;
 

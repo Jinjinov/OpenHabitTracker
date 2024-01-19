@@ -8,8 +8,6 @@ display Category
 
 display Priority
 
-read only ItemsComponent
-
 
 
 NO: display -> show details -> edit

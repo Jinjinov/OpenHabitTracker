@@ -76,7 +76,7 @@ else
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                 </p>
 
-                <ItemsComponent Items=habit />
+                <ItemsComponent Items=habit IsReadOnly=true />
             }
         </div>
     }

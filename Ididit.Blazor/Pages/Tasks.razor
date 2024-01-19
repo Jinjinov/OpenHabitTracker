@@ -64,7 +64,7 @@ else
                     <button @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                 </p>
 
-                <ItemsComponent Items=task />
+                <ItemsComponent Items=task IsReadOnly=true />
             }
         </div>
     }
