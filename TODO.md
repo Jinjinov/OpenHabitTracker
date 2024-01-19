@@ -1,5 +1,15 @@
 # TODO:
 
+no title, no count
+
+on Add go to List/{id}
+
+update and delete icons in the Title line
+
+created, updated - small, bottom
+
+category, priority - ... ?
+
 - settings
 	- CSS
 		- theme
@@ -7,7 +17,8 @@
 		- background color
 		- Note, Task, Habit background color
 	- language
-- localization
+- localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
+- https://github.com/xaviersolau/BlazorJsonLocalization
 
 update css, html
 	Model -> CategoryModel Category ?
