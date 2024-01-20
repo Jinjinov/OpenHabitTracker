@@ -39,7 +39,7 @@ Note Markdown
 CategoryModel, PriorityModel - inverse List<Model> property for CategoryId and PriorityId ?
 
 import Google Keep repeating reminder 
-import Google Keep h1 h2 bold italic underline
+import Google Keep h1, h2, bold, italic, underline
 
 pin razor page to Home - in a column - max 4 columns ?
 
