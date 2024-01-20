@@ -1,25 +1,6 @@
 # TODO:
 
-NO: display -> show details -> edit
-YES: display -> show details & edit
-
 enum Priority
-
-load examples
-
-Note Markdown
-
-- settings
-	- CSS
-		- theme
-		- font size
-		- background color
-		- Note, Task, Habit background color
-	- language
-- localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
-- https://github.com/xaviersolau/BlazorJsonLocalization
-
-CategoryModel, PriorityModel - inverse List<Model> property for CategoryId and PriorityId ?
 
 TSV habits table
 	prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
@@ -50,10 +31,29 @@ TSV habits table
 
 ---------------------------------------------------------------------------------------------------
 
+NO: display -> show details -> edit
+YES: display -> show details & edit
+
+load examples
+
+Note Markdown
+
+CategoryModel, PriorityModel - inverse List<Model> property for CategoryId and PriorityId ?
+
 import Google Keep repeating reminder 
 import Google Keep h1 h2 bold italic underline
 
-- pin razor page to Home - in a column - max 4 columns ?
+pin razor page to Home - in a column - max 4 columns ?
+
+- settings
+	- CSS
+		- theme
+		- font size
+		- background color
+		- Note, Task, Habit background color
+	- language
+- localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
+- https://github.com/xaviersolau/BlazorJsonLocalization
 
 - common:
 	- Routes.razor </Router>
