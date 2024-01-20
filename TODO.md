@@ -1,6 +1,6 @@
 # TODO:
 
-enum Priority
+TimeSpan? Duration
 
 TSV habits table
 	prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
