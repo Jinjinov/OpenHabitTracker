@@ -22,7 +22,7 @@ else
             @if (note.Id == Id)
             {
                 <p>
-                    <span>Priority: @NoteService.Priority(note.PriorityId)?.Title</span>
+                    <span>Priority: @note.Priority?.Title</span>
                     <a href="/notes">@note.Title</a>
                     <a href="/notes/@note.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
@@ -31,7 +31,7 @@ else
                 <p>@note.Content</p>
 
                 <div>
-                    <small>Category: @NoteService.Category(note.CategoryId)?.Title</small>
+                    <small>Category: @note.Category?.Title</small>
                 </div>
 
                 <div>
@@ -42,7 +42,7 @@ else
             else
             {
                 <p>
-                    <span>Priority: @NoteService.Priority(note.PriorityId)?.Title</span>
+                    <span>Priority: @note.Priority?.Title</span>
                     <a href="/notes/@note.Id">@note.Title</a>
                 </p>
 

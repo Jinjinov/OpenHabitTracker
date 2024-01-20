@@ -15,6 +15,11 @@ public class CategoryService(AppData appData, IDataAccess dataAccess)
 
     public CategoryModel? NewCategory { get; set; }
 
+    public void SetCategory(Model model, long categoryId)
+    {
+        model.Category = _appData.Categories?.GetValueOrDefault(categoryId);
+    }
+
     public async Task Initialize()
     {
         await _appData.InitializeCategories();

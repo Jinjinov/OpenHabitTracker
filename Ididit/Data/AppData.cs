@@ -18,6 +18,9 @@ public class AppData(IDataAccess dataAccess)
     {
         if (Habits is null)
         {
+            await InitializeCategories();
+            await InitializePriorities();
+
             IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
             Habits = habits.Select(h => new HabitModel
             {
@@ -28,6 +31,9 @@ public class AppData(IDataAccess dataAccess)
                 Title = h.Title,
                 CreatedAt = h.CreatedAt,
                 UpdatedAt = h.UpdatedAt,
+
+                Category = Categories?.GetValueOrDefault(h.CategoryId),
+                Priority = Priorities?.GetValueOrDefault(h.PriorityId),
 
                 RepeatCount = h.RepeatCount,
                 RepeatInterval = h.RepeatInterval,
@@ -40,6 +46,9 @@ public class AppData(IDataAccess dataAccess)
     {
         if (Notes is null)
         {
+            await InitializeCategories();
+            await InitializePriorities();
+
             IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
             Notes = notes.Select(n => new NoteModel
             {
@@ -51,6 +60,9 @@ public class AppData(IDataAccess dataAccess)
                 CreatedAt = n.CreatedAt,
                 UpdatedAt = n.UpdatedAt,
 
+                Category = Categories?.GetValueOrDefault(n.CategoryId),
+                Priority = Priorities?.GetValueOrDefault(n.PriorityId),
+
                 Content = n.Content
             }).ToDictionary(x => x.Id);
         }
@@ -60,6 +72,9 @@ public class AppData(IDataAccess dataAccess)
     {
         if (Tasks is null)
         {
+            await InitializeCategories();
+            await InitializePriorities();
+
             IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
             Tasks = tasks.Select(t => new TaskModel
             {
@@ -70,6 +85,9 @@ public class AppData(IDataAccess dataAccess)
                 Title = t.Title,
                 CreatedAt = t.CreatedAt,
                 UpdatedAt = t.UpdatedAt,
+
+                Category = Categories?.GetValueOrDefault(t.CategoryId),
+                Priority = Priorities?.GetValueOrDefault(t.PriorityId),
 
                 StartedAt = t.StartedAt,
                 CompletedAt = t.CompletedAt,
@@ -106,12 +124,15 @@ public class AppData(IDataAccess dataAccess)
 
     public async Task InitializeTrash()
     {
-        await InitializeHabits();
-        await InitializeNotes();
-        await InitializeTasks();
-
         if (Trash is null && Habits is not null && Notes is not null && Tasks is not null)
         {
+            await InitializeCategories();
+            await InitializePriorities();
+
+            await InitializeHabits();
+            await InitializeNotes();
+            await InitializeTasks();
+
             Trash = [.. Habits.Values.Where(m => m.IsDeleted), .. Notes.Values.Where(m => m.IsDeleted), .. Tasks.Values.Where(m => m.IsDeleted)];
         }
     }

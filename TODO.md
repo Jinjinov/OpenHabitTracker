@@ -1,12 +1,5 @@
 # TODO:
 
-class AppData - always load every Category and Priority
-
-Model -> CategoryModel Category ?
-Model -> PriorityModel Priority
-
-
-
 NO: display -> show details -> edit
 YES: display -> show details & edit
 

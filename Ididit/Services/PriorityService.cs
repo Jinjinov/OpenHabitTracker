@@ -15,6 +15,11 @@ public class PriorityService(AppData appData, IDataAccess dataAccess)
 
     public PriorityModel? NewPriority { get; set; }
 
+    public void SetPriority(Model model, long priorityId)
+    {
+        model.Priority = _appData.Priorities?.GetValueOrDefault(priorityId);
+    }
+
     public async Task Initialize()
     {
         await _appData.InitializePriorities();

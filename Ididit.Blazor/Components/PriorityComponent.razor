@@ -5,7 +5,7 @@
 
 @if (PriorityService.Priorities is not null && Model is not null)
 {
-    <InputSelect @bind-Value="Model.PriorityId">
+    <InputSelect TValue="long" Value="Model.PriorityId" ValueExpression="() => Model.PriorityId" ValueChanged="(priorityId) => PriorityService.SetPriority(Model, priorityId)">
         <option value="0" disabled selected hidden>Select a priority</option>
         @foreach (PriorityModel priority in PriorityService.Priorities)
         {
