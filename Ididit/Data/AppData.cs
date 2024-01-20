@@ -37,6 +37,8 @@ public class AppData(IDataAccess dataAccess)
 
                 RepeatCount = h.RepeatCount,
                 RepeatInterval = h.RepeatInterval,
+                RepeatPeriod = h.RepeatPeriod,
+                Duration = h.Duration,
                 LastTimeDoneAt = h.LastTimeDoneAt
             }).ToDictionary(x => x.Id);
         }

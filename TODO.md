@@ -1,7 +1,5 @@
 # TODO:
 
-TimeSpan? Duration
-
 TSV habits table
 	prepare TSV: Category, Habit, Item, Priority, RepeatCount, RepeatInterval, RepeatPeriod, Duration
 	add TSV backup service - import, export

@@ -69,6 +69,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
             RepeatCount = NewHabit.RepeatCount,
             RepeatInterval = NewHabit.RepeatInterval,
+            RepeatPeriod = NewHabit.RepeatPeriod,
+            Duration = NewHabit.Duration,
             LastTimeDoneAt = null
         };
 
@@ -97,6 +99,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
             habit.RepeatCount = EditHabit.RepeatCount;
             habit.RepeatInterval = EditHabit.RepeatInterval;
+            habit.RepeatPeriod= EditHabit.RepeatPeriod;
+            habit.Duration = EditHabit.Duration;
             habit.LastTimeDoneAt = EditHabit.LastTimeDoneAt;
 
             await _dataAccess.UpdateHabit(habit);
