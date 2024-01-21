@@ -38,7 +38,7 @@
 
         <div>
             <label for="durationInput">Duration</label>
-            <InputDate id="durationInput" @bind-Value="HabitService.EditHabit.Duration" Type="InputDateType.Time" />
+            <InputDate id="durationInput" @bind-Value="DurationProxy" Type="InputDateType.Time" />
         </div>
     </div>
 }
@@ -46,6 +46,16 @@
 @code {
     [Parameter]
     public long? Id { get; set; }
+
+    TimeOnly DurationProxy
+    {
+        get => HabitService.EditHabit?.Duration ?? TimeOnly.MinValue;
+        set
+        {
+            if (HabitService.EditHabit is not null)
+                HabitService.EditHabit.Duration = value == TimeOnly.MinValue ? null : value;
+        }
+    }
 
     protected override void OnParametersSet()
     {

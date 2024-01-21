@@ -38,7 +38,7 @@
 
         <div>
             <label for="durationInput">Duration</label>
-            <InputDate id="durationInput" @bind-Value="HabitService.NewHabit.Duration" Type="InputDateType.Time" />
+            <InputDate id="durationInput" @bind-Value="DurationProxy" Type="InputDateType.Time" />
         </div>
     </div>
 }
@@ -46,6 +46,16 @@
 @code {
     [Inject]
     private NavigationManager? NavigationManager { get; set; }
+
+    TimeOnly DurationProxy
+    {
+        get => HabitService.NewHabit?.Duration ?? TimeOnly.MinValue;
+        set
+        {
+            if (HabitService.NewHabit is not null)
+                HabitService.NewHabit.Duration = value == TimeOnly.MinValue ? null : value;
+        }
+    }
 
     private async Task AddHabit()
     {
