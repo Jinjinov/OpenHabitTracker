@@ -35,6 +35,11 @@
                 }
             </InputSelect>
         </div>
+
+        <div>
+            <label for="durationInput">Duration</label>
+            <InputDate id="durationInput" @bind-Value="HabitService.NewHabit.Duration" Type="InputDateType.Time" />
+        </div>
     </div>
 }
 

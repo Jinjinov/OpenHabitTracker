@@ -8,7 +8,7 @@ public class HabitModel : ItemsModel
 
     public Period RepeatPeriod { get; set; }
 
-    public TimeSpan? Duration { get; set; }
+    public TimeOnly? Duration { get; set; }
 
     public DateTime? LastTimeDoneAt { get; set; }
 
