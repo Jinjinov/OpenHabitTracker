@@ -13,8 +13,6 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
     public TaskModel? SelectedTask { get; set; }
 
-    public TaskModel? NewTask { get; set; }
-
     public TaskModel? EditTask { get; set; }
 
     public async Task Initialize()
@@ -23,8 +21,6 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         await _appData.InitializePriorities();
 
         await _appData.InitializeTasks();
-
-        NewTask ??= new();
     }
 
     public void SetSelectedTask(long? id)
@@ -37,35 +33,33 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
     public async Task AddTask()
     {
-        if (_appData.Tasks is null || NewTask is null)
+        if (_appData.Tasks is null || EditTask is null)
             return;
 
         DateTime utcNow = DateTime.UtcNow;
 
-        NewTask.CreatedAt = utcNow;
-        NewTask.UpdatedAt = utcNow;
+        EditTask.CreatedAt = utcNow;
+        EditTask.UpdatedAt = utcNow;
 
         TaskEntity task = new()
         {
-            CategoryId = NewTask.CategoryId,
-            PriorityId = NewTask.PriorityId,
+            CategoryId = EditTask.CategoryId,
+            PriorityId = EditTask.PriorityId,
             IsDeleted = false,
-            Title = NewTask.Title,
+            Title = EditTask.Title,
             CreatedAt = utcNow,
             UpdatedAt = utcNow,
 
             StartedAt = null,
             CompletedAt = null,
-            Date = NewTask.Date
+            Date = EditTask.Date
         };
 
         await _dataAccess.AddTask(task);
 
-        NewTask.Id = task.Id;
+        EditTask.Id = task.Id;
 
-        _appData.Tasks.Add(NewTask.Id, NewTask);
-
-        NewTask = new();
+        _appData.Tasks.Add(EditTask.Id, EditTask);
     }
 
     public async Task UpdateTask()

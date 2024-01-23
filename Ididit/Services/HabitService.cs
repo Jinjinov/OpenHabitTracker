@@ -13,8 +13,6 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
     public HabitModel? SelectedHabit { get; set; }
 
-    public HabitModel? NewHabit { get; set; }
-
     public HabitModel? EditHabit { get; set; }
 
     public async Task Initialize()
@@ -23,8 +21,6 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         await _appData.InitializePriorities();
 
         await _appData.InitializeHabits();
-
-        NewHabit ??= new();
     }
 
     public void SetSelectedHabit(long? id)
@@ -50,37 +46,35 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
     public async Task AddHabit()
     {
-        if (_appData.Habits is null || NewHabit is null)
+        if (_appData.Habits is null || EditHabit is null)
             return;
 
         DateTime utcNow = DateTime.UtcNow;
 
-        NewHabit.CreatedAt = utcNow;
-        NewHabit.UpdatedAt = utcNow;
+        EditHabit.CreatedAt = utcNow;
+        EditHabit.UpdatedAt = utcNow;
 
         HabitEntity habit = new()
         {
-            CategoryId = NewHabit.CategoryId,
-            PriorityId = NewHabit.PriorityId,
+            CategoryId = EditHabit.CategoryId,
+            PriorityId = EditHabit.PriorityId,
             IsDeleted = false,
-            Title = NewHabit.Title,
+            Title = EditHabit.Title,
             CreatedAt = utcNow,
             UpdatedAt = utcNow,
 
-            RepeatCount = NewHabit.RepeatCount,
-            RepeatInterval = NewHabit.RepeatInterval,
-            RepeatPeriod = NewHabit.RepeatPeriod,
-            Duration = NewHabit.Duration,
+            RepeatCount = EditHabit.RepeatCount,
+            RepeatInterval = EditHabit.RepeatInterval,
+            RepeatPeriod = EditHabit.RepeatPeriod,
+            Duration = EditHabit.Duration,
             LastTimeDoneAt = null
         };
 
         await _dataAccess.AddHabit(habit);
 
-        NewHabit.Id = habit.Id;
+        EditHabit.Id = habit.Id;
 
-        _appData.Habits.Add(NewHabit.Id, NewHabit);
-
-        NewHabit = new();
+        _appData.Habits.Add(EditHabit.Id, EditHabit);
     }
 
     public async Task UpdateHabit()

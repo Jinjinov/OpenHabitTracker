@@ -1,11 +1,12 @@
-﻿@page "/notes/{Id:long}/update"
+﻿@page "/notes/add"
+@page "/notes/{Id:long}/update"
 
 @using Ididit.Data.Models
 @using Ididit.Services
 
 @inject NoteService NoteService
 
-<PageTitle>NotesUpdate</PageTitle>
+<PageTitle>Notes</PageTitle>
 
 @if (NoteService.EditNote is not null)
 {
@@ -13,7 +14,7 @@
         <div>
             <InputTextImmediate @bind-Value="NoteService.EditNote.Title" placeholder="Title" />
 
-            <button @onclick="UpdateNote" disabled="@string.IsNullOrWhiteSpace(NoteService.EditNote.Title)"><i class="bi bi-floppy"></i></button>
+            <button @onclick="SaveNote" disabled="@string.IsNullOrWhiteSpace(NoteService.EditNote.Title)"><i class="bi bi-floppy"></i></button>
         </div>
 
         <CategoryComponent Model="NoteService.EditNote" />
@@ -32,15 +33,21 @@
 
     protected override void OnParametersSet()
     {
-        NoteService.EditNote = NoteService.Notes?.FirstOrDefault(n => n.Id == Id);
+        if (Id is null)
+            NoteService.EditNote = new();
+        else
+            NoteService.EditNote = NoteService.Notes?.FirstOrDefault(n => n.Id == Id);
     }
 
     [Inject]
     private NavigationManager? NavigationManager { get; set; }
 
-    private async Task UpdateNote()
+    private async Task SaveNote()
     {
-        await NoteService.UpdateNote();
+        if (Id is null)
+            await NoteService.AddNote();
+        else
+            await NoteService.UpdateNote();
 
         NavigationManager?.NavigateTo("/notes");
     }

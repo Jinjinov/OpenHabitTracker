@@ -13,8 +13,6 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
     public NoteModel? SelectedNote { get; set; }
 
-    public NoteModel? NewNote { get; set; }
-
     public NoteModel? EditNote { get; set; }
 
     public async Task Initialize()
@@ -23,8 +21,6 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         await _appData.InitializePriorities();
 
         await _appData.InitializeNotes();
-
-        NewNote ??= new();
     }
 
     public void SetSelectedNote(long? id)
@@ -37,33 +33,31 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
     public async Task AddNote()
     {
-        if (_appData.Notes is null || NewNote is null)
+        if (_appData.Notes is null || EditNote is null)
             return;
 
         DateTime utcNow = DateTime.UtcNow;
 
-        NewNote.CreatedAt = utcNow;
-        NewNote.UpdatedAt = utcNow;
+        EditNote.CreatedAt = utcNow;
+        EditNote.UpdatedAt = utcNow;
 
         NoteEntity note = new()
         {
-            CategoryId = NewNote.CategoryId,
-            PriorityId = NewNote.PriorityId,
+            CategoryId = EditNote.CategoryId,
+            PriorityId = EditNote.PriorityId,
             IsDeleted = false,
-            Title = NewNote.Title,
+            Title = EditNote.Title,
             CreatedAt = utcNow,
             UpdatedAt = utcNow,
 
-            Content = NewNote.Content
+            Content = EditNote.Content
         };
 
         await _dataAccess.AddNote(note);
 
-        NewNote.Id = note.Id;
+        EditNote.Id = note.Id;
 
-        _appData.Notes.Add(NewNote.Id, NewNote);
-
-        NewNote = new();
+        _appData.Notes.Add(EditNote.Id, EditNote);
     }
 
     public async Task UpdateNote()

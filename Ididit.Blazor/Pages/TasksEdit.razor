@@ -1,11 +1,12 @@
-﻿@page "/tasks/{Id:long}/update"
+﻿@page "/tasks/add"
+@page "/tasks/{Id:long}/update"
 
 @using Ididit.Data.Models
 @using Ididit.Services
 
 @inject TaskService TaskService
 
-<PageTitle>TasksUpdate</PageTitle>
+<PageTitle>Tasks</PageTitle>
 
 @if (TaskService.EditTask is not null)
 {
@@ -13,7 +14,7 @@
         <div>
             <InputTextImmediate @bind-Value="TaskService.EditTask.Title" placeholder="Title" />
 
-            <button @onclick="UpdateTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
+            <button @onclick="SaveTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
         </div>
 
         <CategoryComponent Model="TaskService.EditTask" />
@@ -32,15 +33,21 @@
 
     protected override void OnParametersSet()
     {
-        TaskService.EditTask = TaskService.Tasks?.FirstOrDefault(t => t.Id == Id);
+        if (Id is null)
+            TaskService.EditTask = new();
+        else
+            TaskService.EditTask = TaskService.Tasks?.FirstOrDefault(t => t.Id == Id);
     }
 
     [Inject]
     private NavigationManager? NavigationManager { get; set; }
 
-    private async Task UpdateTask()
+    private async Task SaveTask()
     {
-        await TaskService.UpdateTask();
+        if (Id is null)
+            await TaskService.AddTask();
+        else
+            await TaskService.UpdateTask();
 
         NavigationManager?.NavigateTo("/tasks");
     }
