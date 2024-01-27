@@ -17,7 +17,7 @@ public sealed class BlazorAppBuilder
             {
                 webBuilder
                 .UseStartup<Startup>()
-                .UseUrls(new[] { $"https://127.0.0.1:{port}" });
+                .UseUrls([$"https://127.0.0.1:{port}"]);
             });
 
         BlazorAppBuilder appBuilder = new(hostBuilder);

@@ -37,12 +37,11 @@ public class ItemService(IDataAccess dataAccess)
         if (items is null || NewItem is null)
             return;
 
-        if (items.Items is null)
-            items.Items = new();
+        items.Items ??= [];
 
         items.Items.Add(NewItem);
 
-        ItemEntity item = new ItemEntity
+        ItemEntity item = new()
         {
             ParentId = items.Id,
             Title = NewItem.Title,

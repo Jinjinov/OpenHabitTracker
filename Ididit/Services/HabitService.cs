@@ -110,8 +110,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         DateTime utcNow = DateTime.UtcNow;
 
-        if (habit.TimesDone is null)
-            habit.TimesDone = new();
+        habit.TimesDone ??= [];
 
         if (habit.TimesDone.LastOrDefault() is TimeModel time && time.CompletedAt is null)
             return;
@@ -139,8 +138,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         habit.LastTimeDoneAt = utcNow;
 
-        if (habit.TimesDone is null)
-            habit.TimesDone = new();
+        habit.TimesDone ??= [];
 
         if (habit.TimesDone.LastOrDefault() is TimeModel time && time.CompletedAt is null)
         {

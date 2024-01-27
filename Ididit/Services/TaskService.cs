@@ -109,15 +109,13 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
         DateTime utcNow = DateTime.UtcNow;
 
-        if (task.StartedAt is null)
-            task.StartedAt = utcNow;
+        task.StartedAt ??= utcNow;
 
         task.CompletedAt = utcNow;
 
         if (await _dataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
-            if (taskEntity.StartedAt is null)
-                taskEntity.StartedAt = utcNow;
+            taskEntity.StartedAt ??= utcNow;
 
             taskEntity.CompletedAt = utcNow;
             await _dataAccess.UpdateTask(taskEntity);

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ididit.EntityFrameworkCore;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
     public DbSet<Entity> Base { get; set; }
     public DbSet<HabitEntity> Habits { get; set; }
@@ -14,10 +14,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<CategoryEntity> Categories { get; set; }
     public DbSet<PriorityEntity> Priorities { get; set; }
     public DbSet<SettingsEntity> Settings { get; set; }
-
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

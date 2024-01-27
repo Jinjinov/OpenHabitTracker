@@ -84,7 +84,7 @@ public static class ServerAppUtil
         {
             if (BlazorTaskTokenSource != null)
             {
-                WaitHandle.WaitAny(new[] { BlazorTaskTokenSource.Token.WaitHandle });
+                WaitHandle.WaitAny([BlazorTaskTokenSource.Token.WaitHandle]);
             }
 
             BlazorTask?.Dispose();

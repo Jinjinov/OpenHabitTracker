@@ -7,12 +7,38 @@ public class AppData(IDataAccess dataAccess)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
 
+    public SettingsModel Settings { get; set; } = new();
     public Dictionary<long, HabitModel>? Habits { get; set; }
     public Dictionary<long, NoteModel>? Notes { get; set; }
     public Dictionary<long, TaskModel>? Tasks { get; set; }
     public Dictionary<long, CategoryModel>? Categories { get; set; }
     public Dictionary<long, PriorityModel>? Priorities { get; set; }
     public List<Model>? Trash { get; set; }
+
+    public async Task InitializeSettings()
+    {
+        if (Settings.Id == 0)
+        {
+            IReadOnlyList<SettingsEntity> settings = await _dataAccess.GetSettings();
+
+            if (settings.Count > 0 && settings[0] is SettingsEntity settingsEntity)
+            {
+                Settings = new SettingsModel
+                {
+                    Id = settingsEntity.Id,
+                    StartOfWeek = settingsEntity.StartOfWeek
+                };
+            }
+            else
+            {
+                settingsEntity = new SettingsEntity();
+
+                await _dataAccess.AddSettings(settingsEntity);
+
+                Settings.Id = settingsEntity.Id;
+            }
+        }
+    }
 
     public async Task InitializeHabits()
     {
