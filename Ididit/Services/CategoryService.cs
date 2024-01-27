@@ -17,6 +17,7 @@ public class CategoryService(AppData appData, IDataAccess dataAccess)
 
     public void SetCategory(Model model, long categoryId)
     {
+        model.CategoryId = categoryId;
         model.Category = _appData.Categories?.GetValueOrDefault(categoryId);
     }
 
