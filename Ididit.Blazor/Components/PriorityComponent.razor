@@ -1,15 +1,15 @@
-﻿@using Ididit.Data.Models
+﻿@using Ididit.Data
+@using Ididit.Data.Models
 @using Ididit.Services
 
 @inject PriorityService PriorityService
 
 @if (PriorityService.Priorities is not null && Model is not null)
 {
-    <InputSelect TValue="long" Value="Model.PriorityId" ValueExpression="() => Model.PriorityId" ValueChanged="(priorityId) => PriorityService.SetPriority(Model, priorityId)">
-        <option value="0" disabled selected hidden>Select a priority</option>
-        @foreach (PriorityModel priority in PriorityService.Priorities)
+    <InputSelect @bind-Value="Model.Priority">
+        @foreach (Priority priority in Enum.GetValues<Priority>())
         {
-            <option value="@priority.Id">@priority.Title</option>
+            <option value="@priority">@PriorityService.GetPriorityTitle(priority)</option>
         }
     </InputSelect>
 }

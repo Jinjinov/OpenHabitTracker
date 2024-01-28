@@ -5,6 +5,8 @@
 @using Ididit.Services
 
 @inject NoteService NoteService
+@inject PriorityService PriorityService
+@inject CategoryService CategoryService
 
 <PageTitle>Notes</PageTitle>
 
@@ -22,7 +24,7 @@ else
             @if (note.Id == Id)
             {
                 <p>
-                    <span>Priority: @note.Priority?.Title</span>
+                    <span>Priority: @PriorityService.GetPriorityTitle(note.Priority)</span>
                     <a href="/notes">@note.Title</a>
                     <a href="/notes/@note.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
@@ -31,7 +33,7 @@ else
                 <p>@note.Content</p>
 
                 <div>
-                    <small>Category: @note.Category?.Title</small>
+                    <small>Category: @CategoryService.GetCategoryTitle(note.CategoryId)</small>
                 </div>
 
                 <div>
@@ -42,7 +44,7 @@ else
             else
             {
                 <p>
-                    <span>Priority: @note.Priority?.Title</span>
+                    <span>Priority: @PriorityService.GetPriorityTitle(note.Priority)</span>
                     <a href="/notes/@note.Id">@note.Title</a>
                 </p>
 

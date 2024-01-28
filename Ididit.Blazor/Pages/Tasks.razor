@@ -6,6 +6,8 @@
 @using Ididit.Services
 
 @inject TaskService TaskService
+@inject PriorityService PriorityService
+@inject CategoryService CategoryService
 
 <PageTitle>Tasks</PageTitle>
 
@@ -23,7 +25,7 @@ else
             @if (task.Id == Id)
             {
                 <p>
-                    <span>Priority: @task.Priority?.Title</span>
+                    <span>Priority: @PriorityService.GetPriorityTitle(task.Priority)</span>
                     <a href="/tasks">@task.Title</a>
                     <a href="/tasks/@task.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
@@ -48,7 +50,7 @@ else
                 }
 
                 <div>
-                    <small>Category: @task.Category?.Title</small>
+                    <small>Category: @CategoryService.GetCategoryTitle(task.CategoryId)</small>
                 </div>
 
                 <div>
@@ -59,7 +61,7 @@ else
             else
             {
                 <p>
-                    <span>Priority: @task.Priority?.Title</span>
+                    <span>Priority: @PriorityService.GetPriorityTitle(task.Priority)</span>
                     <a href="/tasks/@task.Id">@task.Title</a>
                     <button @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                 </p>

@@ -6,7 +6,7 @@ public class Model
 
     public long CategoryId { get; set; }
 
-    public long PriorityId { get; set; }
+    public Priority Priority { get; set; }
 
     public bool IsDeleted { get; set; }
 
@@ -16,7 +16,5 @@ public class Model
 
     public DateTime UpdatedAt { get; set; }
 
-    public CategoryModel? Category { get; set; }
-
-    public PriorityModel? Priority { get; set; }
+    public long PriorityId => (long)Priority;
 }

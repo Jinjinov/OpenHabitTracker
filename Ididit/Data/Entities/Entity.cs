@@ -6,7 +6,7 @@ public class Entity
 
     public long CategoryId { get; set; }
 
-    public long PriorityId { get; set; }
+    public Priority Priority { get; set; }
 
     public bool IsDeleted { get; set; }
 
@@ -15,4 +15,6 @@ public class Entity
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }
+
+    public long PriorityId => (long)Priority;
 }

@@ -5,6 +5,8 @@
 @using Ididit.Services
 
 @inject HabitService HabitService
+@inject PriorityService PriorityService
+@inject CategoryService CategoryService
 
 <PageTitle>Habits</PageTitle>
 
@@ -22,7 +24,7 @@ else
             @if (habit.Id == Id)
             {
                 <p>
-                    <span>Priority: @habit.Priority?.Title</span>
+                    <span>Priority: @PriorityService.GetPriorityTitle(habit.Priority)</span>
                     <a href="/habits">@habit.Title</a>
                     <a href="/habits/@habit.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
@@ -64,7 +66,7 @@ else
                 </div>
 
                 <div>
-                    <small>Category: @habit.Category?.Title</small>
+                    <small>Category: @CategoryService.GetCategoryTitle(habit.CategoryId)</small>
                 </div>
 
                 <div>
@@ -75,7 +77,7 @@ else
             else
             {
                 <p>
-                    <span>Priority: @habit.Priority?.Title</span>
+                    <span>Priority: @PriorityService.GetPriorityTitle(habit.Priority)</span>
                     <a href="/habits/@habit.Id">@habit.Title</a>
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                 </p>

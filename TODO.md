@@ -1,5 +1,7 @@
 # TODO:
 
+PriorityEntity / PriorityModel - priority text only - everything else is enum Priority
+
 add TSV backup service - import, export
 
 - Calendar

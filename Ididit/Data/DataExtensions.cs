@@ -28,7 +28,7 @@ public static class DataExtensions
     public static void CopyToEntity(this HabitModel model, HabitEntity entity)
     {
         entity.CategoryId = model.CategoryId;
-        entity.PriorityId = model.PriorityId;
+        entity.Priority = model.Priority;
         entity.IsDeleted = model.IsDeleted;
         entity.Title = model.Title;
         entity.CreatedAt = model.CreatedAt;
@@ -65,7 +65,7 @@ public static class DataExtensions
     public static void CopyToEntity(this NoteModel model, NoteEntity entity)
     {
         entity.CategoryId = model.CategoryId;
-        entity.PriorityId = model.PriorityId;
+        entity.Priority = model.Priority;
         entity.IsDeleted = model.IsDeleted;
         entity.Title = model.Title;
         entity.CreatedAt = model.CreatedAt;
@@ -110,7 +110,7 @@ public static class DataExtensions
     public static void CopyToEntity(this TaskModel model, TaskEntity entity)
     {
         entity.CategoryId = model.CategoryId;
-        entity.PriorityId = model.PriorityId;
+        entity.Priority = model.Priority;
         entity.IsDeleted = model.IsDeleted;
         entity.Title = model.Title;
         entity.CreatedAt = model.CreatedAt;

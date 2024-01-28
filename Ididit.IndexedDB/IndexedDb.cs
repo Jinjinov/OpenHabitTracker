@@ -22,19 +22,19 @@ public class IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options
             .WithKey(nameof(HabitEntity.Id))
             .AddUniqueIndex(nameof(HabitEntity.Id))
             .AddIndex(nameof(HabitEntity.CategoryId)) // warning: name.ToCamelCase();
-            .AddIndex(nameof(HabitEntity.PriorityId)); // warning: name.ToCamelCase();
+            .AddIndex(nameof(HabitEntity.Priority)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(NoteEntity))
             .WithKey(nameof(NoteEntity.Id))
             .AddUniqueIndex(nameof(NoteEntity.Id))
             .AddIndex(nameof(NoteEntity.CategoryId)) // warning: name.ToCamelCase();
-            .AddIndex(nameof(NoteEntity.PriorityId)); // warning: name.ToCamelCase();
+            .AddIndex(nameof(NoteEntity.Priority)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(TaskEntity))
             .WithKey(nameof(TaskEntity.Id))
             .AddUniqueIndex(nameof(TaskEntity.Id))
             .AddIndex(nameof(TaskEntity.CategoryId)) // warning: name.ToCamelCase();
-            .AddIndex(nameof(TaskEntity.PriorityId)); // warning: name.ToCamelCase();
+            .AddIndex(nameof(TaskEntity.Priority)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(TimeEntity))
             .WithKey(nameof(TimeEntity.StartedAt))
