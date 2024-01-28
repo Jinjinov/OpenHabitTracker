@@ -54,21 +54,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         EditHabit.CreatedAt = utcNow;
         EditHabit.UpdatedAt = utcNow;
 
-        HabitEntity habit = new()
-        {
-            CategoryId = EditHabit.CategoryId,
-            PriorityId = EditHabit.PriorityId,
-            IsDeleted = false,
-            Title = EditHabit.Title,
-            CreatedAt = utcNow,
-            UpdatedAt = utcNow,
-
-            RepeatCount = EditHabit.RepeatCount,
-            RepeatInterval = EditHabit.RepeatInterval,
-            RepeatPeriod = EditHabit.RepeatPeriod,
-            Duration = EditHabit.Duration,
-            LastTimeDoneAt = null
-        };
+        HabitEntity habit = EditHabit.ToEntity();
 
         await _dataAccess.AddHabit(habit);
 
@@ -84,18 +70,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         if (await _dataAccess.GetHabit(EditHabit.Id) is HabitEntity habit)
         {
-            habit.CategoryId = EditHabit.CategoryId;
-            habit.PriorityId = EditHabit.PriorityId;
-            habit.IsDeleted = EditHabit.IsDeleted;
-            habit.Title = EditHabit.Title;
-            habit.CreatedAt = EditHabit.CreatedAt;
-            habit.UpdatedAt = EditHabit.UpdatedAt;
-
-            habit.RepeatCount = EditHabit.RepeatCount;
-            habit.RepeatInterval = EditHabit.RepeatInterval;
-            habit.RepeatPeriod= EditHabit.RepeatPeriod;
-            habit.Duration = EditHabit.Duration;
-            habit.LastTimeDoneAt = EditHabit.LastTimeDoneAt;
+            EditHabit.CopyToEntity(habit);
 
             await _dataAccess.UpdateHabit(habit);
         }

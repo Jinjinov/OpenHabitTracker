@@ -41,17 +41,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         EditNote.CreatedAt = utcNow;
         EditNote.UpdatedAt = utcNow;
 
-        NoteEntity note = new()
-        {
-            CategoryId = EditNote.CategoryId,
-            PriorityId = EditNote.PriorityId,
-            IsDeleted = false,
-            Title = EditNote.Title,
-            CreatedAt = utcNow,
-            UpdatedAt = utcNow,
-
-            Content = EditNote.Content
-        };
+        NoteEntity note = EditNote.ToEntity();
 
         await _dataAccess.AddNote(note);
 
@@ -67,14 +57,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
         if (await _dataAccess.GetNote(EditNote.Id) is NoteEntity note)
         {
-            note.CategoryId = EditNote.CategoryId;
-            note.PriorityId = EditNote.PriorityId;
-            note.IsDeleted = EditNote.IsDeleted;
-            note.Title = EditNote.Title;
-            note.CreatedAt = EditNote.CreatedAt;
-            note.UpdatedAt = EditNote.UpdatedAt;
-
-            note.Content = EditNote.Content;
+            EditNote.CopyToEntity(note);
 
             await _dataAccess.UpdateNote(note);
         }

@@ -41,19 +41,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         EditTask.CreatedAt = utcNow;
         EditTask.UpdatedAt = utcNow;
 
-        TaskEntity task = new()
-        {
-            CategoryId = EditTask.CategoryId,
-            PriorityId = EditTask.PriorityId,
-            IsDeleted = false,
-            Title = EditTask.Title,
-            CreatedAt = utcNow,
-            UpdatedAt = utcNow,
-
-            StartedAt = null,
-            CompletedAt = null,
-            Date = EditTask.Date
-        };
+        TaskEntity task = EditTask.ToEntity();
 
         await _dataAccess.AddTask(task);
 
@@ -69,16 +57,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
         if (await _dataAccess.GetTask(EditTask.Id) is TaskEntity task)
         {
-            task.CategoryId = EditTask.CategoryId;
-            task.PriorityId = EditTask.PriorityId;
-            task.IsDeleted = EditTask.IsDeleted;
-            task.Title = EditTask.Title;
-            task.CreatedAt = EditTask.CreatedAt;
-            task.UpdatedAt = EditTask.UpdatedAt;
-
-            task.StartedAt = EditTask.StartedAt;
-            task.CompletedAt = EditTask.CompletedAt;
-            task.Date = EditTask.Date;
+            EditTask.CopyToEntity(task);
 
             await _dataAccess.UpdateTask(task);
         }

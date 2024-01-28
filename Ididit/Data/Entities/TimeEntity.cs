@@ -2,7 +2,7 @@
 
 public class TimeEntity
 {
-    public long HabitId { get; init; }
+    public long HabitId { get; set; }
 
     public DateTime StartedAt { get; set; }
 
