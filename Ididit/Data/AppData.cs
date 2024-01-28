@@ -11,6 +11,8 @@ public class AppData(IDataAccess dataAccess)
     public Dictionary<long, HabitModel>? Habits { get; set; }
     public Dictionary<long, NoteModel>? Notes { get; set; }
     public Dictionary<long, TaskModel>? Tasks { get; set; }
+    public Dictionary<long, TimeModel>? Times { get; set; }
+    public Dictionary<long, ItemModel>? Items { get; set; }
     public Dictionary<long, CategoryModel>? Categories { get; set; }
     public Dictionary<long, PriorityModel>? Priorities { get; set; }
     public List<Model>? Trash { get; set; }
@@ -115,6 +117,35 @@ public class AppData(IDataAccess dataAccess)
         }
     }
 
+    public async Task InitializeTimes()
+    {
+        if (Times is null)
+        {
+            IReadOnlyList<TimeEntity> categories = await _dataAccess.GetTimes();
+            Times = categories.Select(c => new TimeModel
+            {
+                HabitId = c.HabitId,
+                StartedAt = c.StartedAt,
+                CompletedAt = c.CompletedAt,
+            }).ToDictionary(x => x.StartedAt.Ticks);
+        }
+    }
+
+    public async Task InitializeItems()
+    {
+        if (Items is null)
+        {
+            IReadOnlyList<ItemEntity> categories = await _dataAccess.GetItems();
+            Items = categories.Select(c => new ItemModel
+            {
+                Id = c.Id,
+                ParentId = c.ParentId,
+                Title = c.Title,
+                IsDone = c.IsDone,
+            }).ToDictionary(x => x.Id);
+        }
+    }
+
     public async Task InitializeCategories()
     {
         if (Categories is null)
@@ -165,17 +196,40 @@ public class AppData(IDataAccess dataAccess)
         await InitializeTasks();
         await InitializeHabits();
 
-        if (Priorities is null || Categories is null || Notes is null || Tasks is null || Habits is null)
+        await InitializeTimes();
+        await InitializeItems();
+
+        if (Priorities is null || Categories is null || Notes is null || Tasks is null || Habits is null || Times is null || Items is null)
             throw new NullReferenceException();
+
+        var habitsByCategoryId = Habits.Values.GroupBy(x => x.CategoryId).ToDictionary(g => g.Key, g => g.ToList());
+        var notesByCategoryId = Notes.Values.GroupBy(x => x.CategoryId).ToDictionary(g => g.Key, g => g.ToList());
+        var tasksByCategoryId = Tasks.Values.GroupBy(x => x.CategoryId).ToDictionary(g => g.Key, g => g.ToList());
+        var timesByHabitId = Times.Values.GroupBy(x => x.HabitId).ToDictionary(g => g.Key, g => g.ToList());
+        var itemsByParentId = Items.Values.GroupBy(x => x.ParentId).ToDictionary(g => g.Key, g => g.ToList());
+
+        foreach (CategoryModel category in Categories.Values)
+        {
+            category.Notes = notesByCategoryId[category.Id];
+            category.Tasks = tasksByCategoryId[category.Id];
+            category.Habits = habitsByCategoryId[category.Id];
+        }
+
+        foreach (TaskModel task in Tasks.Values)
+        {
+            task.Items = itemsByParentId[task.Id];
+        }
+
+        foreach (HabitModel habit in Habits.Values)
+        {
+            habit.Items = itemsByParentId[habit.Id];
+            habit.TimesDone = timesByHabitId[habit.Id];
+        }
 
         UserData userData = new()
         {
             Settings = Settings,
-            Priorities = Priorities.Values.ToList(),
             Categories = Categories.Values.ToList(),
-            Notes = Notes.Values.ToList(),
-            Tasks = Tasks.Values.ToList(),
-            Habits = Habits.Values.ToList()
         };
 
         return userData;
@@ -183,55 +237,37 @@ public class AppData(IDataAccess dataAccess)
 
     public async Task SetUserData(UserData userData)
     {
+        //list of model -> entity
+        //save entity, primary key, assign to model
+        //model now has primary key and a List<>
+        //foreach in list, set foreign key
+
+        //list of model -> select multiple -> entity
+        //save entity, primary key, assign to model
+        //...
+
         SettingsEntity settings = userData.Settings.ToEntity();
-        List<(PriorityModel Model, PriorityEntity Entity)> priorities = userData.Priorities.Select(x => (Model: x, Entity: x.ToEntity())).ToList();
         List<(CategoryModel Model, CategoryEntity Entity)> categories = userData.Categories.Select(x => (Model: x, Entity: x.ToEntity())).ToList();
-        List<(NoteModel Model, NoteEntity Entity)> notes = userData.Notes.Select(x => (Model: x, Entity: x.ToEntity())).ToList();
-        List<(TaskModel Model, TaskEntity Entity)> tasks = userData.Tasks.Select(x => (Model: x, Entity: x.ToEntity())).ToList();
-        List<(HabitModel Model, HabitEntity Entity)> habits = userData.Habits.Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
-        Dictionary<long, PriorityEntity> prioritiesById = priorities.ToDictionary(x => x.Model.Id, x => x.Entity);
         Dictionary<long, CategoryEntity> categoriesById = categories.ToDictionary(x => x.Model.Id, x => x.Entity);
-        Dictionary<long, NoteEntity> notesById = notes.ToDictionary(x => x.Model.Id, x => x.Entity);
-        Dictionary<long, TaskEntity> tasksById = tasks.ToDictionary(x => x.Model.Id, x => x.Entity);
-        Dictionary<long, HabitEntity> habitsById = habits.ToDictionary(x => x.Model.Id, x => x.Entity);
 
-        await _dataAccess.AddPriorities(prioritiesById.Values);
         await _dataAccess.AddCategories(categoriesById.Values);
 
-        foreach (NoteEntity note in notesById.Values)
-        {
-            //note.Priority = prioritiesById[note.PriorityId].Id;
-            note.CategoryId = categoriesById[note.CategoryId].Id;
-        }
-
-        foreach (TaskEntity task in tasksById.Values)
-        {
-            //task.Priority = prioritiesById[task.PriorityId].Id;
-            task.CategoryId = categoriesById[task.CategoryId].Id;
-        }
-
-        foreach (HabitEntity habit in habitsById.Values)
-        {
-            //habit.Priority = prioritiesById[habit.PriorityId].Id;
-            habit.CategoryId = categoriesById[habit.CategoryId].Id;
-        }
-
-        await _dataAccess.AddNotes(notesById.Values);
-        await _dataAccess.AddTasks(tasksById.Values);
-        await _dataAccess.AddHabits(habitsById.Values);
+        //await _dataAccess.AddNotes(notesById.Values);
+        //await _dataAccess.AddTasks(tasksById.Values);
+        //await _dataAccess.AddHabits(habitsById.Values);
 
         //public long ParentId { get; set; }
         //public long HabitId { get; set; }
 
         // to Tuple
 
-        List<TimeEntity> times = userData.Habits.Where(x => x.TimesDone is not null).SelectMany(x => x.TimesDone!.Select(y => y.ToEntity())).ToList();
-        List<ItemEntity> items =
-            [
-                .. userData.Tasks.Where(x => x.Items is not null).SelectMany(x => x.Items!.Select(y => y.ToEntity())),
-                .. userData.Habits.Where(x => x.Items is not null).SelectMany(x => x.Items!.Select(y => y.ToEntity())),
-            ];
+        //List<TimeEntity> times = userData.Habits.Where(x => x.TimesDone is not null).SelectMany(x => x.TimesDone!.Select(y => y.ToEntity())).ToList();
+        //List<ItemEntity> items =
+        //    [
+        //        .. userData.Tasks.Where(x => x.Items is not null).SelectMany(x => x.Items!.Select(y => y.ToEntity())),
+        //        .. userData.Habits.Where(x => x.Items is not null).SelectMany(x => x.Items!.Select(y => y.ToEntity())),
+        //    ];
 
         // TimeEntity.HabitId = HabitEntityDictionary[TimeEntity.HabitId].Id
         // ItemEntity.HabitId = HabitAndTask(Items)EntityDictionary[ItemEntity.HabitId].Id
@@ -242,10 +278,6 @@ public class AppData(IDataAccess dataAccess)
         // update Model.Id for all
 
         Settings = userData.Settings;
-        Priorities = priorities.ToDictionary(x => x.Entity.Id, x => x.Model);
         Categories = categories.ToDictionary(x => x.Entity.Id, x => x.Model);
-        Notes = notes.ToDictionary(x => x.Entity.Id, x => x.Model);
-        Tasks = tasks.ToDictionary(x => x.Entity.Id, x => x.Model);
-        Habits = habits.ToDictionary(x => x.Entity.Id, x => x.Model);
     }
 }
