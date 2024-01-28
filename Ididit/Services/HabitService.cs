@@ -38,6 +38,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
             IReadOnlyList<TimeEntity> timesDone = await _dataAccess.GetTimes(habit.Id);
             habit.TimesDone = timesDone.Select(t => new TimeModel
             {
+                HabitId = t.HabitId,
                 StartedAt = t.StartedAt,
                 CompletedAt = t.CompletedAt
             }).ToList();
@@ -92,6 +93,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         habit.TimesDone.Add(new TimeModel
         {
+            HabitId = habit.Id,
             StartedAt = utcNow
         });
 
@@ -129,6 +131,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         {
             habit.TimesDone.Add(new TimeModel
             {
+                HabitId = habit.Id,
                 StartedAt = utcNow,
                 CompletedAt = utcNow
             });

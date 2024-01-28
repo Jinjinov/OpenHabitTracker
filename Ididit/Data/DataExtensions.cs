@@ -51,6 +51,7 @@ public static class DataExtensions
     public static void CopyToEntity(this ItemModel model, ItemEntity entity)
     {
         entity.Id = model.Id;
+        entity.ParentId = model.ParentId;
         entity.Title = model.Title;
         entity.IsDone = model.IsDone;
     }
@@ -130,6 +131,7 @@ public static class DataExtensions
 
     public static void CopyToEntity(this TimeModel model, TimeEntity entity)
     {
+        entity.HabitId = model.HabitId;
         entity.StartedAt = model.StartedAt;
         entity.CompletedAt = model.CompletedAt;
     }

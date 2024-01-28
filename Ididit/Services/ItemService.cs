@@ -23,6 +23,7 @@ public class ItemService(IDataAccess dataAccess)
                 items.Items = itms.Select(i => new ItemModel
                 {
                     Id = i.Id,
+                    ParentId = i.ParentId,
                     Title = i.Title,
                     IsDone = i.IsDone
                 }).ToList();
