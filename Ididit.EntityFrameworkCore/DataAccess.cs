@@ -60,6 +60,47 @@ public class DataAccess : IDataAccess
         await _dataContext.SaveChangesAsync();
     }
 
+    public async Task AddHabits(IReadOnlyCollection<HabitEntity> habits)
+    {
+        _dataContext.AddRange(habits);
+        await _dataContext.SaveChangesAsync();
+    }
+    public async Task AddNotes(IReadOnlyCollection<NoteEntity> notes)
+    {
+        _dataContext.AddRange(notes);
+        await _dataContext.SaveChangesAsync();
+    }
+    public async Task AddTasks(IReadOnlyCollection<TaskEntity> tasks)
+    {
+        _dataContext.AddRange(tasks);
+        await _dataContext.SaveChangesAsync();
+    }
+    public async Task AddTimes(IReadOnlyCollection<TimeEntity> times)
+    {
+        _dataContext.AddRange(times);
+        await _dataContext.SaveChangesAsync();
+    }
+    public async Task AddItems(IReadOnlyCollection<ItemEntity> items)
+    {
+        _dataContext.AddRange(items);
+        await _dataContext.SaveChangesAsync();
+    }
+    public async Task AddCategories(IReadOnlyCollection<CategoryEntity> categories)
+    {
+        _dataContext.AddRange(categories);
+        await _dataContext.SaveChangesAsync();
+    }
+    public async Task AddPriorities(IReadOnlyCollection<PriorityEntity> priorities)
+    {
+        _dataContext.AddRange(priorities);
+        await _dataContext.SaveChangesAsync();
+    }
+    public async Task AddSettings(IReadOnlyCollection<SettingsEntity> settings)
+    {
+        _dataContext.AddRange(settings);
+        await _dataContext.SaveChangesAsync();
+    }
+
     public async Task<IReadOnlyList<HabitEntity>> GetHabits()
     {
         return await _dataContext.Habits.ToListAsync();
