@@ -1,7 +1,5 @@
 # TODO:
 
-PriorityEntity / PriorityModel - priority text only - everything else is enum Priority
-
 add TSV backup service - import, export
 
 - Calendar
@@ -35,8 +33,6 @@ YES: display -> show details & edit
 load examples
 
 Note Markdown
-
-CategoryModel, PriorityModel - inverse List<Model> property for CategoryId and PriorityId ?
 
 import Google Keep repeating reminder 
 import Google Keep h1, h2, bold, italic, underline
