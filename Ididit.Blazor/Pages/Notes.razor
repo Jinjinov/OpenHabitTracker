@@ -1,12 +1,12 @@
 ﻿@page "/notes"
 @page "/notes/{Id:long}"
 
+@using Ididit.Data
 @using Ididit.Data.Models
 @using Ididit.Services
 
 @inject NoteService NoteService
-@inject PriorityService PriorityService
-@inject CategoryService CategoryService
+@inject AppData AppData
 
 <PageTitle>Notes</PageTitle>
 
@@ -24,7 +24,7 @@ else
             @if (note.Id == Id)
             {
                 <p>
-                    <span>Priority: @PriorityService.GetPriorityTitle(note.Priority)</span>
+                    <span>Priority: @AppData.GetPriorityTitle(note.Priority)</span>
                     <a href="/notes">@note.Title</a>
                     <a href="/notes/@note.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
@@ -33,7 +33,7 @@ else
                 <p>@note.Content</p>
 
                 <div>
-                    <small>Category: @CategoryService.GetCategoryTitle(note.CategoryId)</small>
+                    <small>Category: @AppData.GetCategoryTitle(note.CategoryId)</small>
                 </div>
 
                 <div>
@@ -44,7 +44,7 @@ else
             else
             {
                 <p>
-                    <span>Priority: @PriorityService.GetPriorityTitle(note.Priority)</span>
+                    <span>Priority: @AppData.GetPriorityTitle(note.Priority)</span>
                     <a href="/notes/@note.Id">@note.Title</a>
                 </p>
 

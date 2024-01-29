@@ -3,13 +3,14 @@
 @using Ididit.Services
 
 @inject PriorityService PriorityService
+@inject AppData AppData
 
 @if (PriorityService.Priorities is not null && Model is not null)
 {
     <InputSelect @bind-Value="Model.Priority">
         @foreach (Priority priority in Enum.GetValues<Priority>())
         {
-            <option value="@priority">@PriorityService.GetPriorityTitle(priority)</option>
+            <option value="@priority">@AppData.GetPriorityTitle(priority)</option>
         }
     </InputSelect>
 }

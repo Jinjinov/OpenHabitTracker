@@ -15,16 +15,6 @@ public class CategoryService(AppData appData, IDataAccess dataAccess)
 
     public CategoryModel? NewCategory { get; set; }
 
-    public CategoryModel? GetCategory(long category)
-    {
-        return _appData.Categories?.GetValueOrDefault(category);
-    }
-
-    public string GetCategoryTitle(long category)
-    {
-        return _appData.Categories?.GetValueOrDefault(category)?.Title ?? category.ToString();
-    }
-
     public async Task Initialize()
     {
         await _appData.InitializeCategories();

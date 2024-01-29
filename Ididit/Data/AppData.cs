@@ -17,6 +17,16 @@ public class AppData(IDataAccess dataAccess)
     public Dictionary<long, PriorityModel>? Priorities { get; set; }
     public List<Model>? Trash { get; set; }
 
+    public string GetCategoryTitle(long category)
+    {
+        return Categories?.GetValueOrDefault(category)?.Title ?? category.ToString();
+    }
+
+    public string GetPriorityTitle(Priority priority)
+    {
+        return Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
+    }
+
     public async Task InitializeSettings()
     {
         if (Settings.Id == 0)
