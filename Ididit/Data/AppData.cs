@@ -291,7 +291,11 @@ public class AppData(IDataAccess dataAccess)
             Model.TimesDone?.ForEach(x => x.HabitId = Model.Id);
         }
 
-        List<(ItemModel Model, ItemEntity Entity)> items = tasks.Where(x => x.Model.Items is not null).SelectMany(x => x.Model.Items!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(ItemModel Model, ItemEntity Entity)> items =
+            [
+                .. tasks.Where(x => x.Model.Items is not null).SelectMany(x => x.Model.Items!).Select(x => (Model: x, Entity: x.ToEntity())),
+                .. habits.Where(x => x.Model.Items is not null).SelectMany(x => x.Model.Items!).Select(x => (Model: x, Entity: x.ToEntity()))
+            ];
 
         await _dataAccess.AddItems(items.Select(x => x.Entity).ToList());
 
@@ -315,6 +319,8 @@ public class AppData(IDataAccess dataAccess)
 
     public async Task LoadExamples()
     {
+        DateTime now = DateTime.Now;
+
         UserData userData = new()
         {
             Settings = new()
@@ -351,7 +357,8 @@ public class AppData(IDataAccess dataAccess)
                             {
                                 new() { Title = "Task item 1" },
                                 new() { Title = "Task item 2" }
-                            }
+                            },
+                            PlannedAt = now.AddDays(1)
                         },
                         new()
                         {
@@ -361,7 +368,8 @@ public class AppData(IDataAccess dataAccess)
                             {
                                 new() { Title = "Task item 1" },
                                 new() { Title = "Task item 2" }
-                            }
+                            },
+                            PlannedAt = now.AddDays(2)
                         }
                     },
                     Habits = new()
@@ -374,6 +382,11 @@ public class AppData(IDataAccess dataAccess)
                             {
                                 new() { Title = "Habit item 1" },
                                 new() { Title = "Habit item 2" }
+                            },
+                            TimesDone = new()
+                            {
+                                new() { StartedAt = now.AddHours(-1), CompletedAt = now },
+                                new() { StartedAt = now.AddHours(-2), CompletedAt = now }
                             }
                         },
                         new()
@@ -384,71 +397,11 @@ public class AppData(IDataAccess dataAccess)
                             {
                                 new() { Title = "Habit item 1" },
                                 new() { Title = "Habit item 2" }
-                            }
-                        }
-                    }
-                },
-                new()
-                {
-                    Title = "Category 2",
-                    Notes = new()
-                    {
-                        new()
-                        {
-                            Title = "Note",
-                            Priority = Priority.Low,
-                            Content = "Note text"
-                        },
-                        new()
-                        {
-                            Title = "Note 2",
-                            Priority = Priority.Low,
-                            Content = "Note text 2"
-                        }
-                    },
-                    Tasks = new()
-                    {
-                        new()
-                        {
-                            Title = "Task",
-                            Priority = Priority.High,
-                            Items = new()
+                            },
+                            TimesDone = new()
                             {
-                                new() { Title = "Task item 1" },
-                                new() { Title = "Task item 2" }
-                            }
-                        },
-                        new()
-                        {
-                            Title = "Task 2",
-                            Priority = Priority.High,
-                            Items = new()
-                            {
-                                new() { Title = "Task item 1" },
-                                new() { Title = "Task item 2" }
-                            }
-                        }
-                    },
-                    Habits = new()
-                    {
-                        new()
-                        {
-                            Title = "Habit",
-                            Priority = Priority.Medium,
-                            Items = new()
-                            {
-                                new() { Title = "Habit item 1" },
-                                new() { Title = "Habit item 2" }
-                            }
-                        },
-                        new()
-                        {
-                            Title = "Habit 2",
-                            Priority = Priority.Medium,
-                            Items = new()
-                            {
-                                new() { Title = "Habit item 1" },
-                                new() { Title = "Habit item 2" }
+                                new() { StartedAt = now.AddHours(-3), CompletedAt = now },
+                                new() { StartedAt = now.AddHours(-4), CompletedAt = now }
                             }
                         }
                     }
