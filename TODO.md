@@ -1,5 +1,7 @@
 # TODO:
 
+load examples
+
 add TSV backup service - import, export
 
 - Calendar
@@ -29,8 +31,6 @@ add TSV backup service - import, export
 
 NO: display -> show details -> edit
 YES: display -> show details & edit
-
-load examples
 
 Note Markdown
 

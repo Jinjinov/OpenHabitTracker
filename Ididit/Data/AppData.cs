@@ -312,4 +312,59 @@ public class AppData(IDataAccess dataAccess)
         Items = items.ToDictionary(x => x.Model.Id, x => x.Model);
         Categories = categories.ToDictionary(x => x.Model.Id, x => x.Model);
     }
+
+    public async Task LoadExamples()
+    {
+        UserData userData = new()
+        {
+            Settings = new()
+            {
+                StartOfWeek = DayOfWeek.Monday
+            },
+            Categories = new()
+            {
+                new()
+                {
+                    Title = "Category",
+                    Notes = new()
+                    {
+                        new()
+                        {
+                            Title = "Note",
+                            Priority = Priority.Low,
+                            Content = "Note text"
+                        }
+                    },
+                    Tasks = new()
+                    {
+                        new() 
+                        { 
+                            Title = "Task",
+                            Priority = Priority.High,
+                            Items = new()
+                            {
+                                new() { Title = "Task item 1" },
+                                new() { Title = "Task item 2" }
+                            }
+                        }
+                    },
+                    Habits = new()
+                    {
+                        new() 
+                        { 
+                            Title = "Habit",
+                            Priority = Priority.Medium,
+                            Items = new()
+                            {
+                                new() { Title = "Habit item 1" },
+                                new() { Title = "Habit item 2" }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        await SetUserData(userData);
+    }
 }
