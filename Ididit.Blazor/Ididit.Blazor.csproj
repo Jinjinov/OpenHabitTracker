@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ididit.Backup\Ididit.Backup.csproj" />
     <ProjectReference Include="..\Ididit\Ididit.csproj" />
   </ItemGroup>
 

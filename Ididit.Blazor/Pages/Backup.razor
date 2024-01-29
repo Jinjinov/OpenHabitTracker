@@ -1,7 +1,17 @@
 ﻿@page "/backup"
 
+@using Ididit.Backup
+
+@inject BackupService BackupService
+
 <PageTitle>Backup</PageTitle>
 
-@code {
+<button @onclick="async () => _fileString = await BackupService.GetDataExportFileString(DataFormat.Json)">Export JSON</button>
+<button @onclick="async () => _fileString = await BackupService.GetDataExportFileString(DataFormat.Tsv)">Export TSV</button>
+<button @onclick="async () => _fileString = await BackupService.GetDataExportFileString(DataFormat.Yaml)">Export YAML</button>
 
+<pre>@_fileString</pre>
+
+@code {
+    string _fileString = string.Empty;
 }
