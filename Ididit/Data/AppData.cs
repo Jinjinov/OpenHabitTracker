@@ -220,20 +220,20 @@ public class AppData(IDataAccess dataAccess)
 
         foreach (CategoryModel category in Categories.Values)
         {
-            category.Notes = notesByCategoryId[category.Id];
-            category.Tasks = tasksByCategoryId[category.Id];
-            category.Habits = habitsByCategoryId[category.Id];
+            category.Notes = notesByCategoryId.GetValueOrDefault(category.Id);
+            category.Tasks = tasksByCategoryId.GetValueOrDefault(category.Id);
+            category.Habits = habitsByCategoryId.GetValueOrDefault(category.Id);
         }
 
         foreach (TaskModel task in Tasks.Values)
         {
-            task.Items = itemsByParentId[task.Id];
+            task.Items = itemsByParentId.GetValueOrDefault(task.Id);
         }
 
         foreach (HabitModel habit in Habits.Values)
         {
-            habit.Items = itemsByParentId[habit.Id];
-            habit.TimesDone = timesByHabitId[habit.Id];
+            habit.Items = itemsByParentId.GetValueOrDefault(habit.Id);
+            habit.TimesDone = timesByHabitId.GetValueOrDefault(habit.Id);
         }
 
         UserData userData = new()
