@@ -1,0 +1,16 @@
+﻿@page "/data"
+
+@using Ididit.Data
+@using Ididit.Services
+
+@inject AppData AppData
+@inject TrashService TrashService
+
+<PageTitle>Data</PageTitle>
+
+<button @onclick="AppData.LoadExamples">Load examples</button>
+<button @onclick="TrashService.DeleteAll">Delete all</button>
+
+@code {
+
+}

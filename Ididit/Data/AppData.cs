@@ -333,6 +333,12 @@ public class AppData(IDataAccess dataAccess)
                             Title = "Note",
                             Priority = Priority.Low,
                             Content = "Note text"
+                        },
+                        new()
+                        {
+                            Title = "Note 2",
+                            Priority = Priority.Low,
+                            Content = "Note text 2"
                         }
                     },
                     Tasks = new()
@@ -346,6 +352,16 @@ public class AppData(IDataAccess dataAccess)
                                 new() { Title = "Task item 1" },
                                 new() { Title = "Task item 2" }
                             }
+                        },
+                        new()
+                        {
+                            Title = "Task 2",
+                            Priority = Priority.High,
+                            Items = new()
+                            {
+                                new() { Title = "Task item 1" },
+                                new() { Title = "Task item 2" }
+                            }
                         }
                     },
                     Habits = new()
@@ -353,6 +369,81 @@ public class AppData(IDataAccess dataAccess)
                         new() 
                         { 
                             Title = "Habit",
+                            Priority = Priority.Medium,
+                            Items = new()
+                            {
+                                new() { Title = "Habit item 1" },
+                                new() { Title = "Habit item 2" }
+                            }
+                        },
+                        new()
+                        {
+                            Title = "Habit 2",
+                            Priority = Priority.Medium,
+                            Items = new()
+                            {
+                                new() { Title = "Habit item 1" },
+                                new() { Title = "Habit item 2" }
+                            }
+                        }
+                    }
+                },
+                new()
+                {
+                    Title = "Category 2",
+                    Notes = new()
+                    {
+                        new()
+                        {
+                            Title = "Note",
+                            Priority = Priority.Low,
+                            Content = "Note text"
+                        },
+                        new()
+                        {
+                            Title = "Note 2",
+                            Priority = Priority.Low,
+                            Content = "Note text 2"
+                        }
+                    },
+                    Tasks = new()
+                    {
+                        new()
+                        {
+                            Title = "Task",
+                            Priority = Priority.High,
+                            Items = new()
+                            {
+                                new() { Title = "Task item 1" },
+                                new() { Title = "Task item 2" }
+                            }
+                        },
+                        new()
+                        {
+                            Title = "Task 2",
+                            Priority = Priority.High,
+                            Items = new()
+                            {
+                                new() { Title = "Task item 1" },
+                                new() { Title = "Task item 2" }
+                            }
+                        }
+                    },
+                    Habits = new()
+                    {
+                        new()
+                        {
+                            Title = "Habit",
+                            Priority = Priority.Medium,
+                            Items = new()
+                            {
+                                new() { Title = "Habit item 1" },
+                                new() { Title = "Habit item 2" }
+                            }
+                        },
+                        new()
+                        {
+                            Title = "Habit 2",
                             Priority = Priority.Medium,
                             Items = new()
                             {
