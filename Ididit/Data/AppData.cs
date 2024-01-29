@@ -122,7 +122,7 @@ public class AppData(IDataAccess dataAccess)
 
                 StartedAt = t.StartedAt,
                 CompletedAt = t.CompletedAt,
-                Date = t.Date
+                PlannedAt = t.PlannedAt
             }).ToDictionary(x => x.Id);
         }
     }

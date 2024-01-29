@@ -2,9 +2,9 @@
 
 public class TaskEntity : Entity
 {
+    public DateTime? PlannedAt { get; set; }
+
     public DateTime? StartedAt { get; set; }
 
     public DateTime? CompletedAt { get; set; }
-
-    public DateTime? Date { get; set; }
 }

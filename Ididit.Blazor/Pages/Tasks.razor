@@ -34,9 +34,9 @@ else
 
                 <ItemsComponent Items=task />
 
-                if (task.Date is not null)
+                if (task.PlannedAt is not null)
                 {
-                    <small>Date: @task.Date</small>
+                    <small>PlannedAt: @task.PlannedAt</small>
                 }
 
                 if (task.StartedAt is not null)

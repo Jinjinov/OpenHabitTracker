@@ -2,7 +2,7 @@
 
 public class TimeModel
 {
-    public long HabitId { get; set; }
+    internal long HabitId { get; set; }
 
     public DateTime StartedAt { get; set; }
 

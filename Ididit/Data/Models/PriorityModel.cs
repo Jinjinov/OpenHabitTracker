@@ -2,7 +2,7 @@
 
 public class PriorityModel
 {
-    public long Id { get; set; }
+    internal long Id { get; set; }
 
     public string Title { get; set; } = string.Empty;
 }

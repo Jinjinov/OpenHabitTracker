@@ -2,9 +2,9 @@
 
 public class ItemModel
 {
-    public long Id { get; set; }
+    internal long Id { get; set; }
 
-    public long ParentId { get; set; }
+    internal long ParentId { get; set; }
 
     public string Title { get; set; } = string.Empty;
 
