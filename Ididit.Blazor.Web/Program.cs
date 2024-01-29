@@ -1,3 +1,4 @@
+using Ididit.Backup;
 using Ididit.Blazor.Web.Components;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
@@ -10,6 +11,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddServices();
 builder.Services.AddDataAccess();
+builder.Services.AddBackup();
 
 WebApplication app = builder.Build();
 

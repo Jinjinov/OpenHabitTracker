@@ -1,4 +1,5 @@
-﻿using Ididit.EntityFrameworkCore;
+﻿using Ididit.Backup;
+using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,7 @@ class Program
 
         builder.Services.AddServices();
         builder.Services.AddDataAccess();
+        builder.Services.AddBackup();
 
         // register root component and selector
         builder.RootComponents.Add<Routes>("app");

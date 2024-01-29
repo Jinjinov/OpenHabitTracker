@@ -1,4 +1,5 @@
-﻿using Ididit.EntityFrameworkCore;
+﻿using Ididit.Backup;
+using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 
 namespace Ididit.Blazor.Chromely;
@@ -17,6 +18,7 @@ public class Startup(IConfiguration configuration)
 
         services.AddServices();
         services.AddDataAccess();
+        services.AddBackup();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

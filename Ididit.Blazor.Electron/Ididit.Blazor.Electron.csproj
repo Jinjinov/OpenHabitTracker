@@ -13,6 +13,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\Ididit.Backup\Ididit.Backup.csproj" />
     <ProjectReference Include="..\Ididit.Blazor\Ididit.Blazor.csproj" />
     <ProjectReference Include="..\Ididit.EntityFrameworkCore\Ididit.EntityFrameworkCore.csproj" />
   </ItemGroup>

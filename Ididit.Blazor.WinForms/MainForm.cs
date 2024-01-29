@@ -1,3 +1,4 @@
+using Ididit.Backup;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Components.Web;
@@ -21,6 +22,7 @@ public partial class MainForm : Form
 
         services.AddServices();
         services.AddDataAccess();
+        services.AddBackup();
 
         InitializeComponent();
         Icon = new Icon("favicon.ico");

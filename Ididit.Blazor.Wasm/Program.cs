@@ -1,3 +1,4 @@
+using Ididit.Backup;
 using Ididit.Blazor.Wasm;
 using Ididit.Data;
 using Ididit.IndexedDB;
@@ -20,6 +21,7 @@ builder.Services.AddOidcAuthentication(options =>
 
 builder.Services.AddServices();
 builder.Services.AddDataAccess();
+builder.Services.AddBackup();
 
 WebAssemblyHost host = builder.Build();
 

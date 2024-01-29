@@ -1,5 +1,6 @@
 using ElectronNET.API;
 using ElectronNET.API.Entities;
+using Ididit.Backup;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Builder;
@@ -24,6 +25,7 @@ public class Startup(IConfiguration configuration)
 
         services.AddServices();
         services.AddDataAccess();
+        services.AddBackup();
 
         if (HybridSupport.IsElectronActive)
         {

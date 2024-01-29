@@ -1,4 +1,5 @@
-﻿using Ididit.EntityFrameworkCore;
+﻿using Ididit.Backup;
+using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -21,6 +22,7 @@ public partial class MainWindow : Window
 
         services.AddServices();
         services.AddDataAccess();
+        services.AddBackup();
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         Resources.Add("services", serviceProvider);
