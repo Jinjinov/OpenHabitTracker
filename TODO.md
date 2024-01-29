@@ -2,6 +2,22 @@
 
 SetUserData / AddUserData ? set OR add, not a mix
 
+save file:
+- wasm
+- desktop
+- mobile
+
+load file:
+- wasm
+- desktop
+- mobile
+
+import file:
+- import json
+- import yaml
+- export tsv
+- import tsv
+
 add TSV backup service - import, export
 
 - Calendar
