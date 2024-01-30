@@ -309,12 +309,24 @@ public class AppData(IDataAccess dataAccess)
         await _dataAccess.AddTimes(times.Select(x => x.Entity).ToList());
 
         Settings = userData.Settings;
-        Habits = habits.ToDictionary(x => x.Model.Id, x => x.Model);
-        Notes = notes.ToDictionary(x => x.Model.Id, x => x.Model);
-        Tasks = tasks.ToDictionary(x => x.Model.Id, x => x.Model);
-        Times = times.ToDictionary(x => x.Model.StartedAt.Ticks, x => x.Model);
-        Items = items.ToDictionary(x => x.Model.Id, x => x.Model);
-        Categories = categories.ToDictionary(x => x.Model.Id, x => x.Model);
+
+        if (Habits is null) Habits = habits.ToDictionary(x => x.Model.Id, x => x.Model);
+        else foreach (var pair in habits.ToDictionary(x => x.Model.Id, x => x.Model)) Habits[pair.Key] = pair.Value;
+
+        if (Notes is null) Notes = notes.ToDictionary(x => x.Model.Id, x => x.Model);
+        else foreach (var pair in notes.ToDictionary(x => x.Model.Id, x => x.Model)) Notes[pair.Key] = pair.Value;
+
+        if (Tasks is null) Tasks = tasks.ToDictionary(x => x.Model.Id, x => x.Model);
+        else foreach (var pair in tasks.ToDictionary(x => x.Model.Id, x => x.Model)) Tasks[pair.Key] = pair.Value;
+
+        if (Times is null) Times = times.ToDictionary(x => x.Model.StartedAt.Ticks, x => x.Model);
+        else foreach (var pair in times.ToDictionary(x => x.Model.StartedAt.Ticks, x => x.Model)) Times[pair.Key] = pair.Value;
+
+        if (Items is null) Items = items.ToDictionary(x => x.Model.Id, x => x.Model);
+        else foreach (var pair in items.ToDictionary(x => x.Model.Id, x => x.Model)) Items[pair.Key] = pair.Value;
+
+        if (Categories is null) Categories = categories.ToDictionary(x => x.Model.Id, x => x.Model);
+        else foreach (var pair in categories.ToDictionary(x => x.Model.Id, x => x.Model)) Categories[pair.Key] = pair.Value;
     }
 
     public async Task LoadExamples()
