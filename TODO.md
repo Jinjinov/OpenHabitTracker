@@ -1,19 +1,9 @@
 # TODO:
 
-save file:
-- wasm
-- desktop
-- mobile
-
 using Microsoft.AspNetCore.Components.Forms; InputFile / download
 using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Storage; interface IFileSaver
 using Microsoft.Win32; OpenFileDialog / SaveFileDialog
 using System.Windows.Forms; OpenFileDialog / SaveFileDialog
-
-load file:
-- wasm
-- desktop
-- mobile
 
 import file:
 - import json
