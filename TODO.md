@@ -15,10 +15,23 @@ load file:
 import file:
 - import json
 - import yaml
-- export tsv
 - import tsv
 
-add TSV backup service - import, export
+markdown
+
+google keep
+
+google drive
+
+localization
+
+dark / light theme
+
+search, filter, sort
+
+help
+
+about
 
 - Calendar
 	- Habits.razor
@@ -238,20 +251,20 @@ what i had as goals are actually subcategories
 
 what is wrong with ididit:
 
-- one in all, jack of all trades, master of none
-- too many tasks - should be one task with interval and sub-tasks
+	- one in all, jack of all trades, master of none
+	- too many tasks - should be one task with interval and sub-tasks
 
-- category tree -> breadcrumbs with dropdown
+	- category tree -> breadcrumbs with dropdown
 
-- tasks with very low importance
-- tasks that i never do
-- tasks that i always do - don't need a reminder
-- tasks with interval longer than 7 days
+	- tasks with very low importance
+	- tasks that i never do
+	- tasks that i always do - don't need a reminder
+	- tasks with interval longer than 7 days
 
-- too many options / settings
+	- too many options / settings
 
-- I'm not doing the critical tasks
-- show only highest priority overdue tasks 
+	- I'm not doing the critical tasks
+	- show only highest priority overdue tasks
 
 showing DesiredInterval is a bad idea - no consequences (interval doesn't change) - show AverageInterval
 
