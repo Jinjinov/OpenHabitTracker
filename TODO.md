@@ -5,6 +5,11 @@ save file:
 - desktop
 - mobile
 
+using Microsoft.AspNetCore.Components.Forms; InputFile / download
+using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Storage; interface IFileSaver
+using Microsoft.Win32; OpenFileDialog / SaveFileDialog
+using System.Windows.Forms; OpenFileDialog / SaveFileDialog
+
 load file:
 - wasm
 - desktop
@@ -56,10 +61,15 @@ about
 
 ---------------------------------------------------------------------------------------------------
 
+EF Core: use DbContextFactory
+
+benchmark method time & render time
+
 NO: display -> show details -> edit
 YES: display -> show details & edit
 
 Note Markdown
+Tab in textarea
 
 import Google Keep repeating reminder 
 import Google Keep h1, h2, bold, italic, underline
@@ -136,13 +146,6 @@ RouteView			https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.co
 SectionContent		https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.sections.sectioncontent?view=aspnetcore-8.0
 SectionOutlet		https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.sections.sectionoutlet?view=aspnetcore-8.0
 Virtualize			https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.web.virtualization.virtualize-1?view=aspnetcore-8.0
-
-maui file picker
-maui file saver
-blazor file picker
-blazor file saver
-
-EF Core: use DbContextFactory
 
 columns:
 	habits calendar - own column?
