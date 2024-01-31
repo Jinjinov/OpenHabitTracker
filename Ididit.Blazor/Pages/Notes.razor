@@ -23,14 +23,14 @@ else
         <div class="bg-body-tertiary my-1 p-1">
             @if (note.Id == Id)
             {
-                <p>
+                <div>
                     <span>Priority: @AppData.GetPriorityTitle(note.Priority)</span>
                     <a href="/notes">@note.Title</a>
                     <a href="/notes/@note.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
-                </p>
+                </div>
 
-                <p>@note.Content</p>
+                <pre>@note.Content</pre>
 
                 <div>
                     <small>Category: @AppData.GetCategoryTitle(note.CategoryId)</small>
@@ -43,10 +43,10 @@ else
             }
             else
             {
-                <p>
+                <div>
                     <span>Priority: @AppData.GetPriorityTitle(note.Priority)</span>
                     <a href="/notes/@note.Id">@note.Title</a>
-                </p>
+                </div>
 
                 <div>@note.Content</div>
             }

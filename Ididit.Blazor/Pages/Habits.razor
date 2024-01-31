@@ -23,13 +23,13 @@ else
         <div class="bg-body-tertiary my-1 p-1">
             @if (habit.Id == Id)
             {
-                <p>
+                <div>
                     <span>Priority: @AppData.GetPriorityTitle(habit.Priority)</span>
                     <a href="/habits">@habit.Title</a>
                     <a href="/habits/@habit.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
-                </p>
+                </div>
 
                 <ItemsComponent Items=habit />
 
@@ -76,11 +76,11 @@ else
             }
             else
             {
-                <p>
+                <div>
                     <span>Priority: @AppData.GetPriorityTitle(habit.Priority)</span>
                     <a href="/habits/@habit.Id">@habit.Title</a>
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
-                </p>
+                </div>
 
                 <ItemsComponent Items=habit IsReadOnly=true />
             }

@@ -24,13 +24,13 @@ else
         <div class="bg-body-tertiary my-1 p-1">
             @if (task.Id == Id)
             {
-                <p>
+                <div>
                     <span>Priority: @AppData.GetPriorityTitle(task.Priority)</span>
                     <a href="/tasks">@task.Title</a>
                     <a href="/tasks/@task.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
                     <button @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
-                </p>
+                </div>
 
                 <ItemsComponent Items=task />
 
@@ -60,11 +60,11 @@ else
             }
             else
             {
-                <p>
+                <div>
                     <span>Priority: @AppData.GetPriorityTitle(task.Priority)</span>
                     <a href="/tasks/@task.Id">@task.Title</a>
                     <button @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
-                </p>
+                </div>
 
                 <ItemsComponent Items=task IsReadOnly=true />
             }
