@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Text;
 
 namespace Ididit.Blazor;
 
@@ -24,6 +25,14 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
     {
         IJSObjectReference module = await _moduleTask.Value;
         await module.InvokeAsync<string>("focusElement", element);
+    }
+
+    public async Task SaveAsUTF8(string filename, string content)
+    {
+        byte[] data = Encoding.UTF8.GetBytes(content);
+
+        IJSObjectReference module = await _moduleTask.Value;
+        await module.InvokeAsync<object>("saveAsFile", filename, Convert.ToBase64String(data));
     }
 
     public async ValueTask DisposeAsync()

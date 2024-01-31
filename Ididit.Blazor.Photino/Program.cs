@@ -1,4 +1,5 @@
 ﻿using Ididit.Backup;
+using Ididit.Blazor.File;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Components.Web;
@@ -21,6 +22,8 @@ class Program
         builder.Services.AddDataAccess();
         builder.Services.AddBackup();
         builder.Services.AddScoped<IOpenFile, OpenFile>();
+        builder.Services.AddScoped<JsInterop>();
+        builder.Services.AddScoped<ISaveFile, SaveFile>();
 
         // register root component and selector
         builder.RootComponents.Add<Routes>("app");

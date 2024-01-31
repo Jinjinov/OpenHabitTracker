@@ -1,4 +1,5 @@
 ﻿using Ididit.Backup;
+using Ididit.Blazor.File;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,7 @@ public static class MauiProgram
         builder.Services.AddDataAccess(); // %localappdata%\Packages - Environment.SpecialFolder.LocalApplicationData - FileSystem.Current.AppDataDirectory
         builder.Services.AddBackup();
         builder.Services.AddScoped<IOpenFile, OpenFile>();
+        builder.Services.AddScoped<ISaveFile, SaveFile>();
 
         return builder.Build();
     }

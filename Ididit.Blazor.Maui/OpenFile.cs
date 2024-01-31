@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Ididit.Blazor.File;
+using Microsoft.AspNetCore.Components;
 
 namespace Ididit.Blazor.Maui;
 
 public class OpenFile : IOpenFile
 {
-    public RenderFragment CreateFilePicker(Action<Stream> onFilePicked)
+    public RenderFragment OpenFileDialog(Action<Stream> onFileOpened)
     {
         return builder =>
         {
@@ -20,7 +21,7 @@ public class OpenFile : IOpenFile
                         result.FileName.EndsWith("yaml", StringComparison.OrdinalIgnoreCase))
                     {
                         Stream stream = await result.OpenReadAsync();
-                        onFilePicked(stream);
+                        onFileOpened(stream);
                     }
                 }
             }));
