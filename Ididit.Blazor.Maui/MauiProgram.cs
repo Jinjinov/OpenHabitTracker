@@ -1,4 +1,5 @@
-﻿using Ididit.EntityFrameworkCore;
+﻿using Ididit.Backup;
+using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.Extensions.Logging;
 
@@ -25,6 +26,7 @@ public static class MauiProgram
 
         builder.Services.AddServices();
         builder.Services.AddDataAccess();
+        builder.Services.AddBackup();
 
         return builder.Build();
     }
