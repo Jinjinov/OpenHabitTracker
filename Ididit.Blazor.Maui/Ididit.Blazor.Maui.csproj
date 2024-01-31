@@ -25,7 +25,7 @@
         <ApplicationTitle>Ididit.Blazor.Maui</ApplicationTitle>
 
         <!-- App Identifier -->
-        <ApplicationId>com.companyname.ididit.blazor.maui</ApplicationId>
+        <ApplicationId>ididit.blazor.maui</ApplicationId>
 
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
