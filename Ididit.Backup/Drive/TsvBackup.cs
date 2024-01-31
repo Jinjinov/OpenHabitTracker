@@ -75,7 +75,13 @@ public class TsvBackup(AppData appData)
 
     public async Task ImportDataFile(Stream stream)
     {
-        UserData userData = null;
+        UserData userData = new();
+
+        using (StreamReader reader = new(stream))
+        using (CsvReader csv = new(reader, _csvConfiguration))
+        {
+            IEnumerable<CsvRow> records = csv.GetRecords<CsvRow>();
+        }
 
         await _appData.SetUserData(userData);
     }

@@ -37,7 +37,7 @@
     {
         _filename = filename;
 
-        using var reader = new StreamReader(stream);
+        using StreamReader reader = new StreamReader(stream);
 
         _fileContent = await reader.ReadToEndAsync();
 
