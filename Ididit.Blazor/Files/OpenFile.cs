@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace Ididit.Blazor.File;
+namespace Ididit.Blazor.Files;
 
 public class OpenFile : IOpenFile
 {

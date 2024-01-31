@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Maui.Storage;
-using Ididit.Blazor.File;
+using Ididit.Blazor.Files;
 using System.Text;
 
 namespace Ididit.Blazor.Maui;

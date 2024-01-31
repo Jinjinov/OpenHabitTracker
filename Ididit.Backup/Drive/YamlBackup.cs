@@ -21,4 +21,15 @@ public class YamlBackup(AppData appData)
 
         return stringWriter.ToString();
     }
+
+    public async Task ImportDataFile(Stream stream)
+    {
+        using StreamReader streamReader = new(stream);
+
+        string content = await streamReader.ReadToEndAsync();
+
+        UserData userData = _deserializer.Deserialize<UserData>(content);
+
+        await _appData.SetUserData(userData);
+    }
 }

@@ -18,4 +18,9 @@ public class BackupService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBacku
             _ => throw new ArgumentOutOfRangeException(nameof(dataFormat)),
         };
     }
+
+    public async Task ImportDataFile(Stream stream)
+    {
+
+    }
 }

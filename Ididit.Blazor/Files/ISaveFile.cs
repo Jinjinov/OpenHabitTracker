@@ -1,4 +1,4 @@
-﻿namespace Ididit.Blazor.File;
+﻿namespace Ididit.Blazor.Files;
 
 public interface ISaveFile
 {

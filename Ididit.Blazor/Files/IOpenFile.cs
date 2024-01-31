@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Ididit.Blazor.File;
+namespace Ididit.Blazor.Files;
 
 public interface IOpenFile
 {

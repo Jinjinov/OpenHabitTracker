@@ -1,7 +1,7 @@
 ﻿@page "/backup"
 
 @using Ididit.Backup
-@using Ididit.Blazor.File
+@using Ididit.Blazor.Files
 
 @inject BackupService BackupService
 @inject IOpenFile OpenFile
@@ -24,13 +24,17 @@
     {
         _fileContent = await BackupService.GetDataExportFileString(dataFormat);
 
-        await SaveFile.SaveFileDialog($"ididit.{dataFormat}", _fileContent);
+        string extension = dataFormat.ToString().ToLower();
+
+        await SaveFile.SaveFileDialog($"ididit.{extension}", _fileContent);
     }
 
     private async void OnFileOpened(Stream stream)
     {
         using var reader = new StreamReader(stream);
+
         _fileContent = await reader.ReadToEndAsync();
+
         StateHasChanged();
     }
 }

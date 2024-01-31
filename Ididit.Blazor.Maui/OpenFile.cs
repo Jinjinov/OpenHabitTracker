@@ -1,4 +1,4 @@
-﻿using Ididit.Blazor.File;
+﻿using Ididit.Blazor.Files;
 using Microsoft.AspNetCore.Components;
 
 namespace Ididit.Blazor.Maui;
