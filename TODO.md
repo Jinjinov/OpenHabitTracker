@@ -1,20 +1,16 @@
 # TODO:
 
-markdown
+fix scrolling:
+	/{Id:long} is backup (for bookmarks) - use javascript scroll to (if possible)
+	select Id without navigation
 
-google keep
+column width
+	fill / align right
 
-google drive
+filter by priority
+	save filter in settings
 
-localization
-
-dark / light theme
-
-search, filter, sort
-
-help
-
-about
+multiple scrollable columns
 
 - Calendar
 	- Habits.razor
@@ -41,6 +37,15 @@ about
 
 ---------------------------------------------------------------------------------------------------
 
+markdown
+google keep
+google drive
+localization
+dark / light theme
+search, filter, sort
+help
+about
+
 EF Core: use DbContextFactory
 
 benchmark method time & render time
@@ -51,7 +56,7 @@ YES: display -> show details & edit
 Note Markdown
 Tab in textarea
 
-import Google Keep repeating reminder 
+import Google Keep repeating reminder
 import Google Keep h1, h2, bold, italic, underline
 
 pin razor page to Home - in a column - max 4 columns ?
