@@ -174,6 +174,23 @@ public class AppData(IDataAccess dataAccess)
         if (Priorities is null)
         {
             IReadOnlyList<PriorityEntity> priorities = await _dataAccess.GetPriorities();
+
+            if (priorities.Count == 0)
+            {
+                List<PriorityEntity> defaultPriorities = new()
+                {
+                    new() { Title = "︾" },
+                    new() { Title = "﹀" },
+                    new() { Title = "—" },
+                    new() { Title = "︿" },
+                    new() { Title = "︽" },
+                };
+
+                await _dataAccess.AddPriorities(defaultPriorities);
+
+                priorities = defaultPriorities;
+            }
+
             Priorities = priorities.Select(c => new PriorityModel
             {
                 Id = c.Id,

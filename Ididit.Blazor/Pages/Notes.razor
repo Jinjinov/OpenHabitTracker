@@ -24,7 +24,7 @@ else
             @if (note.Id == Id)
             {
                 <div>
-                    <span>Priority: @AppData.GetPriorityTitle(note.Priority)</span>
+                    <span>@AppData.GetPriorityTitle(note.Priority)</span>
                     <a href="/notes">@note.Title</a>
                     <a href="/notes/@note.Id/update"><i class="bi bi-pencil-square"></i></a>
                     <button @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
@@ -44,7 +44,7 @@ else
             else
             {
                 <div>
-                    <span>Priority: @AppData.GetPriorityTitle(note.Priority)</span>
+                    <span>@AppData.GetPriorityTitle(note.Priority)</span>
                     <a href="/notes/@note.Id">@note.Title</a>
                 </div>
 

@@ -8,15 +8,6 @@
 
 <PageTitle>Priorities</PageTitle>
 
-@if (PriorityService.NewPriority is not null)
-{
-    <div>
-        <InputTextImmediate @bind-Value="PriorityService.NewPriority.Title" placeholder="Title" />
-
-        <button @onclick="() => PriorityService.AddPriority()" disabled="@string.IsNullOrWhiteSpace(PriorityService.NewPriority.Title)"><i class="bi bi-plus-square"></i></button>
-    </div>
-}
-
 @if (PriorityService.Priorities is null)
 {
     <p>Loading...</p>
@@ -34,7 +25,6 @@ else
             {
                 <span @onclick="() => { PriorityService.SelectedPriority = priority; shouldFocus = true; }">@priority.Title</span>
             }
-            <button @onclick="() => PriorityService.DeletePriority(priority)"><i class="bi bi-trash"></i></button>
         </div>
     }
 }
