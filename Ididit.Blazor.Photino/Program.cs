@@ -20,6 +20,7 @@ class Program
         builder.Services.AddServices();
         builder.Services.AddDataAccess();
         builder.Services.AddBackup();
+        builder.Services.AddScoped<IOpenFile, OpenFile>();
 
         // register root component and selector
         builder.RootComponents.Add<Routes>("app");

@@ -3,15 +3,25 @@
 @using Ididit.Backup
 
 @inject BackupService BackupService
+@inject IOpenFile FilePicker
 
 <PageTitle>Backup</PageTitle>
 
-<button @onclick="async () => _fileString = await BackupService.GetDataExportFileString(DataFormat.Json)">Export JSON</button>
-<button @onclick="async () => _fileString = await BackupService.GetDataExportFileString(DataFormat.Tsv)">Export TSV</button>
-<button @onclick="async () => _fileString = await BackupService.GetDataExportFileString(DataFormat.Yaml)">Export YAML</button>
+<button @onclick="async () => _fileContent = await BackupService.GetDataExportFileString(DataFormat.Json)">Export JSON</button>
+<button @onclick="async () => _fileContent = await BackupService.GetDataExportFileString(DataFormat.Tsv)">Export TSV</button>
+<button @onclick="async () => _fileContent = await BackupService.GetDataExportFileString(DataFormat.Yaml)">Export YAML</button>
 
-<pre>@_fileString</pre>
+@FilePicker.CreateFilePicker(OnFilePicked)
+
+<pre>@_fileContent</pre>
 
 @code {
-    string _fileString = string.Empty;
+    string _fileContent = string.Empty;
+
+    private async void OnFilePicked(Stream stream)
+    {
+        using var reader = new StreamReader(stream);
+        _fileContent = await reader.ReadToEndAsync();
+        StateHasChanged();
+    }
 }

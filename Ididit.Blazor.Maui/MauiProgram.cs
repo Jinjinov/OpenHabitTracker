@@ -27,6 +27,7 @@ public static class MauiProgram
         builder.Services.AddServices();
         builder.Services.AddDataAccess(); // %localappdata%\Packages - Environment.SpecialFolder.LocalApplicationData - FileSystem.Current.AppDataDirectory
         builder.Services.AddBackup();
+        builder.Services.AddScoped<IOpenFile, OpenFile>();
 
         return builder.Build();
     }
