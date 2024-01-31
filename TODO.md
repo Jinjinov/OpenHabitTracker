@@ -1,15 +1,5 @@
 # TODO:
 
-using Microsoft.AspNetCore.Components.Forms; InputFile / download
-using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Storage; interface IFileSaver
-using Microsoft.Win32; OpenFileDialog / SaveFileDialog
-using System.Windows.Forms; OpenFileDialog / SaveFileDialog
-
-import file:
-- import json
-- import yaml
-- import tsv
-
 markdown
 
 google keep
@@ -278,6 +268,11 @@ method trace logging - benchmark method performance
 https://learn.microsoft.com/en-us/aspnet/core/blazor/performance
 
 ---------------------------------------------------------------------------------------------------
+
+using Microsoft.AspNetCore.Components.Forms; InputFile / download
+using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Storage; interface IFileSaver
+using Microsoft.Win32; OpenFileDialog / SaveFileDialog
+using System.Windows.Forms; OpenFileDialog / SaveFileDialog
 
 text: ¡!
 background shape: Circle
