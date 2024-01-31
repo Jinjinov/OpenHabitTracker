@@ -1,13 +1,8 @@
 ﻿namespace Ididit.Blazor.Files;
 
-public class SaveFile : ISaveFile
+public class SaveFile(JsInterop jsInterop) : ISaveFile
 {
-    private readonly JsInterop _jsInterop;
-
-    public SaveFile(JsInterop jsInterop)
-    {
-        _jsInterop = jsInterop;
-    }
+    private readonly JsInterop _jsInterop = jsInterop;
 
     public async Task<string> SaveFileDialog(string filename, string content)
     {

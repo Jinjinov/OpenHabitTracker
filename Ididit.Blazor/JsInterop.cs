@@ -27,7 +27,7 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         await module.InvokeAsync<string>("focusElement", element);
     }
 
-    public async Task SaveAsUTF8(string filename, string content)
+    public async ValueTask SaveAsUTF8(string filename, string content)
     {
         byte[] data = Encoding.UTF8.GetBytes(content);
 

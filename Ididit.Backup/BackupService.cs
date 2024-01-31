@@ -19,8 +19,19 @@ public class BackupService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBacku
         };
     }
 
-    public async Task ImportDataFile(Stream stream)
+    public async Task ImportDataFile(string filename, Stream stream)
     {
-
+        if (filename.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+        {
+            await _jsonBackup.ImportDataFile(stream);
+        }
+        else if (filename.EndsWith(".tsv", StringComparison.OrdinalIgnoreCase))
+        {
+            await _tsvBackup.ImportDataFile(stream);
+        }
+        else if (filename.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
+        {
+            await _yamlBackup.ImportDataFile(stream);
+        }
     }
 }

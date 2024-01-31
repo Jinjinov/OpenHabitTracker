@@ -15,9 +15,13 @@
 
 @OpenFile.OpenFileDialog(OnFileOpened)
 
+@_filename
+
 <pre>@_fileContent</pre>
 
 @code {
+    string _filename = string.Empty;
+
     string _fileContent = string.Empty;
 
     private async Task ExportFile(DataFormat dataFormat)
@@ -29,12 +33,16 @@
         await SaveFile.SaveFileDialog($"ididit.{extension}", _fileContent);
     }
 
-    private async void OnFileOpened(Stream stream)
+    private async Task OnFileOpened(string filename, Stream stream)
     {
+        _filename = filename;
+
         using var reader = new StreamReader(stream);
 
         _fileContent = await reader.ReadToEndAsync();
 
         StateHasChanged();
+
+        await BackupService.ImportDataFile(filename, stream);
     }
 }

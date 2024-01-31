@@ -73,6 +73,13 @@ public class TsvBackup(AppData appData)
         return stringWriter.ToString();
     }
 
+    public async Task ImportDataFile(Stream stream)
+    {
+        UserData userData = null;
+
+        await _appData.SetUserData(userData);
+    }
+
     class CsvRow
     {
         public string Category { get; set; } = string.Empty;

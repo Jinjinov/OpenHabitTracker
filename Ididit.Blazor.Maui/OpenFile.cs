@@ -5,7 +5,7 @@ namespace Ididit.Blazor.Maui;
 
 public class OpenFile : IOpenFile
 {
-    public RenderFragment OpenFileDialog(Action<Stream> onFileOpened)
+    public RenderFragment OpenFileDialog(Func<string, Stream, Task> onFileOpened)
     {
         return builder =>
         {
@@ -16,13 +16,8 @@ public class OpenFile : IOpenFile
 
                 if (result != null)
                 {
-                    if (result.FileName.EndsWith("json", StringComparison.OrdinalIgnoreCase) ||
-                        result.FileName.EndsWith("tsv", StringComparison.OrdinalIgnoreCase) ||
-                        result.FileName.EndsWith("yaml", StringComparison.OrdinalIgnoreCase))
-                    {
-                        Stream stream = await result.OpenReadAsync();
-                        onFileOpened(stream);
-                    }
+                    Stream stream = await result.OpenReadAsync();
+                    await onFileOpened(result.FileName, stream);
                 }
             }));
             builder.AddContent(2, "Pick a file");
