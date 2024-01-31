@@ -81,9 +81,13 @@ public class TsvBackup(AppData appData)
 
         using CsvReader csv = new(reader, _csvConfiguration);
 
-        IEnumerable<Record> records = csv.GetRecords<Record>();
+        // Microsoft.AspNetCore.Components.Forms
+        // internal sealed class BrowserFileStream : Stream
+        // public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException("Synchronous reads are not supported.");
 
-        foreach (Record record in records)
+        IAsyncEnumerable<Record> records = csv.GetRecordsAsync<Record>();
+
+        await foreach(Record record in records)
         {
             if (userData.Categories.FirstOrDefault(x => x.Title == record.Category) is not CategoryModel category)
             {

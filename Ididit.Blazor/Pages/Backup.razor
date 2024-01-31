@@ -35,13 +35,25 @@
 
     private async Task OnFileOpened(string filename, Stream stream)
     {
+#if DEBUG
         _filename = filename;
 
-        using StreamReader reader = new StreamReader(stream);
+        using MemoryStream memoryStream = new();
 
-        _fileContent = await reader.ReadToEndAsync();
+        await stream.CopyToAsync(memoryStream);
+        memoryStream.Position = 0;
+
+        using StreamReader streamReader = new(memoryStream);
+
+        _fileContent = await streamReader.ReadToEndAsync();
+
+        memoryStream.Position = 0;
+        streamReader.DiscardBufferedData();
 
         StateHasChanged();
+
+        stream = memoryStream;
+#endif
 
         await BackupService.ImportDataFile(filename, stream);
     }
