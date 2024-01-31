@@ -21,7 +21,7 @@ public class TsvBackup(AppData appData)
     {
         UserData userData = await _appData.GetUserData();
 
-        List<CsvRow> csvRows = new();
+        List<Record> records = new();
 
         foreach (CategoryModel category in userData.Categories)
         {
@@ -33,7 +33,7 @@ public class TsvBackup(AppData appData)
                     {
                         foreach (ItemModel item in habit.Items)
                         {
-                            csvRows.Add(new CsvRow
+                            records.Add(new Record
                             {
                                 Category = category.Title,
                                 Habit = habit.Title,
@@ -48,7 +48,7 @@ public class TsvBackup(AppData appData)
                     }
                     else
                     {
-                        csvRows.Add(new CsvRow
+                        records.Add(new Record
                         {
                             Category = category.Title,
                             Habit = habit.Title,
@@ -67,7 +67,7 @@ public class TsvBackup(AppData appData)
 
         using (CsvWriter csvWriter = new(stringWriter, _csvConfiguration))
         {
-            csvWriter.WriteRecords(csvRows);
+            csvWriter.WriteRecords(records);
         }
 
         return stringWriter.ToString();
@@ -77,16 +77,52 @@ public class TsvBackup(AppData appData)
     {
         UserData userData = new();
 
-        using (StreamReader reader = new(stream))
-        using (CsvReader csv = new(reader, _csvConfiguration))
+        using StreamReader reader = new(stream);
+
+        using CsvReader csv = new(reader, _csvConfiguration);
+
+        IEnumerable<Record> records = csv.GetRecords<Record>();
+
+        foreach (Record record in records)
         {
-            IEnumerable<CsvRow> records = csv.GetRecords<CsvRow>();
+            if (userData.Categories.FirstOrDefault(x => x.Title == record.Category) is not CategoryModel category)
+            {
+                category = new() { Title = record.Category };
+
+                userData.Categories.Add(category);
+            }
+
+            category.Habits ??= new();
+
+            if (category.Habits.FirstOrDefault(x => x.Title == record.Habit) is not HabitModel habit)
+            {
+                habit = new()
+                {
+                    Title = record.Habit,
+                    Priority = record.Priority,
+                    RepeatCount = record.RepeatCount,
+                    RepeatInterval = record.RepeatInterval,
+                    RepeatPeriod = record.RepeatPeriod,
+                    Duration = record.Duration
+                };
+
+                category.Habits.Add(habit);
+            }
+
+            if (string.IsNullOrEmpty(record.Item))
+                continue;
+
+            habit.Items ??= new();
+
+            ItemModel item = new() { Title = record.Item };
+
+            habit.Items.Add(item);
         }
 
         await _appData.SetUserData(userData);
     }
 
-    class CsvRow
+    class Record
     {
         public string Category { get; set; } = string.Empty;
         public string Habit { get; set; } = string.Empty;
