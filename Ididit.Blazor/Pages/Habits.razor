@@ -10,7 +10,7 @@
 
 <PageTitle>Habits</PageTitle>
 
-<div class="fs-1"><a href="/habits/add"><i class="bi bi-plus-square"></i></a></div>
+<div class="fs-1"><NavLink class="nav-link d-inline-block" href="/habits/add"><i class="bi bi-plus-square"></i></NavLink></div>
 
 @if (HabitService.Habits is null)
 {
@@ -25,8 +25,8 @@ else
             {
                 <div>
                     <span>@AppData.GetPriorityTitle(habit.Priority)</span>
-                    <a href="/habits">@habit.Title</a>
-                    <a href="/habits/@habit.Id/update"><i class="bi bi-pencil-square"></i></a>
+                    <NavLink class="nav-link d-inline-block" href="/habits">@habit.Title</NavLink>
+                    <NavLink class="nav-link d-inline-block" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                     <button @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                 </div>
@@ -78,7 +78,7 @@ else
             {
                 <div>
                     <span>@AppData.GetPriorityTitle(habit.Priority)</span>
-                    <a href="/habits/@habit.Id">@habit.Title</a>
+                    <NavLink class="nav-link d-inline-block" href="@($"/habits/{habit.Id}")">@habit.Title</NavLink>
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                 </div>
 
