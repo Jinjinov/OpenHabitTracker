@@ -5,6 +5,7 @@
 @using Ididit.Data.Models
 @using Ididit.Services
 
+@inject NavigationManager NavigationManager
 @inject HabitService HabitService
 @inject AppData AppData
 
@@ -25,7 +26,7 @@ else
             {
                 <div>
                     <span>@AppData.GetPriorityTitle(habit.Priority)</span>
-                    <NavLink class="nav-link d-inline-block" href="/habits">@habit.Title</NavLink>
+                    <span @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
                     <NavLink class="nav-link d-inline-block" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                     <button @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
@@ -78,7 +79,7 @@ else
             {
                 <div>
                     <span>@AppData.GetPriorityTitle(habit.Priority)</span>
-                    <NavLink class="nav-link d-inline-block" href="@($"/habits/{habit.Id}")">@habit.Title</NavLink>
+                    <span @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
                     <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                 </div>
 
@@ -101,5 +102,19 @@ else
     {
         HabitService.SetSelectedHabit(Id);
         await HabitService.LoadTimesDone(HabitService.SelectedHabit);
+    }
+
+    void ToggleSelected(long id)
+    {
+        if (Id == id)
+        {
+            Id = null;
+            //NavigationManager.NavigateTo("/habits");
+        }
+        else
+        {
+            Id = id;
+            //NavigationManager.NavigateTo($"/habits/{id}");
+        }
     }
 }

@@ -1,12 +1,12 @@
 # TODO:
 
 fix scrolling:
-	/{Id:long} is backup (for bookmarks) - use javascript scroll to (if possible)
 	select Id without navigation
+	/{Id:long} is backup (for bookmarks) - Blazor server, Blazor WASM, not WebView / Desktop
 	https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#enhanced-navigation-and-form-handling
 	https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1324689082
 
-<script>
+    <script>
       var skipScrollTo = false;
       const origScrollTo = window.scrollTo;
       window.scrollTo = (x, y) => {
@@ -20,7 +20,7 @@ fix scrolling:
       function willSkipScrollTo(newValue) {
         skipScrollTo = newValue;
       }
-</script>
+    </script>
 
 use Bootstrap
 	column width
