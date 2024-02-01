@@ -4,8 +4,12 @@ fix scrolling:
 	/{Id:long} is backup (for bookmarks) - use javascript scroll to (if possible)
 	select Id without navigation
 
-column width
+use Bootstrap
+	column width
 	fill / align right
+	card
+	checkbox
+	button
 
 filter by priority
 	save filter in settings
