@@ -6,12 +6,13 @@
 @using Ididit.Data.Models
 @using Ididit.Services
 
+@* @inject NavigationManager NavigationManager *@
 @inject TaskService TaskService
 @inject AppData AppData
 
 <PageTitle>Tasks</PageTitle>
 
-<div class="fs-1"><a href="/tasks/add"><i class="bi bi-plus-square"></i></a></div>
+<div class="fs-1"><NavLink class="nav-link d-inline-block" href="/tasks/add"><i class="bi bi-plus-square"></i></NavLink></div>
 
 @if (TaskService.Tasks is null)
 {
@@ -26,8 +27,8 @@ else
             {
                 <div>
                     <span>@AppData.GetPriorityTitle(task.Priority)</span>
-                    <a href="/tasks">@task.Title</a>
-                    <a href="/tasks/@task.Id/update"><i class="bi bi-pencil-square"></i></a>
+                    <span @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
+                    <NavLink class="nav-link d-inline-block" href="@($"/tasks/{task.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                     <button @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
                     <button @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                 </div>
@@ -62,7 +63,7 @@ else
             {
                 <div>
                     <span>@AppData.GetPriorityTitle(task.Priority)</span>
-                    <a href="/tasks/@task.Id">@task.Title</a>
+                    <span @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
                     <button @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                 </div>
 
@@ -84,5 +85,19 @@ else
     protected override void OnParametersSet()
     {
         TaskService.SetSelectedTask(Id);
+    }
+
+    void ToggleSelected(long id)
+    {
+        if (Id == id)
+        {
+            Id = null;
+            //NavigationManager.NavigateTo("/tasks");
+        }
+        else
+        {
+            Id = id;
+            //NavigationManager.NavigateTo($"/tasks/{id}");
+        }
     }
 }

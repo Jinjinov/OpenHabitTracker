@@ -5,12 +5,13 @@
 @using Ididit.Data.Models
 @using Ididit.Services
 
+@* @inject NavigationManager NavigationManager *@
 @inject NoteService NoteService
 @inject AppData AppData
 
 <PageTitle>Notes</PageTitle>
 
-<div class="fs-1"><a href="/notes/add"><i class="bi bi-plus-square"></i></a></div>
+<div class="fs-1"><NavLink class="nav-link d-inline-block" href="/notes/add"><i class="bi bi-plus-square"></i></NavLink></div>
 
 @if (NoteService.Notes is null)
 {
@@ -25,8 +26,8 @@ else
             {
                 <div>
                     <span>@AppData.GetPriorityTitle(note.Priority)</span>
-                    <a href="/notes">@note.Title</a>
-                    <a href="/notes/@note.Id/update"><i class="bi bi-pencil-square"></i></a>
+                    <span @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
+                    <NavLink class="nav-link d-inline-block" href="@($"/notes/{note.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                     <button @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
                 </div>
 
@@ -45,7 +46,7 @@ else
             {
                 <div>
                     <span>@AppData.GetPriorityTitle(note.Priority)</span>
-                    <a href="/notes/@note.Id">@note.Title</a>
+                    <span @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
                 </div>
 
                 <div>@note.Content</div>
@@ -66,5 +67,19 @@ else
     protected override void OnParametersSet()
     {
         NoteService.SetSelectedNote(Id);
+    }
+
+    void ToggleSelected(long id)
+    {
+        if (Id == id)
+        {
+            Id = null;
+            //NavigationManager.NavigateTo("/notes");
+        }
+        else
+        {
+            Id = id;
+            //NavigationManager.NavigateTo($"/notes/{id}");
+        }
     }
 }
