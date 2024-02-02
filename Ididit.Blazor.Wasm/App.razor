@@ -1,4 +1,9 @@
-﻿<CascadingAuthenticationState>
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Ididit.Blazor.Wasm.Layout
+
+<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="new[] { typeof(Ididit.Blazor.Pages.Home).Assembly }">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">

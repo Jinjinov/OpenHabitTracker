@@ -76,9 +76,6 @@ YES: display -> show details & edit
 	- MainLayout.razor
 		- Ididit.Blazor
 		- Ididit.Blazor.Wasm - LoginDisplay
-	- _Imports.razor
-		- Ididit.Blazor
-		- Ididit.Blazor.Wasm - Microsoft.AspNetCore.Components.Authorization
 
 ---------------------------------------------------------------------------------------------------
 
