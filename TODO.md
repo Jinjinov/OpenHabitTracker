@@ -70,17 +70,18 @@ YES: display -> show details & edit
 
 - common:
 	- Routes.razor </Router>
-		- Ididit.Blazor.Maui
-		- Ididit.Blazor.Wasm
 		- Ididit.Blazor
+		- Ididit.Blazor.Maui
+		- Ididit.Blazor.Wasm - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
+		- Ididit.Blazor.Web - missing!!! that is why Error.razor is not working!!!
 	- MainLayout.razor
-		- Ididit.Blazor.Wasm
 		- Ididit.Blazor
+		- Ididit.Blazor.Wasm - LoginDisplay
 	- _Imports.razor
-		- Ididit.Blazor.Maui
-		- Ididit.Blazor.Wasm
-		- Ididit.Blazor.Web
 		- Ididit.Blazor
+		- Ididit.Blazor.Maui
+		- Ididit.Blazor.Wasm - Microsoft.AspNetCore.Components.Authorization
+		- Ididit.Blazor.Web - static Microsoft.AspNetCore.Components.Web.RenderMode
 
 ---------------------------------------------------------------------------------------------------
 
