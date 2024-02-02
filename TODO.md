@@ -41,6 +41,9 @@ filter and sort: (save filter in settings)
 
 multiple scrollable columns
 	how to handle navigation inside the column without changing the URL
+	no need to, if I remove *Edit.razor pages:
+	NO: display -> show details -> edit
+	YES: display -> show details & edit
 
 - Calendar
 	- Habits.razor
@@ -56,9 +59,6 @@ multiple scrollable columns
 	- this month DaysInMonth
 	- next month until sunday - until max 14.
 	- each day is a toggle button
-
-NO: display -> show details -> edit
-YES: display -> show details & edit
 
 - host 24/7 on Raspberry Pi
 	valid LAN IP
