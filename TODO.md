@@ -22,17 +22,25 @@ fix scrolling:
       }
     </script>
 
-use Bootstrap
+use Bootstrap - there are too many classes in the main layout, simplify first!
 	column width
 	fill / align right
 	card
 	checkbox
 	button
 
-filter by priority
-	save filter in settings
+filter and sort: (save filter in settings)
+	filter by priority
+	sort by priority
+	filter by category
+	sort by category
+	filter by RepeatPeriod
+	sort by RepeatPeriod
+	filter by LastTimeDoneAt
+	sort by LastTimeDoneAt
 
 multiple scrollable columns
+	how to handle navigation inside the column without changing the URL
 
 - Calendar
 	- Habits.razor
@@ -49,6 +57,9 @@ multiple scrollable columns
 	- next month until sunday - until max 14.
 	- each day is a toggle button
 
+NO: display -> show details -> edit
+YES: display -> show details & edit
+
 - host 24/7 on Raspberry Pi
 	valid LAN IP
 	test HDMI cable
@@ -56,6 +67,20 @@ multiple scrollable columns
 	always on
 	install VS code
 	install NET 8 sdk
+
+- common:
+	- Routes.razor </Router>
+		- Ididit.Blazor.Maui
+		- Ididit.Blazor.Wasm
+		- Ididit.Blazor
+	- MainLayout.razor
+		- Ididit.Blazor.Wasm
+		- Ididit.Blazor
+	- _Imports.razor
+		- Ididit.Blazor.Maui
+		- Ididit.Blazor.Wasm
+		- Ididit.Blazor.Web
+		- Ididit.Blazor
 
 ---------------------------------------------------------------------------------------------------
 
@@ -71,9 +96,6 @@ about
 EF Core: use DbContextFactory
 
 benchmark method time & render time
-
-NO: display -> show details -> edit
-YES: display -> show details & edit
 
 Note Markdown
 Tab in textarea
@@ -92,20 +114,6 @@ pin razor page to Home - in a column - max 4 columns ?
 	- language
 - localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
 - https://github.com/xaviersolau/BlazorJsonLocalization
-
-- common:
-	- Routes.razor </Router>
-		- Ididit.Blazor.Maui
-		- Ididit.Blazor.Wasm
-		- Ididit.Blazor
-	- MainLayout.razor
-		- Ididit.Blazor.Wasm
-		- Ididit.Blazor
-	- _Imports.razor
-		- Ididit.Blazor.Maui
-		- Ididit.Blazor.Wasm
-		- Ididit.Blazor.Web
-		- Ididit.Blazor
 
 - Ididit.Blazor.Server:
 	- @page "/Error"
