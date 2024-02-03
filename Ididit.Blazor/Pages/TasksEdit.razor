@@ -11,8 +11,8 @@
 @if (TaskService.EditTask is not null)
 {
     <div class="bg-body-tertiary my-1 p-1">
-        <div>
-            <InputTextImmediate @bind-Value="TaskService.EditTask.Title" placeholder="Title" />
+        <div class="input-group">
+            <InputTextImmediate class="form-control" @bind-Value="TaskService.EditTask.Title" placeholder="Title" />
 
             <button class="btn btn-primary" @onclick="SaveTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
         </div>

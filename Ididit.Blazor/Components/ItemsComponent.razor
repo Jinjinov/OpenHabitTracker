@@ -5,8 +5,8 @@
 
 @if (!IsReadOnly && ItemService.NewItem is not null)
 {
-    <div>
-        <InputTextImmediate @bind-Value="ItemService.NewItem.Title" placeholder="Title" />
+    <div class="input-group">
+        <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="Title" />
 
         <button class="btn btn-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
     </div>
@@ -26,7 +26,7 @@
             {
                 @if (item == ItemService.SelectedItem)
                 {
-                    <InputText @ref="inputElement" Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem(title)" @onfocusout="(args) => ItemService.SelectedItem = null" />
+                    <InputText class="form-control" @ref="inputElement" Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem(title)" @onfocusout="(args) => ItemService.SelectedItem = null" />
                 }
                 else
                 {

@@ -12,8 +12,8 @@
 @if (HabitService.EditHabit is not null)
 {
     <div class="bg-body-tertiary my-1 p-1">
-        <div>
-            <InputTextImmediate @bind-Value="HabitService.EditHabit.Title" placeholder="Title" />
+        <div class="input-group">
+            <InputTextImmediate class="form-control" @bind-Value="HabitService.EditHabit.Title" placeholder="Title" />
 
             <button class="btn btn-primary" @onclick="SaveHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.EditHabit.Title)"><i class="bi bi-floppy"></i></button>
         </div>

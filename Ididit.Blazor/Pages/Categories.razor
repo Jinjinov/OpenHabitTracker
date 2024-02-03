@@ -10,8 +10,8 @@
 
 @if (CategoryService.NewCategory is not null)
 {
-    <div>
-        <InputTextImmediate @bind-Value="CategoryService.NewCategory.Title" placeholder="Title" />
+    <div class="input-group">
+        <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="Title" />
 
         <button class="btn btn-primary" @onclick="() => CategoryService.AddCategory()" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
     </div>
@@ -28,7 +28,7 @@ else
         <div>
             @if (category == CategoryService.SelectedCategory)
             {
-                <InputText @ref="inputElement" Value="@category.Title" ValueExpression="() => category.Title" ValueChanged="(string title) => CategoryService.UpdateCategory(title)" @onfocusout="(args) => CategoryService.SelectedCategory = null" />
+                <InputText class="form-control" @ref="inputElement" Value="@category.Title" ValueExpression="() => category.Title" ValueChanged="(string title) => CategoryService.UpdateCategory(title)" @onfocusout="(args) => CategoryService.SelectedCategory = null" />
             }
             else
             {
