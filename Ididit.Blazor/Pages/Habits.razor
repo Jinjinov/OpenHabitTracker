@@ -15,83 +15,83 @@
 
 <div class="col mh-100 overflow-auto">
 
-<div class=""><NavLink class="nav-link" href="/habits/add"><i class="bi bi-plus-square"></i></NavLink></div>
+    <div class="btn btn-primary"><NavLink class="nav-link" href="/habits/add"><i class="bi bi-plus-square"></i></NavLink></div>
 
-@if (HabitService.Habits is null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
+    @if (HabitService.Habits is null)
     {
-        <div class="bg-body-tertiary my-1 p-1">
-            @if (habit.Id == Id)
-            {
-                <div>
-                    <span>@AppData.GetPriorityTitle(habit.Priority)</span>
-                    <span @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
-                    <NavLink class="nav-link d-inline-block" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
-                    <button @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
-                    <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
-                </div>
-
-                <ItemsComponent Items=habit />
-
-                if (habit.LastTimeDoneAt is not null)
-                {
-                    <small>Last time done: @habit.LastTimeDoneAt</small>
-                }
-
-                if (habit.TimesDone is not null)
-                {
-                    <div>Times done: @habit.TimesDone.Count</div>
-
-                    foreach(TimeModel time in habit.TimesDone)
-                    {
-                        <div>
-                            <small>Started: @time.StartedAt</small>
-
-                            @if (time.CompletedAt is not null)
-                            {
-                                <small> Completed: @time.CompletedAt</small>
-                            }
-                        </div>
-                    }
-                }
-
-                <div>
-                    <small>Repeat @habit.RepeatCount times</small>
-                    <small>every @habit.RepeatInterval</small>
-                    <small>@habit.RepeatPeriod</small>
-                </div>
-
-                <div>
-                    <small>Duration: @habit.Duration</small>
-                </div>
-
-                <div>
-                    <small>Category: @AppData.GetCategoryTitle(habit.CategoryId)</small>
-                </div>
-
-                <div>
-                    <small>Created: @habit.CreatedAt</small>
-                    <small>Updated: @habit.UpdatedAt</small>
-                </div>
-            }
-            else
-            {
-                <div>
-                    <span>@AppData.GetPriorityTitle(habit.Priority)</span>
-                    <span @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
-                    <button @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
-                </div>
-
-                <ItemsComponent Items=habit IsReadOnly=true />
-            }
-        </div>
+        <p>Loading...</p>
     }
-}
+    else
+    {
+        foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
+        {
+            <div class="bg-body-tertiary my-1 p-1">
+                @if (habit.Id == Id)
+                {
+                    <div>
+                        <span>@AppData.GetPriorityTitle(habit.Priority)</span>
+                        <span @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
+                        <NavLink class="nav-link d-inline-block" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
+                        <button class="btn btn-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
+                        <button class="btn btn-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                    </div>
+
+                    <ItemsComponent Items=habit />
+
+                    if (habit.LastTimeDoneAt is not null)
+                    {
+                        <small>Last time done: @habit.LastTimeDoneAt</small>
+                    }
+
+                    if (habit.TimesDone is not null)
+                    {
+                        <div>Times done: @habit.TimesDone.Count</div>
+
+                        foreach(TimeModel time in habit.TimesDone)
+                        {
+                            <div>
+                                <small>Started: @time.StartedAt</small>
+
+                                @if (time.CompletedAt is not null)
+                                {
+                                    <small> Completed: @time.CompletedAt</small>
+                                }
+                            </div>
+                        }
+                    }
+
+                    <div>
+                        <small>Repeat @habit.RepeatCount times</small>
+                        <small>every @habit.RepeatInterval</small>
+                        <small>@habit.RepeatPeriod</small>
+                    </div>
+
+                    <div>
+                        <small>Duration: @habit.Duration</small>
+                    </div>
+
+                    <div>
+                        <small>Category: @AppData.GetCategoryTitle(habit.CategoryId)</small>
+                    </div>
+
+                    <div>
+                        <small>Created: @habit.CreatedAt</small>
+                        <small>Updated: @habit.UpdatedAt</small>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <span>@AppData.GetPriorityTitle(habit.Priority)</span>
+                        <span @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
+                        <button class="btn btn-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                    </div>
+
+                    <ItemsComponent Items=habit IsReadOnly=true />
+                }
+            </div>
+        }
+    }
 
 </div>
 

@@ -14,7 +14,7 @@
         <div>
             <InputTextImmediate @bind-Value="NoteService.EditNote.Title" placeholder="Title" />
 
-            <button @onclick="SaveNote" disabled="@string.IsNullOrWhiteSpace(NoteService.EditNote.Title)"><i class="bi bi-floppy"></i></button>
+            <button class="btn btn-primary" @onclick="SaveNote" disabled="@string.IsNullOrWhiteSpace(NoteService.EditNote.Title)"><i class="bi bi-floppy"></i></button>
         </div>
 
         <CategoryComponent Model="NoteService.EditNote" />

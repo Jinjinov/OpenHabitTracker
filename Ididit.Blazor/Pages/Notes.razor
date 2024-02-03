@@ -15,49 +15,49 @@
 
 <div class="col mh-100 overflow-auto">
 
-<div class=""><NavLink class="nav-link" href="/notes/add"><i class="bi bi-plus-square"></i></NavLink></div>
+    <div class="btn btn-primary"><NavLink class="nav-link" href="/notes/add"><i class="bi bi-plus-square"></i></NavLink></div>
 
-@if (NoteService.Notes is null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    foreach (NoteModel note in NoteService.Notes.Where(n => !n.IsDeleted))
+    @if (NoteService.Notes is null)
     {
-        <div class="bg-body-tertiary my-1 p-1">
-            @if (note.Id == Id)
-            {
-                <div>
-                    <span>@AppData.GetPriorityTitle(note.Priority)</span>
-                    <span @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
-                    <NavLink class="nav-link d-inline-block" href="@($"/notes/{note.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
-                    <button @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
-                </div>
-
-                <pre>@note.Content</pre>
-
-                <div>
-                    <small>Category: @AppData.GetCategoryTitle(note.CategoryId)</small>
-                </div>
-
-                <div>
-                    <small>Created: @note.CreatedAt</small>
-                    <small>Updated: @note.UpdatedAt</small>
-                </div>
-            }
-            else
-            {
-                <div>
-                    <span>@AppData.GetPriorityTitle(note.Priority)</span>
-                    <span @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
-                </div>
-
-                <div>@note.Content</div>
-            }
-        </div>
+        <p>Loading...</p>
     }
-}
+    else
+    {
+        foreach (NoteModel note in NoteService.Notes.Where(n => !n.IsDeleted))
+        {
+            <div class="bg-body-tertiary my-1 p-1">
+                @if (note.Id == Id)
+                {
+                    <div>
+                        <span>@AppData.GetPriorityTitle(note.Priority)</span>
+                        <span @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
+                        <NavLink class="nav-link d-inline-block" href="@($"/notes/{note.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
+                        <button class="btn btn-primary" @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
+                    </div>
+
+                    <pre>@note.Content</pre>
+
+                    <div>
+                        <small>Category: @AppData.GetCategoryTitle(note.CategoryId)</small>
+                    </div>
+
+                    <div>
+                        <small>Created: @note.CreatedAt</small>
+                        <small>Updated: @note.UpdatedAt</small>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <span>@AppData.GetPriorityTitle(note.Priority)</span>
+                        <span @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
+                    </div>
+
+                    <div>@note.Content</div>
+                }
+            </div>
+        }
+    }
 
 </div>
 

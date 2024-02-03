@@ -15,7 +15,7 @@
         <div>
             <InputTextImmediate @bind-Value="HabitService.EditHabit.Title" placeholder="Title" />
 
-            <button @onclick="SaveHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.EditHabit.Title)"><i class="bi bi-floppy"></i></button>
+            <button class="btn btn-primary" @onclick="SaveHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.EditHabit.Title)"><i class="bi bi-floppy"></i></button>
         </div>
 
         <CategoryComponent Model="HabitService.EditHabit" />

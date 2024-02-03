@@ -8,7 +8,7 @@
     <div>
         <InputTextImmediate @bind-Value="ItemService.NewItem.Title" placeholder="Title" />
 
-        <button @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
+        <button class="btn btn-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
     </div>
 }
 
@@ -28,7 +28,7 @@
             }
             @if (!IsReadOnly)
             {
-                <button @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
             }
         </div>
     }

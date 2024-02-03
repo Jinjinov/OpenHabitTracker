@@ -16,66 +16,66 @@
 
 <div class="col mh-100 overflow-auto">
 
-<div class=""><NavLink class="nav-link" href="/tasks/add"><i class="bi bi-plus-square"></i></NavLink></div>
+    <div class="btn btn-primary"><NavLink class="nav-link" href="/tasks/add"><i class="bi bi-plus-square"></i></NavLink></div>
 
-@if (TaskService.Tasks is null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    foreach (TaskModel task in TaskService.Tasks.Where(t => !t.IsDeleted))
+    @if (TaskService.Tasks is null)
     {
-        <div class="bg-body-tertiary my-1 p-1">
-            @if (task.Id == Id)
-            {
-                <div>
-                    <span>@AppData.GetPriorityTitle(task.Priority)</span>
-                    <span @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
-                    <NavLink class="nav-link d-inline-block" href="@($"/tasks/{task.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
-                    <button @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
-                    <button @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
-                </div>
-
-                <ItemsComponent Items=task />
-
-                if (task.PlannedAt is not null)
-                {
-                    <small>PlannedAt: @task.PlannedAt</small>
-                }
-
-                if (task.StartedAt is not null)
-                {
-                    <small>StartedAt: @task.StartedAt</small>
-                }
-
-                if (task.CompletedAt is not null)
-                {
-                    <small>CompletedAt: @task.CompletedAt</small>
-                }
-
-                <div>
-                    <small>Category: @AppData.GetCategoryTitle(task.CategoryId)</small>
-                </div>
-
-                <div>
-                    <small>Created: @task.CreatedAt</small>
-                    <small>Updated: @task.UpdatedAt</small>
-                </div>
-            }
-            else
-            {
-                <div>
-                    <span>@AppData.GetPriorityTitle(task.Priority)</span>
-                    <span @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
-                    <button @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
-                </div>
-
-                <ItemsComponent Items=task IsReadOnly=true />
-            }
-        </div>
+        <p>Loading...</p>
     }
-}
+    else
+    {
+        foreach (TaskModel task in TaskService.Tasks.Where(t => !t.IsDeleted))
+        {
+            <div class="bg-body-tertiary my-1 p-1">
+                @if (task.Id == Id)
+                {
+                    <div>
+                        <span>@AppData.GetPriorityTitle(task.Priority)</span>
+                        <span @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
+                        <NavLink class="nav-link d-inline-block" href="@($"/tasks/{task.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
+                        <button class="btn btn-primary" @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
+                        <button class="btn btn-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
+                    </div>
+
+                    <ItemsComponent Items=task />
+
+                    if (task.PlannedAt is not null)
+                    {
+                        <small>PlannedAt: @task.PlannedAt</small>
+                    }
+
+                    if (task.StartedAt is not null)
+                    {
+                        <small>StartedAt: @task.StartedAt</small>
+                    }
+
+                    if (task.CompletedAt is not null)
+                    {
+                        <small>CompletedAt: @task.CompletedAt</small>
+                    }
+
+                    <div>
+                        <small>Category: @AppData.GetCategoryTitle(task.CategoryId)</small>
+                    </div>
+
+                    <div>
+                        <small>Created: @task.CreatedAt</small>
+                        <small>Updated: @task.UpdatedAt</small>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <span>@AppData.GetPriorityTitle(task.Priority)</span>
+                        <span @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
+                        <button class="btn btn-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
+                    </div>
+
+                    <ItemsComponent Items=task IsReadOnly=true />
+                }
+            </div>
+        }
+    }
 
 </div>
 

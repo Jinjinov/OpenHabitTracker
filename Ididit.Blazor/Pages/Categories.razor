@@ -13,7 +13,7 @@
     <div>
         <InputTextImmediate @bind-Value="CategoryService.NewCategory.Title" placeholder="Title" />
 
-        <button @onclick="() => CategoryService.AddCategory()" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
+        <button class="btn btn-primary" @onclick="() => CategoryService.AddCategory()" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
     </div>
 }
 
@@ -34,7 +34,7 @@ else
             {
                 <span @onclick="() => { CategoryService.SelectedCategory = category; shouldFocus = true; }">@category.Title</span>
             }
-            <button @onclick="() => CategoryService.DeleteCategory(category)"><i class="bi bi-trash"></i></button>
+            <button class="btn btn-primary" @onclick="() => CategoryService.DeleteCategory(category)"><i class="bi bi-trash"></i></button>
         </div>
     }
 }

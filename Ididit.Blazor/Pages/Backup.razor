@@ -9,9 +9,9 @@
 
 <PageTitle>Backup</PageTitle>
 
-<button @onclick="() => ExportFile(DataFormat.Json)">Export JSON</button>
-<button @onclick="() => ExportFile(DataFormat.Tsv)">Export TSV</button>
-<button @onclick="() => ExportFile(DataFormat.Yaml)">Export YAML</button>
+<button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Json)">Export JSON</button>
+<button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Tsv)">Export TSV</button>
+<button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Yaml)">Export YAML</button>
 
 @OpenFile.OpenFileDialog(OnFileOpened)
 
