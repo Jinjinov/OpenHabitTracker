@@ -1,4 +1,6 @@
 using Ididit.Backup;
+using Ididit.Blazor.Files;
+using Ididit.Blazor.Layout;
 using Ididit.Blazor.Web.Components;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
@@ -12,6 +14,9 @@ builder.Services.AddRazorComponents()
 builder.Services.AddServices();
 builder.Services.AddDataAccess();
 builder.Services.AddBackup();
+builder.Services.AddScoped<IOpenFile, OpenFile>();
+builder.Services.AddScoped<ISaveFile, SaveFile>();
+builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
 
 WebApplication app = builder.Build();
 

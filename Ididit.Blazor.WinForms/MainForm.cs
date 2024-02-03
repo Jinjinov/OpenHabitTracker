@@ -1,4 +1,6 @@
 using Ididit.Backup;
+using Ididit.Blazor.Files;
+using Ididit.Blazor.Layout;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Components.Web;
@@ -23,6 +25,9 @@ public partial class MainForm : Form
         services.AddServices();
         services.AddDataAccess();
         services.AddBackup();
+        services.AddScoped<IOpenFile, OpenFile>();
+        services.AddScoped<ISaveFile, SaveFile>();
+        services.AddScoped<INavBarFragment, NavBarFragment>();
 
         InitializeComponent();
         Icon = new Icon("favicon.ico");

@@ -1,4 +1,7 @@
 using Ididit.Backup;
+using Ididit.Blazor;
+using Ididit.Blazor.Files;
+using Ididit.Blazor.Layout;
 using Ididit.Blazor.Wasm;
 using Ididit.Data;
 using Ididit.IndexedDB;
@@ -22,6 +25,10 @@ builder.Services.AddOidcAuthentication(options =>
 builder.Services.AddServices();
 builder.Services.AddDataAccess();
 builder.Services.AddBackup();
+builder.Services.AddScoped<IOpenFile, OpenFile>();
+builder.Services.AddScoped<JsInterop>();
+builder.Services.AddScoped<ISaveFile, SaveFile>();
+builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
 
 WebAssemblyHost host = builder.Build();
 

@@ -1,9 +1,7 @@
 # TODO:
 
 Ididit.Google.Apis
-
 Ididit.LocalStorage
-
 https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
 fix scrolling:
@@ -158,7 +156,7 @@ Google Keep
 		- bold
 		- italic
 		- underline
-		- clear formatting
+		- clear (\) text (T) formatting
 
 import Google Keep repeating reminder
 import Google Keep h1, h2, bold, italic, underline

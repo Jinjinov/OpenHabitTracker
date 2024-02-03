@@ -1,4 +1,6 @@
 ﻿using Ididit.Backup;
+using Ididit.Blazor.Files;
+using Ididit.Blazor.Layout;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +25,9 @@ public partial class MainWindow : Window
         services.AddServices();
         services.AddDataAccess();
         services.AddBackup();
+        services.AddScoped<IOpenFile, OpenFile>();
+        services.AddScoped<ISaveFile, SaveFile>();
+        services.AddScoped<INavBarFragment, NavBarFragment>();
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         Resources.Add("services", serviceProvider);

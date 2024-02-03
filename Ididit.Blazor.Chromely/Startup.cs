@@ -1,4 +1,6 @@
 ﻿using Ididit.Backup;
+using Ididit.Blazor.Files;
+using Ididit.Blazor.Layout;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 
@@ -19,6 +21,9 @@ public class Startup(IConfiguration configuration)
         services.AddServices();
         services.AddDataAccess();
         services.AddBackup();
+        services.AddScoped<IOpenFile, OpenFile>();
+        services.AddScoped<ISaveFile, SaveFile>();
+        services.AddScoped<INavBarFragment, NavBarFragment>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
