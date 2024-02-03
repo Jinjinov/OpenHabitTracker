@@ -1,5 +1,11 @@
 # TODO:
 
+Ididit.Google.Apis
+
+Ididit.LocalStorage
+
+https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
+
 fix scrolling:
 	select Id without navigation
 	/{Id:long} is backup (for bookmarks) - Blazor server, Blazor WASM, not WebView / Desktop
@@ -30,14 +36,14 @@ use Bootstrap - there are too many classes in the main layout, simplify first!
 	button
 
 filter and sort: (save filter in settings)
-	filter by priority
+	filter by priority - multiple
 	sort by priority
-	filter by category
+	filter by category - one
 	sort by category
-	filter by RepeatPeriod
+	filter by RepeatPeriod - multiple
 	sort by RepeatPeriod
-	filter by LastTimeDoneAt
-	sort by LastTimeDoneAt
+	filter by LastTimeDoneAt / elapsed time - range / relative range (to the interval)
+	sort by LastTimeDoneAt / elapsed time
 
 multiple scrollable columns
 	how to handle navigation inside the column without changing the URL
@@ -73,9 +79,24 @@ multiple scrollable columns
 		- Ididit.Blazor
 		- Ididit.Blazor.Wasm - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
 		- Ididit.Blazor.Web
+
+		public interface IRouterComponentsAssemblyProvider
+		public System.Reflection.Assembly AppAssembly { get; set; }
+		public System.Collections.Generic.IEnumerable<System.Reflection.Assembly> AdditionalAssemblies { get; set; }
+
 	- MainLayout.razor
 		- Ididit.Blazor
 		- Ididit.Blazor.Wasm - LoginDisplay
+
+		public interface INavBarFragment
+		public RenderFragment GetNavBarFragment()
+		{
+			return builder =>
+			{
+				builder.OpenComponent(0, typeof(LoginDisplay));
+				builder.CloseComponent();
+			};
+		}
 
 ---------------------------------------------------------------------------------------------------
 
@@ -94,6 +115,50 @@ benchmark method time & render time
 
 Note Markdown
 Tab in textarea
+
+Google Keep
+	- title
+	- pin
+	- note
+	- reminder
+		- date
+		- time
+		- place
+		- repeat
+			- Does not repeat
+			- Daily
+			- Weekly
+			- Monthly
+			- Yearly
+			- Custom:
+				- Forever
+				- Until a date
+				- For a number of events
+	- collaborator
+	- background
+	- (app) take photo
+	- add image
+	- archive
+	- delete
+	- add label
+	- add drawing
+	- (app) recording
+	- make copy
+	- show checkboxes
+	- (app) send (share)
+	- copy to Google Docs
+	- version history
+	- undo
+	- redo
+	- close
+	- (app):
+		- h1
+		- h2
+		- normal text
+		- bold
+		- italic
+		- underline
+		- clear formatting
 
 import Google Keep repeating reminder
 import Google Keep h1, h2, bold, italic, underline
