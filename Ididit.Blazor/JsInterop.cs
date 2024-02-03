@@ -24,7 +24,7 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
     public async ValueTask FocusElement(ElementReference element)
     {
         IJSObjectReference module = await _moduleTask.Value;
-        await module.InvokeAsync<string>("focusElement", element);
+        await module.InvokeVoidAsync("focusElement", element);
     }
 
     public async ValueTask SaveAsUTF8(string filename, string content)
@@ -32,7 +32,13 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         byte[] data = Encoding.UTF8.GetBytes(content);
 
         IJSObjectReference module = await _moduleTask.Value;
-        await module.InvokeAsync<object>("saveAsFile", filename, Convert.ToBase64String(data));
+        await module.InvokeVoidAsync("saveAsFile", filename, Convert.ToBase64String(data));
+    }
+
+    public async ValueTask HandleTabKey(ElementReference element)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("handleTabKey", element);
     }
 
     public async ValueTask DisposeAsync()

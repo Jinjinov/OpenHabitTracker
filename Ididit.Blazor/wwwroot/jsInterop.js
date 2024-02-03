@@ -17,3 +17,26 @@ export function saveAsFile(filename, bytesBase64) {
     link.click();
     document.body.removeChild(link);
 }
+
+export function handleTabKey(textarea) {
+    if (textarea && !textarea.tabKeyHandlerAdded) {
+        textarea.addEventListener('keydown', function (event) {
+            if (event.key === 'Tab') {
+                event.preventDefault();
+
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+
+                const newValue = textarea.value.substring(0, start) + '\t' + textarea.value.substring(end);
+                textarea.value = newValue;
+
+                textarea.setSelectionRange(start + 1, start + 1);
+
+                const inputEvent = new Event('input', { bubbles: true, cancelable: true });
+                textarea.dispatchEvent(inputEvent);
+            }
+        });
+
+        textarea.tabKeyHandlerAdded = true;
+    }
+}
