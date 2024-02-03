@@ -14,7 +14,9 @@
 
 <PageTitle>Tasks</PageTitle>
 
-<div class="fs-1"><NavLink class="nav-link d-inline-block" href="/tasks/add"><i class="bi bi-plus-square"></i></NavLink></div>
+<div class="col mh-100 overflow-auto">
+
+<div class=""><NavLink class="nav-link" href="/tasks/add"><i class="bi bi-plus-square"></i></NavLink></div>
 
 @if (TaskService.Tasks is null)
 {
@@ -74,6 +76,8 @@ else
         </div>
     }
 }
+
+</div>
 
 @code {
     [Parameter]
