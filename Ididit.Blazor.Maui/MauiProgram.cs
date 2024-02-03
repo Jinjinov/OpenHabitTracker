@@ -32,6 +32,7 @@ public static class MauiProgram
         builder.Services.AddScoped<IOpenFile, OpenFile>();
         builder.Services.AddScoped<ISaveFile, SaveFile>();
         builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
+        builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
 
         return builder.Build();
     }

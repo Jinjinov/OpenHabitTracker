@@ -29,6 +29,7 @@ builder.Services.AddScoped<IOpenFile, OpenFile>();
 builder.Services.AddScoped<JsInterop>();
 builder.Services.AddScoped<ISaveFile, SaveFile>();
 builder.Services.AddScoped<INavBarFragment, Ididit.Blazor.Wasm.Layout.NavBarFragment>();
+builder.Services.AddScoped<IAssemblyProvider, Ididit.Blazor.Wasm.AssemblyProvider>();
 
 WebAssemblyHost host = builder.Build();
 

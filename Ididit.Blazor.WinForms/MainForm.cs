@@ -28,6 +28,7 @@ public partial class MainForm : Form
         services.AddScoped<IOpenFile, OpenFile>();
         services.AddScoped<ISaveFile, SaveFile>();
         services.AddScoped<INavBarFragment, NavBarFragment>();
+        services.AddScoped<IAssemblyProvider, AssemblyProvider>();
 
         InitializeComponent();
         Icon = new Icon("favicon.ico");

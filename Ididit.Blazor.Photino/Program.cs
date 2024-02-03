@@ -26,6 +26,7 @@ class Program
         builder.Services.AddScoped<JsInterop>();
         builder.Services.AddScoped<ISaveFile, SaveFile>();
         builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
+        builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
 
         // register root component and selector
         builder.RootComponents.Add<Routes>("app");
