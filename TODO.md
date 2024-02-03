@@ -73,14 +73,9 @@ multiple scrollable columns
 	install NET 8 sdk
 
 - common:
-	- Routes.razor </Router>
-		- Ididit.Blazor
-		- Ididit.Blazor.Wasm - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
-		- Ididit.Blazor.Web
-
-		public interface IRouterComponentsAssemblyProvider
-		public System.Reflection.Assembly AppAssembly { get; set; }
-		public System.Collections.Generic.IEnumerable<System.Reflection.Assembly> AdditionalAssemblies { get; set; }
+	- Router
+		- Ididit.Blazor - Routes.razor
+		- Ididit.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
 
 ---------------------------------------------------------------------------------------------------
 
