@@ -28,10 +28,10 @@
             <div class="bg-body-tertiary my-1 p-1">
                 @if (note.Id == Id)
                 {
-                    <div>
-                        <span>@AppData.GetPriorityTitle(note.Priority)</span>
-                        <span @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
-                        <NavLink class="nav-link d-inline-block" href="@($"/notes/{note.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
+                    <div class="input-group">
+                        <span class="input-group-text">@AppData.GetPriorityTitle(note.Priority)</span>
+                        <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
+                        <NavLink class="btn btn-primary" href="@($"/notes/{note.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                         <button class="btn btn-primary" @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
                     </div>
 
@@ -48,12 +48,12 @@
                 }
                 else
                 {
-                    <div>
-                        <span>@AppData.GetPriorityTitle(note.Priority)</span>
-                        <span @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
+                    <div class="input-group">
+                        <span class="input-group-text">@AppData.GetPriorityTitle(note.Priority)</span>
+                        <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
                     </div>
 
-                    <div>@note.Content</div>
+                    <pre>@note.Content</pre>
                 }
             </div>
         }

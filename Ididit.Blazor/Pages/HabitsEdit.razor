@@ -15,7 +15,7 @@
     {
         <div class="bg-body-tertiary my-1 p-1">
             <div class="input-group">
-                <InputTextImmediate class="form-control" @bind-Value="HabitService.EditHabit.Title" placeholder="Title" />
+                <InputTextImmediate class="form-control" @bind-Value="HabitService.EditHabit.Title" placeholder="Add new habit" />
 
                 <button class="btn btn-primary" @onclick="SaveHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.EditHabit.Title)"><i class="bi bi-floppy"></i></button>
             </div>

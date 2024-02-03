@@ -14,7 +14,7 @@
     {
         <div class="bg-body-tertiary my-1 p-1">
             <div class="input-group">
-                <InputTextImmediate class="form-control" @bind-Value="NoteService.EditNote.Title" placeholder="Title" />
+                <InputTextImmediate class="form-control" @bind-Value="NoteService.EditNote.Title" placeholder="Add new note" />
 
                 <button class="btn btn-primary" @onclick="SaveNote" disabled="@string.IsNullOrWhiteSpace(NoteService.EditNote.Title)"><i class="bi bi-floppy"></i></button>
             </div>
@@ -23,9 +23,7 @@
 
             <PriorityComponent Model="NoteService.EditNote" />
 
-            <div>
-                <InputTextArea class="form-control" @bind-Value="NoteService.EditNote.Content" placeholder="Note" />
-            </div>
+            <InputTextArea class="form-control" @bind-Value="NoteService.EditNote.Content" placeholder="Add note text" />
         </div>
     }
 

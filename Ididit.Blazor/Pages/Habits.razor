@@ -28,10 +28,10 @@
             <div class="bg-body-tertiary my-1 p-1">
                 @if (habit.Id == Id)
                 {
-                    <div>
-                        <span>@AppData.GetPriorityTitle(habit.Priority)</span>
-                        <span @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
-                        <NavLink class="nav-link d-inline-block" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
+                    <div class="input-group">
+                        <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
+                        <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
+                        <NavLink class="btn btn-primary" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                         <button class="btn btn-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
                         <button class="btn btn-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                     </div>
@@ -81,9 +81,9 @@
                 }
                 else
                 {
-                    <div>
-                        <span>@AppData.GetPriorityTitle(habit.Priority)</span>
-                        <span @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
+                    <div class="input-group">
+                        <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
+                        <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
                         <button class="btn btn-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                     </div>
 

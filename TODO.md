@@ -6,7 +6,6 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
 use Bootstrap
 	column width
-	fill / align right
 
 filter and sort: (save filter in settings)
 	filter by priority - multiple

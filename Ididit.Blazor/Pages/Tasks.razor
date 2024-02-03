@@ -29,10 +29,10 @@
             <div class="bg-body-tertiary my-1 p-1">
                 @if (task.Id == Id)
                 {
-                    <div>
-                        <span>@AppData.GetPriorityTitle(task.Priority)</span>
-                        <span @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
-                        <NavLink class="nav-link d-inline-block" href="@($"/tasks/{task.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
+                    <div class="input-group">
+                        <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
+                        <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
+                        <NavLink class="btn btn-primary" href="@($"/tasks/{task.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                         <button class="btn btn-primary" @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
                         <button class="btn btn-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                     </div>
@@ -65,9 +65,9 @@
                 }
                 else
                 {
-                    <div>
-                        <span>@AppData.GetPriorityTitle(task.Priority)</span>
-                        <span @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
+                    <div class="input-group">
+                        <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
+                        <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
                         <button class="btn btn-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                     </div>
 

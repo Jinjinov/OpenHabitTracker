@@ -6,7 +6,7 @@
 @if (!IsReadOnly && ItemService.NewItem is not null)
 {
     <div class="input-group">
-        <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="Title" />
+        <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="Add new item" />
 
         <button class="btn btn-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
     </div>
