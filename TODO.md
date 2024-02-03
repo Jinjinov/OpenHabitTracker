@@ -4,6 +4,15 @@ Ididit.Google.Apis
 Ididit.LocalStorage
 https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
+multiple scrollable columns
+
+use Bootstrap - there are too many classes in the main layout, simplify first!
+	column width
+	fill / align right
+	card
+	checkbox
+	button
+
 filter and sort: (save filter in settings)
 	filter by priority - multiple
 	sort by priority
@@ -13,19 +22,6 @@ filter and sort: (save filter in settings)
 	sort by RepeatPeriod
 	filter by LastTimeDoneAt / elapsed time - range / relative range (to the interval)
 	sort by LastTimeDoneAt / elapsed time
-
-remove *Edit.razor pages:
-	NO: display -> show details -> edit
-	YES: display -> show details & edit
-
-multiple scrollable columns
-
-use Bootstrap - there are too many classes in the main layout, simplify first!
-	column width
-	fill / align right
-	card
-	checkbox
-	button
 
 - Calendar
 	- Habits.razor
@@ -50,12 +46,16 @@ use Bootstrap - there are too many classes in the main layout, simplify first!
 	install VS code
 	install NET 8 sdk
 
+---------------------------------------------------------------------------------------------------
+
+remove *Edit.razor pages:
+	NO: display -> show details -> edit
+	YES: display -> show details & edit
+
 - common:
 	- Router
 		- Ididit.Blazor - Routes.razor
 		- Ididit.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
-
----------------------------------------------------------------------------------------------------
 
 markdown
 google keep
