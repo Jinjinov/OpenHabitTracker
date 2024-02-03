@@ -16,6 +16,7 @@ builder.Services.AddServices();
 builder.Services.AddDataAccess();
 builder.Services.AddBackup();
 builder.Services.AddScoped<IOpenFile, OpenFile>();
+builder.Services.AddScoped<JsInterop>();
 builder.Services.AddScoped<ISaveFile, SaveFile>();
 builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
 builder.Services.AddScoped<IAssemblyProvider, Ididit.Blazor.Web.Components.AssemblyProvider>();

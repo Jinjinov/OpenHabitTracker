@@ -5,8 +5,7 @@ Ididit.LocalStorage
 https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
 fix scrolling:
-	select Id without navigation
-	/{Id:long} is backup (for bookmarks) - Blazor server, Blazor WASM, not WebView / Desktop
+	/{Id:long} is for bookmarks - Blazor server, Blazor WASM, not WebView / Desktop
 	https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#enhanced-navigation-and-form-handling
 	https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1324689082
 
@@ -26,13 +25,6 @@ fix scrolling:
       }
     </script>
 
-use Bootstrap - there are too many classes in the main layout, simplify first!
-	column width
-	fill / align right
-	card
-	checkbox
-	button
-
 filter and sort: (save filter in settings)
 	filter by priority - multiple
 	sort by priority
@@ -43,11 +35,18 @@ filter and sort: (save filter in settings)
 	filter by LastTimeDoneAt / elapsed time - range / relative range (to the interval)
 	sort by LastTimeDoneAt / elapsed time
 
-multiple scrollable columns
-	how to handle navigation inside the column without changing the URL
-	no need to, if I remove *Edit.razor pages:
+remove *Edit.razor pages:
 	NO: display -> show details -> edit
 	YES: display -> show details & edit
+
+multiple scrollable columns
+
+use Bootstrap - there are too many classes in the main layout, simplify first!
+	column width
+	fill / align right
+	card
+	checkbox
+	button
 
 - Calendar
 	- Habits.razor

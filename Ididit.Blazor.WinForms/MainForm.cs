@@ -26,6 +26,7 @@ public partial class MainForm : Form
         services.AddDataAccess();
         services.AddBackup();
         services.AddScoped<IOpenFile, OpenFile>();
+        services.AddScoped<JsInterop>();
         services.AddScoped<ISaveFile, SaveFile>();
         services.AddScoped<INavBarFragment, NavBarFragment>();
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
