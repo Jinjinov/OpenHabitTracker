@@ -4,12 +4,9 @@ Ididit.Google.Apis
 Ididit.LocalStorage
 https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
-multiple scrollable columns
-
-use Bootstrap - there are too many classes in the main layout, simplify first!
+use Bootstrap
 	column width
 	fill / align right
-	card
 	checkbox
 	button
 

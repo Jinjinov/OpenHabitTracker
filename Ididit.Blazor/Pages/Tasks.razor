@@ -83,6 +83,9 @@ else
     [Parameter]
     public long? Id { get; set; }
 
+    [Parameter]
+    public bool IsEmbedded { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await TaskService.Initialize();
@@ -95,17 +98,21 @@ else
 
     async Task ToggleSelected(long id)
     {
-        if (Id == id)
+        if (IsEmbedded)
         {
-            //Id = null;
-            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
-            NavigationManager.NavigateTo("/tasks");
+            if (Id == id)
+                Id = null;
+            else
+                Id = id;
         }
         else
         {
-            //Id = id;
             await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
-            NavigationManager.NavigateTo($"/tasks/{id}");
+
+            if (Id == id)
+                NavigationManager.NavigateTo("/tasks");
+            else
+                NavigationManager.NavigateTo($"/tasks/{id}");
         }
     }
 }
