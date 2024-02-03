@@ -8,26 +8,30 @@
 
 <PageTitle>Priorities</PageTitle>
 
-@if (PriorityService.Priorities is null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    foreach (PriorityModel priority in PriorityService.Priorities)
+<div class="col mh-100 overflow-auto">
+
+    @if (PriorityService.Priorities is null)
     {
-        <div>
-            @if (priority == PriorityService.SelectedPriority)
-            {
-                <InputText class="form-control" @ref="inputElement" Value="@priority.Title" ValueExpression="() => priority.Title" ValueChanged="(string title) => PriorityService.UpdatePriority(title)" @onfocusout="(args) => PriorityService.SelectedPriority = null" />
-            }
-            else
-            {
-                <span @onclick="() => { PriorityService.SelectedPriority = priority; shouldFocus = true; }">@priority.Title</span>
-            }
-        </div>
+        <p>Loading...</p>
     }
-}
+    else
+    {
+        foreach (PriorityModel priority in PriorityService.Priorities)
+        {
+            <div>
+                @if (priority == PriorityService.SelectedPriority)
+                {
+                    <InputText class="form-control" @ref="inputElement" Value="@priority.Title" ValueExpression="() => priority.Title" ValueChanged="(string title) => PriorityService.UpdatePriority(title)" @onfocusout="(args) => PriorityService.SelectedPriority = null" />
+                }
+                else
+                {
+                    <span @onclick="() => { PriorityService.SelectedPriority = priority; shouldFocus = true; }">@priority.Title</span>
+                }
+            </div>
+        }
+    }
+
+</div>
 
 @code {
     [Parameter]

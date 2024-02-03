@@ -9,15 +9,19 @@
 
 <PageTitle>Backup</PageTitle>
 
-<button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Json)">Export JSON</button>
-<button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Tsv)">Export TSV</button>
-<button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Yaml)">Export YAML</button>
+<div class="col mh-100 overflow-auto">
 
-@OpenFile.OpenFileDialog(OnFileOpened)
+    <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Json)">Export JSON</button>
+    <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Tsv)">Export TSV</button>
+    <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Yaml)">Export YAML</button>
 
-@_filename
+    @OpenFile.OpenFileDialog(OnFileOpened)
 
-<pre>@_fileContent</pre>
+    @_filename
+
+    <pre>@_fileContent</pre>
+
+</div>
 
 @code {
     string _filename = string.Empty;

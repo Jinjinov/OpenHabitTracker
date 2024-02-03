@@ -8,22 +8,26 @@
 
 <PageTitle>Tasks</PageTitle>
 
-@if (TaskService.EditTask is not null)
-{
-    <div class="bg-body-tertiary my-1 p-1">
-        <div class="input-group">
-            <InputTextImmediate class="form-control" @bind-Value="TaskService.EditTask.Title" placeholder="Title" />
+<div class="col mh-100 overflow-auto">
 
-            <button class="btn btn-primary" @onclick="SaveTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
+    @if (TaskService.EditTask is not null)
+    {
+        <div class="bg-body-tertiary my-1 p-1">
+            <div class="input-group">
+                <InputTextImmediate class="form-control" @bind-Value="TaskService.EditTask.Title" placeholder="Title" />
+
+                <button class="btn btn-primary" @onclick="SaveTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
+            </div>
+
+            <CategoryComponent Model="TaskService.EditTask" />
+
+            <PriorityComponent Model="TaskService.EditTask" />
+
+            <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.EditTask.PlannedAt" />
         </div>
+    }
 
-        <CategoryComponent Model="TaskService.EditTask" />
-
-        <PriorityComponent Model="TaskService.EditTask" />
-
-        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.EditTask.PlannedAt" />
-    </div>
-}
+</div>
 
 @code {
     [Parameter]

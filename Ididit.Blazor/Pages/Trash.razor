@@ -7,19 +7,23 @@
 
 <PageTitle>Trash</PageTitle>
 
-<button class="btn btn-primary" @onclick="TrashService.DeleteAll">Empty trash</button>
+<div class="col mh-100 overflow-auto">
 
-@if (TrashService.Models is null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    foreach (Model model in TrashService.Models)
+    <button class="btn btn-primary" @onclick="TrashService.DeleteAll">Empty trash</button>
+
+    @if (TrashService.Models is null)
     {
-        <p>@model.Title <button class="btn btn-primary" @onclick="() => TrashService.Restore(model)">Restore</button> <button class="btn btn-primary" @onclick="() => TrashService.Delete(model)"><i class="bi bi-trash"></i></button></p>
+        <p>Loading...</p>
     }
-}
+    else
+    {
+        foreach (Model model in TrashService.Models)
+        {
+            <p>@model.Title <button class="btn btn-primary" @onclick="() => TrashService.Restore(model)">Restore</button> <button class="btn btn-primary" @onclick="() => TrashService.Delete(model)"><i class="bi bi-trash"></i></button></p>
+        }
+    }
+
+</div>
 
 @code {
     protected override async Task OnInitializedAsync()
