@@ -4,6 +4,8 @@ Ididit.Google.Apis
 Ididit.LocalStorage
 https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
+when habit is done, uncheck all habit items
+
 use Bootstrap
 	column width
 

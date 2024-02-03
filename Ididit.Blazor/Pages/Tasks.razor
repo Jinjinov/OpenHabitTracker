@@ -16,7 +16,11 @@
 
 <div class="col mh-100 overflow-auto">
 
-    <NavLink class="btn btn-primary" href="/tasks/add"><i class="bi bi-plus-square"></i></NavLink>
+    <NavLink class="input-group text-decoration-none my-1 p-1" href="/tasks/add">
+        <span class="input-group-text flex-grow-1">Add new task</span>
+
+        <span class="btn btn-primary"><i class="bi bi-plus-square"></i></span>
+    </NavLink>
 
     @if (TaskService.Tasks is null)
     {
