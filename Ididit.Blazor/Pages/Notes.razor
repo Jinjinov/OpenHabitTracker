@@ -4,8 +4,10 @@
 @using Ididit.Data
 @using Ididit.Data.Models
 @using Ididit.Services
+@using Microsoft.JSInterop
 
-@* @inject NavigationManager NavigationManager *@
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
 @inject NoteService NoteService
 @inject AppData AppData
 
@@ -69,17 +71,19 @@ else
         NoteService.SetSelectedNote(Id);
     }
 
-    void ToggleSelected(long id)
+    async Task ToggleSelected(long id)
     {
         if (Id == id)
         {
-            Id = null;
-            //NavigationManager.NavigateTo("/notes");
+            //Id = null;
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+            NavigationManager.NavigateTo("/notes");
         }
         else
         {
-            Id = id;
-            //NavigationManager.NavigateTo($"/notes/{id}");
+            //Id = id;
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+            NavigationManager.NavigateTo($"/notes/{id}");
         }
     }
 }

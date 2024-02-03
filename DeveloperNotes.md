@@ -5,6 +5,9 @@ using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Stor
 using Microsoft.Win32; OpenFileDialog / SaveFileDialog
 using System.Windows.Forms; OpenFileDialog / SaveFileDialog
 
+https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#enhanced-navigation-and-form-handling
+https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1324689082
+
 ---------------------------------------------------------------------------------------------------
 
 Blazor magic strings: blazor-error-ui , --blazor-load-percentage , --blazor-load-percentage-text , blazor-error-boundary , validation-errors , validation-message

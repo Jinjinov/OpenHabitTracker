@@ -4,8 +4,10 @@
 @using Ididit.Data
 @using Ididit.Data.Models
 @using Ididit.Services
+@using Microsoft.JSInterop
 
-@* @inject NavigationManager NavigationManager *@
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
 @inject HabitService HabitService
 @inject AppData AppData
 
@@ -104,17 +106,19 @@ else
         await HabitService.LoadTimesDone(HabitService.SelectedHabit);
     }
 
-    void ToggleSelected(long id)
+    async Task ToggleSelected(long id)
     {
         if (Id == id)
         {
-            Id = null;
-            //NavigationManager.NavigateTo("/habits");
+            //Id = null;
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+            NavigationManager.NavigateTo("/habits");
         }
         else
         {
-            Id = id;
-            //NavigationManager.NavigateTo($"/habits/{id}");
+            //Id = id;
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+            NavigationManager.NavigateTo($"/habits/{id}");
         }
     }
 }

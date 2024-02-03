@@ -4,27 +4,6 @@ Ididit.Google.Apis
 Ididit.LocalStorage
 https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
-fix scrolling:
-	/{Id:long} is for bookmarks - Blazor server, Blazor WASM, not WebView / Desktop
-	https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#enhanced-navigation-and-form-handling
-	https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1324689082
-
-    <script>
-      var skipScrollTo = false;
-      const origScrollTo = window.scrollTo;
-      window.scrollTo = (x, y) => {
-        if (x === 0 && y === 0 && skipScrollTo) {
-          skipScrollTo = false;
-          return;
-        }
-        return origScrollTo.apply(this, [x, y]);
-      };
-
-      function willSkipScrollTo(newValue) {
-        skipScrollTo = newValue;
-      }
-    </script>
-
 filter and sort: (save filter in settings)
 	filter by priority - multiple
 	sort by priority
