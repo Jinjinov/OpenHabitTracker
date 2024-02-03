@@ -82,20 +82,6 @@ multiple scrollable columns
 		public System.Reflection.Assembly AppAssembly { get; set; }
 		public System.Collections.Generic.IEnumerable<System.Reflection.Assembly> AdditionalAssemblies { get; set; }
 
-	- MainLayout.razor
-		- Ididit.Blazor
-		- Ididit.Blazor.Wasm - LoginDisplay
-
-		public interface INavBarFragment
-		public RenderFragment GetNavBarFragment()
-		{
-			return builder =>
-			{
-				builder.OpenComponent(0, typeof(LoginDisplay));
-				builder.CloseComponent();
-			};
-		}
-
 ---------------------------------------------------------------------------------------------------
 
 markdown
