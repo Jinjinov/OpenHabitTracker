@@ -19,7 +19,11 @@
     {
         foreach (Model model in TrashService.Models)
         {
-            <p>@model.Title <button class="btn btn-primary" @onclick="() => TrashService.Restore(model)">Restore</button> <button class="btn btn-primary" @onclick="() => TrashService.Delete(model)"><i class="bi bi-trash"></i></button></p>
+            <div class="input-group">
+                <span class="input-group-text flex-grow-1">@model.Title</span>
+                <button class="btn btn-primary" @onclick="() => TrashService.Restore(model)">Restore</button>
+                <button class="btn btn-primary" @onclick="() => TrashService.Delete(model)"><i class="bi bi-trash"></i></button>
+            </div>
         }
     }
 
