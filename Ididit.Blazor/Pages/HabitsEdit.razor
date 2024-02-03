@@ -29,7 +29,7 @@
             <label for="intervalInput">times every</label>
             <InputNumber id="intervalInput" @bind-Value="HabitService.EditHabit.RepeatInterval" />
 
-            <InputSelect @bind-Value="HabitService.EditHabit.RepeatPeriod">
+            <InputSelect class="form-select" @bind-Value="HabitService.EditHabit.RepeatPeriod">
                 @foreach (Period period in Enum.GetValues<Period>())
                 {
                     <option value="@period">@period</option>
