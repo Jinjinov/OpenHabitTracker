@@ -4,10 +4,16 @@ Ididit.Google.Apis
 Ididit.LocalStorage
 https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
+using Markdig; Markdown.ToHtml
+using HtmlAgilityPack; MarkSearchResultsInHtml
+
+label for open file dialog
+
 when habit is done, uncheck all habit items
 
+textarea tabs
 textarea autosize
-
+textarea highlight
 Note Markdown
 
 filter and sort: (save filter in settings)
