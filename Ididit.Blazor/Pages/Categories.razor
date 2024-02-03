@@ -25,14 +25,14 @@ else
 {
     foreach (CategoryModel category in CategoryService.Categories)
     {
-        <div>
+        <div class="input-group">
             @if (category == CategoryService.SelectedCategory)
             {
                 <InputText class="form-control" @ref="inputElement" Value="@category.Title" ValueExpression="() => category.Title" ValueChanged="(string title) => CategoryService.UpdateCategory(title)" @onfocusout="(args) => CategoryService.SelectedCategory = null" />
             }
             else
             {
-                <span @onclick="() => { CategoryService.SelectedCategory = category; shouldFocus = true; }">@category.Title</span>
+                <span class="input-group-text flex-grow-1" @onclick="() => { CategoryService.SelectedCategory = category; shouldFocus = true; }">@category.Title</span>
             }
             <button class="btn btn-primary" @onclick="() => CategoryService.DeleteCategory(category)"><i class="bi bi-trash"></i></button>
         </div>

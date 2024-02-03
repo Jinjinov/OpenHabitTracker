@@ -16,25 +16,30 @@
 {
     foreach (ItemModel item in Items.Items)
     {
-        <div class="form-check">
-            <InputCheckbox id="@item.Id" class="form-check-input" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
-            @if (IsReadOnly)
-            {
+        @if (IsReadOnly)
+        {
+            <div class="form-check">
+                <InputCheckbox id="@item.Id" class="form-check-input" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
                 <label for="@item.Id" class="form-check-label">@item.Title</label>
-            }
-            else
-            {
+            </div>
+        }
+        else
+        {
+            <div class="input-group">
+                <div class="input-group-text">
+                    <InputCheckbox id="@item.Id" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
+                </div>
                 @if (item == ItemService.SelectedItem)
                 {
                     <InputText class="form-control" @ref="inputElement" Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem(title)" @onfocusout="(args) => ItemService.SelectedItem = null" />
                 }
                 else
                 {
-                    <span class="form-check-label" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@item.Title</span>
+                    <span class="input-group-text flex-grow-1" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@item.Title</span>
                 }
                 <button class="btn btn-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
-            }
-        </div>
+            </div>
+        }
     }
 }
 
