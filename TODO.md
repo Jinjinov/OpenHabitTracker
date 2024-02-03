@@ -6,8 +6,9 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
 when habit is done, uncheck all habit items
 
-use Bootstrap
-	column width
+textarea autosize
+
+Note Markdown
 
 filter and sort: (save filter in settings)
 	filter by priority - multiple
