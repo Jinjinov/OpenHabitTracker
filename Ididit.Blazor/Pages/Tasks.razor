@@ -72,6 +72,10 @@
                     <div class="input-group">
                         <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
                         <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
+                        @if (task.PlannedAt is not null)
+                        {
+                            <small class="input-group-text">@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
+                        }
                         <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                     </div>
 

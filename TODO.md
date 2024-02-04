@@ -6,10 +6,6 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
-habit title: elapsed time
-
-task title: planned at
-
 remove *Edit.razor pages:
 	NO: display -> show details -> edit
 	YES: display -> show details & edit
