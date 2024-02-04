@@ -40,7 +40,7 @@
                         <button class="btn btn-outline-primary" @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
                     </div>
 
-                    <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="note.Content" placeholder="Add note text" />
+                    <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="note.Content" rows="@(note.Content.Count(c => c == '\n') + 1)" placeholder="Add note text" />
 
                     <CategoryComponent Model="note" />
 
