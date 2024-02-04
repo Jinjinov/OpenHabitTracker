@@ -3,18 +3,18 @@
 Ididit.Google.Apis
 Ididit.LocalStorage
 https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
-
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
-label for open file dialog
+habit title: elapsed time
 
-when habit is done, uncheck all habit items
+task title: planned at
 
-textarea tabs
+remove *Edit.razor pages:
+	NO: display -> show details -> edit
+	YES: display -> show details & edit
+
 textarea autosize
-textarea highlight
-Note Markdown
 
 filter and sort: (save filter in settings)
 	filter by priority - multiple
@@ -51,9 +51,11 @@ filter and sort: (save filter in settings)
 
 ---------------------------------------------------------------------------------------------------
 
-remove *Edit.razor pages:
-	NO: display -> show details -> edit
-	YES: display -> show details & edit
+when habit is done, uncheck all habit items
+
+textarea tabs
+textarea highlight
+Note Markdown
 
 - common:
 	- Router

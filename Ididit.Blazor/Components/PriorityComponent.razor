@@ -7,15 +7,12 @@
 
 @if (PriorityService.Priorities is not null && Model is not null)
 {
-    <div class="input-group">
-        <span class="input-group-text">Priority</span>
-        <InputSelect class="form-select" @bind-Value="Model.Priority">
-            @foreach (Priority priority in Enum.GetValues<Priority>())
-            {
-                <option value="@priority">@AppData.GetPriorityTitle(priority)</option>
-            }
-        </InputSelect>
-    </div>
+    <InputSelect class="form-select flex-grow-0 w-auto" @bind-Value="Model.Priority">
+        @foreach (Priority priority in Enum.GetValues<Priority>())
+        {
+            <option value="@priority">@AppData.GetPriorityTitle(priority)</option>
+        }
+    </InputSelect>
 }
 
 @code {

@@ -15,14 +15,12 @@
     {
         <div class="bg-body-tertiary my-1 p-1">
             <div class="input-group">
+                <PriorityComponent Model="HabitService.EditHabit" />
+
                 <InputTextImmediate class="form-control" @bind-Value="HabitService.EditHabit.Title" placeholder="Add new habit" />
 
                 <button class="btn btn-outline-primary" @onclick="SaveHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.EditHabit.Title)"><i class="bi bi-floppy"></i></button>
             </div>
-
-            <CategoryComponent Model="HabitService.EditHabit" />
-
-            <PriorityComponent Model="HabitService.EditHabit" />
 
             <div class="input-group">
                 <label class="input-group-text" for="countInput">Repeat</label>
@@ -43,6 +41,8 @@
                 <label class="input-group-text" for="durationInput">Duration</label>
                 <InputDate class="form-control" id="durationInput" @bind-Value="DurationProxy" Type="InputDateType.Time" />
             </div>
+
+            <CategoryComponent Model="HabitService.EditHabit" />
         </div>
     }
 

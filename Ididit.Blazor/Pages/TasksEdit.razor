@@ -14,19 +14,19 @@
     {
         <div class="bg-body-tertiary my-1 p-1">
             <div class="input-group">
+                <PriorityComponent Model="TaskService.EditTask" />
+
                 <InputTextImmediate class="form-control" @bind-Value="TaskService.EditTask.Title" placeholder="Add new task" />
 
                 <button class="btn btn-outline-primary" @onclick="SaveTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
             </div>
 
-            <CategoryComponent Model="TaskService.EditTask" />
-
-            <PriorityComponent Model="TaskService.EditTask" />
-
             <div class="input-group">
                 <span class="input-group-text">Planned at</span>
                 <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.EditTask.PlannedAt" />
             </div>
+
+            <CategoryComponent Model="TaskService.EditTask" />
         </div>
     }
 
