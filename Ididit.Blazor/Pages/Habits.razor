@@ -64,8 +64,13 @@
                             .GroupBy(date => date.StartedAt.Date)
                             .ToDictionary(group => group.Key, group => group.Count());
 
+                        string[] days = { "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", };
+
                         <div>
-                            <div class="border d-inline-block" style="height: 50px; width: 50px">Mo</div><div class="border d-inline-block" style="height: 50px; width: 50px">Tu</div><div class="border d-inline-block" style="height: 50px; width: 50px">We</div><div class="border d-inline-block" style="height: 50px; width: 50px">Th</div><div class="border d-inline-block" style="height: 50px; width: 50px">Fr</div><div class="border d-inline-block" style="height: 50px; width: 50px">Sa</div><div class="border d-inline-block" style="height: 50px; width: 50px">Su</div>
+                            @foreach (string d in days)
+                            {
+                                <div class="border d-inline-block" style="height: 50px; width: 50px">@d</div>
+                            }
                         </div>
 
                         for (int week = 0; week < 6; week++)
@@ -83,18 +88,6 @@
                                     }
 
                                     day = day.AddDays(1);
-                                }
-                            </div>
-                        }
-
-                        foreach(TimeModel time in habit.TimesDone)
-                        {
-                            <div>
-                                <small>Started: @time.StartedAt</small>
-
-                                @if (time.CompletedAt is not null)
-                                {
-                                    <small> Completed: @time.CompletedAt</small>
                                 }
                             </div>
                         }
