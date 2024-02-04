@@ -38,11 +38,13 @@
 
 @if (!IsReadOnly && ItemService.NewItem is not null)
 {
-    <div class="input-group">
-        <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="Add new item" />
+    <form @onsubmit=AddNewItem>
+        <div class="input-group">
+            <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="Add new item" />
 
-        <button class="btn btn-outline-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
-    </div>
+            <button class="btn btn-outline-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
+        </div>
+    </form>
 }
 
 @code {
@@ -68,6 +70,14 @@
         {
             shouldFocus = false;
             await inputElement.Element.Value.FocusAsync();
+        }
+    }
+
+    async Task AddNewItem()
+    {
+        if (ItemService.NewItem is not null && !string.IsNullOrWhiteSpace(ItemService.NewItem.Title))
+        {
+            await ItemService.AddItem(Items);
         }
     }
 }

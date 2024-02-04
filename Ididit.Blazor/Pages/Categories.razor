@@ -12,11 +12,13 @@
 
     @if (CategoryService.NewCategory is not null)
     {
-        <div class="input-group">
-            <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="Add new category" />
+        <form @onsubmit=AddNewCategory>
+            <div class="input-group">
+                <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="Add new category" />
 
-            <button class="btn btn-outline-primary" @onclick="() => CategoryService.AddCategory()" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
-        </div>
+                <button class="btn btn-outline-primary" @onclick="() => CategoryService.AddCategory()" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
+            </div>
+        </form>
     }
 
     @if (CategoryService.Categories is null)
@@ -67,6 +69,14 @@
         {
             shouldFocus = false;
             await inputElement.Element.Value.FocusAsync();
+        }
+    }
+
+    async Task AddNewCategory()
+    {
+        if (CategoryService.NewCategory is not null && !string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title))
+        {
+            await CategoryService.AddCategory();
         }
     }
 }
