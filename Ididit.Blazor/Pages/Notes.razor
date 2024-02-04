@@ -10,6 +10,7 @@
 @inject NavigationManager NavigationManager
 @inject NoteService NoteService
 @inject AppData AppData
+@inject JsInterop JsInterop
 
 <PageTitle>Notes</PageTitle>
 
@@ -39,7 +40,7 @@
                         <button class="btn btn-outline-primary" @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
                     </div>
 
-                    <pre class="m-0">@note.Content</pre>
+                    <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="note.Content" placeholder="Add note text" />
 
                     <CategoryComponent Model="note" />
 
@@ -69,6 +70,14 @@
 
     [Parameter]
     public bool IsEmbedded { get; set; }
+
+    InputTextArea? _inputTextAreaReference;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_inputTextAreaReference?.Element is not null)
+            await JsInterop.HandleTabKey(_inputTextAreaReference.Element.Value);
+    }
 
     protected override async Task OnInitializedAsync()
     {

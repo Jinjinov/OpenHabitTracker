@@ -8,12 +8,9 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 title edit
 
-note text edit
-
 remove *Edit.razor pages:
 	NO: display -> show details -> edit
 	YES: display -> show details & edit
-	textarea autosize
 
 - Calendar
 	- Habits.razor

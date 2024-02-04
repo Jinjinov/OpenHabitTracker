@@ -22,7 +22,7 @@
                 <button class="btn btn-outline-primary" @onclick="SaveNote" disabled="@string.IsNullOrWhiteSpace(NoteService.EditNote.Title)"><i class="bi bi-floppy"></i></button>
             </div>
 
-            <InputTextArea @ref="_inputTextAreaReference" class="form-control" @bind-Value="NoteService.EditNote.Content" placeholder="Add note text" />
+            <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.EditNote.Content" placeholder="Add note text" />
 
             <CategoryComponent Model="NoteService.EditNote" />
         </div>
