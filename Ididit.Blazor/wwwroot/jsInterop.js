@@ -18,7 +18,43 @@ export function saveAsFile(filename, bytesBase64) {
     document.body.removeChild(link);
 }
 
+function calculateAutoHeight(e) {
+    if (e && e.target) {
+        e.target.style.height = 'auto';
+        e.target.style.height = this.scrollHeight + 'px';
+        e.target.style.overflowY = 'hidden';
+    }
+}
+
+export function recalculateAutoHeight(textarea) {
+    if (!textarea)
+        return;
+
+    // fire input to trigger autosize in case the text is long
+    if ("createEvent" in document) {
+        let event = document.createEvent("HTMLEvents");
+        event.initEvent("input", false, true);
+        textarea.dispatchEvent(event);
+    }
+    else {
+        textarea.fireEvent("oninput");
+    }
+}
+
 export function handleTabKey(textarea) {
+    if (textarea) {
+        textarea.oninput = calculateAutoHeight;
+
+        // fire input immediatelly to trigger autosize in case the text is long
+        if ("createEvent" in document) {
+            let event = document.createEvent("HTMLEvents");
+            event.initEvent("input", false, true);
+            textarea.dispatchEvent(event);
+        }
+        else {
+            textarea.fireEvent("oninput");
+        }
+    }
     if (textarea && !textarea.tabKeyHandlerAdded) {
         textarea.addEventListener('keydown', function (event) {
             if (event.key === 'Tab') {

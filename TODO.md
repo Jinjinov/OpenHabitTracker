@@ -54,6 +54,10 @@ filter and sort: (save filter in settings)
 ---------------------------------------------------------------------------------------------------
 
 when habit is done, uncheck all habit items
+when task is done, check all task items
+
+when all habit items are done, habit is done
+when all task items are done, task is done
 
 textarea tabs
 textarea highlight
