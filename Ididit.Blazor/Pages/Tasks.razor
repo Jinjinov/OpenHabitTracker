@@ -19,7 +19,7 @@
     <NavLink class="input-group text-decoration-none my-1 p-1" href="/tasks/add">
         <span class="input-group-text flex-grow-1">Add new task</span>
 
-        <span class="btn btn-primary"><i class="bi bi-plus-square"></i></span>
+        <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
     </NavLink>
 
     @if (TaskService.Tasks is null)
@@ -36,9 +36,9 @@
                     <div class="input-group">
                         <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
                         <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
-                        <NavLink class="btn btn-primary" href="@($"/tasks/{task.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
-                        <button class="btn btn-primary" @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
-                        <button class="btn btn-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
+                        <NavLink class="btn btn-outline-primary" href="@($"/tasks/{task.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
+                        <button class="btn btn-outline-primary" @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
+                        <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                     </div>
 
                     <ItemsComponent Items=task />
@@ -72,7 +72,7 @@
                     <div class="input-group">
                         <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
                         <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
-                        <button class="btn btn-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
+                        <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                     </div>
 
                     <ItemsComponent Items=task IsReadOnly=true />

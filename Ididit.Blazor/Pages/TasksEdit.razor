@@ -16,7 +16,7 @@
             <div class="input-group">
                 <InputTextImmediate class="form-control" @bind-Value="TaskService.EditTask.Title" placeholder="Add new task" />
 
-                <button class="btn btn-primary" @onclick="SaveTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" @onclick="SaveTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
             </div>
 
             <CategoryComponent Model="TaskService.EditTask" />

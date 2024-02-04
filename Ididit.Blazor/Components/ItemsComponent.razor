@@ -30,7 +30,7 @@
                 {
                     <span class="input-group-text flex-grow-1" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@item.Title</span>
                 }
-                <button class="btn btn-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
             </div>
         }
     }
@@ -41,7 +41,7 @@
     <div class="input-group">
         <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="Add new item" />
 
-        <button class="btn btn-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
+        <button class="btn btn-outline-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
     </div>
 }
 

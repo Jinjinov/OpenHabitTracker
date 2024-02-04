@@ -18,7 +18,7 @@
     <NavLink class="input-group text-decoration-none my-1 p-1" href="/habits/add">
         <span class="input-group-text flex-grow-1">Add new habit</span>
 
-        <span class="btn btn-primary"><i class="bi bi-plus-square"></i></span>
+        <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
     </NavLink>
 
     @if (HabitService.Habits is null)
@@ -35,9 +35,9 @@
                     <div class="input-group">
                         <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
                         <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
-                        <NavLink class="btn btn-primary" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
-                        <button class="btn btn-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
-                        <button class="btn btn-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                        <NavLink class="btn btn-outline-primary" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
+                        <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
+                        <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                     </div>
 
                     <ItemsComponent Items=habit />
@@ -88,7 +88,7 @@
                     <div class="input-group">
                         <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
                         <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
-                        <button class="btn btn-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                        <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                     </div>
 
                     <ItemsComponent Items=habit IsReadOnly=true />
