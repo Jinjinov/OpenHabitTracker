@@ -124,7 +124,11 @@
             if (Id == id)
                 Id = null;
             else
+            {
                 Id = id;
+                HabitService.SetSelectedHabit(Id);
+                await HabitService.LoadTimesDone(HabitService.SelectedHabit);
+            }
         }
         else
         {
