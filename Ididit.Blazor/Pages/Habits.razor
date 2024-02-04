@@ -57,25 +57,12 @@
 
                         DayOfWeek firstDayOfWeek = DayOfWeek.Monday;
                         DateTime currentDate = DateTime.Now;
-                        int daysInCurrentMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
-                        int daysInLastMonth = 0;
                         DateTime firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
-                        DateTime startOfWeek;
+                        DateTime day = firstDayOfMonth.AddDays((int)firstDayOfWeek - (int)firstDayOfMonth.DayOfWeek);
 
-                        if (firstDayOfMonth.DayOfWeek == firstDayOfWeek)
-                        {
-                            startOfWeek = firstDayOfMonth;
-                        }
-                        else
-                        {
-                            startOfWeek = firstDayOfMonth.AddDays((int)firstDayOfWeek - (int)firstDayOfMonth.DayOfWeek);
-                            daysInLastMonth = DateTime.DaysInMonth(startOfWeek.Year, startOfWeek.Month);
-                        }
-
-                        int day = startOfWeek.Day;
-
-                        int month = 0;
-                        int[] daysInMonth = { daysInLastMonth, daysInCurrentMonth };
+                        Dictionary<DateTime, int> tasksPerDay = habit.TimesDone
+                            .GroupBy(date => date.StartedAt.Date)
+                            .ToDictionary(group => group.Key, group => group.Count());
 
                         <div>
                             <div class="border d-inline-block" style="height: 50px; width: 50px">Mo</div><div class="border d-inline-block" style="height: 50px; width: 50px">Tu</div><div class="border d-inline-block" style="height: 50px; width: 50px">We</div><div class="border d-inline-block" style="height: 50px; width: 50px">Th</div><div class="border d-inline-block" style="height: 50px; width: 50px">Fr</div><div class="border d-inline-block" style="height: 50px; width: 50px">Sa</div><div class="border d-inline-block" style="height: 50px; width: 50px">Su</div>
@@ -86,13 +73,16 @@
                             <div>
                                 @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
                                 {
-                                    <div class="border d-inline-block" style="height: 50px; width: 50px">@day</div>
-                                    ++day;
-                                    if (day > daysInMonth[month])
+                                    if (tasksPerDay.TryGetValue(day, out int count))
                                     {
-                                        day = 1;
-                                        if(month == 0) ++month;
+                                        <div class="border d-inline-block" style="height: 50px; width: 50px">@day.Day - @count</div>
                                     }
+                                    else
+                                    {
+                                        <div class="border d-inline-block" style="height: 50px; width: 50px">@day.Day</div>
+                                    }
+
+                                    day = day.AddDays(1);
                                 }
                             </div>
                         }
