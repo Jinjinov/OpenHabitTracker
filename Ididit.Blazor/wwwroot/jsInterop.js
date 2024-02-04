@@ -54,6 +54,8 @@ export function handleTabKey(textarea) {
         else {
             textarea.fireEvent("oninput");
         }
+
+        textarea.rows = 2;
     }
     if (textarea && !textarea.tabKeyHandlerAdded) {
         textarea.addEventListener('keydown', function (event) {
