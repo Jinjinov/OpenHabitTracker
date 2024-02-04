@@ -6,6 +6,12 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
+priority edit
+category edit
+planned at edit
+repeat edit
+duration edit
+
 remove *Edit.razor pages:
 	NO: display -> show details -> edit
 	YES: display -> show details & edit

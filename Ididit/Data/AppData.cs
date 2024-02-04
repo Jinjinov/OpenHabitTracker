@@ -24,6 +24,9 @@ public class AppData(IDataAccess dataAccess)
 
     public string GetPriorityTitle(Priority priority)
     {
+        if (priority == Priority.None)
+            return " ";
+
         return Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
     }
 
