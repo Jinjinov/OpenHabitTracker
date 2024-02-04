@@ -56,7 +56,7 @@
                         <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
                     </div>
 
-                    <pre class="m-0">@note.Content</pre>
+                    <div class="form-control" style="white-space: pre-wrap">@note.Content</div>
                 }
             </div>
         }

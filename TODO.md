@@ -54,8 +54,12 @@ when all habit items are done, habit is done
 when all task items are done, task is done
 
 textarea tabs
+
 textarea highlight
+highlight search results
+
 Note Markdown
+make regular markdown text look the same as in textarea
 
 - common:
 	- Router
