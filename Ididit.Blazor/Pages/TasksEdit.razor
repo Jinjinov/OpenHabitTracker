@@ -23,7 +23,10 @@
 
             <PriorityComponent Model="TaskService.EditTask" />
 
-            <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.EditTask.PlannedAt" />
+            <div class="input-group">
+                <span class="input-group-text">Date</span>
+                <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.EditTask.PlannedAt" />
+            </div>
         </div>
     }
 

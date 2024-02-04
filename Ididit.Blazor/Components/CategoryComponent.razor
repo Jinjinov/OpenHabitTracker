@@ -5,13 +5,16 @@
 
 @if (CategoryService.Categories is not null && Model is not null)
 {
-    <InputSelect class="form-select" @bind-Value="Model.CategoryId">
-        <option value="0" disabled selected hidden>Select a category</option>
-        @foreach (CategoryModel category in CategoryService.Categories)
-        {
-            <option value="@category.Id">@category.Title</option>
-        }
-    </InputSelect>
+    <div class="input-group">
+        <span class="input-group-text">Category</span>
+        <InputSelect class="form-select" @bind-Value="Model.CategoryId">
+            <option value="0" disabled selected hidden>None</option>
+            @foreach (CategoryModel category in CategoryService.Categories)
+            {
+                <option value="@category.Id">@category.Title</option>
+            }
+        </InputSelect>
+    </div>
 }
 
 @code {

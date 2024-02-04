@@ -39,7 +39,7 @@
                         <button class="btn btn-primary" @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
                     </div>
 
-                    <pre>@note.Content</pre>
+                    <pre class="m-0">@note.Content</pre>
 
                     <div>
                         <small>Category: @AppData.GetCategoryTitle(note.CategoryId)</small>
@@ -57,7 +57,7 @@
                         <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
                     </div>
 
-                    <pre>@note.Content</pre>
+                    <pre class="m-0">@note.Content</pre>
                 }
             </div>
         }
