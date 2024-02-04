@@ -8,9 +8,6 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 title edit
 
-task planned at edit
-habit repeat edit
-habit duration edit
 note text edit
 
 remove *Edit.razor pages:

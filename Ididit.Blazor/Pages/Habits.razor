@@ -64,14 +64,24 @@
                         }
                     }
 
-                    <div>
-                        <small>Repeat @habit.RepeatCount times</small>
-                        <small>every @habit.RepeatInterval</small>
-                        <small>@habit.RepeatPeriod</small>
+                    <div class="input-group">
+                        <label class="input-group-text" for="countInput">Repeat</label>
+                        <InputNumber class="form-control" id="countInput" @bind-Value="habit.RepeatCount" />
+
+                        <label class="input-group-text" for="intervalInput">times every</label>
+                        <InputNumber class="form-control" id="intervalInput" @bind-Value="habit.RepeatInterval" />
+
+                        <InputSelect class="form-select" @bind-Value="habit.RepeatPeriod">
+                            @foreach (Period period in Enum.GetValues<Period>())
+                            {
+                                <option value="@period">@period</option>
+                            }
+                        </InputSelect>
                     </div>
 
-                    <div>
-                        <small>Duration: @habit.Duration</small>
+                    <div class="input-group">
+                        <label class="input-group-text" for="durationInput">Duration</label>
+                        <InputDate class="form-control" id="durationInput" @bind-Value="DurationProxy" Type="InputDateType.Time" />
                     </div>
 
                     <CategoryComponent Model="habit" />
@@ -107,6 +117,16 @@
 
     [Parameter]
     public bool IsEmbedded { get; set; }
+
+    TimeOnly DurationProxy
+    {
+        get => HabitService.SelectedHabit?.Duration ?? TimeOnly.MinValue;
+        set
+        {
+            if (HabitService.SelectedHabit is not null)
+                HabitService.SelectedHabit.Duration = value == TimeOnly.MinValue ? null : value;
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {

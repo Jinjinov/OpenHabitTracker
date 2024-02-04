@@ -43,10 +43,10 @@
 
                     <ItemsComponent Items=task />
 
-                    if (task.PlannedAt is not null)
-                    {
-                        <small>Planned at: @task.PlannedAt</small>
-                    }
+                    <div class="input-group">
+                        <span class="input-group-text">Planned at</span>
+                        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="task.PlannedAt" />
+                    </div>
 
                     if (task.StartedAt is not null)
                     {
