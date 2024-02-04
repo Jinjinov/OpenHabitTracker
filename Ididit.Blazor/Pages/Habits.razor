@@ -44,12 +44,16 @@
 
                     if (habit.LastTimeDoneAt is not null)
                     {
-                        <small>Last time done: @habit.LastTimeDoneAt</small>
+                        <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
+                            <small>Last time done: @habit.LastTimeDoneAt</small>
+                        </div>
                     }
 
                     if (habit.TimesDone is not null)
                     {
-                        <div>Times done: @habit.TimesDone.Count</div>
+                        <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
+                            <small>Times done: @habit.TimesDone.Count</small>
+                        </div>
 
                         foreach(TimeModel time in habit.TimesDone)
                         {
@@ -86,7 +90,7 @@
 
                     <CategoryComponent Model="habit" />
 
-                    <div>
+                    <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
                         <small>Created: @habit.CreatedAt</small>
                         <small>Updated: @habit.UpdatedAt</small>
                     </div>
