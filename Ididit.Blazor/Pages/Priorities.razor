@@ -18,14 +18,14 @@
     {
         foreach (PriorityModel priority in PriorityService.Priorities)
         {
-            <div>
+            <div class="input-group">
                 @if (priority == PriorityService.SelectedPriority)
                 {
                     <InputText class="form-control" @ref="inputElement" Value="@priority.Title" ValueExpression="() => priority.Title" ValueChanged="(string title) => PriorityService.UpdatePriority(title)" @onfocusout="(args) => PriorityService.SelectedPriority = null" />
                 }
                 else
                 {
-                    <span @onclick="() => { PriorityService.SelectedPriority = priority; shouldFocus = true; }">@priority.Title</span>
+                    <span class="input-group-text flex-grow-1" @onclick="() => { PriorityService.SelectedPriority = priority; shouldFocus = true; }">@priority.Title</span>
                 }
             </div>
         }
