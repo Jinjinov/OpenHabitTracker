@@ -3,24 +3,17 @@
 
 @inject ItemService ItemService
 
-@if (!IsReadOnly && ItemService.NewItem is not null)
-{
-    <div class="input-group">
-        <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="Add new item" />
-
-        <button class="btn btn-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
-    </div>
-}
-
 @if (Items?.Items is not null)
 {
     foreach (ItemModel item in Items.Items)
     {
         @if (IsReadOnly)
         {
-            <div class="form-check">
-                <InputCheckbox id="@item.Id" class="form-check-input" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
-                <label for="@item.Id" class="form-check-label">@item.Title</label>
+            <div class="input-group">
+                <div class="input-group-text">
+                    <InputCheckbox id="@item.Id" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
+                </div>
+                <label for="@item.Id" class="input-group-text flex-grow-1">@item.Title</label>
             </div>
         }
         else
@@ -41,6 +34,15 @@
             </div>
         }
     }
+}
+
+@if (!IsReadOnly && ItemService.NewItem is not null)
+{
+    <div class="input-group">
+        <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="Add new item" />
+
+        <button class="btn btn-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
+    </div>
 }
 
 @code {
