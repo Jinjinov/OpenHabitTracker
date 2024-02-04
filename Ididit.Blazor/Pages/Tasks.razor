@@ -58,9 +58,7 @@
                         <small>CompletedAt: @task.CompletedAt</small>
                     }
 
-                    <div>
-                        <small>Category: @AppData.GetCategoryTitle(task.CategoryId)</small>
-                    </div>
+                    <CategoryComponent Model="task" />
 
                     <div>
                         <small>Created: @task.CreatedAt</small>

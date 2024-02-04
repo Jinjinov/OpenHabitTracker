@@ -74,9 +74,7 @@
                         <small>Duration: @habit.Duration</small>
                     </div>
 
-                    <div>
-                        <small>Category: @AppData.GetCategoryTitle(habit.CategoryId)</small>
-                    </div>
+                    <CategoryComponent Model="habit" />
 
                     <div>
                         <small>Created: @habit.CreatedAt</small>

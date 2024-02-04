@@ -6,9 +6,6 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
-priority edit
-category edit
-
 title edit
 
 task planned at edit

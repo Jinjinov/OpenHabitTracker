@@ -41,9 +41,7 @@
 
                     <pre class="m-0">@note.Content</pre>
 
-                    <div>
-                        <small>Category: @AppData.GetCategoryTitle(note.CategoryId)</small>
-                    </div>
+                    <CategoryComponent Model="note" />
 
                     <div>
                         <small>Created: @note.CreatedAt</small>
