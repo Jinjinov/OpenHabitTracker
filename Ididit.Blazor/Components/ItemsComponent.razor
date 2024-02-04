@@ -9,16 +9,16 @@
     {
         @if (IsReadOnly)
         {
-            <div class="input-group">
+            <div class="input-group flex-nowrap">
                 <div class="input-group-text">
                     <InputCheckbox id="@item.Id" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
                 </div>
-                <label for="@item.Id" class="input-group-text flex-grow-1">@item.Title</label>
+                <label for="@item.Id" class="input-group-text flex-grow-1 text-wrap">@item.Title</label>
             </div>
         }
         else
         {
-            <div class="input-group">
+            <div class="input-group flex-nowrap">
                 <div class="input-group-text">
                     <InputCheckbox id="@item.Id" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
                 </div>
@@ -28,7 +28,7 @@
                 }
                 else
                 {
-                    <span class="input-group-text flex-grow-1" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@item.Title</span>
+                    <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@item.Title</span>
                 }
                 <button class="btn btn-outline-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
             </div>
