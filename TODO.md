@@ -8,25 +8,18 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 priority edit
 category edit
-planned at edit
-repeat edit
-duration edit
+
+title edit
+
+task planned at edit
+habit repeat edit
+habit duration edit
+note text edit
 
 remove *Edit.razor pages:
 	NO: display -> show details -> edit
 	YES: display -> show details & edit
-
-textarea autosize
-
-filter and sort: (save filter in settings)
-	filter by priority - multiple
-	sort by priority
-	filter by category - one
-	sort by category
-	filter by RepeatPeriod - multiple
-	sort by RepeatPeriod
-	filter by LastTimeDoneAt / elapsed time - range / relative range (to the interval)
-	sort by LastTimeDoneAt / elapsed time
+	textarea autosize
 
 - Calendar
 	- Habits.razor
@@ -42,6 +35,16 @@ filter and sort: (save filter in settings)
 	- this month DaysInMonth
 	- next month until sunday - until max 14.
 	- each day is a toggle button
+
+filter and sort: (save filter in settings)
+	filter by priority - multiple
+	sort by priority
+	filter by category - one
+	sort by category
+	filter by RepeatPeriod - multiple
+	sort by RepeatPeriod
+	filter by LastTimeDoneAt / elapsed time - range / relative range (to the interval)
+	sort by LastTimeDoneAt / elapsed time
 
 - host 24/7 on Raspberry Pi
 	valid LAN IP

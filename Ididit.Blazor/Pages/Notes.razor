@@ -33,7 +33,7 @@
                 @if (note.Id == Id)
                 {
                     <div class="input-group">
-                        <span class="input-group-text">@AppData.GetPriorityTitle(note.Priority)</span>
+                        <PriorityComponent Model="note" />
                         <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
                         <NavLink class="btn btn-outline-primary" href="@($"/notes/{note.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                         <button class="btn btn-outline-primary" @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>

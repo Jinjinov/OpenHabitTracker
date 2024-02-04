@@ -33,7 +33,7 @@
                 @if (habit.Id == Id)
                 {
                     <div class="input-group">
-                        <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
+                        <PriorityComponent Model="habit" />
                         <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
                         <NavLink class="btn btn-outline-primary" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                         <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>

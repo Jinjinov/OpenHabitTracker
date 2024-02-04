@@ -34,7 +34,7 @@
                 @if (task.Id == Id)
                 {
                     <div class="input-group">
-                        <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
+                        <PriorityComponent Model="task" />
                         <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
                         <NavLink class="btn btn-outline-primary" href="@($"/tasks/{task.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                         <button class="btn btn-outline-primary" @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
