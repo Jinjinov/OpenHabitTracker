@@ -68,10 +68,10 @@
 
                         <div class="input-group-text">
                             <div class="mx-auto">
-                                <div>
+                                <div class="bg-body">
                                     @foreach (string d in days)
                                     {
-                                        <div class="border d-inline-block" style="height: 50px; width: 50px">@d</div>
+                                        <div class="border d-inline-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@d</div>
                                     }
                                 </div>
 
@@ -82,7 +82,7 @@
                                         {
                                             if (tasksPerDay.TryGetValue(day, out int count))
                                             {
-                                                <div class="border d-inline-block" style="height: 50px; width: 50px">@day.Day - @count</div>
+                                                <div class="border d-inline-block bg-success" style="height: 50px; width: 50px">@day.Day - @count</div>
                                             }
                                             else
                                             {
