@@ -7,10 +7,8 @@ using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
 ! title edit
-
-bool editTitle
-bool addNew
-
+	bool editTitle
+	bool addNew
 show Add New Note directly on top of the list
 show Add New Task directly on top of the list
 show Add New Habit directly on top of the list
@@ -18,6 +16,11 @@ show Add New Habit directly on top of the list
 !!! calendar in 1 row
 
 ! calendar in 7x7 grid
+
+selected day:
+	show all (list)
+	add
+	remove
 
 - Calendar
 	- 7 row, one for each day of the week

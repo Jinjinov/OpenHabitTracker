@@ -66,31 +66,35 @@
 
                         string[] days = { "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", };
 
-                        <div>
-                            @foreach (string d in days)
-                            {
-                                <div class="border d-inline-block" style="height: 50px; width: 50px">@d</div>
-                            }
-                        </div>
+                        <div class="input-group-text">
+                            <div class="mx-auto">
+                                <div>
+                                    @foreach (string d in days)
+                                    {
+                                        <div class="border d-inline-block" style="height: 50px; width: 50px">@d</div>
+                                    }
+                                </div>
 
-                        for (int week = 0; week < 6; week++)
-                        {
-                            <div>
-                                @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
+                                @for (int week = 0; week < 6; week++)
                                 {
-                                    if (tasksPerDay.TryGetValue(day, out int count))
-                                    {
-                                        <div class="border d-inline-block" style="height: 50px; width: 50px">@day.Day - @count</div>
-                                    }
-                                    else
-                                    {
-                                        <div class="border d-inline-block" style="height: 50px; width: 50px">@day.Day</div>
-                                    }
+                                    <div>
+                                        @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
+                                        {
+                                            if (tasksPerDay.TryGetValue(day, out int count))
+                                            {
+                                                <div class="border d-inline-block" style="height: 50px; width: 50px">@day.Day - @count</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="border d-inline-block" style="height: 50px; width: 50px">@day.Day</div>
+                                            }
 
-                                    day = day.AddDays(1);
+                                            day = day.AddDays(1);
+                                        }
+                                    </div>
                                 }
                             </div>
-                        }
+                        </div>
                     }
 
                     <div class="input-group">
