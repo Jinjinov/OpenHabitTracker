@@ -72,6 +72,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     }
     public async Task AddTime(TimeEntity time)
     {
+        time.Id = 1 + await _indexedDb.GetMaxKey<long, TimeEntity>();
         await _indexedDb.AddItems(new List<TimeEntity> { time });
     }
     public async Task AddItem(ItemEntity item)
@@ -124,6 +125,11 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     }
     public async Task AddTimes(IReadOnlyCollection<TimeEntity> times)
     {
+        long maxKey = await _indexedDb.GetMaxKey<long, TimeEntity>();
+        foreach (TimeEntity time in times)
+        {
+            time.Id = ++maxKey;
+        }
         await _indexedDb.AddItems(times.ToList());
     }
     public async Task AddItems(IReadOnlyCollection<ItemEntity> items)
@@ -214,9 +220,9 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     {
         return await _indexedDb.GetByKey<long, TaskEntity>(id);
     }
-    public async Task<TimeEntity?> GetTime(DateTime time)
+    public async Task<TimeEntity?> GetTime(long id)
     {
-        return await _indexedDb.GetByKey<DateTime, TimeEntity>(time);
+        return await _indexedDb.GetByKey<long, TimeEntity>(id);
     }
     public async Task<ItemEntity?> GetItem(long id)
     {
@@ -283,9 +289,9 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     {
         await _indexedDb.DeleteByKey<long, TaskEntity>(id);
     }
-    public async Task RemoveTime(DateTime time)
+    public async Task RemoveTime(long id)
     {
-        await _indexedDb.DeleteByKey<DateTime, TimeEntity>(time);
+        await _indexedDb.DeleteByKey<long, TimeEntity>(id);
     }
     public async Task RemoveItem(long id)
     {

@@ -8,17 +8,12 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 ! title edit
 
-remove *Edit.razor pages:
-	NO: display -> show details -> edit
-	YES: display -> show details & edit
+bool editTitle
+bool addNew
 
 show Add New Note directly on top of the list
 show Add New Task directly on top of the list
 show Add New Habit directly on top of the list
-
-! TimeModel / TimeEntity - internal long Id { get; set; }
-
-fix DateTime.Now / DateTime.UtcNow
 
 !!! calendar in 1 row
 
@@ -44,6 +39,8 @@ search / filter / sort: (save filter in settings)
 	sort by RepeatPeriod
 	filter by LastTimeDoneAt / elapsed time - range / relative range (to the interval)
 	sort by LastTimeDoneAt / elapsed time
+
+fix DateTime.Now / DateTime.UtcNow
 
 - host 24/7 on Raspberry Pi
 	valid LAN IP

@@ -38,6 +38,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
             IReadOnlyList<TimeEntity> timesDone = await _dataAccess.GetTimes(habit.Id);
             habit.TimesDone = timesDone.Select(t => new TimeModel
             {
+                Id = t.Id,
                 HabitId = t.HabitId,
                 StartedAt = t.StartedAt,
                 CompletedAt = t.CompletedAt
@@ -91,11 +92,13 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         if (habit.TimesDone.LastOrDefault() is TimeModel time && time.CompletedAt is null)
             return;
 
-        habit.TimesDone.Add(new TimeModel
+        TimeModel timeModel = new TimeModel
         {
             HabitId = habit.Id,
             StartedAt = utcNow
-        });
+        };
+
+        habit.TimesDone.Add(timeModel);
 
         TimeEntity timeEntity = new()
         {
@@ -104,6 +107,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         };
 
         await _dataAccess.AddTime(timeEntity);
+
+        timeModel.Id = timeEntity.Id;
     }
 
     public async Task MarkAsDone(HabitModel habit)
@@ -121,7 +126,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         {
             time.CompletedAt = utcNow;
 
-            if (await _dataAccess.GetTime(time.StartedAt) is TimeEntity timeEntity)
+            if (await _dataAccess.GetTime(time.Id) is TimeEntity timeEntity)
             {
                 timeEntity.CompletedAt = utcNow;
                 await _dataAccess.UpdateTime(timeEntity);
@@ -129,12 +134,14 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         }
         else
         {
-            habit.TimesDone.Add(new TimeModel
+            TimeModel timeModel = new TimeModel
             {
                 HabitId = habit.Id,
                 StartedAt = utcNow,
                 CompletedAt = utcNow
-            });
+            };
+
+            habit.TimesDone.Add(timeModel);
 
             TimeEntity timeEntity = new()
             {
@@ -144,6 +151,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
             };
 
             await _dataAccess.AddTime(timeEntity);
+
+            timeModel.Id = timeEntity.Id;
         }
 
         if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)

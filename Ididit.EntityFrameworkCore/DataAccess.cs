@@ -152,9 +152,9 @@ public class DataAccess : IDataAccess
     {
         return await _dataContext.Tasks.FindAsync(id);
     }
-    public async Task<TimeEntity?> GetTime(DateTime time)
+    public async Task<TimeEntity?> GetTime(long id)
     {
-        return await _dataContext.Times.FindAsync(time);
+        return await _dataContext.Times.FindAsync(id);
     }
     public async Task<ItemEntity?> GetItem(long id)
     {
@@ -232,9 +232,9 @@ public class DataAccess : IDataAccess
         _dataContext.Remove(new TaskEntity { Id = id });
         await _dataContext.SaveChangesAsync();
     }
-    public async Task RemoveTime(DateTime time)
+    public async Task RemoveTime(long id)
     {
-        _dataContext.Remove(new TimeEntity { StartedAt = time });
+        _dataContext.Remove(new TimeEntity { Id = id });
         await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveItem(long id)

@@ -137,6 +137,7 @@ public class AppData(IDataAccess dataAccess)
             IReadOnlyList<TimeEntity> categories = await _dataAccess.GetTimes();
             Times = categories.Select(c => new TimeModel
             {
+                Id = c.Id,
                 HabitId = c.HabitId,
                 StartedAt = c.StartedAt,
                 CompletedAt = c.CompletedAt,

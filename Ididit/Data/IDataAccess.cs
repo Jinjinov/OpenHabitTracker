@@ -36,7 +36,7 @@ public interface IDataAccess
     Task<HabitEntity?> GetHabit(long id);
     Task<NoteEntity?> GetNote(long id);
     Task<TaskEntity?> GetTask(long id);
-    Task<TimeEntity?> GetTime(DateTime time);
+    Task<TimeEntity?> GetTime(long id);
     Task<ItemEntity?> GetItem(long id);
     Task<CategoryEntity?> GetCategory(long id);
     Task<PriorityEntity?> GetPriority(long id);
@@ -54,7 +54,7 @@ public interface IDataAccess
     Task RemoveHabit(long id);
     Task RemoveNote(long id);
     Task RemoveTask(long id);
-    Task RemoveTime(DateTime time);
+    Task RemoveTime(long id);
     Task RemoveItem(long id);
     Task RemoveCategory(long id);
     Task RemovePriority(long id);

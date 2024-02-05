@@ -19,7 +19,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         modelBuilder.Entity<Entity>().HasIndex(x => x.CategoryId);
 
-        modelBuilder.Entity<TimeEntity>().HasKey(x => x.StartedAt);
         modelBuilder.Entity<TimeEntity>().HasIndex(x => x.HabitId);
 
         modelBuilder.Entity<ItemEntity>().HasIndex(x => x.ParentId);
