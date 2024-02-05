@@ -177,6 +177,8 @@ public class AppData(IDataAccess dataAccess)
     {
         if (Priorities is null)
         {
+            Priorities = []; // TODO: add bool _isInitializing, remove this line
+
             IReadOnlyList<PriorityEntity> priorities = await _dataAccess.GetPriorities();
 
             if (priorities.Count == 0)
