@@ -12,10 +12,19 @@ remove *Edit.razor pages:
 	NO: display -> show details -> edit
 	YES: display -> show details & edit
 
+show Add New Note directly on top of the list
+show Add New Task directly on top of the list
+show Add New Habit directly on top of the list
+
+TimeModel / TimeEntity - internal long Id { get; set; }
+
+fix DateTime.Now / DateTime.UtcNow
+
+calendar in 1 row
+
+calendar in 7x7 grid
+
 - Calendar
-	- Habits.razor
-	- DateTime.Now
-	- List<TimeModel>? TimesDone
 	- 7 row, one for each day of the week
 	- 6 columns = one month - 4 full weeks = 28 - another 0/1/2/3 days can take max 2 weeks more
 	- find the last monday of the previous month
@@ -25,9 +34,8 @@ remove *Edit.razor pages:
 	- previous month DaysInMonth
 	- this month DaysInMonth
 	- next month until sunday - until max 14.
-	- each day is a toggle button
 
-filter and sort: (save filter in settings)
+search / filter / sort: (save filter in settings)
 	filter by priority - multiple
 	sort by priority
 	filter by category - one
