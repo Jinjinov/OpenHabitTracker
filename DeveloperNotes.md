@@ -70,3 +70,14 @@ SectionContent				https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetc
 SectionOutlet				https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.sections.sectionoutlet?view=aspnetcore-8.0
 ValidationSummary			https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.forms.validationsummary?view=aspnetcore-8.0
 Virtualize					https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.web.virtualization.virtualize-1?view=aspnetcore-8.0
+
+- Calendar
+	- 7 row, one for each day of the week
+	- 6 columns = one month - 4 full weeks = 28 - another 0/1/2/3 days can take max 2 weeks more
+	- find the last monday of the previous month
+		DateTime currentDate = DateTime.Now;
+		DateTime lastDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+		DateTime lastMonday = lastDayOfMonth.AddDays((int)DayOfWeek.Monday - (int)lastDayOfMonth.DayOfWeek);
+	- previous month DaysInMonth
+	- this month DaysInMonth
+	- next month until sunday - until max 14.

@@ -15,23 +15,10 @@ show Add New Habit directly on top of the list
 
 !!! calendar in 1 row
 
-! calendar in 7x7 grid
-
 selected day:
 	show all (list)
 	add
 	remove
-
-- Calendar
-	- 7 row, one for each day of the week
-	- 6 columns = one month - 4 full weeks = 28 - another 0/1/2/3 days can take max 2 weeks more
-	- find the last monday of the previous month
-		DateTime currentDate = DateTime.Now;
-		DateTime lastDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-		DateTime lastMonday = lastDayOfMonth.AddDays((int)DayOfWeek.Monday - (int)lastDayOfMonth.DayOfWeek);
-	- previous month DaysInMonth
-	- this month DaysInMonth
-	- next month until sunday - until max 14.
 
 search / filter / sort: (save filter in settings)
 	filter by priority - multiple

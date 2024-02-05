@@ -134,25 +134,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         }
         else
         {
-            TimeModel timeModel = new TimeModel
-            {
-                HabitId = habit.Id,
-                StartedAt = utcNow,
-                CompletedAt = utcNow
-            };
-
-            habit.TimesDone.Add(timeModel);
-
-            TimeEntity timeEntity = new()
-            {
-                HabitId = habit.Id,
-                StartedAt = utcNow,
-                CompletedAt = utcNow
-            };
-
-            await _dataAccess.AddTime(timeEntity);
-
-            timeModel.Id = timeEntity.Id;
+            await AddTimeDone(habit, utcNow);
         }
 
         if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
@@ -160,6 +142,31 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
             habitEntity.LastTimeDoneAt = utcNow;
             await _dataAccess.UpdateHabit(habitEntity);
         }
+    }
+
+    public async Task AddTimeDone(HabitModel habit, DateTime utcNow)
+    {
+        habit.TimesDone ??= [];
+
+        TimeModel timeModel = new()
+        {
+            HabitId = habit.Id,
+            StartedAt = utcNow,
+            CompletedAt = utcNow
+        };
+
+        habit.TimesDone.Add(timeModel);
+
+        TimeEntity timeEntity = new()
+        {
+            HabitId = habit.Id,
+            StartedAt = utcNow,
+            CompletedAt = utcNow
+        };
+
+        await _dataAccess.AddTime(timeEntity);
+
+        timeModel.Id = timeEntity.Id;
     }
 
     public async Task DeleteHabit(HabitModel habit)

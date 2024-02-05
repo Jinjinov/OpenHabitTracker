@@ -82,11 +82,15 @@
                                         {
                                             if (tasksPerDay.TryGetValue(day, out int count))
                                             {
-                                                <div class="border d-inline-block bg-success" style="height: 50px; width: 50px">@day.Day - @count</div>
+                                                <div class="border d-inline-flex bg-success" 
+                                                    style="align-items: center; justify-content: center; height: 50px; width: 50px"
+                                                    @onclick="() => HabitService.AddTimeDone(habit, day)">@day.Day - @count</div>
                                             }
                                             else
                                             {
-                                                <div class="border d-inline-block" style="height: 50px; width: 50px">@day.Day</div>
+                                                <div class="border d-inline-flex" 
+                                                    style="align-items: center; justify-content: center; height: 50px; width: 50px"
+                                                    @onclick="() => HabitService.AddTimeDone(habit, day)">@day.Day</div>
                                             }
 
                                             day = day.AddDays(1);
