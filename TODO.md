@@ -16,6 +16,10 @@ show Add New Note directly on top of the list
 show Add New Task directly on top of the list
 show Add New Habit directly on top of the list
 
+calendar 7x7
+	display month
+	previous / next month
+
 !!! calendar in 1 row
 
 search / filter / sort: (save filter in settings)
