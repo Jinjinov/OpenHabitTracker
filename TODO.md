@@ -6,17 +6,25 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
-!!! fix duplicated HTML elements - use C# variables instead of if/else !!!
+always set CreatedAt
+
+remove column left, right margin / padding
+
+consistent top margin on all pages
+
+fix priority right padding
+
+fix duplicated HTML elements - use C# variables instead of if/else
 	find every "else" in .razor files
 
-! title edit
+title edit
 	bool editTitle
 	bool addNew
 show Add New Note directly on top of the list
 show Add New Task directly on top of the list
 show Add New Habit directly on top of the list
 
-!!! calendar in 1 row
+calendar in 1 row
 
 search / filter / sort: (save filter in settings)
 	filter by priority - multiple

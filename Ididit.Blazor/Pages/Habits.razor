@@ -68,30 +68,30 @@
 
                         <div class="input-group-text">
                             <div class="mx-auto">
-                                <div class="bg-body">
+                                <div class="bg-body d-flex">
                                     @foreach (string d in days)
                                     {
-                                        <div class="border d-inline-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@d</div>
+                                        <div class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@d</div>
                                     }
                                 </div>
 
                                 @for (int week = 0; week < 6; week++)
                                 {
-                                    <div>
+                                    <div class="d-flex">
                                         @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
                                         {
                                             if (tasksPerDay.TryGetValue(day, out int count))
                                             {
                                                 DateTime dateTime = day; // if not captured locally, day becomes the last value used in the loop
-                                                <div class="border d-inline-flex bg-success" 
-                                                    style="align-items: center; justify-content: center; height: 50px; width: 50px"
+                                                <div class="border d-flex bg-success" 
+                                                    style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
                                                     @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@day.Day<small>(@count)</small></div>
                                             }
                                             else
                                             {
                                                 DateTime dateTime = day; // if not captured locally, day becomes the last value used in the loop
-                                                <div class="border d-inline-flex" 
-                                                    style="align-items: center; justify-content: center; height: 50px; width: 50px"
+                                                <div class="border d-flex" 
+                                                    style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal;"
                                                     @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@day.Day</div>
                                             }
 
