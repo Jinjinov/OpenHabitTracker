@@ -82,15 +82,17 @@
                                         {
                                             if (tasksPerDay.TryGetValue(day, out int count))
                                             {
+                                                DateTime dateTime = day; // if not captured locally, day becomes the last value used in the loop
                                                 <div class="border d-inline-flex bg-success" 
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px"
-                                                    @onclick="() => HabitService.AddTimeDone(habit, day)">@day.Day - @count</div>
+                                                    @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@day.Day - @count</div>
                                             }
                                             else
                                             {
+                                                DateTime dateTime = day; // if not captured locally, day becomes the last value used in the loop
                                                 <div class="border d-inline-flex" 
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px"
-                                                    @onclick="() => HabitService.AddTimeDone(habit, day)">@day.Day</div>
+                                                    @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@day.Day</div>
                                             }
 
                                             day = day.AddDays(1);
