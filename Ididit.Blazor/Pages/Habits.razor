@@ -32,9 +32,9 @@
             <div class="bg-body-tertiary my-1 p-1">
                 @if (habit.Id == Id)
                 {
-                    <div class="input-group">
+                    <div class="input-group flex-nowrap">
                         <PriorityComponent Model="habit" />
-                        <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
+                        <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
                         <NavLink class="btn btn-outline-primary" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                         <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
@@ -122,9 +122,9 @@
                 }
                 else
                 {
-                    <div class="input-group">
+                    <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
-                        <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
+                        <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
                         @if (habit.LastTimeDoneAt is not null)
                         {
                             <small class="input-group-text">@(habit.LastTimeDoneAt.Value.Date == DateTime.Now.Date ? habit.LastTimeDoneAt.Value.ToShortTimeString() : habit.LastTimeDoneAt.Value.ToShortDateString())</small>

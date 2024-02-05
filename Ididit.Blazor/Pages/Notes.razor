@@ -33,9 +33,9 @@
             <div class="bg-body-tertiary my-1 p-1">
                 @if (note.Id == Id)
                 {
-                    <div class="input-group">
+                    <div class="input-group flex-nowrap">
                         <PriorityComponent Model="note" />
-                        <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
+                        <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
                         <NavLink class="btn btn-outline-primary" href="@($"/notes/{note.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
                         <button class="btn btn-outline-primary" @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
                     </div>
@@ -51,9 +51,9 @@
                 }
                 else
                 {
-                    <div class="input-group">
+                    <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(note.Priority)</span>
-                        <span class="input-group-text flex-grow-1" @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
+                        <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
                     </div>
 
                     <div class="form-control" style="white-space: pre-wrap">@note.Content</div>

@@ -6,7 +6,7 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
-title edit
+! title edit
 
 remove *Edit.razor pages:
 	NO: display -> show details -> edit
@@ -16,13 +16,13 @@ show Add New Note directly on top of the list
 show Add New Task directly on top of the list
 show Add New Habit directly on top of the list
 
-TimeModel / TimeEntity - internal long Id { get; set; }
+! TimeModel / TimeEntity - internal long Id { get; set; }
 
 fix DateTime.Now / DateTime.UtcNow
 
-calendar in 1 row
+!!! calendar in 1 row
 
-calendar in 7x7 grid
+! calendar in 7x7 grid
 
 - Calendar
 	- 7 row, one for each day of the week
