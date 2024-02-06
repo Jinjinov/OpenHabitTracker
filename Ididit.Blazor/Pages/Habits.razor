@@ -88,7 +88,7 @@
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
                                                     @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@day.Day<small>(@count)</small></div>
                                             }
-                                            else // TODO: fix duplicates
+                                            else // TODO: fix duplicate HTML elements - use C# variables instead of if/else
                                             {
                                                 <div class="border d-flex" 
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal;"
