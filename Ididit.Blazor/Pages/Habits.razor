@@ -55,12 +55,17 @@
                             <small>Times done: @habit.TimesDone.Count</small>
                         </div>
 
+                        <div>
+                            <span></span>
+                        </div>
+
                         <div class="input-group-text">
                             <div class="mx-auto">
                                 <div class="bg-body d-flex">
-                                    @foreach (string d in _days)
+                                    @for (int i = 0; i < 7; i++)
                                     {
-                                        <div @key="d" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@d</div>
+                                        string day = _days[(i + (int)_firstDayOfWeek) % 7];
+                                        <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
                                     }
                                 </div>
 
@@ -69,21 +74,21 @@
                                     <div class="d-flex">
                                         @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
                                         {
-                                            DateTime day = GetCalendarDayWithCaching(week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
+                                            DateTime dateTime = GetCalendarDayWithCaching(week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
 
-                                            string border = day.Date == DateTime.Today.Date ? "border-4 border-primary" : "";
+                                            string border = dateTime.Date == DateTime.Today.Date ? "border-4 border-primary" : "";
 
-                                            if (habit.TimesDoneByDay.TryGetValue(day, out var list))
+                                            if (habit.TimesDoneByDay.TryGetValue(dateTime, out var list))
                                             {
                                                 <div class="@($"border {border} d-flex bg-success")"
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
-                                                    @onclick="() => HabitService.AddTimeDone(habit, day)">@day.Day<small>(@list.Count)</small></div>
+                                                    @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@dateTime.Day<small>(@list.Count)</small></div>
                                             }
                                             else // TODO: fix duplicate HTML elements - use C# variables instead of if/else
                                             {
                                                 <div class="@($"border {border} d-flex")"
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal;"
-                                                    @onclick="() => HabitService.AddTimeDone(habit, day)">@day.Day</div>
+                                                    @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@dateTime.Day</div>
                                             }
                                         }
                                     </div>
@@ -156,11 +161,12 @@
         }
     }
 
-    readonly string[] _days = { "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", };
+    readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
 
     const long _ticksInDay = 864_000_000_000;
     const long _ticksInWeek = 6_048_000_000_000;
 
+    DateTime _firstDayOfMonth;
     DateTime _calendarStart;
     long _calendarStartTicks;
 
@@ -188,19 +194,22 @@
 
     void SetCalendarStart(DateTime day)
     {
+        _firstDayOfMonth = GetFirstDayOfMonth(day);
         _calendarStart = day;
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
     void SetCalendarStartToNextMonth()
     {
-        _calendarStart = _calendarStart.AddMonths(1);
+        _firstDayOfMonth = _firstDayOfMonth.AddMonths(1);
+        _calendarStart = GetFirstDateOfWeek(_firstDayOfMonth);
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
     void SetCalendarStartToPreviousMonth()
     {
-        _calendarStart = _calendarStart.AddMonths(-1);
+        _firstDayOfMonth = _firstDayOfMonth.AddMonths(-1);
+        _calendarStart = GetFirstDateOfWeek(_firstDayOfMonth);
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
@@ -216,27 +225,27 @@
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
-    DateTime GetFirstDateOfWeek(DateTime day, DayOfWeek firstDayOfWeek)
+    DateTime GetFirstDateOfWeek(DateTime day)
     {
-        return day.AddDays((int)firstDayOfWeek - (int)day.DayOfWeek);
+        return day.AddDays((int)_firstDayOfWeek - (int)day.DayOfWeek);
     }
 
-    void SetCalendarStartByFirstDayOfWeek(DateTime day, DayOfWeek firstDayOfWeek)
+    void SetCalendarStartByFirstDayOfWeek(DateTime day)
     {
-        _calendarStart = GetFirstDateOfWeek(day, firstDayOfWeek);
+        _firstDayOfMonth = GetFirstDayOfMonth(day);
+        _calendarStart = GetFirstDateOfWeek(day);
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
-    DateTime GetCalendarStart(DateTime day, DayOfWeek firstDayOfWeek)
+    DateTime GetFirstDayOfMonth(DateTime day)
     {
-        DateTime firstDayOfMonth = new DateTime(day.Year, day.Month, 1);
-
-        return GetFirstDateOfWeek(firstDayOfMonth, firstDayOfWeek);
+        return new DateTime(day.Year, day.Month, 1);
     }
 
-    void SetCalendarStartByFirstDayOfMonth(DateTime day, DayOfWeek firstDayOfWeek)
+    void SetCalendarStartByFirstDayOfMonth(DateTime day)
     {
-        _calendarStart = GetCalendarStart(day, firstDayOfWeek);
+        _firstDayOfMonth = GetFirstDayOfMonth(day);
+        _calendarStart = GetFirstDateOfWeek(_firstDayOfMonth);
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
@@ -247,7 +256,7 @@
     {
         await HabitService.Initialize();
 
-        SetCalendarStartByFirstDayOfMonth(DateTime.Today, _firstDayOfWeek);
+        SetCalendarStartByFirstDayOfMonth(DateTime.Today);
     }
 
     protected override async Task OnParametersSetAsync()
