@@ -43,6 +43,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
                 StartedAt = t.StartedAt,
                 CompletedAt = t.CompletedAt
             }).ToList();
+
+            habit.RefreshTimesDoneByDay();
         }
     }
 
@@ -100,6 +102,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         habit.TimesDone.Add(timeModel);
 
+        habit.RefreshTimesDoneByDay();
+
         TimeEntity timeEntity = new()
         {
             HabitId = habit.Id,
@@ -156,6 +160,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         };
 
         habit.TimesDone.Add(timeModel);
+
+        habit.RefreshTimesDoneByDay();
 
         TimeEntity timeEntity = new()
         {

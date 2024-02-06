@@ -13,4 +13,11 @@ public class HabitModel : ItemsModel
     public DateTime? LastTimeDoneAt { get; set; }
 
     public List<TimeModel>? TimesDone { get; set; }
+
+    internal Dictionary<DateTime, List<TimeModel>>? TimesDoneByDay { get; set; }
+
+    public void RefreshTimesDoneByDay()
+    {
+        TimesDoneByDay = TimesDone?.GroupBy(date => date.StartedAt.Date).ToDictionary(group => group.Key, group => group.ToList());
+    }
 }

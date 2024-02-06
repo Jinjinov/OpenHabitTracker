@@ -49,18 +49,13 @@
                         </div>
                     }
 
-                    if (habit.TimesDone is not null)
+                    if (habit.TimesDone is not null && habit.TimesDoneByDay is not null)
                     {
                         <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
                             <small>Times done: @habit.TimesDone.Count</small>
                         </div>
 
-                        DateTime day = GetFristCalendarDay();
-
-                        // TODO: in class HabitModel:
-                        Dictionary<DateTime, int> donePerDay = habit.TimesDone
-                            .GroupBy(date => date.StartedAt.Date)
-                            .ToDictionary(group => group.Key, group => group.Count());
+                        DateTime day = GetFristCalendarDay(DateTime.Today);
 
                         <div class="input-group-text">
                             <div class="mx-auto">
@@ -78,11 +73,11 @@
                                         {
                                             DateTime dateTime = day; // if not captured locally, day becomes the last value used in the loop
 
-                                            if (donePerDay.TryGetValue(day, out int count))
+                                            if (habit.TimesDoneByDay.TryGetValue(day, out var list))
                                             {
                                                 <div class="border d-flex bg-success" 
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
-                                                    @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@day.Day<small>(@count)</small></div>
+                                                    @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@day.Day<small>(@list.Count)</small></div>
                                             }
                                             else // TODO: fix duplicate HTML elements - use C# variables instead of if/else
                                             {
@@ -165,14 +160,24 @@
 
     readonly string[] _days = { "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", };
 
-    DateTime GetFristCalendarDay()
-    {
-        // TODO: in class Settings:
-        DayOfWeek firstDayOfWeek = DayOfWeek.Monday;
+    DateTime _calendarMonth;
+    DateTime _fristCalendarDay;
 
-        DateTime currentDate = DateTime.Now;
-        DateTime firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
-        return firstDayOfMonth.AddDays((int)firstDayOfWeek - (int)firstDayOfMonth.DayOfWeek);
+    DateTime GetFristCalendarDay(DateTime calendarMonth)
+    {
+        if (_calendarMonth != calendarMonth)
+        {
+            _calendarMonth = calendarMonth;
+
+            // TODO: in class Settings:
+            DayOfWeek firstDayOfWeek = DayOfWeek.Monday;
+
+            DateTime firstDayOfMonth = new DateTime(_calendarMonth.Year, _calendarMonth.Month, 1);
+
+            _fristCalendarDay = firstDayOfMonth.AddDays((int)firstDayOfWeek - (int)firstDayOfMonth.DayOfWeek);
+        }
+
+        return _fristCalendarDay;
     }
 
     protected override async Task OnInitializedAsync()

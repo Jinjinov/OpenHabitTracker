@@ -257,6 +257,7 @@ public class AppData(IDataAccess dataAccess)
         {
             habit.Items = itemsByParentId.GetValueOrDefault(habit.Id);
             habit.TimesDone = timesByHabitId.GetValueOrDefault(habit.Id);
+            habit.RefreshTimesDoneByDay();
         }
 
         UserData userData = new()
