@@ -55,8 +55,6 @@
                             <small>Times done: @habit.TimesDone.Count</small>
                         </div>
 
-                        DateTime day = GetFristCalendarDay(DateTime.Today);
-
                         <div class="input-group-text">
                             <div class="mx-auto">
                                 <div class="bg-body d-flex">
@@ -71,22 +69,22 @@
                                     <div class="d-flex">
                                         @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
                                         {
-                                            DateTime dateTime = day; // if not captured locally, day becomes the last value used in the loop
+                                            DateTime day = GetCalendarDayWithCaching(week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
+
+                                            string border = day.Date == DateTime.Today.Date ? "border-4 border-primary" : "";
 
                                             if (habit.TimesDoneByDay.TryGetValue(day, out var list))
                                             {
-                                                <div class="border d-flex bg-success" 
+                                                <div class="@($"border {border} d-flex bg-success")"
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
-                                                    @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@day.Day<small>(@list.Count)</small></div>
+                                                    @onclick="() => HabitService.AddTimeDone(habit, day)">@day.Day<small>(@list.Count)</small></div>
                                             }
                                             else // TODO: fix duplicate HTML elements - use C# variables instead of if/else
                                             {
-                                                <div class="border d-flex" 
+                                                <div class="@($"border {border} d-flex")"
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal;"
-                                                    @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@day.Day</div>
+                                                    @onclick="() => HabitService.AddTimeDone(habit, day)">@day.Day</div>
                                             }
-
-                                            day = day.AddDays(1);
                                         }
                                     </div>
                                 }
@@ -245,26 +243,11 @@
     // TODO: in class Settings:
     DayOfWeek _firstDayOfWeek = DayOfWeek.Monday;
 
-    DateTime _calendarMonth;
-    DateTime _fristCalendarDay;
-
-    DateTime GetFristCalendarDay(DateTime calendarMonth)
-    {
-        if (_calendarMonth != calendarMonth)
-        {
-            _calendarMonth = calendarMonth;
-
-            DateTime firstDayOfMonth = new DateTime(_calendarMonth.Year, _calendarMonth.Month, 1);
-
-            _fristCalendarDay = firstDayOfMonth.AddDays((int)_firstDayOfWeek - (int)firstDayOfMonth.DayOfWeek);
-        }
-
-        return _fristCalendarDay;
-    }
-
     protected override async Task OnInitializedAsync()
     {
         await HabitService.Initialize();
+
+        SetCalendarStartByFirstDayOfMonth(DateTime.Today, _firstDayOfWeek);
     }
 
     protected override async Task OnParametersSetAsync()
