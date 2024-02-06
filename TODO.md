@@ -6,11 +6,7 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
-! always set CreatedAt
-
 ! remove column left, right margin / padding
-
-! consistent top margin on all pages
 
 ! fix priority right padding
 

@@ -10,16 +10,18 @@
 
 <div class="col mh-100 overflow-auto">
 
-    @if (CategoryService.NewCategory is not null)
-    {
-        <form @onsubmit=AddNewCategory>
-            <div class="input-group">
-                <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="Add new category" />
+    <div class="my-1">
+        @if (CategoryService.NewCategory is not null)
+        {
+            <form @onsubmit=AddNewCategory>
+                <div class="input-group">
+                    <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="Add new category" />
 
-                <button class="btn btn-outline-primary" @onclick="() => CategoryService.AddCategory()" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
-            </div>
-        </form>
-    }
+                    <button class="btn btn-outline-primary" @onclick="() => CategoryService.AddCategory()" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
+                </div>
+            </form>
+        }
+    </div>
 
     @if (CategoryService.Categories is null)
     {

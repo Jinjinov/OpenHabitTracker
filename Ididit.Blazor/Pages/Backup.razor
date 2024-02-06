@@ -11,11 +11,13 @@
 
 <div class="col mh-100 overflow-auto">
 
-    <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Json)">Export JSON</button>
-    <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Tsv)">Export TSV</button>
-    <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Yaml)">Export YAML</button>
+    <div class="my-1">
+        <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Json)">Export JSON</button>
+        <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Tsv)">Export TSV</button>
+        <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Yaml)">Export YAML</button>
 
-    @OpenFile.OpenFileDialog(OnFileOpened)
+        @OpenFile.OpenFileDialog(OnFileOpened)
+    </div>
 
     @_filename
 

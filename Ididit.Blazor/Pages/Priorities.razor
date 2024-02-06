@@ -10,26 +10,28 @@
 
 <div class="col mh-100 overflow-auto">
 
-    @if (PriorityService.Priorities is null)
-    {
-        <p>Loading...</p>
-    }
-    else
-    {
-        foreach (PriorityModel priority in PriorityService.Priorities)
+    <div class="my-1">
+        @if (PriorityService.Priorities is null)
         {
-            <div class="input-group">
-                @if (priority == PriorityService.SelectedPriority)
-                {
-                    <InputText class="form-control" @ref="inputElement" Value="@priority.Title" ValueExpression="() => priority.Title" ValueChanged="(string title) => PriorityService.UpdatePriority(title)" @onfocusout="(args) => PriorityService.SelectedPriority = null" />
-                }
-                else
-                {
-                    <span class="input-group-text flex-grow-1" @onclick="() => { PriorityService.SelectedPriority = priority; shouldFocus = true; }">@priority.Title</span>
-                }
-            </div>
+            <p>Loading...</p>
         }
-    }
+        else
+        {
+            foreach (PriorityModel priority in PriorityService.Priorities)
+            {
+                <div class="input-group">
+                    @if (priority == PriorityService.SelectedPriority)
+                    {
+                        <InputText class="form-control" @ref="inputElement" Value="@priority.Title" ValueExpression="() => priority.Title" ValueChanged="(string title) => PriorityService.UpdatePriority(title)" @onfocusout="(args) => PriorityService.SelectedPriority = null" />
+                    }
+                    else
+                    {
+                        <span class="input-group-text flex-grow-1" @onclick="() => { PriorityService.SelectedPriority = priority; shouldFocus = true; }">@priority.Title</span>
+                    }
+                </div>
+            }
+        }
+    </div>
 
 </div>
 
