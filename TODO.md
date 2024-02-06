@@ -6,8 +6,6 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
-! fix priority right padding
-
 !!! fix duplicated HTML elements - use C# variables instead of if/else
 	find every "else" in .razor files
 
