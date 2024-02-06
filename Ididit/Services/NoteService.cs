@@ -36,10 +36,10 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         if (_appData.Notes is null || EditNote is null)
             return;
 
-        DateTime utcNow = DateTime.UtcNow;
+        DateTime now = DateTime.Now;
 
-        EditNote.CreatedAt = utcNow;
-        EditNote.UpdatedAt = utcNow;
+        EditNote.CreatedAt = now;
+        EditNote.UpdatedAt = now;
 
         NoteEntity note = EditNote.ToEntity();
 

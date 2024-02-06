@@ -354,7 +354,7 @@ public class AppData(IDataAccess dataAccess)
 
     public async Task LoadExamples()
     {
-        DateTime now = DateTime.UtcNow;
+        DateTime now = DateTime.Now;
 
         UserData userData = new()
         {

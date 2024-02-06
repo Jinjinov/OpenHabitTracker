@@ -46,8 +46,6 @@ search / filter / sort: (save filter in settings)
 
 ---------------------------------------------------------------------------------------------------
 
-fix DateTime.Now / DateTime.UtcNow
-
 calendar 7x7
 	display month
 	previous / next month

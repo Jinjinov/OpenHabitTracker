@@ -36,10 +36,10 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         if (_appData.Tasks is null || EditTask is null)
             return;
 
-        DateTime utcNow = DateTime.UtcNow;
+        DateTime now = DateTime.Now;
 
-        EditTask.CreatedAt = utcNow;
-        EditTask.UpdatedAt = utcNow;
+        EditTask.CreatedAt = now;
+        EditTask.UpdatedAt = now;
 
         TaskEntity task = EditTask.ToEntity();
 
@@ -70,13 +70,13 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         if (Tasks is null)
             return;
 
-        DateTime utcNow = DateTime.UtcNow;
+        DateTime now = DateTime.Now;
 
-        task.StartedAt = utcNow;
+        task.StartedAt = now;
 
         if (await _dataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
-            taskEntity.StartedAt = utcNow;
+            taskEntity.StartedAt = now;
             await _dataAccess.UpdateTask(taskEntity);
         }
     }
@@ -86,17 +86,17 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         if (Tasks is null)
             return;
 
-        DateTime utcNow = DateTime.UtcNow;
+        DateTime now = DateTime.Now;
 
-        task.StartedAt ??= utcNow;
+        task.StartedAt ??= now;
 
-        task.CompletedAt = utcNow;
+        task.CompletedAt = now;
 
         if (await _dataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
-            taskEntity.StartedAt ??= utcNow;
+            taskEntity.StartedAt ??= now;
 
-            taskEntity.CompletedAt = utcNow;
+            taskEntity.CompletedAt = now;
             await _dataAccess.UpdateTask(taskEntity);
         }
     }

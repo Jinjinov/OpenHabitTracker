@@ -87,7 +87,7 @@ public class TsvBackup(AppData appData)
 
         IAsyncEnumerable<Record> records = csv.GetRecordsAsync<Record>();
 
-        DateTime utcNow = DateTime.UtcNow;
+        DateTime now = DateTime.Now;
 
         await foreach (Record record in records)
         {
@@ -111,8 +111,8 @@ public class TsvBackup(AppData appData)
                     RepeatPeriod = record.RepeatPeriod,
                     Duration = record.Duration,
 
-                    CreatedAt = utcNow,
-                    UpdatedAt = utcNow
+                    CreatedAt = now,
+                    UpdatedAt = now
                 };
 
                 category.Habits.Add(habit);

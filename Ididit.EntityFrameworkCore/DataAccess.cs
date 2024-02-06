@@ -175,19 +175,19 @@ public class DataAccess : IDataAccess
 
     public async Task UpdateHabit(HabitEntity habit)
     {
-        habit.UpdatedAt = DateTime.UtcNow;
+        habit.UpdatedAt = DateTime.Now;
         _dataContext.Update(habit);
         await _dataContext.SaveChangesAsync();
     }
     public async Task UpdateNote(NoteEntity note)
     {
-        note.UpdatedAt = DateTime.UtcNow;
+        note.UpdatedAt = DateTime.Now;
         _dataContext.Update(note);
         await _dataContext.SaveChangesAsync();
     }
     public async Task UpdateTask(TaskEntity task)
     {
-        task.UpdatedAt = DateTime.UtcNow;
+        task.UpdatedAt = DateTime.Now;
         _dataContext.Update(task);
         await _dataContext.SaveChangesAsync();
     }
