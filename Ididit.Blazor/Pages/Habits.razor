@@ -166,6 +166,7 @@
     const long _ticksInDay = 864_000_000_000;
     const long _ticksInWeek = 6_048_000_000_000;
 
+    DayOfWeek _firstDayOfWeek;
     DateTime _firstDayOfMonth;
     DateTime _calendarStart;
     long _calendarStartTicks;
@@ -192,10 +193,37 @@
         return date;
     }
 
+    DateTime GetFirstDayOfMonth(DateTime day)
+    {
+        return new DateTime(day.Year, day.Month, 1);
+    }
+
+    DateTime GetFirstDateOfWeek(DateTime day)
+    {
+        return day.AddDays((int)_firstDayOfWeek - (int)day.DayOfWeek);
+    }
+
+    void SetCalendarStartByFirstDayOfWeek(DateTime day, DayOfWeek firstDayOfWeek)
+    {
+        _firstDayOfWeek = firstDayOfWeek;
+        _firstDayOfMonth = GetFirstDayOfMonth(day);
+        _calendarStart = GetFirstDateOfWeek(day);
+        _calendarStartTicks = _calendarStart.Ticks;
+    }
+
+    void SetCalendarStartByFirstDayOfMonth(DateTime day, DayOfWeek firstDayOfWeek)
+    {
+        _firstDayOfWeek = firstDayOfWeek;
+        _firstDayOfMonth = GetFirstDayOfMonth(day);
+        _calendarStart = GetFirstDateOfWeek(_firstDayOfMonth);
+        _calendarStartTicks = _calendarStart.Ticks;
+    }
+
     void SetCalendarStart(DateTime day)
     {
         _firstDayOfMonth = GetFirstDayOfMonth(day);
         _calendarStart = day;
+        _firstDayOfWeek = day.DayOfWeek;
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
@@ -216,47 +244,23 @@
     void SetCalendarStartToNextWeek()
     {
         _calendarStart = _calendarStart.AddDays(7);
+        _firstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
     void SetCalendarStartToPreviousWeek()
     {
         _calendarStart = _calendarStart.AddDays(-7);
+        _firstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
         _calendarStartTicks = _calendarStart.Ticks;
     }
-
-    DateTime GetFirstDateOfWeek(DateTime day)
-    {
-        return day.AddDays((int)_firstDayOfWeek - (int)day.DayOfWeek);
-    }
-
-    void SetCalendarStartByFirstDayOfWeek(DateTime day)
-    {
-        _firstDayOfMonth = GetFirstDayOfMonth(day);
-        _calendarStart = GetFirstDateOfWeek(day);
-        _calendarStartTicks = _calendarStart.Ticks;
-    }
-
-    DateTime GetFirstDayOfMonth(DateTime day)
-    {
-        return new DateTime(day.Year, day.Month, 1);
-    }
-
-    void SetCalendarStartByFirstDayOfMonth(DateTime day)
-    {
-        _firstDayOfMonth = GetFirstDayOfMonth(day);
-        _calendarStart = GetFirstDateOfWeek(_firstDayOfMonth);
-        _calendarStartTicks = _calendarStart.Ticks;
-    }
-
-    // TODO: in class Settings:
-    DayOfWeek _firstDayOfWeek = DayOfWeek.Monday;
 
     protected override async Task OnInitializedAsync()
     {
         await HabitService.Initialize();
 
-        SetCalendarStartByFirstDayOfMonth(DateTime.Today);
+        // TODO: in class Settings: DayOfWeek.Monday
+        SetCalendarStartByFirstDayOfMonth(DateTime.Today, DayOfWeek.Monday);
     }
 
     protected override async Task OnParametersSetAsync()
