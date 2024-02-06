@@ -9,7 +9,7 @@
         <option value="0" disabled selected hidden>None</option>
         @foreach (CategoryModel category in CategoryService.Categories)
         {
-            <option value="@category.Id">@category.Title</option>
+            <option @key="category" value="@category.Id">@category.Title</option>
         }
     </InputSelect>
 }

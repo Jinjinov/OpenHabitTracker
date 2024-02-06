@@ -7,22 +7,17 @@
 {
     foreach (ItemModel item in Items.Items)
     {
-        @if (IsReadOnly)
-        {
-            <div class="input-group flex-nowrap">
-                <div class="input-group-text">
-                    <InputCheckbox id="@item.Id" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
-                </div>
-                <label for="@item.Id" class="input-group-text flex-grow-1 text-wrap">@item.Title</label>
+        <div class="input-group flex-nowrap">
+            <div class="input-group-text">
+                <InputCheckbox id="@item.Id" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
             </div>
-        }
-        else
-        {
-            <div class="input-group flex-nowrap">
-                <div class="input-group-text">
-                    <InputCheckbox id="@item.Id" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
-                </div>
-                @if (item == ItemService.SelectedItem)
+            @if (IsReadOnly)
+            {
+                <label for="@item.Id" class="input-group-text flex-grow-1 text-wrap">@item.Title</label>
+            }
+            else
+            {
+                if (item == ItemService.SelectedItem)
                 {
                     <InputText class="form-control" @ref="inputElement" Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem(title)" @onfocusout="(args) => ItemService.SelectedItem = null" />
                 }
@@ -30,9 +25,9 @@
                 {
                     <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@item.Title</span>
                 }
-                <button class="btn btn-outline-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
-            </div>
-        }
+            }
+            <button class="btn btn-outline-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
+        </div>
     }
 }
 
