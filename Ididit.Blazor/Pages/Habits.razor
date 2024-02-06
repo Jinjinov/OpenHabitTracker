@@ -55,12 +55,17 @@
                             <small>Times done: @habit.TimesDone.Count</small>
                         </div>
 
-                        <div>
-                            <span></span>
-                        </div>
-
                         <div class="input-group-text">
                             <div class="mx-auto">
+
+                                <div class="d-flex mb-1">
+                                    <button class="btn btn-outline-primary" @onclick="SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
+                                    <button class="btn btn-outline-primary" @onclick="SetCalendarStartToPreviousMonth"><i class="bi bi-chevron-double-left"></i></button>
+                                    <span class="flex-grow-1 d-flex" style="align-items: center; justify-content: center;">@_firstDayOfMonth.ToString("MMMM")</span>
+                                    <button class="btn btn-outline-primary" @onclick="SetCalendarStartToNextMonth"><i class="bi bi-chevron-double-right"></i></button>
+                                    <button class="btn btn-outline-primary" @onclick="SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
+                                </div>
+
                                 <div class="bg-body d-flex">
                                     @for (int i = 0; i < 7; i++)
                                     {
@@ -245,6 +250,8 @@
     {
         _calendarStart = _calendarStart.AddDays(7);
         _firstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
+        if (_calendarStart.Day > 21)
+            _firstDayOfMonth = _firstDayOfMonth.AddMonths(1);
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
@@ -252,6 +259,8 @@
     {
         _calendarStart = _calendarStart.AddDays(-7);
         _firstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
+        if (_calendarStart.Day > 21)
+            _firstDayOfMonth = _firstDayOfMonth.AddMonths(1);
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
