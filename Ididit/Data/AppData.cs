@@ -354,7 +354,7 @@ public class AppData(IDataAccess dataAccess)
 
     public async Task LoadExamples()
     {
-        DateTime now = DateTime.Now;
+        DateTime now = DateTime.UtcNow;
 
         UserData userData = new()
         {
@@ -373,13 +373,17 @@ public class AppData(IDataAccess dataAccess)
                         {
                             Title = "Note",
                             Priority = Priority.Low,
-                            Content = "Note text"
+                            Content = "Note text",
+                            CreatedAt = now,
+                            UpdatedAt = now
                         },
                         new()
                         {
                             Title = "Note 2",
                             Priority = Priority.Low,
-                            Content = "Note text 2"
+                            Content = "Note text 2",
+                            CreatedAt = now,
+                            UpdatedAt = now
                         }
                     },
                     Tasks = new()
@@ -393,7 +397,9 @@ public class AppData(IDataAccess dataAccess)
                                 new() { Title = "Task item 1" },
                                 new() { Title = "Task item 2" }
                             },
-                            PlannedAt = now.AddDays(1)
+                            PlannedAt = now.AddDays(1),
+                            CreatedAt = now,
+                            UpdatedAt = now
                         },
                         new()
                         {
@@ -404,7 +410,9 @@ public class AppData(IDataAccess dataAccess)
                                 new() { Title = "Task item 1" },
                                 new() { Title = "Task item 2" }
                             },
-                            PlannedAt = now.AddDays(2)
+                            PlannedAt = now.AddDays(2),
+                            CreatedAt = now,
+                            UpdatedAt = now
                         }
                     },
                     Habits = new()
@@ -422,7 +430,9 @@ public class AppData(IDataAccess dataAccess)
                             {
                                 new() { StartedAt = now.AddHours(-1), CompletedAt = now },
                                 new() { StartedAt = now.AddHours(-2), CompletedAt = now }
-                            }
+                            },
+                            CreatedAt = now,
+                            UpdatedAt = now
                         },
                         new()
                         {
@@ -437,7 +447,9 @@ public class AppData(IDataAccess dataAccess)
                             {
                                 new() { StartedAt = now.AddHours(-3), CompletedAt = now },
                                 new() { StartedAt = now.AddHours(-4), CompletedAt = now }
-                            }
+                            },
+                            CreatedAt = now,
+                            UpdatedAt = now
                         }
                     }
                 }
