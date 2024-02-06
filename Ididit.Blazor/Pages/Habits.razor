@@ -160,6 +160,91 @@
 
     readonly string[] _days = { "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", };
 
+    const long _ticksInDay = 864_000_000_000;
+    const long _ticksInWeek = 6_048_000_000_000;
+
+    DateTime _calendarStart;
+    long _calendarStartTicks;
+
+    DateTime GetCalendarDay(int calendarWeek, int dayInWeek)
+    {
+        int days = calendarWeek * 7 + dayInWeek;
+
+        return _calendarStart.AddDays(days);
+    }
+
+    Dictionary<long, DateTime> _dateByTicks = new();
+
+    DateTime GetCalendarDayWithCaching(int calendarWeek, int dayInWeek)
+    {
+        long ticks = _calendarStartTicks + calendarWeek * _ticksInWeek + dayInWeek * _ticksInDay;
+
+        if(!_dateByTicks.TryGetValue(ticks, out DateTime date))
+        {
+            date = new DateTime(ticks);
+            _dateByTicks[ticks] = date;
+        }
+
+        return date;
+    }
+
+    void SetCalendarStart(DateTime day)
+    {
+        _calendarStart = day;
+        _calendarStartTicks = _calendarStart.Ticks;
+    }
+
+    void SetCalendarStartToNextMonth()
+    {
+        _calendarStart = _calendarStart.AddMonths(1);
+        _calendarStartTicks = _calendarStart.Ticks;
+    }
+
+    void SetCalendarStartToPreviousMonth()
+    {
+        _calendarStart = _calendarStart.AddMonths(-1);
+        _calendarStartTicks = _calendarStart.Ticks;
+    }
+
+    void SetCalendarStartToNextWeek()
+    {
+        _calendarStart = _calendarStart.AddDays(7);
+        _calendarStartTicks = _calendarStart.Ticks;
+    }
+
+    void SetCalendarStartToPreviousWeek()
+    {
+        _calendarStart = _calendarStart.AddDays(-7);
+        _calendarStartTicks = _calendarStart.Ticks;
+    }
+
+    DateTime GetFirstDateOfWeek(DateTime day, DayOfWeek firstDayOfWeek)
+    {
+        return day.AddDays((int)firstDayOfWeek - (int)day.DayOfWeek);
+    }
+
+    void SetCalendarStartByFirstDayOfWeek(DateTime day, DayOfWeek firstDayOfWeek)
+    {
+        _calendarStart = GetFirstDateOfWeek(day, firstDayOfWeek);
+        _calendarStartTicks = _calendarStart.Ticks;
+    }
+
+    DateTime GetCalendarStart(DateTime day, DayOfWeek firstDayOfWeek)
+    {
+        DateTime firstDayOfMonth = new DateTime(day.Year, day.Month, 1);
+
+        return GetFirstDateOfWeek(firstDayOfMonth, firstDayOfWeek);
+    }
+
+    void SetCalendarStartByFirstDayOfMonth(DateTime day, DayOfWeek firstDayOfWeek)
+    {
+        _calendarStart = GetCalendarStart(day, firstDayOfWeek);
+        _calendarStartTicks = _calendarStart.Ticks;
+    }
+
+    // TODO: in class Settings:
+    DayOfWeek _firstDayOfWeek = DayOfWeek.Monday;
+
     DateTime _calendarMonth;
     DateTime _fristCalendarDay;
 
@@ -169,12 +254,9 @@
         {
             _calendarMonth = calendarMonth;
 
-            // TODO: in class Settings:
-            DayOfWeek firstDayOfWeek = DayOfWeek.Monday;
-
             DateTime firstDayOfMonth = new DateTime(_calendarMonth.Year, _calendarMonth.Month, 1);
 
-            _fristCalendarDay = firstDayOfMonth.AddDays((int)firstDayOfWeek - (int)firstDayOfMonth.DayOfWeek);
+            _fristCalendarDay = firstDayOfMonth.AddDays((int)_firstDayOfWeek - (int)firstDayOfMonth.DayOfWeek);
         }
 
         return _fristCalendarDay;
