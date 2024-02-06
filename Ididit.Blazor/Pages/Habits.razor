@@ -55,21 +55,17 @@
                             <small>Times done: @habit.TimesDone.Count</small>
                         </div>
 
-                        DayOfWeek firstDayOfWeek = DayOfWeek.Monday;
-                        DateTime currentDate = DateTime.Now;
-                        DateTime firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
-                        DateTime day = firstDayOfMonth.AddDays((int)firstDayOfWeek - (int)firstDayOfMonth.DayOfWeek);
+                        DateTime day = GetFristCalendarDay();
 
-                        Dictionary<DateTime, int> tasksPerDay = habit.TimesDone
+                        // TODO: in class HabitModel:
+                        Dictionary<DateTime, int> donePerDay = habit.TimesDone
                             .GroupBy(date => date.StartedAt.Date)
                             .ToDictionary(group => group.Key, group => group.Count());
-
-                        string[] days = { "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", };
 
                         <div class="input-group-text">
                             <div class="mx-auto">
                                 <div class="bg-body d-flex">
-                                    @foreach (string d in days)
+                                    @foreach (string d in _days)
                                     {
                                         <div @key="d" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@d</div>
                                     }
@@ -82,7 +78,7 @@
                                         {
                                             DateTime dateTime = day; // if not captured locally, day becomes the last value used in the loop
 
-                                            if (tasksPerDay.TryGetValue(day, out int count))
+                                            if (donePerDay.TryGetValue(day, out int count))
                                             {
                                                 <div class="border d-flex bg-success" 
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
@@ -165,6 +161,18 @@
             if (HabitService.SelectedHabit is not null)
                 HabitService.SelectedHabit.Duration = value == TimeOnly.MinValue ? null : value;
         }
+    }
+
+    readonly string[] _days = { "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", };
+
+    DateTime GetFristCalendarDay()
+    {
+        // TODO: in class Settings:
+        DayOfWeek firstDayOfWeek = DayOfWeek.Monday;
+
+        DateTime currentDate = DateTime.Now;
+        DateTime firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+        return firstDayOfMonth.AddDays((int)firstDayOfWeek - (int)firstDayOfMonth.DayOfWeek);
     }
 
     protected override async Task OnInitializedAsync()
