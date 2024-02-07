@@ -46,7 +46,10 @@ public class AppData(IDataAccess dataAccess)
             }
             else
             {
-                settingsEntity = new SettingsEntity();
+                settingsEntity = new SettingsEntity()
+                {
+                    StartOfWeek = DayOfWeek.Monday
+                };
 
                 await _dataAccess.AddSettings(settingsEntity);
 

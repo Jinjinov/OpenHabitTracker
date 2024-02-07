@@ -1,30 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ididit.Data;
 
 namespace Ididit.Services;
 
-public class CalendarService
+public class CalendarService(AppData appData)
 {
-    readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
+    private readonly AppData _appData = appData;
 
-    const long _ticksInDay = 864_000_000_000;
-    const long _ticksInWeek = 6_048_000_000_000;
+    private readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
 
-    DateTime _calendarStart;
+    private const long _ticksInDay = 864_000_000_000;
+    private const long _ticksInWeek = 6_048_000_000_000;
 
-    long _calendarStartTicks;
+    private DateTime _calendarStart;
 
-    DayOfWeek _firstDayOfWeek;
+    private long _calendarStartTicks;
+
+    private readonly Dictionary<long, DateTime> _dateByTicks = new();
+
+    private DayOfWeek _firstDayOfWeek;
 
     public DateTime FirstDayOfMonth { get; private set; }
 
-    public void Initialize()
+    public async Task Initialize()
     {
-        // TODO: in class Settings: DayOfWeek.Monday
-        SetCalendarStartByFirstDayOfMonth(DateTime.Today, DayOfWeek.Monday);
+        await _appData.InitializeSettings();
+
+        SetCalendarStartByFirstDayOfMonth(DateTime.Today, _appData.Settings.StartOfWeek);
     }
 
     public string GetDayOfWeek(int dayIndex)
@@ -38,8 +39,6 @@ public class CalendarService
 
         return _calendarStart.AddDays(days);
     }
-
-    Dictionary<long, DateTime> _dateByTicks = new();
 
     public DateTime GetCalendarDayWithCaching(int calendarWeek, int dayInWeek)
     {

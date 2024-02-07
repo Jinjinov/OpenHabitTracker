@@ -6,12 +6,12 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
-!! title edit
+!!! title edit
 	bool editTitle
 	bool addNew
-show Add New Note directly on top of the list
-show Add New Task directly on top of the list
-show Add New Habit directly on top of the list
+!! show Add New Note directly on top of the list
+!! show Add New Task directly on top of the list
+!! show Add New Habit directly on top of the list
 
 ! calendar in 1 row
 
