@@ -8,14 +8,13 @@ public class CalendarService(AppData appData)
 
     private readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
 
+    private readonly Dictionary<long, DateTime> _dateByTicks = new();
+
     private const long _ticksInDay = 864_000_000_000;
     private const long _ticksInWeek = 6_048_000_000_000;
 
     private DateTime _calendarStart;
-
     private long _calendarStartTicks;
-
-    private readonly Dictionary<long, DateTime> _dateByTicks = new();
 
     public DateTime FirstDayOfMonth { get; private set; }
 
@@ -51,12 +50,12 @@ public class CalendarService(AppData appData)
         return date;
     }
 
-    DateTime GetFirstDayOfMonth(DateTime day)
+    private DateTime GetFirstDayOfMonth(DateTime day)
     {
         return new DateTime(day.Year, day.Month, 1);
     }
 
-    DateTime GetFirstDateOfWeek(DateTime day)
+    private DateTime GetFirstDateOfWeek(DateTime day)
     {
         int diff = (7 + (day.DayOfWeek - _appData.Settings.FirstDayOfWeek)) % 7;
         return day.AddDays(-1 * diff).Date;
