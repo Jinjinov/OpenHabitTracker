@@ -10,13 +10,14 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 call Update on input controls that just update the Model, but not the Entity
 
-save on every change or on Save / Close / Focus out ???
+save on every change + on Save / Focus out
 
 selectedModel - for Edit
 newModel - for Add
 
 !!! title edit
-	bool editTitle
+	--bool editTitle-- : always edit
+	replace Edit icon with Save icon
 
 bool addNew => newModel = null / newModel = new();
 

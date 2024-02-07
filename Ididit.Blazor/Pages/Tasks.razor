@@ -16,7 +16,7 @@
 
 <div class="col mh-100 overflow-auto px-1">
 
-    <NavLink class="input-group text-decoration-none my-1 p-1" href="/tasks/add">
+    <NavLink class="input-group flex-nowrap text-decoration-none my-1 p-1" href="/tasks/add">
         <span class="input-group-text flex-grow-1">Add new task</span>
 
         <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
@@ -60,9 +60,9 @@
 
                     <CategoryComponent Model="task" />
 
-                    <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
-                        <small>Created: @task.CreatedAt</small>
-                        <small>Updated: @task.UpdatedAt</small>
+                    <div class="p-1 border text-center" style="border-radius: var(--bs-border-radius)">
+                        <small class="d-inline-block">Created: @task.CreatedAt</small>
+                        <small class="d-inline-block">Updated: @task.UpdatedAt</small>
                     </div>
                 }
                 else
