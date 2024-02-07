@@ -206,7 +206,9 @@
 
     DateTime GetFirstDateOfWeek(DateTime day)
     {
-        return day.AddDays((int)_firstDayOfWeek - (int)day.DayOfWeek);
+        int diff = (7 + (day.DayOfWeek - _firstDayOfWeek)) % 7;
+        return day.AddDays(-1 * diff).Date;
+        //return day.AddDays((int)_firstDayOfWeek - (int)day.DayOfWeek);
     }
 
     void SetCalendarStartByFirstDayOfWeek(DateTime day, DayOfWeek firstDayOfWeek)
