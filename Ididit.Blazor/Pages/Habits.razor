@@ -253,7 +253,7 @@
     {
         _calendarStart = _calendarStart.AddDays(7);
         _firstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
-        if (_calendarStart.Day > 15)
+        if (_calendarStart.Day > 14)
             _firstDayOfMonth = _firstDayOfMonth.AddMonths(1);
         _calendarStartTicks = _calendarStart.Ticks;
     }
@@ -262,7 +262,7 @@
     {
         _calendarStart = _calendarStart.AddDays(-7);
         _firstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
-        if (_calendarStart.Day > 15)
+        if (_calendarStart.Day > 14)
             _firstDayOfMonth = _firstDayOfMonth.AddMonths(1);
         _calendarStartTicks = _calendarStart.Ticks;
     }
