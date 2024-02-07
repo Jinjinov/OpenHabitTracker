@@ -50,8 +50,11 @@
 
                     @if (task.StartedAt is not null)
                     {
-                        <div class="p-1 border text-center" style="border-radius: var(--bs-border-radius)">
-                            <small class="d-inline-block mx-1">Started: @task.StartedAt</small>
+                        <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
+                            @if (task.StartedAt != task.CompletedAt)
+                            {
+                                <small class="d-inline-block mx-1">Started: @task.StartedAt</small>
+                            }
                             @if (task.CompletedAt is not null)
                             {
                                 <small class="d-inline-block mx-1">Completed: @task.CompletedAt</small>
@@ -61,8 +64,9 @@
 
                     <CategoryComponent Model="task" />
 
-                    <div class="p-1 border text-center" style="border-radius: var(--bs-border-radius)">
-                        <small class="d-inline-block mx-1">Created: @task.CreatedAt</small><small class="d-inline-block mx-1">Updated: @task.UpdatedAt</small>
+                    <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
+                        <small class="d-inline-block mx-1">Created: @task.CreatedAt</small>
+                        <small class="d-inline-block mx-1">Updated: @task.UpdatedAt</small>
                     </div>
                 }
                 else
