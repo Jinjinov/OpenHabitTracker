@@ -10,24 +10,17 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-save changes:
-	save on every change - this will spam DB when writing text
-	on Save / Focus out - this can leave unsaved changes
-	call Update on input controls that just update the Model, but not the Entity
+call Update on input controls that just update the Model, but not the Entity
 
-selectedModel - for Edit
+selecting Note, Task, Habit should be consistent with selecting Category, Item, Priority
+
+
+
 newModel - for Add
-
-!!! title edit
-	--bool editTitle-- : always edit
-	replace Edit icon with Save icon
-
 bool addNew => newModel = null / newModel = new();
-
 !! show Add New Note directly on top of the list
 !! show Add New Task directly on top of the list
 !! show Add New Habit directly on top of the list
-
 
 
 

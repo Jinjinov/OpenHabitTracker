@@ -35,8 +35,8 @@
                 {
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="task" />
-                        <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(task.Id)">@task.Title</span>
-                        <NavLink class="btn btn-outline-primary" href="@($"/tasks/{task.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
+                        <InputText class="form-control" @bind-Value="@task.Title" />
+                        <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(task.Id)"><i class="bi bi-floppy"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                     </div>

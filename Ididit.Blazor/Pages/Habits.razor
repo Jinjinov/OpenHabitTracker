@@ -35,8 +35,8 @@
                 {
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="habit" />
-                        <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
-                        <NavLink class="btn btn-outline-primary" href="@($"/habits/{habit.Id}/update")"><i class="bi bi-pencil-square"></i></NavLink>
+                        <InputText class="form-control" @bind-Value="@habit.Title" />
+                        <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(habit.Id)"><i class="bi bi-floppy"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                     </div>
