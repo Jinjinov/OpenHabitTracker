@@ -48,21 +48,21 @@
                         <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="task.PlannedAt" />
                     </div>
 
-                    if (task.StartedAt is not null)
+                    @if (task.StartedAt is not null)
                     {
-                        <small>StartedAt: @task.StartedAt</small>
-                    }
-
-                    if (task.CompletedAt is not null)
-                    {
-                        <small>CompletedAt: @task.CompletedAt</small>
+                        <div class="p-1 border text-center" style="border-radius: var(--bs-border-radius)">
+                            <small class="d-inline-block mx-1">Started: @task.StartedAt</small>
+                            @if (task.CompletedAt is not null)
+                            {
+                                <small class="d-inline-block mx-1">Completed: @task.CompletedAt</small>
+                            }
+                        </div>
                     }
 
                     <CategoryComponent Model="task" />
 
                     <div class="p-1 border text-center" style="border-radius: var(--bs-border-radius)">
-                        <small class="d-inline-block">Created: @task.CreatedAt</small>
-                        <small class="d-inline-block">Updated: @task.UpdatedAt</small>
+                        <small class="d-inline-block mx-1">Created: @task.CreatedAt</small><small class="d-inline-block mx-1">Updated: @task.UpdatedAt</small>
                     </div>
                 }
                 else
