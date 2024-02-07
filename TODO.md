@@ -9,16 +9,22 @@ using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
-
-
 call Update on input controls that just update the Model, but not the Entity
+- priority
+- title
+- category
 
+- task planned at
 
+- note content
+
+- habit repeat
+- habit repeat
+- habit repeat
+- habit duration
 
 
 calendar in 1 row
-
-
 
 
 search / filter / sort: (save filter in settings)
