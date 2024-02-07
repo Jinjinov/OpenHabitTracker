@@ -1,5 +1,15 @@
 # Notes:
 
+text: ¡!
+background shape: Circle
+font: Miltonian
+Regular 400 Normal
+font size: 110
+font color: #EEEEEE
+background color: #333333
+
+---------------------------------------------------------------------------------------------------
+
 using Microsoft.AspNetCore.Components.Forms; InputFile / download
 using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Storage; interface IFileSaver
 using Microsoft.Win32; OpenFileDialog / SaveFileDialog
