@@ -17,20 +17,18 @@ public class CalendarService(AppData appData)
 
     private readonly Dictionary<long, DateTime> _dateByTicks = new();
 
-    private DayOfWeek _firstDayOfWeek;
-
     public DateTime FirstDayOfMonth { get; private set; }
 
     public async Task Initialize()
     {
         await _appData.InitializeSettings();
 
-        SetCalendarStartByFirstDayOfMonth(DateTime.Today, _appData.Settings.StartOfWeek);
+        SetCalendarStartByFirstDayOfMonth(DateTime.Today);
     }
 
     public string GetDayOfWeek(int dayIndex)
     {
-        return _days[(dayIndex + (int)_firstDayOfWeek) % 7];
+        return _days[(dayIndex + (int)_appData.Settings.FirstDayOfWeek) % 7];
     }
 
     DateTime GetCalendarDay(int calendarWeek, int dayInWeek)
@@ -60,32 +58,22 @@ public class CalendarService(AppData appData)
 
     DateTime GetFirstDateOfWeek(DateTime day)
     {
-        int diff = (7 + (day.DayOfWeek - _firstDayOfWeek)) % 7;
+        int diff = (7 + (day.DayOfWeek - _appData.Settings.FirstDayOfWeek)) % 7;
         return day.AddDays(-1 * diff).Date;
         //return day.AddDays((int)_firstDayOfWeek - (int)day.DayOfWeek);
     }
 
-    void SetCalendarStartByFirstDayOfWeek(DateTime day, DayOfWeek firstDayOfWeek)
+    void SetCalendarStartByFirstDayOfWeek(DateTime day)
     {
-        _firstDayOfWeek = firstDayOfWeek;
         FirstDayOfMonth = GetFirstDayOfMonth(day);
         _calendarStart = GetFirstDateOfWeek(day);
         _calendarStartTicks = _calendarStart.Ticks;
     }
 
-    void SetCalendarStartByFirstDayOfMonth(DateTime day, DayOfWeek firstDayOfWeek)
+    void SetCalendarStartByFirstDayOfMonth(DateTime day)
     {
-        _firstDayOfWeek = firstDayOfWeek;
         FirstDayOfMonth = GetFirstDayOfMonth(day);
         _calendarStart = GetFirstDateOfWeek(FirstDayOfMonth);
-        _calendarStartTicks = _calendarStart.Ticks;
-    }
-
-    void SetCalendarStart(DateTime day)
-    {
-        FirstDayOfMonth = GetFirstDayOfMonth(day);
-        _calendarStart = day;
-        _firstDayOfWeek = day.DayOfWeek;
         _calendarStartTicks = _calendarStart.Ticks;
     }
 

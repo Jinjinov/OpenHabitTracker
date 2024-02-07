@@ -136,8 +136,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        HabitService.SetSelectedHabit(Id);
-        await HabitService.LoadTimesDone(HabitService.SelectedHabit);
+        await HabitService.SetSelectedHabit(Id);
     }
 
     async Task ToggleSelected(long id)
@@ -149,8 +148,7 @@
             else
             {
                 Id = id;
-                HabitService.SetSelectedHabit(Id);
-                await HabitService.LoadTimesDone(HabitService.SelectedHabit);
+                await HabitService.SetSelectedHabit(Id);
             }
         }
         else

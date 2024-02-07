@@ -23,12 +23,14 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         await _appData.InitializeHabits();
     }
 
-    public void SetSelectedHabit(long? id)
+    public async Task SetSelectedHabit(long? id)
     {
         if (_appData.Habits is null)
             return;
 
         SelectedHabit = id.HasValue && _appData.Habits.TryGetValue(id.Value, out HabitModel? habit) ? habit : null;
+
+        await LoadTimesDone(SelectedHabit);
     }
 
     public async Task LoadTimesDone(HabitModel? habit)

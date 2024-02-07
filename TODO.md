@@ -6,9 +6,18 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
+call Update on input controls that just update the Model, but not the Entity
+
+save on every change or on Save / Close / Focus out ???
+
+selectedModel - for Edit
+newModel - for Add
+
 !!! title edit
 	bool editTitle
-	bool addNew
+
+bool addNew => newModel = null / newModel = new();
+
 !! show Add New Note directly on top of the list
 !! show Add New Task directly on top of the list
 !! show Add New Habit directly on top of the list

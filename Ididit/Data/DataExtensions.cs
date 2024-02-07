@@ -98,7 +98,7 @@ public static class DataExtensions
     public static void CopyToEntity(this SettingsModel model, SettingsEntity entity)
     {
         entity.Id = model.Id;
-        entity.StartOfWeek = model.StartOfWeek;
+        entity.FirstDayOfWeek = model.FirstDayOfWeek;
     }
 
     public static TaskEntity ToEntity(this TaskModel model)
