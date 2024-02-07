@@ -40,7 +40,7 @@ else
                 {
                     <div class="@($"border {border} {text} d-flex bg-success")"
                          style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
-                         @onclick="() => HabitService.AddTimeDone(Habit, dateTime)">
+                         @onclick="() => AddTimeDone(dateTime)">
                         @dateTime.Day<small>(@list.Count)</small>
                     </div>
                 }
@@ -48,7 +48,7 @@ else
                 {
                     <div class="@($"border {border} {text} d-flex")"
                          style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal;"
-                         @onclick="() => HabitService.AddTimeDone(Habit, dateTime)">
+                         @onclick="() => AddTimeDone(dateTime)">
                         @dateTime.Day
                     </div>
                 }
@@ -61,4 +61,15 @@ else
     [EditorRequired]
     [Parameter]
     public HabitModel? Habit { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback<HabitModel?> HabitChanged { get; set; }
+
+    async Task AddTimeDone(DateTime dateTime)
+    {
+        await HabitService.AddTimeDone(Habit!, dateTime);
+
+        await HabitChanged.InvokeAsync(Habit);
+    }
 }
