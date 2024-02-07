@@ -10,6 +10,7 @@
 @inject NavigationManager NavigationManager
 @inject HabitService HabitService
 @inject AppData AppData
+@inject CalendarService CalendarService
 
 <PageTitle>Habits</PageTitle>
 
@@ -59,17 +60,17 @@
                             <div class="mx-auto">
 
                                 <div class="d-flex mb-1">
-                                    <button class="btn btn-outline-primary" @onclick="SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
-                                    <button class="btn btn-outline-primary" @onclick="SetCalendarStartToPreviousMonth"><i class="bi bi-chevron-double-left"></i></button>
-                                    <span class="flex-grow-1 d-flex" style="align-items: center; justify-content: center;">@_firstDayOfMonth.ToString("MMMM")</span>
-                                    <button class="btn btn-outline-primary" @onclick="SetCalendarStartToNextMonth"><i class="bi bi-chevron-double-right"></i></button>
-                                    <button class="btn btn-outline-primary" @onclick="SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
+                                    <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
+                                    <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousMonth"><i class="bi bi-chevron-double-left"></i></button>
+                                    <span class="flex-grow-1 d-flex" style="align-items: center; justify-content: center;">@CalendarService.FirstDayOfMonth.ToString("MMMM")</span>
+                                    <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextMonth"><i class="bi bi-chevron-double-right"></i></button>
+                                    <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
                                 </div>
 
                                 <div class="bg-body d-flex">
                                     @for (int i = 0; i < 7; i++)
                                     {
-                                        string day = _days[(i + (int)_firstDayOfWeek) % 7];
+                                        string day = CalendarService.GetDayOfWeek(i);
                                         <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
                                     }
                                 </div>
@@ -79,9 +80,9 @@
                                     <div class="d-flex">
                                         @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
                                         {
-                                            DateTime dateTime = GetCalendarDayWithCaching(week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
+                                            DateTime dateTime = CalendarService.GetCalendarDayWithCaching(week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
 
-                                            string text = dateTime.Month != _firstDayOfMonth.Month ? "text-body-tertiary" : "";
+                                            string text = dateTime.Month != CalendarService.FirstDayOfMonth.Month ? "text-body-tertiary" : "";
                                             string border = dateTime.Date == DateTime.Today.Date ? "border-4 border-primary" : "";
 
                                             if (habit.TimesDoneByDay.TryGetValue(dateTime, out var list))
@@ -167,112 +168,11 @@
         }
     }
 
-    readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
-
-    const long _ticksInDay = 864_000_000_000;
-    const long _ticksInWeek = 6_048_000_000_000;
-
-    DayOfWeek _firstDayOfWeek;
-    DateTime _firstDayOfMonth;
-    DateTime _calendarStart;
-    long _calendarStartTicks;
-
-    DateTime GetCalendarDay(int calendarWeek, int dayInWeek)
-    {
-        int days = calendarWeek * 7 + dayInWeek;
-
-        return _calendarStart.AddDays(days);
-    }
-
-    Dictionary<long, DateTime> _dateByTicks = new();
-
-    DateTime GetCalendarDayWithCaching(int calendarWeek, int dayInWeek)
-    {
-        long ticks = _calendarStartTicks + calendarWeek * _ticksInWeek + dayInWeek * _ticksInDay;
-
-        if(!_dateByTicks.TryGetValue(ticks, out DateTime date))
-        {
-            date = new DateTime(ticks);
-            _dateByTicks[ticks] = date;
-        }
-
-        return date;
-    }
-
-    DateTime GetFirstDayOfMonth(DateTime day)
-    {
-        return new DateTime(day.Year, day.Month, 1);
-    }
-
-    DateTime GetFirstDateOfWeek(DateTime day)
-    {
-        int diff = (7 + (day.DayOfWeek - _firstDayOfWeek)) % 7;
-        return day.AddDays(-1 * diff).Date;
-        //return day.AddDays((int)_firstDayOfWeek - (int)day.DayOfWeek);
-    }
-
-    void SetCalendarStartByFirstDayOfWeek(DateTime day, DayOfWeek firstDayOfWeek)
-    {
-        _firstDayOfWeek = firstDayOfWeek;
-        _firstDayOfMonth = GetFirstDayOfMonth(day);
-        _calendarStart = GetFirstDateOfWeek(day);
-        _calendarStartTicks = _calendarStart.Ticks;
-    }
-
-    void SetCalendarStartByFirstDayOfMonth(DateTime day, DayOfWeek firstDayOfWeek)
-    {
-        _firstDayOfWeek = firstDayOfWeek;
-        _firstDayOfMonth = GetFirstDayOfMonth(day);
-        _calendarStart = GetFirstDateOfWeek(_firstDayOfMonth);
-        _calendarStartTicks = _calendarStart.Ticks;
-    }
-
-    void SetCalendarStart(DateTime day)
-    {
-        _firstDayOfMonth = GetFirstDayOfMonth(day);
-        _calendarStart = day;
-        _firstDayOfWeek = day.DayOfWeek;
-        _calendarStartTicks = _calendarStart.Ticks;
-    }
-
-    void SetCalendarStartToNextMonth()
-    {
-        _firstDayOfMonth = _firstDayOfMonth.AddMonths(1);
-        _calendarStart = GetFirstDateOfWeek(_firstDayOfMonth);
-        _calendarStartTicks = _calendarStart.Ticks;
-    }
-
-    void SetCalendarStartToPreviousMonth()
-    {
-        _firstDayOfMonth = _firstDayOfMonth.AddMonths(-1);
-        _calendarStart = GetFirstDateOfWeek(_firstDayOfMonth);
-        _calendarStartTicks = _calendarStart.Ticks;
-    }
-
-    void SetCalendarStartToNextWeek()
-    {
-        _calendarStart = _calendarStart.AddDays(7);
-        _firstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
-        if (_calendarStart.Day > 14)
-            _firstDayOfMonth = _firstDayOfMonth.AddMonths(1);
-        _calendarStartTicks = _calendarStart.Ticks;
-    }
-
-    void SetCalendarStartToPreviousWeek()
-    {
-        _calendarStart = _calendarStart.AddDays(-7);
-        _firstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
-        if (_calendarStart.Day > 14)
-            _firstDayOfMonth = _firstDayOfMonth.AddMonths(1);
-        _calendarStartTicks = _calendarStart.Ticks;
-    }
-
     protected override async Task OnInitializedAsync()
     {
         await HabitService.Initialize();
 
-        // TODO: in class Settings: DayOfWeek.Monday
-        SetCalendarStartByFirstDayOfMonth(DateTime.Today, DayOfWeek.Monday);
+        CalendarService.Initialize();
     }
 
     protected override async Task OnParametersSetAsync()
