@@ -9,11 +9,11 @@
 
 <PageTitle>Habits</PageTitle>
 
-<div class="col mh-100 overflow-auto px-1">
+<div class="col mh-100 overflow-auto px-0 px-md-1">
 
     @if (HabitService.EditHabit is not null)
     {
-        <div class="bg-body-tertiary my-1 p-1">
+        <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
             <div class="input-group">
                 <PriorityComponent Model="HabitService.EditHabit" />
 
@@ -26,7 +26,7 @@
                 <label class="input-group-text" for="countInput">Repeat</label>
                 <InputNumber class="form-control" id="countInput" @bind-Value="HabitService.EditHabit.RepeatCount" />
 
-                <label class="input-group-text" for="intervalInput">times every</label>
+                <label class="input-group-text" for="intervalInput">every</label>
                 <InputNumber class="form-control" id="intervalInput" @bind-Value="HabitService.EditHabit.RepeatInterval" />
 
                 <InputSelect class="form-select" @bind-Value="HabitService.EditHabit.RepeatPeriod">

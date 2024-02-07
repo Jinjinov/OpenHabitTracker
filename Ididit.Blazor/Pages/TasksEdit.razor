@@ -8,11 +8,11 @@
 
 <PageTitle>Tasks</PageTitle>
 
-<div class="col mh-100 overflow-auto px-1">
+<div class="col mh-100 overflow-auto px-0 px-md-1">
 
     @if (TaskService.EditTask is not null)
     {
-        <div class="bg-body-tertiary my-1 p-1">
+        <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
             <div class="input-group">
                 <PriorityComponent Model="TaskService.EditTask" />
 

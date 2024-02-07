@@ -14,7 +14,7 @@
 
 <PageTitle>Tasks</PageTitle>
 
-<div class="col mh-100 overflow-auto px-1">
+<div class="col mh-100 overflow-auto px-0 px-md-1">
 
     <NavLink class="input-group flex-nowrap text-decoration-none my-1 p-1" href="/tasks/add">
         <span class="input-group-text flex-grow-1">Add new task</span>
@@ -30,7 +30,7 @@
     {
         foreach (TaskModel task in TaskService.Tasks.Where(t => !t.IsDeleted))
         {
-            <div class="bg-body-tertiary my-1 p-1">
+            <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
                 @if (task.Id == Id)
                 {
                     <div class="input-group flex-nowrap">

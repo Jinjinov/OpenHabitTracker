@@ -14,7 +14,7 @@
 
 <PageTitle>Habits</PageTitle>
 
-<div class="col mh-100 overflow-auto px-1">
+<div class="col mh-100 overflow-auto px-0 px-md-1">
 
     <NavLink class="input-group flex-nowrap text-decoration-none my-1 p-1" href="/habits/add">
         <span class="input-group-text flex-grow-1">Add new habit</span>
@@ -30,7 +30,7 @@
     {
         foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
         {
-            <div class="bg-body-tertiary my-1 p-1">
+            <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
                 @if (habit.Id == Id)
                 {
                     <div class="input-group flex-nowrap">
@@ -56,7 +56,7 @@
                             <small>Times done: @habit.TimesDone.Count</small>
                         </div>
 
-                        <div class="input-group-text p-1">
+                        <div class="input-group-text px-0 py-1 border-0">
                             <div class="mx-auto">
                                 <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" />
                             </div>
@@ -67,7 +67,7 @@
                         <label class="input-group-text" for="countInput">Repeat</label>
                         <InputNumber class="form-control" id="countInput" @bind-Value="habit.RepeatCount" />
 
-                        <label class="input-group-text" for="intervalInput">times every</label>
+                        <label class="input-group-text" for="intervalInput">every</label>
                         <InputNumber class="form-control" id="intervalInput" @bind-Value="habit.RepeatInterval" />
 
                         <InputSelect class="form-select" @bind-Value="habit.RepeatPeriod">
