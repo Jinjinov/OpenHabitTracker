@@ -1,0 +1,64 @@
+﻿@using Ididit.Data.Models
+@using Ididit.Services
+
+@inject CalendarService CalendarService
+@inject HabitService HabitService
+
+@if (Habit is null || Habit.TimesDoneByDay is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="d-flex mb-1">
+        <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
+        <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousMonth"><i class="bi bi-chevron-double-left"></i></button>
+        <span class="flex-grow-1 d-flex" style="align-items: center; justify-content: center;">@CalendarService.FirstDayOfMonth.ToString("MMMM")</span>
+        <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextMonth"><i class="bi bi-chevron-double-right"></i></button>
+        <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
+    </div>
+
+    <div class="bg-body d-flex">
+        @for (int i = 0; i < 7; i++)
+        {
+            string day = CalendarService.GetDayOfWeek(i);
+            <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
+        }
+    </div>
+
+    @for (int week = 0; week < 6; week++)
+    {
+        <div class="d-flex">
+            @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
+            {
+                DateTime dateTime = CalendarService.GetCalendarDayWithCaching(week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
+
+                string text = dateTime.Month != CalendarService.FirstDayOfMonth.Month ? "text-body-tertiary" : "";
+                string border = dateTime.Date == DateTime.Today.Date ? "border-4 border-primary" : "";
+
+                if (Habit.TimesDoneByDay.TryGetValue(dateTime, out var list))
+                {
+                    <div class="@($"border {border} {text} d-flex bg-success")"
+                         style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
+                         @onclick="() => HabitService.AddTimeDone(Habit, dateTime)">
+                        @dateTime.Day<small>(@list.Count)</small>
+                    </div>
+                }
+                else // TODO: fix duplicate HTML elements - use C# variables instead of if/else
+                {
+                    <div class="@($"border {border} {text} d-flex")"
+                         style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal;"
+                         @onclick="() => HabitService.AddTimeDone(Habit, dateTime)">
+                        @dateTime.Day
+                    </div>
+                }
+            }
+        </div>
+    }
+}
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public HabitModel? Habit { get; set; }
+}
