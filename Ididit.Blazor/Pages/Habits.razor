@@ -81,17 +81,18 @@
                                         {
                                             DateTime dateTime = GetCalendarDayWithCaching(week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
 
+                                            string text = dateTime.Month != _firstDayOfMonth.Month ? "text-body-tertiary" : "";
                                             string border = dateTime.Date == DateTime.Today.Date ? "border-4 border-primary" : "";
 
                                             if (habit.TimesDoneByDay.TryGetValue(dateTime, out var list))
                                             {
-                                                <div class="@($"border {border} d-flex bg-success")"
+                                                <div class="@($"border {border} {text} d-flex bg-success")"
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
                                                     @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@dateTime.Day<small>(@list.Count)</small></div>
                                             }
                                             else // TODO: fix duplicate HTML elements - use C# variables instead of if/else
                                             {
-                                                <div class="@($"border {border} d-flex")"
+                                                <div class="@($"border {border} {text} d-flex")"
                                                     style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal;"
                                                     @onclick="() => HabitService.AddTimeDone(habit, dateTime)">@dateTime.Day</div>
                                             }
@@ -250,7 +251,7 @@
     {
         _calendarStart = _calendarStart.AddDays(7);
         _firstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
-        if (_calendarStart.Day > 21)
+        if (_calendarStart.Day > 15)
             _firstDayOfMonth = _firstDayOfMonth.AddMonths(1);
         _calendarStartTicks = _calendarStart.Ticks;
     }
@@ -259,7 +260,7 @@
     {
         _calendarStart = _calendarStart.AddDays(-7);
         _firstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
-        if (_calendarStart.Day > 21)
+        if (_calendarStart.Day > 15)
             _firstDayOfMonth = _firstDayOfMonth.AddMonths(1);
         _calendarStartTicks = _calendarStart.Ticks;
     }
