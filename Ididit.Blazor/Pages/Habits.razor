@@ -33,6 +33,7 @@
                 <InputTextImmediate class="form-control" @bind-Value="HabitService.EditHabit.Title" placeholder="Add new habit" />
 
                 <button class="btn btn-outline-primary" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.EditHabit.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => HabitService.EditHabit = null"><i class="bi bi-trash"></i></button>
             </div>
 
             <div class="input-group">
