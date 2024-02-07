@@ -69,7 +69,7 @@
         foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
         {
             <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
-                @if (habit.Id == Id)
+                @if (habit.Id == Id && HabitService.EditHabit is null)
                 {
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="habit" />

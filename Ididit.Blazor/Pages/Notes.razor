@@ -16,11 +16,31 @@
 
 <div class="col mh-100 overflow-auto px-0 px-md-1">
 
-    <NavLink class="input-group flex-nowrap text-decoration-none my-1 p-1" href="/notes/add">
-        <span class="input-group-text flex-grow-1">Add new note</span>
+    @if (NoteService.EditNote is null)
+    {
+        <button class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => NoteService.EditNote = new()">
+            <span class="input-group-text flex-grow-1">Add new note</span>
 
-        <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
-    </NavLink>
+            <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
+        </button>
+    }
+    @if (NoteService.EditNote is not null)
+    {
+        <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
+            <div class="input-group">
+                <PriorityComponent Model="NoteService.EditNote" />
+
+                <InputTextImmediate class="form-control" @bind-Value="NoteService.EditNote.Title" placeholder="Add new note" />
+
+                <button class="btn btn-outline-primary" @onclick="NoteService.AddNote" disabled="@string.IsNullOrWhiteSpace(NoteService.EditNote.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => NoteService.EditNote = null"><i class="bi bi-trash"></i></button>
+            </div>
+
+            <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.EditNote.Content" placeholder="Add note text" />
+
+            <CategoryComponent Model="NoteService.EditNote" />
+        </div>
+    }
 
     @if (NoteService.Notes is null)
     {
@@ -31,7 +51,7 @@
         foreach (NoteModel note in NoteService.Notes.Where(n => !n.IsDeleted))
         {
             <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
-                @if (note.Id == Id)
+                @if (note.Id == Id && NoteService.EditNote is null)
                 {
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="note" />

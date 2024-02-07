@@ -48,6 +48,8 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         EditNote.Id = note.Id;
 
         _appData.Notes.Add(EditNote.Id, EditNote);
+
+        EditNote = null;
     }
 
     public async Task UpdateNote()
