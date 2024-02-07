@@ -56,7 +56,7 @@
                             <small>Times done: @habit.TimesDone.Count</small>
                         </div>
 
-                        <div class="input-group-text">
+                        <div class="input-group-text p-1">
                             <div class="mx-auto">
                                 <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" />
                             </div>
@@ -85,7 +85,7 @@
 
                     <CategoryComponent Model="habit" />
 
-                    <div class="p-1 border text-center" style="border-radius: var(--bs-border-radius)">
+                    <div class="text-center p-1 border" style="border-radius: var(--bs-border-radius)">
                         <small class="d-inline-block">Created: @habit.CreatedAt</small>
                         <small class="d-inline-block">Updated: @habit.UpdatedAt</small>
                     </div>
