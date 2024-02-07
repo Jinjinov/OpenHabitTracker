@@ -431,11 +431,16 @@ public class AppData(IDataAccess dataAccess)
                                 new() { Title = "Habit item 1" },
                                 new() { Title = "Habit item 2" }
                             },
+                            RepeatCount = 1,
+                            RepeatInterval = 1,
+                            RepeatPeriod = Period.Day,
+                            Duration = new TimeOnly(1,30),
                             TimesDone = new()
                             {
                                 new() { StartedAt = now.AddHours(-1), CompletedAt = now },
                                 new() { StartedAt = now.AddHours(-2), CompletedAt = now }
                             },
+                            LastTimeDoneAt = now,
                             CreatedAt = now,
                             UpdatedAt = now
                         },
@@ -448,11 +453,16 @@ public class AppData(IDataAccess dataAccess)
                                 new() { Title = "Habit item 1" },
                                 new() { Title = "Habit item 2" }
                             },
+                            RepeatCount = 1,
+                            RepeatInterval = 1,
+                            RepeatPeriod = Period.Day,
+                            Duration = new TimeOnly(1,30),
                             TimesDone = new()
                             {
                                 new() { StartedAt = now.AddHours(-3), CompletedAt = now },
                                 new() { StartedAt = now.AddHours(-4), CompletedAt = now }
                             },
+                            LastTimeDoneAt = now,
                             CreatedAt = now,
                             UpdatedAt = now
                         }
