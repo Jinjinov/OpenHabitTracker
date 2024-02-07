@@ -9,8 +9,6 @@ using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
-what is on the home URL on mobile? menu? search, filter, sort?
-
 
 call Update on input controls that just update the Model, but not the Entity
 

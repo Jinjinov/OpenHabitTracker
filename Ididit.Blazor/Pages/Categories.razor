@@ -38,7 +38,7 @@
                 }
                 else
                 {
-                    <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => { CategoryService.SelectedCategory = category; shouldFocus = true; }">@category.Title</span>
+                    <button class="input-group-text flex-grow-1 text-wrap" @onclick="() => { CategoryService.SelectedCategory = category; shouldFocus = true; }">@category.Title</button>
                 }
                 <button class="btn btn-outline-primary" @onclick="() => CategoryService.DeleteCategory(category)"><i class="bi bi-trash"></i></button>
             </div>

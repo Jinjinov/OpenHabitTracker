@@ -53,7 +53,7 @@
                 {
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(note.Priority)</span>
-                        <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(note.Id)">@note.Title</span>
+                        <button class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(note.Id)">@note.Title</button>
                     </div>
 
                     <div class="form-control" style="white-space: pre-wrap">@note.Content</div>

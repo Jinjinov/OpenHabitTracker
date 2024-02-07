@@ -38,19 +38,19 @@ else
 
                 if (Habit.TimesDoneByDay.TryGetValue(dateTime, out var list))
                 {
-                    <div class="@($"border {border} {text} d-flex bg-success")"
+                    <button class="@($"border {border} {text} d-flex bg-success")"
                          style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
                          @onclick="() => AddTimeDone(dateTime)">
                         @dateTime.Day<small>(@list.Count)</small>
-                    </div>
+                    </button>
                 }
                 else // TODO: fix duplicate HTML elements - use C# variables instead of if/else
                 {
-                    <div class="@($"border {border} {text} d-flex")"
+                    <button class="@($"border {border} {text} d-flex bg-body-secondary")"
                          style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal;"
                          @onclick="() => AddTimeDone(dateTime)">
                         @dateTime.Day
-                    </div>
+                    </button>
                 }
             }
         </div>

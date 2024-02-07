@@ -67,6 +67,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         EditHabit.Id = habit.Id;
 
         _appData.Habits.Add(EditHabit.Id, EditHabit);
+
+        EditHabit = null;
     }
 
     public async Task UpdateHabit()

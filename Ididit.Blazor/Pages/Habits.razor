@@ -16,11 +16,48 @@
 
 <div class="col mh-100 overflow-auto px-0 px-md-1">
 
-    <NavLink class="input-group flex-nowrap text-decoration-none my-1 p-1" href="/habits/add">
-        <span class="input-group-text flex-grow-1">Add new habit</span>
+    @if (HabitService.EditHabit is null)
+    {
+        <button class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => HabitService.EditHabit = new()">
+            <span class="input-group-text flex-grow-1">Add new habit</span>
 
-        <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
-    </NavLink>
+            <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
+        </button>
+    }
+    @if (HabitService.EditHabit is not null)
+    {
+        <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
+            <div class="input-group">
+                <PriorityComponent Model="HabitService.EditHabit" />
+
+                <InputTextImmediate class="form-control" @bind-Value="HabitService.EditHabit.Title" placeholder="Add new habit" />
+
+                <button class="btn btn-outline-primary" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.EditHabit.Title)"><i class="bi bi-floppy"></i></button>
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-text" for="countInput">Repeat</label>
+                <InputNumber class="form-control" id="countInput" @bind-Value="HabitService.EditHabit.RepeatCount" />
+
+                <label class="input-group-text" for="intervalInput">every</label>
+                <InputNumber class="form-control" id="intervalInput" @bind-Value="HabitService.EditHabit.RepeatInterval" />
+
+                <InputSelect class="form-select" @bind-Value="HabitService.EditHabit.RepeatPeriod">
+                    @foreach (Period period in Enum.GetValues<Period>())
+                    {
+                        <option @key="period" value="@period">@period</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-text" for="durationInput">Duration</label>
+                <InputDate class="form-control" id="durationInput" @bind-Value="HabitService.EditHabit.DurationProxy" Type="InputDateType.Time" />
+            </div>
+
+            <CategoryComponent Model="HabitService.EditHabit" />
+        </div>
+    }
 
     @if (HabitService.Habits is null)
     {
@@ -90,7 +127,7 @@
                 {
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
-                        <span class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</span>
+                        <button class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</button>
                         @if (habit.LastTimeDoneAt is not null)
                         {
                             <small class="input-group-text">@(habit.LastTimeDoneAt.Value.Date == DateTime.Now.Date ? habit.LastTimeDoneAt.Value.ToShortTimeString() : habit.LastTimeDoneAt.Value.ToShortDateString())</small>
