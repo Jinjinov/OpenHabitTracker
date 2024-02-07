@@ -12,15 +12,9 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 call Update on input controls that just update the Model, but not the Entity
 
+
+
 selecting Note, Task, Habit should be consistent with selecting Category, Item, Priority
-
-
-
-newModel - for Add
-bool addNew => newModel = null / newModel = new();
-!! show Add New Note directly on top of the list
-!! show Add New Task directly on top of the list
-!! show Add New Habit directly on top of the list
 
 
 
