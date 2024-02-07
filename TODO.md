@@ -9,6 +9,8 @@ using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
+what is on the home URL on mobile? menu? search, filter, sort?
+
 
 call Update on input controls that just update the Model, but not the Entity
 
@@ -46,10 +48,6 @@ search / filter / sort: (save filter in settings)
 
 ---------------------------------------------------------------------------------------------------
 
-calendar 7x7
-	display month
-	previous / next month
-
 selected calendar day:
 	show all (list)
 	add
@@ -86,9 +84,6 @@ about
 EF Core: use DbContextFactory
 
 benchmark method time & render time
-
-Note Markdown
-Tab in textarea
 
 Google Keep
 	- title
@@ -167,7 +162,6 @@ columns:
 
 - import
 - export
-- load examples
 - delete all
 
 - about
@@ -176,9 +170,8 @@ columns:
 ---------------------------------------------------------------------------------------------------
 
 - online sync - server with SQL
-- calendar streak - load on demand
+- calendar streak
 - average interval
-- sub-tasks for exercises, chores, ...
 - drag & drop reorder
 - keyboard navigation
 - benchmark: method time & render time
@@ -190,14 +183,6 @@ appointments: (very high priority)
 ASAP tasks: (shopping, etc, ...)
 goals: (high priority)
 maintenance: (normal priority)
-
-- note
-- task
-    - ASAP
-    - date and time - appointment
-- habit
-    - repeating interval
-    - always / every opportunity / occasion - NOTE ?
 
 - ASAP tasks
 	- with subtasks but not really?
@@ -215,46 +200,14 @@ maintenance: (normal priority)
 		- never done
 		- speed - blazor profiler
 
-Make a concrete plan so that the habit is not just waiting to be done:
-- for habits: split the day in 24 hours, like in calendar
-- split the week in 7 days, like in Habits app
-
-there is no point in accordian component - one action to open and one action to close is the same as next, previous - and it is not url route friendly 
-
 - don't use `event` to refresh everything on every change
 - don't use `StateHasChanged()`
 - don't do this: current screen changed -> save current screen to settings -> data changed -> refresh all
-
-- ReplaceTab in MemoEdit
-
-- habits that i really want to do more frequently
-	- chores, cleaning 
-	- exercise, stretch 
-	- grooming, hygiene 
-	- meditation, singing 
-	- reading, Spanish 
-	- programming 
-	- piano
-- subtasks: cleaning, exercises
-
-several exercises should not be several tasks
-several cleaning chores should not be several tasks
-- should be one task with interval and sub-tasks
 
 - import google keep notes with all features
 - organize notes
 - category is mandatory
 - auto sync & backup
-- sub notes? paragraphs? sections? yes!
-	- tree view? no!
-	- accordion? no!
-	- breadcrumbs with drop-down? yes!
-
-are goals actually labels? yes!
-hiking:
-- category: sport
-- goals: endurance, immune system, meditation
-what i had as goals are actually subcategories 
 
 what is wrong with ididit:
 
@@ -275,8 +228,6 @@ what is wrong with ididit:
 
 showing DesiredInterval is a bad idea - no consequences (interval doesn't change) - show AverageInterval
 
-use either checkbox [] or one time action to permanently create a habit
-
 email: copy task list as HTML with checkboxes to clipboard
 sms, message: copy task list with Unicode checkboxes
 
@@ -285,7 +236,7 @@ sms, message: copy task list with Unicode checkboxes
 copy Loop Habit Tracker
 - History (done count grouped by week, month, quarter, year)
 - Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
-- Best straks (from date - to date)
+- Best streaks (from date - to date)
 - Frequency (by day of the week - continuous calendar, without dates, done count grouped by days of the week)
 
 virtualized container
