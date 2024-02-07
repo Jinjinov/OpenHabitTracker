@@ -80,7 +80,7 @@
 
                     <div class="input-group">
                         <label class="input-group-text" for="durationInput">Duration</label>
-                        <InputDate class="form-control" id="durationInput" @bind-Value="DurationProxy" Type="InputDateType.Time" />
+                        <InputDate class="form-control" id="durationInput" @bind-Value="habit.DurationProxy" Type="InputDateType.Time" />
                     </div>
 
                     <CategoryComponent Model="habit" />
@@ -115,16 +115,6 @@
 
     [Parameter]
     public bool IsEmbedded { get; set; }
-
-    TimeOnly DurationProxy
-    {
-        get => HabitService.SelectedHabit?.Duration ?? TimeOnly.MinValue;
-        set
-        {
-            if (HabitService.SelectedHabit is not null)
-                HabitService.SelectedHabit.Duration = value == TimeOnly.MinValue ? null : value;
-        }
-    }
 
     protected override async Task OnInitializedAsync()
     {

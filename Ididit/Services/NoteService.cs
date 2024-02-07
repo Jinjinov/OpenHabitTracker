@@ -11,7 +11,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
     public IReadOnlyCollection<NoteModel>? Notes => _appData.Notes?.Values;
 
-    public NoteModel? SelectedNote { get; set; }
+    private NoteModel? SelectedNote { get; set; }
 
     public NoteModel? EditNote { get; set; }
 

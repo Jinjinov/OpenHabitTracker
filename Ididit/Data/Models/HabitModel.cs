@@ -16,6 +16,12 @@ public class HabitModel : ItemsModel
 
     internal Dictionary<DateTime, List<TimeModel>>? TimesDoneByDay { get; set; }
 
+    internal TimeOnly DurationProxy
+    {
+        get => Duration ?? TimeOnly.MinValue;
+        set => Duration = value == TimeOnly.MinValue ? null : value;
+    }
+
     public void RefreshTimesDoneByDay()
     {
         TimesDoneByDay = TimesDone?.GroupBy(date => date.StartedAt.Date).ToDictionary(group => group.Key, group => group.ToList());

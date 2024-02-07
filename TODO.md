@@ -8,9 +8,12 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
-call Update on input controls that just update the Model, but not the Entity
 
-save on every change + on Save / Focus out
+
+save changes:
+	save on every change - this will spam DB when writing text
+	on Save / Focus out - this can leave unsaved changes
+	call Update on input controls that just update the Model, but not the Entity
 
 selectedModel - for Edit
 newModel - for Add
@@ -24,6 +27,9 @@ bool addNew => newModel = null / newModel = new();
 !! show Add New Note directly on top of the list
 !! show Add New Task directly on top of the list
 !! show Add New Habit directly on top of the list
+
+
+
 
 ! calendar in 1 row
 

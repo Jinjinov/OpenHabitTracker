@@ -11,7 +11,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
     public IReadOnlyCollection<TaskModel>? Tasks => _appData.Tasks?.Values;
 
-    public TaskModel? SelectedTask { get; set; }
+    private TaskModel? SelectedTask { get; set; }
 
     public TaskModel? EditTask { get; set; }
 

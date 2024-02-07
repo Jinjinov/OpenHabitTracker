@@ -11,7 +11,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
     public IReadOnlyCollection<HabitModel>? Habits => _appData.Habits?.Values;
 
-    public HabitModel? SelectedHabit { get; set; }
+    private HabitModel? SelectedHabit { get; set; }
 
     public HabitModel? EditHabit { get; set; }
 
