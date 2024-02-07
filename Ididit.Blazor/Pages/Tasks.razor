@@ -16,11 +16,34 @@
 
 <div class="col mh-100 overflow-auto px-0 px-md-1">
 
-    <NavLink class="input-group flex-nowrap text-decoration-none my-1 p-1" href="/tasks/add">
-        <span class="input-group-text flex-grow-1">Add new task</span>
+    @if (TaskService.EditTask is null)
+    {
+        <NavLink class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => TaskService.EditTask = new()">
+            <span class="input-group-text flex-grow-1">Add new task</span>
 
-        <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
-    </NavLink>
+            <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
+        </NavLink>
+    }
+    @if (TaskService.EditTask is not null)
+    {
+        <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
+            <div class="input-group">
+                <PriorityComponent Model="TaskService.EditTask" />
+
+                <InputTextImmediate class="form-control" @bind-Value="TaskService.EditTask.Title" placeholder="Add new task" />
+
+                <button class="btn btn-outline-primary" @onclick="TaskService.AddTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => TaskService.EditTask = null"><i class="bi bi-trash"></i></button>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Planned at</span>
+                <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.EditTask.PlannedAt" />
+            </div>
+
+            <CategoryComponent Model="TaskService.EditTask" />
+        </div>
+    }
 
     @if (TaskService.Tasks is null)
     {
@@ -31,7 +54,7 @@
         foreach (TaskModel task in TaskService.Tasks.Where(t => !t.IsDeleted))
         {
             <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
-                @if (task.Id == Id)
+                @if (task.Id == Id && TaskService.EditTask is null)
                 {
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="task" />

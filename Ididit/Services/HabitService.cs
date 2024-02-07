@@ -30,6 +30,9 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         SelectedHabit = id.HasValue && _appData.Habits.TryGetValue(id.Value, out HabitModel? habit) ? habit : null;
 
+        if (SelectedHabit is not null)
+            EditHabit = null;
+
         await LoadTimesDone(SelectedHabit);
     }
 

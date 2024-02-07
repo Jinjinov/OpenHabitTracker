@@ -29,6 +29,9 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
             return;
 
         SelectedTask = id.HasValue && _appData.Tasks.TryGetValue(id.Value, out TaskModel? task) ? task : null;
+
+        if (SelectedTask is not null)
+            EditTask = null;
     }
 
     public async Task AddTask()
@@ -48,6 +51,8 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         EditTask.Id = task.Id;
 
         _appData.Tasks.Add(EditTask.Id, EditTask);
+
+        EditTask = null;
     }
 
     public async Task UpdateTask()

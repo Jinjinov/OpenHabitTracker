@@ -29,6 +29,9 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
             return;
 
         SelectedNote = id.HasValue && _appData.Notes.TryGetValue(id.Value, out NoteModel? note) ? note : null;
+
+        if (SelectedNote is not null)
+            EditNote = null;
     }
 
     public async Task AddNote()
