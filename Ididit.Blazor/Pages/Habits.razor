@@ -18,7 +18,7 @@
 
     @if (HabitService.EditHabit is null)
     {
-        <button class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => HabitService.EditHabit = new()">
+        <button class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => { HabitService.EditHabit = new(); shouldFocus = true; }">
             <span class="input-group-text flex-grow-1">Add new habit</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
@@ -30,7 +30,7 @@
             <div class="input-group">
                 <PriorityComponent Model="HabitService.EditHabit" />
 
-                <InputTextImmediate class="form-control" @bind-Value="HabitService.EditHabit.Title" placeholder="Add new habit" />
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.EditHabit.Title" placeholder="Add new habit" />
 
                 <button class="btn btn-outline-primary" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.EditHabit.Title)"><i class="bi bi-floppy"></i></button>
                 <button class="btn btn-outline-primary" @onclick="() => HabitService.EditHabit = null"><i class="bi bi-trash"></i></button>
@@ -151,6 +151,10 @@
     [Parameter]
     public bool IsEmbedded { get; set; }
 
+    InputTextImmediate? inputElement;
+
+    bool shouldFocus;
+
     protected override async Task OnInitializedAsync()
     {
         await HabitService.Initialize();
@@ -161,6 +165,15 @@
     protected override async Task OnParametersSetAsync()
     {
         await HabitService.SetSelectedHabit(Id);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (shouldFocus && inputElement?.Element is not null)
+        {
+            shouldFocus = false;
+            await inputElement.Element.Value.FocusAsync();
+        }
     }
 
     async Task ToggleSelected(long id)

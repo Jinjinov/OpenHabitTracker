@@ -18,7 +18,7 @@
 
     @if (TaskService.EditTask is null)
     {
-        <NavLink class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => TaskService.EditTask = new()">
+        <NavLink class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => { TaskService.EditTask = new(); shouldFocus = true; }">
             <span class="input-group-text flex-grow-1">Add new task</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
@@ -30,7 +30,7 @@
             <div class="input-group">
                 <PriorityComponent Model="TaskService.EditTask" />
 
-                <InputTextImmediate class="form-control" @bind-Value="TaskService.EditTask.Title" placeholder="Add new task" />
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="TaskService.EditTask.Title" placeholder="Add new task" />
 
                 <button class="btn btn-outline-primary" @onclick="TaskService.AddTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
                 <button class="btn btn-outline-primary" @onclick="() => TaskService.EditTask = null"><i class="bi bi-trash"></i></button>
@@ -119,6 +119,10 @@
     [Parameter]
     public bool IsEmbedded { get; set; }
 
+    InputTextImmediate? inputElement;
+
+    bool shouldFocus;
+
     protected override async Task OnInitializedAsync()
     {
         await TaskService.Initialize();
@@ -127,6 +131,15 @@
     protected override void OnParametersSet()
     {
         TaskService.SetSelectedTask(Id);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (shouldFocus && inputElement?.Element is not null)
+        {
+            shouldFocus = false;
+            await inputElement.Element.Value.FocusAsync();
+        }
     }
 
     async Task ToggleSelected(long id)

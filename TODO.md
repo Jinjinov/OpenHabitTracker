@@ -10,15 +10,16 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
+
 call Update on input controls that just update the Model, but not the Entity
 
 
 
-selecting Note, Task, Habit should be consistent with selecting Category, Item, Priority
+
+calendar in 1 row
 
 
 
-! calendar in 1 row
 
 search / filter / sort: (save filter in settings)
 	filter by priority - multiple
