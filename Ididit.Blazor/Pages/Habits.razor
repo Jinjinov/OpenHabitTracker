@@ -43,18 +43,14 @@
 
                     <ItemsComponent Items=habit />
 
-                    if (habit.LastTimeDoneAt is not null)
-                    {
-                        <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
-                            <small>Last time done: @habit.LastTimeDoneAt</small>
-                        </div>
-                    }
-
                     if (habit.TimesDone is not null && habit.TimesDoneByDay is not null)
                     {
-                        <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
-                            <small>Times done: @habit.TimesDone.Count</small>
-                        </div>
+                        if (habit.LastTimeDoneAt is not null)
+                        {
+                            <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
+                                <small>Completed @habit.TimesDone.Count times, last time on @habit.LastTimeDoneAt</small>
+                            </div>
+                        }
 
                         <div class="input-group-text px-0 py-1 border-0">
                             <div class="mx-auto">
