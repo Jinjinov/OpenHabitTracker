@@ -124,8 +124,6 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         DateTime now = DateTime.Now;
 
-        habit.LastTimeDoneAt = now;
-
         habit.TimesDone ??= [];
 
         if (habit.TimesDone.LastOrDefault() is TimeModel time && time.CompletedAt is null)
@@ -137,11 +135,21 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
                 timeEntity.CompletedAt = now;
                 await _dataAccess.UpdateTime(timeEntity);
             }
+
+            await SetLastTimeDone(habit, now);
         }
         else
         {
             await AddTimeDone(habit, now);
         }
+    }
+
+    private async Task SetLastTimeDone(HabitModel habit, DateTime now)
+    {
+        if (habit.LastTimeDoneAt > now)
+            return;
+
+        habit.LastTimeDoneAt = now;
 
         if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
         {
@@ -175,6 +183,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         await _dataAccess.AddTime(timeEntity);
 
         timeModel.Id = timeEntity.Id;
+
+        await SetLastTimeDone(habit, now);
     }
 
     public async Task DeleteHabit(HabitModel habit)
