@@ -10,10 +10,10 @@
 }
 else
 {
-    <div class="d-flex mb-1">
+    <div class="input-group mb-1">
         <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
         <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousMonth"><i class="bi bi-chevron-double-left"></i></button>
-        <span class="flex-grow-1 d-flex" style="align-items: center; justify-content: center;">@CalendarService.FirstDayOfMonth.ToString("MMMM")</span>
+        <span class="input-group-text flex-grow-1" style="justify-content: center;">@CalendarService.FirstDayOfMonth.ToString("MMMM")</span>
         <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextMonth"><i class="bi bi-chevron-double-right"></i></button>
         <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
     </div>
