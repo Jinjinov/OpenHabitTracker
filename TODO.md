@@ -1,5 +1,7 @@
 # TODO:
 
+!!! blazor lifecycle methods swallow exceptions !!! -> remove `protected override async Task OnInitializedAsync()`
+
 Ididit.Google.Apis
 Ididit.LocalStorage
 https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables

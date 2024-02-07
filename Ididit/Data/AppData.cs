@@ -260,7 +260,6 @@ public class AppData(IDataAccess dataAccess)
         {
             habit.Items = itemsByParentId.GetValueOrDefault(habit.Id);
             habit.TimesDone = timesByHabitId.GetValueOrDefault(habit.Id);
-            habit.RefreshTimesDoneByDay();
         }
 
         UserData userData = new()
@@ -316,6 +315,8 @@ public class AppData(IDataAccess dataAccess)
 
             Model.Items?.ForEach(x => x.ParentId = Model.Id);
             Model.TimesDone?.ForEach(x => x.HabitId = Model.Id);
+
+            Model.RefreshTimesDoneByDay();
         }
 
         List<(ItemModel Model, ItemEntity Entity)> items =
