@@ -10,13 +10,14 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
+
 call Update on input controls that just update the Model, but not the Entity
-1 - priority
+
 - title
-1 - category
 
 - note content
 
+- 
 
 
 search / filter / sort: (save filter in settings)

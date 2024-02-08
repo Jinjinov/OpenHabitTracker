@@ -30,14 +30,28 @@ public class AppData(IDataAccess dataAccess)
         return Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
     }
 
-    public async Task UpdateCategory(Model model, long categoryId)
+    public async Task UpdateModel(Model model) // TODO: learn to use generics, perhaps you will like them...
     {
+        if (model is HabitModel habitModel && await _dataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)
+        {
+            habitModel.CopyToEntity(habitEntity);
 
-    }
+            await _dataAccess.UpdateHabit(habitEntity);
+        }
 
-    public async Task UpdatePriority(Model model, Priority priority)
-    {
+        if (model is NoteModel noteModel && await _dataAccess.GetNote(noteModel.Id) is NoteEntity noteEntity)
+        {
+            noteModel.CopyToEntity(noteEntity);
 
+            await _dataAccess.UpdateNote(noteEntity);
+        }
+
+        if (model is TaskModel taskModel && await _dataAccess.GetTask(taskModel.Id) is TaskEntity taskEntity)
+        {
+            taskModel.CopyToEntity(taskEntity);
+
+            await _dataAccess.UpdateTask(taskEntity);
+        }
     }
 
     public async Task InitializeSettings()
