@@ -10,23 +10,29 @@
 }
 else
 {
-    <div class="input-group mb-1">
-        <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
-        <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousMonth"><i class="bi bi-chevron-double-left"></i></button>
-        <span class="input-group-text flex-grow-1" style="justify-content: center;">@CalendarService.FirstDayOfMonth.ToString("MMMM")</span>
-        <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextMonth"><i class="bi bi-chevron-double-right"></i></button>
-        <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
-    </div>
+    if (DisplayMonth)
+    {
+        <div class="input-group mb-1">
+            <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
+            <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousMonth"><i class="bi bi-chevron-double-left"></i></button>
+            <span class="input-group-text flex-grow-1" style="justify-content: center;">@CalendarService.FirstDayOfMonth.ToString("MMMM")</span>
+            <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextMonth"><i class="bi bi-chevron-double-right"></i></button>
+            <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
+        </div>
+    }
 
-    <div class="bg-body d-flex">
-        @for (int i = 0; i < 7; i++)
-        {
-            string day = CalendarService.GetDayOfWeek(i);
-            <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
-        }
-    </div>
+    if (DisplayDayNames)
+    {
+        <div class="bg-body d-flex">
+            @for (int i = 0; i < 7; i++)
+            {
+                string day = CalendarService.GetDayOfWeek(i);
+                <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
+            }
+        </div>
+    }
 
-    @for (int week = 0; week < 6; week++)
+    @for (int week = 0; week < WeekCount; week++)
     {
         <div class="d-flex">
             @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
@@ -66,8 +72,30 @@ else
     [Parameter]
     public EventCallback<HabitModel?> HabitChanged { get; set; }
 
+    [Parameter]
+    public bool DisplayMonth { get; set; }
+
+    [Parameter]
+    public bool DisplayDayNames { get; set; }
+
+    [Parameter]
+    public int WeekCount { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Habit is not null && Habit.TimesDoneByDay is null)
+        {
+            await HabitService.LoadTimesDone(Habit);
+
+            Habit.RefreshTimesDoneByDay();
+        }
+    }
+
     async Task AddTimeDone(DateTime dateTime)
     {
+        if (dateTime > DateTime.Now)
+            return;
+
         await HabitService.AddTimeDone(Habit!, dateTime);
 
         await HabitChanged.InvokeAsync(Habit);

@@ -92,7 +92,7 @@
 
                         <div class="input-group-text px-0 py-1 border-0">
                             <div class="mx-auto">
-                                <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" />
+                                <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" DisplayMonth DisplayDayNames WeekCount="6" />
                             </div>
                         </div>
                     }
@@ -135,6 +135,12 @@
                         }
                         <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                     </div>
+
+                    <div class="input-group-text px-0 py-1 border-0">
+                        <div class="mx-auto">
+                            <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" WeekCount="1" />
+                         </div>
+                     </div>
 
                     <ItemsComponent Items=habit IsReadOnly=true />
                 }
