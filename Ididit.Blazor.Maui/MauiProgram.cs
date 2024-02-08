@@ -27,9 +27,10 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddServices();
-        builder.Services.AddDataAccess(); // %localappdata%\Packages - Environment.SpecialFolder.LocalApplicationData - FileSystem.Current.AppDataDirectory
+        builder.Services.AddDataAccess(); // %localappdata%\Packages\...\LocalState - Environment.SpecialFolder.LocalApplicationData - FileSystem.Current.AppDataDirectory
         builder.Services.AddBackup();
         builder.Services.AddScoped<IOpenFile, OpenFile>();
+        builder.Services.AddScoped<JsInterop>();
         builder.Services.AddScoped<ISaveFile, SaveFile>();
         builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
