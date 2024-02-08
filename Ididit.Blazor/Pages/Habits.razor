@@ -10,7 +10,6 @@
 @inject NavigationManager NavigationManager
 @inject HabitService HabitService
 @inject AppData AppData
-@inject CalendarService CalendarService
 
 <PageTitle>Habits</PageTitle>
 
@@ -164,8 +163,6 @@
     protected override async Task OnInitializedAsync()
     {
         await HabitService.Initialize();
-
-        await CalendarService.Initialize();
     }
 
     protected override async Task OnParametersSetAsync()

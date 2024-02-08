@@ -1,8 +1,10 @@
-﻿@using Ididit.Data.Models
+﻿@using Ididit.Data
+@using Ididit.Data.Models
 @using Ididit.Services
 
 @inject CalendarService CalendarService
 @inject HabitService HabitService
+@inject AppData AppData
 
 @if (Habit is null || Habit.TimesDoneByDay is null)
 {
@@ -13,11 +15,11 @@ else
     if (DisplayMonth)
     {
         <div class="input-group mb-1">
-            <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
-            <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToPreviousMonth"><i class="bi bi-chevron-double-left"></i></button>
-            <span class="input-group-text flex-grow-1" style="justify-content: center;">@CalendarService.FirstDayOfMonth.ToString("MMMM")</span>
-            <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextMonth"><i class="bi bi-chevron-double-right"></i></button>
-            <button class="btn btn-outline-primary" @onclick="CalendarService.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
+            <button class="btn btn-outline-primary" @onclick="_calendarParams.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
+            <button class="btn btn-outline-primary" @onclick="() => _calendarParams.SetCalendarStartToPreviousMonth(AppData.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-left"></i></button>
+            <span class="input-group-text flex-grow-1" style="justify-content: center;">@_calendarParams.FirstDayOfMonth.ToString("MMMM")</span>
+            <button class="btn btn-outline-primary" @onclick="() => _calendarParams.SetCalendarStartToNextMonth(AppData.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-right"></i></button>
+            <button class="btn btn-outline-primary" @onclick="_calendarParams.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
         </div>
     }
 
@@ -26,7 +28,7 @@ else
         <div class="bg-body d-flex">
             @for (int i = 0; i < 7; i++)
             {
-                string day = CalendarService.GetDayOfWeek(i);
+                string day = CalendarService.GetDayOfWeek(AppData.Settings.FirstDayOfWeek, i);
                 <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
             }
         </div>
@@ -37,9 +39,9 @@ else
         <div class="d-flex">
             @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
             {
-                DateTime dateTime = CalendarService.GetCalendarDayWithCaching(week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
+                DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
 
-                string text = dateTime.Month != CalendarService.FirstDayOfMonth.Month ? "text-body-tertiary" : "";
+                string text = dateTime.Month != _calendarParams.FirstDayOfMonth.Month ? "text-body-tertiary" : "";
                 string border = dateTime.Date == DateTime.Today.Date ? "border-4 border-primary" : "";
 
                 if (Habit.TimesDoneByDay.TryGetValue(dateTime, out var list))
@@ -81,8 +83,20 @@ else
     [Parameter]
     public int WeekCount { get; set; }
 
+    CalendarParams _calendarParams = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AppData.InitializeSettings();
+    }
+
     protected override async Task OnParametersSetAsync()
     {
+        if (WeekCount == 1)
+            _calendarParams.SetCalendarStartByFirstDayOfWeek(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+        else
+            _calendarParams.SetCalendarStartByFirstDayOfMonth(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+
         if (Habit is not null && Habit.TimesDoneByDay is null)
         {
             await HabitService.LoadTimesDone(Habit);
