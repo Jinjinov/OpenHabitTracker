@@ -7,7 +7,7 @@
 
 @if (PriorityService.Priorities is not null && Model is not null)
 {
-    <InputSelect class="form-select flex-grow-0 w-auto" @bind-Value="Model.Priority">
+    <InputSelect class="form-select flex-grow-0 w-auto" Value="Model.Priority" ValueExpression="() => Model.Priority" ValueChanged="(Priority priority) => SavePriority(priority)">
         @foreach (Priority priority in Enum.GetValues<Priority>())
         {
             <option @key="priority" value="@priority">@AppData.GetPriorityTitle(priority)</option>
@@ -23,5 +23,15 @@
     protected override async Task OnInitializedAsync()
     {
         await PriorityService.Initialize();
+    }
+
+    async Task SavePriority(Priority priority)
+    {
+        if (Model is null)
+            return;
+
+        Model.Priority = priority;
+
+        await AppData.UpdatePriority(Model, priority);
     }
 }

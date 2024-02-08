@@ -30,6 +30,16 @@ public class AppData(IDataAccess dataAccess)
         return Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
     }
 
+    public async Task UpdateCategory(Model model, long categoryId)
+    {
+
+    }
+
+    public async Task UpdatePriority(Model model, Priority priority)
+    {
+
+    }
+
     public async Task InitializeSettings()
     {
         if (Settings.Id == 0)

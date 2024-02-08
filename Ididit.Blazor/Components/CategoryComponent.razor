@@ -1,11 +1,13 @@
-﻿@using Ididit.Data.Models
+﻿@using Ididit.Data
+@using Ididit.Data.Models
 @using Ididit.Services
 
 @inject CategoryService CategoryService
+@inject AppData AppData
 
 @if (CategoryService.Categories is not null && Model is not null)
 {
-    <InputSelect class="form-select" @bind-Value="Model.CategoryId">
+    <InputSelect class="form-select" Value="Model.CategoryId" ValueExpression="() => Model.CategoryId" ValueChanged="(long categoryId) => SaveCategory(categoryId)">
         <option value="0" disabled selected hidden>None</option>
         @foreach (CategoryModel category in CategoryService.Categories)
         {
@@ -22,5 +24,15 @@
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.Initialize();
+    }
+
+    async Task SaveCategory(long categoryId)
+    {
+        if (Model is null)
+            return;
+
+        Model.CategoryId = categoryId;
+
+        await AppData.UpdateCategory(Model, categoryId);
     }
 }
