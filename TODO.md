@@ -162,6 +162,17 @@ columns:
 - Google Keep - copy all features
 - don't list habits that i always do / never do - or find a solution for displaying them
 
+Ididit.Rest for SQL server for WebView
+User authentication / table Users
+... or ...
+Google, Microsoft, Apple log in
+
+Ididit.yyyyMMddHHmmss.json
+	Google Drive
+	OneDrive
+	iCloud
+	Dropbox - NO!
+
 essentials: (highest priority)
 appointments: (very high priority)
 ASAP tasks: (shopping, etc, ...)
