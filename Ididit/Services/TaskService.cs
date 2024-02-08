@@ -13,7 +13,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
     private TaskModel? SelectedTask { get; set; }
 
-    public TaskModel? EditTask { get; set; }
+    public TaskModel? NewTask { get; set; }
 
     public async Task Initialize()
     {
@@ -31,43 +31,41 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         SelectedTask = id.HasValue && _appData.Tasks.TryGetValue(id.Value, out TaskModel? task) ? task : null;
 
         if (SelectedTask is not null)
-            EditTask = null;
+            NewTask = null;
     }
 
     public async Task AddTask()
     {
-        if (_appData.Tasks is null || EditTask is null)
+        if (_appData.Tasks is null || NewTask is null)
             return;
 
         DateTime now = DateTime.Now;
 
-        EditTask.CreatedAt = now;
-        EditTask.UpdatedAt = now;
+        NewTask.CreatedAt = now;
+        NewTask.UpdatedAt = now;
 
-        TaskEntity task = EditTask.ToEntity();
+        TaskEntity task = NewTask.ToEntity();
 
         await _dataAccess.AddTask(task);
 
-        EditTask.Id = task.Id;
+        NewTask.Id = task.Id;
 
-        _appData.Tasks.Add(EditTask.Id, EditTask);
+        _appData.Tasks.Add(NewTask.Id, NewTask);
 
-        EditTask = null;
+        NewTask = null;
     }
 
     public async Task UpdateTask()
     {
-        if (Tasks is null || EditTask is null)
+        if (Tasks is null || SelectedTask is null)
             return;
 
-        if (await _dataAccess.GetTask(EditTask.Id) is TaskEntity task)
+        if (await _dataAccess.GetTask(SelectedTask.Id) is TaskEntity task)
         {
-            EditTask.CopyToEntity(task);
+            SelectedTask.CopyToEntity(task);
 
             await _dataAccess.UpdateTask(task);
         }
-
-        EditTask = null;
     }
 
     public async Task Start(TaskModel task)

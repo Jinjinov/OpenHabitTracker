@@ -13,7 +13,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
     private HabitModel? SelectedHabit { get; set; }
 
-    public HabitModel? EditHabit { get; set; }
+    public HabitModel? NewHabit { get; set; }
 
     public async Task Initialize()
     {
@@ -31,7 +31,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         SelectedHabit = id.HasValue && _appData.Habits.TryGetValue(id.Value, out HabitModel? habit) ? habit : null;
 
         if (SelectedHabit is not null)
-            EditHabit = null;
+            NewHabit = null;
 
         await LoadTimesDone(SelectedHabit);
     }
@@ -55,38 +55,36 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
     public async Task AddHabit()
     {
-        if (_appData.Habits is null || EditHabit is null)
+        if (_appData.Habits is null || NewHabit is null)
             return;
 
         DateTime now = DateTime.Now;
 
-        EditHabit.CreatedAt = now;
-        EditHabit.UpdatedAt = now;
+        NewHabit.CreatedAt = now;
+        NewHabit.UpdatedAt = now;
 
-        HabitEntity habit = EditHabit.ToEntity();
+        HabitEntity habit = NewHabit.ToEntity();
 
         await _dataAccess.AddHabit(habit);
 
-        EditHabit.Id = habit.Id;
+        NewHabit.Id = habit.Id;
 
-        _appData.Habits.Add(EditHabit.Id, EditHabit);
+        _appData.Habits.Add(NewHabit.Id, NewHabit);
 
-        EditHabit = null;
+        NewHabit = null;
     }
 
     public async Task UpdateHabit()
     {
-        if (Habits is null || EditHabit is null)
+        if (Habits is null || SelectedHabit is null)
             return;
 
-        if (await _dataAccess.GetHabit(EditHabit.Id) is HabitEntity habit)
+        if (await _dataAccess.GetHabit(SelectedHabit.Id) is HabitEntity habit)
         {
-            EditHabit.CopyToEntity(habit);
+            SelectedHabit.CopyToEntity(habit);
 
             await _dataAccess.UpdateHabit(habit);
         }
-
-        EditHabit = null;
     }
 
     public async Task Start(HabitModel habit)

@@ -10,18 +10,18 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 call Update on input controls that just update the Model, but not the Entity
-- priority
+1 - priority
 - title
-- category
+1 - category
 
-- task planned at
+1 - task planned at
 
 - note content
 
-- habit repeat
-- habit repeat
-- habit repeat
-- habit duration
+1 - habit repeat count
+1 - habit repeat interval
+1 - habit repeat period
+1 - habit duration
 
 
 search / filter / sort: (save filter in settings)

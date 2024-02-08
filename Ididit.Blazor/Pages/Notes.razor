@@ -16,29 +16,29 @@
 
 <div class="col mh-100 overflow-auto px-0 px-md-1">
 
-    @if (NoteService.EditNote is null)
+    @if (NoteService.NewNote is null)
     {
-        <button class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => { NoteService.EditNote = new(); shouldFocus = true; }">
+        <button class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => { NoteService.NewNote = new(); shouldFocus = true; }">
             <span class="input-group-text flex-grow-1">Add new note</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
         </button>
     }
-    @if (NoteService.EditNote is not null)
+    @if (NoteService.NewNote is not null)
     {
         <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
             <div class="input-group">
-                <PriorityComponent Model="NoteService.EditNote" />
+                <PriorityComponent Model="NoteService.NewNote" />
 
-                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="NoteService.EditNote.Title" placeholder="Add new note" />
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="NoteService.NewNote.Title" placeholder="Add new note" />
 
-                <button class="btn btn-outline-primary" @onclick="NoteService.AddNote" disabled="@string.IsNullOrWhiteSpace(NoteService.EditNote.Title)"><i class="bi bi-floppy"></i></button>
-                <button class="btn btn-outline-primary" @onclick="() => NoteService.EditNote = null"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-outline-primary" @onclick="NoteService.AddNote" disabled="@string.IsNullOrWhiteSpace(NoteService.NewNote.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => NoteService.NewNote = null"><i class="bi bi-trash"></i></button>
             </div>
 
-            <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.EditNote.Content" placeholder="Add note text" />
+            <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.NewNote.Content" placeholder="Add note text" />
 
-            <CategoryComponent Model="NoteService.EditNote" />
+            <CategoryComponent Model="NoteService.NewNote" />
         </div>
     }
 
@@ -51,7 +51,7 @@
         foreach (NoteModel note in NoteService.Notes.Where(n => !n.IsDeleted))
         {
             <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
-                @if (note.Id == Id && NoteService.EditNote is null)
+                @if (note.Id == Id && NoteService.NewNote is null)
                 {
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="note" />

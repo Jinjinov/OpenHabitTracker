@@ -13,7 +13,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
     private NoteModel? SelectedNote { get; set; }
 
-    public NoteModel? EditNote { get; set; }
+    public NoteModel? NewNote { get; set; }
 
     public async Task Initialize()
     {
@@ -31,43 +31,41 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         SelectedNote = id.HasValue && _appData.Notes.TryGetValue(id.Value, out NoteModel? note) ? note : null;
 
         if (SelectedNote is not null)
-            EditNote = null;
+            NewNote = null;
     }
 
     public async Task AddNote()
     {
-        if (_appData.Notes is null || EditNote is null)
+        if (_appData.Notes is null || NewNote is null)
             return;
 
         DateTime now = DateTime.Now;
 
-        EditNote.CreatedAt = now;
-        EditNote.UpdatedAt = now;
+        NewNote.CreatedAt = now;
+        NewNote.UpdatedAt = now;
 
-        NoteEntity note = EditNote.ToEntity();
+        NoteEntity note = NewNote.ToEntity();
 
         await _dataAccess.AddNote(note);
 
-        EditNote.Id = note.Id;
+        NewNote.Id = note.Id;
 
-        _appData.Notes.Add(EditNote.Id, EditNote);
+        _appData.Notes.Add(NewNote.Id, NewNote);
 
-        EditNote = null;
+        NewNote = null;
     }
 
     public async Task UpdateNote()
     {
-        if (Notes is null || EditNote is null)
+        if (Notes is null || SelectedNote is null)
             return;
 
-        if (await _dataAccess.GetNote(EditNote.Id) is NoteEntity note)
+        if (await _dataAccess.GetNote(SelectedNote.Id) is NoteEntity note)
         {
-            EditNote.CopyToEntity(note);
+            SelectedNote.CopyToEntity(note);
 
             await _dataAccess.UpdateNote(note);
         }
-
-        EditNote = null;
     }
 
     public async Task DeleteNote(NoteModel note)

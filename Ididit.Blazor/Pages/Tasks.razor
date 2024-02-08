@@ -16,32 +16,32 @@
 
 <div class="col mh-100 overflow-auto px-0 px-md-1">
 
-    @if (TaskService.EditTask is null)
+    @if (TaskService.NewTask is null)
     {
-        <NavLink class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => { TaskService.EditTask = new(); shouldFocus = true; }">
+        <NavLink class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => { TaskService.NewTask = new(); shouldFocus = true; }">
             <span class="input-group-text flex-grow-1">Add new task</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
         </NavLink>
     }
-    @if (TaskService.EditTask is not null)
+    @if (TaskService.NewTask is not null)
     {
         <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
             <div class="input-group">
-                <PriorityComponent Model="TaskService.EditTask" />
+                <PriorityComponent Model="TaskService.NewTask" />
 
-                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="TaskService.EditTask.Title" placeholder="Add new task" />
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="TaskService.NewTask.Title" placeholder="Add new task" />
 
-                <button class="btn btn-outline-primary" @onclick="TaskService.AddTask" disabled="@string.IsNullOrWhiteSpace(TaskService.EditTask.Title)"><i class="bi bi-floppy"></i></button>
-                <button class="btn btn-outline-primary" @onclick="() => TaskService.EditTask = null"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-outline-primary" @onclick="TaskService.AddTask" disabled="@string.IsNullOrWhiteSpace(TaskService.NewTask.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => TaskService.NewTask = null"><i class="bi bi-trash"></i></button>
             </div>
 
             <div class="input-group">
                 <span class="input-group-text">Planned at</span>
-                <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.EditTask.PlannedAt" />
+                <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.NewTask.PlannedAt" />
             </div>
 
-            <CategoryComponent Model="TaskService.EditTask" />
+            <CategoryComponent Model="TaskService.NewTask" />
         </div>
     }
 
@@ -54,7 +54,7 @@
         foreach (TaskModel task in TaskService.Tasks.Where(t => !t.IsDeleted))
         {
             <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
-                @if (task.Id == Id && TaskService.EditTask is null)
+                @if (task.Id == Id && TaskService.NewTask is null)
                 {
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="task" />
@@ -68,7 +68,7 @@
 
                     <div class="input-group">
                         <span class="input-group-text">Planned at</span>
-                        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="task.PlannedAt" />
+                        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="task.PlannedAt" ValueExpression="() => task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(task, plannedAt)" />
                     </div>
 
                     @if (task.StartedAt is not null)
@@ -165,5 +165,12 @@
             else
                 NavigationManager.NavigateTo($"/tasks/{id}");
         }
+    }
+
+    async Task SavePlannedAt(TaskModel task, DateTime? plannedAt)
+    {
+        task.PlannedAt = plannedAt;
+
+        await TaskService.UpdateTask();
     }
 }

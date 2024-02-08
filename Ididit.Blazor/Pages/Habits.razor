@@ -15,34 +15,34 @@
 
 <div class="col mh-100 overflow-auto px-0 px-md-1">
 
-    @if (HabitService.EditHabit is null)
+    @if (HabitService.NewHabit is null)
     {
-        <button class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => { HabitService.EditHabit = new(); shouldFocus = true; }">
+        <button class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => { HabitService.NewHabit = new(); shouldFocus = true; }">
             <span class="input-group-text flex-grow-1">Add new habit</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
         </button>
     }
-    @if (HabitService.EditHabit is not null)
+    @if (HabitService.NewHabit is not null)
     {
         <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
             <div class="input-group">
-                <PriorityComponent Model="HabitService.EditHabit" />
+                <PriorityComponent Model="HabitService.NewHabit" />
 
-                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.EditHabit.Title" placeholder="Add new habit" />
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.NewHabit.Title" placeholder="Add new habit" />
 
-                <button class="btn btn-outline-primary" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.EditHabit.Title)"><i class="bi bi-floppy"></i></button>
-                <button class="btn btn-outline-primary" @onclick="() => HabitService.EditHabit = null"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-outline-primary" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.NewHabit.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => HabitService.NewHabit = null"><i class="bi bi-trash"></i></button>
             </div>
 
             <div class="input-group">
                 <label class="input-group-text" for="countInput">Repeat</label>
-                <InputNumber class="form-control" id="countInput" @bind-Value="HabitService.EditHabit.RepeatCount" />
+                <InputNumber class="form-control" id="countInput" @bind-Value="HabitService.NewHabit.RepeatCount" />
 
                 <label class="input-group-text" for="intervalInput">every</label>
-                <InputNumber class="form-control" id="intervalInput" @bind-Value="HabitService.EditHabit.RepeatInterval" />
+                <InputNumber class="form-control" id="intervalInput" @bind-Value="HabitService.NewHabit.RepeatInterval" />
 
-                <InputSelect class="form-select" @bind-Value="HabitService.EditHabit.RepeatPeriod">
+                <InputSelect class="form-select" @bind-Value="HabitService.NewHabit.RepeatPeriod">
                     @foreach (Period period in Enum.GetValues<Period>())
                     {
                         <option @key="period" value="@period">@period</option>
@@ -52,10 +52,10 @@
 
             <div class="input-group">
                 <label class="input-group-text" for="durationInput">Duration</label>
-                <InputDate class="form-control" id="durationInput" @bind-Value="HabitService.EditHabit.DurationProxy" Type="InputDateType.Time" />
+                <InputDate class="form-control" id="durationInput" @bind-Value="HabitService.NewHabit.DurationProxy" Type="InputDateType.Time" />
             </div>
 
-            <CategoryComponent Model="HabitService.EditHabit" />
+            <CategoryComponent Model="HabitService.NewHabit" />
         </div>
     }
 
@@ -68,7 +68,7 @@
         foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
         {
             <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
-                @if (habit.Id == Id && HabitService.EditHabit is null)
+                @if (habit.Id == Id && HabitService.NewHabit is null)
                 {
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="habit" />
