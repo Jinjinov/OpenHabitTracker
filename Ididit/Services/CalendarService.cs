@@ -14,7 +14,6 @@ public class CalendarService(AppData appData)
     private const long _ticksInWeek = 6_048_000_000_000;
 
     private DateTime _calendarStart;
-    private long _calendarStartTicks;
 
     public DateTime FirstDayOfMonth { get; private set; }
 
@@ -39,7 +38,7 @@ public class CalendarService(AppData appData)
 
     public DateTime GetCalendarDayWithCaching(int calendarWeek, int dayInWeek)
     {
-        long ticks = _calendarStartTicks + calendarWeek * _ticksInWeek + dayInWeek * _ticksInDay;
+        long ticks = _calendarStart.Ticks + calendarWeek * _ticksInWeek + dayInWeek * _ticksInDay;
 
         if (!_dateByTicks.TryGetValue(ticks, out DateTime date))
         {
@@ -57,37 +56,32 @@ public class CalendarService(AppData appData)
 
     private DateTime GetFirstDateOfWeek(DateTime day)
     {
-        int diff = (7 + (day.DayOfWeek - _appData.Settings.FirstDayOfWeek)) % 7;
-        return day.AddDays(-1 * diff).Date;
-        //return day.AddDays((int)_firstDayOfWeek - (int)day.DayOfWeek);
+        int diff = -((7 + (day.DayOfWeek - _appData.Settings.FirstDayOfWeek)) % 7);
+        return day.AddDays(diff).Date;
     }
 
     void SetCalendarStartByFirstDayOfWeek(DateTime day)
     {
         FirstDayOfMonth = GetFirstDayOfMonth(day);
         _calendarStart = GetFirstDateOfWeek(day);
-        _calendarStartTicks = _calendarStart.Ticks;
     }
 
     void SetCalendarStartByFirstDayOfMonth(DateTime day)
     {
         FirstDayOfMonth = GetFirstDayOfMonth(day);
         _calendarStart = GetFirstDateOfWeek(FirstDayOfMonth);
-        _calendarStartTicks = _calendarStart.Ticks;
     }
 
     public void SetCalendarStartToNextMonth()
     {
         FirstDayOfMonth = FirstDayOfMonth.AddMonths(1);
         _calendarStart = GetFirstDateOfWeek(FirstDayOfMonth);
-        _calendarStartTicks = _calendarStart.Ticks;
     }
 
     public void SetCalendarStartToPreviousMonth()
     {
         FirstDayOfMonth = FirstDayOfMonth.AddMonths(-1);
         _calendarStart = GetFirstDateOfWeek(FirstDayOfMonth);
-        _calendarStartTicks = _calendarStart.Ticks;
     }
 
     public void SetCalendarStartToNextWeek()
@@ -96,7 +90,6 @@ public class CalendarService(AppData appData)
         FirstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
         if (_calendarStart.Day > 14)
             FirstDayOfMonth = FirstDayOfMonth.AddMonths(1);
-        _calendarStartTicks = _calendarStart.Ticks;
     }
 
     public void SetCalendarStartToPreviousWeek()
@@ -105,6 +98,5 @@ public class CalendarService(AppData appData)
         FirstDayOfMonth = GetFirstDayOfMonth(_calendarStart);
         if (_calendarStart.Day > 14)
             FirstDayOfMonth = FirstDayOfMonth.AddMonths(1);
-        _calendarStartTicks = _calendarStart.Ticks;
     }
 }
