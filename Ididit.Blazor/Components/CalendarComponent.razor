@@ -36,7 +36,8 @@ else
 
     @for (int week = 0; week < WeekCount; week++)
     {
-        <div class="@($"d-none {_sizes[week]}")">
+        string display = DisplayBasedOnWidth ? $"d-none {_sizes[week]}" : "d-flex";
+        <div class="@display">
             @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
             {
                 DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
@@ -79,6 +80,9 @@ else
 
     [Parameter]
     public bool DisplayDayNames { get; set; }
+
+    [Parameter]
+    public bool DisplayBasedOnWidth { get; set; }
 
     [Parameter]
     public int WeekCount { get; set; }
