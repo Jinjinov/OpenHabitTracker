@@ -72,7 +72,7 @@
                 {
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="habit" />
-                        <InputText class="form-control" @bind-Value="@habit.Title" />
+                        <InputText class="form-control" Value="@habit.Title" ValueExpression="() => habit.Title" ValueChanged="(string title) => SaveTitle(habit, title)" />
                         <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(habit.Id)"><i class="bi bi-floppy"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
@@ -212,6 +212,13 @@
             else
                 NavigationManager.NavigateTo($"/habits/{id}");
         }
+    }
+
+    async Task SaveTitle(HabitModel habit, string title)
+    {
+        habit.Title = title;
+
+        await HabitService.UpdateHabit();
     }
 
     async Task SaveRepeatCount(HabitModel habit, int repeatCount)

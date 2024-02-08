@@ -55,7 +55,7 @@
                 {
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="note" />
-                        <InputText class="form-control" @bind-Value="@note.Title" />
+                        <InputText class="form-control" Value="@note.Title" ValueExpression="() => note.Title" ValueChanged="(string title) => SaveTitle(note, title)" />
                         <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(note.Id)"><i class="bi bi-floppy"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
                     </div>
@@ -142,5 +142,12 @@
             else
                 NavigationManager.NavigateTo($"/notes/{id}");
         }
+    }
+
+    async Task SaveTitle(NoteModel note, string title)
+    {
+        note.Title = title;
+
+        await NoteService.UpdateNote();
     }
 }
