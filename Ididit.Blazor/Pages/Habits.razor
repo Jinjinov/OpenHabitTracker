@@ -98,12 +98,12 @@
 
                     <div class="input-group">
                         <label class="input-group-text" for="countInput">Repeat</label>
-                        <InputNumber class="form-control" id="countInput" @bind-Value="habit.RepeatCount" />
+                        <InputNumber class="form-control" id="countInput" Value="habit.RepeatCount" ValueExpression="() => habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(habit, repeatCount)" />
 
                         <label class="input-group-text" for="intervalInput">every</label>
-                        <InputNumber class="form-control" id="intervalInput" @bind-Value="habit.RepeatInterval" />
+                        <InputNumber class="form-control" id="intervalInput" Value="habit.RepeatInterval" ValueExpression="() => habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(habit, repeatInterval)" />
 
-                        <InputSelect class="form-select" @bind-Value="habit.RepeatPeriod">
+                        <InputSelect class="form-select" Value="habit.RepeatPeriod" ValueExpression="() => habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(habit, repeatPeriod)">
                             @foreach (Period period in Enum.GetValues<Period>())
                             {
                                 <option @key="period" value="@period">@period</option>
@@ -113,7 +113,7 @@
 
                     <div class="input-group">
                         <label class="input-group-text" for="durationInput">Duration</label>
-                        <InputDate class="form-control" id="durationInput" @bind-Value="habit.DurationProxy" Type="InputDateType.Time" />
+                        <InputDate class="form-control" id="durationInput" Value="habit.DurationProxy" ValueExpression="() => habit.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(habit, duration)" Type="InputDateType.Time" />
                     </div>
 
                     <CategoryComponent Model="habit" />
@@ -212,5 +212,33 @@
             else
                 NavigationManager.NavigateTo($"/habits/{id}");
         }
+    }
+
+    async Task SaveRepeatCount(HabitModel habit, int repeatCount)
+    {
+        habit.RepeatCount = repeatCount;
+
+        await HabitService.UpdateHabit();
+    }
+
+    async Task SaveRepeatInterval(HabitModel habit, int repeatInterval)
+    {
+        habit.RepeatInterval = repeatInterval;
+
+        await HabitService.UpdateHabit();
+    }
+
+    async Task SaveRepeatPeriod(HabitModel habit, Period repeatPeriod)
+    {
+        habit.RepeatPeriod = repeatPeriod;
+
+        await HabitService.UpdateHabit();
+    }
+
+    async Task SaveDuration(HabitModel habit, TimeOnly duration)
+    {
+        habit.DurationProxy = duration;
+
+        await HabitService.UpdateHabit();
     }
 }
