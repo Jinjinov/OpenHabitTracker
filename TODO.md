@@ -24,9 +24,6 @@ call Update on input controls that just update the Model, but not the Entity
 - habit duration
 
 
-calendar in 1 row
-
-
 search / filter / sort: (save filter in settings)
 	filter by priority - multiple
 	sort by priority

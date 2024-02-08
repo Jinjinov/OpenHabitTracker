@@ -36,7 +36,7 @@ else
 
     @for (int week = 0; week < WeekCount; week++)
     {
-        <div class="d-flex">
+        <div class="@($"d-none {_sizes[week]}")">
             @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
             {
                 DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
@@ -82,6 +82,8 @@ else
 
     [Parameter]
     public int WeekCount { get; set; }
+
+    string[] _sizes = { "d-lg-flex", "d-xl-flex", "d-xxl-flex", "", "", "" };
 
     CalendarParams _calendarParams = new();
 
