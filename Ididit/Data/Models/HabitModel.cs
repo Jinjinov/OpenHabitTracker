@@ -14,23 +14,33 @@ public class HabitModel : ItemsModel
 
     public List<TimeModel>? TimesDone { get; set; }
 
-    internal Dictionary<DateTime, List<TimeModel>>? TimesDoneByDay { get; set; }
-
     internal TimeOnly DurationProxy
     {
         get => Duration ?? TimeOnly.MinValue;
         set => Duration = value == TimeOnly.MinValue ? null : value;
     }
 
+    internal Dictionary<DateTime, List<TimeModel>>? TimesDoneByDay { get; set; }
+
     public void RefreshTimesDoneByDay()
     {
         TimesDoneByDay = TimesDone?.GroupBy(date => date.StartedAt.Date).ToDictionary(group => group.Key, group => group.ToList());
     }
 
-    public bool? IsOverdue()
+    public bool? IsOverdue() // TODO: add a field, call the method only when TimesDone changes
     {
         if (LastTimeDoneAt is null)
             return null;
+
+        // TODO: use RepeatCount
+
+        // do NOT use LastTimeDoneAt
+
+        // only use TimesDone
+
+        // sort it, because TimesDone can have elements in the past added later
+
+        // iterate the list from the end, break if you find RepeatCount num of dates, or if you reach a date that is outside elapsedTime
 
         DateTime nextDueDate = RepeatPeriod switch
         {
