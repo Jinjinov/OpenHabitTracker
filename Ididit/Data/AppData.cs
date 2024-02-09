@@ -247,6 +247,18 @@ public class AppData(IDataAccess dataAccess)
         }
     }
 
+    public void ClearData()
+    {
+        Habits?.Clear();
+        Notes?.Clear();
+        Tasks?.Clear();
+        Times?.Clear();
+        Items?.Clear();
+        Categories?.Clear();
+        Priorities?.Clear();
+        Trash?.Clear();
+    }
+
     public async Task<UserData> GetUserData()
     {
         await InitializeSettings();
