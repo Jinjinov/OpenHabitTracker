@@ -68,4 +68,6 @@ public interface IDataAccess
     Task RemoveCategories();
     Task RemovePriorities();
     Task RemoveSettings();
+
+    Task ClearAllTables();
 }

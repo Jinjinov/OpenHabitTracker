@@ -1,5 +1,6 @@
 ﻿using Ididit.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Ididit.EntityFrameworkCore;
 
@@ -24,5 +25,23 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<ItemEntity>().HasIndex(x => x.ParentId);
 
         base.OnModelCreating(modelBuilder);
+    }
+
+    public void ClearAllTables()
+    {
+        foreach (IEntityType entityType in Model.GetEntityTypes())
+        {
+            string? tableName = entityType.GetTableName();
+            if (!string.IsNullOrEmpty(tableName))
+            {
+                Database.ExecuteSqlRaw($"DELETE FROM {tableName}");
+                Database.ExecuteSqlRaw($"DELETE FROM sqlite_sequence WHERE name = '{tableName}'");
+            }
+        }
+
+        foreach (var entry in ChangeTracker.Entries().ToList())
+        {
+            entry.State = EntityState.Detached;
+        }
     }
 }

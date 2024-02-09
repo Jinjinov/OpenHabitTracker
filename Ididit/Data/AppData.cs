@@ -249,22 +249,16 @@ public class AppData(IDataAccess dataAccess)
 
     public async Task DeleteAllData()
     {
-        await _dataAccess.RemoveHabits();
-        await _dataAccess.RemoveNotes();
-        await _dataAccess.RemoveTasks();
-        await _dataAccess.RemoveTimes();
-        await _dataAccess.RemoveItems();
-        await _dataAccess.RemoveCategories();
-        await _dataAccess.RemovePriorities();
+        await _dataAccess.ClearAllTables();
 
-        Habits?.Clear();
-        Notes?.Clear();
-        Tasks?.Clear();
-        Times?.Clear();
-        Items?.Clear();
-        Categories?.Clear();
-        Priorities?.Clear();
-        Trash?.Clear();
+        Habits = null;
+        Notes = null;
+        Tasks = null;
+        Times = null;
+        Items = null;
+        Categories = null;
+        Priorities = null;
+        Trash = null;
     }
 
     public async Task<UserData> GetUserData()
