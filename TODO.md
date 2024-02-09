@@ -14,8 +14,6 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 filter, sort by priority
 
-! include time for done today on calendar
-
 show / hide item list
 
 last time done: green / red

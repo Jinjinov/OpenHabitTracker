@@ -118,6 +118,9 @@ else
         if (dateTime > DateTime.Now)
             return;
 
+        if (dateTime.Date == DateTime.Today.Date)
+            dateTime = DateTime.Now;
+
         await HabitService.AddTimeDone(Habit!, dateTime);
 
         await HabitChanged.InvokeAsync(Habit);
