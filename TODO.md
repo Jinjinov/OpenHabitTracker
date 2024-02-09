@@ -10,6 +10,22 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
+title color must be different from item color
+
+filter, sort by priority
+
+include time for done today on calendar
+
+show / hide item list
+
+mark saturday / sunday on calendar - font color
+
+last time done: green / red
+
+own column for title calendar
+
+
+
 search / filter / sort: (save filter in settings)
 	filter by priority - multiple
 	sort by priority
@@ -19,8 +35,6 @@ search / filter / sort: (save filter in settings)
 	sort by RepeatPeriod
 	filter by LastTimeDoneAt / elapsed time - range / relative range (to the interval)
 	sort by LastTimeDoneAt / elapsed time
-
-
 
 - host 24/7 on Raspberry Pi
 	valid LAN IP
