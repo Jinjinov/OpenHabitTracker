@@ -17,8 +17,6 @@ filter, sort by priority
 
 ! settings UI for FirstDayOfWeek
 
-! last time done: green / red
-
 own column for title row calendar
 	- title is a row
 	- everything is in the frist column

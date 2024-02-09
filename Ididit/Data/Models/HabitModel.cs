@@ -32,13 +32,15 @@ public class HabitModel : ItemsModel
         if (LastTimeDoneAt is null)
             return null;
 
-        return RepeatPeriod switch
+        DateTime nextDueDate = RepeatPeriod switch
         {
-            Period.Day => LastTimeDoneAt.Value.AddDays(RepeatInterval) < DateTime.Now,
-            Period.Week => LastTimeDoneAt.Value.AddDays(7 * RepeatInterval) < DateTime.Now,
-            Period.Month => LastTimeDoneAt.Value.AddMonths(RepeatInterval) < DateTime.Now,
-            Period.Year => LastTimeDoneAt.Value.AddYears(RepeatInterval) < DateTime.Now,
-            _ => null,
+            Period.Day => LastTimeDoneAt.Value.AddDays(RepeatInterval),
+            Period.Week => LastTimeDoneAt.Value.AddDays(7 * RepeatInterval),
+            Period.Month => LastTimeDoneAt.Value.AddMonths(RepeatInterval),
+            Period.Year => LastTimeDoneAt.Value.AddYears(RepeatInterval),
+            _ => throw new InvalidOperationException("Invalid repeat period"),
         };
+
+        return nextDueDate < DateTime.Now;
     }
 }
