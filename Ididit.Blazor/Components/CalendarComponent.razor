@@ -100,10 +100,13 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        if (WeekCount == 1)
-            _calendarParams.SetCalendarStartByFirstDayOfWeek(AppData.Settings.FirstDayOfWeek, DateTime.Today);
-        else
-            _calendarParams.SetCalendarStartByFirstDayOfMonth(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+        if (_calendarParams.CalendarStart == DateTime.MinValue)
+        {
+            if (WeekCount == 1)
+                _calendarParams.SetCalendarStartByFirstDayOfWeek(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+            else
+                _calendarParams.SetCalendarStartByFirstDayOfMonth(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+        }
 
         if (Habit is not null && Habit.TimesDoneByDay is null)
         {

@@ -20,8 +20,6 @@ show / hide item list
 
 ! own column for title row calendar
 
-!!! why does calendar reset on time done added ???
-
 
 
 search / filter / sort: (save filter in settings)
