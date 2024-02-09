@@ -10,15 +10,17 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-! title color must be different from item color
+? Title color != Item color ?
 
 filter, sort by priority
 
 show / hide item list
 
-last time done: green / red
+! last time done: green / red
 
-own column for title calendar
+! own column for title row calendar
+
+!!! why does calendar reset on time done added ???
 
 
 
