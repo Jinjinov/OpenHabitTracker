@@ -9,19 +9,20 @@ using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
-
 ? Title color != Item color ?
 
 filter, sort by priority
 
-show / hide item list
+! show / hide item list
 
-settings UI for FirstDayOfWeek
+! settings UI for FirstDayOfWeek
 
 ! last time done: green / red
 
-! own column for title row calendar
-
+own column for title row calendar
+	- title is a row
+	- everything is in the frist column
+	- calendar is in the second column
 
 
 search / filter / sort: (save filter in settings)

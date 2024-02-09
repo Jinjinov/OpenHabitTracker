@@ -132,18 +132,12 @@
                         @if (habit.LastTimeDoneAt is not null)
                         {
                             DateTime lastTimeDoneAt = habit.LastTimeDoneAt.Value;
-                            string color = "";
-                            if (habit.RepeatCount != 0 && habit.RepeatInterval != 0)
+                            string color = habit.IsOverdue() switch
                             {
-                                if (DateTime.Now - lastTimeDoneAt > TimeSpan.FromDays(habit.RepeatInterval))
-                                {
-                                    color = "bg-danger";
-                                }
-                                else
-                                {
-                                    color = "bg-success";
-                                }
-                            }
+                                true => "bg-danger",
+                                false => "bg-success",
+                                null => ""
+                            };
                             <small class="@($"input-group-text {color}")">@(lastTimeDoneAt.Date == DateTime.Now.Date ? lastTimeDoneAt.ToShortTimeString() : lastTimeDoneAt.ToShortDateString())</small>
                         }
 

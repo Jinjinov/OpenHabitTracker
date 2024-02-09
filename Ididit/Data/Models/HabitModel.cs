@@ -26,4 +26,19 @@ public class HabitModel : ItemsModel
     {
         TimesDoneByDay = TimesDone?.GroupBy(date => date.StartedAt.Date).ToDictionary(group => group.Key, group => group.ToList());
     }
+
+    public bool? IsOverdue()
+    {
+        if (LastTimeDoneAt is null)
+            return null;
+
+        return RepeatPeriod switch
+        {
+            Period.Day => LastTimeDoneAt.Value.AddDays(RepeatInterval) < DateTime.Now,
+            Period.Week => LastTimeDoneAt.Value.AddDays(7 * RepeatInterval) < DateTime.Now,
+            Period.Month => LastTimeDoneAt.Value.AddMonths(RepeatInterval) < DateTime.Now,
+            Period.Year => LastTimeDoneAt.Value.AddYears(RepeatInterval) < DateTime.Now,
+            _ => null,
+        };
+    }
 }
