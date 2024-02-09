@@ -96,16 +96,12 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
         await _dataAccess.RemoveTask(id);
     }
 
-    public async Task DeleteAll()
+    public async Task EmptyTrash()
     {
         await _dataAccess.RemoveHabits();
         await _dataAccess.RemoveNotes();
         await _dataAccess.RemoveTasks();
-        await _dataAccess.RemoveTimes();
-        await _dataAccess.RemoveItems();
-        await _dataAccess.RemoveCategories();
-        await _dataAccess.RemovePriorities();
 
-        _appData.ClearData();
+        _appData.Trash?.Clear();
     }
 }

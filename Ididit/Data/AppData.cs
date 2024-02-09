@@ -247,8 +247,16 @@ public class AppData(IDataAccess dataAccess)
         }
     }
 
-    public void ClearData()
+    public async Task DeleteAllData()
     {
+        await _dataAccess.RemoveHabits();
+        await _dataAccess.RemoveNotes();
+        await _dataAccess.RemoveTasks();
+        await _dataAccess.RemoveTimes();
+        await _dataAccess.RemoveItems();
+        await _dataAccess.RemoveCategories();
+        await _dataAccess.RemovePriorities();
+
         Habits?.Clear();
         Notes?.Clear();
         Tasks?.Clear();

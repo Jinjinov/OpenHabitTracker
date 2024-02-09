@@ -4,7 +4,6 @@
 @using Ididit.Services
 
 @inject AppData AppData
-@inject TrashService TrashService
 
 <PageTitle>Data</PageTitle>
 
@@ -12,7 +11,7 @@
 
     <div class="my-1">
         <button class="btn btn-primary" @onclick="AppData.LoadExamples">Load examples</button>
-        <button class="btn btn-primary" @onclick="TrashService.DeleteAll">Delete all</button>
+        <button class="btn btn-primary" @onclick="AppData.DeleteAllData">Delete all data</button>
     </div>
 
 </div>
