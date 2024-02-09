@@ -128,13 +128,28 @@
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
                         <button class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</button>
+
                         @if (habit.LastTimeDoneAt is not null)
                         {
-                            <small class="input-group-text">@(habit.LastTimeDoneAt.Value.Date == DateTime.Now.Date ? habit.LastTimeDoneAt.Value.ToShortTimeString() : habit.LastTimeDoneAt.Value.ToShortDateString())</small>
+                            DateTime lastTimeDoneAt = habit.LastTimeDoneAt.Value;
+                            string color = "";
+                            if (habit.RepeatCount != 0 && habit.RepeatInterval != 0)
+                            {
+                                if (DateTime.Now - lastTimeDoneAt > TimeSpan.FromDays(habit.RepeatInterval))
+                                {
+                                    color = "bg-danger";
+                                }
+                                else
+                                {
+                                    color = "bg-success";
+                                }
+                            }
+                            <small class="@($"input-group-text {color}")">@(lastTimeDoneAt.Date == DateTime.Now.Date ? lastTimeDoneAt.ToShortTimeString() : lastTimeDoneAt.ToShortDateString())</small>
                         }
+
                         @if (IsEmbedded)
                         {
-                        <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                            <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                         }
                         else
                         {
@@ -144,11 +159,11 @@
 
                     if (IsEmbedded)
                     {
-                    <div class="input-group-text px-0 py-1 border-0">
-                        <div class="mx-auto">
-                            <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" WeekCount="1" />
+                        <div class="input-group-text px-0 py-1 border-0">
+                            <div class="mx-auto">
+                                <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" WeekCount="1" />
+                             </div>
                          </div>
-                     </div>
                     }
 
                     <ItemsComponent Items=habit IsReadOnly=true />

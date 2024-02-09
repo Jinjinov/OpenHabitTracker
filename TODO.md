@@ -16,6 +16,8 @@ filter, sort by priority
 
 show / hide item list
 
+settings UI for FirstDayOfWeek
+
 ! last time done: green / red
 
 ! own column for title row calendar
