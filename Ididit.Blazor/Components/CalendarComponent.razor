@@ -42,7 +42,9 @@ else
             {
                 DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
 
-                string text = dateTime.Month != _calendarParams.FirstDayOfMonth.Month ? "text-body-tertiary" : "";
+                string text = dateTime.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "text-warning" : "text-secondary";
+                if (dateTime.Month == _calendarParams.FirstDayOfMonth.Month)
+                    text += "-emphasis";
                 string border = dateTime.Date == DateTime.Today.Date ? "border-4 border-primary" : "";
 
                 if (Habit.TimesDoneByDay.TryGetValue(dateTime, out var list))
@@ -55,7 +57,7 @@ else
                 }
                 else // TODO: fix duplicate HTML elements - use C# variables instead of if/else
                 {
-                    <button class="@($"border {border} {text} d-flex bg-body-secondary")"
+                    <button class="@($"border {border} {text} d-flex bg-body-tertiary")"
                          style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal;"
                          @onclick="() => AddTimeDone(dateTime)">
                         @dateTime.Day

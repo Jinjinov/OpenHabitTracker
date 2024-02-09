@@ -10,15 +10,13 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-title color must be different from item color
+! title color must be different from item color
 
 filter, sort by priority
 
-include time for done today on calendar
+! include time for done today on calendar
 
 show / hide item list
-
-mark saturday / sunday on calendar - font color
 
 last time done: green / red
 
