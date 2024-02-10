@@ -16,6 +16,14 @@ show Search.razor in the first column
 
 
 
+add Search box
+
+
+
+add Filter by done date
+
+
+
 search / filter / sort: (save filter in settings)
 
 	filter by priority - multiple
