@@ -14,8 +14,8 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 search / filter / sort: (save filter in settings)
-	filter by priority - multiple
 	filter by category - one
+	filter by priority - multiple
 	filter by ElapsedTimeToRepeatIntervalRatio range
 
 
@@ -26,6 +26,7 @@ refresh Notes, Tasks, Habits on filter change:
 	NavigationManager with Route Parameters - GetUriWithQueryParameters
 		string currentPage = Navigation.Uri; // Get relative URI
 		Navigation.NavigateTo($"{currentPage}?filter={filterValue}", forceLoad: false); // Prevent full reload
+		string filterValue = Navigation.QueryString["filter"];
 
 
 
