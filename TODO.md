@@ -9,16 +9,14 @@ using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
+
 filter, sort by priority
-
-! show / hide item list
-
-! settings UI for FirstDayOfWeek
 
 own column for title row calendar
 	- title is a row
 	- everything is in the frist column
 	- calendar is in the second column
+
 
 
 search / filter / sort: (save filter in settings)
