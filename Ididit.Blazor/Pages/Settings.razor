@@ -1,13 +1,29 @@
 ﻿@page "/settings"
 
+@using Ididit.Services
+
+@inject SettingsService SettingsService
+
 <PageTitle>Settings</PageTitle>
 
 <div class="col mh-100 overflow-auto px-0 px-md-1">
     <div class="my-1">
 
+        <div class="input-group flex-nowrap">
+            <div class="input-group-text">
+                <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="SettingsService.Settings.ShowItemList" ValueExpression="() => SettingsService.Settings.ShowItemList" ValueChanged="(bool show) => SetShowItemList(show)" />
+            </div>
+            <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">Show item list</label>
+        </div>
+
     </div>
 </div>
 
 @code {
+    async Task SetShowItemList(bool show)
+    {
+        SettingsService.Settings.ShowItemList = show;
 
+        await SettingsService.UpdateSettings();
+    }
 }

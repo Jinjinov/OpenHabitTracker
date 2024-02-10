@@ -10,6 +10,7 @@
 @inject NavigationManager NavigationManager
 @inject HabitService HabitService
 @inject AppData AppData
+@inject SettingsService SettingsService
 
 <PageTitle>Habits</PageTitle>
 
@@ -157,10 +158,13 @@
                             <div class="mx-auto">
                                 <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" WeekCount="1" />
                              </div>
-                         </div>
+                        </div>
                     }
 
-                    <ItemsComponent Items=habit IsReadOnly=true />
+                    if (SettingsService.Settings.ShowItemList)
+                    {
+                        <ItemsComponent Items=habit IsReadOnly=true />
+                    }
                 }
             </div>
         }

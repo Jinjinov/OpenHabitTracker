@@ -11,6 +11,7 @@
 @inject NavigationManager NavigationManager
 @inject TaskService TaskService
 @inject AppData AppData
+@inject SettingsService SettingsService
 
 <PageTitle>Tasks</PageTitle>
 
@@ -104,7 +105,10 @@
                         <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                     </div>
 
-                    <ItemsComponent Items=task IsReadOnly=true />
+                    if (SettingsService.Settings.ShowItemList)
+                    {
+                        <ItemsComponent Items=task IsReadOnly=true />
+                    }
                 }
             </div>
         }

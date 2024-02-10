@@ -65,14 +65,16 @@ public class AppData(IDataAccess dataAccess)
                 Settings = new SettingsModel
                 {
                     Id = settingsEntity.Id,
-                    FirstDayOfWeek = settingsEntity.FirstDayOfWeek
+                    FirstDayOfWeek = settingsEntity.FirstDayOfWeek,
+                    ShowItemList = settingsEntity.ShowItemList
                 };
             }
             else
             {
                 settingsEntity = new SettingsEntity()
                 {
-                    FirstDayOfWeek = DayOfWeek.Monday
+                    FirstDayOfWeek = DayOfWeek.Monday,
+                    ShowItemList = true
                 };
 
                 await _dataAccess.AddSettings(settingsEntity);
@@ -403,7 +405,8 @@ public class AppData(IDataAccess dataAccess)
         {
             Settings = new()
             {
-                FirstDayOfWeek = DayOfWeek.Monday
+                FirstDayOfWeek = DayOfWeek.Monday,
+                ShowItemList = true
             },
             Categories = new()
             {
