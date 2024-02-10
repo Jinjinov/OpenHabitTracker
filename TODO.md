@@ -8,6 +8,8 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
+add TimeOnly? Duration to TaskModel ?
+
 
 
 search / filter / sort: (save filter in settings)

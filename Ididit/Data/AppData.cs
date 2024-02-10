@@ -66,7 +66,10 @@ public class AppData(IDataAccess dataAccess)
                 {
                     Id = settingsEntity.Id,
                     FirstDayOfWeek = settingsEntity.FirstDayOfWeek,
-                    ShowItemList = settingsEntity.ShowItemList
+                    ShowItemList = settingsEntity.ShowItemList,
+                    NotesSort = settingsEntity.NotesSort,
+                    TasksSort = settingsEntity.TasksSort,
+                    HabitsSort = settingsEntity.HabitsSort
                 };
             }
             else
@@ -74,7 +77,10 @@ public class AppData(IDataAccess dataAccess)
                 settingsEntity = new SettingsEntity()
                 {
                     FirstDayOfWeek = DayOfWeek.Monday,
-                    ShowItemList = true
+                    ShowItemList = true,
+                    NotesSort = Sort.Priority,
+                    TasksSort = Sort.Priority,
+                    HabitsSort = Sort.Priority
                 };
 
                 await _dataAccess.AddSettings(settingsEntity);

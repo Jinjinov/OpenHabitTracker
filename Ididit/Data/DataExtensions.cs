@@ -100,6 +100,9 @@ public static class DataExtensions
         entity.Id = model.Id;
         entity.FirstDayOfWeek = model.FirstDayOfWeek;
         entity.ShowItemList = model.ShowItemList;
+        entity.NotesSort = model.NotesSort;
+        entity.TasksSort = model.TasksSort;
+        entity.HabitsSort = model.HabitsSort;
     }
 
     public static TaskEntity ToEntity(this TaskModel model)
