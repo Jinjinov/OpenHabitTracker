@@ -105,7 +105,7 @@ else
             if (WeekCount == 1)
                 _calendarParams.SetCalendarStartByFirstDayOfWeek(AppData.Settings.FirstDayOfWeek, DateTime.Today);
             else if (WeekCount == 2)
-                _calendarParams.SetCalendarStart(DateTime.Today.AddDays(-13));
+                _calendarParams.SetCalendarStartByDaysFromToday(-13);
             else
                 _calendarParams.SetCalendarStartByFirstDayOfMonth(AppData.Settings.FirstDayOfWeek, DateTime.Today);
         }
