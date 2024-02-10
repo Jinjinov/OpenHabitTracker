@@ -12,11 +12,19 @@ add TimeOnly? Duration to TaskModel ?
 
 
 
+show Search.razor in the first column
+
+
+
 search / filter / sort: (save filter in settings)
+
 	filter by priority - multiple
+
 	filter by category - one
+
 	filter by RepeatPeriod - multiple
 	sort by RepeatPeriod
+
 	filter by LastTimeDoneAt / elapsed time - range / relative range (to the interval)
 	sort by LastTimeDoneAt / elapsed time
 
