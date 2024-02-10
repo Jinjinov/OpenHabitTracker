@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using Ididit.Blazor.Pages
+
+@inherits LayoutComponentBase
 
 @inject INavBarFragment NavBarFragment
 
@@ -16,6 +18,7 @@
     </div>
 
     <div class="row flex-grow-1 overflow-hidden">
+        <Search />
         @Body
     </div>
 

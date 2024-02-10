@@ -1,7 +1,16 @@
 ﻿@page "/"
 
+@inject NavigationManager NavigationManager
+
 <PageTitle>ididit!</PageTitle>
 
 <Notes IsEmbedded />
 <Tasks IsEmbedded />
 <Habits IsEmbedded />
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavigationManager.NavigateTo("/habits");
+    }
+}

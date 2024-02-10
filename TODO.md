@@ -13,10 +13,6 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-!!! show Search.razor in the first column
-
-
-
 search / filter / sort: (save filter in settings)
 
 	filter by priority - multiple
