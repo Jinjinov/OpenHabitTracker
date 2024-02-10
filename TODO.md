@@ -12,25 +12,28 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 ??? Task CompletedAt / Habit LastTimeDoneAt --> DateTime? DoneAt ???
 
 
-multiple layouts:
-	in first column open: (with ??? in the second column)
-		Categories
-		Priorities
-		Settings
-		Data
-		Backup
-		Search
-	open Notes, Tasks, Habits in second column, with Search in the first column
-	open Help, About in second column, with ???
-	open Home in second column, with ???
-	open Menu in in first column, with ???
-	open Trash in second column, with ???
+multiple layouts: @layout MainLayout - use Nested layouts
+	in first column open:
+		Settings - [last opened] in second column
+		Data - [last opened] in second column
+		Backup - [last opened] in second column
+		Search - [last opened] in second column
+	with Search in the first column
+		open Home with [last opened] in second column, with Search in the first column
+		open Notes, Tasks, Habits in second column, with Search in the first column
+	open Menu in in first column, with [empty]
+		open Categories in second column, with Menu in in first column
+		open Priorities in second column, with Menu in in first column
+		open Help, About in second column, with Menu in in first column
+		open Trash in second column, with Menu in in first column
 
 
 refresh Notes, Tasks, Habits on filter change:
 	event
 	CascadingValue / CascadingParameter
-	NavigationManager with Route Parameters
+	NavigationManager with Route Parameters - GetUriWithQueryParameters
+		string currentPage = Navigation.Uri; // Get relative URI
+		Navigation.NavigateTo($"{currentPage}?filter={filterValue}", forceLoad: false); // Prevent full reload
 
 
 search / filter / sort: (save filter in settings)
