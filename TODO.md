@@ -17,22 +17,13 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-add Search box
-add Filter by done date (Task CompletedAt / Habit LastTimeDoneAt)
-
-
-
 search / filter / sort: (save filter in settings)
 
 	filter by priority - multiple
 
 	filter by category - one
 
-	sort by RepeatInterval
-
 	filter by ElapsedTimeToRepeatIntervalRatio range
-
-	sort by ElapsedTimeToRepeatIntervalRatio
 
 
 
@@ -45,6 +36,9 @@ search / filter / sort: (save filter in settings)
 	install NET 8 sdk
 
 ---------------------------------------------------------------------------------------------------
+
+add Search box
+add Filter by done date (Task CompletedAt / Habit LastTimeDoneAt)
 
 selected calendar day:
 	show all (list)

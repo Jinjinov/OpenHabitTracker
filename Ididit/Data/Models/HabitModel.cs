@@ -14,6 +14,10 @@ public class HabitModel : ItemsModel
 
     public List<TimeModel>? TimesDone { get; set; }
 
+    internal TimeSpan ElapsedTime => LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : DateTime.Now - CreatedAt;
+
+    internal double ElapsedTimeToRepeatIntervalRatio => ElapsedTime / GetRepeatInterval() * 100.0;
+
     internal TimeOnly DurationProxy
     {
         get => Duration ?? TimeOnly.MinValue;
@@ -25,6 +29,18 @@ public class HabitModel : ItemsModel
     public void RefreshTimesDoneByDay()
     {
         TimesDoneByDay = TimesDone?.GroupBy(date => date.StartedAt.Date).ToDictionary(group => group.Key, group => group.ToList());
+    }
+
+    public TimeSpan GetRepeatInterval()
+    {
+        return RepeatPeriod switch
+        {
+            Period.Day => TimeSpan.FromDays(RepeatInterval),
+            Period.Week => TimeSpan.FromDays(7 * RepeatInterval),
+            Period.Month => TimeSpan.FromDays(30 * RepeatInterval),
+            Period.Year => TimeSpan.FromDays(365 * RepeatInterval),
+            _ => throw new InvalidOperationException("Invalid repeat period")
+        };
     }
 
     public bool? IsOverdue() // TODO: add a field, call the method only when TimesDone changes
@@ -48,7 +64,7 @@ public class HabitModel : ItemsModel
             Period.Week => LastTimeDoneAt.Value.AddDays(7 * RepeatInterval),
             Period.Month => LastTimeDoneAt.Value.AddMonths(RepeatInterval),
             Period.Year => LastTimeDoneAt.Value.AddYears(RepeatInterval),
-            _ => throw new InvalidOperationException("Invalid repeat period"),
+            _ => throw new InvalidOperationException("Invalid repeat period")
         };
 
         return nextDueDate < DateTime.Now;

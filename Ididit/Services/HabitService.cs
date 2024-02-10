@@ -27,9 +27,9 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
             Sort.Priority => habits.OrderByDescending(x => x.Priority),
             Sort.Title => habits.OrderBy(x => x.Title),
             Sort.Duration => habits.OrderBy(x => x.Duration),
-            Sort.RepeatInterval => throw new NotImplementedException(),
+            Sort.RepeatInterval => habits.OrderBy(x => x.GetRepeatInterval()),
             Sort.ElapsedTime => habits.OrderBy(x => x.LastTimeDoneAt),
-            Sort.ElapsedTimeToRepeatIntervalRatio => throw new NotImplementedException(),
+            Sort.ElapsedTimeToRepeatIntervalRatio => habits.OrderBy(x => x.ElapsedTimeToRepeatIntervalRatio),
             _ => habits
         };
     }
