@@ -106,6 +106,8 @@ when task is done, check all task items
 when all habit items are done, habit is done
 when all task items are done, task is done
 
+---------------------------------------------------------------------------------------------------
+
 textarea tabs
 
 textarea highlight
@@ -196,7 +198,6 @@ pin razor page to Home - in a column - max 4 columns ?
 	- app.UseExceptionHandler("/Error");
 
 columns:
-	habits calendar - own column?
 	search, filter, sort
 
 - read Settings from DB before Run()
@@ -206,10 +207,6 @@ columns:
 
 - filter
 - sort
-
-- import
-- export
-- delete all
 
 - about
 - help
