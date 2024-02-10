@@ -12,6 +12,33 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 ??? Task CompletedAt / Habit LastTimeDoneAt --> DateTime? DoneAt ???
 
 
+
+search / filter / sort: (save filter in settings)
+	filter by priority - multiple
+	filter by category - one
+	filter by ElapsedTimeToRepeatIntervalRatio range
+
+
+
+refresh Notes, Tasks, Habits on filter change:
+	event
+	CascadingValue / CascadingParameter
+	NavigationManager with Route Parameters - GetUriWithQueryParameters
+		string currentPage = Navigation.Uri; // Get relative URI
+		Navigation.NavigateTo($"{currentPage}?filter={filterValue}", forceLoad: false); // Prevent full reload
+
+
+
+- host 24/7 on Raspberry Pi
+	valid LAN IP
+	test HDMI cable
+	test fan
+	always on
+	install VS code
+	install NET 8 sdk
+
+---------------------------------------------------------------------------------------------------
+
 multiple layouts: @layout MainLayout - use Nested layouts
 	in first column open:
 		Settings - [last opened] in second column
@@ -26,31 +53,6 @@ multiple layouts: @layout MainLayout - use Nested layouts
 		open Priorities in second column, with Menu in in first column
 		open Help, About in second column, with Menu in in first column
 		open Trash in second column, with Menu in in first column
-
-
-refresh Notes, Tasks, Habits on filter change:
-	event
-	CascadingValue / CascadingParameter
-	NavigationManager with Route Parameters - GetUriWithQueryParameters
-		string currentPage = Navigation.Uri; // Get relative URI
-		Navigation.NavigateTo($"{currentPage}?filter={filterValue}", forceLoad: false); // Prevent full reload
-
-
-search / filter / sort: (save filter in settings)
-	filter by priority - multiple
-	filter by category - one
-	filter by ElapsedTimeToRepeatIntervalRatio range
-
-
-- host 24/7 on Raspberry Pi
-	valid LAN IP
-	test HDMI cable
-	test fan
-	always on
-	install VS code
-	install NET 8 sdk
-
----------------------------------------------------------------------------------------------------
 
 add Search box
 add Filter by done date (Task CompletedAt / Habit LastTimeDoneAt)
