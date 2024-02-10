@@ -29,6 +29,12 @@ refresh Notes, Tasks, Habits on filter change:
 			NavigationManager.NavigateTo(newUri);
 				[SupplyParameterFromQuery]
 				public string Filter { get; set; }
+					Navigation.GetUriWithQueryParameters(
+					new Dictionary<string, object?>
+					{
+						["full name"] = "Morena Baccarin",
+						["ping"] = new int?[] { 35, 16, null, 87, 240 }
+					})
 
 
 
