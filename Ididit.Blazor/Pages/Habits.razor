@@ -71,57 +71,59 @@
             <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1 d-flex">
                 @if (habit.Id == Id && HabitService.NewHabit is null)
                 {
-                    <div class="input-group flex-nowrap">
-                        <PriorityComponent Model="habit" />
-                        <InputText class="form-control" Value="@habit.Title" ValueExpression="() => habit.Title" ValueChanged="(string title) => SaveTitle(habit, title)" />
-                        <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(habit.Id)"><i class="bi bi-floppy"></i></button>
-                        <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
-                        <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
-                    </div>
+                    <div>
+                        <div class="input-group flex-nowrap">
+                            <PriorityComponent Model="habit" />
+                            <InputText class="form-control" Value="@habit.Title" ValueExpression="() => habit.Title" ValueChanged="(string title) => SaveTitle(habit, title)" />
+                            <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(habit.Id)"><i class="bi bi-floppy"></i></button>
+                            <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
+                            <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                        </div>
 
-                    <ItemsComponent Items=habit />
+                        <ItemsComponent Items=habit />
 
-                    if (habit.TimesDone is not null && habit.TimesDoneByDay is not null)
-                    {
-                        if (habit.LastTimeDoneAt is not null)
+                        @if (habit.TimesDone is not null && habit.TimesDoneByDay is not null)
                         {
-                            <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
-                                <small>Completed @habit.TimesDone.Count times, last time on @habit.LastTimeDoneAt</small>
+                            if (habit.LastTimeDoneAt is not null)
+                            {
+                                <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
+                                    <small>Completed @habit.TimesDone.Count times, last time on @habit.LastTimeDoneAt</small>
+                                </div>
+                            }
+
+                            <div class="input-group-text px-0 py-1 border-0">
+                                <div class="mx-auto">
+                                    <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" DisplayMonth DisplayDayNames WeekCount="6" />
+                                </div>
                             </div>
                         }
 
-                        <div class="input-group-text px-0 py-1 border-0">
-                            <div class="mx-auto">
-                                <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" DisplayMonth DisplayDayNames WeekCount="6" />
-                            </div>
+                        <div class="input-group">
+                            <label class="input-group-text" for="countInput">Repeat</label>
+                            <InputNumber class="form-control" id="countInput" Value="habit.RepeatCount" ValueExpression="() => habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(habit, repeatCount)" />
+
+                            <label class="input-group-text" for="intervalInput">every</label>
+                            <InputNumber class="form-control" id="intervalInput" Value="habit.RepeatInterval" ValueExpression="() => habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(habit, repeatInterval)" />
+
+                            <InputSelect class="form-select" Value="habit.RepeatPeriod" ValueExpression="() => habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(habit, repeatPeriod)">
+                                @foreach (Period period in Enum.GetValues<Period>())
+                                {
+                                    <option @key="period" value="@period">@period</option>
+                                }
+                            </InputSelect>
                         </div>
-                    }
 
-                    <div class="input-group">
-                        <label class="input-group-text" for="countInput">Repeat</label>
-                        <InputNumber class="form-control" id="countInput" Value="habit.RepeatCount" ValueExpression="() => habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(habit, repeatCount)" />
+                        <div class="input-group">
+                            <label class="input-group-text" for="durationInput">Duration</label>
+                            <InputDate class="form-control" id="durationInput" Value="habit.DurationProxy" ValueExpression="() => habit.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(habit, duration)" Type="InputDateType.Time" />
+                        </div>
 
-                        <label class="input-group-text" for="intervalInput">every</label>
-                        <InputNumber class="form-control" id="intervalInput" Value="habit.RepeatInterval" ValueExpression="() => habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(habit, repeatInterval)" />
+                        <CategoryComponent Model="habit" />
 
-                        <InputSelect class="form-select" Value="habit.RepeatPeriod" ValueExpression="() => habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(habit, repeatPeriod)">
-                            @foreach (Period period in Enum.GetValues<Period>())
-                            {
-                                <option @key="period" value="@period">@period</option>
-                            }
-                        </InputSelect>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-group-text" for="durationInput">Duration</label>
-                        <InputDate class="form-control" id="durationInput" Value="habit.DurationProxy" ValueExpression="() => habit.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(habit, duration)" Type="InputDateType.Time" />
-                    </div>
-
-                    <CategoryComponent Model="habit" />
-
-                    <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
-                        <small class="d-inline-block mx-1">Created: @habit.CreatedAt</small>
-                        <small class="d-inline-block mx-1">Updated: @habit.UpdatedAt</small>
+                        <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
+                            <small class="d-inline-block mx-1">Created: @habit.CreatedAt</small>
+                            <small class="d-inline-block mx-1">Updated: @habit.UpdatedAt</small>
+                        </div>
                     </div>
                 }
                 else
