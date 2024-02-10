@@ -15,6 +15,11 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
     public NoteModel? NewNote { get; set; }
 
+    public IEnumerable<NoteModel> GetNotes()
+    {
+        return Notes!.Where(h => !h.IsDeleted);
+    }
+
     public async Task Initialize()
     {
         await _appData.InitializeCategories();

@@ -66,7 +66,7 @@
     }
     else
     {
-        foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
+        foreach (HabitModel habit in HabitService.GetHabits())
         {
             <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1 d-flex">
                 @if (habit.Id == Id && HabitService.NewHabit is null)

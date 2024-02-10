@@ -15,6 +15,11 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
     public HabitModel? NewHabit { get; set; }
 
+    public IEnumerable<HabitModel> GetHabits()
+    {
+        return Habits!.Where(h => !h.IsDeleted);
+    }
+
     public async Task Initialize()
     {
         await _appData.InitializeCategories();

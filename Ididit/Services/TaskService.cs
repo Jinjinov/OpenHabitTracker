@@ -15,6 +15,11 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
     public TaskModel? NewTask { get; set; }
 
+    public IEnumerable<TaskModel> GetTasks()
+    {
+        return Tasks!.Where(h => !h.IsDeleted);
+    }
+
     public async Task Initialize()
     {
         await _appData.InitializeCategories();
