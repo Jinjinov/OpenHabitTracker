@@ -127,15 +127,15 @@
                 {
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
-                        <button class="input-group-text flex-grow-1 text-wrap" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</button>
+                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</button>
 
                         @if (habit.LastTimeDoneAt is not null)
                         {
                             DateTime lastTimeDoneAt = habit.LastTimeDoneAt.Value;
                             string color = habit.IsOverdue() switch
                             {
-                                true => "bg-danger",
-                                false => "bg-success",
+                                true => "bg-danger-subtle",
+                                false => "bg-success-subtle",
                                 null => ""
                             };
                             <small class="@($"input-group-text {color}")">@(lastTimeDoneAt.Date == DateTime.Now.Date ? lastTimeDoneAt.ToShortTimeString() : lastTimeDoneAt.ToShortDateString())</small>

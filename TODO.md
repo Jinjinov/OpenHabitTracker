@@ -9,8 +9,6 @@ using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
-? Title color != Item color ?
-
 filter, sort by priority
 
 ! show / hide item list
