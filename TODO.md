@@ -48,23 +48,28 @@ refresh Notes, Tasks, Habits on filter change:
 
 ---------------------------------------------------------------------------------------------------
 
-multiple layouts: @layout MainLayout - use Nested layouts
-	in first column open:
-		Settings - [last opened] in second column
-		Data - [last opened] in second column
-		Backup - [last opened] in second column
-		Search - [last opened] in second column
-	with Search in the first column
-		open Home with [last opened] in second column, with Search in the first column
-		open Notes, Tasks, Habits in second column, with Search in the first column
-	open Menu in in first column, with [empty]
-		open Categories in second column, with Menu in in first column
-		open Priorities in second column, with Menu in in first column
-		open Help, About in second column, with Menu in in first column
-		open Trash in second column, with Menu in in first column
+two changing columns: https://learn.microsoft.com/en-us/aspnet/core/blazor/components/dynamiccomponent?view=aspnetcore-8.0#example
+	in first column: - RenderFragment / DynamicComponent - in a dropdown - this solves the problem with "Back"
+		Settings
+		Data
+		Backup
+		Search
+		Menu == dropdown
+		Categories
+		Priorities
+		Help
+		Trash
+	in second column: - NavigationManager.NavigateTo
+		Home == NavigationManager.NavigateTo
+		Notes
+		Tasks
+		Habits
+		About
 
 add Search box
 add Filter by done date (Task CompletedAt / Habit LastTimeDoneAt)
+
+on calendar use yellow color for partially done (brush teeth 1x of 2x per day)
 
 selected calendar day:
 	show all (list)
