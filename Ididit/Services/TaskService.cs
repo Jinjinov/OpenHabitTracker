@@ -17,7 +17,21 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
     public IEnumerable<TaskModel> GetTasks()
     {
-        return Tasks!.Where(h => !h.IsDeleted);
+        SettingsModel settings = _appData.Settings;
+
+        var tasks = Tasks!.Where(h => !h.IsDeleted);
+
+        return settings.HabitsSort switch
+        {
+            Sort.Category => tasks.OrderBy(x => x.CategoryId),
+            Sort.Priority => tasks.OrderByDescending(x => x.Priority),
+            Sort.Title => tasks.OrderBy(x => x.Title),
+            Sort.Duration => throw new NotImplementedException(),
+            Sort.RepeatInterval => throw new NotImplementedException(),
+            Sort.ElapsedTime => throw new NotImplementedException(),
+            Sort.ElapsedTimeToRepeatIntervalRatio => throw new NotImplementedException(),
+            _ => tasks
+        };
     }
 
     public async Task Initialize()

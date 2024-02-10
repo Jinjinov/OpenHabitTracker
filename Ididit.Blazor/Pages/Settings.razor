@@ -19,7 +19,6 @@
 
         <div class="input-group flex-nowrap">
             <span class="input-group-text">First day of the week</span>
-
             <InputSelect class="form-select" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" ValueChanged="(DayOfWeek dayOfWeek) => SaveFirstDayOfWeek(dayOfWeek)">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
                 {

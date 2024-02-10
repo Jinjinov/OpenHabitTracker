@@ -412,7 +412,10 @@ public class AppData(IDataAccess dataAccess)
             Settings = new()
             {
                 FirstDayOfWeek = DayOfWeek.Monday,
-                ShowItemList = true
+                ShowItemList = true,
+                NotesSort = Sort.Priority,
+                TasksSort = Sort.Priority,
+                HabitsSort = Sort.Priority
             },
             Categories = new()
             {

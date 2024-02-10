@@ -1,13 +1,72 @@
 ﻿@page "/search"
 
+@using Ididit.Data
+@using Ididit.Data.Models
+@using Ididit.Services
+
+@inject SettingsService SettingsService
+
 <PageTitle>Search</PageTitle>
 
 <div class="col mh-100 overflow-auto px-0 px-md-1">
     <div class="my-1">
 
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text">Sort notes by</span>
+            <InputSelect class="form-select" Value="_settings.NotesSort" ValueExpression="() => _settings.NotesSort" ValueChanged="(Sort sort) => SaveNotesSort(sort)">
+                <option value="@Sort.Category">Category</option>
+                <option value="@Sort.Priority">Priority</option>
+                <option value="@Sort.Title">Title</option>
+            </InputSelect>
+        </div>
+
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text">Sort tasks by</span>
+            <InputSelect class="form-select" Value="_settings.TasksSort" ValueExpression="() => _settings.TasksSort" ValueChanged="(Sort sort) => SaveTasksSort(sort)">
+                <option value="@Sort.Category">Category</option>
+                <option value="@Sort.Priority">Priority</option>
+                <option value="@Sort.Title">Title</option>
+            </InputSelect>
+        </div>
+
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text">Sort habits by</span>
+            <InputSelect class="form-select" Value="_settings.HabitsSort" ValueExpression="() => _settings.HabitsSort" ValueChanged="(Sort sort) => SaveHabitsSort(sort)">
+                <option value="@Sort.Category">Category</option>
+                <option value="@Sort.Priority">Priority</option>
+                <option value="@Sort.Title">Title</option>
+            </InputSelect>
+        </div>
+
     </div>
 </div>
 
 @code {
+    SettingsModel _settings => SettingsService.Settings;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await SettingsService.Initialize();
+    }
+
+    async Task SaveNotesSort(Sort sort)
+    {
+        _settings.NotesSort = sort;
+
+        await SettingsService.UpdateSettings();
+    }
+
+    async Task SaveTasksSort(Sort sort)
+    {
+        _settings.TasksSort = sort;
+
+        await SettingsService.UpdateSettings();
+    }
+
+    async Task SaveHabitsSort(Sort sort)
+    {
+        _settings.HabitsSort = sort;
+
+        await SettingsService.UpdateSettings();
+    }
 }

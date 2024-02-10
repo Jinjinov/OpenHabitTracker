@@ -15,7 +15,6 @@ public static class Startup
         services.AddScoped<HabitService>();
         services.AddScoped<ItemService>();
         services.AddScoped<NoteService>();
-        services.AddScoped<SearchFilterSortService>();
         services.AddScoped<SettingsService>();
         services.AddScoped<TaskService>();
         services.AddScoped<TrashService>();

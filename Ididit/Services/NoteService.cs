@@ -17,7 +17,21 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
     public IEnumerable<NoteModel> GetNotes()
     {
-        return Notes!.Where(h => !h.IsDeleted);
+        SettingsModel settings = _appData.Settings;
+
+        var notes = Notes!.Where(h => !h.IsDeleted);
+
+        return settings.HabitsSort switch
+        {
+            Sort.Category => notes.OrderBy(x => x.CategoryId),
+            Sort.Priority => notes.OrderByDescending(x => x.Priority),
+            Sort.Title => notes.OrderBy(x => x.Title),
+            Sort.Duration => throw new NotImplementedException(),
+            Sort.RepeatInterval => throw new NotImplementedException(),
+            Sort.ElapsedTime => throw new NotImplementedException(),
+            Sort.ElapsedTimeToRepeatIntervalRatio => throw new NotImplementedException(),
+            _ => notes
+        };
     }
 
     public async Task Initialize()

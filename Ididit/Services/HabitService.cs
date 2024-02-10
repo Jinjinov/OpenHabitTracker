@@ -17,7 +17,21 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
     public IEnumerable<HabitModel> GetHabits()
     {
-        return Habits!.Where(h => !h.IsDeleted);
+        SettingsModel settings = _appData.Settings;
+
+        var habits = Habits!.Where(h => !h.IsDeleted);
+
+        return settings.HabitsSort switch
+        {
+            Sort.Category => habits.OrderBy(x => x.CategoryId),
+            Sort.Priority => habits.OrderByDescending(x => x.Priority),
+            Sort.Title => habits.OrderBy(x => x.Title),
+            Sort.Duration => throw new NotImplementedException(),
+            Sort.RepeatInterval => throw new NotImplementedException(),
+            Sort.ElapsedTime => throw new NotImplementedException(),
+            Sort.ElapsedTimeToRepeatIntervalRatio => throw new NotImplementedException(),
+            _ => habits
+        };
     }
 
     public async Task Initialize()
