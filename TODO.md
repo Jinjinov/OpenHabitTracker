@@ -12,15 +12,31 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 ??? Task CompletedAt / Habit LastTimeDoneAt --> DateTime? DoneAt ???
 
 
+multiple layouts:
+	in first column open: (with ??? in the second column)
+		Categories
+		Priorities
+		Settings
+		Data
+		Backup
+		Search
+	open Notes, Tasks, Habits in second column, with Search in the first column
+	open Help, About in second column, with ???
+	open Home in second column, with ???
+	open Menu in in first column, with ???
+	open Trash in second column, with ???
+
+
+refresh Notes, Tasks, Habits on filter change:
+	event
+	CascadingValue / CascadingParameter
+	NavigationManager with Route Parameters
+
 
 search / filter / sort: (save filter in settings)
-
 	filter by priority - multiple
-
 	filter by category - one
-
 	filter by ElapsedTimeToRepeatIntervalRatio range
-
 
 
 - host 24/7 on Raspberry Pi
