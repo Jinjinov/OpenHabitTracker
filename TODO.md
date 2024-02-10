@@ -54,7 +54,7 @@ two changing columns: https://learn.microsoft.com/en-us/aspnet/core/blazor/compo
 		Data
 		Backup
 		Search
-		Menu == dropdown
+		Menu == dropdown / select - dropdown is just an action menu, select displays the chosen option
 		Categories
 		Priorities
 		Help
@@ -65,6 +65,30 @@ two changing columns: https://learn.microsoft.com/en-us/aspnet/core/blazor/compo
 		Tasks
 		Habits
 		About
+
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dropdown button
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Action</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+  </ul>
+</div>
+
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dropdown
+  </button>
+  <ul class="dropdown-menu">
+    <li><button class="dropdown-item" type="button">Action</button></li>
+    <li><button class="dropdown-item" type="button">Another action</button></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><button class="dropdown-item" type="button">Something else here</button></li>
+  </ul>
+</div>
 
 add Search box
 add Filter by done date (Task CompletedAt / Habit LastTimeDoneAt)
