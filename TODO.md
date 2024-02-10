@@ -8,20 +8,21 @@ https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 using Markdig; Markdown.ToHtml
 using HtmlAgilityPack; MarkSearchResultsInHtml
 
+
+
 add TimeOnly? Duration to TaskModel ?
 
+
+CompletedAt / LastTimeDoneAt --> DateTime? DoneAt
 
 
 show Search.razor in the first column
 
 
-
 add Search box
 
 
-
 add Filter by done date
-
 
 
 search / filter / sort: (save filter in settings)
@@ -30,11 +31,11 @@ search / filter / sort: (save filter in settings)
 
 	filter by category - one
 
-	filter by RepeatPeriod - multiple
-	sort by RepeatPeriod
+	sort by RepeatInterval
 
-	filter by LastTimeDoneAt / elapsed time - range / relative range (to the interval)
-	sort by LastTimeDoneAt / elapsed time
+	filter by ElapsedTimeToRepeatIntervalRatio range
+	sort by ElapsedTime
+	sort by ElapsedTimeToRepeatIntervalRatio
 
 
 
