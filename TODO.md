@@ -21,12 +21,29 @@ search / filter / sort: (save filter in settings)
 
 
 refresh Notes, Tasks, Habits on filter change:
-	event
+	event += StateHasChanged
 	CascadingValue / CascadingParameter
 	NavigationManager with Route Parameters - GetUriWithQueryParameters
 		string currentPage = Navigation.Uri; // Get relative URI
 		Navigation.NavigateTo($"{currentPage}?filter={filterValue}", forceLoad: false); // Prevent full reload
 		string filterValue = Navigation.QueryString["filter"];
+			var uri = new Uri(NavigationManager.Uri).GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+			var newUri = QueryHelpers.AddQueryString(uri, "filter", filter);
+			NavigationManager.NavigateTo(newUri);
+				var uri = new Uri(NavigationManager.Uri);
+				if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("filter", out var filterValues))
+				{
+					filter = filterValues.First();
+				}
+				https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#query-strings
+					private void OnInput(ChangeEventArgs e)
+					{
+						filter = e.Value.ToString();
+						var newUri = NavigationManager.GetUriWithQueryParameter("filter", filter);
+						NavigationManager.NavigateTo(newUri);
+					}
+					[SupplyParameterFromQuery]
+					public string Filter { get; set; }
 
 
 
