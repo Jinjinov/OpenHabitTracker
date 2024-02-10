@@ -10,15 +10,6 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-filter, sort by priority
-
-own column for title row calendar
-	- title is a row
-	- everything is in the frist column
-	- calendar is in the second column
-
-
-
 search / filter / sort: (save filter in settings)
 	filter by priority - multiple
 	sort by priority
@@ -28,6 +19,8 @@ search / filter / sort: (save filter in settings)
 	sort by RepeatPeriod
 	filter by LastTimeDoneAt / elapsed time - range / relative range (to the interval)
 	sort by LastTimeDoneAt / elapsed time
+
+
 
 - host 24/7 on Raspberry Pi
 	valid LAN IP

@@ -68,7 +68,7 @@
     {
         foreach (HabitModel habit in HabitService.Habits.Where(h => !h.IsDeleted))
         {
-            <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
+            <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1 d-flex">
                 @if (habit.Id == Id && HabitService.NewHabit is null)
                 {
                     <div class="input-group flex-nowrap">
@@ -126,44 +126,53 @@
                 }
                 else
                 {
-                    <div class="input-group flex-nowrap">
-                        <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
-                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</button>
+                    string style = "";
+                    if (!IsEmbedded)
+                    {
+                        style = "height: 50px; --bs-border-radius: 0";
+                    }
+                    <div class="w-100">
+                        <div class="input-group flex-nowrap" style="@style">
+                            <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
+                            <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</button>
 
-                        @if (habit.LastTimeDoneAt is not null)
-                        {
-                            DateTime lastTimeDoneAt = habit.LastTimeDoneAt.Value;
-                            string color = habit.IsOverdue() switch
+                            @if (habit.LastTimeDoneAt is not null)
                             {
-                                true => "bg-danger-subtle",
-                                false => "bg-success-subtle",
-                                null => ""
-                            };
-                            <small class="@($"input-group-text {color}")">@(lastTimeDoneAt.Date == DateTime.Now.Date ? lastTimeDoneAt.ToShortTimeString() : lastTimeDoneAt.ToShortDateString())</small>
-                        }
+                                DateTime lastTimeDoneAt = habit.LastTimeDoneAt.Value;
+                                string color = habit.IsOverdue() switch
+                                {
+                                    true => "bg-danger-subtle",
+                                    false => "bg-success-subtle",
+                                    null => ""
+                                };
+                                <small class="@($"input-group-text {color}")">@(lastTimeDoneAt.Date == DateTime.Now.Date ? lastTimeDoneAt.ToShortTimeString() : lastTimeDoneAt.ToShortDateString())</small>
+                            }
+
+                            @if (IsEmbedded)
+                            {
+                                <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                            }
+                        </div>
 
                         @if (IsEmbedded)
                         {
-                            <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                            <div class="input-group-text px-0 py-1 border-0">
+                                <div class="mx-auto">
+                                    <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" WeekCount="1" />
+                                 </div>
+                            </div>
                         }
-                        else
+
+                        @if (SettingsService.Settings.ShowItemList)
                         {
-                            <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" WeekCount="3" DisplayBasedOnWidth />
+                            <ItemsComponent Items=habit IsReadOnly=true />
                         }
                     </div>
-
-                    if (IsEmbedded)
+                    if (!IsEmbedded)
                     {
-                        <div class="input-group-text px-0 py-1 border-0">
-                            <div class="mx-auto">
-                                <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" WeekCount="1" />
-                             </div>
-                        </div>
-                    }
-
-                    if (SettingsService.Settings.ShowItemList)
-                    {
-                        <ItemsComponent Items=habit IsReadOnly=true />
+                        <div class="d-flex">
+                            <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" WeekCount="3" DisplayBasedOnWidth />
+                         </div>
                     }
                 }
             </div>
