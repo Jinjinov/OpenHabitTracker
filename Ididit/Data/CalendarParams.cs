@@ -17,6 +17,12 @@ public class CalendarParams
         return day.AddDays(diff).Date;
     }
 
+    public void SetCalendarStart(DateTime day)
+    {
+        FirstDayOfMonth = GetFirstDayOfMonth(day);
+        CalendarStart = day;
+    }
+
     public void SetCalendarStartByFirstDayOfWeek(DayOfWeek firstDayOfWeek, DateTime day)
     {
         FirstDayOfMonth = GetFirstDayOfMonth(day);

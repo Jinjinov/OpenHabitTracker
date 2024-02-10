@@ -89,7 +89,7 @@ else
     [Parameter]
     public int WeekCount { get; set; }
 
-    string[] _sizes = { "d-lg-flex", "d-xl-flex", "d-xxl-flex", "", "", "" };
+    string[] _sizes = { "d-xxl-flex", "d-xl-flex", "d-lg-flex", "", "", "" };
 
     CalendarParams _calendarParams = new();
 
@@ -104,6 +104,8 @@ else
         {
             if (WeekCount == 1)
                 _calendarParams.SetCalendarStartByFirstDayOfWeek(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+            else if (WeekCount == 3)
+                _calendarParams.SetCalendarStart(DateTime.Today.AddDays(-20));
             else
                 _calendarParams.SetCalendarStartByFirstDayOfMonth(AppData.Settings.FirstDayOfWeek, DateTime.Today);
         }
