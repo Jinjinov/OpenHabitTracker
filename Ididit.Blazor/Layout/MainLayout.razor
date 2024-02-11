@@ -7,11 +7,16 @@
 <div class="container-fluid d-flex flex-column vh-100 mh-100 overflow-hidden">
     <div class="row flex-shrink-1">
         <div class="col bg-body-secondary d-flex align-items-center">
-            <NavLink class="nav-link" href="menu"><i class="bi bi-list"></i> Menu</NavLink>
-            <NavLink class="nav-link ms-3" href="/" style="font-family: 'Caveat', cursive; font-size: 1.5em;">ididit!</NavLink>
+
+            <button class="nav-link" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> Menu</button>
+
+            @* <NavLink class="nav-link ms-3" href="/" style="font-family: 'Caveat', cursive; font-size: 1.5em;">ididit!</NavLink> *@
+
             <NavLink class="nav-link ms-3" href="habits"><i class="bi bi-card-list"></i> Habits</NavLink>
             <NavLink class="nav-link ms-3" href="notes"><i class="bi bi-card-text"></i> Notes</NavLink>
             <NavLink class="nav-link ms-3" href="tasks"><i class="bi bi-card-checklist"></i> Tasks</NavLink>
+
+            <NavLink class="nav-link ms-3" href="about"><i class="bi bi-info-square"></i> Tasks</NavLink>
 
             @NavBarFragment.GetNavBarFragment()
         </div>
@@ -19,11 +24,20 @@
 
     <div class="row flex-grow-1 overflow-hidden">
         <CascadingValue Name="SettingsChanged" Value=@settingsChanged>
+
+            @if (componentType is not null)
+            {
+                <DynamicComponent Type="componentType" Parameters="parameters" />
+            }
+
             <Search @bind-SettingsChanged=settingsChanged />
+
             @Body
+
         </CascadingValue>
     </div>
 
+    @*
     <div class="row flex-shrink-1">
         <div class="col bg-body-secondary">
             <a href="https://ididit.today/"><i class="bi bi-globe"></i> Web</a>
@@ -31,6 +45,8 @@
             © Jinjinov 2024
         </div>
     </div>
+    *@
+
 </div>
 
 <div id="blazor-error-ui">
@@ -41,4 +57,14 @@
 
 @code {
     bool settingsChanged;
+
+    private Type? componentType;
+    private IDictionary<string, object> parameters;
+
+    void SelectComponent<T>()
+    {
+        componentType = typeof(T);
+
+        //componentType = Type.GetType($"Ididit.Blazor.Pages.{Name}");
+    }
 }
