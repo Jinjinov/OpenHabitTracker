@@ -36,12 +36,6 @@ two changing columns:
 		Priorities
 		Help
 		Trash
-	in second column: - NavigationManager.NavigateTo last visited or default ? Set Default
-		Home == NavigationManager.NavigateTo Default
-		Notes
-		Tasks
-		Habits
-		About
 
 Expression<Func<string>> valueExpression = () => ...
 dictionary = new Dictionary<string, object>()

@@ -79,7 +79,7 @@ public class AppData(IDataAccess dataAccess)
             {
                 settingsEntity = new SettingsEntity()
                 {
-                    StartPage = string.Empty,
+                    StartPage = "/about",
                     FirstDayOfWeek = DayOfWeek.Monday,
                     ShowItemList = true,
                     ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = false,
@@ -430,6 +430,7 @@ public class AppData(IDataAccess dataAccess)
         {
             Settings = new()
             {
+                StartPage = "/about",
                 FirstDayOfWeek = DayOfWeek.Monday,
                 ShowItemList = true,
                 ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = false,
