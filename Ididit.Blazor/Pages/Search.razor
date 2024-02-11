@@ -122,10 +122,10 @@
 
 @code {
     [Parameter]
-    public bool FiltersDirty { get; set; }
+    public bool SettingsChanged { get; set; }
 
     [Parameter]
-    public EventCallback<bool> FiltersDirtyChanged { get; set; }
+    public EventCallback<bool> SettingsChangedChanged { get; set; }
 
     SettingsModel _settings => SettingsService.Settings;
 
@@ -140,8 +140,8 @@
     {
         await SettingsService.UpdateSettings();
 
-        FiltersDirty = !FiltersDirty;
-        await FiltersDirtyChanged.InvokeAsync(FiltersDirty);
+        SettingsChanged = !SettingsChanged;
+        await SettingsChangedChanged.InvokeAsync(SettingsChanged);
     }
 
     async Task SaveCategory(long categoryId)

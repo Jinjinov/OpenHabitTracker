@@ -123,6 +123,9 @@
     [Parameter]
     public bool IsEmbedded { get; set; }
 
+    [CascadingParameter(Name = "SettingsChanged")]
+    public bool SettingsChanged { get; set; }
+
     InputTextImmediate? inputElement;
 
     bool shouldFocus;

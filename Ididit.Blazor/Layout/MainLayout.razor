@@ -18,8 +18,8 @@
     </div>
 
     <div class="row flex-grow-1 overflow-hidden">
-        <CascadingValue Name="FiltersDirty" Value=@filtersDirty>
-            <Search @bind-FiltersDirty=filtersDirty />
+        <CascadingValue Name="SettingsChanged" Value=@settingsChanged>
+            <Search @bind-SettingsChanged=settingsChanged />
             @Body
         </CascadingValue>
     </div>
@@ -40,5 +40,5 @@
 </div>
 
 @code {
-    bool filtersDirty;
+    bool settingsChanged;
 }

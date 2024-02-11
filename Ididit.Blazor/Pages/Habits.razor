@@ -190,8 +190,8 @@
     [Parameter]
     public bool IsEmbedded { get; set; }
 
-    [CascadingParameter(Name = "FiltersDirty")]
-    public bool FiltersDirty { get; set; }
+    [CascadingParameter(Name = "SettingsChanged")]
+    public bool SettingsChanged { get; set; }
 
     InputTextImmediate? inputElement;
 

@@ -13,12 +13,6 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-refresh Notes, Tasks, Habits on filter change:
-	event += StateHasChanged
-	CascadingValue / CascadingParameter
-
-
-
 - host 24/7 on Raspberry Pi
 	valid LAN IP
 	test HDMI cable
