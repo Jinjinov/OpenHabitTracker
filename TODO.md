@@ -26,14 +26,6 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 two changing columns:
 	https://learn.microsoft.com/en-us/aspnet/core/blazor/components/dynamiccomponent?view=aspnetcore-8.0#event-callbacks-eventcallback
 
-Expression<Func<string>> valueExpression = () => ...
-dictionary = new Dictionary<string, object>()
-{
-  { "Value", property },         
-  { "ValueChanged", EventCallback.Factory.Create<string>(this, val => ...)},
-  { "ValueExpression", valueExpression } //optional
-},
-
 selected calendar day:
 	show all (list)
 	add
