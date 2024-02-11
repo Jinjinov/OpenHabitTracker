@@ -17,9 +17,10 @@
         }
         else
         {
-            foreach (PriorityModel priority in PriorityService.Priorities)
+            foreach (PriorityModel priority in PriorityService.Priorities.OrderByDescending(x => x.Id))
             {
                 <div class="input-group">
+                    <span class="input-group-text">@priority.Id</span>
                     @if (priority == PriorityService.SelectedPriority)
                     {
                         <InputText class="form-control" @ref="inputElement" Value="@priority.Title" ValueExpression="() => priority.Title" ValueChanged="(string title) => PriorityService.UpdatePriority(title)" @onfocusout="(args) => PriorityService.SelectedPriority = null" />
