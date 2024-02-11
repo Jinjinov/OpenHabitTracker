@@ -16,7 +16,7 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
         await _appData.InitializeTrash();
     }
 
-    public async Task Restore(InfoModel model)
+    public async Task Restore(InfoModel model) // TODO: learn to use generics, perhaps you will like them...
     {
         model.IsDeleted = false;
 
@@ -63,7 +63,18 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
         }
     }
 
-    public async Task Delete(InfoModel model)
+    public async Task RestoreAll()
+    {
+        if (Models is null)
+            return;
+
+        foreach (InfoModel model in Models)
+        {
+            await Restore(model);
+        }
+    }
+
+    public async Task Delete(InfoModel model) // TODO: learn to use generics, perhaps you will like them...
     {
         if (model is NoteModel)
         {
