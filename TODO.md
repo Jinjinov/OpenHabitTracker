@@ -13,13 +13,6 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-search / filter / sort: (save filter in settings)
-	filter by category - one
-	filter by priority - multiple
-	filter by ElapsedTimeToRepeatIntervalRatio range
-
-
-
 refresh Notes, Tasks, Habits on filter change:
 	event += StateHasChanged
 	CascadingValue / CascadingParameter
