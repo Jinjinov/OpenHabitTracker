@@ -43,13 +43,6 @@ two changing columns:
 		Habits
 		About
 
-<DynamicComponent Type="componentType" Parameters="parameters" />
-
-@code {
-    private Type componentType = ...;
-    private IDictionary<string, object> parameters = ...;
-}
-
 Expression<Func<string>> valueExpression = () => ...
 dictionary = new Dictionary<string, object>()
 {

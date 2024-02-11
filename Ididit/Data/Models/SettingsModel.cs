@@ -4,6 +4,8 @@ public class SettingsModel
 {
     internal long Id { get; set; }
 
+    public string StartPage { get; set; } = string.Empty;
+
     public DayOfWeek FirstDayOfWeek { get; set; }
 
     public bool ShowItemList { get; set; }

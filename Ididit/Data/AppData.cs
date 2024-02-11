@@ -65,6 +65,7 @@ public class AppData(IDataAccess dataAccess)
                 Settings = new SettingsModel
                 {
                     Id = settingsEntity.Id,
+                    StartPage = settingsEntity.StartPage,
                     FirstDayOfWeek = settingsEntity.FirstDayOfWeek,
                     ShowItemList = settingsEntity.ShowItemList,
                     ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = settingsEntity.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin,
@@ -78,6 +79,7 @@ public class AppData(IDataAccess dataAccess)
             {
                 settingsEntity = new SettingsEntity()
                 {
+                    StartPage = string.Empty,
                     FirstDayOfWeek = DayOfWeek.Monday,
                     ShowItemList = true,
                     ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = false,

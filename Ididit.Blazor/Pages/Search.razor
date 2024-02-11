@@ -10,114 +10,121 @@
 <PageTitle>Search</PageTitle>
 
 <div class="col-auto mh-100 overflow-auto px-0 px-md-1">
-    <div class="my-1">
+    @if (CategoryService.Categories is null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="my-1">
 
-        <div class="input-group flex-nowrap">
-            <span class="input-group-text">Show category</span>
-            <InputSelect class="form-select" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" ValueChanged="(long categoryId) => SaveCategory(categoryId)">
-                <option value="0" disabled selected hidden>All</option>
-                @foreach (CategoryModel category in CategoryService.Categories!)
-                {
-                    <option @key="category" value="@category.Id">@category.Title</option>
-                }
-            </InputSelect>
-        </div>
-
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueExpression="() => _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueChanged="(bool show) => SaveShowOnlyOverElapsedTimeToRepeatIntervalRatioMin(show)" />
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text">Show category</span>
+                <InputSelect class="form-select" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" ValueChanged="(long categoryId) => SaveCategory(categoryId)">
+                    <option value="0" disabled selected hidden>All</option>
+                    @foreach (CategoryModel category in CategoryService.Categories)
+                    {
+                        <option @key="category" value="@category.Id">@category.Title</option>
+                    }
+                </InputSelect>
             </div>
-            <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">Show only habits with ratio over @_settings.ElapsedTimeToRepeatIntervalRatioMin%</label>
-        </div>
 
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text flex-grow-1">
-                <input type="range" class="form-range" value="@_settings.ElapsedTimeToRepeatIntervalRatioMin" @oninput="(ChangeEventArgs args) => SaveElapsedTimeToRepeatIntervalRatioMin(Convert.ToInt32(args.Value))">
-            </div>
-        </div>
-
-        @*
-        @foreach (Priority priority in Enum.GetValues<Priority>())
-        {
             <div class="input-group flex-nowrap">
                 <div class="input-group-text">
-                    <InputCheckbox id="@priority" class="form-check-input mt-0" Value="_settings.ShowPriority[priority]" ValueExpression="() => _settings.ShowPriority[priority]" ValueChanged="(bool show) => SaveShowPriority(priority, show)" />
+                    <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueExpression="() => _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueChanged="(bool show) => SaveShowOnlyOverElapsedTimeToRepeatIntervalRatioMin(show)" />
                 </div>
-                <label for="@priority" class="input-group-text flex-grow-1 text-wrap">Show @priority</label>
+                <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">Show only habits with ratio over @_settings.ElapsedTimeToRepeatIntervalRatioMin%</label>
             </div>
-        }
-        *@
 
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="Priority.None" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.None]" ValueExpression="() => _settings.ShowPriority[Priority.None]" ValueChanged="(bool show) => SaveShowPriority(Priority.None, show)" />
+            <div class="input-group flex-nowrap">
+                <div class="input-group-text flex-grow-1">
+                    <input type="range" class="form-range" value="@_settings.ElapsedTimeToRepeatIntervalRatioMin" @oninput="(ChangeEventArgs args) => SaveElapsedTimeToRepeatIntervalRatioMin(Convert.ToInt32(args.Value))">
+                </div>
             </div>
-            <label for="Priority.None" class="input-group-text flex-grow-1 text-wrap">Show Priority None</label>
-        </div>
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="Priority.VeryLow" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.VeryLow]" ValueExpression="() => _settings.ShowPriority[Priority.VeryLow]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryLow, show)" />
-            </div>
-            <label for="Priority.VeryLow" class="input-group-text flex-grow-1 text-wrap">Show Priority VeryLow</label>
-        </div>
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="Priority.Low" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.Low]" ValueExpression="() => _settings.ShowPriority[Priority.Low]" ValueChanged="(bool show) => SaveShowPriority(Priority.Low, show)" />
-            </div>
-            <label for="Priority.Low" class="input-group-text flex-grow-1 text-wrap">Show Priority Low</label>
-        </div>
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="Priority.Medium" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.Medium]" ValueExpression="() => _settings.ShowPriority[Priority.Medium]" ValueChanged="(bool show) => SaveShowPriority(Priority.Medium, show)" />
-            </div>
-            <label for="Priority.Medium" class="input-group-text flex-grow-1 text-wrap">Show Priority Medium</label>
-        </div>
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="Priority.High" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.High]" ValueExpression="() => _settings.ShowPriority[Priority.High]" ValueChanged="(bool show) => SaveShowPriority(Priority.High, show)" />
-            </div>
-            <label for="Priority.High" class="input-group-text flex-grow-1 text-wrap">Show Priority High</label>
-        </div>
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="Priority.VeryHigh" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.VeryHigh]" ValueExpression="() => _settings.ShowPriority[Priority.VeryHigh]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryHigh, show)" />
-            </div>
-            <label for="Priority.VeryHigh" class="input-group-text flex-grow-1 text-wrap">Show Priority VeryHigh</label>
-        </div>
 
-        <div class="input-group flex-nowrap">
-            <span class="input-group-text">Sort notes by</span>
-            <InputSelect class="form-select" Value="_settings.SortBy[InfoType.Note]" ValueExpression="() => _settings.SortBy[InfoType.Note]" ValueChanged="(Sort sort) => SaveSort(InfoType.Note, sort)">
-                <option value="@Sort.Category">Category</option>
-                <option value="@Sort.Priority">Priority</option>
-                <option value="@Sort.Title">Title</option>
-            </InputSelect>
-        </div>
+            @*
+            @foreach (Priority priority in Enum.GetValues<Priority>())
+            {
+                <div class="input-group flex-nowrap">
+                    <div class="input-group-text">
+                        <InputCheckbox id="@priority" class="form-check-input mt-0" Value="_settings.ShowPriority[priority]" ValueExpression="() => _settings.ShowPriority[priority]" ValueChanged="(bool show) => SaveShowPriority(priority, show)" />
+                    </div>
+                    <label for="@priority" class="input-group-text flex-grow-1 text-wrap">Show @priority</label>
+                </div>
+            }
+            *@
 
-        <div class="input-group flex-nowrap">
-            <span class="input-group-text">Sort tasks by</span>
-            <InputSelect class="form-select" Value="_settings.SortBy[InfoType.Task]" ValueExpression="() => _settings.SortBy[InfoType.Task]" ValueChanged="(Sort sort) => SaveSort(InfoType.Task, sort)">
-                <option value="@Sort.Category">Category</option>
-                <option value="@Sort.Priority">Priority</option>
-                <option value="@Sort.Title">Title</option>
-                <option value="@Sort.ElapsedTime">Elapsed time</option>
-            </InputSelect>
-        </div>
+            <div class="input-group flex-nowrap">
+                <div class="input-group-text">
+                    <InputCheckbox id="Priority.None" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.None]" ValueExpression="() => _settings.ShowPriority[Priority.None]" ValueChanged="(bool show) => SaveShowPriority(Priority.None, show)" />
+                </div>
+                <label for="Priority.None" class="input-group-text flex-grow-1 text-wrap">Show Priority None</label>
+            </div>
+            <div class="input-group flex-nowrap">
+                <div class="input-group-text">
+                    <InputCheckbox id="Priority.VeryLow" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.VeryLow]" ValueExpression="() => _settings.ShowPriority[Priority.VeryLow]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryLow, show)" />
+                </div>
+                <label for="Priority.VeryLow" class="input-group-text flex-grow-1 text-wrap">Show Priority VeryLow</label>
+            </div>
+            <div class="input-group flex-nowrap">
+                <div class="input-group-text">
+                    <InputCheckbox id="Priority.Low" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.Low]" ValueExpression="() => _settings.ShowPriority[Priority.Low]" ValueChanged="(bool show) => SaveShowPriority(Priority.Low, show)" />
+                </div>
+                <label for="Priority.Low" class="input-group-text flex-grow-1 text-wrap">Show Priority Low</label>
+            </div>
+            <div class="input-group flex-nowrap">
+                <div class="input-group-text">
+                    <InputCheckbox id="Priority.Medium" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.Medium]" ValueExpression="() => _settings.ShowPriority[Priority.Medium]" ValueChanged="(bool show) => SaveShowPriority(Priority.Medium, show)" />
+                </div>
+                <label for="Priority.Medium" class="input-group-text flex-grow-1 text-wrap">Show Priority Medium</label>
+            </div>
+            <div class="input-group flex-nowrap">
+                <div class="input-group-text">
+                    <InputCheckbox id="Priority.High" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.High]" ValueExpression="() => _settings.ShowPriority[Priority.High]" ValueChanged="(bool show) => SaveShowPriority(Priority.High, show)" />
+                </div>
+                <label for="Priority.High" class="input-group-text flex-grow-1 text-wrap">Show Priority High</label>
+            </div>
+            <div class="input-group flex-nowrap">
+                <div class="input-group-text">
+                    <InputCheckbox id="Priority.VeryHigh" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.VeryHigh]" ValueExpression="() => _settings.ShowPriority[Priority.VeryHigh]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryHigh, show)" />
+                </div>
+                <label for="Priority.VeryHigh" class="input-group-text flex-grow-1 text-wrap">Show Priority VeryHigh</label>
+            </div>
 
-        <div class="input-group flex-nowrap">
-            <span class="input-group-text">Sort habits by</span>
-            <InputSelect class="form-select" Value="_settings.SortBy[InfoType.Habit]" ValueExpression="() => _settings.SortBy[InfoType.Habit]" ValueChanged="(Sort sort) => SaveSort(InfoType.Habit, sort)">
-                <option value="@Sort.Category">Category</option>
-                <option value="@Sort.Priority">Priority</option>
-                <option value="@Sort.Title">Title</option>
-                <option value="@Sort.Duration">Duration</option>
-                <option value="@Sort.RepeatInterval">Repeat interval</option>
-                <option value="@Sort.ElapsedTime">Elapsed time</option>
-                <option value="@Sort.ElapsedTimeToRepeatIntervalRatio">Elapsed time to repeat interval ratio</option>
-            </InputSelect>
-        </div>
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text">Sort notes by</span>
+                <InputSelect class="form-select" Value="_settings.SortBy[InfoType.Note]" ValueExpression="() => _settings.SortBy[InfoType.Note]" ValueChanged="(Sort sort) => SaveSort(InfoType.Note, sort)">
+                    <option value="@Sort.Category">Category</option>
+                    <option value="@Sort.Priority">Priority</option>
+                    <option value="@Sort.Title">Title</option>
+                </InputSelect>
+            </div>
 
-    </div>
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text">Sort tasks by</span>
+                <InputSelect class="form-select" Value="_settings.SortBy[InfoType.Task]" ValueExpression="() => _settings.SortBy[InfoType.Task]" ValueChanged="(Sort sort) => SaveSort(InfoType.Task, sort)">
+                    <option value="@Sort.Category">Category</option>
+                    <option value="@Sort.Priority">Priority</option>
+                    <option value="@Sort.Title">Title</option>
+                    <option value="@Sort.ElapsedTime">Elapsed time</option>
+                </InputSelect>
+            </div>
+
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text">Sort habits by</span>
+                <InputSelect class="form-select" Value="_settings.SortBy[InfoType.Habit]" ValueExpression="() => _settings.SortBy[InfoType.Habit]" ValueChanged="(Sort sort) => SaveSort(InfoType.Habit, sort)">
+                    <option value="@Sort.Category">Category</option>
+                    <option value="@Sort.Priority">Priority</option>
+                    <option value="@Sort.Title">Title</option>
+                    <option value="@Sort.Duration">Duration</option>
+                    <option value="@Sort.RepeatInterval">Repeat interval</option>
+                    <option value="@Sort.ElapsedTime">Elapsed time</option>
+                    <option value="@Sort.ElapsedTimeToRepeatIntervalRatio">Elapsed time to repeat interval ratio</option>
+                </InputSelect>
+            </div>
+
+        </div>
+    }
 </div>
 
 @code {

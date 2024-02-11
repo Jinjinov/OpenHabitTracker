@@ -64,7 +64,10 @@
     void SelectComponent<T>()
     {
         componentType = typeof(T);
+    }
 
-        //componentType = Type.GetType($"Ididit.Blazor.Pages.{Name}");
+    void SelectComponent(string name)
+    {
+        componentType = Type.GetType($"Ididit.Blazor.Pages.{name}");
     }
 }

@@ -1,16 +1,24 @@
 ﻿@page "/"
 
+@using Ididit.Data
+
+@inject AppData AppData
 @inject NavigationManager NavigationManager
 
 <PageTitle>ididit!</PageTitle>
 
+@*
 <Notes IsEmbedded />
 <Tasks IsEmbedded />
 <Habits IsEmbedded />
+*@
 
 @code {
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        NavigationManager.NavigateTo("/habits");
+        await AppData.InitializeSettings();
+
+        if (!string.IsNullOrEmpty(AppData.Settings.StartPage))
+            NavigationManager.NavigateTo(AppData.Settings.StartPage);
     }
 }

@@ -7,8 +7,17 @@
 
 <PageTitle>Settings</PageTitle>
 
-<div class="col mh-100 overflow-auto px-0 px-md-1">
+<div class="col-auto mh-100 overflow-auto px-0 px-md-1">
     <div class="my-1">
+
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text">Start page</span>
+            <InputSelect class="form-select" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" ValueChanged="(string startPage) => SaveStartPage(startPage)">
+                <option value="/notes">Notes</option>
+                <option value="/tasks">Tasks</option>
+                <option value="/habits">Habits</option>
+            </InputSelect>
+        </div>
 
         <div class="input-group flex-nowrap">
             <div class="input-group-text">
@@ -50,6 +59,13 @@
 
         SettingsChanged = !SettingsChanged;
         await SettingsChangedChanged.InvokeAsync(SettingsChanged);
+    }
+
+    async Task SaveStartPage(string startPage)
+    {
+        _settings.StartPage = startPage;
+
+        await SettingsService.UpdateSettings();
     }
 
     async Task SaveShowItemList(bool show)

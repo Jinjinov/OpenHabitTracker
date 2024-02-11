@@ -98,6 +98,7 @@ public static class DataExtensions
     public static void CopyToEntity(this SettingsModel model, SettingsEntity entity)
     {
         entity.Id = model.Id;
+        entity.StartPage = model.StartPage;
         entity.FirstDayOfWeek = model.FirstDayOfWeek;
         entity.ShowItemList = model.ShowItemList;
         entity.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = model.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin;
