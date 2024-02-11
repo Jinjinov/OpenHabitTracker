@@ -1,6 +1,8 @@
-﻿using Ididit.Data.Entities;
+﻿using Ididit.Data;
+using Ididit.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Text.Json;
 
 namespace Ididit.EntityFrameworkCore;
 
@@ -23,6 +25,20 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<TimeEntity>().HasIndex(x => x.HabitId);
 
         modelBuilder.Entity<ItemEntity>().HasIndex(x => x.ParentId);
+
+        modelBuilder.Entity<SettingsEntity>()
+            .Property(e => e.SortBy)
+            .HasColumnName("SortBy")
+            .HasConversion(
+                dictionary => JsonSerializer.Serialize(dictionary, (JsonSerializerOptions?)null),
+                json => JsonSerializer.Deserialize<Dictionary<InfoType, Sort>>(json, (JsonSerializerOptions?)null)!);
+
+        modelBuilder.Entity<SettingsEntity>()
+            .Property(e => e.ShowPriority)
+            .HasColumnName("ShowPriority")
+            .HasConversion(
+                dictionary => JsonSerializer.Serialize(dictionary, (JsonSerializerOptions?)null),
+                json => JsonSerializer.Deserialize<Dictionary<Priority, bool>>(json, (JsonSerializerOptions?)null)!);
 
         base.OnModelCreating(modelBuilder);
     }

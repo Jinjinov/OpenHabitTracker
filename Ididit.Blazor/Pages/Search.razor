@@ -24,7 +24,13 @@
             <div class="input-group-text">
                 <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueExpression="() => _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueChanged="(bool show) => SaveShowOnlyOverElapsedTimeToRepeatIntervalRatioMin(show)" />
             </div>
-            <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">Show item list</label>
+            <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">Show only habits with ratio over @_settings.ElapsedTimeToRepeatIntervalRatioMin%</label>
+        </div>
+
+        <div class="input-group flex-nowrap">
+            <div class="input-group-text flex-grow-1">
+                <input type="range" class="form-range" value="@_settings.ElapsedTimeToRepeatIntervalRatioMin" @oninput="(ChangeEventArgs args) => Convert.ToInt32(args.Value)">
+            </div>
         </div>
 
         <div class="input-group flex-nowrap">
