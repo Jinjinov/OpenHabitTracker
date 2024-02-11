@@ -12,13 +12,16 @@
 <div class="col-auto mh-100 overflow-auto px-0 px-md-1">
     <div class="my-1">
 
-        <InputSelect class="form-select" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" ValueChanged="(long categoryId) => SaveCategory(categoryId)">
-            <option value="0" disabled selected hidden>None</option>
-            @foreach (CategoryModel category in CategoryService.Categories!)
-            {
-                <option @key="category" value="@category.Id">@category.Title</option>
-            }
-        </InputSelect>
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text">Show category</span>
+            <InputSelect class="form-select" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" ValueChanged="(long categoryId) => SaveCategory(categoryId)">
+                <option value="0" disabled selected hidden>All</option>
+                @foreach (CategoryModel category in CategoryService.Categories!)
+                {
+                    <option @key="category" value="@category.Id">@category.Title</option>
+                }
+            </InputSelect>
+        </div>
 
         <div class="input-group flex-nowrap">
             <div class="input-group-text">
