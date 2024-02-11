@@ -29,7 +29,7 @@
 
         <div class="input-group flex-nowrap">
             <div class="input-group-text flex-grow-1">
-                <input type="range" class="form-range" value="@_settings.ElapsedTimeToRepeatIntervalRatioMin" @oninput="(ChangeEventArgs args) => Convert.ToInt32(args.Value)">
+                <input type="range" class="form-range" value="@_settings.ElapsedTimeToRepeatIntervalRatioMin" @oninput="(ChangeEventArgs args) => SaveElapsedTimeToRepeatIntervalRatioMin(Convert.ToInt32(args.Value))">
             </div>
         </div>
 
@@ -88,6 +88,13 @@
     async Task SaveShowOnlyOverElapsedTimeToRepeatIntervalRatioMin(bool show)
     {
         _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = show;
+
+        await SettingsService.UpdateSettings();
+    }
+
+    async Task SaveElapsedTimeToRepeatIntervalRatioMin(int min)
+    {
+        _settings.ElapsedTimeToRepeatIntervalRatioMin = min;
 
         await SettingsService.UpdateSettings();
     }
