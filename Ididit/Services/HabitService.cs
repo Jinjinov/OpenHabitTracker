@@ -24,7 +24,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         if (settings.SelectedCategoryId != 0)
             habits = habits.Where(x => x.CategoryId == settings.SelectedCategoryId);
 
-        if (settings.ElapsedTimeToRepeatIntervalRatioMin is not null)
+        if (settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin)
             habits = habits.Where(x => x.ElapsedTimeToRepeatIntervalRatio > settings.ElapsedTimeToRepeatIntervalRatioMin);
 
         return settings.SortBy[InfoType.Habit] switch

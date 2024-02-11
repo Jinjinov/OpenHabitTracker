@@ -8,7 +8,9 @@ public class SettingsModel
 
     public bool ShowItemList { get; set; }
 
-    public int? ElapsedTimeToRepeatIntervalRatioMin { get; set; }
+    public bool ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin { get; set; }
+
+    public int ElapsedTimeToRepeatIntervalRatioMin { get; set; }
 
     public long SelectedCategoryId { get; set; }
 
