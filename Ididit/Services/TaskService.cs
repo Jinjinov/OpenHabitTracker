@@ -21,7 +21,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
         var tasks = Tasks!.Where(h => !h.IsDeleted);
 
-        return settings.HabitsSort switch
+        return settings.SortBy[InfoType.Task] switch
         {
             Sort.Category => tasks.OrderBy(x => x.CategoryId),
             Sort.Priority => tasks.OrderByDescending(x => x.Priority),

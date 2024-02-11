@@ -13,7 +13,7 @@
 
         <div class="input-group flex-nowrap">
             <span class="input-group-text">Sort notes by</span>
-            <InputSelect class="form-select" Value="_settings.NotesSort" ValueExpression="() => _settings.NotesSort" ValueChanged="(Sort sort) => SaveNotesSort(sort)">
+            <InputSelect class="form-select" Value="_settings.SortBy[InfoType.Note]" ValueExpression="() => _settings.SortBy[InfoType.Note]" ValueChanged="(Sort sort) => SaveSort(InfoType.Note, sort)">
                 <option value="@Sort.Category">Category</option>
                 <option value="@Sort.Priority">Priority</option>
                 <option value="@Sort.Title">Title</option>
@@ -22,7 +22,7 @@
 
         <div class="input-group flex-nowrap">
             <span class="input-group-text">Sort tasks by</span>
-            <InputSelect class="form-select" Value="_settings.TasksSort" ValueExpression="() => _settings.TasksSort" ValueChanged="(Sort sort) => SaveTasksSort(sort)">
+            <InputSelect class="form-select" Value="_settings.SortBy[InfoType.Task]" ValueExpression="() => _settings.SortBy[InfoType.Task]" ValueChanged="(Sort sort) => SaveSort(InfoType.Task, sort)">
                 <option value="@Sort.Category">Category</option>
                 <option value="@Sort.Priority">Priority</option>
                 <option value="@Sort.Title">Title</option>
@@ -32,7 +32,7 @@
 
         <div class="input-group flex-nowrap">
             <span class="input-group-text">Sort habits by</span>
-            <InputSelect class="form-select" Value="_settings.HabitsSort" ValueExpression="() => _settings.HabitsSort" ValueChanged="(Sort sort) => SaveHabitsSort(sort)">
+            <InputSelect class="form-select" Value="_settings.SortBy[InfoType.Habit]" ValueExpression="() => _settings.SortBy[InfoType.Habit]" ValueChanged="(Sort sort) => SaveSort(InfoType.Habit, sort)">
                 <option value="@Sort.Category">Category</option>
                 <option value="@Sort.Priority">Priority</option>
                 <option value="@Sort.Title">Title</option>
@@ -54,23 +54,9 @@
         await SettingsService.Initialize();
     }
 
-    async Task SaveNotesSort(Sort sort)
+    async Task SaveSort(InfoType infoType, Sort sort)
     {
-        _settings.NotesSort = sort;
-
-        await SettingsService.UpdateSettings();
-    }
-
-    async Task SaveTasksSort(Sort sort)
-    {
-        _settings.TasksSort = sort;
-
-        await SettingsService.UpdateSettings();
-    }
-
-    async Task SaveHabitsSort(Sort sort)
-    {
-        _settings.HabitsSort = sort;
+        _settings.SortBy[infoType] = sort;
 
         await SettingsService.UpdateSettings();
     }

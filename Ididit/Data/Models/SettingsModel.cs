@@ -8,9 +8,26 @@ public class SettingsModel
 
     public bool ShowItemList { get; set; }
 
-    public Sort NotesSort { get; set; }
+    public bool ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin { get; set; }
+    public bool HideAllUnderElapsedTimeToRepeatIntervalRatioMin { get; set; }
+    public int ElapsedTimeToRepeatIntervalRatioMin { get; set; }
 
-    public Sort TasksSort { get; set; }
+    public long SelectedCategoryId { get; set; }
 
-    public Sort HabitsSort { get; set; }
+    public Dictionary<InfoType, Sort> SortBy { get; set; } = new()
+    {
+        { InfoType.Note, Sort.Priority },
+        { InfoType.Task, Sort.Priority },
+        { InfoType.Habit, Sort.Priority }
+    };
+
+    public Dictionary<Priority, bool> ShowPriority { get; set; } = new()
+    {
+        { Priority.None, true },
+        { Priority.VeryLow, true },
+        { Priority.Low, true },
+        { Priority.Medium, true },
+        { Priority.High, true },
+        { Priority.VeryHigh, true }
+    };
 }

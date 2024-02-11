@@ -21,7 +21,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         var habits = Habits!.Where(h => !h.IsDeleted);
 
-        return settings.HabitsSort switch
+        return settings.SortBy[InfoType.Habit] switch
         {
             Sort.Category => habits.OrderBy(x => x.CategoryId),
             Sort.Priority => habits.OrderByDescending(x => x.Priority),

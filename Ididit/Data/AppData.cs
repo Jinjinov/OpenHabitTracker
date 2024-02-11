@@ -67,9 +67,7 @@ public class AppData(IDataAccess dataAccess)
                     Id = settingsEntity.Id,
                     FirstDayOfWeek = settingsEntity.FirstDayOfWeek,
                     ShowItemList = settingsEntity.ShowItemList,
-                    NotesSort = settingsEntity.NotesSort,
-                    TasksSort = settingsEntity.TasksSort,
-                    HabitsSort = settingsEntity.HabitsSort
+                    SortBy = settingsEntity.SortBy
                 };
             }
             else
@@ -78,9 +76,12 @@ public class AppData(IDataAccess dataAccess)
                 {
                     FirstDayOfWeek = DayOfWeek.Monday,
                     ShowItemList = true,
-                    NotesSort = Sort.Priority,
-                    TasksSort = Sort.Priority,
-                    HabitsSort = Sort.Priority
+                    SortBy = new()
+                    {
+                        { InfoType.Note, Sort.Priority },
+                        { InfoType.Task, Sort.Priority },
+                        { InfoType.Habit, Sort.Priority }
+                    }
                 };
 
                 await _dataAccess.AddSettings(settingsEntity);
@@ -413,9 +414,12 @@ public class AppData(IDataAccess dataAccess)
             {
                 FirstDayOfWeek = DayOfWeek.Monday,
                 ShowItemList = true,
-                NotesSort = Sort.Priority,
-                TasksSort = Sort.Priority,
-                HabitsSort = Sort.Priority
+                SortBy = new()
+                {
+                    { InfoType.Note, Sort.Priority },
+                    { InfoType.Task, Sort.Priority },
+                    { InfoType.Habit, Sort.Priority }
+                }
             },
             Categories = new()
             {

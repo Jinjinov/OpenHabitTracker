@@ -21,7 +21,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
         var notes = Notes!.Where(h => !h.IsDeleted);
 
-        return settings.HabitsSort switch
+        return settings.SortBy[InfoType.Note] switch
         {
             Sort.Category => notes.OrderBy(x => x.CategoryId),
             Sort.Priority => notes.OrderByDescending(x => x.Priority),
