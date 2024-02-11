@@ -23,7 +23,9 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 ---------------------------------------------------------------------------------------------------
 
-two changing columns: https://learn.microsoft.com/en-us/aspnet/core/blazor/components/dynamiccomponent?view=aspnetcore-8.0#example
+two changing columns:
+	https://learn.microsoft.com/en-us/aspnet/core/blazor/components/dynamiccomponent?view=aspnetcore-8.0#example
+	https://learn.microsoft.com/en-us/aspnet/core/blazor/components/dynamiccomponent?view=aspnetcore-8.0#event-callbacks-eventcallback
 	in first column: - RenderFragment / DynamicComponent - in a dropdown - this solves the problem with "Back"
 		Settings
 		Data
@@ -34,12 +36,27 @@ two changing columns: https://learn.microsoft.com/en-us/aspnet/core/blazor/compo
 		Priorities
 		Help
 		Trash
-	in second column: - NavigationManager.NavigateTo
-		Home == NavigationManager.NavigateTo
+	in second column: - NavigationManager.NavigateTo last visited or default ? Set Default
+		Home == NavigationManager.NavigateTo Default
 		Notes
 		Tasks
 		Habits
 		About
+
+<DynamicComponent Type="componentType" Parameters="parameters" />
+
+@code {
+    private Type componentType = ...;
+    private IDictionary<string, object> parameters = ...;
+}
+
+Expression<Func<string>> valueExpression = () => ...
+dictionary = new Dictionary<string, object>()
+{
+  { "Value", property },         
+  { "ValueChanged", EventCallback.Factory.Create<string>(this, val => ...)},
+  { "ValueExpression", valueExpression } //optional
+},
 
 <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -65,21 +82,21 @@ two changing columns: https://learn.microsoft.com/en-us/aspnet/core/blazor/compo
   </ul>
 </div>
 
-add Search box
-add Filter by done date (Task CompletedAt / Habit LastTimeDoneAt)
-
-on calendar use yellow color for partially done (brush teeth 1x of 2x per day)
-
 selected calendar day:
 	show all (list)
 	add
 	remove
+
+on calendar use yellow color for partially done (brush teeth 1x of 2x per day)
 
 when habit is done, uncheck all habit items
 when task is done, check all task items
 
 when all habit items are done, habit is done
 when all task items are done, task is done
+
+add Search box
+add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
 
 ---------------------------------------------------------------------------------------------------
 

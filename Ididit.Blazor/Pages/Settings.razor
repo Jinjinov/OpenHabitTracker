@@ -31,6 +31,12 @@
 </div>
 
 @code {
+    [Parameter]
+    public bool SettingsChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> SettingsChangedChanged { get; set; }
+
     SettingsModel _settings => SettingsService.Settings;
 
     protected override async Task OnInitializedAsync()
@@ -38,17 +44,25 @@
         await SettingsService.Initialize();
     }
 
+    async Task UpdateSettings()
+    {
+        await SettingsService.UpdateSettings();
+
+        SettingsChanged = !SettingsChanged;
+        await SettingsChangedChanged.InvokeAsync(SettingsChanged);
+    }
+
     async Task SaveShowItemList(bool show)
     {
         _settings.ShowItemList = show;
 
-        await SettingsService.UpdateSettings();
+        await UpdateSettings();
     }
 
     async Task SaveFirstDayOfWeek(DayOfWeek dayOfWeek)
     {
         _settings.FirstDayOfWeek = dayOfWeek;
 
-        await SettingsService.UpdateSettings();
+        await UpdateSettings();
     }
 }
