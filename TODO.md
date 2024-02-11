@@ -24,18 +24,7 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 ---------------------------------------------------------------------------------------------------
 
 two changing columns:
-	https://learn.microsoft.com/en-us/aspnet/core/blazor/components/dynamiccomponent?view=aspnetcore-8.0#example
 	https://learn.microsoft.com/en-us/aspnet/core/blazor/components/dynamiccomponent?view=aspnetcore-8.0#event-callbacks-eventcallback
-	in first column: - RenderFragment / DynamicComponent - in a dropdown - this solves the problem with "Back"
-		Settings
-		Data
-		Backup
-		Search
-		Menu == dropdown / select - dropdown is just an action menu, select displays the chosen option
-		Categories
-		Priorities
-		Help
-		Trash
 
 Expression<Func<string>> valueExpression = () => ...
 dictionary = new Dictionary<string, object>()
@@ -44,26 +33,6 @@ dictionary = new Dictionary<string, object>()
   { "ValueChanged", EventCallback.Factory.Create<string>(this, val => ...)},
   { "ValueExpression", valueExpression } //optional
 },
-
-<div class="list-group">
-  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-    The current link item
-  </a>
-  <a href="#" class="list-group-item list-group-item-action">A second link item</a>
-  <a href="#" class="list-group-item list-group-item-action">A third link item</a>
-  <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
-  <a class="list-group-item list-group-item-action disabled" aria-disabled="true">A disabled link item</a>
-</div>
-
-<div class="list-group">
-  <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
-    The current button
-  </button>
-  <button type="button" class="list-group-item list-group-item-action">A second button item</button>
-  <button type="button" class="list-group-item list-group-item-action">A third button item</button>
-  <button type="button" class="list-group-item list-group-item-action">A fourth button item</button>
-  <button type="button" class="list-group-item list-group-item-action" disabled>A disabled button item</button>
-</div>
 
 selected calendar day:
 	show all (list)
