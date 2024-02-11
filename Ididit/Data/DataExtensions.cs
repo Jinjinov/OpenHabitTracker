@@ -100,7 +100,6 @@ public static class DataExtensions
         entity.Id = model.Id;
         entity.FirstDayOfWeek = model.FirstDayOfWeek;
         entity.ShowItemList = model.ShowItemList;
-        entity.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = model.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin;
         entity.ElapsedTimeToRepeatIntervalRatioMin = model.ElapsedTimeToRepeatIntervalRatioMin;
         entity.SelectedCategoryId = model.SelectedCategoryId;
         entity.SortBy = model.SortBy;

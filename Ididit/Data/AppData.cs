@@ -67,7 +67,6 @@ public class AppData(IDataAccess dataAccess)
                     Id = settingsEntity.Id,
                     FirstDayOfWeek = settingsEntity.FirstDayOfWeek,
                     ShowItemList = settingsEntity.ShowItemList,
-                    ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = settingsEntity.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin,
                     ElapsedTimeToRepeatIntervalRatioMin = settingsEntity.ElapsedTimeToRepeatIntervalRatioMin,
                     SelectedCategoryId = settingsEntity.SelectedCategoryId,
                     SortBy = settingsEntity.SortBy,
@@ -80,8 +79,7 @@ public class AppData(IDataAccess dataAccess)
                 {
                     FirstDayOfWeek = DayOfWeek.Monday,
                     ShowItemList = true,
-                    ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = false,
-                    ElapsedTimeToRepeatIntervalRatioMin = 0,
+                    ElapsedTimeToRepeatIntervalRatioMin = null,
                     SelectedCategoryId = 0,
                     SortBy = new()
                     {
@@ -430,8 +428,7 @@ public class AppData(IDataAccess dataAccess)
             {
                 FirstDayOfWeek = DayOfWeek.Monday,
                 ShowItemList = true,
-                ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = false,
-                ElapsedTimeToRepeatIntervalRatioMin = 0,
+                ElapsedTimeToRepeatIntervalRatioMin = null,
                 SelectedCategoryId = 0,
                 SortBy = new()
                 {

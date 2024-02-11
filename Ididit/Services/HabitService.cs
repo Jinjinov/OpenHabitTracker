@@ -19,7 +19,13 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
     {
         SettingsModel settings = _appData.Settings;
 
-        var habits = Habits!.Where(h => !h.IsDeleted);
+        var habits = Habits!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
+
+        if (settings.SelectedCategoryId != 0)
+            habits = habits.Where(x => x.CategoryId == settings.SelectedCategoryId);
+
+        if (settings.ElapsedTimeToRepeatIntervalRatioMin is not null)
+            habits = habits.Where(x => x.ElapsedTimeToRepeatIntervalRatio > settings.ElapsedTimeToRepeatIntervalRatioMin);
 
         return settings.SortBy[InfoType.Habit] switch
         {

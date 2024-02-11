@@ -19,7 +19,10 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
     {
         SettingsModel settings = _appData.Settings;
 
-        var notes = Notes!.Where(h => !h.IsDeleted);
+        var notes = Notes!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
+
+        if (settings.SelectedCategoryId != 0)
+            notes = notes.Where(x => x.CategoryId == settings.SelectedCategoryId);
 
         return settings.SortBy[InfoType.Note] switch
         {
