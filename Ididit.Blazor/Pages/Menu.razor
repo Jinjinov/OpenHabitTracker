@@ -7,25 +7,19 @@
     <div class="my-1">
 
         <div class="list-group">
-
-            @*
-            <button class="list-group-item list-group-item-action" @onclick="TrashService.RestoreAll">Restore all</button>
-            <button class="list-group-item list-group-item-action" @onclick="TrashService.EmptyTrash">Empty trash</button>
-            *@
-
             <NavLink class="list-group-item list-group-item-action" href="habits">Habits</NavLink>
             <NavLink class="list-group-item list-group-item-action" href="notes">Notes</NavLink>
             <NavLink class="list-group-item list-group-item-action" href="tasks">Tasks</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="trash">Trash</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="categories">Categories</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="priorities">Priorities</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="settings">Settings</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="data">Data</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="backup">Backup</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="help">Help</NavLink>
             <NavLink class="list-group-item list-group-item-action" href="about">About</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="search">Search</NavLink>
 
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Trash>">Trash</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Categories>">Categories</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Priorities>">Priorities</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Settings>">Settings</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Data>">Data</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Backup>">Backup</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Help>">Help</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Search>">Search</button>
         </div>
 
     </div>
@@ -37,5 +31,12 @@
     public Type? DynamicComponentType { get; set; }
 
     [Parameter]
-    public EventCallback<Type?> SettingsChangedChanged { get; set; }
+    public EventCallback<Type?> DynamicComponentTypeChanged { get; set; }
+
+    async Task SelectComponent<T>()
+    {
+        DynamicComponentType = typeof(T);
+
+        await DynamicComponentTypeChanged.InvokeAsync(DynamicComponentType);
+    }
 }
