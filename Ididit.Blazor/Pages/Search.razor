@@ -121,6 +121,12 @@
 </div>
 
 @code {
+    [Parameter]
+    public bool FiltersDirty { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> FiltersDirtyChanged { get; set; }
+
     SettingsModel _settings => SettingsService.Settings;
 
     protected override async Task OnInitializedAsync()
@@ -130,38 +136,46 @@
         await CategoryService.Initialize();
     }
 
+    async Task UpdateSettings()
+    {
+        await SettingsService.UpdateSettings();
+
+        FiltersDirty = !FiltersDirty;
+        await FiltersDirtyChanged.InvokeAsync(FiltersDirty);
+    }
+
     async Task SaveCategory(long categoryId)
     {
         _settings.SelectedCategoryId = categoryId;
 
-        await SettingsService.UpdateSettings();
+        await UpdateSettings();
     }
 
     async Task SaveShowOnlyOverElapsedTimeToRepeatIntervalRatioMin(bool show)
     {
         _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = show;
 
-        await SettingsService.UpdateSettings();
+        await UpdateSettings();
     }
 
     async Task SaveElapsedTimeToRepeatIntervalRatioMin(int min)
     {
         _settings.ElapsedTimeToRepeatIntervalRatioMin = min;
 
-        await SettingsService.UpdateSettings();
+        await UpdateSettings();
     }
 
     async Task SaveShowPriority(Priority priority, bool show)
     {
         _settings.ShowPriority[priority] = show;
 
-        await SettingsService.UpdateSettings();
+        await UpdateSettings();
     }
 
     async Task SaveSort(InfoType infoType, Sort sort)
     {
         _settings.SortBy[infoType] = sort;
 
-        await SettingsService.UpdateSettings();
+        await UpdateSettings();
     }
 }

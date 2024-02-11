@@ -190,6 +190,9 @@
     [Parameter]
     public bool IsEmbedded { get; set; }
 
+    [CascadingParameter(Name = "FiltersDirty")]
+    public bool FiltersDirty { get; set; }
+
     InputTextImmediate? inputElement;
 
     bool shouldFocus;

@@ -18,8 +18,10 @@
     </div>
 
     <div class="row flex-grow-1 overflow-hidden">
-        <Search />
-        @Body
+        <CascadingValue Name="FiltersDirty" Value=@filtersDirty>
+            <Search @bind-FiltersDirty=filtersDirty />
+            @Body
+        </CascadingValue>
     </div>
 
     <div class="row flex-shrink-1">
@@ -36,3 +38,7 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    bool filtersDirty;
+}

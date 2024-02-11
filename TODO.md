@@ -16,18 +16,6 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 refresh Notes, Tasks, Habits on filter change:
 	event += StateHasChanged
 	CascadingValue / CascadingParameter
-	NavigationManager with Route Parameters - GetUriWithQueryParameter / GetUriWithQueryParameters
-	https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#query-strings
-	var newUri = NavigationManager.GetUriWithQueryParameter("filter", filter);
-	NavigationManager.NavigateTo(newUri);
-		[SupplyParameterFromQuery]
-		public string Filter { get; set; }
-			Navigation.GetUriWithQueryParameters(
-			new Dictionary<string, object?>
-			{
-				["full name"] = "Morena Baccarin",
-				["ping"] = new int?[] { 35, 16, null, 87, 240 }
-			})
 
 
 
