@@ -63,11 +63,17 @@
     bool settingsChanged;
 
     private Type? dynamicComponentType;
-    private IDictionary<string, object> dynamicComponentParameters;
+    private Dictionary<string, object> dynamicComponentParameters = new(); // TODO: Menu, Search, Settings
 
     protected override async Task OnInitializedAsync()
     {
         await AppData.InitializeSettings();
+
+        dynamicComponentParameters = new Dictionary<string, object>()
+        {
+          { "SettingsChanged", settingsChanged },
+          { "SettingsChangedChanged", EventCallback.Factory.Create<bool>(this, val => settingsChanged = val)},
+        };
 
         if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
             SelectComponent(AppData.Settings.StartSidebar);
