@@ -9,7 +9,7 @@ public class SettingsEntity
     public bool ShowItemList { get; set; }
 
     public bool ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin { get; set; }
-    public bool HideAllUnderElapsedTimeToRepeatIntervalRatioMin { get; set; }
+
     public int ElapsedTimeToRepeatIntervalRatioMin { get; set; }
 
     public long SelectedCategoryId { get; set; }

@@ -67,7 +67,11 @@ public class AppData(IDataAccess dataAccess)
                     Id = settingsEntity.Id,
                     FirstDayOfWeek = settingsEntity.FirstDayOfWeek,
                     ShowItemList = settingsEntity.ShowItemList,
-                    SortBy = settingsEntity.SortBy
+                    ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = settingsEntity.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin,
+                    ElapsedTimeToRepeatIntervalRatioMin = settingsEntity.ElapsedTimeToRepeatIntervalRatioMin,
+                    SelectedCategoryId = settingsEntity.SelectedCategoryId,
+                    SortBy = settingsEntity.SortBy,
+                    ShowPriority = settingsEntity.ShowPriority
                 };
             }
             else
@@ -76,11 +80,23 @@ public class AppData(IDataAccess dataAccess)
                 {
                     FirstDayOfWeek = DayOfWeek.Monday,
                     ShowItemList = true,
+                    ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = false,
+                    ElapsedTimeToRepeatIntervalRatioMin = 0,
+                    SelectedCategoryId = 0,
                     SortBy = new()
                     {
                         { InfoType.Note, Sort.Priority },
                         { InfoType.Task, Sort.Priority },
                         { InfoType.Habit, Sort.Priority }
+                    },
+                    ShowPriority = new()
+                    {
+                        { Priority.None, true },
+                        { Priority.VeryLow, true },
+                        { Priority.Low, true },
+                        { Priority.Medium, true },
+                        { Priority.High, true },
+                        { Priority.VeryHigh, true }
                     }
                 };
 
@@ -414,11 +430,23 @@ public class AppData(IDataAccess dataAccess)
             {
                 FirstDayOfWeek = DayOfWeek.Monday,
                 ShowItemList = true,
+                ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = false,
+                ElapsedTimeToRepeatIntervalRatioMin = 0,
+                SelectedCategoryId = 0,
                 SortBy = new()
                 {
                     { InfoType.Note, Sort.Priority },
                     { InfoType.Task, Sort.Priority },
                     { InfoType.Habit, Sort.Priority }
+                },
+                ShowPriority = new()
+                {
+                    { Priority.None, true },
+                    { Priority.VeryLow, true },
+                    { Priority.Low, true },
+                    { Priority.Medium, true },
+                    { Priority.High, true },
+                    { Priority.VeryHigh, true }
                 }
             },
             Categories = new()
