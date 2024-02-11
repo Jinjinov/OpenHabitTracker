@@ -6,7 +6,6 @@
 
 @inject SettingsService SettingsService
 @inject CategoryService CategoryService
-@inject NavigationManager NavigationManager
 
 <PageTitle>Search</PageTitle>
 
@@ -131,62 +130,38 @@
         await CategoryService.Initialize();
     }
 
-    async Task UpdateSettingsAndNavigate()
-    {
-        await SettingsService.UpdateSettings();
-
-        var newUri = NavigationManager.GetUriWithQueryParameters(
-            new Dictionary<string, object?>
-                {
-                    ["ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin"] = _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin,
-                    ["ElapsedTimeToRepeatIntervalRatioMin"] = _settings.ElapsedTimeToRepeatIntervalRatioMin,
-                    ["SelectedCategoryId"] = _settings.SelectedCategoryId,
-                    ["SortNotes"] = _settings.SortBy[InfoType.Note],
-                    ["SortTasks"] = _settings.SortBy[InfoType.Task],
-                    ["SortHabits"] = _settings.SortBy[InfoType.Habit],
-                    ["ShowPriorityNone"] = _settings.ShowPriority[Priority.None],
-                    ["ShowPriorityVeryLow"] = _settings.ShowPriority[Priority.VeryLow],
-                    ["ShowPriorityLow"] = _settings.ShowPriority[Priority.Low],
-                    ["ShowPriorityMedium"] = _settings.ShowPriority[Priority.Medium],
-                    ["ShowPriorityHigh"] = _settings.ShowPriority[Priority.High],
-                    ["ShowPriorityVeryHigh"] = _settings.ShowPriority[Priority.VeryHigh],
-                });
-
-        NavigationManager.NavigateTo(newUri);
-    }
-
     async Task SaveCategory(long categoryId)
     {
         _settings.SelectedCategoryId = categoryId;
 
-        await UpdateSettingsAndNavigate();
+        await SettingsService.UpdateSettings();
     }
 
     async Task SaveShowOnlyOverElapsedTimeToRepeatIntervalRatioMin(bool show)
     {
         _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = show;
 
-        await UpdateSettingsAndNavigate();
+        await SettingsService.UpdateSettings();
     }
 
     async Task SaveElapsedTimeToRepeatIntervalRatioMin(int min)
     {
         _settings.ElapsedTimeToRepeatIntervalRatioMin = min;
 
-        await UpdateSettingsAndNavigate();
+        await SettingsService.UpdateSettings();
     }
 
     async Task SaveShowPriority(Priority priority, bool show)
     {
         _settings.ShowPriority[priority] = show;
 
-        await UpdateSettingsAndNavigate();
+        await SettingsService.UpdateSettings();
     }
 
     async Task SaveSort(InfoType infoType, Sort sort)
     {
         _settings.SortBy[infoType] = sort;
 
-        await UpdateSettingsAndNavigate();
+        await SettingsService.UpdateSettings();
     }
 }
