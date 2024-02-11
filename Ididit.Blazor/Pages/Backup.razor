@@ -12,11 +12,15 @@
 <div class="col-auto mh-100 overflow-auto px-0 px-md-1">
 
     <div class="my-1">
-        <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Json)">Export JSON</button>
-        <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Tsv)">Export TSV</button>
-        <button class="btn btn-primary" @onclick="() => ExportFile(DataFormat.Yaml)">Export YAML</button>
 
-        @OpenFile.OpenFileDialog(OnFileOpened)
+        <div class="list-group">
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(DataFormat.Json)">Export JSON</button>
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(DataFormat.Tsv)">Export TSV</button>
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(DataFormat.Yaml)">Export YAML</button>
+
+            @OpenFile.OpenFileDialog("list-group-item list-group-item-action", OnFileOpened)
+        </div>
+
     </div>
 
     @_filename

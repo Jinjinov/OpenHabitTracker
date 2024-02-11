@@ -4,5 +4,5 @@ namespace Ididit.Blazor.Files;
 
 public interface IOpenFile
 {
-    RenderFragment OpenFileDialog(Func<string, Stream, Task> onFileOpened);
+    RenderFragment OpenFileDialog(string css, Func<string, Stream, Task> onFileOpened);
 }

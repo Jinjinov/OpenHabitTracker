@@ -8,12 +8,14 @@
 <PageTitle>Data</PageTitle>
 
 <div class="col-auto mh-100 overflow-auto px-0 px-md-1">
-
     <div class="my-1">
-        <button class="btn btn-primary" @onclick="AppData.LoadExamples">Load examples</button>
-        <button class="btn btn-primary" @onclick="AppData.DeleteAllData">Delete all data</button>
-    </div>
 
+        <div class="list-group">
+            <button class="list-group-item list-group-item-action" @onclick="AppData.LoadExamples">Load examples</button>
+            <button class="list-group-item list-group-item-action" @onclick="AppData.DeleteAllData">Delete all data</button>
+        </div>
+
+    </div>
 </div>
 
 @code {

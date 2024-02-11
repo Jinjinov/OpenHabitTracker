@@ -5,12 +5,13 @@ namespace Ididit.Blazor.Maui;
 
 public class OpenFile : IOpenFile
 {
-    public RenderFragment OpenFileDialog(Func<string, Stream, Task> onFileOpened)
+    public RenderFragment OpenFileDialog(string css, Func<string, Stream, Task> onFileOpened)
     {
         return builder =>
         {
             builder.OpenElement(0, "button");
-            builder.AddAttribute(1, "onclick", EventCallback.Factory.Create(this, async () =>
+            builder.AddAttribute(1, "class", css);
+            builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, async () =>
             {
                 FileResult? result = await FilePicker.PickAsync();
 
@@ -20,7 +21,7 @@ public class OpenFile : IOpenFile
                     await onFileOpened(result.FileName, stream);
                 }
             }));
-            builder.AddContent(2, "Pick a file");
+            builder.AddContent(3, "Import");
             builder.CloseElement();
         };
     }

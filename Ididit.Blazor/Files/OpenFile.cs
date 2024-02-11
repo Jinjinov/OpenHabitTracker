@@ -7,12 +7,12 @@ public class OpenFile : IOpenFile
 {
     const long _maxAllowedFileSize = 50 * 1024 * 1024; // 50 MB
 
-    public RenderFragment OpenFileDialog(Func<string, Stream, Task> onFileOpened)
+    public RenderFragment OpenFileDialog(string css, Func<string, Stream, Task> onFileOpened)
     {
         return builder =>
         {
             builder.OpenElement(0, "label");
-            builder.AddAttribute(1, "class", "btn btn-primary");
+            builder.AddAttribute(1, "class", css);
             builder.AddContent(2, "Import");
 
             builder.OpenComponent(3, typeof(InputFile));
