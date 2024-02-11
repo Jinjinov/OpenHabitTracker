@@ -28,6 +28,8 @@ solve the too wide disaster - open details in another column
 
 bring back 3 column screen: Notes, Tasks, Habits
 
+horizontal calendar with vertical weeks
+
 
 - host 24/7 on Raspberry Pi
 	valid LAN IP
