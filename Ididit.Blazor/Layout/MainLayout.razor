@@ -69,11 +69,11 @@
     {
         await AppData.InitializeSettings();
 
-        dynamicComponentParameters = new Dictionary<string, object>()
-        {
-          { "SettingsChanged", settingsChanged },
-          { "SettingsChangedChanged", EventCallback.Factory.Create<bool>(this, val => settingsChanged = val)},
-        };
+        // dynamicComponentParameters = new Dictionary<string, object>()
+        // {
+        //   { "SettingsChanged", settingsChanged },
+        //   { "SettingsChangedChanged", EventCallback.Factory.Create<bool>(this, val => settingsChanged = val)},
+        // };
 
         if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
             SelectComponent(AppData.Settings.StartSidebar);

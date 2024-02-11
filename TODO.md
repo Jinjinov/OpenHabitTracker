@@ -12,6 +12,22 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 ??? Task CompletedAt / Habit LastTimeDoneAt --> DateTime? DoneAt ???
 
 
+get rid of habit padding
+
+remove Items delete when read only
+
+make input-group-text same width - Settings, Search
+
+change input-group into list-group
+
+solve the too wide disaster - open details in another column
+
+[ ] - show calendar below title
+
+[ ] - show calendar beside title
+
+bring back 3 column screen: Notes, Tasks, Habits
+
 
 - host 24/7 on Raspberry Pi
 	valid LAN IP
