@@ -15,7 +15,7 @@ public class AppData(IDataAccess dataAccess)
     public Dictionary<long, ItemModel>? Items { get; set; }
     public Dictionary<long, CategoryModel>? Categories { get; set; }
     public Dictionary<long, PriorityModel>? Priorities { get; set; }
-    public List<Model>? Trash { get; set; }
+    public List<InfoModel>? Trash { get; set; }
 
     public string GetCategoryTitle(long category)
     {
@@ -30,7 +30,7 @@ public class AppData(IDataAccess dataAccess)
         return Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
     }
 
-    public async Task UpdateModel(Model model) // TODO: learn to use generics, perhaps you will like them...
+    public async Task UpdateModel(InfoModel model) // TODO: learn to use generics, perhaps you will like them...
     {
         if (model is HabitModel habitModel && await _dataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)
         {

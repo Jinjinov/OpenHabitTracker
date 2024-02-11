@@ -9,14 +9,14 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
     private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public IReadOnlyList<Model>? Models => _appData.Trash;
+    public IReadOnlyList<InfoModel>? Models => _appData.Trash;
 
     public async Task Initialize()
     {
         await _appData.InitializeTrash();
     }
 
-    public async Task Restore(Model model)
+    public async Task Restore(InfoModel model)
     {
         model.IsDeleted = false;
 
@@ -63,7 +63,7 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
         }
     }
 
-    public async Task Delete(Model model)
+    public async Task Delete(InfoModel model)
     {
         if (model is NoteModel)
         {
