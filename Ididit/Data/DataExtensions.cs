@@ -99,6 +99,7 @@ public static class DataExtensions
     {
         entity.Id = model.Id;
         entity.StartPage = model.StartPage;
+        entity.StartSidebar = model.StartSidebar;
         entity.FirstDayOfWeek = model.FirstDayOfWeek;
         entity.ShowItemList = model.ShowItemList;
         entity.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = model.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin;

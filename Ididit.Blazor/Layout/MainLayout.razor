@@ -1,7 +1,9 @@
 ﻿@using Ididit.Blazor.Pages
+@using Ididit.Data
 
 @inherits LayoutComponentBase
 
+@inject AppData AppData
 @inject INavBarFragment NavBarFragment
 
 <div class="container-fluid d-flex flex-column vh-100 mh-100 overflow-hidden">
@@ -25,12 +27,12 @@
     <div class="row flex-grow-1 overflow-hidden">
         <CascadingValue Name="SettingsChanged" Value=@settingsChanged>
 
-            @if (componentType is not null)
+            @if (dynamicComponentType is not null)
             {
-                <DynamicComponent Type="componentType" Parameters="parameters" />
+                <DynamicComponent Type="dynamicComponentType" Parameters="dynamicComponentParameters" />
             }
 
-            <Search @bind-SettingsChanged=settingsChanged />
+            @* <Search @bind-SettingsChanged=settingsChanged /> *@
 
             @Body
 
@@ -58,16 +60,24 @@
 @code {
     bool settingsChanged;
 
-    private Type? componentType;
-    private IDictionary<string, object> parameters;
+    private Type? dynamicComponentType;
+    private IDictionary<string, object> dynamicComponentParameters;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AppData.InitializeSettings();
+
+        if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
+            SelectComponent(AppData.Settings.StartSidebar);
+    }
 
     void SelectComponent<T>()
     {
-        componentType = typeof(T);
+        dynamicComponentType = typeof(T);
     }
 
     void SelectComponent(string name)
     {
-        componentType = Type.GetType($"Ididit.Blazor.Pages.{name}");
+        dynamicComponentType = Type.GetType($"Ididit.Blazor.Pages.{name}");
     }
 }

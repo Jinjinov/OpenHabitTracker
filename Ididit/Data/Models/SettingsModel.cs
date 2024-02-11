@@ -6,6 +6,8 @@ public class SettingsModel
 
     public string StartPage { get; set; } = string.Empty;
 
+    public string StartSidebar { get; set; } = string.Empty;
+
     public DayOfWeek FirstDayOfWeek { get; set; }
 
     public bool ShowItemList { get; set; }

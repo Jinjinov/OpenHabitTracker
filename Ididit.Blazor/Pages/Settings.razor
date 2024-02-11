@@ -21,6 +21,21 @@
         </div>
 
         <div class="input-group flex-nowrap">
+            <span class="input-group-text">Start page</span>
+            <InputSelect class="form-select" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" ValueChanged="(string startSidebar) => SaveStartSidebar(startSidebar)">
+                <option value="Settings">Settings</option>
+                <option value="Data">Data</option>
+                <option value="Backup">Backup</option>
+                <option value="Search">Search</option>
+                <option value="Menu">Menu</option>
+                <option value="Categories">Categories</option>
+                <option value="Priorities">Priorities</option>
+                <option value="Help">Help</option>
+                <option value="Trash">Trash</option>
+            </InputSelect>
+        </div>
+
+        <div class="input-group flex-nowrap">
             <div class="input-group-text">
                 <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowItemList" ValueExpression="() => _settings.ShowItemList" ValueChanged="(bool show) => SaveShowItemList(show)" />
             </div>
@@ -65,6 +80,13 @@
     async Task SaveStartPage(string startPage)
     {
         _settings.StartPage = startPage;
+
+        await SettingsService.UpdateSettings();
+    }
+
+    async Task SaveStartSidebar(string startSidebar)
+    {
+        _settings.StartSidebar = startSidebar;
 
         await SettingsService.UpdateSettings();
     }
