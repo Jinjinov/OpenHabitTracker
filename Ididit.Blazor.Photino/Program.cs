@@ -1,6 +1,7 @@
 ﻿using Ididit.Backup;
 using Ididit.Blazor.Files;
 using Ididit.Blazor.Layout;
+using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Components.Web;
@@ -34,9 +35,12 @@ class Program
 
         PhotinoBlazorApp app = builder.Build();
 
+        IDataAccess dataAccess = app.Services.GetRequiredService<IDataAccess>();
+        dataAccess.Initialize();
+
         // customize window
         //if (!OperatingSystem.IsLinux()) // TODO: find out why this works in Photino sample
-            app.MainWindow.SetIconFile("favicon.ico");
+        app.MainWindow.SetIconFile("favicon.ico");
         app.MainWindow.SetTitle("ididit!");
         app.MainWindow.SetUseOsDefaultSize(false);
         app.MainWindow.SetSize(1680, 1050);

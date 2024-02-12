@@ -1,6 +1,7 @@
 ﻿using Ididit.Backup;
 using Ididit.Blazor.Files;
 using Ididit.Blazor.Layout;
+using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +42,9 @@ public partial class MainWindow : Window
         Height = 1050 + 7 + 31;
 
         //serviceProvider.UseServices();
+
+        IDataAccess dataAccess = serviceProvider.GetRequiredService<IDataAccess>();
+        dataAccess.Initialize();
     }
 }
 

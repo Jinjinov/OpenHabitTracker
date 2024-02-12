@@ -1,6 +1,7 @@
 using Ididit.Backup;
 using Ididit.Blazor.Files;
 using Ididit.Blazor.Layout;
+using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Components.Web;
@@ -41,5 +42,8 @@ public partial class MainForm : Form
         blazorWebView.RootComponents.Add<HeadOutlet>("head::after");
 
         //serviceProvider.UseServices();
+
+        IDataAccess dataAccess = serviceProvider.GetRequiredService<IDataAccess>();
+        dataAccess.Initialize();
     }
 }

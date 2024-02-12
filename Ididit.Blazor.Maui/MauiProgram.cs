@@ -1,6 +1,7 @@
 ﻿using Ididit.Backup;
 using Ididit.Blazor.Files;
 using Ididit.Blazor.Layout;
+using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.Extensions.Logging;
@@ -35,6 +36,11 @@ public static class MauiProgram
         builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
 
-        return builder.Build();
+        MauiApp mauiApp = builder.Build();
+
+        IDataAccess dataAccess = mauiApp.Services.GetRequiredService<IDataAccess>();
+        dataAccess.Initialize();
+
+        return mauiApp;
     }
 }
