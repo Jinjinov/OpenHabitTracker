@@ -28,6 +28,8 @@ bring back 3 column screen: Notes, Tasks, Habits
 
 horizontal calendar with vertical weeks
 
+responsive number of days / weeks
+
 
 - host 24/7 on Raspberry Pi
 	valid LAN IP
@@ -38,9 +40,6 @@ horizontal calendar with vertical weeks
 	install NET 8 sdk
 
 ---------------------------------------------------------------------------------------------------
-
-two changing columns:
-	https://learn.microsoft.com/en-us/aspnet/core/blazor/components/dynamiccomponent?view=aspnetcore-8.0#event-callbacks-eventcallback
 
 selected calendar day:
 	show all (list)
