@@ -16,7 +16,7 @@ get rid of habit padding
 
 make input-group-text same width in all rows - Settings, Search
 
-change input-group into list-group
+change input-group into list-group - or - remove borders
 
 solve the too wide disaster - open details in another column
 
