@@ -12,8 +12,6 @@
 
             <button class="nav-link" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> Menu</button>
 
-            @* <NavLink class="nav-link ms-3" href="/" style="font-family: 'Caveat', cursive; font-size: 1.5em;">ididit!</NavLink> *@
-
             <NavLink class="nav-link ms-3" href="habits"><i class="bi bi-card-list"></i> Habits</NavLink>
             <NavLink class="nav-link ms-3" href="notes"><i class="bi bi-card-text"></i> Notes</NavLink>
             <NavLink class="nav-link ms-3" href="tasks"><i class="bi bi-card-checklist"></i> Tasks</NavLink>
@@ -31,26 +29,13 @@
 
             @if (dynamicComponentType is not null)
             {
-                <DynamicComponent Type="dynamicComponentType" Parameters="dynamicComponentParameters" />
+                <DynamicComponent Type="dynamicComponentType" Parameters="dynamicComponentParameters.GetValueOrDefault(dynamicComponentType.Name)" />
             }
-
-            @* <Search @bind-SettingsChanged=settingsChanged /> *@
 
             @Body
 
         </CascadingValue>
     </div>
-
-    @*
-    <div class="row flex-shrink-1">
-        <div class="col bg-body-secondary">
-            <a href="https://ididit.today/"><i class="bi bi-globe"></i> Web</a>
-            <a href="https://github.com/Jinjinov/Ididit.Today"><i class="bi bi-github"></i> GitHub</a>
-            © Jinjinov 2024
-        </div>
-    </div>
-    *@
-
 </div>
 
 <div id="blazor-error-ui">
@@ -63,17 +48,36 @@
     bool settingsChanged;
 
     private Type? dynamicComponentType;
-    private Dictionary<string, object> dynamicComponentParameters = new(); // TODO: Menu, Search, Settings
+    private Dictionary<string, Dictionary<string, object>> dynamicComponentParameters = new ();
 
     protected override async Task OnInitializedAsync()
     {
         await AppData.InitializeSettings();
 
-        // dynamicComponentParameters = new Dictionary<string, object>()
-        // {
-        //   { "SettingsChanged", settingsChanged },
-        //   { "SettingsChangedChanged", EventCallback.Factory.Create<bool>(this, val => settingsChanged = val)},
-        // };
+        dynamicComponentParameters = new Dictionary<string, Dictionary<string, object>>
+        {
+            {
+                "Menu", new Dictionary<string, object>()
+                {
+                  { "DynamicComponentType", dynamicComponentType },
+                  { "DynamicComponentTypeChanged", EventCallback.Factory.Create<Type?>(this, val => dynamicComponentType = val)},
+                }
+            },
+            {
+                "Search", new Dictionary<string, object>()
+                {
+                  { "SettingsChanged", settingsChanged },
+                  { "SettingsChangedChanged", EventCallback.Factory.Create<bool>(this, val => settingsChanged = val)},
+                }
+            },
+            {
+                "Settings", new Dictionary<string, object>()
+                {
+                  { "SettingsChanged", settingsChanged },
+                  { "SettingsChangedChanged", EventCallback.Factory.Create<bool>(this, val => settingsChanged = val)},
+                }
+            }
+        };
 
         if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
             SelectComponent(AppData.Settings.StartSidebar);
