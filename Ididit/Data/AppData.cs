@@ -78,7 +78,7 @@ public class AppData(IDataAccess dataAccess)
             }
             else
             {
-                settingsEntity = new SettingsEntity()
+                Settings = new SettingsModel
                 {
                     StartPage = "/about",
                     StartSidebar = "Help",
@@ -103,6 +103,8 @@ public class AppData(IDataAccess dataAccess)
                         { Priority.VeryHigh, true }
                     }
                 };
+
+                settingsEntity = Settings.ToEntity();
 
                 await _dataAccess.AddSettings(settingsEntity);
 
