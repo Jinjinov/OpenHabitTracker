@@ -14,9 +14,7 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 get rid of habit padding
 
-remove Items delete when read only
-
-make input-group-text same width - Settings, Search
+make input-group-text same width in all rows - Settings, Search
 
 change input-group into list-group
 

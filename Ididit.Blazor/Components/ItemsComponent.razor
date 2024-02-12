@@ -25,8 +25,8 @@
                 {
                     <button class="input-group-text flex-grow-1 text-wrap" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@item.Title</button>
                 }
+                <button class="btn btn-outline-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
             }
-            <button class="btn btn-outline-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
         </div>
     }
 }
