@@ -57,10 +57,10 @@
 
 @code {
     [Parameter]
-    public bool SettingsChanged { get; set; }
+    public bool StateChanged { get; set; }
 
     [Parameter]
-    public EventCallback<bool> SettingsChangedChanged { get; set; }
+    public EventCallback<bool> StateChangedChanged { get; set; }
 
     SettingsModel _settings => SettingsService.Settings;
 
@@ -73,8 +73,8 @@
     {
         await SettingsService.UpdateSettings();
 
-        SettingsChanged = !SettingsChanged;
-        await SettingsChangedChanged.InvokeAsync(SettingsChanged);
+        StateChanged = !StateChanged;
+        await StateChangedChanged.InvokeAsync(StateChanged);
     }
 
     async Task SaveStartPage(string startPage)

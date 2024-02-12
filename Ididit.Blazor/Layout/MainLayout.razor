@@ -24,7 +24,7 @@
     </div>
 
     <div class="row flex-grow-1 overflow-hidden">
-        <CascadingValue Name="SettingsChanged" Value=@settingsChanged>
+        <CascadingValue Name="StateChanged" Value=@stateChanged>
 
             @if (dynamicComponentType is not null)
             {
@@ -44,7 +44,7 @@
 </div>
 
 @code {
-    bool settingsChanged;
+    bool stateChanged;
 
     private Type? dynamicComponentType;
     private Dictionary<string, Dictionary<string, object>> dynamicComponentParametersByName = new ();
@@ -53,10 +53,10 @@
     {
         await AppData.InitializeSettings();
 
-        Dictionary<string, object> settingsChangedParameters = new Dictionary<string, object>()
+        Dictionary<string, object> stateChangedParameters = new Dictionary<string, object>()
         {
-            { "SettingsChanged", settingsChanged },
-            { "SettingsChangedChanged", EventCallback.Factory.Create<bool>(this, val => settingsChanged = val)},
+            { "StateChanged", stateChanged },
+            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => stateChanged = val)},
         };
 
         Dictionary<string, object> dynamicComponentParameters = new Dictionary<string, object>()
@@ -68,8 +68,8 @@
         dynamicComponentParametersByName = new Dictionary<string, Dictionary<string, object>>
         {
             { "Menu", dynamicComponentParameters },
-            { "Search", settingsChangedParameters },
-            { "Settings", settingsChangedParameters }
+            { "Search", stateChangedParameters },
+            { "Settings", stateChangedParameters }
         };
 
         if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
