@@ -12,6 +12,25 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 ??? Task CompletedAt / Habit LastTimeDoneAt --> DateTime? DoneAt ???
 
 
+
+
+Android not working because of @inject AppData AppData
+
+
+
+
+default settings not working
+	StartPage = "/about",
+	StartSidebar = "Help",
+
+
+
+
+add margin to WASM GetNavBarFragment
+
+
+
+
 get rid of habit padding
 
 make input-group-text same width in all rows - Settings, Search
