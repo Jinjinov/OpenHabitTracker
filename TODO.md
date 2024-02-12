@@ -16,7 +16,7 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-Android not working because of @inject AppData AppData
+Android not working because of @inject AppData AppData - IDataAccess dataAccess - DataAccess(ApplicationDbContext dataContext) - dataContext.Database.EnsureCreated();
 
 
 
