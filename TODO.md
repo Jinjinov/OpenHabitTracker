@@ -2,7 +2,7 @@
 
 !!! Blazor lifecycle methods swallow exceptions !!! -> remove `protected override async Task OnInitializedAsync()`
 
-!!! Blazor @inject swallows constructor exceptions !!!
+!!! Blazor @inject swallows constructor exceptions !!! -> add @using Microsoft.Extensions.Logging @inject ILogger Logger
 
 Ididit.Google.Apis
 Ididit.LocalStorage
