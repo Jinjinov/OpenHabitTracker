@@ -16,6 +16,7 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 Android not working because of @inject AppData AppData - IDataAccess dataAccess - DataAccess(ApplicationDbContext dataContext) - dataContext.Database.EnsureCreated();
+https://stackoverflow.com/questions/72598734/entity-framework-core-in-net-maui-xamarin-forms
 
 
 
