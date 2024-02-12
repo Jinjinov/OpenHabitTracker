@@ -19,17 +19,16 @@
             <NavLink class="nav-link ms-3" href="about"><i class="bi bi-info-square"></i> About</NavLink>
 
             @NavBarFragment.GetNavBarFragment()
+
         </div>
     </div>
 
     <div class="row flex-grow-1 overflow-hidden">
         <CascadingValue Name="SettingsChanged" Value=@settingsChanged>
 
-            @* <Menu @bind-DynamicComponentType=dynamicComponentType /> *@
-
             @if (dynamicComponentType is not null)
             {
-                <DynamicComponent Type="dynamicComponentType" Parameters="dynamicComponentParameters.GetValueOrDefault(dynamicComponentType.Name)" />
+                <DynamicComponent Type="dynamicComponentType" Parameters="dynamicComponentParametersByName.GetValueOrDefault(dynamicComponentType.Name)" />
             }
 
             @Body
@@ -48,35 +47,29 @@
     bool settingsChanged;
 
     private Type? dynamicComponentType;
-    private Dictionary<string, Dictionary<string, object>> dynamicComponentParameters = new ();
+    private Dictionary<string, Dictionary<string, object>> dynamicComponentParametersByName = new ();
 
     protected override async Task OnInitializedAsync()
     {
         await AppData.InitializeSettings();
 
-        dynamicComponentParameters = new Dictionary<string, Dictionary<string, object>>
+        Dictionary<string, object> settingsChangedParameters = new Dictionary<string, object>()
         {
-            {
-                "Menu", new Dictionary<string, object>()
-                {
-                  { "DynamicComponentType", dynamicComponentType },
-                  { "DynamicComponentTypeChanged", EventCallback.Factory.Create<Type?>(this, val => dynamicComponentType = val)},
-                }
-            },
-            {
-                "Search", new Dictionary<string, object>()
-                {
-                  { "SettingsChanged", settingsChanged },
-                  { "SettingsChangedChanged", EventCallback.Factory.Create<bool>(this, val => settingsChanged = val)},
-                }
-            },
-            {
-                "Settings", new Dictionary<string, object>()
-                {
-                  { "SettingsChanged", settingsChanged },
-                  { "SettingsChangedChanged", EventCallback.Factory.Create<bool>(this, val => settingsChanged = val)},
-                }
-            }
+            { "SettingsChanged", settingsChanged },
+            { "SettingsChangedChanged", EventCallback.Factory.Create<bool>(this, val => settingsChanged = val)},
+        };
+
+        Dictionary<string, object> dynamicComponentParameters = new Dictionary<string, object>()
+        {
+            { "DynamicComponentType", dynamicComponentType },
+            { "DynamicComponentTypeChanged", EventCallback.Factory.Create<Type?>(this, val => dynamicComponentType = val)},
+        };
+
+        dynamicComponentParametersByName = new Dictionary<string, Dictionary<string, object>>
+        {
+            { "Menu", dynamicComponentParameters },
+            { "Search", settingsChangedParameters },
+            { "Settings", settingsChangedParameters }
         };
 
         if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
