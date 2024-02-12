@@ -26,11 +26,6 @@ default settings not working
 
 
 
-add margin to WASM GetNavBarFragment
-
-
-
-
 get rid of habit padding
 
 make input-group-text same width in all rows - Settings, Search
