@@ -53,23 +53,28 @@
     {
         await AppData.InitializeSettings();
 
-        Dictionary<string, object> stateChangedParameters = new Dictionary<string, object>()
-        {
-            { "StateChanged", stateChanged },
-            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => stateChanged = val)},
-        };
-
         Dictionary<string, object> dynamicComponentParameters = new Dictionary<string, object>()
         {
             { "DynamicComponentType", dynamicComponentType },
             { "DynamicComponentTypeChanged", EventCallback.Factory.Create<Type?>(this, val => dynamicComponentType = val)},
         };
 
+        Dictionary<string, object> stateChangedParameters = new Dictionary<string, object>()
+        {
+            { "StateChanged", stateChanged },
+            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => stateChanged = val)},
+        };
+
         dynamicComponentParametersByName = new Dictionary<string, Dictionary<string, object>>
         {
             { "Menu", dynamicComponentParameters },
             { "Search", stateChangedParameters },
-            { "Settings", stateChangedParameters }
+            { "Settings", stateChangedParameters },
+            { "Backup", stateChangedParameters },
+            { "Categories", stateChangedParameters },
+            { "Data", stateChangedParameters },
+            { "Priorities", stateChangedParameters },
+            { "Trash", stateChangedParameters }
         };
 
         if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))

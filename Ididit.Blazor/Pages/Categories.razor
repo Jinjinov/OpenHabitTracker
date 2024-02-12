@@ -13,11 +13,11 @@
     <div class="my-1">
         @if (CategoryService.NewCategory is not null)
         {
-            <form @onsubmit=AddNewCategory>
+            <form @onsubmit=AddCategory>
                 <div class="input-group">
                     <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="Add new category" />
 
-                    <button class="btn btn-outline-primary" @onclick="() => CategoryService.AddCategory()" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
+                    <button class="btn btn-outline-primary" @onclick="AddCategory" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
                 </div>
             </form>
         }
@@ -34,13 +34,13 @@
             <div class="input-group flex-nowrap">
                 @if (category == CategoryService.SelectedCategory)
                 {
-                    <InputText class="form-control" @ref="inputElement" Value="@category.Title" ValueExpression="() => category.Title" ValueChanged="(string title) => CategoryService.UpdateCategory(title)" @onfocusout="(args) => CategoryService.SelectedCategory = null" />
+                    <InputText class="form-control" @ref="inputElement" Value="@category.Title" ValueExpression="() => category.Title" ValueChanged="(string title) => UpdateCategory(title)" @onfocusout="(args) => CategoryService.SelectedCategory = null" />
                 }
                 else
                 {
                     <button class="input-group-text flex-grow-1 text-wrap" @onclick="() => { CategoryService.SelectedCategory = category; shouldFocus = true; }">@category.Title</button>
                 }
-                <button class="btn btn-outline-primary" @onclick="() => CategoryService.DeleteCategory(category)"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => DeleteCategory(category)"><i class="bi bi-trash"></i></button>
             </div>
         }
     }
@@ -50,6 +50,12 @@
 @code {
     [Parameter]
     public long? Id { get; set; }
+
+    [Parameter]
+    public bool StateChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> StateChangedChanged { get; set; }
 
     InputText? inputElement;
 
@@ -74,11 +80,33 @@
         }
     }
 
-    async Task AddNewCategory()
+    async Task OnStateChanged()
+    {
+        StateChanged = !StateChanged;
+        await StateChangedChanged.InvokeAsync(StateChanged);
+    }
+
+    async Task AddCategory()
     {
         if (CategoryService.NewCategory is not null && !string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title))
         {
             await CategoryService.AddCategory();
+
+            await OnStateChanged();
         }
+    }
+
+    async Task UpdateCategory(string title)
+    {
+        await CategoryService.UpdateCategory(title);
+
+        await OnStateChanged();
+    }
+
+    async Task DeleteCategory(CategoryModel category)
+    {
+        await CategoryService.DeleteCategory(category);
+
+        await OnStateChanged();
     }
 }

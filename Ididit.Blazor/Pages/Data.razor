@@ -11,13 +11,37 @@
     <div class="my-1">
 
         <div class="list-group">
-            <button class="list-group-item list-group-item-action" @onclick="AppData.LoadExamples">Load examples</button>
-            <button class="list-group-item list-group-item-action" @onclick="AppData.DeleteAllData">Delete all data</button>
+            <button class="list-group-item list-group-item-action" @onclick="LoadExamples">Load examples</button>
+            <button class="list-group-item list-group-item-action" @onclick="DeleteAllData">Delete all data</button>
         </div>
 
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public bool StateChanged { get; set; }
 
+    [Parameter]
+    public EventCallback<bool> StateChangedChanged { get; set; }
+
+    async Task OnStateChanged()
+    {
+        StateChanged = !StateChanged;
+        await StateChangedChanged.InvokeAsync(StateChanged);
+    }
+
+    async Task LoadExamples()
+    {
+        await AppData.LoadExamples();
+
+        await OnStateChanged();
+    }
+
+    async Task DeleteAllData()
+    {
+        await AppData.DeleteAllData();
+
+        await OnStateChanged();
+    }
 }

@@ -30,9 +30,21 @@
 </div>
 
 @code {
+    [Parameter]
+    public bool StateChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> StateChangedChanged { get; set; }
+
     string _filename = string.Empty;
 
     string _fileContent = string.Empty;
+
+    async Task OnStateChanged()
+    {
+        StateChanged = !StateChanged;
+        await StateChangedChanged.InvokeAsync(StateChanged);
+    }
 
     private async Task ExportFile(DataFormat dataFormat)
     {
@@ -66,5 +78,7 @@
 #endif
 
         await BackupService.ImportDataFile(filename, stream);
+
+        await OnStateChanged();
     }
 }
