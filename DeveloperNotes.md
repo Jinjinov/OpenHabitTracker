@@ -10,6 +10,16 @@ background color: #333333
 
 ---------------------------------------------------------------------------------------------------
 
+Component instantiation
+When Blazor creates instances of your components, it invokes their constructors, as well as constructors for any DI services being supplied to them via @inject or the [Inject] attribute. 
+If any of these constructors throws an exception, or if the setters for [Inject] properties throw exceptions, this is fatal to the circuit because it's impossible for the framework to carry out the intentions of the developer.
+
+Lifecycle methods
+During the lifetime of components, Blazor invokes lifecycle methods on components such as OnInitialized, OnParametersSet, ShouldRender, OnAfterRender, and the ...Async versions of these. 
+If any of these lifecycle methods throws an exception, synchronously or asynchronously, this is fatal to the circuit because the framework no longer knows whether or how to render that component.
+
+---------------------------------------------------------------------------------------------------
+
 using Microsoft.AspNetCore.Components.Forms; InputFile / download
 using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Storage; interface IFileSaver
 using Microsoft.Win32; OpenFileDialog / SaveFileDialog

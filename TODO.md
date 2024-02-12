@@ -1,6 +1,8 @@
 # TODO:
 
-!!! blazor lifecycle methods swallow exceptions !!! -> remove `protected override async Task OnInitializedAsync()`
+!!! Blazor lifecycle methods swallow exceptions !!! -> remove `protected override async Task OnInitializedAsync()`
+
+!!! Blazor @inject swallows constructor exceptions !!!
 
 Ididit.Google.Apis
 Ididit.LocalStorage
