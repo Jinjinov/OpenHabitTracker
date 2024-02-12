@@ -70,8 +70,23 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
 
         foreach (InfoModel model in Models)
         {
-            await Restore(model);
+            model.IsDeleted = false;
+
+            if (model is NoteModel)
+            {
+                await RestoreNote(model.Id);
+            }
+            else if (model is TaskModel)
+            {
+                await RestoreTask(model.Id);
+            }
+            else if (model is HabitModel)
+            {
+                await RestoreHabit(model.Id);
+            }
         }
+
+        _appData.Trash?.Clear();
     }
 
     public async Task Delete(InfoModel model) // TODO: learn to use generics, perhaps you will like them...

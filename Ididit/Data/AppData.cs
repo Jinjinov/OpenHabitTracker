@@ -263,7 +263,7 @@ public class AppData(IDataAccess dataAccess)
 
     public async Task InitializeTrash()
     {
-        if (Trash is null && Habits is not null && Notes is not null && Tasks is not null)
+        if (Trash is null)
         {
             await InitializeCategories();
             await InitializePriorities();
@@ -272,7 +272,8 @@ public class AppData(IDataAccess dataAccess)
             await InitializeNotes();
             await InitializeTasks();
 
-            Trash = [.. Habits.Values.Where(m => m.IsDeleted), .. Notes.Values.Where(m => m.IsDeleted), .. Tasks.Values.Where(m => m.IsDeleted)];
+            if (Habits is not null && Notes is not null && Tasks is not null)
+                Trash = [.. Habits.Values.Where(m => m.IsDeleted), .. Notes.Values.Where(m => m.IsDeleted), .. Tasks.Values.Where(m => m.IsDeleted)];
         }
     }
 
