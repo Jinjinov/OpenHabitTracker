@@ -19,11 +19,15 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-!	get rid of habit padding
-!	remove borders -/ or /- change round borders --> change input-group into list-group
-
-!	solve the too wide disaster - open details in another column
 !	bring back 3 column screen: Notes, Tasks, Habits
+
+!	get rid of habit padding
+
+!	fix round borders
+		a) remove borders
+		b) change input-group into list-group
+
+!	open Notes, Tasks, Habits details in another column
 
 !	[ ] - show calendar below title
 !	[ ] - show calendar beside title
