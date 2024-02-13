@@ -21,7 +21,7 @@ class Program
         builder.Services.AddLogging();
 
         builder.Services.AddServices();
-        builder.Services.AddDataAccess();
+        builder.Services.AddDataAccess("Ididit.db");
         builder.Services.AddBackup();
         builder.Services.AddScoped<IOpenFile, OpenFile>();
         builder.Services.AddScoped<JsInterop>();

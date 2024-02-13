@@ -91,6 +91,8 @@ SectionOutlet				https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetco
 ValidationSummary			https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.forms.validationsummary?view=aspnetcore-8.0
 Virtualize					https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.web.virtualization.virtualize-1?view=aspnetcore-8.0
 
+---------------------------------------------------------------------------------------------------
+
 - Calendar
 	- 7 row, one for each day of the week
 	- 6 columns = one month - 4 full weeks = 28 - another 0/1/2/3 days can take max 2 weeks more
@@ -101,3 +103,38 @@ Virtualize					https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore
 	- previous month DaysInMonth
 	- this month DaysInMonth
 	- next month until sunday - until max 14.
+
+---------------------------------------------------------------------------------------------------
+
+public class ApplicationDbContext : DbContext
+{
+    public DbSet<ListItem> Items { get; set; }
+    private const string DatabaseName = "myItems.db";
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        String databasePath;
+        switch (Device.RuntimePlatform)
+        {
+            case Device.iOS:
+                databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "..", "Library", DatabaseName);
+                break;
+            case Device.Android:
+                databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), DatabaseName);
+                break;
+            default:
+                throw new NotImplementedException("Platform not supported");
+        }
+        optionsBuilder.UseSqlite($"Filename={databasePath}"); // “Filename” and “DataSource” are aliases for “Data Source”
+    }
+}
+
+SQLitePCL.Batteries_V2.Init();
+
+[assembly: Preserve(typeof(System.Linq.Queryable), AllMembers = true)]
+[assembly: Preserve(typeof(System.DateTime), AllMembers = true)]
+[assembly: Preserve(typeof(System.Linq.Enumerable), AllMembers = true)]
+[assembly: Preserve(typeof(System.Linq.IQueryable), AllMembers = true)]
+
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
