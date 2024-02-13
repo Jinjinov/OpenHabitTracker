@@ -15,12 +15,12 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-!!! show only one column on Android / iOS!!!
+!!! show only one column on Android / iOS !!! - copy CSS from the previous version
 
 
 
 !	get rid of habit padding
-!	remove borders -/- change round borders --> change input-group into list-group
+!	remove borders -/ or /- change round borders --> change input-group into list-group
 
 !	solve the too wide disaster - open details in another column
 !	bring back 3 column screen: Notes, Tasks, Habits
@@ -28,7 +28,8 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 !	[ ] - show calendar below title
 !	[ ] - show calendar beside title
 !	horizontal calendar with vertical weeks
-?	responsive number of calendar days / weeks
+!	responsive number of calendar days / weeks - use GetDimensions() - no need for window.addEventListener("resize"
+
 
 
 - host 24/7 on Raspberry Pi

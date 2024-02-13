@@ -18,6 +18,13 @@ export function saveAsFile(filename, bytesBase64) {
     document.body.removeChild(link);
 }
 
+export function getDimensions() {
+    return {
+        width: window.innerWidth,
+        height: window.innerHeight
+    };
+}
+
 function calculateAutoHeight(e) {
     if (e && e.target) {
         e.target.style.height = 'auto';

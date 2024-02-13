@@ -150,3 +150,48 @@ optionsBuilder.UseSqlite($"Data Source={sqlitePath}\fmd.db");
 ---
 
 System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+
+---------------------------------------------------------------------------------------------------
+
+https://github.com/EdCharbeneau/BlazorSize/wiki
+
+---------------------------------------------------------------------------------------------------
+
+// wwwroot/js/interop.js
+window.getScreenWidth = function () {
+    return window.innerWidth;
+};
+
+window.addEventListener("resize", function() {
+    var screenWidth = window.innerWidth;
+    DotNet.invokeMethodAsync('YourAssemblyName', 'UpdateScreenWidth', screenWidth);
+});
+
+---------------------------------------------------------------------------------------------------
+
+@code {
+    int screenWidth;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await UpdateScreenWidth();
+        }
+    }
+
+    async Task UpdateScreenWidth()
+    {
+        screenWidth = await JsRuntime.InvokeAsync<int>("getScreenWidth");
+        StateHasChanged(); // Ensure UI updates after screen width change
+    }
+
+    [JSInvokable]
+    public async Task UpdateScreenWidth(int screenWidth)
+    {
+        this.screenWidth = screenWidth;
+        StateHasChanged(); // Ensure UI updates after screen width change
+    }
+}
+
+---------------------------------------------------------------------------------------------------

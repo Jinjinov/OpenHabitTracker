@@ -4,12 +4,15 @@ using System.Text;
 
 namespace Ididit.Blazor;
 
-// This class provides an example of how JavaScript functionality can be wrapped
-// in a .NET class for easy consumption. The associated JavaScript module is
-// loaded on demand when first needed.
-//
-// This class can be registered as scoped DI service and then injected into Blazor
-// components for use.
+// This class provides an example of how JavaScript functionality can be wrapped in a .NET class for easy consumption.
+// The associated JavaScript module is loaded on demand when first needed.
+// This class can be registered as scoped DI service and then injected into Blazor components for use.
+
+public class Dimensions
+{
+    public int Width { get; set; }
+    public int Height { get; set; }
+}
 
 public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
 {
@@ -19,6 +22,12 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
     {
         IJSObjectReference module = await _moduleTask.Value;
         return await module.InvokeAsync<string>("showPrompt", message);
+    }
+
+    public async Task<Dimensions> GetDimensions()
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        return await module.InvokeAsync<Dimensions>("getDimensions");
     }
 
     public async ValueTask FocusElement(ElementReference element)
