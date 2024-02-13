@@ -19,17 +19,16 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-get rid of habit padding
-make input-group-text same width in all rows - Settings, Search
-remove borders -/- change round borders --> change input-group into list-group
+!	get rid of habit padding
+!	remove borders -/- change round borders --> change input-group into list-group
 
-solve the too wide disaster - open details in another column
-bring back 3 column screen: Notes, Tasks, Habits
+!	solve the too wide disaster - open details in another column
+!	bring back 3 column screen: Notes, Tasks, Habits
 
-[ ] - show calendar below title
-[ ] - show calendar beside title
-horizontal calendar with vertical weeks
-responsive number of calendar days / weeks
+!	[ ] - show calendar below title
+!	[ ] - show calendar beside title
+!	horizontal calendar with vertical weeks
+?	responsive number of calendar days / weeks
 
 
 - host 24/7 on Raspberry Pi

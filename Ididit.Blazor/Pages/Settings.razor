@@ -11,8 +11,8 @@
     <div class="my-1">
 
         <div class="input-group flex-nowrap">
-            <span class="input-group-text">Start page</span>
-            <InputSelect class="form-select" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" ValueChanged="(string startPage) => SaveStartPage(startPage)">
+            <span class="input-group-text col-6">Start page</span>
+            <InputSelect class="form-select col-6" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" ValueChanged="(string startPage) => SaveStartPage(startPage)">
                 <option value="/notes">Notes</option>
                 <option value="/tasks">Tasks</option>
                 <option value="/habits">Habits</option>
@@ -21,8 +21,8 @@
         </div>
 
         <div class="input-group flex-nowrap">
-            <span class="input-group-text">Start sidebar</span>
-            <InputSelect class="form-select" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" ValueChanged="(string startSidebar) => SaveStartSidebar(startSidebar)">
+            <span class="input-group-text col-6">Start sidebar</span>
+            <InputSelect class="form-select col-6" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" ValueChanged="(string startSidebar) => SaveStartSidebar(startSidebar)">
                 <option value="Settings">Settings</option>
                 <option value="Data">Data</option>
                 <option value="Backup">Backup</option>
@@ -43,8 +43,8 @@
         </div>
 
         <div class="input-group flex-nowrap">
-            <span class="input-group-text">First day of the week</span>
-            <InputSelect class="form-select" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" ValueChanged="(DayOfWeek dayOfWeek) => SaveFirstDayOfWeek(dayOfWeek)">
+            <span class="input-group-text col-6">First day of the week</span>
+            <InputSelect class="form-select col-6" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" ValueChanged="(DayOfWeek dayOfWeek) => SaveFirstDayOfWeek(dayOfWeek)">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
                 {
                     <option @key="dayOfWeek" value="@dayOfWeek">@dayOfWeek</option>
