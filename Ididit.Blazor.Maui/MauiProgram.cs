@@ -27,16 +27,22 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
-        string databasePath = "Ididit.db";
+        string databaseFile = "Ididit.db";
+        string databaseFolder = "";
 
         if (DeviceInfo.Platform == DevicePlatform.iOS)
         {
-            databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "..", "Library", databasePath);
+            databaseFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library");
         }
         else if (DeviceInfo.Platform == DevicePlatform.Android)
         {
-            databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), databasePath);
+            databaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+
+            // solution for: Microsoft.Data.Sqlite.SqliteException: 'SQLite Error 14: 'unable to open database file'.'
+            Directory.CreateDirectory(databaseFolder);
         }
+
+        string databasePath = Path.Combine(databaseFolder, databaseFile);
 
         builder.Services.AddServices();
         builder.Services.AddDataAccess(databasePath); // %localappdata%\Packages\...\LocalState - Environment.SpecialFolder.LocalApplicationData - FileSystem.Current.AppDataDirectory

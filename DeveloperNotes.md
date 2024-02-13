@@ -117,7 +117,7 @@ public class ApplicationDbContext : DbContext
         switch (Device.RuntimePlatform)
         {
             case Device.iOS:
-                databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "..", "Library", DatabaseName);
+                databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library", DatabaseName);
                 break;
             case Device.Android:
                 databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), DatabaseName);
@@ -136,5 +136,17 @@ SQLitePCL.Batteries_V2.Init();
 [assembly: Preserve(typeof(System.Linq.Enumerable), AllMembers = true)]
 [assembly: Preserve(typeof(System.Linq.IQueryable), AllMembers = true)]
 
+Microsoft.Data.Sqlite.SqliteException: 'SQLite Error 14: 'unable to open database file'.'
+
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+var sqlitePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"OlsonSoftware\FinanceManager");
+
+Directory.CreateDirectory(sqlitePath);
+
+optionsBuilder.UseSqlite($"Data Source={sqlitePath}\fmd.db");
+
+---
+
+System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
