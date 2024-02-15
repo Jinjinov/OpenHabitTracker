@@ -15,17 +15,15 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-!!! show only one column on Android / iOS !!! - copy CSS from the previous version
+[ ] - show small calendar
+[ ] - show large calendar
+
+
+!!! show only one column on mobile !!! - copy CSS from the previous version
 
 
 
 !!	open details in another column: Note, Task, Habit
-
-
-
-[ ] - show small calendar
-[ ] - show large calendar
-
 
 
 !	responsive number of calendar days / weeks - use GetDimensions() - no need for window.addEventListener("resize"
