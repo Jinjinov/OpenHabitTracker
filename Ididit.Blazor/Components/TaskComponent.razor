@@ -1,0 +1,65 @@
+﻿@using Ididit.Data.Models
+@using Ididit.Services
+
+@inject TaskService TaskService
+
+<div class="input-group flex-nowrap">
+    <PriorityComponent Model="task" />
+    <InputText class="form-control" Value="@task.Title" ValueExpression="() => task.Title" ValueChanged="(string title) => SaveTitle(task, title)" />
+    <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(task.Id)"><i class="bi bi-floppy"></i></button>
+    <button class="btn btn-outline-primary" @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
+    <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
+</div>
+
+<ItemsComponent Items=task />
+
+<div class="input-group">
+    <span class="input-group-text">Planned at</span>
+    <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="task.PlannedAt" ValueExpression="() => task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(task, plannedAt)" />
+</div>
+
+@if (task.StartedAt is not null)
+{
+    <div class="p-1 border rounded-0">
+        @if (task.StartedAt != task.CompletedAt)
+        {
+            <small class="d-inline-block mx-1">Started: @task.StartedAt</small>
+        }
+        @if (task.CompletedAt is not null)
+        {
+            <small class="d-inline-block mx-1">Completed: @task.CompletedAt</small>
+        }
+    </div>
+}
+
+<CategoryComponent Model="task" />
+
+<div class="p-1 border rounded-0">
+    <small class="d-inline-block mx-1">Created: @task.CreatedAt</small>
+    <small class="d-inline-block mx-1">Updated: @task.UpdatedAt</small>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public TaskModel task { get; set; }
+
+    async Task ToggleSelected(long id)
+    {
+        
+    }
+
+    async Task SaveTitle(TaskModel task, string title)
+    {
+        task.Title = title;
+
+        await TaskService.UpdateTask();
+    }
+
+    async Task SavePlannedAt(TaskModel task, DateTime? plannedAt)
+    {
+        task.PlannedAt = plannedAt;
+
+        await TaskService.UpdateTask();
+    }
+}

@@ -1,0 +1,110 @@
+﻿@using Ididit.Data
+@using Ididit.Data.Models
+@using Ididit.Services
+
+@inject HabitService HabitService
+@inject SettingsService SettingsService
+
+<div>
+    <div class="input-group flex-nowrap">
+        <PriorityComponent Model="habit" />
+        <InputText class="form-control" Value="@habit.Title" ValueExpression="() => habit.Title" ValueChanged="(string title) => SaveTitle(habit, title)" />
+        <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(habit.Id)"><i class="bi bi-floppy"></i></button>
+        <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
+        <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+    </div>
+
+    <ItemsComponent Items=habit />
+
+    @if (habit.TimesDone is not null && habit.TimesDoneByDay is not null)
+    {
+        if (habit.LastTimeDoneAt is not null)
+        {
+            <div class="p-1 border rounded-0">
+                <small>Completed @habit.TimesDone.Count times, last time on @habit.LastTimeDoneAt</small>
+            </div>
+        }
+
+        @if (SettingsService.Settings.ShowLargeCalendar)
+        {
+            <div class="input-group-text p-0 border-0 rounded-0">
+                <div class="mx-auto">
+                    <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" DisplayMonth DisplayDayNames WeekCount="6" />
+                 </div>
+             </div>
+        }
+    }
+
+    <div class="input-group">
+        <label class="input-group-text" for="countInput">Repeat</label>
+        <InputNumber class="form-control" id="countInput" Value="habit.RepeatCount" ValueExpression="() => habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(habit, repeatCount)" />
+
+        <label class="input-group-text" for="intervalInput">every</label>
+        <InputNumber class="form-control" id="intervalInput" Value="habit.RepeatInterval" ValueExpression="() => habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(habit, repeatInterval)" />
+
+        <InputSelect class="form-select" Value="habit.RepeatPeriod" ValueExpression="() => habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(habit, repeatPeriod)">
+            @foreach (Period period in Enum.GetValues<Period>())
+            {
+                <option @key="period" value="@period">@period</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="input-group">
+        <label class="input-group-text" for="durationInput">Duration</label>
+        <InputDate class="form-control" id="durationInput" Value="habit.DurationProxy" ValueExpression="() => habit.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(habit, duration)" Type="InputDateType.Time" />
+    </div>
+
+    <CategoryComponent Model="habit" />
+
+    <div class="p-1 border rounded-0">
+        <small class="d-inline-block mx-1">Created: @habit.CreatedAt</small>
+        <small class="d-inline-block mx-1">Updated: @habit.UpdatedAt</small>
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public HabitModel habit { get; set; }
+
+    async Task ToggleSelected(long id)
+    {
+        
+    }
+
+    async Task SaveTitle(HabitModel habit, string title)
+    {
+        habit.Title = title;
+
+        await HabitService.UpdateHabit();
+    }
+
+    async Task SaveRepeatCount(HabitModel habit, int repeatCount)
+    {
+        habit.RepeatCount = repeatCount;
+
+        await HabitService.UpdateHabit();
+    }
+
+    async Task SaveRepeatInterval(HabitModel habit, int repeatInterval)
+    {
+        habit.RepeatInterval = repeatInterval;
+
+        await HabitService.UpdateHabit();
+    }
+
+    async Task SaveRepeatPeriod(HabitModel habit, Period repeatPeriod)
+    {
+        habit.RepeatPeriod = repeatPeriod;
+
+        await HabitService.UpdateHabit();
+    }
+
+    async Task SaveDuration(HabitModel habit, TimeOnly duration)
+    {
+        habit.DurationProxy = duration;
+
+        await HabitService.UpdateHabit();
+    }
+}
