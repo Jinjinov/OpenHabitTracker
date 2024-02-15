@@ -7,11 +7,12 @@
 
 <PageTitle>ididit!</PageTitle>
 
-@*
+@if (string.IsNullOrEmpty(AppData.Settings.StartPage))
+{
 <Notes IsEmbedded />
 <Tasks IsEmbedded />
 <Habits IsEmbedded />
-*@
+}
 
 @code {
     protected override async Task OnInitializedAsync()

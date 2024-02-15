@@ -13,6 +13,7 @@
         <div class="input-group flex-nowrap">
             <span class="input-group-text col-6">Start page</span>
             <InputSelect class="form-select col-6" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" ValueChanged="(string startPage) => SaveStartPage(startPage)">
+                <option value="">Notes, Tasks, Habits</option>
                 <option value="/notes">Notes</option>
                 <option value="/tasks">Tasks</option>
                 <option value="/habits">Habits</option>
@@ -23,6 +24,7 @@
         <div class="input-group flex-nowrap">
             <span class="input-group-text col-6">Start sidebar</span>
             <InputSelect class="form-select col-6" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" ValueChanged="(string startSidebar) => SaveStartSidebar(startSidebar)">
+                <option value="">None</option>
                 <option value="Settings">Settings</option>
                 <option value="Data">Data</option>
                 <option value="Backup">Backup</option>

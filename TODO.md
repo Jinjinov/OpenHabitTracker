@@ -19,8 +19,6 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-!!	bring back 3 column screen: Notes, Tasks, Habits
-
 !!	fix round borders
 		a) remove borders
 		b) change input-group into list-group
