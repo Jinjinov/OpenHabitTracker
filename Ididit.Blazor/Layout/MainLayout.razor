@@ -32,7 +32,14 @@
             @if (dynamicComponentType is not null)
             {
                 <div class="col mh-100 overflow-auto px-0 px-md-1" style="max-width: 400px">
+
+                    <div class="input-group flex-nowrap my-1">
+                        <span class="input-group-text flex-grow-1">@dynamicComponentType.Name</span>
+                        <button class="btn btn-outline-primary" @onclick="() => dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
+                    </div>
+
                     <DynamicComponent Type="dynamicComponentType" Parameters="dynamicComponentParametersByName.GetValueOrDefault(dynamicComponentType.Name)" />
+
                 </div>
             }
 

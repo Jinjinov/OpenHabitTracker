@@ -19,7 +19,7 @@
 
     @if (TaskService.NewTask is null)
     {
-        <NavLink class="btn input-group d-flex flex-nowrap my-1 p-1" @onclick="() => { TaskService.NewTask = new(); shouldFocus = true; }">
+        <NavLink class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="() => { TaskService.NewTask = new(); shouldFocus = true; }">
             <span class="input-group-text flex-grow-1">Add new task</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
