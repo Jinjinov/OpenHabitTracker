@@ -15,18 +15,20 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-[ ] - show small calendar
-[ ] - show large calendar
-
-
-!!! show only one column on mobile !!! - copy CSS from the previous version
+show only one column on mobile
 
 
 
-!!	open details in another column: Note, Task, Habit
+open details in another column:
+	Note
+	Task
+	Habit
 
 
-!	responsive number of calendar days / weeks - use GetDimensions() - no need for window.addEventListener("resize"
+
+responsive number of calendar days / weeks
+	use GetDimensions()
+	no need for window.addEventListener("resize"
 
 
 
