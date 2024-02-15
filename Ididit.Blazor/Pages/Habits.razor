@@ -86,7 +86,7 @@
                         {
                             if (habit.LastTimeDoneAt is not null)
                             {
-                                <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
+                                <div class="p-1 border rounded">
                                     <small>Completed @habit.TimesDone.Count times, last time on @habit.LastTimeDoneAt</small>
                                 </div>
                             }
@@ -120,7 +120,7 @@
 
                         <CategoryComponent Model="habit" />
 
-                        <div class="p-1 border" style="border-radius: var(--bs-border-radius)">
+                        <div class="p-1 border rounded">
                             <small class="d-inline-block mx-1">Created: @habit.CreatedAt</small>
                             <small class="d-inline-block mx-1">Updated: @habit.UpdatedAt</small>
                         </div>
