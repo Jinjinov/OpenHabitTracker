@@ -15,10 +15,6 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-show only one column on mobile
-
-
-
 open details in another column:
 	Note
 	Task
