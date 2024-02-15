@@ -91,11 +91,14 @@
                                 </div>
                             }
 
-                            <div class="input-group-text p-0 border-0 rounded-0">
-                                <div class="mx-auto">
-                                    <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" DisplayMonth DisplayDayNames WeekCount="6" />
+                            @if (SettingsService.Settings.ShowLargeCalendar)
+                            {
+                                <div class="input-group-text p-0 border-0 rounded-0">
+                                    <div class="mx-auto">
+                                        <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" DisplayMonth DisplayDayNames WeekCount="6" />
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         }
 
                         <div class="input-group">
@@ -156,7 +159,7 @@
                             }
                         </div>
 
-                        @if (IsEmbedded)
+                        @if (IsEmbedded && SettingsService.Settings.ShowSmallCalendar)
                         {
                             <div class="input-group-text p-0 border-0 rounded-0">
                                 <div class="mx-auto">
@@ -170,7 +173,7 @@
                             <ItemsComponent Items=habit IsReadOnly=true />
                         }
                     </div>
-                    if (!IsEmbedded)
+                    if (!IsEmbedded && SettingsService.Settings.ShowSmallCalendar)
                     {
                         <div class="d-flex">
                             <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" WeekCount="2" DisplayBasedOnWidth />

@@ -45,6 +45,20 @@
         </div>
 
         <div class="input-group flex-nowrap">
+            <div class="input-group-text">
+                <InputCheckbox id="ShowSmallCalendar" class="form-check-input mt-0" Value="_settings.ShowSmallCalendar" ValueExpression="() => _settings.ShowSmallCalendar" ValueChanged="(bool show) => SaveShowSmallCalendar(show)" />
+            </div>
+            <label for="ShowSmallCalendar" class="input-group-text flex-grow-1 text-wrap">Show small calendar</label>
+        </div>
+
+        <div class="input-group flex-nowrap">
+            <div class="input-group-text">
+                <InputCheckbox id="ShowLargeCalendar" class="form-check-input mt-0" Value="_settings.ShowLargeCalendar" ValueExpression="() => _settings.ShowLargeCalendar" ValueChanged="(bool show) => SaveShowLargeCalendar(show)" />
+            </div>
+            <label for="ShowLargeCalendar" class="input-group-text flex-grow-1 text-wrap">Show large calendar</label>
+        </div>
+
+        <div class="input-group flex-nowrap">
             <span class="input-group-text col-6">First day of the week</span>
             <InputSelect class="form-select col-6" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" ValueChanged="(DayOfWeek dayOfWeek) => SaveFirstDayOfWeek(dayOfWeek)">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
@@ -96,6 +110,20 @@
     async Task SaveShowItemList(bool show)
     {
         _settings.ShowItemList = show;
+
+        await UpdateSettings();
+    }
+
+    async Task SaveShowSmallCalendar(bool show)
+    {
+        _settings.ShowSmallCalendar = show;
+
+        await UpdateSettings();
+    }
+
+    async Task SaveShowLargeCalendar(bool show)
+    {
+        _settings.ShowLargeCalendar = show;
 
         await UpdateSettings();
     }

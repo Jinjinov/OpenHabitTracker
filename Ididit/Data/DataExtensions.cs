@@ -102,6 +102,8 @@ public static class DataExtensions
         entity.StartSidebar = model.StartSidebar;
         entity.FirstDayOfWeek = model.FirstDayOfWeek;
         entity.ShowItemList = model.ShowItemList;
+        entity.ShowSmallCalendar = model.ShowSmallCalendar;
+        entity.ShowLargeCalendar = model.ShowLargeCalendar;
         entity.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = model.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin;
         entity.ElapsedTimeToRepeatIntervalRatioMin = model.ElapsedTimeToRepeatIntervalRatioMin;
         entity.SelectedCategoryId = model.SelectedCategoryId;

@@ -12,6 +12,10 @@ public class SettingsEntity
 
     public bool ShowItemList { get; set; }
 
+    public bool ShowSmallCalendar { get; set; }
+
+    public bool ShowLargeCalendar { get; set; }
+
     public bool ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin { get; set; }
 
     public int ElapsedTimeToRepeatIntervalRatioMin { get; set; }
