@@ -19,15 +19,14 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-!!	fix round borders
-		a) remove borders
-		b) change input-group into list-group
-
-
 !!	open details in another column: Note, Task, Habit
+
+
 
 [ ] - show small calendar
 [ ] - show large calendar
+
+
 
 !	responsive number of calendar days / weeks - use GetDimensions() - no need for window.addEventListener("resize"
 

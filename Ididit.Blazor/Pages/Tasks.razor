@@ -74,7 +74,7 @@
 
                     @if (task.StartedAt is not null)
                     {
-                        <div class="p-1 border rounded">
+                        <div class="p-1 border rounded-0">
                             @if (task.StartedAt != task.CompletedAt)
                             {
                                 <small class="d-inline-block mx-1">Started: @task.StartedAt</small>
@@ -88,7 +88,7 @@
 
                     <CategoryComponent Model="task" />
 
-                    <div class="p-1 border rounded">
+                    <div class="p-1 border rounded-0">
                         <small class="d-inline-block mx-1">Created: @task.CreatedAt</small>
                         <small class="d-inline-block mx-1">Updated: @task.UpdatedAt</small>
                     </div>

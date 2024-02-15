@@ -26,6 +26,22 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.form-control {
+    border-radius: 0 !important;
+}
+
+.form-select {
+    border-radius: 0 !important;
+}
+
+.input-group > * {
+    border-radius: 0 !important;
+}
+
+.list-group {
+    border-radius: 0 !important;
+}
+
 /* MAIN ROW AND COLUMNS SCROLLBARS */
 
 /* Mobile: show scrollbar in parent row */

@@ -86,12 +86,12 @@
                         {
                             if (habit.LastTimeDoneAt is not null)
                             {
-                                <div class="p-1 border rounded">
+                                <div class="p-1 border rounded-0">
                                     <small>Completed @habit.TimesDone.Count times, last time on @habit.LastTimeDoneAt</small>
                                 </div>
                             }
 
-                            <div class="input-group-text px-0 py-1 border-0">
+                            <div class="input-group-text p-0 border-0 rounded-0">
                                 <div class="mx-auto">
                                     <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" DisplayMonth DisplayDayNames WeekCount="6" />
                                 </div>
@@ -120,7 +120,7 @@
 
                         <CategoryComponent Model="habit" />
 
-                        <div class="p-1 border rounded">
+                        <div class="p-1 border rounded-0">
                             <small class="d-inline-block mx-1">Created: @habit.CreatedAt</small>
                             <small class="d-inline-block mx-1">Updated: @habit.UpdatedAt</small>
                         </div>
@@ -131,7 +131,7 @@
                     string style = "";
                     if (!IsEmbedded)
                     {
-                        style = "height: 50px; --bs-border-radius: 0";
+                        style = "height: 50px;";
                     }
                     <div class="w-100">
                         <div class="input-group flex-nowrap" style="@style">
@@ -158,7 +158,7 @@
 
                         @if (IsEmbedded)
                         {
-                            <div class="input-group-text px-0 py-1 border-0">
+                            <div class="input-group-text p-0 border-0 rounded-0">
                                 <div class="mx-auto">
                                     <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" WeekCount="1" />
                                  </div>
