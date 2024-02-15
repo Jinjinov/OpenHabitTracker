@@ -23,11 +23,12 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 		a) remove borders
 		b) change input-group into list-group
 
+
 !!	open details in another column: Note, Task, Habit
 
-!	[ ] - show calendar below title
-!	[ ] - show calendar beside title
-!	horizontal calendar with vertical weeks
+[ ] - show small calendar
+[ ] - show large calendar
+
 !	responsive number of calendar days / weeks - use GetDimensions() - no need for window.addEventListener("resize"
 
 
@@ -57,6 +58,8 @@ when all task items are done, task is done
 
 add Search box
 add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
+
+horizontal calendar with vertical weeks
 
 ---------------------------------------------------------------------------------------------------
 

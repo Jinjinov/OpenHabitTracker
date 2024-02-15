@@ -26,6 +26,39 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+/* MAIN ROW AND COLUMNS SCROLLBARS */
+
+/* Mobile: show scrollbar in parent row */
+.parent-row {
+    overflow: auto !important;
+    max-height: 100% !important;
+    display: block !important;
+}
+
+/* Mobile: hide scrollbar in every child column */
+.child-column {
+    overflow: visible !important;
+    max-height: none !important;
+}
+
+@media (min-width: 768px) {
+
+    /* Desktop: hide scrollbar in parent row */
+    .parent-row {
+        overflow: hidden !important;
+        max-height: none !important;
+        display: flex !important;
+    }
+
+    /* Desktop: show scrollbar in every child column */
+    .child-column {
+        overflow: auto !important;
+        max-height: 100% !important;
+    }
+}
+
+/* SPINNER */
+
 .spinner-container {
     display: flex;
     justify-content: center;
@@ -65,6 +98,8 @@ html, body {
     font-weight: 400;
     color: #EEEEEE;
 }
+
+/* BLAZOR ERROR */
 
 #blazor-error-ui {
     background: lightyellow;
