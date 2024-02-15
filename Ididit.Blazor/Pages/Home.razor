@@ -2,24 +2,12 @@
 
 @using Ididit.Data
 
-@inject AppData AppData
-@inject NavigationManager NavigationManager
-
 <PageTitle>ididit!</PageTitle>
 
-@if (string.IsNullOrEmpty(AppData.Settings.StartPage))
-{
 <Notes IsEmbedded />
 <Tasks IsEmbedded />
 <Habits IsEmbedded />
-}
 
 @code {
-    protected override async Task OnInitializedAsync()
-    {
-        await AppData.InitializeSettings();
 
-        if (!string.IsNullOrEmpty(AppData.Settings.StartPage))
-            NavigationManager.NavigateTo(AppData.Settings.StartPage);
-    }
 }

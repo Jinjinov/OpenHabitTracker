@@ -5,6 +5,7 @@
 
 @inject AppData AppData
 @inject INavBarFragment NavBarFragment
+@inject NavigationManager NavigationManager
 
 <div class="container-fluid d-flex flex-column vh-100 mh-100 overflow-hidden">
     <div class="row flex-shrink-1">
@@ -83,6 +84,9 @@
 
         if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
             SelectComponent(AppData.Settings.StartSidebar);
+
+        if (!string.IsNullOrEmpty(AppData.Settings.StartPage))
+            NavigationManager.NavigateTo(AppData.Settings.StartPage);
     }
 
     void SelectComponent<T>()
