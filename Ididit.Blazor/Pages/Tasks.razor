@@ -27,7 +27,7 @@
     }
     @if (TaskService.NewTask is not null)
     {
-        <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
+        <div class="bg-body-tertiary my-1">
             <div class="input-group">
                 <PriorityComponent Model="TaskService.NewTask" />
 
@@ -54,7 +54,7 @@
     {
         foreach (TaskModel task in TaskService.GetTasks())
         {
-            <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
+            <div class="bg-body-tertiary my-1">
                 @if (task.Id == Id && TaskService.NewTask is null)
                 {
                     <div class="input-group flex-nowrap">

@@ -26,7 +26,7 @@
     }
     @if (HabitService.NewHabit is not null)
     {
-        <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
+        <div class="bg-body-tertiary my-1">
             <div class="input-group">
                 <PriorityComponent Model="HabitService.NewHabit" />
 
@@ -68,7 +68,7 @@
     {
         foreach (HabitModel habit in HabitService.GetHabits())
         {
-            <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1 d-flex">
+            <div class="bg-body-tertiary my-1 d-flex">
                 @if (habit.Id == Id && HabitService.NewHabit is null)
                 {
                     <div>

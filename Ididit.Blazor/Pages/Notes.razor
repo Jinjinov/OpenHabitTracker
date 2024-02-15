@@ -26,7 +26,7 @@
     }
     @if (NoteService.NewNote is not null)
     {
-        <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
+        <div class="bg-body-tertiary my-1">
             <div class="input-group">
                 <PriorityComponent Model="NoteService.NewNote" />
 
@@ -50,7 +50,7 @@
     {
         foreach (NoteModel note in NoteService.GetNotes())
         {
-            <div class="bg-body-tertiary my-1 py-1 px-0 px-md-1">
+            <div class="bg-body-tertiary my-1">
                 @if (note.Id == Id && NoteService.NewNote is null)
                 {
                     <div class="input-group flex-nowrap">
