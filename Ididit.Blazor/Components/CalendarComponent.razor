@@ -33,8 +33,7 @@ else
 
     @for (int row = 0; row < rowCount; row++)
     {
-        string display = DisplayBasedOnWidth ? $"d-none {_sizes[row]}" : "d-flex";
-        <div class="@display">
+        <div class="d-flex">
             @for (int day = 0; day < daysInRow; day++)
             {
                 DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, row * daysInRow + day); // if not captured locally, day becomes the last value used in the loop
@@ -85,8 +84,6 @@ else
 
     [Parameter]
     public int ColumnWidth { get; set; }
-
-    string[] _sizes = { "d-xxl-flex", "d-xl-flex", "d-lg-flex", "", "", "" };
 
     CalendarParams _calendarParams = new();
 

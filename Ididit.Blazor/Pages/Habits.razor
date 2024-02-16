@@ -65,7 +65,7 @@
     {
         <p>Loading...</p>
     }
-    else
+    else if (columnWidth != 0)
     {
         foreach (HabitModel habit in HabitService.GetHabits())
         {
@@ -178,7 +178,7 @@
                     {
                         <div class="d-flex">
                             <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" DisplayBasedOnWidth />
-                         </div>
+                        </div>
                     }
                 }
             </div>
@@ -223,7 +223,11 @@
             var columnDimensions = await JsInterop.GetElementDimensions(columnRef);
             columnWidth = columnDimensions.Width;
 
-            StateHasChanged(); // TODO: try to make it work without this
+            // TODO: try to make it work without this
+            // or at least move it up the hierarchy, before Habits render for the first time
+            // or don't render habits if columnWidth == 0
+            StateHasChanged();
+            // TODO: make it work without JsInterop and use @media for each day
         }
 
         if (shouldFocus && inputElement?.Element is not null)

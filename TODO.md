@@ -22,12 +22,6 @@ open details in another column:
 
 
 
-responsive number of calendar days / weeks
-	use GetDimensions()
-	no need for window.addEventListener("resize"
-
-
-
 - host 24/7 on Raspberry Pi
 	valid LAN IP
 	test HDMI cable
