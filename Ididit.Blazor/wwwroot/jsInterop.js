@@ -18,10 +18,17 @@ export function saveAsFile(filename, bytesBase64) {
     document.body.removeChild(link);
 }
 
-export function getDimensions() {
+export function getWindowDimensions() {
     return {
         width: window.innerWidth,
         height: window.innerHeight
+    };
+}
+
+export function getElementDimensions(element) {
+    return {
+        width: element.clientWidth,
+        height: element.clientHeight
     };
 }
 

@@ -24,10 +24,16 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         return await module.InvokeAsync<string>("showPrompt", message);
     }
 
-    public async Task<Dimensions> GetDimensions()
+    public async Task<Dimensions> GetWindowDimensions()
     {
         IJSObjectReference module = await _moduleTask.Value;
-        return await module.InvokeAsync<Dimensions>("getDimensions");
+        return await module.InvokeAsync<Dimensions>("getWindowDimensions");
+    }
+
+    public async Task<Dimensions> GetElementDimensions(ElementReference element)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        return await module.InvokeAsync<Dimensions>("getElementDimensions", element);
     }
 
     public async ValueTask FocusElement(ElementReference element)
