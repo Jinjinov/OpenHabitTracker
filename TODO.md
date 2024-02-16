@@ -32,6 +32,11 @@ when all task items are done, task is done
 
 
 
+Note Markdown
+make regular markdown text look the same as in textarea
+
+
+
 - host 24/7 on Raspberry Pi
 	valid LAN IP
 	test HDMI cable
@@ -52,15 +57,12 @@ add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
 
 horizontal calendar with vertical weeks
 
----------------------------------------------------------------------------------------------------
-
 textarea tabs
 
 textarea highlight
 highlight search results
 
-Note Markdown
-make regular markdown text look the same as in textarea
+---------------------------------------------------------------------------------------------------
 
 - common:
 	- Router
@@ -165,9 +167,9 @@ columns:
 - don't list habits that i always do / never do - or find a solution for displaying them
 
 Ididit.Rest for SQL server for WebView
-User authentication / table Users
-... or ...
-Google, Microsoft, Apple log in
+	User authentication / table Users
+	... or ...
+	Google, Microsoft, Apple log in
 
 Ididit.yyyyMMddHHmmss.json
 	Google Drive
