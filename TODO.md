@@ -24,6 +24,8 @@ open details in another column:
 
 on calendar use yellow color for partially done (brush teeth 1x of 2x per day)
 
+
+
 when habit is done, uncheck all habit items
 when task is done, check all task items
 
