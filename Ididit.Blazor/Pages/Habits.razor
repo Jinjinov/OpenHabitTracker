@@ -228,6 +228,8 @@
             // or don't render habits if columnWidth == 0
             StateHasChanged();
             // TODO: make it work without JsInterop and use @media for each day
+            // even better: get <body> dimensions once at startup, calculate everything else from that
+            // first render can be empty in MainLayout, with everything else rendersing only if body dimensions are set
         }
 
         if (shouldFocus && inputElement?.Element is not null)
