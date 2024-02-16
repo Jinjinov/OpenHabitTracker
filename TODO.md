@@ -22,6 +22,16 @@ open details in another column:
 
 
 
+on calendar use yellow color for partially done (brush teeth 1x of 2x per day)
+
+when habit is done, uncheck all habit items
+when task is done, check all task items
+
+when all habit items are done, habit is done
+when all task items are done, task is done
+
+
+
 - host 24/7 on Raspberry Pi
 	valid LAN IP
 	test HDMI cable
@@ -36,14 +46,6 @@ selected calendar day:
 	show all (list)
 	add
 	remove
-
-on calendar use yellow color for partially done (brush teeth 1x of 2x per day)
-
-when habit is done, uncheck all habit items
-when task is done, check all task items
-
-when all habit items are done, habit is done
-when all task items are done, task is done
 
 add Search box
 add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
