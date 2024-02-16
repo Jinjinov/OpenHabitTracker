@@ -21,10 +21,7 @@ else
             <button class="btn btn-outline-primary" @onclick="() => _calendarParams.SetCalendarStartToNextMonth(AppData.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-right"></i></button>
             <button class="btn btn-outline-primary" @onclick="_calendarParams.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
         </div>
-    }
 
-    if (DisplayDayNames)
-    {
         <div class="bg-body d-flex">
             @for (int i = 0; i < 7; i++)
             {
@@ -34,13 +31,13 @@ else
         </div>
     }
 
-    @for (int week = 0; week < WeekCount; week++)
+    @for (int row = 0; row < rowCount; row++)
     {
-        string display = DisplayBasedOnWidth ? $"d-none {_sizes[week]}" : "d-flex";
+        string display = DisplayBasedOnWidth ? $"d-none {_sizes[row]}" : "d-flex";
         <div class="@display">
-            @for (int dayInWeek = 0; dayInWeek < 7; dayInWeek++)
+            @for (int day = 0; day < daysInRow; day++)
             {
-                DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, week, dayInWeek); // if not captured locally, day becomes the last value used in the loop
+                DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, row * daysInRow + day); // if not captured locally, day becomes the last value used in the loop
 
                 string text = dateTime.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "text-warning" : "text-secondary";
                 if (dateTime.Month == _calendarParams.FirstDayOfMonth.Month)
@@ -81,13 +78,10 @@ else
     public bool DisplayMonth { get; set; }
 
     [Parameter]
-    public bool DisplayDayNames { get; set; }
-
-    [Parameter]
     public bool DisplayBasedOnWidth { get; set; }
 
-    [Parameter]
-    public int WeekCount { get; set; }
+    int rowCount = 6;
+    int daysInRow = 7;
 
     [Parameter]
     public int ColumnWidth { get; set; }
@@ -105,12 +99,24 @@ else
     {
         if (_calendarParams.CalendarStart == DateTime.MinValue)
         {
-            if (WeekCount == 1)
-                _calendarParams.SetCalendarStartByFirstDayOfWeek(AppData.Settings.FirstDayOfWeek, DateTime.Today);
-            else if (WeekCount == 2)
-                _calendarParams.SetCalendarStartByDaysFromToday(-13);
-            else
+            if (DisplayMonth)
+            {
+                rowCount = 6;
+                daysInRow = 7;
                 _calendarParams.SetCalendarStartByFirstDayOfMonth(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+            }
+            else if (DisplayBasedOnWidth)
+            {
+                rowCount = 1;
+                daysInRow = ColumnWidth / 50;
+                _calendarParams.SetCalendarStartByDaysFromToday(-13);
+            }
+            else
+            {
+                rowCount = 1;
+                daysInRow = ColumnWidth / 50;
+                _calendarParams.SetCalendarStartByFirstDayOfWeek(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+            }
         }
 
         if (Habit is not null && Habit.TimesDoneByDay is null)
