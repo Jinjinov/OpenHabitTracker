@@ -222,6 +222,8 @@
         {
             var columnDimensions = await JsInterop.GetElementDimensions(columnRef);
             columnWidth = columnDimensions.Width;
+
+            StateHasChanged(); // TODO: try to make it work without this
         }
 
         if (shouldFocus && inputElement?.Element is not null)

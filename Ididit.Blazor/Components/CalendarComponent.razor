@@ -80,8 +80,8 @@ else
     [Parameter]
     public bool DisplayBasedOnWidth { get; set; }
 
-    int rowCount = 6;
-    int daysInRow = 7;
+    int rowCount = 0;
+    int daysInRow = 0;
 
     [Parameter]
     public int ColumnWidth { get; set; }
@@ -105,10 +105,14 @@ else
                 daysInRow = 7;
                 _calendarParams.SetCalendarStartByFirstDayOfMonth(AppData.Settings.FirstDayOfWeek, DateTime.Today);
             }
-            else if (DisplayBasedOnWidth)
+        }
+
+        if (rowCount == 0 && ColumnWidth != 0)
+        {
+            if (DisplayBasedOnWidth)
             {
                 rowCount = 1;
-                daysInRow = ColumnWidth / 50;
+                daysInRow = (ColumnWidth-350) / 50;
                 _calendarParams.SetCalendarStartByDaysFromToday(-13);
             }
             else
