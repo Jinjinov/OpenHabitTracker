@@ -4,45 +4,45 @@
 @inject TaskService TaskService
 
 <div class="input-group flex-nowrap">
-    <PriorityComponent Model="task" />
-    <InputText class="form-control" Value="@task.Title" ValueExpression="() => task.Title" ValueChanged="(string title) => SaveTitle(task, title)" />
-    <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(task.Id)"><i class="bi bi-floppy"></i></button>
-    <button class="btn btn-outline-primary" @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
-    <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
+    <PriorityComponent Model="Task" />
+    <InputText class="form-control" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
+    <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(Task.Id)"><i class="bi bi-floppy"></i></button>
+    <button class="btn btn-outline-primary" @onclick="() => TaskService.DeleteTask(Task)"><i class="bi bi-trash"></i></button>
+    <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(Task)"><i class="bi bi-check-square"></i></button>
 </div>
 
-<ItemsComponent Items=task />
+<ItemsComponent Items=Task />
 
 <div class="input-group">
     <span class="input-group-text">Planned at</span>
-    <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="task.PlannedAt" ValueExpression="() => task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(task, plannedAt)" />
+    <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.PlannedAt" ValueExpression="() => Task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(Task, plannedAt)" />
 </div>
 
-@if (task.StartedAt is not null)
+@if (Task.StartedAt is not null)
 {
     <div class="p-1 border rounded-0">
-        @if (task.StartedAt != task.CompletedAt)
+        @if (Task.StartedAt != Task.CompletedAt)
         {
-            <small class="d-inline-block mx-1">Started: @task.StartedAt</small>
+            <small class="d-inline-block mx-1">Started: @Task.StartedAt</small>
         }
-        @if (task.CompletedAt is not null)
+        @if (Task.CompletedAt is not null)
         {
-            <small class="d-inline-block mx-1">Completed: @task.CompletedAt</small>
+            <small class="d-inline-block mx-1">Completed: @Task.CompletedAt</small>
         }
     </div>
 }
 
-<CategoryComponent Model="task" />
+<CategoryComponent Model="Task" />
 
 <div class="p-1 border rounded-0">
-    <small class="d-inline-block mx-1">Created: @task.CreatedAt</small>
-    <small class="d-inline-block mx-1">Updated: @task.UpdatedAt</small>
+    <small class="d-inline-block mx-1">Created: @Task.CreatedAt</small>
+    <small class="d-inline-block mx-1">Updated: @Task.UpdatedAt</small>
 </div>
 
 @code {
     [EditorRequired]
     [Parameter]
-    public TaskModel task { get; set; }
+    public TaskModel Task { get; set; }
 
     async Task ToggleSelected(long id)
     {

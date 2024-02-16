@@ -5,25 +5,25 @@
 @inject JsInterop JsInterop
 
 <div class="input-group flex-nowrap">
-    <PriorityComponent Model="note" />
-    <InputText class="form-control" Value="@note.Title" ValueExpression="() => note.Title" ValueChanged="(string title) => SaveTitle(note, title)" />
-    <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(note.Id)"><i class="bi bi-floppy"></i></button>
-    <button class="btn btn-outline-primary" @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
+    <PriorityComponent Model="Note" />
+    <InputText class="form-control" Value="@Note.Title" ValueExpression="() => Note.Title" ValueChanged="(string title) => SaveTitle(Note, title)" />
+    <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(Note.Id)"><i class="bi bi-floppy"></i></button>
+    <button class="btn btn-outline-primary" @onclick="() => NoteService.DeleteNote(Note)"><i class="bi bi-trash"></i></button>
 </div>
 
-<InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" Value="@note.Content" ValueExpression="() => note.Content" ValueChanged="(string content) => SaveContent(note, content)" rows="@(note.Content.Count(c => c == '\n') + 1)" placeholder="Add note text" />
+<InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" Value="@Note.Content" ValueExpression="() => Note.Content" ValueChanged="(string content) => SaveContent(Note, content)" rows="@(Note.Content.Count(c => c == '\n') + 1)" placeholder="Add note text" />
 
-<CategoryComponent Model="note" />
+<CategoryComponent Model="Note" />
 
 <div class="p-1 border rounded-0">
-    <small class="d-inline-block mx-1">Created: @note.CreatedAt</small>
-    <small class="d-inline-block mx-1">Updated: @note.UpdatedAt</small>
+    <small class="d-inline-block mx-1">Created: @Note.CreatedAt</small>
+    <small class="d-inline-block mx-1">Updated: @Note.UpdatedAt</small>
 </div>
 
 @code {
     [EditorRequired]
     [Parameter]
-    public NoteModel note { get; set; }
+    public NoteModel Note { get; set; }
 
     InputTextArea? _inputTextAreaReference;
 
