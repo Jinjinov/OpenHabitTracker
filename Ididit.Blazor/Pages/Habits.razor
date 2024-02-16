@@ -11,10 +11,11 @@
 @inject HabitService HabitService
 @inject AppData AppData
 @inject SettingsService SettingsService
+@inject JsInterop JsInterop
 
 <PageTitle>Habits</PageTitle>
 
-<div class="col child-column px-0 px-md-1">
+<div @ref="columnRef" class="col child-column px-0 px-md-1">
 
     @if (HabitService.NewHabit is null)
     {
@@ -212,8 +213,17 @@
         await HabitService.SetSelectedHabit(Id);
     }
 
+    ElementReference columnRef;
+    int columnWidth;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender)
+        {
+            var columnDimensions = await JsInterop.GetElementDimensions(columnRef);
+            columnWidth = columnDimensions.Width;
+        }
+
         if (shouldFocus && inputElement?.Element is not null)
         {
             shouldFocus = false;
