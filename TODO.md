@@ -133,13 +133,12 @@ import Google Keep h1, h2, bold, italic, underline
 
 pin razor page to Home - in a column - max 4 columns ?
 
+- Note, Task, Habit background color
+
 - settings
-	- CSS
-		- theme
-		- font size
-		- background color
-		- Note, Task, Habit background color
+	- theme
 	- language
+
 - localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
 - https://github.com/xaviersolau/BlazorJsonLocalization
 
@@ -154,9 +153,6 @@ columns:
 
 - categories are filters
 - filters are query parameters
-
-- filter
-- sort
 
 - about
 - help
@@ -190,10 +186,8 @@ goals: (high priority)
 maintenance: (normal priority)
 
 - ASAP tasks
-	- with subtasks but not really?
-	- more: where, when, address, email, phone
-- date & time tasks? do i really need this? why not google calendar
-	- the only reason would be details
+	- where, when, address, email, phone
+- date & time tasks
 
 1. online sync (c# backend with sql)
 2. new hosting provider - ASP net core
