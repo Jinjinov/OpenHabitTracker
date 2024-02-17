@@ -219,42 +219,58 @@ public class DataAccess : IDataAccess
 
     public async Task RemoveHabit(long id)
     {
-        _dataContext.Remove(new HabitEntity { Id = id });
+        var entity = _dataContext.Habits.Find(id);
+        if (entity is not null)
+            _dataContext.Habits.Remove(entity);
         await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveNote(long id)
     {
-        _dataContext.Remove(new NoteEntity { Id = id });
+        var entity = _dataContext.Notes.Find(id);
+        if (entity is not null)
+            _dataContext.Notes.Remove(entity);
         await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveTask(long id)
     {
-        _dataContext.Remove(new TaskEntity { Id = id });
+        var entity = _dataContext.Tasks.Find(id);
+        if (entity is not null)
+            _dataContext.Tasks.Remove(entity);
         await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveTime(long id)
     {
-        _dataContext.Remove(new TimeEntity { Id = id });
+        var entity = _dataContext.Times.Find(id);
+        if (entity is not null)
+            _dataContext.Times.Remove(entity);
         await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveItem(long id)
     {
-        _dataContext.Remove(new ItemEntity { Id = id });
+        var entity = _dataContext.Items.Find(id);
+        if (entity is not null)
+            _dataContext.Items.Remove(entity);
         await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveCategory(long id)
     {
-        _dataContext.Remove(new CategoryEntity { Id = id });
+        var entity = _dataContext.Categories.Find(id);
+        if (entity is not null)
+            _dataContext.Categories.Remove(entity);
         await _dataContext.SaveChangesAsync();
     }
     public async Task RemovePriority(long id)
     {
-        _dataContext.Remove(new PriorityEntity { Id = id });
+        var entity = _dataContext.Priorities.Find(id);
+        if (entity is not null)
+            _dataContext.Priorities.Remove(entity);
         await _dataContext.SaveChangesAsync();
     }
     public async Task RemoveSettings(long id)
     {
-        _dataContext.Remove(new SettingsEntity { Id = id });
+        var entity = _dataContext.Settings.Find(id);
+        if (entity is not null)
+            _dataContext.Settings.Remove(entity);
         await _dataContext.SaveChangesAsync();
     }
 
