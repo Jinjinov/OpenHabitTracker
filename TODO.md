@@ -22,12 +22,8 @@ calendar:
 
 
 - host 24/7 on Raspberry Pi
-	valid LAN IP
-	test HDMI cable
 	test fan
 	always on
-	install VS code
-	install NET 8 sdk
 
 ---------------------------------------------------------------------------------------------------
 
