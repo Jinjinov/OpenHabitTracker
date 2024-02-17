@@ -82,8 +82,8 @@ public class AppData(IDataAccess dataAccess)
             {
                 Settings = new SettingsModel
                 {
-                    StartPage = "/about",
-                    StartSidebar = "Help",
+                    StartPage = "",
+                    StartSidebar = "",
                     FirstDayOfWeek = DayOfWeek.Monday,
                     ShowItemList = true,
                     ShowSmallCalendar = true,
@@ -439,8 +439,8 @@ public class AppData(IDataAccess dataAccess)
         {
             Settings = new()
             {
-                StartPage = "/about",
-                StartSidebar = "Help",
+                StartPage = "",
+                StartSidebar = "",
                 FirstDayOfWeek = DayOfWeek.Monday,
                 ShowItemList = true,
                 ShowSmallCalendar = true,
