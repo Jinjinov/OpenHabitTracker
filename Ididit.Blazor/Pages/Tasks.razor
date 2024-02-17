@@ -55,7 +55,7 @@
         foreach (TaskModel task in TaskService.GetTasks())
         {
             <div class="my-1">
-                @if (task.Id == Id && TaskService.NewTask is null)
+                @if (IsEmbedded && task.Id == Id && TaskService.NewTask is null)
                 {
                     <TaskComponent Task="task" CloseSelected="CloseSelected" />
                 }
@@ -81,6 +81,16 @@
     }
 
 </div>
+
+@if (!IsEmbedded)
+{
+    <div class="col child-column px-0 px-md-1 my-1">
+        @if (Id is not null && TaskService.NewTask is null)
+        {
+            <TaskComponent Task="TaskService.SelectedTask" CloseSelected="CloseSelected" />
+        }
+    </div>
+}
 
 @code {
     [Parameter]

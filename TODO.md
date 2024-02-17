@@ -15,10 +15,9 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-open details in another column:
-	Note
-	Task
-	Habit
+don't open details in another column on mobile
+
+
 
 calendar:
 	if count is 1, click on day toggles done
