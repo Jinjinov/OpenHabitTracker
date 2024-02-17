@@ -43,7 +43,7 @@ else
                     text += "-emphasis";
                 string border = dateTime.Date == DateTime.Today.Date ? "border-4 border-primary-subtle" : "";
 
-                if (Habit.TimesDoneByDay.TryGetValue(dateTime, out var list))
+                if (Habit.TimesDoneByDay.TryGetValue(dateTime, out List<TimeModel>? list))
                 {
                     <button class="@($"border {border} {text} d-flex bg-success-subtle")"
                          style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"

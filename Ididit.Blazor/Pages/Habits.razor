@@ -179,7 +179,7 @@
     {
         if (firstRender)
         {
-            var columnDimensions = await JsInterop.GetElementDimensions(columnRef);
+            Dimensions columnDimensions = await JsInterop.GetElementDimensions(columnRef);
             columnWidth = columnDimensions.Width;
 
             // TODO: try to make it work without this

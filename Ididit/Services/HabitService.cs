@@ -19,7 +19,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
     {
         SettingsModel settings = _appData.Settings;
 
-        var habits = Habits!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
+        IEnumerable<HabitModel> habits = Habits!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
 
         if (settings.SelectedCategoryId != 0)
             habits = habits.Where(x => x.CategoryId == settings.SelectedCategoryId);

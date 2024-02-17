@@ -19,7 +19,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
     {
         SettingsModel settings = _appData.Settings;
 
-        var tasks = Tasks!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
+        IEnumerable<TaskModel> tasks = Tasks!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
 
         if (settings.SelectedCategoryId != 0)
             tasks = tasks.Where(x => x.CategoryId == settings.SelectedCategoryId);

@@ -1,6 +1,7 @@
 ﻿using Ididit.Data;
 using Ididit.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Text.Json;
 
@@ -55,7 +56,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             }
         }
 
-        foreach (var entry in ChangeTracker.Entries().ToList())
+        foreach (EntityEntry entry in ChangeTracker.Entries().ToList())
         {
             entry.State = EntityState.Detached;
         }
