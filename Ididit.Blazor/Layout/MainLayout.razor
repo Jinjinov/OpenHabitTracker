@@ -6,6 +6,7 @@
 @inject AppData AppData
 @inject INavBarFragment NavBarFragment
 @inject NavigationManager NavigationManager
+@inject JsInterop JsInterop
 
 <div class="container-fluid d-flex flex-column vh-100 mh-100 overflow-hidden">
     <div class="row flex-shrink-1">
@@ -27,7 +28,8 @@
     </div>
 
     <div class="row flex-grow-1 parent-row">
-        <CascadingValue Name="StateChanged" Value=@stateChanged>
+        <CascadingValue Name="StateChanged" Value=@_stateChanged>
+            <CascadingValue Name="WindowDimensions" Value=@_windowDimensions>
 
             @if (dynamicComponentType is not null)
             {
@@ -45,6 +47,7 @@
 
             @Body
 
+            </CascadingValue>
         </CascadingValue>
     </div>
 </div>
@@ -56,7 +59,9 @@
 </div>
 
 @code {
-    bool stateChanged;
+    bool _stateChanged;
+
+    Dimensions? _windowDimensions;
 
     private Type? dynamicComponentType;
     private Dictionary<string, Dictionary<string, object>> dynamicComponentParametersByName = new ();
@@ -73,8 +78,8 @@
 
         Dictionary<string, object> stateChangedParameters = new Dictionary<string, object>()
         {
-            { "StateChanged", stateChanged },
-            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => stateChanged = val)},
+            { "StateChanged", _stateChanged },
+            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged = val)},
         };
 
         dynamicComponentParametersByName = new Dictionary<string, Dictionary<string, object>>
@@ -98,6 +103,14 @@
             {
                 NavigationManager.NavigateTo(AppData.Settings.StartPage);
             }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _windowDimensions = await JsInterop.GetWindowDimensions();
         }
     }
 

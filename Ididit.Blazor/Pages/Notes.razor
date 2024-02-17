@@ -51,7 +51,7 @@
         foreach (NoteModel note in NoteService.GetNotes())
         {
             <div class="my-1">
-                @if (IsEmbedded && note.Id == Id && NoteService.NewNote is null)
+                @if (!_showSecondColumn && note.Id == Id && NoteService.NewNote is null)
                 {
                     <NoteComponent Note="note" CloseSelected="CloseSelected" />
                 }
@@ -70,7 +70,7 @@
 
 </div>
 
-@if (!IsEmbedded)
+@if (_showSecondColumn)
 {
     <div class="col child-column px-0 px-md-1 my-1">
         @if (Id is not null && NoteService.NewNote is null)
@@ -89,6 +89,11 @@
 
     [CascadingParameter(Name = "StateChanged")]
     public bool StateChanged { get; set; }
+
+    [CascadingParameter(Name = "WindowDimensions")]
+    public Dimensions? WindowDimensions { get; set; }
+
+    bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width > 700;
 
     InputTextImmediate? inputElement;
 

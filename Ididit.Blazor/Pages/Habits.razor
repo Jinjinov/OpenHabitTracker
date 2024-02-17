@@ -70,7 +70,7 @@
         foreach (HabitModel habit in HabitService.GetHabits())
         {
             <div class="my-1 d-flex">
-                @if (IsEmbedded && habit.Id == Id && HabitService.NewHabit is null)
+                @if (!_showSecondColumn && habit.Id == Id && HabitService.NewHabit is null)
                 {
                     <HabitComponent Habit="habit" CloseSelected="CloseSelected" />
                 }
@@ -131,7 +131,7 @@
 
 </div>
 
-@if (!IsEmbedded)
+@if (_showSecondColumn)
 {
     <div class="col child-column px-0 px-md-1 my-1">
         @if (Id is not null && HabitService.NewHabit is null)
@@ -150,6 +150,11 @@
 
     [CascadingParameter(Name = "StateChanged")]
     public bool StateChanged { get; set; }
+
+    [CascadingParameter(Name = "WindowDimensions")]
+    public Dimensions? WindowDimensions { get; set; }
+
+    bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width > 700;
 
     InputTextImmediate? inputElement;
 

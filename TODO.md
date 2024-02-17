@@ -15,28 +15,13 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 
 
 
-don't open details in another column on mobile
-
-
-
 calendar:
-	if count is 1, click on day toggles done
+	if count is 1, a click on Day toggles Done
 	if count is more than 1, click selects the day
 
+
+
 on calendar use yellow color for partially done (brush teeth 1x of 2x per day)
-
-
-
-when habit is done, uncheck all habit items
-when task is done, check all task items
-
-when all habit items are done, habit is done
-when all task items are done, task is done
-
-
-
-Note Markdown
-make regular markdown text look the same as in textarea
 
 
 
@@ -49,6 +34,15 @@ make regular markdown text look the same as in textarea
 	install NET 8 sdk
 
 ---------------------------------------------------------------------------------------------------
+
+when habit is done, uncheck all habit items
+when task is done, check all task items
+
+when all habit items are done, habit is done
+when all task items are done, task is done
+
+Note Markdown
+make regular markdown text look the same as in textarea
 
 selected calendar day:
 	show all (list)
