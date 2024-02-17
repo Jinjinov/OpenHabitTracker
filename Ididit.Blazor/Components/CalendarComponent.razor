@@ -45,12 +45,14 @@ else
                 string background = "bg-body-tertiary";
                 string timesDone = "";
                 int count = 0;
+                List<TimeModel>? list = null;
 
-                if (Habit.TimesDoneByDay.TryGetValue(dateTime, out List<TimeModel>? list))
+                if (Habit.TimesDoneByDay.TryGetValue(dateTime, out list))
                 {
                     count = list.Count;
 
-                    timesDone = $"({list.Count})";
+                    if (count > 1)
+                        timesDone = $"({count})";
 
                     if (count < Habit.RepeatCount)
                         background = "bg-warning-subtle";
@@ -60,7 +62,7 @@ else
 
                 <button class="@($"border {border} {text} d-flex {background}")"
                         style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
-                        @onclick="() => DayClicked(dateTime)">
+                        @onclick="() => count < Habit.RepeatCount ? AddTimeDone(dateTime) : RemoveTimeDone(list)">
                     @dateTime.Day<small>@timesDone</small>
                 </button>
             }
@@ -132,7 +134,7 @@ else
         }
     }
 
-    async Task DayClicked(DateTime dateTime)
+    async Task AddTimeDone(DateTime dateTime)
     {
         if (dateTime > DateTime.Now)
             return;
@@ -141,6 +143,16 @@ else
             dateTime = DateTime.Now;
 
         await HabitService.AddTimeDone(Habit!, dateTime);
+
+        await HabitChanged.InvokeAsync(Habit);
+    }
+
+    async Task RemoveTimeDone(List<TimeModel>? list)
+    {
+        if (list is null || list.Count == 0)
+            return;
+
+        await HabitService.RemoveTimeDone(Habit!, list.Last());
 
         await HabitChanged.InvokeAsync(Habit);
     }

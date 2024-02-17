@@ -31,14 +31,6 @@ public class HabitModel : ItemsModel
         TimesDoneByDay = TimesDone?.GroupBy(date => date.StartedAt.Date).ToDictionary(group => group.Key, group => group.ToList());
     }
 
-    public int GetTimesDoneByDay(DateTime dateTime)
-    {
-        if (TimesDoneByDay?.TryGetValue(dateTime, out List<TimeModel>? list) == true)
-            return list.Count;
-
-        return 0;
-    }
-
     public TimeSpan GetRepeatInterval()
     {
         return RepeatPeriod switch

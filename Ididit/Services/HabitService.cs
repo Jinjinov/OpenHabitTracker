@@ -168,16 +168,16 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         }
     }
 
-    private async Task SetLastTimeDone(HabitModel habit, DateTime now)
+    private async Task SetLastTimeDone(HabitModel habit, DateTime? dateTime)
     {
-        if (habit.LastTimeDoneAt > now)
+        if (habit.LastTimeDoneAt > dateTime)
             return;
 
-        habit.LastTimeDoneAt = now;
+        habit.LastTimeDoneAt = dateTime;
 
         if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
         {
-            habitEntity.LastTimeDoneAt = now;
+            habitEntity.LastTimeDoneAt = dateTime;
             await _dataAccess.UpdateHabit(habitEntity);
         }
     }
@@ -203,8 +203,23 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         timeModel.Id = timeEntity.Id;
 
-        // TODO: only if it is really the last one
         await SetLastTimeDone(habit, dateTime);
+    }
+
+    public async Task RemoveTimeDone(HabitModel habit, TimeModel timeModel)
+    {
+        if (habit.TimesDone is null || habit.TimesDoneByDay is null)
+            return;
+
+        habit.TimesDone.Remove(timeModel);
+
+        habit.RefreshTimesDoneByDay();
+
+        await _dataAccess.RemoveTime(timeModel.Id);
+
+        TimeModel? first = habit.TimesDone.OrderBy(x => x.StartedAt).FirstOrDefault();
+
+        await SetLastTimeDone(habit, first?.CompletedAt);
     }
 
     public async Task DeleteHabit(HabitModel habit)
