@@ -122,7 +122,8 @@ else
             {
                 rowCount = 1;
                 daysInRow = ColumnWidth / 50;
-                _calendarParams.SetCalendarStartByFirstDayOfWeek(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+                _calendarParams.SetCalendarStartByDaysFromToday(-daysInRow + 1);
+                //_calendarParams.SetCalendarStartByFirstDayOfWeek(AppData.Settings.FirstDayOfWeek, DateTime.Today);
             }
         }
 
