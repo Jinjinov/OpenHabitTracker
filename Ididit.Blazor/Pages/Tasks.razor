@@ -60,7 +60,7 @@
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="task" />
                         <InputText class="form-control" Value="@task.Title" ValueExpression="() => task.Title" ValueChanged="(string title) => SaveTitle(task, title)" />
-                        <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(task.Id)"><i class="bi bi-floppy"></i></button>
+                        <button class="btn btn-outline-primary" @onclick="() => CloseSelected()"><i class="bi bi-floppy"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
                     </div>
@@ -97,7 +97,7 @@
                 {
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
-                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => ToggleSelected(task.Id)">@task.Title</button>
+                                    <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => OpenSelected(task.Id)">@task.Title</button>
                         @if (task.PlannedAt is not null)
                         {
                             <small class="input-group-text">@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
@@ -151,28 +151,32 @@
         }
     }
 
-    async Task ToggleSelected(long id)
+    async Task OpenSelected(long id)
     {
         if (IsEmbedded)
         {
-            if (Id == id)
-            {
-                Id = null;
-            }
-            else
-            {
-                Id = id;
-                TaskService.SetSelectedTask(Id);
-            }
+            Id = id;
+            TaskService.SetSelectedTask(Id);
         }
         else
         {
             await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
 
-            if (Id == id)
-                NavigationManager.NavigateTo("/tasks");
-            else
-                NavigationManager.NavigateTo($"/tasks/{id}");
+            NavigationManager.NavigateTo($"/tasks/{id}");
+        }
+    }
+
+    async Task CloseSelected()
+    {
+        if (IsEmbedded)
+        {
+            Id = null;
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+
+            NavigationManager.NavigateTo("/tasks");
         }
     }
 

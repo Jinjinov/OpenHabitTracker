@@ -56,7 +56,7 @@
                     <div class="input-group flex-nowrap">
                         <PriorityComponent Model="note" />
                         <InputText class="form-control" Value="@note.Title" ValueExpression="() => note.Title" ValueChanged="(string title) => SaveTitle(note, title)" />
-                        <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(note.Id)"><i class="bi bi-floppy"></i></button>
+                        <button class="btn btn-outline-primary" @onclick="() => CloseSelected()"><i class="bi bi-floppy"></i></button>
                         <button class="btn btn-outline-primary" @onclick="() => NoteService.DeleteNote(note)"><i class="bi bi-trash"></i></button>
                     </div>
 
@@ -73,7 +73,7 @@
                 {
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(note.Priority)</span>
-                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => ToggleSelected(note.Id)">@note.Title</button>
+                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => OpenSelected(note.Id)">@note.Title</button>
                     </div>
 
                     <div class="form-control" style="white-space: pre-wrap">@note.Content</div>
@@ -122,28 +122,32 @@
             await JsInterop.HandleTabKey(_inputTextAreaReference.Element.Value);
     }
 
-    async Task ToggleSelected(long id)
+    async Task OpenSelected(long id)
     {
         if (IsEmbedded)
         {
-            if (Id == id)
-            {
-                Id = null;
-            }
-            else
-            {
-                Id = id;
-                NoteService.SetSelectedNote(Id);
-            }
+            Id = id;
+            NoteService.SetSelectedNote(Id);
         }
         else
         {
             await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
 
-            if (Id == id)
-                NavigationManager.NavigateTo("/notes");
-            else
-                NavigationManager.NavigateTo($"/notes/{id}");
+            NavigationManager.NavigateTo($"/notes/{id}");
+        }
+    }
+
+    async Task CloseSelected()
+    {
+        if (IsEmbedded)
+        {
+            Id = null;
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+
+            NavigationManager.NavigateTo("/notes");
         }
     }
 

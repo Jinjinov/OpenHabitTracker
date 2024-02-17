@@ -76,7 +76,7 @@
                         <div class="input-group flex-nowrap">
                             <PriorityComponent Model="habit" />
                             <InputText class="form-control" Value="@habit.Title" ValueExpression="() => habit.Title" ValueChanged="(string title) => SaveTitle(habit, title)" />
-                            <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(habit.Id)"><i class="bi bi-floppy"></i></button>
+                            <button class="btn btn-outline-primary" @onclick="() => CloseSelected()"><i class="bi bi-floppy"></i></button>
                             <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
                             <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                         </div>
@@ -140,7 +140,7 @@
                     <div class="w-100">
                         <div class="input-group flex-nowrap" style="@style">
                             <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
-                            <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => ToggleSelected(habit.Id)">@habit.Title</button>
+                            <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => OpenSelected(habit.Id)">@habit.Title</button>
 
                             @if (habit.LastTimeDoneAt is not null)
                             {
@@ -239,28 +239,32 @@
         }
     }
 
-    async Task ToggleSelected(long id)
+    async Task OpenSelected(long id)
     {
         if (IsEmbedded)
         {
-            if (Id == id)
-            {
-                Id = null;
-            }
-            else
-            {
-                Id = id;
-                await HabitService.SetSelectedHabit(Id);
-            }
+            Id = id;
+            await HabitService.SetSelectedHabit(Id);
         }
         else
         {
             await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
 
-            if (Id == id)
-                NavigationManager.NavigateTo("/habits");
-            else
-                NavigationManager.NavigateTo($"/habits/{id}");
+            NavigationManager.NavigateTo($"/habits/{id}");
+        }
+    }
+
+    async Task CloseSelected()
+    {
+        if (IsEmbedded)
+        {
+            Id = null;
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+
+            NavigationManager.NavigateTo("/habits");
         }
     }
 

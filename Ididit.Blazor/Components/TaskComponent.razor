@@ -6,7 +6,7 @@
 <div class="input-group flex-nowrap">
     <PriorityComponent Model="Task" />
     <InputText class="form-control" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
-    <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(Task.Id)"><i class="bi bi-floppy"></i></button>
+    <button class="btn btn-outline-primary" @onclick="() => CloseSelected.InvokeAsync()"><i class="bi bi-floppy"></i></button>
     <button class="btn btn-outline-primary" @onclick="() => TaskService.DeleteTask(Task)"><i class="bi bi-trash"></i></button>
     <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(Task)"><i class="bi bi-check-square"></i></button>
 </div>
@@ -44,10 +44,8 @@
     [Parameter]
     public TaskModel Task { get; set; }
 
-    async Task ToggleSelected(long id)
-    {
-        
-    }
+    [Parameter]
+    public EventCallback CloseSelected { get; set; }
 
     async Task SaveTitle(TaskModel task, string title)
     {

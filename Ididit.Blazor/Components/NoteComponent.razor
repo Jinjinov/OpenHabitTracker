@@ -7,7 +7,7 @@
 <div class="input-group flex-nowrap">
     <PriorityComponent Model="Note" />
     <InputText class="form-control" Value="@Note.Title" ValueExpression="() => Note.Title" ValueChanged="(string title) => SaveTitle(Note, title)" />
-    <button class="btn btn-outline-primary" @onclick="() => ToggleSelected(Note.Id)"><i class="bi bi-floppy"></i></button>
+    <button class="btn btn-outline-primary" @onclick="() => CloseSelected.InvokeAsync()"><i class="bi bi-floppy"></i></button>
     <button class="btn btn-outline-primary" @onclick="() => NoteService.DeleteNote(Note)"><i class="bi bi-trash"></i></button>
 </div>
 
@@ -25,17 +25,15 @@
     [Parameter]
     public NoteModel Note { get; set; }
 
+    [Parameter]
+    public EventCallback CloseSelected { get; set; }
+
     InputTextArea? _inputTextAreaReference;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (_inputTextAreaReference?.Element is not null)
             await JsInterop.HandleTabKey(_inputTextAreaReference.Element.Value);
-    }
-
-    async Task ToggleSelected(long id)
-    {
-        
     }
 
     async Task SaveTitle(NoteModel note, string title)
