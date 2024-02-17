@@ -93,7 +93,12 @@
             SelectComponent(AppData.Settings.StartSidebar);
 
         if (!string.IsNullOrEmpty(AppData.Settings.StartPage))
-            NavigationManager.NavigateTo(AppData.Settings.StartPage);
+        {
+            if (!NavigationManager.Uri.Contains(AppData.Settings.StartPage)) // fix for ERR_TOO_MANY_REDIRECTS on Blazor Server which calls OnInitializedAsync twice
+            {
+                NavigationManager.NavigateTo(AppData.Settings.StartPage);
+            }
+        }
     }
 
     void SelectComponent<T>()

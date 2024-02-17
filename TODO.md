@@ -20,7 +20,9 @@ open details in another column:
 	Task
 	Habit
 
-
+calendar:
+	if count is 1, click on day toggles done
+	if count is more than 1, click selects the day
 
 on calendar use yellow color for partially done (brush teeth 1x of 2x per day)
 
