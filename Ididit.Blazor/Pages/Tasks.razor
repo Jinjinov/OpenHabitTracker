@@ -57,47 +57,13 @@
             <div class="my-1">
                 @if (task.Id == Id && TaskService.NewTask is null)
                 {
-                    <div class="input-group flex-nowrap">
-                        <PriorityComponent Model="task" />
-                        <InputText class="form-control" Value="@task.Title" ValueExpression="() => task.Title" ValueChanged="(string title) => SaveTitle(task, title)" />
-                        <button class="btn btn-outline-primary" @onclick="() => CloseSelected()"><i class="bi bi-floppy"></i></button>
-                        <button class="btn btn-outline-primary" @onclick="() => TaskService.DeleteTask(task)"><i class="bi bi-trash"></i></button>
-                        <button class="btn btn-outline-primary" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
-                    </div>
-
-                    <ItemsComponent Items=task />
-
-                    <div class="input-group">
-                        <span class="input-group-text">Planned at</span>
-                        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="task.PlannedAt" ValueExpression="() => task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(task, plannedAt)" />
-                    </div>
-
-                    @if (task.StartedAt is not null)
-                    {
-                        <div class="p-1 border rounded-0">
-                            @if (task.StartedAt != task.CompletedAt)
-                            {
-                                <small class="d-inline-block mx-1">Started: @task.StartedAt</small>
-                            }
-                            @if (task.CompletedAt is not null)
-                            {
-                                <small class="d-inline-block mx-1">Completed: @task.CompletedAt</small>
-                            }
-                        </div>
-                    }
-
-                    <CategoryComponent Model="task" />
-
-                    <div class="p-1 border rounded-0">
-                        <small class="d-inline-block mx-1">Created: @task.CreatedAt</small>
-                        <small class="d-inline-block mx-1">Updated: @task.UpdatedAt</small>
-                    </div>
+                    <TaskComponent Task="task" CloseSelected="CloseSelected" />
                 }
                 else
                 {
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
-                                    <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => OpenSelected(task.Id)">@task.Title</button>
+                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => OpenSelected(task.Id)">@task.Title</button>
                         @if (task.PlannedAt is not null)
                         {
                             <small class="input-group-text">@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>

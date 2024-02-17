@@ -72,63 +72,7 @@
             <div class="my-1 d-flex">
                 @if (habit.Id == Id && HabitService.NewHabit is null)
                 {
-                    <div>
-                        <div class="input-group flex-nowrap">
-                            <PriorityComponent Model="habit" />
-                            <InputText class="form-control" Value="@habit.Title" ValueExpression="() => habit.Title" ValueChanged="(string title) => SaveTitle(habit, title)" />
-                            <button class="btn btn-outline-primary" @onclick="() => CloseSelected()"><i class="bi bi-floppy"></i></button>
-                            <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(habit)"><i class="bi bi-trash"></i></button>
-                            <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
-                        </div>
-
-                        <ItemsComponent Items=habit />
-
-                        @if (habit.TimesDone is not null && habit.TimesDoneByDay is not null)
-                        {
-                            if (habit.LastTimeDoneAt is not null)
-                            {
-                                <div class="p-1 border rounded-0">
-                                    <small>Completed @habit.TimesDone.Count times, last time on @habit.LastTimeDoneAt</small>
-                                </div>
-                            }
-
-                            @if (SettingsService.Settings.ShowLargeCalendar)
-                            {
-                                <div class="input-group-text p-0 border-0 rounded-0">
-                                    <div class="mx-auto">
-                                        <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" DisplayMonth />
-                                    </div>
-                                </div>
-                            }
-                        }
-
-                        <div class="input-group">
-                            <label class="input-group-text" for="countInput">Repeat</label>
-                            <InputNumber class="form-control" id="countInput" Value="habit.RepeatCount" ValueExpression="() => habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(habit, repeatCount)" />
-
-                            <label class="input-group-text" for="intervalInput">every</label>
-                            <InputNumber class="form-control" id="intervalInput" Value="habit.RepeatInterval" ValueExpression="() => habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(habit, repeatInterval)" />
-
-                            <InputSelect class="form-select" Value="habit.RepeatPeriod" ValueExpression="() => habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(habit, repeatPeriod)">
-                                @foreach (Period period in Enum.GetValues<Period>())
-                                {
-                                    <option @key="period" value="@period">@period</option>
-                                }
-                            </InputSelect>
-                        </div>
-
-                        <div class="input-group">
-                            <label class="input-group-text" for="durationInput">Duration</label>
-                            <InputDate class="form-control" id="durationInput" Value="habit.DurationProxy" ValueExpression="() => habit.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(habit, duration)" Type="InputDateType.Time" />
-                        </div>
-
-                        <CategoryComponent Model="habit" />
-
-                        <div class="p-1 border rounded-0">
-                            <small class="d-inline-block mx-1">Created: @habit.CreatedAt</small>
-                            <small class="d-inline-block mx-1">Updated: @habit.UpdatedAt</small>
-                        </div>
-                    </div>
+                    <HabitComponent Habit="habit" CloseSelected="CloseSelected" />
                 }
                 else
                 {
