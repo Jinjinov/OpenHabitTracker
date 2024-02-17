@@ -529,7 +529,7 @@ public class AppData(IDataAccess dataAccess)
                                 new() { Title = "Habit item 2" }
                             },
                             RepeatCount = 1,
-                            RepeatInterval = 1,
+                            RepeatInterval = 2,
                             RepeatPeriod = Period.Day,
                             Duration = new TimeOnly(1,30),
                             TimesDone = new()
@@ -550,7 +550,7 @@ public class AppData(IDataAccess dataAccess)
                                 new() { Title = "Habit item 1" },
                                 new() { Title = "Habit item 2" }
                             },
-                            RepeatCount = 1,
+                            RepeatCount = 2,
                             RepeatInterval = 1,
                             RepeatPeriod = Period.Day,
                             Duration = new TimeOnly(1,30),
