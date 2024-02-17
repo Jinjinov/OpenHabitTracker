@@ -21,10 +21,6 @@ calendar:
 
 
 
-on calendar use yellow color for partially done (brush teeth 1x of 2x per day)
-
-
-
 - host 24/7 on Raspberry Pi
 	valid LAN IP
 	test HDMI cable

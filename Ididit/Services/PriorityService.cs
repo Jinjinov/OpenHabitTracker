@@ -35,10 +35,7 @@ public class PriorityService(AppData appData, IDataAccess dataAccess)
         if (_appData.Priorities is null || NewPriority is null)
             return;
 
-        PriorityEntity priority = new()
-        {
-            Title = NewPriority.Title
-        };
+        PriorityEntity priority = NewPriority.ToEntity();
 
         await _dataAccess.AddPriority(priority);
 

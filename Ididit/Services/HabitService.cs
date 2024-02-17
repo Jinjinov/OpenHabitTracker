@@ -124,7 +124,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         if (habit.TimesDone.LastOrDefault() is TimeModel time && time.CompletedAt is null)
             return;
 
-        TimeModel timeModel = new TimeModel
+        TimeModel timeModel = new()
         {
             HabitId = habit.Id,
             StartedAt = now
@@ -134,11 +134,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         habit.RefreshTimesDoneByDay();
 
-        TimeEntity timeEntity = new()
-        {
-            HabitId = habit.Id,
-            StartedAt = now
-        };
+        TimeEntity timeEntity = timeModel.ToEntity();
 
         await _dataAccess.AddTime(timeEntity);
 
@@ -186,33 +182,29 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         }
     }
 
-    public async Task AddTimeDone(HabitModel habit, DateTime now)
+    public async Task AddTimeDone(HabitModel habit, DateTime dateTime)
     {
         habit.TimesDone ??= [];
 
         TimeModel timeModel = new()
         {
             HabitId = habit.Id,
-            StartedAt = now,
-            CompletedAt = now
+            StartedAt = dateTime,
+            CompletedAt = dateTime
         };
 
         habit.TimesDone.Add(timeModel);
 
         habit.RefreshTimesDoneByDay();
 
-        TimeEntity timeEntity = new()
-        {
-            HabitId = habit.Id,
-            StartedAt = now,
-            CompletedAt = now
-        };
+        TimeEntity timeEntity = timeModel.ToEntity();
 
         await _dataAccess.AddTime(timeEntity);
 
         timeModel.Id = timeEntity.Id;
 
-        await SetLastTimeDone(habit, now);
+        // TODO: only if it is really the last one
+        await SetLastTimeDone(habit, dateTime);
     }
 
     public async Task DeleteHabit(HabitModel habit)

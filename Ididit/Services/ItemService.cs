@@ -42,12 +42,9 @@ public class ItemService(IDataAccess dataAccess)
 
         items.Items.Add(NewItem);
 
-        ItemEntity item = new()
-        {
-            ParentId = items.Id,
-            Title = NewItem.Title,
-            IsDone = false
-        };
+        NewItem.ParentId = items.Id;
+
+        ItemEntity item = NewItem.ToEntity();
 
         await _dataAccess.AddItem(item);
 

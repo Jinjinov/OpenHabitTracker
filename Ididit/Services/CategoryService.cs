@@ -35,10 +35,7 @@ public class CategoryService(AppData appData, IDataAccess dataAccess)
         if (_appData.Categories is null || NewCategory is null)
             return;
 
-        CategoryEntity category = new()
-        {
-            Title = NewCategory.Title
-        };
+        CategoryEntity category = NewCategory.ToEntity();
 
         await _dataAccess.AddCategory(category);
 
