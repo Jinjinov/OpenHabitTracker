@@ -40,11 +40,6 @@ when all task items are done, task is done
 Note Markdown
 make regular markdown text look the same as in textarea
 
-selected calendar day:
-	show all (list)
-	add
-	remove
-
 add Search box
 add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
 
