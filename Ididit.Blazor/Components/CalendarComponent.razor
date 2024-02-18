@@ -100,7 +100,7 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        if (_calendarParams.CalendarStart == DateTime.MinValue)
+        if (_calendarParams.CalendarStart == DateTime.MinValue || _calendarParams.CalendarStart.DayOfWeek != AppData.Settings.FirstDayOfWeek)
         {
             if (DisplayMonth)
             {
