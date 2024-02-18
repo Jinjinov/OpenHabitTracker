@@ -26,23 +26,23 @@
 
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">Planned</span>
-                <InputSelect class="form-control w-auto flex-grow-0" Value="AppData.Filters.PlannedAtCompare" ValueExpression="() => AppData.Filters.PlannedAtCompare" ValueChanged="async (DateCompare plannedAtCompare) => { AppData.Filters.PlannedAtCompare = plannedAtCompare; await UpdateStateChanged(); }">
+                <InputSelect class="form-control w-auto flex-grow-0" Value="AppData.Filters.PlannedAtCompare" ValueExpression="() => AppData.Filters.PlannedAtCompare" TValue="DateCompare" ValueChanged="UpdatePlannedAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
                     <option value="@DateCompare.After">@(">")</option>
                 </InputSelect>
-                <InputDate class="form-control" Value="AppData.Filters.PlannedAtFilter" ValueExpression="() => AppData.Filters.PlannedAtFilter" ValueChanged="async (DateTime? plannedAtFilter) => { AppData.Filters.PlannedAtFilter = plannedAtFilter; await UpdateStateChanged(); }" Type="InputDateType.Date" />
+                <InputDate class="form-control" Value="AppData.Filters.PlannedAtFilter" ValueExpression="() => AppData.Filters.PlannedAtFilter" TValue="DateTime?" ValueChanged="UpdatePlannedAtFilter" Type="InputDateType.Date" />
                 <button class="btn btn-outline-primary" @onclick="async () => { AppData.Filters.PlannedAtFilter = null; await UpdateStateChanged(); }"><i class="bi bi-x-square"></i></button>
             </div>
 
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">Done</span>
-                <InputSelect class="form-control w-auto flex-grow-0" Value="AppData.Filters.DoneAtCompare" ValueExpression="() => AppData.Filters.DoneAtCompare" ValueChanged="async (DateCompare doneAtCompare) => { AppData.Filters.DoneAtCompare = doneAtCompare; await UpdateStateChanged(); }">
+                <InputSelect class="form-control w-auto flex-grow-0" Value="AppData.Filters.DoneAtCompare" ValueExpression="() => AppData.Filters.DoneAtCompare" TValue="DateCompare" ValueChanged="UpdateDoneAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
                     <option value="@DateCompare.After">@(">")</option>
                 </InputSelect>
-                <InputDate class="form-control" Value="AppData.Filters.DoneAtFilter" ValueExpression="() => AppData.Filters.DoneAtFilter" ValueChanged="async (DateTime? doneAtFilter) => { AppData.Filters.DoneAtFilter = doneAtFilter; await UpdateStateChanged(); }" Type="InputDateType.Date" />
+                <InputDate class="form-control" Value="AppData.Filters.DoneAtFilter" ValueExpression="() => AppData.Filters.DoneAtFilter" TValue="DateTime?" ValueChanged="UpdateDoneAtFilter" Type="InputDateType.Date" />
                 <button class="btn btn-outline-primary" @onclick="async () => { AppData.Filters.DoneAtFilter = null; await UpdateStateChanged(); }"><i class="bi bi-x-square"></i></button>
             </div>
 
@@ -187,6 +187,30 @@
     async Task UpdateSearchTerm(string searchTerm)
     {
         AppData.Filters.SearchTerm = searchTerm;
+        await UpdateStateChanged();
+    }
+
+    async Task UpdatePlannedAtCompare(DateCompare plannedAtCompare)
+    {
+        AppData.Filters.PlannedAtCompare = plannedAtCompare;
+        await UpdateStateChanged();
+    }
+
+    async Task UpdatePlannedAtFilter(DateTime? plannedAtFilter)
+    {
+        AppData.Filters.PlannedAtFilter = plannedAtFilter;
+        await UpdateStateChanged();
+    }
+
+    async Task UpdateDoneAtCompare(DateCompare doneAtCompare)
+    {
+        AppData.Filters.DoneAtCompare = doneAtCompare;
+        await UpdateStateChanged();
+    }
+
+    async Task UpdateDoneAtFilter(DateTime? doneAtFilter)
+    {
+        AppData.Filters.DoneAtFilter = doneAtFilter;
         await UpdateStateChanged();
     }
 
