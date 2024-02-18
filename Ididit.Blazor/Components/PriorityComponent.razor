@@ -7,7 +7,7 @@
 
 @if (PriorityService.Priorities is not null && Model is not null)
 {
-    <InputSelect class="form-select flex-grow-0 w-auto" Value="Model.Priority" ValueExpression="() => Model.Priority" ValueChanged="(Priority priority) => SavePriority(priority)">
+    <InputSelect class="form-select flex-grow-0 w-auto" Value="Model.Priority" ValueExpression="() => Model.Priority" TValue="Priority" ValueChanged="SavePriority">
         @foreach (Priority priority in Enum.GetValues<Priority>().OrderDescending())
         {
             <option @key="priority" value="@priority">@AppData.GetPriorityTitle(priority)</option>

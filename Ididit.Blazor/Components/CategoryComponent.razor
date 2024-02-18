@@ -7,7 +7,7 @@
 
 @if (CategoryService.Categories is not null && Model is not null)
 {
-    <InputSelect class="form-select" Value="Model.CategoryId" ValueExpression="() => Model.CategoryId" ValueChanged="(long categoryId) => SaveCategory(categoryId)">
+    <InputSelect class="form-select" Value="Model.CategoryId" ValueExpression="() => Model.CategoryId" TValue="long" ValueChanged="SaveCategory">
         <option value="0" disabled selected hidden>None</option>
         @foreach (CategoryModel category in CategoryService.Categories)
         {

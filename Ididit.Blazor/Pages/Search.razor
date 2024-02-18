@@ -48,7 +48,7 @@
 
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">Category</span>
-                <InputSelect class="form-select col-8" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" ValueChanged="(long categoryId) => SaveCategory(categoryId)">
+                <InputSelect class="form-select col-8" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long" ValueChanged="SaveCategory">
                     <option value="0" disabled selected hidden>All</option>
                     @foreach (CategoryModel category in CategoryService.Categories)
                     {
@@ -59,7 +59,7 @@
 
             <div class="input-group flex-nowrap">
                 <div class="input-group-text">
-                    <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueExpression="() => _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueChanged="(bool show) => SaveShowOnlyOverElapsedTimeToRepeatIntervalRatioMin(show)" />
+                    <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueExpression="() => _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" TValue="bool" ValueChanged="SaveShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" />
                 </div>
                 <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">Show only habits with ratio over @_settings.ElapsedTimeToRepeatIntervalRatioMin%</label>
             </div>

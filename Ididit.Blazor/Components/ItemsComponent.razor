@@ -19,7 +19,7 @@
             {
                 if (item == ItemService.SelectedItem)
                 {
-                    <InputText class="form-control" @ref="inputElement" Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="(string title) => ItemService.UpdateItem(title)" @onfocusout="(args) => ItemService.SelectedItem = null" />
+                    <InputText class="form-control" @ref="inputElement" Value="@item.Title" ValueExpression="() => item.Title" TValue="string" ValueChanged="ItemService.UpdateItem" @onfocusout="(args) => ItemService.SelectedItem = null" />
                 }
                 else
                 {
