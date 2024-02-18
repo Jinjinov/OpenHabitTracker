@@ -25,10 +25,26 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
             tasks = tasks.Where(x => x.Title.Contains(_appData.Filters.SearchTerm) || x.Items?.Any(i => i.Title.Contains(_appData.Filters.SearchTerm)) == true);
 
         if (_appData.Filters.DoneAtFilter is not null)
-            tasks = tasks.Where(x => x.CompletedAt?.Date == _appData.Filters.DoneAtFilter.Value.Date);
+        {
+            tasks = _appData.Filters.DoneAtCompare switch
+            {
+                DateCompare.Before => tasks.Where(x => x.CompletedAt?.Date < _appData.Filters.DoneAtFilter.Value.Date),
+                DateCompare.On => tasks.Where(x => x.CompletedAt?.Date == _appData.Filters.DoneAtFilter.Value.Date),
+                DateCompare.After => tasks.Where(x => x.CompletedAt?.Date > _appData.Filters.DoneAtFilter.Value.Date),
+                _ => throw new ArgumentOutOfRangeException(nameof(_appData.Filters.DoneAtCompare))
+            };
+        }
 
         if (_appData.Filters.PlannedAtFilter is not null)
-            tasks = tasks.Where(x => x.PlannedAt?.Date == _appData.Filters.PlannedAtFilter.Value.Date);
+        {
+            tasks = _appData.Filters.PlannedAtCompare switch
+            {
+                DateCompare.Before => tasks.Where(x => x.PlannedAt?.Date < _appData.Filters.PlannedAtFilter.Value.Date),
+                DateCompare.On => tasks.Where(x => x.PlannedAt?.Date == _appData.Filters.PlannedAtFilter.Value.Date),
+                DateCompare.After => tasks.Where(x => x.PlannedAt?.Date > _appData.Filters.PlannedAtFilter.Value.Date),
+                _ => throw new ArgumentOutOfRangeException(nameof(_appData.Filters.PlannedAtCompare))
+            };
+        }
 
         if (settings.SelectedCategoryId != 0)
             tasks = tasks.Where(x => x.CategoryId == settings.SelectedCategoryId);

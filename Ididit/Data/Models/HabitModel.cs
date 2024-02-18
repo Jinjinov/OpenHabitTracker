@@ -39,7 +39,7 @@ public class HabitModel : ItemsModel
             Period.Week => TimeSpan.FromDays(7 * RepeatInterval),
             Period.Month => TimeSpan.FromDays(30 * RepeatInterval),
             Period.Year => TimeSpan.FromDays(365 * RepeatInterval),
-            _ => throw new InvalidOperationException("Invalid repeat period")
+            _ => throw new ArgumentOutOfRangeException(nameof(RepeatPeriod))
         };
     }
 
@@ -64,7 +64,7 @@ public class HabitModel : ItemsModel
             Period.Week => LastTimeDoneAt.Value.AddDays(7 * RepeatInterval),
             Period.Month => LastTimeDoneAt.Value.AddMonths(RepeatInterval),
             Period.Year => LastTimeDoneAt.Value.AddYears(RepeatInterval),
-            _ => throw new InvalidOperationException("Invalid repeat period")
+            _ => throw new ArgumentOutOfRangeException(nameof(RepeatPeriod))
         };
 
         return nextDueDate < DateTime.Now;

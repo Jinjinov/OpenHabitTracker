@@ -25,7 +25,15 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
             habits = habits.Where(x => x.Title.Contains(_appData.Filters.SearchTerm) || x.Items?.Any(i => i.Title.Contains(_appData.Filters.SearchTerm)) == true);
 
         if (_appData.Filters.DoneAtFilter is not null)
-            habits = habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date == _appData.Filters.DoneAtFilter.Value.Date) == true);
+        {
+            habits = _appData.Filters.DoneAtCompare switch
+            {
+                DateCompare.Before => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date < _appData.Filters.DoneAtFilter.Value.Date) == true),
+                DateCompare.On => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date == _appData.Filters.DoneAtFilter.Value.Date) == true),
+                DateCompare.After => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date > _appData.Filters.DoneAtFilter.Value.Date) == true),
+                _ => throw new ArgumentOutOfRangeException(nameof(_appData.Filters.DoneAtCompare))
+            };
+        }
 
         if (settings.SelectedCategoryId != 0)
             habits = habits.Where(x => x.CategoryId == settings.SelectedCategoryId);
