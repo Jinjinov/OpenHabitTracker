@@ -11,7 +11,10 @@
         <InputText class="form-control" Value="@Habit.Title" ValueExpression="() => Habit.Title" ValueChanged="(string title) => SaveTitle(Habit, title)" />
         <button class="btn btn-outline-primary" @onclick="() => CloseSelected.InvokeAsync()"><i class="bi bi-floppy"></i></button>
         <button class="btn btn-outline-primary" @onclick="() => HabitService.DeleteHabit(Habit)"><i class="bi bi-trash"></i></button>
-        <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(Habit)"><i class="bi bi-check-square"></i></button>
+        @if (!SettingsService.Settings.ShowLargeCalendar)
+        {
+            <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(Habit)"><i class="bi bi-check-square"></i></button>
+        }
     </div>
 
     <ItemsComponent Items=Habit />

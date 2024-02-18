@@ -42,6 +42,28 @@ html, body {
     border-radius: 0 !important;
 }
 
+/* MARKDOWN */
+
+/* set margin in Markdown HTML */
+.markdown-block-margin > p,
+.markdown-block-margin > ol,
+.markdown-block-margin > ul,
+.markdown-block-margin > pre {
+    margin-bottom: calc(1em * var(--bs-body-line-height));
+}
+
+.markdown-block-margin > p + ol,
+.markdown-block-margin > p + ul {
+    margin-top: calc(-1em * var(--bs-body-line-height));
+}
+
+.markdown-block-margin > p:last-child,
+.markdown-block-margin > ol:last-child,
+.markdown-block-margin > ul:last-child,
+.markdown-block-margin > pre:last-child {
+    margin-bottom: 0;
+}
+
 /* MAIN ROW AND COLUMNS SCROLLBARS */
 
 /* Mobile: show scrollbar in parent row */

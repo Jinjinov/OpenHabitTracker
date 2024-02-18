@@ -98,7 +98,7 @@
                                 <small class="@($"input-group-text {color}")">@(lastTimeDoneAt.Date == DateTime.Now.Date ? lastTimeDoneAt.ToShortTimeString() : lastTimeDoneAt.ToShortDateString())</small>
                             }
 
-                            @if (IsEmbedded)
+                            @if (!SettingsService.Settings.ShowSmallCalendar)
                             {
                                 <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                             }
