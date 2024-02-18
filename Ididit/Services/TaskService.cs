@@ -21,11 +21,11 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
         IEnumerable<TaskModel> tasks = Tasks!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
 
-        if (_appData.Filters.Search is not null)
-            tasks = tasks.Where(x => x.Title.Contains(_appData.Filters.Search) || x.Items?.Any(i => i.Title.Contains(_appData.Filters.Search)) == true);
+        if (_appData.Filters.SearchTerm is not null)
+            tasks = tasks.Where(x => x.Title.Contains(_appData.Filters.SearchTerm) || x.Items?.Any(i => i.Title.Contains(_appData.Filters.SearchTerm)) == true);
 
-        if (_appData.Filters.FilterByDate is not null)
-            tasks = tasks.Where(x => x.CompletedAt?.Date == _appData.Filters.FilterByDate.Value.Date);
+        if (_appData.Filters.DoneAtFilter is not null)
+            tasks = tasks.Where(x => x.CompletedAt?.Date == _appData.Filters.DoneAtFilter.Value.Date);
 
         if (settings.SelectedCategoryId != 0)
             tasks = tasks.Where(x => x.CategoryId == settings.SelectedCategoryId);
