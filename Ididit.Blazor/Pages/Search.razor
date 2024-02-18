@@ -6,6 +6,7 @@
 
 @inject SettingsService SettingsService
 @inject CategoryService CategoryService
+@inject AppData AppData
 
 <PageTitle>Search</PageTitle>
 
@@ -19,8 +20,35 @@
         <div class="my-1">
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-6">Show category</span>
-                <InputSelect class="form-select col-6" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" ValueChanged="(long categoryId) => SaveCategory(categoryId)">
+                <InputTextImmediate class="form-control" @bind-Value="AppData.Filters.SearchTerm" placeholder="Search" />
+                <button class="btn btn-outline-primary" @onclick="() => AppData.Filters.SearchTerm = null"><i class="bi bi-x-square"></i></button>
+            </div>
+
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">Done</span>
+                <InputSelect class="form-control w-auto flex-grow-0" @bind-Value="AppData.Filters.DoneAtCompare">
+                    <option value="@DateCompare.Before">@("<")</option>
+                    <option value="@DateCompare.On">@("=")</option>
+                    <option value="@DateCompare.After">@(">")</option>
+                </InputSelect>
+                <InputDate class="form-control" @bind-Value="AppData.Filters.DoneAtFilter" Type="InputDateType.Date" />
+                <button class="btn btn-outline-primary" @onclick="() => AppData.Filters.DoneAtFilter = null"><i class="bi bi-x-square"></i></button>
+            </div>
+
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">Planned</span>
+                <InputSelect class="form-control w-auto flex-grow-0" @bind-Value="AppData.Filters.PlannedAtCompare">
+                    <option value="@DateCompare.Before">@("<")</option>
+                    <option value="@DateCompare.On">@("=")</option>
+                    <option value="@DateCompare.After">@(">")</option>
+                </InputSelect>
+                <InputDate class="form-control" @bind-Value="AppData.Filters.PlannedAtFilter" Type="InputDateType.Date" />
+                <button class="btn btn-outline-primary" @onclick="() => AppData.Filters.PlannedAtFilter = null"><i class="bi bi-x-square"></i></button>
+            </div>
+
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">Category</span>
+                <InputSelect class="form-select col-8" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" ValueChanged="(long categoryId) => SaveCategory(categoryId)">
                     <option value="0" disabled selected hidden>All</option>
                     @foreach (CategoryModel category in CategoryService.Categories)
                     {
@@ -92,8 +120,8 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-6">Sort notes by</span>
-                <InputSelect class="form-select col-6" Value="_settings.SortBy[InfoType.Note]" ValueExpression="() => _settings.SortBy[InfoType.Note]" ValueChanged="(Sort sort) => SaveSort(InfoType.Note, sort)">
+                <span class="input-group-text col-4">Sort notes</span>
+                <InputSelect class="form-select col-8" Value="_settings.SortBy[InfoType.Note]" ValueExpression="() => _settings.SortBy[InfoType.Note]" ValueChanged="(Sort sort) => SaveSort(InfoType.Note, sort)">
                     <option value="@Sort.Category">Category</option>
                     <option value="@Sort.Priority">Priority</option>
                     <option value="@Sort.Title">Title</option>
@@ -101,8 +129,8 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-6">Sort tasks by</span>
-                <InputSelect class="form-select col-6" Value="_settings.SortBy[InfoType.Task]" ValueExpression="() => _settings.SortBy[InfoType.Task]" ValueChanged="(Sort sort) => SaveSort(InfoType.Task, sort)">
+                <span class="input-group-text col-4">Sort tasks</span>
+                <InputSelect class="form-select col-8" Value="_settings.SortBy[InfoType.Task]" ValueExpression="() => _settings.SortBy[InfoType.Task]" ValueChanged="(Sort sort) => SaveSort(InfoType.Task, sort)">
                     <option value="@Sort.Category">Category</option>
                     <option value="@Sort.Priority">Priority</option>
                     <option value="@Sort.Title">Title</option>
@@ -111,8 +139,8 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-6">Sort habits by</span>
-                <InputSelect class="form-select col-6" Value="_settings.SortBy[InfoType.Habit]" ValueExpression="() => _settings.SortBy[InfoType.Habit]" ValueChanged="(Sort sort) => SaveSort(InfoType.Habit, sort)">
+                <span class="input-group-text col-4">Sort habits</span>
+                <InputSelect class="form-select col-8" Value="_settings.SortBy[InfoType.Habit]" ValueExpression="() => _settings.SortBy[InfoType.Habit]" ValueChanged="(Sort sort) => SaveSort(InfoType.Habit, sort)">
                     <option value="@Sort.Category">Category</option>
                     <option value="@Sort.Priority">Priority</option>
                     <option value="@Sort.Title">Title</option>
