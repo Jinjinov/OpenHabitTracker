@@ -6,10 +6,9 @@
 
 Ididit.Google.Apis
 Ididit.LocalStorage
-https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
+version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
-??? add TimeOnly? Duration to TaskModel ???
-??? Task CompletedAt / Habit LastTimeDoneAt --> DateTime? DoneAt ???
+??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
 
 ---------------------------------------------------------------------------------------------------
 
@@ -19,25 +18,44 @@ calendar:
 	add option to remove TimeDone
 
 search, filter, sort
-	using HtmlAgilityPack; MarkSearchResultsInHtml
+	`using HtmlAgilityPack; MarkSearchResultsInHtml`
 	textarea highlight - but why tho?
 	div / span - highlight search results
 !	add Search box
-!	add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
+		Match case
+!	add Filter by Date (Task `CompletedAt` / Habit `LastTimeDoneAt`)
+		Today
+		before / on / after
 
-! dark / light theme
+! dark mode / light mode
+theme: default Bootstrap / Bootswatch
 
 ! help
 
 ! about
 
 textarea
-!	using Markdig; Markdown.ToHtml
+!	`using Markdig; Markdown.ToHtml`
 !	Markdown
 !	make regular markdown text look the same as in textarea
 	insert tabs
 	tabs on/off setting
 
+
+start / stop timing
+	add `TimeOnly? Duration` to TaskModel
+
+Item `bool IsDone` -> `DateTime? DoneAt`
+
+complete TSV import / export
+import / export Markdown
+
+
+repeat:
+	add `PlannedAt` to Habit
+	weekly: which day in week
+	monthly: which day (week) in month
+	yearly: which day (date) in year
 
 
 - host 24/7 on Raspberry Pi
@@ -56,7 +74,7 @@ horizontal calendar with vertical weeks
 
 ---------------------------------------------------------------------------------------------------
 
-common Router
+common `Router`
 	Ididit.Blazor - Routes.razor
 	Ididit.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
 
@@ -64,7 +82,7 @@ google keep
 google drive
 localization
 
-EF Core: use DbContextFactory
+EF Core: use `DbContextFactory`
 
 benchmark method time & render time
 
