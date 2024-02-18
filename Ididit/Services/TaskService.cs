@@ -27,6 +27,9 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         if (_appData.Filters.DoneAtFilter is not null)
             tasks = tasks.Where(x => x.CompletedAt?.Date == _appData.Filters.DoneAtFilter.Value.Date);
 
+        if (_appData.Filters.PlannedAtFilter is not null)
+            tasks = tasks.Where(x => x.PlannedAt?.Date == _appData.Filters.PlannedAtFilter.Value.Date);
+
         if (settings.SelectedCategoryId != 0)
             tasks = tasks.Where(x => x.CategoryId == settings.SelectedCategoryId);
 
