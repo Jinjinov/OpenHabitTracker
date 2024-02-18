@@ -21,6 +21,14 @@
 
             <div class="input-group flex-nowrap">
                 <InputTextImmediate class="form-control" Value="@AppData.Filters.SearchTerm" ValueExpression="() => AppData.Filters.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="Search" />
+                @if (AppData.Filters.MatchCase)
+                {
+                    <button class="btn btn-primary" @onclick="() => UpdateMatchCase(false)"><i class="bi bi-type"></i></button>
+                }
+                else
+                {
+                    <button class="btn btn-outline-primary" @onclick="() => UpdateMatchCase(true)"><i class="bi bi-type"></i></button>
+                }
                 <button class="btn btn-outline-primary" @onclick="() => UpdateSearchTerm(null)"><i class="bi bi-x-square"></i></button>
             </div>
 
@@ -187,6 +195,12 @@
     async Task UpdateSearchTerm(string? searchTerm)
     {
         AppData.Filters.SearchTerm = searchTerm;
+        await UpdateStateChanged();
+    }
+
+    async Task UpdateMatchCase(bool matchCase)
+    {
+        AppData.Filters.MatchCase = matchCase;
         await UpdateStateChanged();
     }
 

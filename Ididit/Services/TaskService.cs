@@ -22,7 +22,11 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         IEnumerable<TaskModel> tasks = Tasks!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
 
         if (_appData.Filters.SearchTerm is not null)
-            tasks = tasks.Where(x => x.Title.Contains(_appData.Filters.SearchTerm) || x.Items?.Any(i => i.Title.Contains(_appData.Filters.SearchTerm)) == true);
+        {
+            StringComparison comparisonType = _appData.Filters.MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            tasks = tasks.Where(x => x.Title.Contains(_appData.Filters.SearchTerm, comparisonType) || x.Items?.Any(i => i.Title.Contains(_appData.Filters.SearchTerm, comparisonType)) == true);
+        }
 
         if (_appData.Filters.DoneAtFilter is not null)
         {

@@ -22,7 +22,11 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         IEnumerable<NoteModel> notes = Notes!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
 
         if (_appData.Filters.SearchTerm is not null)
-            notes = notes.Where(x => x.Title.Contains(_appData.Filters.SearchTerm) || x.Content.Contains(_appData.Filters.SearchTerm));
+        {
+            StringComparison comparisonType = _appData.Filters.MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            notes = notes.Where(x => x.Title.Contains(_appData.Filters.SearchTerm, comparisonType) || x.Content.Contains(_appData.Filters.SearchTerm, comparisonType));
+        }
 
         if (settings.SelectedCategoryId != 0)
             notes = notes.Where(x => x.CategoryId == settings.SelectedCategoryId);

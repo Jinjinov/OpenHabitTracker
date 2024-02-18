@@ -22,8 +22,6 @@ search, filter, sort
 		title
 		note content
 		task, habit items
-!	add Search box
-		Match case
 
 Show only habits with ratio `over` / `under`
 

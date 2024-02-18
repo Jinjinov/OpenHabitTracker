@@ -22,7 +22,11 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
         IEnumerable<HabitModel> habits = Habits!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
 
         if (_appData.Filters.SearchTerm is not null)
-            habits = habits.Where(x => x.Title.Contains(_appData.Filters.SearchTerm) || x.Items?.Any(i => i.Title.Contains(_appData.Filters.SearchTerm)) == true);
+        {
+            StringComparison comparisonType = _appData.Filters.MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            habits = habits.Where(x => x.Title.Contains(_appData.Filters.SearchTerm, comparisonType) || x.Items?.Any(i => i.Title.Contains(_appData.Filters.SearchTerm, comparisonType)) == true);
+        }
 
         if (_appData.Filters.DoneAtFilter is not null)
         {
