@@ -14,12 +14,14 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 calendar:
 	if count is more than 1, click selects the day
-	add option to remove TimeDone
+!	add option to remove TimeDone
 
 search, filter, sort
 	`using HtmlAgilityPack; MarkSearchResultsInHtml`
-	textarea highlight - but why tho?
 	div / span - highlight search results
+		title
+		note content
+		task, habit items
 !	add Search box
 		Match case
 !	add Filter by Date (Task `CompletedAt` / Habit `LastTimeDoneAt`)
@@ -28,8 +30,9 @@ search, filter, sort
 
 Show only habits with ratio `over` / `under`
 
-! dark mode / light mode
-theme: Bootstrap / Bootswatch
+settings:
+	theme: Bootstrap / Bootswatch
+!	dark mode / light mode
 
 ! help
 
@@ -47,13 +50,14 @@ start / stop timing
 
 Item `bool IsDone` -> `DateTime? DoneAt`
 
-complete TSV import / export
-import / export Markdown
+import / export
+	Markdown
+!	complete TSV import / export
 
 repeat:
 	add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
 	weekly: which day in week
-	monthly: which day (or week - second monday) in month
+	monthly: which day (or week/day - second monday) in month
 	yearly: which day (date) in year
 
 
