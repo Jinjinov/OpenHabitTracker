@@ -20,22 +20,23 @@ calendar:
 
 search, filter, sort
 	using HtmlAgilityPack; MarkSearchResultsInHtml
-	textarea highlight
-	highlight search results
-	add Search box
-	add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
+	textarea highlight - but why tho?
+	div / span - highlight search results
+!	add Search box
+!	add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
 
-dark / light theme
+! dark / light theme
 
-help
+! help
 
-about
+! about
 
 textarea
-	using Markdig; Markdown.ToHtml
-	tabs
-	Markdown
-	make regular markdown text look the same as in textarea
+!	using Markdig; Markdown.ToHtml
+!	Markdown
+!	make regular markdown text look the same as in textarea
+	insert tabs
+	tabs on/off setting
 
 
 
@@ -55,10 +56,9 @@ horizontal calendar with vertical weeks
 
 ---------------------------------------------------------------------------------------------------
 
-- common:
-	- Router
-		- Ididit.Blazor - Routes.razor
-		- Ididit.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
+common Router
+	Ididit.Blazor - Routes.razor
+	Ididit.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
 
 google keep
 google drive
