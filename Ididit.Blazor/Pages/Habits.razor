@@ -19,7 +19,7 @@
 
     @if (HabitService.NewHabit is null)
     {
-        <button class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="() => { HabitService.NewHabit = new(); shouldFocus = true; }">
+        <button class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
             <span class="input-group-text flex-grow-1">Add new habit</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
@@ -198,6 +198,12 @@
         }
     }
 
+    void AddNew()
+    {
+        HabitService.NewHabit = new();
+        shouldFocus = true;
+    }
+
     async Task OpenSelected(long id)
     {
         if (IsEmbedded)
@@ -225,40 +231,5 @@
 
             NavigationManager.NavigateTo("/habits");
         }
-    }
-
-    async Task SaveTitle(HabitModel habit, string title)
-    {
-        habit.Title = title;
-
-        await HabitService.UpdateHabit();
-    }
-
-    async Task SaveRepeatCount(HabitModel habit, int repeatCount)
-    {
-        habit.RepeatCount = repeatCount;
-
-        await HabitService.UpdateHabit();
-    }
-
-    async Task SaveRepeatInterval(HabitModel habit, int repeatInterval)
-    {
-        habit.RepeatInterval = repeatInterval;
-
-        await HabitService.UpdateHabit();
-    }
-
-    async Task SaveRepeatPeriod(HabitModel habit, Period repeatPeriod)
-    {
-        habit.RepeatPeriod = repeatPeriod;
-
-        await HabitService.UpdateHabit();
-    }
-
-    async Task SaveDuration(HabitModel habit, TimeOnly duration)
-    {
-        habit.DurationProxy = duration;
-
-        await HabitService.UpdateHabit();
     }
 }

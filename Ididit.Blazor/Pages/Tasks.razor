@@ -19,7 +19,7 @@
 
     @if (TaskService.NewTask is null)
     {
-        <NavLink class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="() => { TaskService.NewTask = new(); shouldFocus = true; }">
+        <NavLink class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
             <span class="input-group-text flex-grow-1">Add new task</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
@@ -132,6 +132,12 @@
         }
     }
 
+    void AddNew()
+    {
+        TaskService.NewTask = new();
+        shouldFocus = true;
+    }
+
     async Task OpenSelected(long id)
     {
         if (IsEmbedded)
@@ -159,19 +165,5 @@
 
             NavigationManager.NavigateTo("/tasks");
         }
-    }
-
-    async Task SaveTitle(TaskModel task, string title)
-    {
-        task.Title = title;
-
-        await TaskService.UpdateTask();
-    }
-
-    async Task SavePlannedAt(TaskModel task, DateTime? plannedAt)
-    {
-        task.PlannedAt = plannedAt;
-
-        await TaskService.UpdateTask();
     }
 }

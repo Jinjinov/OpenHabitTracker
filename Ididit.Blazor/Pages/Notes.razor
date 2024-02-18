@@ -18,7 +18,7 @@
 
     @if (NoteService.NewNote is null)
     {
-        <button class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="() => { NoteService.NewNote = new(); shouldFocus = true; }">
+        <button class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
             <span class="input-group-text flex-grow-1">Add new note</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
@@ -123,6 +123,12 @@
             await JsInterop.HandleTabKey(_inputTextAreaReference.Element.Value);
     }
 
+    void AddNew()
+    {
+        NoteService.NewNote = new();
+        shouldFocus = true;
+    }
+
     async Task OpenSelected(long id)
     {
         if (IsEmbedded)
@@ -150,19 +156,5 @@
 
             NavigationManager.NavigateTo("/notes");
         }
-    }
-
-    async Task SaveTitle(NoteModel note, string title)
-    {
-        note.Title = title;
-
-        await NoteService.UpdateNote();
-    }
-
-    async Task SaveContent(NoteModel note, string content)
-    {
-        note.Content = content;
-
-        await NoteService.UpdateNote();
     }
 }
