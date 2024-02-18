@@ -27,6 +27,8 @@ search, filter, sort
 		Today
 		before / on / after
 
+Show only habits with ratio `over` / `under`
+
 ! dark mode / light mode
 theme: default Bootstrap / Bootswatch
 
@@ -179,6 +181,7 @@ maintenance: (normal priority)
 
 - ASAP tasks
 	- where, when, address, email, phone
+	- when, where, contact/company name, address, phone number, working hours, website, email
 - date & time tasks
 
 1. online sync (c# backend with sql)

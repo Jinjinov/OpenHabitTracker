@@ -8,6 +8,10 @@ font size: 110
 font color: #EEEEEE
 background color: #333333
 
+Screenshots dimensions should be: 1280x800 1440x900 2560x1600 2880x1800
+https://stackoverflow.com/questions/67972372/why-are-window-height-and-window-width-not-exact-c-wpf
+a difference of 7px in Height and 14px in Width, header 31px
+
 ---------------------------------------------------------------------------------------------------
 
 Component instantiation
