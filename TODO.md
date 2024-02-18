@@ -24,10 +24,6 @@ search, filter, sort
 		task, habit items
 !	add Search box
 		Match case
-!	add Filter by Date (Task `CompletedAt` / Habit `LastTimeDoneAt`)
-		Today
-		before / on / after
-!	add Filter by Date (Task `PlannedAt`)
 
 Show only habits with ratio `over` / `under`
 

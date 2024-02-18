@@ -25,7 +25,7 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">Planned</span>
+                <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)">Planned</button>
                 <InputSelect class="form-control w-auto flex-grow-0" Value="AppData.Filters.PlannedAtCompare" ValueExpression="() => AppData.Filters.PlannedAtCompare" TValue="DateCompare" ValueChanged="UpdatePlannedAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
@@ -36,7 +36,7 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">Done</span>
+                <button class="input-group-text col-4" @onclick="() => UpdateDoneAtFilter(DateTime.Today)">Done</button>
                 <InputSelect class="form-control w-auto flex-grow-0" Value="AppData.Filters.DoneAtCompare" ValueExpression="() => AppData.Filters.DoneAtCompare" TValue="DateCompare" ValueChanged="UpdateDoneAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
