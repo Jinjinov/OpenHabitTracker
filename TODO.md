@@ -7,35 +7,32 @@
 Ididit.Google.Apis
 Ididit.LocalStorage
 https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
-using Markdig; Markdown.ToHtml
-using HtmlAgilityPack; MarkSearchResultsInHtml
 
 ??? add TimeOnly? Duration to TaskModel ???
 ??? Task CompletedAt / Habit LastTimeDoneAt --> DateTime? DoneAt ???
+
+---------------------------------------------------------------------------------------------------
 
 
 calendar:
 	if count is more than 1, click selects the day
 	add option to remove TimeDone
 
-
 search, filter, sort
+	using HtmlAgilityPack; MarkSearchResultsInHtml
 	textarea highlight
 	highlight search results
 	add Search box
 	add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
 
-
 dark / light theme
-
 
 help
 
-
 about
 
-
 textarea
+	using Markdig; Markdown.ToHtml
 	tabs
 	Markdown
 	make regular markdown text look the same as in textarea
