@@ -23,7 +23,7 @@
                     <span class="input-group-text">@priority.Id</span>
                     @if (priority == PriorityService.SelectedPriority)
                     {
-                        <InputText class="form-control" @ref="inputElement" Value="@priority.Title" ValueExpression="() => priority.Title" TValue="string" ValueChanged="UpdatePriority" @onfocusout="(args) => PriorityService.SelectedPriority = null" />
+                        <InputText class="form-control" @ref="inputElement" Value="@priority.Title" ValueExpression="() => priority.Title" ValueChanged="UpdatePriority" @onfocusout="(args) => PriorityService.SelectedPriority = null" />
                     }
                     else
                     {

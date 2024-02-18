@@ -20,7 +20,7 @@
         <div class="my-1">
 
             <div class="input-group flex-nowrap">
-                <InputTextImmediate class="form-control" Value="@AppData.Filters.SearchTerm" ValueExpression="() => AppData.Filters.SearchTerm" ValueChanged="async (searchTerm) => { AppData.Filters.SearchTerm = searchTerm; await UpdateStateChanged(); }" placeholder="Search" />
+                <InputTextImmediate class="form-control" Value="@AppData.Filters.SearchTerm" ValueExpression="() => AppData.Filters.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="Search" />
                 <button class="btn btn-outline-primary" @onclick="async () => { AppData.Filters.SearchTerm = null; await UpdateStateChanged(); }"><i class="bi bi-x-square"></i></button>
             </div>
 
@@ -181,6 +181,12 @@
     {
         await SettingsService.UpdateSettings();
 
+        await UpdateStateChanged();
+    }
+
+    async Task UpdateSearchTerm(string searchTerm)
+    {
+        AppData.Filters.SearchTerm = searchTerm;
         await UpdateStateChanged();
     }
 

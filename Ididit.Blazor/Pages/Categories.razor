@@ -34,7 +34,7 @@
             <div class="input-group flex-nowrap">
                 @if (category == CategoryService.SelectedCategory)
                 {
-                    <InputText class="form-control" @ref="inputElement" Value="@category.Title" ValueExpression="() => category.Title" TValue="string" ValueChanged="UpdateCategory" @onfocusout="(args) => CategoryService.SelectedCategory = null" />
+                    <InputText class="form-control" @ref="inputElement" Value="@category.Title" ValueExpression="() => category.Title" ValueChanged="UpdateCategory" @onfocusout="(args) => CategoryService.SelectedCategory = null" />
                 }
                 else
                 {
