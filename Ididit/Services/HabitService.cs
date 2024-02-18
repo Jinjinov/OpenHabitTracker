@@ -21,6 +21,12 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         IEnumerable<HabitModel> habits = Habits!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
 
+        if (_appData.Filters.Search is not null)
+            habits = habits.Where(x => x.Title.Contains(_appData.Filters.Search) || x.Items?.Any(i => i.Title.Contains(_appData.Filters.Search)) == true);
+
+        if (_appData.Filters.FilterByDate is not null)
+            habits = habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date == _appData.Filters.FilterByDate.Value.Date) == true);
+
         if (settings.SelectedCategoryId != 0)
             habits = habits.Where(x => x.CategoryId == settings.SelectedCategoryId);
 

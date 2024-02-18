@@ -21,6 +21,9 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
         IEnumerable<NoteModel> notes = Notes!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
 
+        if (_appData.Filters.Search is not null)
+            notes = notes.Where(x => x.Title.Contains(_appData.Filters.Search) || x.Content.Contains(_appData.Filters.Search));
+
         if (settings.SelectedCategoryId != 0)
             notes = notes.Where(x => x.CategoryId == settings.SelectedCategoryId);
 
