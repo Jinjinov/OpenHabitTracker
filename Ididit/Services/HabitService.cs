@@ -35,7 +35,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
             Sort.Duration => habits.OrderBy(x => x.Duration),
             Sort.RepeatInterval => habits.OrderBy(x => x.GetRepeatInterval()),
             Sort.ElapsedTime => habits.OrderBy(x => x.LastTimeDoneAt),
-            Sort.ElapsedTimeToRepeatIntervalRatio => habits.OrderBy(x => x.ElapsedTimeToRepeatIntervalRatio),
+            Sort.ElapsedTimeToRepeatIntervalRatio => habits.OrderByDescending(x => x.ElapsedTimeToRepeatIntervalRatio),
             _ => habits
         };
     }
