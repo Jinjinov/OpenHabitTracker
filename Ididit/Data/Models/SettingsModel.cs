@@ -16,6 +16,8 @@ public class SettingsModel
 
     public bool ShowLargeCalendar { get; set; }
 
+    public bool DisplayNoteContentAsMarkdown { get; set; }
+
     public bool ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin { get; set; }
 
     public int ElapsedTimeToRepeatIntervalRatioMin { get; set; }

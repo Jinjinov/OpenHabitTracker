@@ -28,7 +28,7 @@ If any of these lifecycle methods throws an exception, synchronously or asynchro
 
 EventCallback<T> Error cannot convert from 'method group' to 'EventCallback'
 
-workaround: TValue="bool" / TValue="int" / TValue="long" for all but <InputText>
+workaround: TValue="int" / TValue="long" for <InputNumber> <InputSelect> <InputDate> <InputRadio> but not <InputCheckbox> <InputText> <InputTextArea>
 
 ---------------------------------------------------------------------------------------------------
 
