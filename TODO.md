@@ -14,10 +14,31 @@ using HtmlAgilityPack; MarkSearchResultsInHtml
 ??? Task CompletedAt / Habit LastTimeDoneAt --> DateTime? DoneAt ???
 
 
-
 calendar:
 	if count is more than 1, click selects the day
 	add option to remove TimeDone
+
+
+search, filter, sort
+	textarea highlight
+	highlight search results
+	add Search box
+	add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
+
+
+dark / light theme
+
+
+help
+
+
+about
+
+
+textarea
+	tabs
+	Markdown
+	make regular markdown text look the same as in textarea
 
 
 
@@ -33,18 +54,7 @@ when task is done, check all task items
 when all habit items are done, habit is done
 when all task items are done, task is done
 
-Note Markdown
-make regular markdown text look the same as in textarea
-
-add Search box
-add Filter by Date (Task CompletedAt / Habit LastTimeDoneAt)
-
 horizontal calendar with vertical weeks
-
-textarea tabs
-
-textarea highlight
-highlight search results
 
 ---------------------------------------------------------------------------------------------------
 
@@ -53,14 +63,9 @@ highlight search results
 		- Ididit.Blazor - Routes.razor
 		- Ididit.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
 
-markdown
 google keep
 google drive
 localization
-dark / light theme
-search, filter, sort
-help
-about
 
 EF Core: use DbContextFactory
 
@@ -117,10 +122,6 @@ pin razor page to Home - in a column - max 4 columns ?
 
 - Note, Task, Habit background color
 
-- settings
-	- theme
-	- language
-
 - localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
 - https://github.com/xaviersolau/BlazorJsonLocalization
 
@@ -128,16 +129,10 @@ pin razor page to Home - in a column - max 4 columns ?
 	- @page "/Error"
 	- app.UseExceptionHandler("/Error");
 
-columns:
-	search, filter, sort
-
 - read Settings from DB before Run()
 
 - categories are filters
 - filters are query parameters
-
-- about
-- help
 
 ---------------------------------------------------------------------------------------------------
 
