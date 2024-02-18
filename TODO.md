@@ -12,7 +12,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-
 calendar:
 	if count is more than 1, click selects the day
 	add option to remove TimeDone
@@ -30,7 +29,7 @@ search, filter, sort
 Show only habits with ratio `over` / `under`
 
 ! dark mode / light mode
-theme: default Bootstrap / Bootswatch
+theme: Bootstrap / Bootswatch
 
 ! help
 
@@ -43,7 +42,6 @@ textarea
 	insert tabs
 	tabs on/off setting
 
-
 start / stop timing
 	add `TimeOnly? Duration` to TaskModel
 
@@ -52,12 +50,12 @@ Item `bool IsDone` -> `DateTime? DoneAt`
 complete TSV import / export
 import / export Markdown
 
-
 repeat:
-	add `PlannedAt` to Habit
+	add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
 	weekly: which day in week
-	monthly: which day (week) in month
+	monthly: which day (or week - second monday) in month
 	yearly: which day (date) in year
+
 
 
 - host 24/7 on Raspberry Pi
