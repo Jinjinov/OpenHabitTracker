@@ -21,11 +21,10 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 ! readme
 
 
-- host 24/7 on Raspberry Pi
-	test fan
-	always on
 
----------------------------------------------------------------------------------------------------
+show elapsed time and ratio
+
+add `Start` / `Stop` timing buttons
 
 div / span - highlight search results
 	`using HtmlAgilityPack; MarkSearchResultsInHtml`
@@ -33,11 +32,15 @@ div / span - highlight search results
 	note Content
 	task, habit Items
 
-add `Start` / `Stop` timing buttons
 
-import / export Markdown
+
+- host 24/7 on Raspberry Pi
+	test fan
+	always on
 
 ---------------------------------------------------------------------------------------------------
+
+import / export Markdown
 
 settings: theme: Bootstrap / Bootswatch
 
