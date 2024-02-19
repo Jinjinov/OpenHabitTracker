@@ -152,58 +152,70 @@ public class TsvBackup(AppData appData)
             category.Tasks ??= new();
             category.Habits ??= new();
 
-            if (record.ContentType == ContentType.Note && category.Notes.FirstOrDefault(x => x.Title == record.Title) is not NoteModel note)
+            ItemsModel? items = null;
+
+            if (record.ContentType == ContentType.Note)
             {
-                note = new()
+                if (category.Notes.FirstOrDefault(x => x.Title == record.Title) is not NoteModel note)
                 {
-                    Title = record.Title,
-                    Priority = record.Priority,
-                    Content = record.Content,
+                    note = new()
+                    {
+                        Title = record.Title,
+                        Priority = record.Priority,
+                        Content = record.Content,
 
-                    CreatedAt = now,
-                    UpdatedAt = now
-                };
+                        CreatedAt = now,
+                        UpdatedAt = now
+                    };
 
-                category.Notes.Add(note);
+                    category.Notes.Add(note);
+                }
+                else
+                {
+                    note.Content += Environment.NewLine + record.Content;
+                }
 
                 continue;
             }
-
-            ItemsModel? items = null;
-
-            if (record.ContentType == ContentType.Task && category.Tasks.FirstOrDefault(x => x.Title == record.Title) is not TaskModel task)
+            else if (record.ContentType == ContentType.Task)
             {
-                task = new()
+                if (category.Tasks.FirstOrDefault(x => x.Title == record.Title) is not TaskModel task)
                 {
-                    Title = record.Title,
-                    Priority = record.Priority,
-                    PlannedAt = record.PlannedAt,
-                    Duration = record.Duration,
+                    task = new()
+                    {
+                        Title = record.Title,
+                        Priority = record.Priority,
+                        PlannedAt = record.PlannedAt,
+                        Duration = record.Duration,
 
-                    CreatedAt = now,
-                    UpdatedAt = now
-                };
+                        CreatedAt = now,
+                        UpdatedAt = now
+                    };
 
-                category.Tasks.Add(task);
+                    category.Tasks.Add(task);
+                }
 
                 items = task;
             }
-            else if (record.ContentType == ContentType.Habit && category.Habits.FirstOrDefault(x => x.Title == record.Title) is not HabitModel habit)
+            else if (record.ContentType == ContentType.Habit)
             {
-                habit = new()
+                if (category.Habits.FirstOrDefault(x => x.Title == record.Title) is not HabitModel habit)
                 {
-                    Title = record.Title,
-                    Priority = record.Priority,
-                    RepeatCount = record.RepeatCount ?? 0,
-                    RepeatInterval = record.RepeatInterval ?? 0,
-                    RepeatPeriod = record.RepeatPeriod ?? 0,
-                    Duration = record.Duration,
+                    habit = new()
+                    {
+                        Title = record.Title,
+                        Priority = record.Priority,
+                        RepeatCount = record.RepeatCount ?? 0,
+                        RepeatInterval = record.RepeatInterval ?? 0,
+                        RepeatPeriod = record.RepeatPeriod ?? 0,
+                        Duration = record.Duration,
 
-                    CreatedAt = now,
-                    UpdatedAt = now
-                };
+                        CreatedAt = now,
+                        UpdatedAt = now
+                    };
 
-                category.Habits.Add(habit);
+                    category.Habits.Add(habit);
+                }
 
                 items = habit;
             }

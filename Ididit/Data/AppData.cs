@@ -497,8 +497,8 @@ public class AppData(IDataAccess dataAccess)
                         {
                             Title = "Note",
                             Priority = Priority.Low,
-                            Content = "Note text",
-                            ContentMarkdown = GetMarkdown("Note text"),
+                            Content = "Note 1 line 1\nLine 2",
+                            ContentMarkdown = GetMarkdown("Note 1 line 1\nLine 2"),
                             CreatedAt = now,
                             UpdatedAt = now
                         },
@@ -506,8 +506,8 @@ public class AppData(IDataAccess dataAccess)
                         {
                             Title = "Note 2",
                             Priority = Priority.Low,
-                            Content = "Note text 2",
-                            ContentMarkdown = GetMarkdown("Note text 2"),
+                            Content = "Note 2 line 1\nLine 2",
+                            ContentMarkdown = GetMarkdown("Note 2 line 1\nLine 2"),
                             CreatedAt = now,
                             UpdatedAt = now
                         }
