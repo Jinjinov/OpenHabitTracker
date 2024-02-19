@@ -18,6 +18,8 @@ public class HabitModel : ItemsModel
 
     internal double ElapsedTimeToRepeatIntervalRatio => ElapsedTime / GetRepeatInterval() * 100.0;
 
+    internal int NonZeroRepeatCount => Math.Max(1, RepeatCount);
+
     internal TimeOnly DurationProxy
     {
         get => Duration ?? TimeOnly.MinValue;
