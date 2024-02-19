@@ -20,18 +20,16 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ! readme
 
-textarea
-	make regular markdown text look the same as in textarea (tabs)
-	insert tabs in multiple rows
-
 start / stop timing
 !	add `TimeOnly? Duration` to TaskModel
-
-! Item `bool IsDone` -> `DateTime? DoneAt`
 
 import / export
 	Markdown
 !	complete TSV import / export
+
+textarea
+	make regular markdown text look the same as in textarea (tabs)
+	insert tabs in multiple rows
 
 repeat:
 	add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval

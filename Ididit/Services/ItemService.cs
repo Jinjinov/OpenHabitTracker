@@ -25,7 +25,7 @@ public class ItemService(IDataAccess dataAccess)
                     Id = i.Id,
                     ParentId = i.ParentId,
                     Title = i.Title,
-                    IsDone = i.IsDone
+                    DoneAt = i.DoneAt
                 }).ToList();
             }
         }
@@ -70,11 +70,13 @@ public class ItemService(IDataAccess dataAccess)
 
     public async Task SetIsDone(ItemModel item, bool done)
     {
-        item.IsDone = done;
+        DateTime now = DateTime.Now;
+
+        item.DoneAt = done ? now : null;
 
         if (await _dataAccess.GetItem(item.Id) is ItemEntity itemEntity)
         {
-            itemEntity.IsDone = done;
+            itemEntity.DoneAt = item.DoneAt;
 
             await _dataAccess.UpdateItem(itemEntity);
         }

@@ -53,7 +53,7 @@ public static class DataExtensions
         entity.Id = model.Id;
         entity.ParentId = model.ParentId;
         entity.Title = model.Title;
-        entity.IsDone = model.IsDone;
+        entity.DoneAt = model.DoneAt;
     }
 
     public static NoteEntity ToEntity(this NoteModel model)

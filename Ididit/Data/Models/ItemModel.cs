@@ -8,5 +8,7 @@ public class ItemModel
 
     public string Title { get; set; } = string.Empty;
 
-    public bool IsDone { get; set; }
+    public DateTime? DoneAt { get; set; }
+
+    internal bool IsDone => DoneAt is not null;
 }

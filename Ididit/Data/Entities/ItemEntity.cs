@@ -8,5 +8,5 @@ public class ItemEntity
 
     public string Title { get; set; } = string.Empty;
 
-    public bool IsDone { get; set; }
+    public DateTime? DoneAt { get; set; }
 }

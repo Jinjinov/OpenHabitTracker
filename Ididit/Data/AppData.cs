@@ -235,7 +235,7 @@ public class AppData(IDataAccess dataAccess)
                 Id = c.Id,
                 ParentId = c.ParentId,
                 Title = c.Title,
-                IsDone = c.IsDone,
+                DoneAt = c.DoneAt,
             }).ToDictionary(x => x.Id);
         }
     }
