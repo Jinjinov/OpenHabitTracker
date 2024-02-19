@@ -25,6 +25,51 @@ public class TsvBackup(AppData appData)
 
         foreach (CategoryModel category in userData.Categories)
         {
+            if (category.Notes?.Count > 0)
+            {
+                foreach (NoteModel note in category.Notes)
+                {
+                    records.Add(new Record
+                    {
+                        Category = category.Title,
+                        Title = note.Title,
+                        Content = note.Content,
+                        Priority = note.Priority
+                    });
+                }
+            }
+            if (category.Tasks?.Count > 0)
+            {
+                foreach (TaskModel task in category.Tasks)
+                {
+                    if (task.Items?.Count > 0)
+                    {
+                        foreach (ItemModel item in task.Items)
+                        {
+                            records.Add(new Record
+                            {
+                                Category = category.Title,
+                                Title = task.Title,
+                                Content = item.Title,
+                                Priority = task.Priority,
+                                PlannedAt = task.PlannedAt,
+                                Duration = task.Duration
+                            });
+                        }
+                    }
+                    else
+                    {
+                        records.Add(new Record
+                        {
+                            Category = category.Title,
+                            Title = task.Title,
+                            Priority = task.Priority,
+                            PlannedAt = task.PlannedAt,
+                            Duration = task.Duration
+                        });
+                    }
+                }
+            }
             if (category.Habits?.Count > 0)
             {
                 foreach (HabitModel habit in category.Habits)
@@ -36,8 +81,8 @@ public class TsvBackup(AppData appData)
                             records.Add(new Record
                             {
                                 Category = category.Title,
-                                Habit = habit.Title,
-                                Item = item.Title,
+                                Title = habit.Title,
+                                Content = item.Title,
                                 Priority = habit.Priority,
                                 RepeatCount = habit.RepeatCount,
                                 RepeatInterval = habit.RepeatInterval,
@@ -51,7 +96,7 @@ public class TsvBackup(AppData appData)
                         records.Add(new Record
                         {
                             Category = category.Title,
-                            Habit = habit.Title,
+                            Title = habit.Title,
                             Priority = habit.Priority,
                             RepeatCount = habit.RepeatCount,
                             RepeatInterval = habit.RepeatInterval,
@@ -100,11 +145,11 @@ public class TsvBackup(AppData appData)
 
             category.Habits ??= new();
 
-            if (category.Habits.FirstOrDefault(x => x.Title == record.Habit) is not HabitModel habit)
+            if (category.Habits.FirstOrDefault(x => x.Title == record.Title) is not HabitModel habit)
             {
                 habit = new()
                 {
-                    Title = record.Habit,
+                    Title = record.Title,
                     Priority = record.Priority,
                     RepeatCount = record.RepeatCount,
                     RepeatInterval = record.RepeatInterval,
@@ -118,12 +163,12 @@ public class TsvBackup(AppData appData)
                 category.Habits.Add(habit);
             }
 
-            if (string.IsNullOrEmpty(record.Item))
+            if (string.IsNullOrEmpty(record.Content))
                 continue;
 
             habit.Items ??= new();
 
-            ItemModel item = new() { Title = record.Item };
+            ItemModel item = new() { Title = record.Content };
 
             habit.Items.Add(item);
         }
@@ -134,12 +179,13 @@ public class TsvBackup(AppData appData)
     class Record
     {
         public string Category { get; set; } = string.Empty;
-        public string Habit { get; set; } = string.Empty;
-        public string Item { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
         public Priority Priority { get; set; }
+        public TimeOnly? Duration { get; set; }
+        public DateTime? PlannedAt { get; set; }
         public int RepeatCount { get; set; }
         public int RepeatInterval { get; set; }
         public Period RepeatPeriod { get; set; }
-        public TimeOnly? Duration { get; set; }
     }
 }
