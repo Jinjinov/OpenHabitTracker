@@ -1,8 +1,10 @@
-﻿@using Ididit.Data.Models
+﻿@using Ididit.Data
+@using Ididit.Data.Models
 @using Ididit.Services
 
 @inject NoteService NoteService
 @inject JsInterop JsInterop
+@inject AppData AppData
 
 <div class="input-group flex-nowrap">
     <PriorityComponent Model="Note" />
@@ -46,6 +48,7 @@
     async Task SaveContent(NoteModel note, string content)
     {
         note.Content = content;
+        note.ContentMarkdown = AppData.GetMarkdown(content);
 
         await NoteService.UpdateNote();
     }

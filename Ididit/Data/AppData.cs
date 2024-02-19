@@ -1,11 +1,14 @@
 ﻿using Ididit.Data.Entities;
 using Ididit.Data.Models;
+using Markdig;
 
 namespace Ididit.Data;
 
 public class AppData(IDataAccess dataAccess)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
+
+    static readonly MarkdownPipeline _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseSoftlineBreakAsHardlineBreak().Build();
 
     public SettingsModel Settings { get; set; } = new();
     public Dictionary<long, HabitModel>? Habits { get; set; }
@@ -30,6 +33,11 @@ public class AppData(IDataAccess dataAccess)
             return "◯";
 
         return Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
+    }
+
+    public string GetMarkdown(string content)
+    {
+        return Settings.DisplayNoteContentAsMarkdown ? Markdown.ToHtml(content, _markdownPipeline) : content;
     }
 
     public async Task UpdateModel(InfoModel model) // TODO: learn to use generics, perhaps you will like them...
@@ -166,7 +174,8 @@ public class AppData(IDataAccess dataAccess)
                 CreatedAt = n.CreatedAt,
                 UpdatedAt = n.UpdatedAt,
 
-                Content = n.Content
+                Content = n.Content,
+                ContentMarkdown = GetMarkdown(n.Content)
             }).ToDictionary(x => x.Id);
         }
     }
@@ -481,6 +490,7 @@ public class AppData(IDataAccess dataAccess)
                             Title = "Note",
                             Priority = Priority.Low,
                             Content = "Note text",
+                            ContentMarkdown = GetMarkdown("Note text"),
                             CreatedAt = now,
                             UpdatedAt = now
                         },
@@ -489,6 +499,7 @@ public class AppData(IDataAccess dataAccess)
                             Title = "Note 2",
                             Priority = Priority.Low,
                             Content = "Note text 2",
+                            ContentMarkdown = GetMarkdown("Note text 2"),
                             CreatedAt = now,
                             UpdatedAt = now
                         }

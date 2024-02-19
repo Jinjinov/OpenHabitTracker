@@ -69,6 +69,8 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         NewNote.CreatedAt = now;
         NewNote.UpdatedAt = now;
 
+        NewNote.ContentMarkdown = _appData.GetMarkdown(NewNote.Content);
+
         NoteEntity note = NewNote.ToEntity();
 
         await _dataAccess.AddNote(note);
