@@ -205,7 +205,8 @@ public class AppData(IDataAccess dataAccess)
 
                 StartedAt = t.StartedAt,
                 CompletedAt = t.CompletedAt,
-                PlannedAt = t.PlannedAt
+                PlannedAt = t.PlannedAt,
+                Duration = t.Duration
             }).ToDictionary(x => x.Id);
         }
     }
@@ -523,6 +524,7 @@ public class AppData(IDataAccess dataAccess)
                                 new() { Title = "Task item 2" }
                             },
                             PlannedAt = now.AddDays(1),
+                            Duration = new TimeOnly(1,30),
                             CreatedAt = now,
                             UpdatedAt = now
                         },
@@ -536,6 +538,7 @@ public class AppData(IDataAccess dataAccess)
                                 new() { Title = "Task item 2" }
                             },
                             PlannedAt = now.AddDays(2),
+                            Duration = new TimeOnly(1,30),
                             CreatedAt = now,
                             UpdatedAt = now
                         }

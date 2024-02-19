@@ -20,8 +20,7 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ! readme
 
-start / stop timing
-!	add `TimeOnly? Duration` to TaskModel
+add `Start` / `Stop` timing buttons
 
 import / export
 	Markdown

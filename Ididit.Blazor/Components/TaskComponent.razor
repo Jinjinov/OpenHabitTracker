@@ -18,6 +18,11 @@
     <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.PlannedAt" ValueExpression="() => Task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(Task, plannedAt)" />
 </div>
 
+<div class="input-group">
+    <label class="input-group-text" for="durationInput">Duration</label>
+    <InputDate class="form-control" id="durationInput" Value="Task.DurationProxy" ValueExpression="() => Task.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(Task, duration)" Type="InputDateType.Time" />
+</div>
+
 @if (Task.StartedAt is not null)
 {
     <div class="p-1 border rounded-0">
@@ -57,6 +62,13 @@
     async Task SavePlannedAt(TaskModel task, DateTime? plannedAt)
     {
         task.PlannedAt = plannedAt;
+
+        await TaskService.UpdateTask();
+    }
+
+    async Task SaveDuration(TaskModel task, TimeOnly duration)
+    {
+        task.DurationProxy = duration;
 
         await TaskService.UpdateTask();
     }

@@ -5,7 +5,7 @@ public enum Sort
     Category,
     Priority,
     Title,
-    PlannedTime,
+    PlannedAt,
     Duration,
     RepeatInterval,
     ElapsedTime,

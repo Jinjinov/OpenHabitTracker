@@ -133,6 +133,7 @@ public static class DataExtensions
         entity.StartedAt = model.StartedAt;
         entity.CompletedAt = model.CompletedAt;
         entity.PlannedAt = model.PlannedAt;
+        entity.Duration = model.Duration;
     }
 
     public static TimeEntity ToEntity(this TimeModel model)

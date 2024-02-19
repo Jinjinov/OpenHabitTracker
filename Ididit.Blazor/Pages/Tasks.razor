@@ -42,6 +42,11 @@
                 <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.NewTask.PlannedAt" />
             </div>
 
+            <div class="input-group">
+                <label class="input-group-text" for="durationInput">Duration</label>
+                <InputDate class="form-control" id="durationInput" @bind-Value="TaskService.NewTask.DurationProxy" Type="InputDateType.Time" />
+            </div>
+
             <CategoryComponent Model="TaskService.NewTask" />
         </div>
     }
