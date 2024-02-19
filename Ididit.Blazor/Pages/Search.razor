@@ -57,7 +57,7 @@
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">Category</span>
                 <InputSelect class="form-select col-8" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long" ValueChanged="SaveCategory">
-                    <option value="0" disabled selected hidden>All</option>
+                    <option value="0" selected>All</option>
                     @foreach (CategoryModel category in CategoryService.Categories)
                     {
                         <option @key="category" value="@category.Id">@category.Title</option>
