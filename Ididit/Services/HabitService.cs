@@ -178,7 +178,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
                 await _dataAccess.UpdateTime(timeEntity);
             }
 
-            if (habit.LastTimeDoneAt < now)
+            if (habit.LastTimeDoneAt is null || habit.LastTimeDoneAt < now)
                 await SetLastTimeDone(habit, now);
         }
         else
@@ -222,7 +222,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         timeModel.Id = timeEntity.Id;
 
-        if (habit.LastTimeDoneAt < dateTime)
+        if (habit.LastTimeDoneAt is null || habit.LastTimeDoneAt < dateTime)
             await SetLastTimeDone(habit, dateTime);
     }
 
