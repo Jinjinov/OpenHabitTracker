@@ -62,7 +62,14 @@
                         <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => OpenSelected(note.Id)">@note.Title</button>
                     </div>
 
-                    <div class="form-control" style="white-space: pre-wrap">@note.Content</div>
+                    if (AppData.Settings.DisplayNoteContentAsMarkdown)
+                    {
+                        <div class="form-control markdown-block-margin">@((MarkupString)note.ContentMarkdown)</div>
+                    }
+                    else
+                    {
+                        <div class="form-control" style="white-space: pre-wrap">@note.Content</div>
+                    }
                 }
             </div>
         }

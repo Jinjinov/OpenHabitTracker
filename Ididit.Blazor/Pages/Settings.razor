@@ -59,6 +59,13 @@
         </div>
 
         <div class="input-group flex-nowrap">
+            <div class="input-group-text">
+                <InputCheckbox id="DisplayNoteContentAsMarkdown" class="form-check-input mt-0" Value="_settings.DisplayNoteContentAsMarkdown" ValueExpression="() => _settings.DisplayNoteContentAsMarkdown" ValueChanged="SaveDisplayNoteContentAsMarkdown" />
+            </div>
+            <label for="DisplayNoteContentAsMarkdown" class="input-group-text flex-grow-1 text-wrap">Display note content as markdown</label>
+        </div>
+
+        <div class="input-group flex-nowrap">
             <span class="input-group-text col-4">Week start</span>
             <InputSelect class="form-select col-8" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
@@ -124,6 +131,13 @@
     async Task SaveShowLargeCalendar(bool show)
     {
         _settings.ShowLargeCalendar = show;
+
+        await UpdateSettings();
+    }
+
+    async Task SaveDisplayNoteContentAsMarkdown(bool show)
+    {
+        _settings.DisplayNoteContentAsMarkdown = show;
 
         await UpdateSettings();
     }
