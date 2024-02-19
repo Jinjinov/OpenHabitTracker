@@ -27,7 +27,7 @@ import / export
 
 
 textarea
-	make regular markdown text look the same as in textarea (tabs)
+	make markdown Tabs look the same as in textarea
 	insert tabs in multiple rows
 
 repeat:
@@ -36,12 +36,11 @@ repeat:
 	monthly: which day (or week/day - second monday) in month
 	yearly: which day (date) in year
 
-search, filter, sort
+div / span - highlight search results
 	`using HtmlAgilityPack; MarkSearchResultsInHtml`
-	div / span - highlight search results
-		title
-		note content
-		task, habit items
+	title
+	note content
+	task, habit items
 
 Show only habits with ratio `over` / `under`
 
