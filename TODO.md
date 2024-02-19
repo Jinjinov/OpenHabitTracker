@@ -34,13 +34,7 @@ settings:
 ! about
 
 textarea
-!	`using Markdig; Markdown.ToHtml`
-	static readonly MarkdownPipeline _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseSoftlineBreakAsHardlineBreak().Build();
-	DetailsMarkdownHtml = Markdown.ToHtml(_detailsText, _markdownPipeline);
-	<Div Class="child-block-margin" Border=Border.Is1.RoundedZero Padding=Padding.Is1>
-	@((MarkupString)task.DetailsMarkdownHtml)
-!	Markdown
-!	make regular markdown text look the same as in textarea
+!	make regular markdown text look the same as in textarea (tabs)
 	insert tabs
 	tabs on/off setting
 
