@@ -29,14 +29,17 @@ public class TsvBackup(AppData appData)
             {
                 foreach (NoteModel note in category.Notes)
                 {
-                    records.Add(new Record
+                    foreach (string line in note.Content.Split('\n'))
                     {
-                        ContentType = ContentType.Note,
-                        Category = category.Title,
-                        Title = note.Title,
-                        Content = note.Content,
-                        Priority = note.Priority
-                    });
+                        records.Add(new Record
+                        {
+                            ContentType = ContentType.Note,
+                            Category = category.Title,
+                            Title = note.Title,
+                            Content = line,
+                            Priority = note.Priority
+                        });
+                    }
                 }
             }
             if (category.Tasks?.Count > 0)
