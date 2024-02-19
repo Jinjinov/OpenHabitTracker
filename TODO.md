@@ -33,9 +33,13 @@ settings:
 
 ! about
 
+! website
+
+! readme
+
 textarea
-!	make regular markdown text look the same as in textarea (tabs)
-	insert tabs
+	make regular markdown text look the same as in textarea (tabs)
+	insert tabs in multiple rows
 	tabs on/off setting
 
 start / stop timing
