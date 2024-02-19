@@ -25,29 +25,32 @@
         </div>
     </div>
 
-    <div class="row flex-grow-1 parent-row">
-        <CascadingValue Name="StateChanged" Value=@_stateChanged>
-            <CascadingValue Name="WindowDimensions" Value=@_windowDimensions>
+    @if (_windowDimensions is not null)
+    {
+        <div class="row flex-grow-1 parent-row">
+            <CascadingValue Name="StateChanged" Value=@_stateChanged>
+                <CascadingValue Name="WindowDimensions" Value=@_windowDimensions>
 
-                @if (_dynamicComponentType is not null)
-                {
-                    <div class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px">
+                    @if (_dynamicComponentType is not null)
+                    {
+                        <div class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px">
 
-                        <div class="input-group flex-nowrap my-1">
-                            <span class="input-group-text flex-grow-1">@_titleByTypeName[_dynamicComponentType.Name]</span>
-                            <button class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
+                            <div class="input-group flex-nowrap my-1">
+                                <span class="input-group-text flex-grow-1">@_titleByTypeName[_dynamicComponentType.Name]</span>
+                                <button class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
+                            </div>
+
+                            <DynamicComponent Type="_dynamicComponentType" Parameters="_dynamicComponentParametersByName.GetValueOrDefault(_dynamicComponentType.Name)" />
+
                         </div>
+                    }
 
-                        <DynamicComponent Type="_dynamicComponentType" Parameters="_dynamicComponentParametersByName.GetValueOrDefault(_dynamicComponentType.Name)" />
+                    @Body
 
-                    </div>
-                }
-
-                @Body
-
+                </CascadingValue>
             </CascadingValue>
-        </CascadingValue>
-    </div>
+        </div>
+    }
 </div>
 
 <div id="blazor-error-ui">
@@ -110,14 +113,6 @@
 
         if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
             SelectComponent(AppData.Settings.StartSidebar);
-
-        if (!string.IsNullOrEmpty(AppData.Settings.StartPage))
-        {
-            if (!NavigationManager.Uri.Contains(AppData.Settings.StartPage)) // fix for ERR_TOO_MANY_REDIRECTS on Blazor Server which calls OnInitializedAsync twice
-            {
-                NavigationManager.NavigateTo(AppData.Settings.StartPage);
-            }
-        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -125,6 +120,14 @@
         if (firstRender)
         {
             _windowDimensions = await JsInterop.GetWindowDimensions();
+
+            if (!string.IsNullOrEmpty(AppData.Settings.StartPage))
+            {
+                if (!NavigationManager.Uri.Contains(AppData.Settings.StartPage)) // fix for ERR_TOO_MANY_REDIRECTS on Blazor Server which calls OnInitializedAsync twice
+                {
+                    NavigationManager.NavigateTo(AppData.Settings.StartPage);
+                }
+            }
         }
     }
 
