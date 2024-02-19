@@ -24,7 +24,7 @@
     }
     else
     {
-        foreach (InfoModel model in TrashService.Models)
+        foreach (ContentModel model in TrashService.Models)
         {
             <div class="input-group flex-nowrap">
                 <span class="input-group-text flex-grow-1 text-wrap">@model.Title</span>
@@ -68,14 +68,14 @@
         await OnStateChanged();
     }
 
-    async Task Restore(InfoModel model)
+    async Task Restore(ContentModel model)
     {
         await TrashService.Restore(model);
 
         await OnStateChanged();
     }
 
-    async Task Delete(InfoModel model)
+    async Task Delete(ContentModel model)
     {
         await TrashService.Delete(model);
 

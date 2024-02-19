@@ -18,7 +18,7 @@ public class AppData(IDataAccess dataAccess)
     public Dictionary<long, ItemModel>? Items { get; set; }
     public Dictionary<long, CategoryModel>? Categories { get; set; }
     public Dictionary<long, PriorityModel>? Priorities { get; set; }
-    public List<InfoModel>? Trash { get; set; }
+    public List<ContentModel>? Trash { get; set; }
 
     public Filters Filters { get; set; } = new();
 
@@ -41,7 +41,7 @@ public class AppData(IDataAccess dataAccess)
         return Markdown.ToHtml(content, _markdownPipeline);
     }
 
-    public async Task UpdateModel(InfoModel model) // TODO: learn to use generics, perhaps you will like them...
+    public async Task UpdateModel(ContentModel model) // TODO: learn to use generics, perhaps you will like them...
     {
         if (model is HabitModel habitModel && await _dataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)
         {

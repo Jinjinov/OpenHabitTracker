@@ -1,6 +1,6 @@
 ﻿namespace Ididit.Data.Models;
 
-public class InfoModel
+public class ContentModel
 {
     internal long Id { get; set; }
 

@@ -9,14 +9,14 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
     private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    public IReadOnlyList<InfoModel>? Models => _appData.Trash;
+    public IReadOnlyList<ContentModel>? Models => _appData.Trash;
 
     public async Task Initialize()
     {
         await _appData.InitializeTrash();
     }
 
-    public async Task Restore(InfoModel model) // TODO: learn to use generics, perhaps you will like them...
+    public async Task Restore(ContentModel model) // TODO: learn to use generics, perhaps you will like them...
     {
         model.IsDeleted = false;
 
@@ -68,7 +68,7 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
         if (Models is null)
             return;
 
-        foreach (InfoModel model in Models)
+        foreach (ContentModel model in Models)
         {
             model.IsDeleted = false;
 
@@ -89,7 +89,7 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
         _appData.Trash?.Clear();
     }
 
-    public async Task Delete(InfoModel model) // TODO: learn to use generics, perhaps you will like them...
+    public async Task Delete(ContentModel model) // TODO: learn to use generics, perhaps you will like them...
     {
         if (model is NoteModel)
         {

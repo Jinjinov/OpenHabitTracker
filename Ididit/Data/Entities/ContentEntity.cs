@@ -1,6 +1,6 @@
 ﻿namespace Ididit.Data.Entities;
 
-public class InfoEntity
+public class ContentEntity
 {
     public long Id { get; set; }
 

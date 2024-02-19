@@ -1,6 +1,6 @@
 ﻿namespace Ididit.Data.Entities;
 
-public class TaskEntity : InfoEntity
+public class TaskEntity : ContentEntity
 {
     public DateTime? PlannedAt { get; set; }
 

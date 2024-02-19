@@ -1,6 +1,6 @@
 ﻿namespace Ididit.Data.Models;
 
-public class NoteModel : InfoModel
+public class NoteModel : ContentModel
 {
     public string Content { get; set; } = string.Empty;
 

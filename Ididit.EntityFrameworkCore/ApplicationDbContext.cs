@@ -9,7 +9,7 @@ namespace Ididit.EntityFrameworkCore;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public DbSet<InfoEntity> Infos { get; set; }
+    public DbSet<ContentEntity> Contents { get; set; }
     public DbSet<HabitEntity> Habits { get; set; }
     public DbSet<NoteEntity> Notes { get; set; }
     public DbSet<TaskEntity> Tasks { get; set; }
@@ -21,7 +21,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<InfoEntity>().HasIndex(x => x.CategoryId);
+        modelBuilder.Entity<ContentEntity>().HasIndex(x => x.CategoryId);
 
         modelBuilder.Entity<TimeEntity>().HasIndex(x => x.HabitId);
 

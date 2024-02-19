@@ -1,6 +1,6 @@
 ﻿namespace Ididit.Data.Entities;
 
-public class HabitEntity : InfoEntity
+public class HabitEntity : ContentEntity
 {
     public int RepeatCount { get; set; }
 
