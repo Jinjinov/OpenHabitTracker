@@ -4,6 +4,8 @@ public class SettingsModel
 {
     internal long Id { get; set; }
 
+    public bool IsDarkMode { get; set; }
+
     public string StartPage { get; set; } = string.Empty;
 
     public string StartSidebar { get; set; } = string.Empty;

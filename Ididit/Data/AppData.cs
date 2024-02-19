@@ -76,6 +76,7 @@ public class AppData(IDataAccess dataAccess)
                 Settings = new SettingsModel
                 {
                     Id = settingsEntity.Id,
+                    IsDarkMode = settingsEntity.IsDarkMode,
                     StartPage = settingsEntity.StartPage,
                     StartSidebar = settingsEntity.StartSidebar,
                     FirstDayOfWeek = settingsEntity.FirstDayOfWeek,
@@ -94,6 +95,7 @@ public class AppData(IDataAccess dataAccess)
             {
                 Settings = new SettingsModel
                 {
+                    IsDarkMode = true,
                     StartPage = "",
                     StartSidebar = "",
                     FirstDayOfWeek = DayOfWeek.Monday,
@@ -453,6 +455,7 @@ public class AppData(IDataAccess dataAccess)
         {
             Settings = new()
             {
+                IsDarkMode = true,
                 StartPage = "",
                 StartSidebar = "",
                 FirstDayOfWeek = DayOfWeek.Monday,

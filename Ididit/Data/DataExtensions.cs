@@ -98,6 +98,7 @@ public static class DataExtensions
     public static void CopyToEntity(this SettingsModel model, SettingsEntity entity)
     {
         entity.Id = model.Id;
+        entity.IsDarkMode = model.IsDarkMode;
         entity.StartPage = model.StartPage;
         entity.StartSidebar = model.StartSidebar;
         entity.FirstDayOfWeek = model.FirstDayOfWeek;

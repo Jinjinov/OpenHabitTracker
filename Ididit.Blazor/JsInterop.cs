@@ -24,6 +24,18 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         return await module.InvokeAsync<string>("showPrompt", message);
     }
 
+    public async ValueTask SetTheme(string theme)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("setTheme", theme);
+    }
+
+    public async ValueTask FocusElement(ElementReference element)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("focusElement", element);
+    }
+
     public async Task<Dimensions> GetWindowDimensions()
     {
         IJSObjectReference module = await _moduleTask.Value;
@@ -34,12 +46,6 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
     {
         IJSObjectReference module = await _moduleTask.Value;
         return await module.InvokeAsync<Dimensions>("getElementDimensions", element);
-    }
-
-    public async ValueTask FocusElement(ElementReference element)
-    {
-        IJSObjectReference module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("focusElement", element);
     }
 
     public async ValueTask SaveAsUTF8(string filename, string content)

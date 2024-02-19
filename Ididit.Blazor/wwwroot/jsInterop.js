@@ -5,17 +5,12 @@ export function showPrompt(message) {
   return prompt(message, 'Type anything here');
 }
 
+export function setTheme(theme) {
+    document.documentElement.setAttribute('data-bs-theme', theme);
+};
+
 export function focusElement(element) {
     element.focus();
-}
-
-export function saveAsFile(filename, bytesBase64) {
-    var link = document.createElement('a');
-    link.download = filename;
-    link.href = "data:application/octet-stream;base64," + bytesBase64;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
 }
 
 export function getWindowDimensions() {
@@ -30,6 +25,15 @@ export function getElementDimensions(element) {
         width: element.clientWidth,
         height: element.clientHeight
     };
+}
+
+export function saveAsFile(filename, bytesBase64) {
+    var link = document.createElement('a');
+    link.download = filename;
+    link.href = "data:application/octet-stream;base64," + bytesBase64;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 function calculateAutoHeight(e) {

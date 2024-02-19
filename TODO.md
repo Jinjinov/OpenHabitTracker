@@ -14,7 +14,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 settings:
 	theme: Bootstrap / Bootswatch
-!	dark mode / light mode
 
 ! help
 
