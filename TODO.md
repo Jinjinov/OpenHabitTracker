@@ -12,8 +12,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-
-
 ! help
 
 ! about
@@ -23,32 +21,11 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 ! readme
 
 
-
-import / export
-	Markdown
-!	complete TSV import / export
-
-
-
-
-
-
-
 - host 24/7 on Raspberry Pi
 	test fan
 	always on
 
 ---------------------------------------------------------------------------------------------------
-
-textarea Tabs
-	make markdown Tabs look the same as in textarea
-	insert Tabs in multiple rows
-
-repeat:
-	add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
-	weekly: which day in week
-	monthly: which day (or week/day - second monday) in month
-	yearly: which day (date) in year
 
 div / span - highlight search results
 	`using HtmlAgilityPack; MarkSearchResultsInHtml`
@@ -56,11 +33,25 @@ div / span - highlight search results
 	note Content
 	task, habit Items
 
-Show only habits with ratio `over` / `under`
+add `Start` / `Stop` timing buttons
+
+import / export Markdown
+
+---------------------------------------------------------------------------------------------------
 
 settings: theme: Bootstrap / Bootswatch
 
-add `Start` / `Stop` timing buttons
+repeat:
+	add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
+	weekly: which day in week
+	monthly: which day (or week/day - second monday) in month
+	yearly: which day (date) in year
+
+textarea Tabs
+	make markdown Tabs look the same as in textarea
+	insert Tabs in multiple rows
+
+Show only habits with ratio `over` / `under`
 
 when habit is done, uncheck all habit items
 when task is done, check all task items

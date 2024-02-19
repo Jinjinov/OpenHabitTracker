@@ -194,9 +194,9 @@ public class TsvBackup(AppData appData)
                 {
                     Title = record.Title,
                     Priority = record.Priority,
-                    RepeatCount = record.RepeatCount,
-                    RepeatInterval = record.RepeatInterval,
-                    RepeatPeriod = record.RepeatPeriod,
+                    RepeatCount = record.RepeatCount ?? 0,
+                    RepeatInterval = record.RepeatInterval ?? 0,
+                    RepeatPeriod = record.RepeatPeriod ?? 0,
                     Duration = record.Duration,
 
                     CreatedAt = now,
@@ -230,8 +230,8 @@ public class TsvBackup(AppData appData)
         public Priority Priority { get; set; }
         public TimeOnly? Duration { get; set; }
         public DateTime? PlannedAt { get; set; }
-        public int RepeatCount { get; set; }
-        public int RepeatInterval { get; set; }
-        public Period RepeatPeriod { get; set; }
+        public int? RepeatCount { get; set; }
+        public int? RepeatInterval { get; set; }
+        public Period? RepeatPeriod { get; set; }
     }
 }
