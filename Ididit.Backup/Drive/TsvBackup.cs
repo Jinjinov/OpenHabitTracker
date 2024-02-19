@@ -31,6 +31,7 @@ public class TsvBackup(AppData appData)
                 {
                     records.Add(new Record
                     {
+                        ContentType = ContentType.Note,
                         Category = category.Title,
                         Title = note.Title,
                         Content = note.Content,
@@ -48,6 +49,7 @@ public class TsvBackup(AppData appData)
                         {
                             records.Add(new Record
                             {
+                                ContentType = ContentType.Task,
                                 Category = category.Title,
                                 Title = task.Title,
                                 Content = item.Title,
@@ -61,6 +63,7 @@ public class TsvBackup(AppData appData)
                     {
                         records.Add(new Record
                         {
+                            ContentType = ContentType.Task,
                             Category = category.Title,
                             Title = task.Title,
                             Priority = task.Priority,
@@ -80,6 +83,7 @@ public class TsvBackup(AppData appData)
                         {
                             records.Add(new Record
                             {
+                                ContentType = ContentType.Habit,
                                 Category = category.Title,
                                 Title = habit.Title,
                                 Content = item.Title,
@@ -95,6 +99,7 @@ public class TsvBackup(AppData appData)
                     {
                         records.Add(new Record
                         {
+                            ContentType = ContentType.Habit,
                             Category = category.Title,
                             Title = habit.Title,
                             Priority = habit.Priority,
@@ -143,9 +148,47 @@ public class TsvBackup(AppData appData)
                 userData.Categories.Add(category);
             }
 
+            category.Notes ??= new();
+            category.Tasks ??= new();
             category.Habits ??= new();
 
-            if (category.Habits.FirstOrDefault(x => x.Title == record.Title) is not HabitModel habit)
+            if (record.ContentType == ContentType.Note && category.Notes.FirstOrDefault(x => x.Title == record.Title) is not NoteModel note)
+            {
+                note = new()
+                {
+                    Title = record.Title,
+                    Priority = record.Priority,
+                    Content = record.Content,
+
+                    CreatedAt = now,
+                    UpdatedAt = now
+                };
+
+                category.Notes.Add(note);
+
+                continue;
+            }
+
+            ItemsModel? items = null;
+
+            if (record.ContentType == ContentType.Task && category.Tasks.FirstOrDefault(x => x.Title == record.Title) is not TaskModel task)
+            {
+                task = new()
+                {
+                    Title = record.Title,
+                    Priority = record.Priority,
+                    PlannedAt = record.PlannedAt,
+                    Duration = record.Duration,
+
+                    CreatedAt = now,
+                    UpdatedAt = now
+                };
+
+                category.Tasks.Add(task);
+
+                items = task;
+            }
+            else if (record.ContentType == ContentType.Habit && category.Habits.FirstOrDefault(x => x.Title == record.Title) is not HabitModel habit)
             {
                 habit = new()
                 {
@@ -161,16 +204,18 @@ public class TsvBackup(AppData appData)
                 };
 
                 category.Habits.Add(habit);
+
+                items = habit;
             }
 
-            if (string.IsNullOrEmpty(record.Content))
-                continue;
+            if (items is not null && !string.IsNullOrEmpty(record.Content))
+            {
+                items.Items ??= new();
 
-            habit.Items ??= new();
+                ItemModel item = new() { Title = record.Content };
 
-            ItemModel item = new() { Title = record.Content };
-
-            habit.Items.Add(item);
+                items.Items.Add(item);
+            }
         }
 
         await _appData.SetUserData(userData);
@@ -178,6 +223,7 @@ public class TsvBackup(AppData appData)
 
     class Record
     {
+        public ContentType ContentType { get; set; }
         public string Category { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
