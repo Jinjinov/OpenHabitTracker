@@ -12,15 +12,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-search, filter, sort
-	`using HtmlAgilityPack; MarkSearchResultsInHtml`
-	div / span - highlight search results
-		title
-		note content
-		task, habit items
-
-Show only habits with ratio `over` / `under`
-
 settings:
 	theme: Bootstrap / Bootswatch
 !	dark mode / light mode
@@ -36,12 +27,12 @@ settings:
 textarea
 	make regular markdown text look the same as in textarea (tabs)
 	insert tabs in multiple rows
-	tabs on/off setting
+!	tabs on/off setting
 
 start / stop timing
-	add `TimeOnly? Duration` to TaskModel
+!	add `TimeOnly? Duration` to TaskModel
 
-Item `bool IsDone` -> `DateTime? DoneAt`
+! Item `bool IsDone` -> `DateTime? DoneAt`
 
 import / export
 	Markdown
@@ -52,6 +43,15 @@ repeat:
 	weekly: which day in week
 	monthly: which day (or week/day - second monday) in month
 	yearly: which day (date) in year
+
+search, filter, sort
+	`using HtmlAgilityPack; MarkSearchResultsInHtml`
+	div / span - highlight search results
+		title
+		note content
+		task, habit items
+
+Show only habits with ratio `over` / `under`
 
 
 
