@@ -20,11 +20,11 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ! readme
 
-add `Start` / `Stop` timing buttons
-
 import / export
 	Markdown
 !	complete TSV import / export
+
+
 
 textarea
 	make regular markdown text look the same as in textarea (tabs)
@@ -46,6 +46,8 @@ search, filter, sort
 Show only habits with ratio `over` / `under`
 
 settings: theme: Bootstrap / Bootswatch
+
+add `Start` / `Stop` timing buttons
 
 
 
