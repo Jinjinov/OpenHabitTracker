@@ -150,7 +150,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         habit.TimesDone.Add(timeModel);
 
-        habit.RefreshTimesDoneByDay();
+        habit.AddTimesDoneByDay(timeModel);
 
         TimeEntity timeEntity = timeModel.ToEntity();
 
@@ -214,7 +214,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         habit.TimesDone.Add(timeModel);
 
-        habit.RefreshTimesDoneByDay();
+        habit.AddTimesDoneByDay(timeModel);
 
         TimeEntity timeEntity = timeModel.ToEntity();
 
@@ -233,7 +233,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess)
 
         habit.TimesDone.Remove(timeModel);
 
-        habit.RefreshTimesDoneByDay();
+        habit.RemoveTimesDoneByDay(timeModel);
 
         await _dataAccess.RemoveTime(timeModel.Id);
 

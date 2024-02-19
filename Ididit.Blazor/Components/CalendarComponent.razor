@@ -41,20 +41,17 @@ else
                 string text = dateTime.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "text-warning" : "text-secondary";
                 if (dateTime.Month == _calendarParams.FirstDayOfMonth.Month)
                     text += "-emphasis";
-                string border = dateTime.Date == DateTime.Today.Date ? "border-4 border-primary-subtle" : "";
+                string border = dateTime == selectedDateTime ? "border-4 border-success-subtle" : dateTime.Date == DateTime.Today.Date ? "border-4 border-primary-subtle" : "";
                 string background = "bg-body-tertiary";
                 string timesDone = "";
-                int count = 0;
                 List<TimeModel>? list = null;
 
-                if (Habit.TimesDoneByDay.TryGetValue(dateTime, out list))
+                if (Habit.TimesDoneByDay.TryGetValue(dateTime, out list) && list.Count > 0)
                 {
-                    count = list.Count;
+                    if (list.Count > 1)
+                        timesDone = $"({list.Count})";
 
-                    if (count > 1)
-                        timesDone = $"({count})";
-
-                    if (count < Habit.RepeatCount)
+                    if (list.Count < Habit.RepeatCount)
                         background = "bg-warning-subtle";
                     else
                         background = "bg-success-subtle";
@@ -62,10 +59,21 @@ else
 
                 <button class="@($"border {border} {text} d-flex {background}")"
                         style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
-                        @onclick="() => count < Habit.RepeatCount ? AddTimeDone(dateTime) : RemoveTimeDone(list)">
+                        @onclick="() => DayClicked(dateTime, list)">
                     @dateTime.Day<small>@timesDone</small>
                 </button>
             }
+        </div>
+    }
+
+    if (selectedDateTime is not null)
+    {
+        <div class="input-group mt-1">
+            <button class="btn btn-outline-primary" @onclick="RemoveFromSelectedDay"><i class="bi bi-dash"></i></button>
+
+            <span class="input-group-text flex-grow-1" style="justify-content: center;">@(selectedTimeList?.Count ?? 0)</span>
+
+            <button class="btn btn-outline-primary" @onclick="AddToSelectedDay"><i class="bi bi-plus"></i></button>
         </div>
     }
 }
@@ -131,7 +139,46 @@ else
         {
             await HabitService.LoadTimesDone(Habit);
 
-            Habit.RefreshTimesDoneByDay();
+            //Habit.RefreshTimesDoneByDay();
+        }
+    }
+
+    DateTime? selectedDateTime;
+    List<TimeModel>? selectedTimeList;
+
+    async Task RemoveFromSelectedDay()
+    {
+        await RemoveTimeDone(selectedTimeList);
+    }
+
+    async Task AddToSelectedDay()
+    {
+        await AddTimeDone(selectedDateTime!.Value);
+
+        if (selectedTimeList is null)
+            Habit!.TimesDoneByDay!.TryGetValue(selectedDateTime!.Value, out selectedTimeList);
+    }
+
+    async Task DayClicked(DateTime dateTime, List<TimeModel>? timeList)
+    {
+        if (DisplayMonth)
+        {
+            if (selectedDateTime == dateTime)
+            {
+                selectedDateTime = null;
+            }
+            else
+            {
+                selectedDateTime = dateTime;
+                selectedTimeList = timeList;
+            }
+        }
+        else
+        {
+            if (timeList?.Count < Habit!.RepeatCount)
+                await AddTimeDone(dateTime);
+            else
+                await RemoveTimeDone(timeList);
         }
     }
 
@@ -148,12 +195,12 @@ else
         await HabitChanged.InvokeAsync(Habit);
     }
 
-    async Task RemoveTimeDone(List<TimeModel>? list)
+    async Task RemoveTimeDone(List<TimeModel>? timeList)
     {
-        if (list is null || list.Count == 0)
+        if (timeList is null || timeList.Count == 0)
             return;
 
-        await HabitService.RemoveTimeDone(Habit!, list.Last());
+        await HabitService.RemoveTimeDone(Habit!, timeList.Last());
 
         await HabitChanged.InvokeAsync(Habit);
     }

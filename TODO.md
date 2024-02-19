@@ -13,8 +13,7 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 ---------------------------------------------------------------------------------------------------
 
 calendar:
-	if count is more than 1, click selects the day
-!	add option to remove TimeDone
+!	full calendar day always displays: [-] InputNumber [+]
 
 search, filter, sort
 	`using HtmlAgilityPack; MarkSearchResultsInHtml`

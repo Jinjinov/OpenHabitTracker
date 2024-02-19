@@ -31,6 +31,32 @@ public class HabitModel : ItemsModel
         TimesDoneByDay = TimesDone?.GroupBy(date => date.StartedAt.Date).ToDictionary(group => group.Key, group => group.ToList());
     }
 
+    public void AddTimesDoneByDay(TimeModel timeModel)
+    {
+        if (TimesDoneByDay is null)
+            return;
+
+        if (TimesDoneByDay.TryGetValue(timeModel.StartedAt.Date, out var list))
+        {
+            list.Add(timeModel);
+        }
+        else
+        {
+            TimesDoneByDay[timeModel.StartedAt.Date] = new() { timeModel };
+        }
+    }
+
+    public void RemoveTimesDoneByDay(TimeModel timeModel)
+    {
+        if (TimesDoneByDay is null)
+            return;
+
+        if (TimesDoneByDay.TryGetValue(timeModel.StartedAt.Date, out var list) && list.Contains(timeModel))
+        {
+            list.Remove(timeModel);
+        }
+    }
+
     public TimeSpan GetRepeatInterval()
     {
         return RepeatPeriod switch
