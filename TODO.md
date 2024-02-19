@@ -12,8 +12,8 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-calendar:
-!	full calendar day always displays: [-] InputNumber [+]
+calendar InputNumber:
+	full calendar day always displays: [-] InputNumber [+]
 
 search, filter, sort
 	`using HtmlAgilityPack; MarkSearchResultsInHtml`
