@@ -173,7 +173,7 @@ else
         }
         else
         {
-            if (timeList?.Count < Habit!.RepeatCount)
+            if ((timeList?.Count ?? 0) < Habit!.RepeatCount)
                 await AddTimeDone(dateTime);
             else
                 await RemoveTimeDone(timeList);
