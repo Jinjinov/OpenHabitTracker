@@ -84,8 +84,24 @@ export function handleTabKey(textarea) {
 
                 textarea.setSelectionRange(start + 1, start + 1);
 
+                // Dispatch 'input' event
                 const inputEvent = new Event('input', { bubbles: true, cancelable: true });
                 textarea.dispatchEvent(inputEvent);
+
+                // Dispatch 'change' event
+                //const changeEvent = new Event('change', { bubbles: true, cancelable: true });
+                //textarea.dispatchEvent(changeEvent);
+
+                textarea.tabKeyPressed = true;
+            }
+        });
+
+        // Add blur event listener to trigger change event when the textarea loses focus
+        textarea.addEventListener('blur', function () {
+            if (textarea.tabKeyPressed) {
+                textarea.tabKeyPressed = false;
+                const changeEvent = new Event('change', { bubbles: true, cancelable: true });
+                textarea.dispatchEvent(changeEvent);
             }
         });
 
