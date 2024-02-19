@@ -22,6 +22,8 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ! readme
 
+
+
 import / export
 	Markdown
 !	complete TSV import / export
@@ -36,13 +38,11 @@ import / export
 	test fan
 	always on
 
-
-
 ---------------------------------------------------------------------------------------------------
 
-textarea
+textarea Tabs
 	make markdown Tabs look the same as in textarea
-	insert tabs in multiple rows
+	insert Tabs in multiple rows
 
 repeat:
 	add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
@@ -52,9 +52,9 @@ repeat:
 
 div / span - highlight search results
 	`using HtmlAgilityPack; MarkSearchResultsInHtml`
-	title
-	note content
-	task, habit items
+	Title
+	note Content
+	task, habit Items
 
 Show only habits with ratio `over` / `under`
 
