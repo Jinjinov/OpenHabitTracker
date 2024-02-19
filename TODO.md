@@ -44,6 +44,14 @@ import / export Markdown
 
 settings: theme: Bootstrap / Bootswatch
 
+Google Keep import
+
+Google Drive backup
+
+localization
+
+---------------------------------------------------------------------------------------------------
+
 repeat:
 	add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
 	weekly: which day in week
@@ -69,10 +77,6 @@ horizontal calendar with vertical weeks
 common `Router`
 	Ididit.Blazor - Routes.razor
 	Ididit.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
-
-google keep
-google drive
-localization
 
 EF Core: use `DbContextFactory`
 
