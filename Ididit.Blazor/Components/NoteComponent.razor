@@ -35,7 +35,12 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (_inputTextAreaReference?.Element is not null)
-            await JsInterop.HandleTabKey(_inputTextAreaReference.Element.Value);
+        {
+            if (AppData.Settings.InsertTabsInNoteContent)
+                await JsInterop.HandleTabKey(_inputTextAreaReference.Element.Value);
+
+            await JsInterop.SetCalculateAutoHeight(_inputTextAreaReference.Element.Value);
+        }
     }
 
     async Task SaveTitle(NoteModel note, string title)

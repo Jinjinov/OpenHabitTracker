@@ -12,9 +12,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-settings:
-	theme: Bootstrap / Bootswatch
-
 ! help
 
 ! about
@@ -26,7 +23,6 @@ settings:
 textarea
 	make regular markdown text look the same as in textarea (tabs)
 	insert tabs in multiple rows
-!	tabs on/off setting
 
 start / stop timing
 !	add `TimeOnly? Duration` to TaskModel
@@ -51,6 +47,8 @@ search, filter, sort
 		task, habit items
 
 Show only habits with ratio `over` / `under`
+
+settings: theme: Bootstrap / Bootswatch
 
 
 

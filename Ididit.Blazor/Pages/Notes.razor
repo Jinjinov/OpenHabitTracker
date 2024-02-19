@@ -127,7 +127,12 @@
         }
 
         if (_inputTextAreaReference?.Element is not null)
-            await JsInterop.HandleTabKey(_inputTextAreaReference.Element.Value);
+        {
+            if (AppData.Settings.InsertTabsInNoteContent)
+                await JsInterop.HandleTabKey(_inputTextAreaReference.Element.Value);
+
+            await JsInterop.SetCalculateAutoHeight(_inputTextAreaReference.Element.Value);
+        }
     }
 
     void AddNew()

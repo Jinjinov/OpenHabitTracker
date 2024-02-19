@@ -67,13 +67,6 @@
         </div>
 
         <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="DisplayNoteContentAsMarkdown" class="form-check-input mt-0" Value="_settings.DisplayNoteContentAsMarkdown" ValueExpression="() => _settings.DisplayNoteContentAsMarkdown" ValueChanged="SaveDisplayNoteContentAsMarkdown" />
-            </div>
-            <label for="DisplayNoteContentAsMarkdown" class="input-group-text flex-grow-1 text-wrap">Display note content as markdown</label>
-        </div>
-
-        <div class="input-group flex-nowrap">
             <span class="input-group-text col-4">Week start</span>
             <InputSelect class="form-select col-8" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
@@ -81,6 +74,20 @@
                     <option @key="dayOfWeek" value="@dayOfWeek">@dayOfWeek</option>
                 }
             </InputSelect>
+        </div>
+
+        <div class="input-group flex-nowrap">
+            <div class="input-group-text">
+                <InputCheckbox id="InsertTabsInNoteContent" class="form-check-input mt-0" Value="_settings.InsertTabsInNoteContent" ValueExpression="() => _settings.InsertTabsInNoteContent" ValueChanged="SaveInsertTabsInNoteContent" />
+            </div>
+            <label for="InsertTabsInNoteContent" class="input-group-text flex-grow-1 text-wrap">Insert tabs in note content</label>
+        </div>
+
+        <div class="input-group flex-nowrap">
+            <div class="input-group-text">
+                <InputCheckbox id="DisplayNoteContentAsMarkdown" class="form-check-input mt-0" Value="_settings.DisplayNoteContentAsMarkdown" ValueExpression="() => _settings.DisplayNoteContentAsMarkdown" ValueChanged="SaveDisplayNoteContentAsMarkdown" />
+            </div>
+            <label for="DisplayNoteContentAsMarkdown" class="input-group-text flex-grow-1 text-wrap">Display note content as markdown</label>
         </div>
 
     </div>
@@ -156,16 +163,23 @@
         await UpdateAndRefresh();
     }
 
-    async Task SaveDisplayNoteContentAsMarkdown(bool show)
+    async Task SaveFirstDayOfWeek(DayOfWeek dayOfWeek)
     {
-        _settings.DisplayNoteContentAsMarkdown = show;
+        _settings.FirstDayOfWeek = dayOfWeek;
 
         await UpdateAndRefresh();
     }
 
-    async Task SaveFirstDayOfWeek(DayOfWeek dayOfWeek)
+    async Task SaveInsertTabsInNoteContent(bool val)
     {
-        _settings.FirstDayOfWeek = dayOfWeek;
+        _settings.InsertTabsInNoteContent = val;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveDisplayNoteContentAsMarkdown(bool val)
+    {
+        _settings.DisplayNoteContentAsMarkdown = val;
 
         await UpdateAndRefresh();
     }

@@ -45,36 +45,26 @@ function calculateAutoHeight(e) {
 }
 
 export function recalculateAutoHeight(textarea) {
-    if (!textarea)
-        return;
-
-    // fire input to trigger autosize in case the text is long
-    if ("createEvent" in document) {
-        let event = document.createEvent("HTMLEvents");
-        event.initEvent("input", false, true);
-        textarea.dispatchEvent(event);
-    }
-    else {
-        textarea.fireEvent("oninput");
+    if (textarea) {
+        // fire input to trigger autosize in case the text is long
+        const inputEvent = new Event('input', { bubbles: false, cancelable: true });
+        textarea.dispatchEvent(inputEvent);
     }
 }
 
-export function handleTabKey(textarea) {
+export function setCalculateAutoHeight(textarea) {
     if (textarea) {
         textarea.oninput = calculateAutoHeight;
 
         // fire input immediatelly to trigger autosize in case the text is long
-        if ("createEvent" in document) {
-            let event = document.createEvent("HTMLEvents");
-            event.initEvent("input", false, true);
-            textarea.dispatchEvent(event);
-        }
-        else {
-            textarea.fireEvent("oninput");
-        }
+        const inputEvent = new Event('input', { bubbles: false, cancelable: true });
+        textarea.dispatchEvent(inputEvent);
 
         textarea.rows = 2;
     }
+}
+
+export function handleTabKey(textarea) {
     if (textarea && !textarea.tabKeyHandlerAdded) {
         textarea.addEventListener('keydown', function (event) {
             if (event.key === 'Tab') {
@@ -88,13 +78,8 @@ export function handleTabKey(textarea) {
 
                 textarea.setSelectionRange(start + 1, start + 1);
 
-                // Dispatch 'input' event
                 const inputEvent = new Event('input', { bubbles: true, cancelable: true });
                 textarea.dispatchEvent(inputEvent);
-
-                // Dispatch 'change' event
-                //const changeEvent = new Event('change', { bubbles: true, cancelable: true });
-                //textarea.dispatchEvent(changeEvent);
 
                 textarea.tabKeyPressed = true;
             }

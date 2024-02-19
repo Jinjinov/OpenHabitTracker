@@ -56,6 +56,12 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         await module.InvokeVoidAsync("saveAsFile", filename, Convert.ToBase64String(data));
     }
 
+    public async ValueTask SetCalculateAutoHeight(ElementReference element)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("setCalculateAutoHeight", element);
+    }
+
     public async ValueTask HandleTabKey(ElementReference element)
     {
         IJSObjectReference module = await _moduleTask.Value;

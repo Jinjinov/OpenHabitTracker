@@ -105,6 +105,7 @@ public static class DataExtensions
         entity.ShowItemList = model.ShowItemList;
         entity.ShowSmallCalendar = model.ShowSmallCalendar;
         entity.ShowLargeCalendar = model.ShowLargeCalendar;
+        entity.InsertTabsInNoteContent = model.InsertTabsInNoteContent;
         entity.DisplayNoteContentAsMarkdown = model.DisplayNoteContentAsMarkdown;
         entity.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = model.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin;
         entity.ElapsedTimeToRepeatIntervalRatioMin = model.ElapsedTimeToRepeatIntervalRatioMin;
