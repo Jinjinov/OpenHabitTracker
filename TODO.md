@@ -12,6 +12,8 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
+
+
 ! help
 
 ! about
@@ -25,6 +27,18 @@ import / export
 !	complete TSV import / export
 
 
+
+
+
+
+
+- host 24/7 on Raspberry Pi
+	test fan
+	always on
+
+
+
+---------------------------------------------------------------------------------------------------
 
 textarea
 	make markdown Tabs look the same as in textarea
@@ -47,14 +61,6 @@ Show only habits with ratio `over` / `under`
 settings: theme: Bootstrap / Bootswatch
 
 add `Start` / `Stop` timing buttons
-
-
-
-- host 24/7 on Raspberry Pi
-	test fan
-	always on
-
----------------------------------------------------------------------------------------------------
 
 when habit is done, uncheck all habit items
 when task is done, check all task items

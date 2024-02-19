@@ -110,9 +110,9 @@ public class AppData(IDataAccess dataAccess)
                     SelectedCategoryId = 0,
                     SortBy = new()
                     {
-                        { InfoType.Note, Sort.Priority },
-                        { InfoType.Task, Sort.Priority },
-                        { InfoType.Habit, Sort.Priority }
+                        { ContentType.Note, Sort.Priority },
+                        { ContentType.Task, Sort.Priority },
+                        { ContentType.Habit, Sort.Priority }
                     },
                     ShowPriority = new()
                     {
@@ -472,9 +472,9 @@ public class AppData(IDataAccess dataAccess)
                 SelectedCategoryId = 0,
                 SortBy = new()
                 {
-                    { InfoType.Note, Sort.Priority },
-                    { InfoType.Task, Sort.Priority },
-                    { InfoType.Habit, Sort.Priority }
+                    { ContentType.Note, Sort.Priority },
+                    { ContentType.Task, Sort.Priority },
+                    { ContentType.Habit, Sort.Priority }
                 },
                 ShowPriority = new()
                 {

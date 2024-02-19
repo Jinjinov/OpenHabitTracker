@@ -32,7 +32,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasColumnName("SortBy")
             .HasConversion(
                 dictionary => JsonSerializer.Serialize(dictionary, (JsonSerializerOptions?)null),
-                json => JsonSerializer.Deserialize<Dictionary<InfoType, Sort>>(json, (JsonSerializerOptions?)null)!);
+                json => JsonSerializer.Deserialize<Dictionary<ContentType, Sort>>(json, (JsonSerializerOptions?)null)!);
 
         modelBuilder.Entity<SettingsEntity>()
             .Property(e => e.ShowPriority)

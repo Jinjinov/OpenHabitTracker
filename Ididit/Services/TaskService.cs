@@ -53,7 +53,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
         if (settings.SelectedCategoryId != 0)
             tasks = tasks.Where(x => x.CategoryId == settings.SelectedCategoryId);
 
-        return settings.SortBy[InfoType.Task] switch
+        return settings.SortBy[ContentType.Task] switch
         {
             Sort.Category => tasks.OrderBy(x => x.CategoryId),
             Sort.Priority => tasks.OrderByDescending(x => x.Priority),

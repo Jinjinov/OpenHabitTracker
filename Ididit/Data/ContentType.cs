@@ -1,6 +1,6 @@
 ﻿namespace Ididit.Data;
 
-public enum InfoType
+public enum ContentType
 {
     Note,
     Task,

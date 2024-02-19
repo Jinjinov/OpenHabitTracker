@@ -31,7 +31,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
         if (settings.SelectedCategoryId != 0)
             notes = notes.Where(x => x.CategoryId == settings.SelectedCategoryId);
 
-        return settings.SortBy[InfoType.Note] switch
+        return settings.SortBy[ContentType.Note] switch
         {
             Sort.Category => notes.OrderBy(x => x.CategoryId),
             Sort.Priority => notes.OrderByDescending(x => x.Priority),

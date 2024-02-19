@@ -129,7 +129,7 @@
 
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">Sort notes</span>
-                <InputSelect class="form-select col-8" Value="_settings.SortBy[InfoType.Note]" ValueExpression="() => _settings.SortBy[InfoType.Note]" ValueChanged="(Sort sort) => SaveSort(InfoType.Note, sort)">
+                <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
                     <option value="@Sort.Category">Category</option>
                     <option value="@Sort.Priority">Priority</option>
                     <option value="@Sort.Title">Title</option>
@@ -138,7 +138,7 @@
 
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">Sort tasks</span>
-                <InputSelect class="form-select col-8" Value="_settings.SortBy[InfoType.Task]" ValueExpression="() => _settings.SortBy[InfoType.Task]" ValueChanged="(Sort sort) => SaveSort(InfoType.Task, sort)">
+                <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
                     <option value="@Sort.Category">Category</option>
                     <option value="@Sort.Priority">Priority</option>
                     <option value="@Sort.Title">Title</option>
@@ -150,7 +150,7 @@
 
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">Sort habits</span>
-                <InputSelect class="form-select col-8" Value="_settings.SortBy[InfoType.Habit]" ValueExpression="() => _settings.SortBy[InfoType.Habit]" ValueChanged="(Sort sort) => SaveSort(InfoType.Habit, sort)">
+                <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
                     <option value="@Sort.Category">Category</option>
                     <option value="@Sort.Priority">Priority</option>
                     <option value="@Sort.Title">Title</option>
@@ -258,9 +258,9 @@
         await UpdateSettings();
     }
 
-    async Task SaveSort(InfoType infoType, Sort sort)
+    async Task SaveSort(ContentType contentType, Sort sort)
     {
-        _settings.SortBy[infoType] = sort;
+        _settings.SortBy[contentType] = sort;
 
         await UpdateSettings();
     }
