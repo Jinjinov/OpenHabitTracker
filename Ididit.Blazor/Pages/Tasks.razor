@@ -12,6 +12,7 @@
 @inject TaskService TaskService
 @inject AppData AppData
 @inject SettingsService SettingsService
+@inject SearchFilterService SearchFilterService
 
 <PageTitle>Tasks</PageTitle>
 
@@ -68,7 +69,7 @@
                 {
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
-                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => OpenSelected(task.Id)">@task.Title</button>
+                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary highlightable" @onclick="() => OpenSelected(task.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
                         @if (task.PlannedAt is not null)
                         {
                             <small class="input-group-text">@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>

@@ -12,6 +12,7 @@
 @inject AppData AppData
 @inject SettingsService SettingsService
 @inject JsInterop JsInterop
+@inject SearchFilterService SearchFilterService
 
 <PageTitle>Habits</PageTitle>
 
@@ -84,7 +85,7 @@
                     <div class="w-100">
                         <div class="input-group flex-nowrap" style="@style">
                             <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
-                            <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => OpenSelected(habit.Id)">@habit.Title</button>
+                            <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary highlightable" @onclick="() => OpenSelected(habit.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
 
                             @*
                             @if (habit.LastTimeDoneAt is not null)

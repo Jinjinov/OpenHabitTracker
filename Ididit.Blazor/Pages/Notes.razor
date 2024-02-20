@@ -60,7 +60,7 @@
                 {
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(note.Priority)</span>
-                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => OpenSelected(note.Id)">@note.Title</button>
+                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary highlightable" @onclick="() => OpenSelected(note.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
                     </div>
 
                     if (AppData.Settings.DisplayNoteContentAsMarkdown)
