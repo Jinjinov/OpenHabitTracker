@@ -4,10 +4,11 @@ using Ididit.Data.Models;
 
 namespace Ididit.Services;
 
-public class NoteService(AppData appData, IDataAccess dataAccess)
+public class NoteService(AppData appData, IDataAccess dataAccess, SearchFilterService searchFilterService)
 {
     private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
+    private readonly SearchFilterService _searchFilterService = searchFilterService;
 
     public IReadOnlyCollection<NoteModel>? Notes => _appData.Notes?.Values;
 
@@ -21,11 +22,11 @@ public class NoteService(AppData appData, IDataAccess dataAccess)
 
         IEnumerable<NoteModel> notes = Notes!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
 
-        if (_appData.Filters.SearchTerm is not null)
+        if (_searchFilterService.SearchTerm is not null)
         {
-            StringComparison comparisonType = _appData.Filters.MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            StringComparison comparisonType = _searchFilterService.MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
-            notes = notes.Where(x => x.Title.Contains(_appData.Filters.SearchTerm, comparisonType) || x.Content.Contains(_appData.Filters.SearchTerm, comparisonType));
+            notes = notes.Where(x => x.Title.Contains(_searchFilterService.SearchTerm, comparisonType) || x.Content.Contains(_searchFilterService.SearchTerm, comparisonType));
         }
 
         if (settings.SelectedCategoryId != 0)

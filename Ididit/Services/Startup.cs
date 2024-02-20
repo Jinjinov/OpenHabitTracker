@@ -18,6 +18,7 @@ public static class Startup
         services.AddScoped<SettingsService>();
         services.AddScoped<TaskService>();
         services.AddScoped<TrashService>();
+        services.AddScoped<SearchFilterService>();
 
         return services;
     }

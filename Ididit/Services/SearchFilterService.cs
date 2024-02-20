@@ -1,6 +1,8 @@
-﻿namespace Ididit.Data;
+﻿using Ididit.Data;
 
-public class Filters
+namespace Ididit.Services;
+
+public class SearchFilterService
 {
     public string? SearchTerm { get; set; }
 

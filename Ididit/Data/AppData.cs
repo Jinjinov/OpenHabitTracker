@@ -20,8 +20,6 @@ public class AppData(IDataAccess dataAccess)
     public Dictionary<long, PriorityModel>? Priorities { get; set; }
     public List<ContentModel>? Trash { get; set; }
 
-    public Filters Filters { get; set; } = new();
-
     public string GetCategoryTitle(long category)
     {
         return Categories?.GetValueOrDefault(category)?.Title ?? category.ToString();

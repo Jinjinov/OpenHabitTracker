@@ -4,10 +4,11 @@ using Ididit.Data.Models;
 
 namespace Ididit.Services;
 
-public class TaskService(AppData appData, IDataAccess dataAccess)
+public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterService searchFilterService)
 {
     private readonly AppData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
+    private readonly SearchFilterService _searchFilterService = searchFilterService;
 
     public IReadOnlyCollection<TaskModel>? Tasks => _appData.Tasks?.Values;
 
@@ -21,32 +22,32 @@ public class TaskService(AppData appData, IDataAccess dataAccess)
 
         IEnumerable<TaskModel> tasks = Tasks!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
 
-        if (_appData.Filters.SearchTerm is not null)
+        if (_searchFilterService.SearchTerm is not null)
         {
-            StringComparison comparisonType = _appData.Filters.MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            StringComparison comparisonType = _searchFilterService.MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
-            tasks = tasks.Where(x => x.Title.Contains(_appData.Filters.SearchTerm, comparisonType) || x.Items?.Any(i => i.Title.Contains(_appData.Filters.SearchTerm, comparisonType)) == true);
+            tasks = tasks.Where(x => x.Title.Contains(_searchFilterService.SearchTerm, comparisonType) || x.Items?.Any(i => i.Title.Contains(_searchFilterService.SearchTerm, comparisonType)) == true);
         }
 
-        if (_appData.Filters.DoneAtFilter is not null)
+        if (_searchFilterService.DoneAtFilter is not null)
         {
-            tasks = _appData.Filters.DoneAtCompare switch
+            tasks = _searchFilterService.DoneAtCompare switch
             {
-                DateCompare.Before => tasks.Where(x => x.CompletedAt?.Date < _appData.Filters.DoneAtFilter.Value.Date),
-                DateCompare.On => tasks.Where(x => x.CompletedAt?.Date == _appData.Filters.DoneAtFilter.Value.Date),
-                DateCompare.After => tasks.Where(x => x.CompletedAt?.Date > _appData.Filters.DoneAtFilter.Value.Date),
-                _ => throw new ArgumentOutOfRangeException(nameof(_appData.Filters.DoneAtCompare))
+                DateCompare.Before => tasks.Where(x => x.CompletedAt?.Date < _searchFilterService.DoneAtFilter.Value.Date),
+                DateCompare.On => tasks.Where(x => x.CompletedAt?.Date == _searchFilterService.DoneAtFilter.Value.Date),
+                DateCompare.After => tasks.Where(x => x.CompletedAt?.Date > _searchFilterService.DoneAtFilter.Value.Date),
+                _ => throw new ArgumentOutOfRangeException(nameof(_searchFilterService.DoneAtCompare))
             };
         }
 
-        if (_appData.Filters.PlannedAtFilter is not null)
+        if (_searchFilterService.PlannedAtFilter is not null)
         {
-            tasks = _appData.Filters.PlannedAtCompare switch
+            tasks = _searchFilterService.PlannedAtCompare switch
             {
-                DateCompare.Before => tasks.Where(x => x.PlannedAt?.Date < _appData.Filters.PlannedAtFilter.Value.Date),
-                DateCompare.On => tasks.Where(x => x.PlannedAt?.Date == _appData.Filters.PlannedAtFilter.Value.Date),
-                DateCompare.After => tasks.Where(x => x.PlannedAt?.Date > _appData.Filters.PlannedAtFilter.Value.Date),
-                _ => throw new ArgumentOutOfRangeException(nameof(_appData.Filters.PlannedAtCompare))
+                DateCompare.Before => tasks.Where(x => x.PlannedAt?.Date < _searchFilterService.PlannedAtFilter.Value.Date),
+                DateCompare.On => tasks.Where(x => x.PlannedAt?.Date == _searchFilterService.PlannedAtFilter.Value.Date),
+                DateCompare.After => tasks.Where(x => x.PlannedAt?.Date > _searchFilterService.PlannedAtFilter.Value.Date),
+                _ => throw new ArgumentOutOfRangeException(nameof(_searchFilterService.PlannedAtCompare))
             };
         }
 

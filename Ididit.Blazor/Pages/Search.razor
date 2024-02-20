@@ -6,7 +6,7 @@
 
 @inject SettingsService SettingsService
 @inject CategoryService CategoryService
-@inject AppData AppData
+@inject SearchFilterService SearchFilterService
 
 <PageTitle>Search</PageTitle>
 
@@ -20,8 +20,8 @@
         <div class="my-1">
 
             <div class="input-group flex-nowrap">
-                <InputTextImmediate class="form-control" Value="@AppData.Filters.SearchTerm" ValueExpression="() => AppData.Filters.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="Search" />
-                @if (AppData.Filters.MatchCase)
+                <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="Search" />
+                @if (SearchFilterService.MatchCase)
                 {
                     <button class="btn btn-primary" @onclick="() => UpdateMatchCase(false)"><i class="bi bi-type"></i></button>
                 }
@@ -34,23 +34,23 @@
 
             <div class="input-group flex-nowrap">
                 <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)">Planned</button>
-                <InputSelect class="form-control w-auto flex-grow-0" Value="AppData.Filters.PlannedAtCompare" ValueExpression="() => AppData.Filters.PlannedAtCompare" TValue="DateCompare" ValueChanged="UpdatePlannedAtCompare">
+                <InputSelect class="form-control w-auto flex-grow-0" Value="SearchFilterService.PlannedAtCompare" ValueExpression="() => SearchFilterService.PlannedAtCompare" TValue="DateCompare" ValueChanged="UpdatePlannedAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
                     <option value="@DateCompare.After">@(">")</option>
                 </InputSelect>
-                <InputDate class="form-control" Value="AppData.Filters.PlannedAtFilter" ValueExpression="() => AppData.Filters.PlannedAtFilter" TValue="DateTime?" ValueChanged="UpdatePlannedAtFilter" Type="InputDateType.Date" />
+                <InputDate class="form-control" Value="SearchFilterService.PlannedAtFilter" ValueExpression="() => SearchFilterService.PlannedAtFilter" TValue="DateTime?" ValueChanged="UpdatePlannedAtFilter" Type="InputDateType.Date" />
                 <button class="btn btn-outline-primary" @onclick="() => UpdatePlannedAtFilter(null)"><i class="bi bi-x-square"></i></button>
             </div>
 
             <div class="input-group flex-nowrap">
                 <button class="input-group-text col-4" @onclick="() => UpdateDoneAtFilter(DateTime.Today)">Done</button>
-                <InputSelect class="form-control w-auto flex-grow-0" Value="AppData.Filters.DoneAtCompare" ValueExpression="() => AppData.Filters.DoneAtCompare" TValue="DateCompare" ValueChanged="UpdateDoneAtCompare">
+                <InputSelect class="form-control w-auto flex-grow-0" Value="SearchFilterService.DoneAtCompare" ValueExpression="() => SearchFilterService.DoneAtCompare" TValue="DateCompare" ValueChanged="UpdateDoneAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
                     <option value="@DateCompare.After">@(">")</option>
                 </InputSelect>
-                <InputDate class="form-control" Value="AppData.Filters.DoneAtFilter" ValueExpression="() => AppData.Filters.DoneAtFilter" TValue="DateTime?" ValueChanged="UpdateDoneAtFilter" Type="InputDateType.Date" />
+                <InputDate class="form-control" Value="SearchFilterService.DoneAtFilter" ValueExpression="() => SearchFilterService.DoneAtFilter" TValue="DateTime?" ValueChanged="UpdateDoneAtFilter" Type="InputDateType.Date" />
                 <button class="btn btn-outline-primary" @onclick="() => UpdateDoneAtFilter(null)"><i class="bi bi-x-square"></i></button>
             </div>
 
@@ -196,37 +196,37 @@
 
     async Task UpdateSearchTerm(string? searchTerm)
     {
-        AppData.Filters.SearchTerm = searchTerm;
+        SearchFilterService.SearchTerm = searchTerm;
         await UpdateStateChanged();
     }
 
     async Task UpdateMatchCase(bool matchCase)
     {
-        AppData.Filters.MatchCase = matchCase;
+        SearchFilterService.MatchCase = matchCase;
         await UpdateStateChanged();
     }
 
     async Task UpdatePlannedAtCompare(DateCompare plannedAtCompare)
     {
-        AppData.Filters.PlannedAtCompare = plannedAtCompare;
+        SearchFilterService.PlannedAtCompare = plannedAtCompare;
         await UpdateStateChanged();
     }
 
     async Task UpdatePlannedAtFilter(DateTime? plannedAtFilter)
     {
-        AppData.Filters.PlannedAtFilter = plannedAtFilter;
+        SearchFilterService.PlannedAtFilter = plannedAtFilter;
         await UpdateStateChanged();
     }
 
     async Task UpdateDoneAtCompare(DateCompare doneAtCompare)
     {
-        AppData.Filters.DoneAtCompare = doneAtCompare;
+        SearchFilterService.DoneAtCompare = doneAtCompare;
         await UpdateStateChanged();
     }
 
     async Task UpdateDoneAtFilter(DateTime? doneAtFilter)
     {
-        AppData.Filters.DoneAtFilter = doneAtFilter;
+        SearchFilterService.DoneAtFilter = doneAtFilter;
         await UpdateStateChanged();
     }
 
