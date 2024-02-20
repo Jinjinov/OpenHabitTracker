@@ -2,6 +2,7 @@
 @using Ididit.Services
 
 @inject ItemService ItemService
+@inject SearchFilterService SearchFilterService
 
 @if (Items?.Items is not null)
 {
@@ -13,7 +14,7 @@
             </div>
             @if (IsReadOnly)
             {
-                <label for="@item.Id" class="input-group-text flex-grow-1 text-wrap">@item.Title</label>
+                <label for="@item.Id" class="input-group-text flex-grow-1 text-wrap highlightable">@((MarkupString)SearchFilterService.MarkSearchResults(item.Title))</label>
             }
             else
             {
@@ -23,7 +24,7 @@
                 }
                 else
                 {
-                    <button class="input-group-text flex-grow-1 text-wrap" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@item.Title</button>
+                    <button class="input-group-text flex-grow-1 text-wrap highlightable" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@((MarkupString)SearchFilterService.MarkSearchResults(item.Title))</button>
                 }
                 <button class="btn btn-outline-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
             }

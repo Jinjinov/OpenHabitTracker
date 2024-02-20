@@ -42,6 +42,17 @@ html, body {
     border-radius: 0 !important;
 }
 
+/* SEARCH HIGHLIGHT */
+
+.mark, mark {
+    padding: 0 !important;
+}
+
+.highlightable {
+    display: inline;
+    text-align: start;
+}
+
 /* MARKDOWN */
 
 /* set margin in Markdown HTML */
