@@ -86,6 +86,7 @@
                             <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
                             <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary" @onclick="() => OpenSelected(habit.Id)">@habit.Title</button>
 
+                            @*
                             @if (habit.LastTimeDoneAt is not null)
                             {
                                 DateTime lastTimeDoneAt = habit.LastTimeDoneAt.Value;
@@ -97,6 +98,20 @@
                                 };
                                 <small class="@($"input-group-text {color}")">@(lastTimeDoneAt.Date == DateTime.Now.Date ? lastTimeDoneAt.ToShortTimeString() : lastTimeDoneAt.ToShortDateString())</small>
                             }
+                            *@
+
+                            @{
+                                string color = habit.ElapsedTimeToRepeatIntervalRatio switch
+                                {
+                                    >= 100 => "bg-danger-subtle",
+                                    >= 80 => "bg-warning-subtle",
+                                    _ => "bg-success-subtle"
+                                };
+                            }
+                            <small class="@($"input-group-text {color}")">
+                                @(habit.LastTimeDoneAt is not null ? ToHighestValueString(habit.ElapsedTime) : "⊘")
+                                (@habit.ElapsedTimeToRepeatIntervalRatio.ToString("N0")%)
+                            </small>
 
                             @if (!SettingsService.Settings.ShowSmallCalendar)
                             {
@@ -231,5 +246,12 @@
 
             NavigationManager.NavigateTo("/habits");
         }
+    }
+
+    string ToHighestValueString(TimeSpan span)
+    {
+        return span.Days > 0 ? span.Days + " d"
+                             : span.Hours > 0 ? span.Hours + " h"
+                                              : span.Minutes + " m";
     }
 }

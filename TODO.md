@@ -22,8 +22,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 
 
-show elapsed time and ratio
-
 add `Start` / `Stop` timing buttons
 
 div / span - highlight search results
