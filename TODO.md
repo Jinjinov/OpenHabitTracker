@@ -12,6 +12,8 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
+
+
 ! help
 
 ! about
@@ -24,17 +26,13 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 add `Start` / `Stop` timing buttons
 
-div / span - highlight search results
-	`using HtmlAgilityPack; MarkSearchResultsInHtml`
-	Title
-	note Content
-	task, habit Items
-
 
 
 - host 24/7 on Raspberry Pi
 	test fan
 	always on
+
+
 
 ---------------------------------------------------------------------------------------------------
 
