@@ -23,6 +23,17 @@
     <InputDate class="form-control" id="durationInput" Value="Task.DurationProxy" ValueExpression="() => Task.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(Task, duration)" Type="InputDateType.Time" />
 </div>
 
+<div class="input-group flex-nowrap">
+    <span class="input-group-text flex-grow-1">Start timer</span>
+    <button class="btn btn-outline-primary" @onclick="() => {}"><i class="bi bi-play"></i></button>
+    <button class="btn btn-outline-primary" @onclick="() => {}"><i class="bi bi-pause"></i></button>
+    <button class="btn btn-outline-primary" @onclick="() => {}"><i class="bi bi-stop"></i></button>
+</div>
+
+<div class="p-1 border rounded-0">
+    <div>Total time spent:</div>
+</div>
+
 @if (Task.StartedAt is not null)
 {
     <div class="p-1 border rounded-0">
