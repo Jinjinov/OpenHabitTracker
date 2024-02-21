@@ -28,6 +28,17 @@ add `Start` / `Stop` timing buttons
 
 
 
+duration
+start timer
+time spent
+average time spent
+average interval
+interval overdue
+average interval overdue
+average interval ratio
+
+
+
 - host 24/7 on Raspberry Pi
 	test fan
 	always on

@@ -2,11 +2,11 @@
 
 public class HabitModel : ItemsModel
 {
-    public int RepeatCount { get; set; }
+    public int RepeatCount { get; set; } = 1;
 
-    public int RepeatInterval { get; set; }
+    public int RepeatInterval { get; set; } = 1;
 
-    public Period RepeatPeriod { get; set; }
+    public Period RepeatPeriod { get; set; } = Period.Day;
 
     public TimeOnly? Duration { get; set; }
 
