@@ -37,8 +37,6 @@ public partial class MainForm : Form
 
         InitializeComponent();
 
-        blazorWebView.UrlLoading += OnUrlLoading;
-
         Icon = new Icon("favicon.ico");
 
         blazorWebView.HostPage = @"wwwroot\index.html";
@@ -53,31 +51,4 @@ public partial class MainForm : Form
         dataAccess.Initialize();
     }
 
-    private void OnUrlLoading(object? sender, UrlLoadingEventArgs e)
-    {
-        Uri uri = e.Url;
-
-        if (!uri.Host.Contains("0.0.0.0"))
-        {
-            e.UrlLoadingStrategy = UrlLoadingStrategy.CancelLoad;
-
-            string url = uri.ToString();
-
-            //System.Diagnostics.Process.Start(uri.ToString());
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                //url = url.Replace("&", "^&");
-                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Process.Start("xdg-open", url);
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                Process.Start("open", url);
-            }
-        }
-    }
 }
