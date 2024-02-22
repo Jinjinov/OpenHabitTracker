@@ -127,10 +127,13 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
         DateTime now = DateTime.Now;
 
         task.StartedAt = now;
+        task.CompletedAt = null;
 
         if (await _dataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
             taskEntity.StartedAt = now;
+            taskEntity.CompletedAt = null;
+
             await _dataAccess.UpdateTask(taskEntity);
         }
     }

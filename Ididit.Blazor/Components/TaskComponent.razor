@@ -1,6 +1,8 @@
 ﻿@using Ididit.Data.Models
 @using Ididit.Services
 
+@implements IDisposable
+
 @inject TaskService TaskService
 
 <div class="input-group flex-nowrap">
@@ -24,10 +26,16 @@
 </div>
 
 <div class="input-group flex-nowrap">
-    <span class="input-group-text flex-grow-1">Start timer</span>
-    <button class="btn btn-outline-primary" @onclick="() => {}"><i class="bi bi-play"></i></button>
-    <button class="btn btn-outline-primary" @onclick="() => {}"><i class="bi bi-pause"></i></button>
-    <button class="btn btn-outline-primary" @onclick="() => {}"><i class="bi bi-stop"></i></button>
+    @if (_timer is null)
+    {
+        <span class="input-group-text flex-grow-1">Start timer</span>
+        <button class="btn btn-outline-primary" @onclick="StartTimer"><i class="bi bi-play"></i></button>
+    }
+    else
+    {
+        <span class="input-group-text flex-grow-1">@_elapsedTime.ToString(@"hh\:mm\:ss")</span>
+        <button class="btn btn-outline-primary" @onclick="StopTimer"><i class="bi bi-stop"></i></button>
+    }
 </div>
 
 @if (Task.StartedAt is not null)
@@ -65,6 +73,50 @@
 
     [Parameter]
     public EventCallback CloseSelected { get; set; }
+
+    PeriodicTimer? _timer;
+    TimeSpan _elapsedTime;
+    DateTime _taskStartedTime;
+
+    async Task StartTimer()
+    {
+        if (Task is null || Task.Duration?.ToTimeSpan() is not TimeSpan duration || duration.Ticks == 0)
+            return;
+
+        await TaskService.Start(Task);
+
+        _taskStartedTime = DateTime.Now;
+
+        _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+
+        while (_timer is not null && await _timer.WaitForNextTickAsync())
+        {
+            _elapsedTime = DateTime.Now - _taskStartedTime;
+
+            if (_elapsedTime >= duration)
+            {
+                await StopTimer();
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    async Task StopTimer()
+    {
+        if (Task is null || _timer is null)
+            return;
+
+        await TaskService.MarkAsDone(Task);
+
+        _timer.Dispose();
+        _timer = null;
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
 
     async Task SaveTitle(TaskModel task, string title)
     {
