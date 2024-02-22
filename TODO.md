@@ -24,19 +24,11 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 
 
-add `Start` / `Stop` timing buttons
-
-
-
 time spent = completed - started
 
 
+
 average time spent = time spent / count
-
-
-average interval
-average interval overdue
-average interval ratio
 
 
 
