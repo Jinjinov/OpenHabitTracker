@@ -288,16 +288,21 @@ public class AppData(IDataAccess dataAccess)
     {
         if (Trash is null)
         {
-            await InitializeCategories();
-            await InitializePriorities();
-
-            await InitializeHabits();
-            await InitializeNotes();
-            await InitializeTasks();
+            await InitializeContent();
 
             if (Habits is not null && Notes is not null && Tasks is not null)
                 Trash = [.. Habits.Values.Where(m => m.IsDeleted), .. Notes.Values.Where(m => m.IsDeleted), .. Tasks.Values.Where(m => m.IsDeleted)];
         }
+    }
+
+    private async Task InitializeContent()
+    {
+        await InitializeCategories();
+        await InitializePriorities();
+
+        await InitializeHabits();
+        await InitializeNotes();
+        await InitializeTasks();
     }
 
     public async Task DeleteAllData()
@@ -312,16 +317,15 @@ public class AppData(IDataAccess dataAccess)
         Categories = null;
         Priorities = null;
         Trash = null;
+
+        await InitializeContent();
     }
 
     public async Task<UserData> GetUserData()
     {
         await InitializeSettings();
-        await InitializePriorities();
-        await InitializeCategories();
-        await InitializeNotes();
-        await InitializeTasks();
-        await InitializeHabits();
+
+        await InitializeContent();
 
         await InitializeTimes();
         await InitializeItems();
