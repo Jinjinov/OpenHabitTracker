@@ -35,6 +35,8 @@ settings: theme: Bootstrap / Bootswatch
 
 Google Keep import
 
+---------------------------------------------------------------------------------------------------
+
 Google Drive backup
 
 localization
@@ -118,8 +120,6 @@ Google Keep
 import Google Keep repeating reminder
 import Google Keep h1, h2, bold, italic, underline
 
-pin razor page to Home - in a column - max 4 columns ?
-
 - Note, Task, Habit background color
 
 - localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
@@ -131,7 +131,6 @@ pin razor page to Home - in a column - max 4 columns ?
 
 - read Settings from DB before Run()
 
-- categories are filters
 - filters are query parameters
 
 ---------------------------------------------------------------------------------------------------
