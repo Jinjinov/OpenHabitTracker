@@ -13,7 +13,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 ---------------------------------------------------------------------------------------------------
 
 
-
 ! help
 
 ! about
@@ -23,19 +22,9 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 ! readme
 
 
-
-time spent = completed - started
-
-
-
-average time spent = time spent / count
-
-
-
 - host 24/7 on Raspberry Pi
 	test fan
 	always on
-
 
 
 ---------------------------------------------------------------------------------------------------
