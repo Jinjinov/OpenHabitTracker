@@ -171,6 +171,11 @@
     [CascadingParameter(Name = "WindowDimensions")]
     public Dimensions? WindowDimensions { get; set; }
 
+    [CascadingParameter(Name = "DynamicComponentType")]
+    public Type? DynamicComponentType { get; set; }
+
+    string? _dynamicComponentTypeName;
+
     bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width > 700;
 
     InputTextImmediate? inputElement;
@@ -194,10 +199,11 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // TODO:
-        // public bool isSidebarVisible
-        // private bool wasSidebarVisible
-        if (firstRender)
+        bool dynamicComponentVisibilityChanged = (_dynamicComponentTypeName is null && DynamicComponentType is not null) || (_dynamicComponentTypeName is not null && DynamicComponentType is null);
+
+        _dynamicComponentTypeName = DynamicComponentType?.Name;
+
+        if (firstRender || dynamicComponentVisibilityChanged)
         {
             Dimensions columnDimensions = await JsInterop.GetElementDimensions(columnRef);
             columnWidth = columnDimensions.Width;

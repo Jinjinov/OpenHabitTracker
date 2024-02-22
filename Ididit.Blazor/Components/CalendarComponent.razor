@@ -97,6 +97,8 @@ else
     [Parameter]
     public int ColumnWidth { get; set; }
 
+    int _currentColumnWidth;
+
     CalendarParams _calendarParams = new();
 
     protected override async Task OnInitializedAsync()
@@ -116,8 +118,10 @@ else
             }
         }
 
-        if (rowCount == 0 && ColumnWidth != 0)
+        if (ColumnWidth != 0 && (_currentColumnWidth != ColumnWidth || rowCount == 0))
         {
+            _currentColumnWidth = ColumnWidth;
+
             if (DisplayBasedOnWidth)
             {
                 rowCount = 1;
