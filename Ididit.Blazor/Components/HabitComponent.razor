@@ -64,8 +64,12 @@
     <div class="p-1 border rounded-0">
         <div>Total time spent:</div>
         <div>Average time spent:</div>
-        <div>Average interval:</div>
-        <div>Average interval overdue:</div>
+        <div>Average interval: @Habit.AverageInterval.ToString(@"hh\:mm\:ss")</div>
+        <div>Average interval ratio: @Habit.ElapsedTimeToAverageIntervalRatio.ToString("N0")%</div>
+        @if (Habit.ElapsedTimeToAverageIntervalRatio > 100.0)
+        {
+            <div>Average interval overdue: @((Habit.ElapsedTime - Habit.AverageInterval).ToString(@"hh\:mm\:ss"))</div>
+        }
     </div>
 
     @if (Habit.TimesDone is not null && Habit.LastTimeDoneAt is not null)

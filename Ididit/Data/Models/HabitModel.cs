@@ -14,11 +14,15 @@ public class HabitModel : ItemsModel
 
     public List<TimeModel>? TimesDone { get; set; }
 
+    internal int NonZeroRepeatCount => Math.Max(1, RepeatCount);
+
     internal TimeSpan ElapsedTime => LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : DateTime.Now - CreatedAt;
 
     internal double ElapsedTimeToRepeatIntervalRatio => ElapsedTime / GetRepeatInterval() * 100.0;
 
-    internal int NonZeroRepeatCount => Math.Max(1, RepeatCount);
+    internal double ElapsedTimeToAverageIntervalRatio => ElapsedTime / AverageInterval * 100.0;
+
+    internal TimeSpan AverageInterval { get; set; }
 
     internal TimeOnly DurationProxy
     {
@@ -31,6 +35,8 @@ public class HabitModel : ItemsModel
     public void RefreshTimesDoneByDay()
     {
         TimesDoneByDay = TimesDone?.GroupBy(date => date.StartedAt.Date).ToDictionary(group => group.Key, group => group.ToList());
+
+        OnTimesDoneChanged();
     }
 
     public void AddTimesDoneByDay(TimeModel timeModel)
@@ -46,6 +52,8 @@ public class HabitModel : ItemsModel
         {
             TimesDoneByDay[timeModel.StartedAt.Date] = new() { timeModel };
         }
+
+        OnTimesDoneChanged();
     }
 
     public void RemoveTimesDoneByDay(TimeModel timeModel)
@@ -56,6 +64,30 @@ public class HabitModel : ItemsModel
         if (TimesDoneByDay.TryGetValue(timeModel.StartedAt.Date, out var list) && list.Contains(timeModel))
         {
             list.Remove(timeModel);
+
+            OnTimesDoneChanged();
+        }
+    }
+
+    private void OnTimesDoneChanged()
+    {
+        if (TimesDone is null)
+            return;
+
+        if (TimesDone.Count == 0)
+        {
+            AverageInterval = TimeSpan.Zero;
+        }
+        else if (TimesDone.Count == 1)
+            {
+            if (TimesDone.First().StartedAt > CreatedAt)
+                AverageInterval = TimesDone.First().StartedAt - CreatedAt;
+            else
+                AverageInterval = CreatedAt - TimesDone.First().StartedAt;
+        }
+        else
+        {
+            AverageInterval = TimeSpan.FromMilliseconds(TimesDone.Zip(TimesDone.Skip(1), (x, y) => (y.StartedAt - x.StartedAt).TotalMilliseconds).Average());
         }
     }
 
