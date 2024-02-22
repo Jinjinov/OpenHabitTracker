@@ -49,10 +49,16 @@
     </div>
 
     <div class="input-group flex-nowrap">
-        <span class="input-group-text flex-grow-1">Start timer</span>
-        <button class="btn btn-outline-primary" @onclick="() => {}"><i class="bi bi-play"></i></button>
-        <button class="btn btn-outline-primary" @onclick="() => {}"><i class="bi bi-pause"></i></button>
-        <button class="btn btn-outline-primary" @onclick="() => {}"><i class="bi bi-stop"></i></button>
+        @if (_timer is null)
+        {
+            <span class="input-group-text flex-grow-1">Start timer</span>
+            <button class="btn btn-outline-primary" @onclick="StartTimer"><i class="bi bi-play"></i></button>
+        }
+        else
+        {
+            <span class="input-group-text flex-grow-1">@_elapsedTime.ToString(@"hh\:mm\:ss")</span>
+            <button class="btn btn-outline-primary" @onclick="StopTimer"><i class="bi bi-stop"></i></button>
+        }
     </div>
 
     <div class="p-1 border rounded-0">
@@ -84,6 +90,52 @@
 
     [Parameter]
     public EventCallback CloseSelected { get; set; }
+
+    PeriodicTimer? _timer;
+    TimeSpan _elapsedTime;
+    DateTime _taskStartedTime;
+
+    async Task StartTimer()
+    {
+        if (Habit is null)
+            return;
+
+        TimeSpan? duration = Habit.Duration?.ToTimeSpan();
+
+        await HabitService.Start(Habit);
+
+        _taskStartedTime = DateTime.Now;
+
+        _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+
+        while (_timer is not null && await _timer.WaitForNextTickAsync())
+        {
+            _elapsedTime = DateTime.Now - _taskStartedTime;
+
+            if (duration is not null && _elapsedTime >= duration)
+            {
+                await StopTimer();
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    async Task StopTimer()
+    {
+        if (Habit is null || _timer is null)
+            return;
+
+        await HabitService.MarkAsDone(Habit);
+
+        _timer.Dispose();
+        _timer = null;
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
 
     async Task SaveTitle(HabitModel habit, string title)
     {

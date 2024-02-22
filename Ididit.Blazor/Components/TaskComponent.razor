@@ -80,8 +80,10 @@
 
     async Task StartTimer()
     {
-        if (Task is null || Task.Duration?.ToTimeSpan() is not TimeSpan duration || duration.Ticks == 0)
+        if (Task is null)
             return;
+
+        TimeSpan? duration = Task.Duration?.ToTimeSpan();
 
         await TaskService.Start(Task);
 
@@ -93,7 +95,7 @@
         {
             _elapsedTime = DateTime.Now - _taskStartedTime;
 
-            if (_elapsedTime >= duration)
+            if (duration is not null && _elapsedTime >= duration)
             {
                 await StopTimer();
             }
