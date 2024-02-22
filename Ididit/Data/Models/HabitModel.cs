@@ -87,7 +87,8 @@ public class HabitModel : ItemsModel
         }
         else
         {
-            AverageInterval = TimeSpan.FromMilliseconds(TimesDone.Zip(TimesDone.Skip(1), (x, y) => (y.StartedAt - x.StartedAt).TotalMilliseconds).Average());
+            var timesDone = TimesDone.Select(x => x.StartedAt).Order().ToList();
+            AverageInterval = TimeSpan.FromMilliseconds(timesDone.Zip(timesDone.Skip(1), (x, y) => (y - x).TotalMilliseconds).Average());
         }
     }
 

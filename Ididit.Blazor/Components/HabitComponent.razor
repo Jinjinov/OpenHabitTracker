@@ -64,11 +64,11 @@
     <div class="p-1 border rounded-0">
         <div>Total time spent:</div>
         <div>Average time spent:</div>
-        <div>Average interval: @Habit.AverageInterval.ToString(@"hh\:mm\:ss")</div>
+        <div>Average interval: @ToReadableString(Habit.AverageInterval)</div>
         <div>Average interval ratio: @Habit.ElapsedTimeToAverageIntervalRatio.ToString("N0")%</div>
         @if (Habit.ElapsedTimeToAverageIntervalRatio > 100.0)
         {
-            <div>Average interval overdue: @((Habit.ElapsedTime - Habit.AverageInterval).ToString(@"hh\:mm\:ss"))</div>
+            <div>Average interval overdue: @ToReadableString(Habit.ElapsedTime - Habit.AverageInterval)</div>
         }
     </div>
 
@@ -174,5 +174,16 @@
         habit.DurationProxy = duration;
 
         await HabitService.UpdateHabit();
+    }
+
+    string ToReadableString(TimeSpan span)
+    {
+        string readableString = span.TotalMinutes >= 1.0 ? (
+            (span.Days > 0 ? span.Days + " d" + (span.Hours > 0 || span.Minutes > 0 ? ", " : string.Empty) : string.Empty) +
+            (span.Hours > 0 ? span.Hours + " h" + (span.Minutes > 0 ? ", " : string.Empty) : string.Empty) +
+            (span.Minutes > 0 ? span.Minutes + " m" : string.Empty)
+            ) : "0 " + "m";
+
+        return readableString;
     }
 }
