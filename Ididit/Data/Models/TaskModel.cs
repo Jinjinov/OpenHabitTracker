@@ -15,4 +15,6 @@ public class TaskModel : ItemsModel
         get => Duration ?? TimeOnly.MinValue;
         set => Duration = value == TimeOnly.MinValue ? null : value;
     }
+
+    internal TimeSpan? TimeSpent => CompletedAt - StartedAt;
 }

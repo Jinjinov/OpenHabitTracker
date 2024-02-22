@@ -30,12 +30,15 @@
     <button class="btn btn-outline-primary" @onclick="() => {}"><i class="bi bi-stop"></i></button>
 </div>
 
-<div class="p-1 border rounded-0">
-    <div>Total time spent:</div>
-</div>
-
 @if (Task.StartedAt is not null)
 {
+    @if (Task.CompletedAt is not null && Task.StartedAt != Task.CompletedAt)
+    {
+        <div class="p-1 border rounded-0">
+            <div>Time spent: @Task.TimeSpent?.ToString(@"hh\:mm\:ss")</div>
+        </div>
+    }
+
     <div class="p-1 border rounded-0">
         @if (Task.StartedAt != Task.CompletedAt)
         {

@@ -28,12 +28,13 @@ add `Start` / `Stop` timing buttons
 
 
 
-duration
-start timer
-time spent
-average time spent
+time spent = completed - started
+
+
+average time spent = time spent / count
+
+
 average interval
-interval overdue
 average interval overdue
 average interval ratio
 
