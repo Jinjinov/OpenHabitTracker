@@ -194,6 +194,9 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        // TODO:
+        // public bool isSidebarVisible
+        // private bool wasSidebarVisible
         if (firstRender)
         {
             Dimensions columnDimensions = await JsInterop.GetElementDimensions(columnRef);
