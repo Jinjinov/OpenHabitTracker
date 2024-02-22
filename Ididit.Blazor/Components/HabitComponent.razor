@@ -62,8 +62,8 @@
     </div>
 
     <div class="p-1 border rounded-0">
-        <div>Total time spent:</div>
-        <div>Average time spent:</div>
+        <div>Total time spent: @ToReadableString(Habit.TotalTimeSpent)</div>
+        <div>Average time spent: @ToReadableString(Habit.AverageTimeSpent)</div>
         <div>Average interval: @ToReadableString(Habit.AverageInterval)</div>
         <div>Average interval ratio: @Habit.ElapsedTimeToAverageIntervalRatio.ToString("N0")%</div>
         @if (Habit.ElapsedTimeToAverageIntervalRatio > 100.0)

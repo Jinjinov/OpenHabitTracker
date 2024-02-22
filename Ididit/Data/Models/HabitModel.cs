@@ -24,6 +24,10 @@ public class HabitModel : ItemsModel
 
     internal TimeSpan AverageInterval { get; set; }
 
+    internal TimeSpan TotalTimeSpent { get; set; }
+
+    internal TimeSpan AverageTimeSpent { get; set; }
+
     internal TimeOnly DurationProxy
     {
         get => Duration ?? TimeOnly.MinValue;
@@ -77,18 +81,28 @@ public class HabitModel : ItemsModel
         if (TimesDone.Count == 0)
         {
             AverageInterval = TimeSpan.Zero;
+            TotalTimeSpent = TimeSpan.Zero;
+            AverageTimeSpent = TimeSpan.Zero;
         }
         else if (TimesDone.Count == 1)
-            {
-            if (TimesDone.First().StartedAt > CreatedAt)
-                AverageInterval = TimesDone.First().StartedAt - CreatedAt;
+        {
+            TimeModel timeDone = TimesDone.First();
+
+            if (timeDone.StartedAt > CreatedAt)
+                AverageInterval = timeDone.StartedAt - CreatedAt;
             else
-                AverageInterval = CreatedAt - TimesDone.First().StartedAt;
+                AverageInterval = CreatedAt - timeDone.StartedAt;
+
+            TotalTimeSpent = timeDone.CompletedAt.HasValue ? timeDone.CompletedAt.Value - timeDone.StartedAt : TimeSpan.Zero;
+            AverageTimeSpent = TotalTimeSpent;
         }
         else
         {
             var timesDone = TimesDone.Select(x => x.StartedAt).Order().ToList();
             AverageInterval = TimeSpan.FromMilliseconds(timesDone.Zip(timesDone.Skip(1), (x, y) => (y - x).TotalMilliseconds).Average());
+
+            TotalTimeSpent = new TimeSpan(TimesDone.Sum(x => x.CompletedAt.HasValue ? x.CompletedAt.Value.Ticks - x.StartedAt.Ticks : 0));
+            AverageTimeSpent = TotalTimeSpent / TimesDone.Count;
         }
     }
 
