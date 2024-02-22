@@ -452,6 +452,24 @@ public class AppData(IDataAccess dataAccess)
     {
         DateTime now = DateTime.Now;
 
+        string markdown =
+            """
+            # Markdown
+            ## Heading
+                code
+                block
+            **bold**
+            *italic*
+            ***bold and italic***
+            `code`
+            [ididit!](https://ididit.today)
+            - one item
+            - another item
+            ---
+            1. first item
+            2. second item
+            """;
+
         UserData userData = new()
         {
             Settings = new()
@@ -504,8 +522,8 @@ public class AppData(IDataAccess dataAccess)
                         {
                             Title = "Note 2",
                             Priority = Priority.Low,
-                            Content = "Note 2 line 1\nLine 2",
-                            ContentMarkdown = GetMarkdown("Note 2 line 1\nLine 2"),
+                            Content = markdown,
+                            ContentMarkdown = GetMarkdown(markdown),
                             CreatedAt = now,
                             UpdatedAt = now
                         }
@@ -558,7 +576,7 @@ public class AppData(IDataAccess dataAccess)
                             Duration = new TimeOnly(1,30),
                             TimesDone = new()
                             {
-                                new() { StartedAt = now.AddHours(-1), CompletedAt = now },
+                                new() { StartedAt = now.AddDays(-1), CompletedAt = now },
                                 new() { StartedAt = now.AddHours(-2), CompletedAt = now }
                             },
                             LastTimeDoneAt = now,
@@ -580,7 +598,7 @@ public class AppData(IDataAccess dataAccess)
                             Duration = new TimeOnly(1,30),
                             TimesDone = new()
                             {
-                                new() { StartedAt = now.AddHours(-3), CompletedAt = now },
+                                new() { StartedAt = now.AddDays(-3), CompletedAt = now },
                                 new() { StartedAt = now.AddHours(-4), CompletedAt = now }
                             },
                             LastTimeDoneAt = now,
