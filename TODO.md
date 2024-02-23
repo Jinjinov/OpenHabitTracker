@@ -26,9 +26,11 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-! import / export Markdown
+!!! export Markdown
 
-! settings: theme: Bootstrap / Bootswatch
+! import Markdown
+
+!!! settings: theme: Bootstrap / Bootswatch
 
 ! Google Keep import
 
@@ -36,9 +38,9 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ! Google Drive backup
 
-! localization
+localization
 
-! Note, Task, Habit background color
+!!! Note, Task, Habit background color
 
 ---------------------------------------------------------------------------------------------------
 
