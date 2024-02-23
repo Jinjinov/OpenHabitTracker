@@ -13,6 +13,40 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 ---------------------------------------------------------------------------------------------------
 
 
+
+elapsed time to repeat interval is the main feature
+
+- elapsed time is not a good indicator for urgency
+
+- elapsed time to repeat interval ratio is a much better indicator for urgency
+
+- together with setting the priority, you have a very good overview on what to do next
+
+- powerful advanced Search, filter and sort
+
+ididit! is free, open source and works on Web, Windows, Linux, Android, iOS and macOS!
+
+Take Markdown  notes, manage tasks, track habits.
+
+Import from Google Keep
+Backup to and restore from Google Drive in JSON format
+
+Human readable Markdown and YAML formats
+The popular JSON format
+Excel and Google Sheets compatible TSV (Tab Separated Values)
+
+There are 5 languages:
+
+There are 26 color themes:
+
+
+
+
+
+
+
+
+
 ! help
 
 ! about
@@ -40,6 +74,15 @@ Google Keep import
 Google Drive backup
 
 localization
+
+Note, Task, Habit background color
+
+version history
+
+Google Drive
+OneDrive
+iCloud
+Dropbox
 
 ---------------------------------------------------------------------------------------------------
 
@@ -119,8 +162,6 @@ Google Keep
 
 import Google Keep repeating reminder
 import Google Keep h1, h2, bold, italic, underline
-
-- Note, Task, Habit background color
 
 - localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
 - https://github.com/xaviersolau/BlazorJsonLocalization
