@@ -13,40 +13,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 ---------------------------------------------------------------------------------------------------
 
 
-
-ididit! is free, open source and works on Web, Windows, Linux, Android, iOS and macOS!
-
-Take Markdown notes, manage tasks, track habits.
-
-Elapsed time to repeat interval is the main feature:
-
-- elapsed time is not a good indicator for urgency
-
-- elapsed time to repeat interval ratio is a much better indicator for urgency
-
-- together with setting the priority, you have a very good overview on what to do next
-
-- powerful advanced search, filter and sort
-
-Import from Google Keep
-Backup to and restore from Google Drive in JSON format
-
-Human readable Markdown and YAML formats
-The popular JSON format
-Excel and Google Sheets compatible TSV (Tab Separated Values)
-
-Localized in 5 languages
-
-Available in 26 color themes
-
-
-
-
-
-
-
-
-
 ! help
 
 ! about
