@@ -4,5 +4,6 @@ public enum DataFormat
 {
     Json,
     Tsv,
-    Yaml
+    Yaml,
+    Md
 }

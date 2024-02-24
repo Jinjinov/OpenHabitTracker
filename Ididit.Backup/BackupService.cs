@@ -2,11 +2,12 @@
 
 namespace Ididit.Backup;
 
-public class BackupService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBackup yamlBackup)
+public class BackupService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBackup yamlBackup, MarkdownBackup markdownBackup)
 {
     private readonly JsonBackup _jsonBackup = jsonBackup;
     private readonly TsvBackup _tsvBackup = tsvBackup;
     private readonly YamlBackup _yamlBackup = yamlBackup;
+    private readonly MarkdownBackup _markdownBackup = markdownBackup;
 
     public async Task<string> GetDataExportFileString(DataFormat dataFormat)
     {
@@ -15,6 +16,7 @@ public class BackupService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBacku
             DataFormat.Json => await _jsonBackup.GetDataExportFileString(),
             DataFormat.Tsv => await _tsvBackup.GetDataExportFileString(),
             DataFormat.Yaml => await _yamlBackup.GetDataExportFileString(),
+            DataFormat.Md => await _markdownBackup.GetDataExportFileString(),
             _ => throw new ArgumentOutOfRangeException(nameof(dataFormat)),
         };
     }
@@ -32,6 +34,10 @@ public class BackupService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBacku
         else if (filename.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
         {
             await _yamlBackup.ImportDataFile(stream);
+        }
+        else if (filename.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
+        {
+            await _markdownBackup.ImportDataFile(stream);
         }
     }
 }

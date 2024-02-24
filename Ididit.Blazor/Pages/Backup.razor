@@ -17,6 +17,7 @@
             <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(DataFormat.Json)">Export JSON</button>
             <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(DataFormat.Tsv)">Export TSV</button>
             <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(DataFormat.Yaml)">Export YAML</button>
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(DataFormat.Md)">Export Markdown</button>
 
             @OpenFile.OpenFileDialog("list-group-item list-group-item-action", OnFileOpened)
         </div>

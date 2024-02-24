@@ -10,6 +10,8 @@ public static class Startup
         services.AddScoped<JsonBackup>();
         services.AddScoped<TsvBackup>();
         services.AddScoped<YamlBackup>();
+        services.AddScoped<MarkdownBackup>();
+
         services.AddScoped<BackupService>();
 
         return services;
