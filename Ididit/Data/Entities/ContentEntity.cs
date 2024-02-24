@@ -8,7 +8,7 @@ public class ContentEntity
 
     public string Title { get; set; } = string.Empty;
 
-    public string Color { get; set; } = string.Empty;
+    public string Color { get; set; } = "bg-body-secondary";
 
     public Priority Priority { get; set; }
 

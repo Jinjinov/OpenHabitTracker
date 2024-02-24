@@ -24,8 +24,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 !!! settings: theme: Bootstrap / Bootswatch
 
-!!! Note, Task, Habit background color
-
 ! Google Keep import
 
 localization

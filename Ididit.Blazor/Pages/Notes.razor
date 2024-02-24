@@ -39,6 +39,7 @@
 
             <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.NewNote.Content" placeholder="Add note text" />
 
+            <ColorComponent Model="NoteService.NewNote" />
             <CategoryComponent Model="NoteService.NewNote" />
         </div>
     }
@@ -60,7 +61,7 @@
                 {
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text">@AppData.GetPriorityTitle(note.Priority)</span>
-                        <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary highlightable" @onclick="() => OpenSelected(note.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
+                        <button class="@($"input-group-text flex-grow-1 text-wrap {note.Color} highlightable")" @onclick="() => OpenSelected(note.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
                     </div>
 
                     if (AppData.Settings.DisplayNoteContentAsMarkdown)
@@ -138,7 +139,7 @@
 
     void AddNew()
     {
-        NoteService.NewNote = new();
+        NoteService.NewNote = new() { Color = "bg-body-secondary" };
         shouldFocus = true;
     }
 

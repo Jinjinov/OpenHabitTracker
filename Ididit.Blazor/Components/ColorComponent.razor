@@ -1,0 +1,40 @@
+﻿@using Ididit.Data
+@using Ididit.Data.Models
+@using Ididit.Services
+
+@inject AppData AppData
+
+@if (Model is not null)
+{
+    <InputSelect class="@_background" Value="Model.Color" ValueExpression="() => Model.Color" TValue="string" ValueChanged="SaveColor">
+        <option value="bg-body" class="bg-body"></option>
+        <option value="bg-body-secondary" class="bg-body-secondary"></option>
+        <option value="bg-body-tertiary" class="bg-body-tertiary"></option>
+        <option value="bg-primary-subtle" class="bg-primary-subtle"></option>
+        <option value="bg-secondary-subtle" class="bg-secondary-subtle"></option>
+        <option value="bg-success-subtle" class="bg-success-subtle"></option>
+        <option value="bg-danger-subtle" class="bg-danger-subtle"></option>
+        <option value="bg-warning-subtle" class="bg-warning-subtle"></option>
+        <option value="bg-info-subtle" class="bg-info-subtle"></option>
+        <option value="bg-light-subtle" class="bg-light-subtle"></option>
+        <option value="bg-dark-subtle" class="bg-dark-subtle"></option>
+    </InputSelect>
+}
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public ContentModel? Model { get; set; }
+
+    string _background => Model is not null ? $"form-select {Model.Color}" : "form-select";
+
+    async Task SaveColor(string color)
+    {
+        if (Model is null)
+            return;
+
+        Model.Color = color;
+
+        await AppData.UpdateModel(Model);
+    }
+}

@@ -58,6 +58,7 @@
                 <InputDate class="form-control" id="durationInput" @bind-Value="HabitService.NewHabit.DurationProxy" Type="InputDateType.Time" />
             </div>
 
+            <ColorComponent Model="HabitService.NewHabit" />
             <CategoryComponent Model="HabitService.NewHabit" />
         </div>
     }
@@ -85,7 +86,7 @@
                     <div class="w-100">
                         <div class="input-group flex-nowrap" style="@style">
                             <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
-                            <button class="input-group-text flex-grow-1 text-wrap bg-body-secondary highlightable" @onclick="() => OpenSelected(habit.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
+                            <button class="@($"input-group-text flex-grow-1 text-wrap {habit.Color} highlightable")" @onclick="() => OpenSelected(habit.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
 
                             @*
                             @if (habit.LastTimeDoneAt is not null)
@@ -226,7 +227,7 @@
 
     void AddNew()
     {
-        HabitService.NewHabit = new();
+        HabitService.NewHabit = new() { Color = "bg-body-secondary" };
         shouldFocus = true;
     }
 
