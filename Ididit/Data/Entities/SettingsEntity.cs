@@ -4,7 +4,7 @@ public class SettingsEntity
 {
     public long Id { get; set; }
 
-    public bool IsDarkMode { get; set; }
+    public bool IsDarkMode { get; set; } = true;
 
     public string StartPage { get; set; } = string.Empty;
 
@@ -12,11 +12,11 @@ public class SettingsEntity
 
     public DayOfWeek FirstDayOfWeek { get; set; }
 
-    public bool ShowItemList { get; set; }
+    public bool ShowItemList { get; set; } = true;
 
-    public bool ShowSmallCalendar { get; set; }
+    public bool ShowSmallCalendar { get; set; } = true;
 
-    public bool ShowLargeCalendar { get; set; }
+    public bool ShowLargeCalendar { get; set; } = true;
 
     public bool InsertTabsInNoteContent { get; set; }
 

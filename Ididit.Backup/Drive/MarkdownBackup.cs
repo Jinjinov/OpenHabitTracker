@@ -20,42 +20,56 @@ public class MarkdownBackup(AppData appData)
             stringBuilder.AppendLine();
 
             if (category.Notes is not null)
+            {
                 foreach (NoteModel note in category.Notes)
                 {
                     stringBuilder.AppendLine($"## {note.Title}");
                     stringBuilder.AppendLine();
 
-                    stringBuilder.AppendLine(note.Content);
+                    stringBuilder.AppendLine(note.Content.Replace("\n", "\n\n"));
                     stringBuilder.AppendLine();
                 }
+            }
 
             if (category.Tasks is not null)
+            {
                 foreach (TaskModel task in category.Tasks)
                 {
                     stringBuilder.AppendLine($"## {task.Title}");
                     stringBuilder.AppendLine();
 
                     if (task.Items is not null)
+                    {
                         foreach (ItemModel item in task.Items)
                         {
-                            stringBuilder.AppendLine(item.Title);
-                            stringBuilder.AppendLine();
+                            stringBuilder.AppendLine($"- {item.Title}");
                         }
+
+                        if (task.Items.Count > 0)
+                            stringBuilder.AppendLine();
+                    }
                 }
+            }
 
             if (category.Habits is not null)
+            {
                 foreach (HabitModel habit in category.Habits)
                 {
                     stringBuilder.AppendLine($"## {habit.Title}");
                     stringBuilder.AppendLine();
 
                     if (habit.Items is not null)
+                    {
                         foreach (ItemModel item in habit.Items)
                         {
-                            stringBuilder.AppendLine(item.Title);
-                            stringBuilder.AppendLine();
+                            stringBuilder.AppendLine($"- {item.Title}");
                         }
+
+                        if (habit.Items.Count > 0)
+                            stringBuilder.AppendLine();
+                    }
                 }
+            }
         }
 
         return stringBuilder.ToString();
@@ -72,7 +86,10 @@ public class MarkdownBackup(AppData appData)
         UserData userData = new();
 
         CategoryModel category = new();
-        NoteModel note = new();
+        NoteModel? note = null;
+        TaskModel? task = null;
+        HabitModel? habit = null;
+        string? newTitle = null;
 
         string? line;
         while ((line = stringReader.ReadLine()) is not null)
@@ -82,19 +99,69 @@ public class MarkdownBackup(AppData appData)
 
             if (line.StartsWith("# "))
             {
-                category = new() { Title = line[2..] };
+                category = new()
+                {
+                    Title = line[2..],
+                    Notes = new(),
+                    Tasks = new(),
+                    Habits = new()
+                };
+
                 userData.Categories.Add(category);
+
+                continue;
             }
 
             category.Notes ??= new();
+            category.Tasks ??= new();
+            category.Habits ??= new();
 
             if (line.StartsWith("## "))
             {
-                note = new() { Title = line[3..] };
-                category.Notes.Add(note);
+                newTitle = line[3..];
+                continue;
             }
 
-            note.Content += line;
+            if (newTitle is not null)
+            {
+                if (line.StartsWith("- "))
+                {
+                    task = new() { Title = newTitle };
+                    category.Tasks.Add(task);
+
+                    note = null;
+                    habit = null;
+                }
+                else
+                {
+                    note = new() { Title = newTitle };
+                    category.Notes.Add(note);
+
+                    task = null;
+                    habit = null;
+                }
+
+                newTitle = null;
+            }
+
+            if (task is not null)
+            {
+                if (line.StartsWith("- "))
+                {
+                    task.Items ??= new();
+
+                    ItemModel item = new() { Title = line[2..] };
+                    task.Items.Add(item);
+                }
+            }
+
+            if (note is not null)
+            {
+                if (!string.IsNullOrEmpty(note.Content))
+                    note.Content += "\n";
+
+                note.Content += line;
+            }
         }
 
         await _appData.SetUserData(userData);

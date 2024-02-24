@@ -22,10 +22,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-!!! export Markdown
-
-! import Markdown
-
 !!! settings: theme: Bootstrap / Bootswatch
 
 !!! Note, Task, Habit background color

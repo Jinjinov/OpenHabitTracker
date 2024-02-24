@@ -395,6 +395,8 @@ public class AppData(IDataAccess dataAccess)
         foreach ((NoteModel Model, NoteEntity Entity) in notes)
         {
             Model.Id = Entity.Id;
+
+            Model.ContentMarkdown = GetMarkdown(Model.Content);
         }
 
         foreach ((TaskModel Model, TaskEntity Entity) in tasks)
