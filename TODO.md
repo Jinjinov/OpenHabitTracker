@@ -20,9 +20,7 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ! readme
 
-- host 24/7 on Raspberry Pi
-	test fan
-	always on
+
 
 ---------------------------------------------------------------------------------------------------
 
@@ -38,6 +36,13 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 localization
 
+sort by
+	average interval
+	duration
+	time spent
+
+show average interval overdue / ratio after the Title
+
 ---------------------------------------------------------------------------------------------------
 
 backup
@@ -49,7 +54,14 @@ backup
 		desktop authorisation
 		mobile authorisation
 
-version history - SQL Server - Blazor Server
+SQL Server - Blazor Server
+	version history
+	table User
+	column UserId in every other table
+	EF Core: use `DbContextFactory`
+
+host 24/7 on Raspberry Pi
+	test fan
 
 ---------------------------------------------------------------------------------------------------
 
@@ -78,8 +90,6 @@ horizontal calendar with vertical weeks
 common `Router`
 	Ididit.Blazor - Routes.razor
 	Ididit.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
-
-EF Core: use `DbContextFactory`
 
 benchmark method time & render time
 
