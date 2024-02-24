@@ -140,21 +140,22 @@ public class AppData(IDataAccess dataAccess)
             await InitializePriorities();
 
             IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
-            Habits = habits.Select(h => new HabitModel
+            Habits = habits.Select(x => new HabitModel
             {
-                Id = h.Id,
-                CategoryId = h.CategoryId,
-                Priority = h.Priority,
-                IsDeleted = h.IsDeleted,
-                Title = h.Title,
-                CreatedAt = h.CreatedAt,
-                UpdatedAt = h.UpdatedAt,
+                Id = x.Id,
+                CategoryId = x.CategoryId,
+                Priority = x.Priority,
+                IsDeleted = x.IsDeleted,
+                Title = x.Title,
+                Color = x.Color,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
 
-                RepeatCount = h.RepeatCount,
-                RepeatInterval = h.RepeatInterval,
-                RepeatPeriod = h.RepeatPeriod,
-                Duration = h.Duration,
-                LastTimeDoneAt = h.LastTimeDoneAt
+                RepeatCount = x.RepeatCount,
+                RepeatInterval = x.RepeatInterval,
+                RepeatPeriod = x.RepeatPeriod,
+                Duration = x.Duration,
+                LastTimeDoneAt = x.LastTimeDoneAt
             }).ToDictionary(x => x.Id);
         }
     }
@@ -167,18 +168,19 @@ public class AppData(IDataAccess dataAccess)
             await InitializePriorities();
 
             IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
-            Notes = notes.Select(n => new NoteModel
+            Notes = notes.Select(x => new NoteModel
             {
-                Id = n.Id,
-                CategoryId = n.CategoryId,
-                Priority = n.Priority,
-                IsDeleted = n.IsDeleted,
-                Title = n.Title,
-                CreatedAt = n.CreatedAt,
-                UpdatedAt = n.UpdatedAt,
+                Id = x.Id,
+                CategoryId = x.CategoryId,
+                Priority = x.Priority,
+                IsDeleted = x.IsDeleted,
+                Title = x.Title,
+                Color = x.Color,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
 
-                Content = n.Content,
-                ContentMarkdown = GetMarkdown(n.Content)
+                Content = x.Content,
+                ContentMarkdown = GetMarkdown(x.Content)
             }).ToDictionary(x => x.Id);
         }
     }
@@ -191,20 +193,21 @@ public class AppData(IDataAccess dataAccess)
             await InitializePriorities();
 
             IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
-            Tasks = tasks.Select(t => new TaskModel
+            Tasks = tasks.Select(x => new TaskModel
             {
-                Id = t.Id,
-                CategoryId = t.CategoryId,
-                Priority = t.Priority,
-                IsDeleted = t.IsDeleted,
-                Title = t.Title,
-                CreatedAt = t.CreatedAt,
-                UpdatedAt = t.UpdatedAt,
+                Id = x.Id,
+                CategoryId = x.CategoryId,
+                Priority = x.Priority,
+                IsDeleted = x.IsDeleted,
+                Title = x.Title,
+                Color = x.Color,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
 
-                StartedAt = t.StartedAt,
-                CompletedAt = t.CompletedAt,
-                PlannedAt = t.PlannedAt,
-                Duration = t.Duration
+                StartedAt = x.StartedAt,
+                CompletedAt = x.CompletedAt,
+                PlannedAt = x.PlannedAt,
+                Duration = x.Duration
             }).ToDictionary(x => x.Id);
         }
     }

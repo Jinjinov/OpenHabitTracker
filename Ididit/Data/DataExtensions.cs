@@ -31,6 +31,7 @@ public static class DataExtensions
         entity.Priority = model.Priority;
         entity.IsDeleted = model.IsDeleted;
         entity.Title = model.Title;
+        entity.Color = model.Color;
         entity.CreatedAt = model.CreatedAt;
         entity.UpdatedAt = model.UpdatedAt;
 
@@ -69,6 +70,7 @@ public static class DataExtensions
         entity.Priority = model.Priority;
         entity.IsDeleted = model.IsDeleted;
         entity.Title = model.Title;
+        entity.Color = model.Color;
         entity.CreatedAt = model.CreatedAt;
         entity.UpdatedAt = model.UpdatedAt;
 
@@ -127,6 +129,7 @@ public static class DataExtensions
         entity.Priority = model.Priority;
         entity.IsDeleted = model.IsDeleted;
         entity.Title = model.Title;
+        entity.Color = model.Color;
         entity.CreatedAt = model.CreatedAt;
         entity.UpdatedAt = model.UpdatedAt;
 

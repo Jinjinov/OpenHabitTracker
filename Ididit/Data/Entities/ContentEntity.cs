@@ -8,6 +8,8 @@ public class ContentEntity
 
     public string Title { get; set; } = string.Empty;
 
+    public string Color { get; set; } = string.Empty;
+
     public Priority Priority { get; set; }
 
     public bool IsDeleted { get; set; }
