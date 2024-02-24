@@ -32,24 +32,24 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 !!! settings: theme: Bootstrap / Bootswatch
 
+!!! Note, Task, Habit background color
+
 ! Google Keep import
-
----------------------------------------------------------------------------------------------------
-
-! Google Drive backup
 
 localization
 
-!!! Note, Task, Habit background color
-
 ---------------------------------------------------------------------------------------------------
 
-version history
+backup
+	Google Drive
+	OneDrive
+	iCloud
+	Dropbox
+		WASM authorisation
+		desktop authorisation
+		mobile authorisation
 
-Google Drive
-OneDrive
-iCloud
-Dropbox
+version history - SQL Server - Blazor Server
 
 ---------------------------------------------------------------------------------------------------
 
