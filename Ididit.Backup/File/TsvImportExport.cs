@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace Ididit.Backup.File;
 
-public class TsvBackup(AppData appData)
+public class TsvImportExport(AppData appData)
 {
     private readonly AppData _appData = appData;
 

@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Ididit.Backup.File;
 
-public class JsonBackup(AppData appData)
+public class JsonImportExport(AppData appData)
 {
     private readonly AppData _appData = appData;
 

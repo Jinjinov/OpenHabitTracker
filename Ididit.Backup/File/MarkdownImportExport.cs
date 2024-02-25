@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ididit.Backup.File;
 
-public class MarkdownBackup(AppData appData)
+public class MarkdownImportExport(AppData appData)
 {
     private readonly AppData _appData = appData;
 

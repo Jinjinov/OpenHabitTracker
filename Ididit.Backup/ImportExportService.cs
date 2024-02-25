@@ -3,22 +3,22 @@ using Ididit.Backup.GoogleKeep;
 
 namespace Ididit.Backup;
 
-public class ImportExportService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBackup yamlBackup, MarkdownBackup markdownBackup, GoogleKeepImport googleKeepImport)
+public class ImportExportService(JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport)
 {
-    private readonly JsonBackup _jsonBackup = jsonBackup;
-    private readonly TsvBackup _tsvBackup = tsvBackup;
-    private readonly YamlBackup _yamlBackup = yamlBackup;
-    private readonly MarkdownBackup _markdownBackup = markdownBackup;
+    private readonly JsonImportExport _jsonImportExport = jsonImportExport;
+    private readonly TsvImportExport _tsvImportExport = tsvImportExport;
+    private readonly YamlImportExport _yamlImportExport = yamlImportExport;
+    private readonly MarkdownImportExport _markdownImportExport = markdownImportExport;
     private readonly GoogleKeepImport _googleKeepImport = googleKeepImport;
 
     public async Task<string> GetDataExportFileString(FileFormat fileFormat)
     {
         return fileFormat switch
         {
-            FileFormat.Json => await _jsonBackup.GetDataExportFileString(),
-            FileFormat.Tsv => await _tsvBackup.GetDataExportFileString(),
-            FileFormat.Yaml => await _yamlBackup.GetDataExportFileString(),
-            FileFormat.Md => await _markdownBackup.GetDataExportFileString(),
+            FileFormat.Json => await _jsonImportExport.GetDataExportFileString(),
+            FileFormat.Tsv => await _tsvImportExport.GetDataExportFileString(),
+            FileFormat.Yaml => await _yamlImportExport.GetDataExportFileString(),
+            FileFormat.Md => await _markdownImportExport.GetDataExportFileString(),
             _ => throw new ArgumentOutOfRangeException(nameof(fileFormat)),
         };
     }
@@ -27,19 +27,19 @@ public class ImportExportService(JsonBackup jsonBackup, TsvBackup tsvBackup, Yam
     {
         if (filename.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
         {
-            await _jsonBackup.ImportDataFile(stream);
+            await _jsonImportExport.ImportDataFile(stream);
         }
         else if (filename.EndsWith(".tsv", StringComparison.OrdinalIgnoreCase))
         {
-            await _tsvBackup.ImportDataFile(stream);
+            await _tsvImportExport.ImportDataFile(stream);
         }
         else if (filename.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
         {
-            await _yamlBackup.ImportDataFile(stream);
+            await _yamlImportExport.ImportDataFile(stream);
         }
         else if (filename.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
         {
-            await _markdownBackup.ImportDataFile(stream);
+            await _markdownImportExport.ImportDataFile(stream);
         }
         else if (filename.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
         {

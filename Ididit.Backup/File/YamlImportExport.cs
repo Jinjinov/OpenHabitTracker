@@ -3,7 +3,7 @@ using YamlDotNet.Serialization;
 
 namespace Ididit.Backup.File;
 
-public class YamlBackup(AppData appData)
+public class YamlImportExport(AppData appData)
 {
     private readonly AppData _appData = appData;
 

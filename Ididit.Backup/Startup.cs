@@ -8,10 +8,10 @@ public static class Startup
 {
     public static IServiceCollection AddBackup(this IServiceCollection services)
     {
-        services.AddScoped<JsonBackup>();
-        services.AddScoped<TsvBackup>();
-        services.AddScoped<YamlBackup>();
-        services.AddScoped<MarkdownBackup>();
+        services.AddScoped<JsonImportExport>();
+        services.AddScoped<TsvImportExport>();
+        services.AddScoped<YamlImportExport>();
+        services.AddScoped<MarkdownImportExport>();
 
         services.AddScoped<GoogleKeepImport>();
 
