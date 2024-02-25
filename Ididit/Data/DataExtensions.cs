@@ -105,6 +105,7 @@ public static class DataExtensions
         entity.StartPage = model.StartPage;
         entity.StartSidebar = model.StartSidebar;
         entity.FirstDayOfWeek = model.FirstDayOfWeek;
+        entity.SelectedRatio = model.SelectedRatio;
         entity.ShowItemList = model.ShowItemList;
         entity.ShowSmallCalendar = model.ShowSmallCalendar;
         entity.ShowLargeCalendar = model.ShowLargeCalendar;

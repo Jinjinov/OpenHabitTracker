@@ -14,6 +14,8 @@ public class SettingsEntity
 
     public DayOfWeek FirstDayOfWeek { get; set; }
 
+    public Ratio SelectedRatio { get; set; }
+
     public bool ShowItemList { get; set; } = true;
 
     public bool ShowSmallCalendar { get; set; } = true;
