@@ -59,8 +59,15 @@
     </div>
 }
 
-<ColorComponent Model="Task" />
-<CategoryComponent Model="Task" />
+<div class="input-group flex-nowrap">
+    <span class="input-group-text col-4">Color</span>
+    <ColorComponent Model="Task" />
+</div>
+
+<div class="input-group flex-nowrap">
+    <span class="input-group-text col-4">Category</span>
+    <CategoryComponent Model="Task" />
+</div>
 
 <div class="p-1 border rounded-0">
     <small class="d-inline-block mx-1">Created: @Task.CreatedAt</small>

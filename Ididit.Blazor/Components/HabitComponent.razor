@@ -83,8 +83,15 @@
         </div>
     }
 
-    <ColorComponent Model="Habit" />
-    <CategoryComponent Model="Habit" />
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text col-4">Color</span>
+        <ColorComponent Model="Habit" />
+    </div>
+
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text col-4">Category</span>
+        <CategoryComponent Model="Habit" />
+    </div>
 
     <div class="p-1 border rounded-0">
         <small class="d-inline-block mx-1">Created: @Habit.CreatedAt</small>

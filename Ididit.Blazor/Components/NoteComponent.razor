@@ -15,8 +15,15 @@
 
 <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" Value="@Note.Content" ValueExpression="() => Note.Content" ValueChanged="(string content) => SaveContent(Note, content)" rows="@(Note.Content.Count(c => c == '\n') + 1)" placeholder="Add note text" />
 
-<ColorComponent Model="Note" />
-<CategoryComponent Model="Note" />
+<div class="input-group flex-nowrap">
+    <span class="input-group-text col-4">Color</span>
+    <ColorComponent Model="Note" />
+</div>
+
+<div class="input-group flex-nowrap">
+    <span class="input-group-text col-4">Category</span>
+    <CategoryComponent Model="Note" />
+</div>
 
 <div class="p-1 border rounded-0">
     <small class="d-inline-block mx-1">Created: @Note.CreatedAt</small>
