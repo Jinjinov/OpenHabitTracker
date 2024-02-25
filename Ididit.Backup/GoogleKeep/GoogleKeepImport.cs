@@ -20,23 +20,57 @@ public class GoogleKeepImport(AppData appData)
         TaskModel? task = null;
         HabitModel? habit = null;
 
+        DateTime now = DateTime.Now;
+
         foreach (GoogleKeepNote googleKeepNote in googleKeepNotes.OrderByDescending(gkn => gkn.CreatedTimestampUsec))
         {
             category.Notes ??= new();
             category.Tasks ??= new();
             category.Habits ??= new();
 
-            note = new()
+            if (googleKeepNote.ListContent.Count == 0)
             {
-                Title = googleKeepNote.Title,
-                Content = googleKeepNote.TextContent,
-                IsDeleted = googleKeepNote.IsTrashed,
-                //Color = googleKeepNote.Color
-                CreatedAt = new DateTime(googleKeepNote.CreatedTimestampUsec),
-                UpdatedAt = new DateTime(googleKeepNote.UserEditedTimestampUsec)
-            };
+                note = new()
+                {
+                    Title = googleKeepNote.Title,
+                    Content = googleKeepNote.TextContent,
+                    IsDeleted = googleKeepNote.IsTrashed,
+                    //Color = googleKeepNote.Color
+                    CreatedAt = new DateTime(googleKeepNote.CreatedTimestampUsec),
+                    UpdatedAt = new DateTime(googleKeepNote.UserEditedTimestampUsec)
+                };
 
-            category.Notes.Add(note);
+                category.Notes.Add(note);
+            }
+            else
+            {
+                task = new()
+                {
+                    Title = googleKeepNote.Title,
+                    IsDeleted = googleKeepNote.IsTrashed,
+                    //Color = googleKeepNote.Color
+                    CreatedAt = new DateTime(googleKeepNote.CreatedTimestampUsec),
+                    UpdatedAt = new DateTime(googleKeepNote.UserEditedTimestampUsec)
+                };
+
+                if (googleKeepNote.ListContent.Count > 0)
+                {
+                    task.Items = new();
+
+                    foreach (ListContent listContent in googleKeepNote.ListContent)
+                    {
+                        ItemModel item = new()
+                        {
+                            Title = listContent.Text,
+                            DoneAt = listContent.IsChecked ? now : null
+                        };
+
+                        task.Items.Add(item);
+                    }
+                }
+
+                category.Tasks.Add(task);
+            }
         }
 
         await _appData.SetUserData(userData);

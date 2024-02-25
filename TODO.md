@@ -31,8 +31,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 !!! show ""selected ratio"" after the Title
 
-! Google Keep import
-
 ---------------------------------------------------------------------------------------------------
 
 backup
