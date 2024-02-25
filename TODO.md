@@ -125,7 +125,6 @@ Google Keep
 		- underline
 		- clear (\) text (T) formatting
 
-import Google Keep repeating reminder
 import Google Keep h1, h2, bold, italic, underline
 
 - localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0

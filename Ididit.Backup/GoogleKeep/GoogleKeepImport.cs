@@ -24,6 +24,22 @@ public class GoogleKeepImport(AppData appData)
 
         foreach (GoogleKeepNote googleKeepNote in googleKeepNotes.OrderByDescending(gkn => gkn.CreatedTimestampUsec))
         {
+            if (googleKeepNote.Labels.Count > 0)
+            {
+                Label label = googleKeepNote.Labels.First();
+
+                if (userData.Categories.FirstOrDefault(x => x.Title == label.Name) is CategoryModel categoryModel)
+                {
+                    category = categoryModel;
+                }
+                else
+                {
+                    category = new() { Title = label.Name };
+
+                    userData.Categories.Add(category);
+                }
+            }
+
             category.Notes ??= new();
             category.Tasks ??= new();
             category.Habits ??= new();
