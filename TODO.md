@@ -20,18 +20,18 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ! readme
 
+! localization
+
 ---------------------------------------------------------------------------------------------------
-
-! Google Keep import
-
-localization
 
 !!! ""selected ratio""
 	interval ratio
 	average interval ratio
-	interval to average interval ratio
+	average interval to interval ratio
 
 !!! show ""selected ratio"" after the Title
+
+! Google Keep import
 
 ---------------------------------------------------------------------------------------------------
 
