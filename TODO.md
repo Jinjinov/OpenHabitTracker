@@ -26,19 +26,12 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 localization
 
-in details
-	interval overdue
-	interval ratio
-	average interval overdue
-	average interval ratio
-	interval to average interval ratio
-
-selected ratio
+!!! ""selected ratio""
 	interval ratio
 	average interval ratio
 	interval to average interval ratio
 
-!!! show average interval overdue / ratio after the Title
+!!! show ""selected ratio"" after the Title
 
 ---------------------------------------------------------------------------------------------------
 
