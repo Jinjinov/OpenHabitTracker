@@ -58,8 +58,15 @@
                 <InputDate class="form-control" id="durationInput" @bind-Value="HabitService.NewHabit.DurationProxy" Type="InputDateType.Time" />
             </div>
 
-            <ColorComponent Model="HabitService.NewHabit" />
-            <CategoryComponent Model="HabitService.NewHabit" />
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">Color</span>
+                <ColorComponent Model="HabitService.NewHabit" />
+            </div>
+
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">Category</span>
+                <CategoryComponent Model="HabitService.NewHabit" />
+            </div>
         </div>
     }
 

@@ -39,8 +39,15 @@
 
             <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.NewNote.Content" placeholder="Add note text" />
 
-            <ColorComponent Model="NoteService.NewNote" />
-            <CategoryComponent Model="NoteService.NewNote" />
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">Color</span>
+                <ColorComponent Model="NoteService.NewNote" />
+            </div>
+
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">Category</span>
+                <CategoryComponent Model="NoteService.NewNote" />
+            </div>
         </div>
     }
 
