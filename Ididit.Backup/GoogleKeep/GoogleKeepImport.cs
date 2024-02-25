@@ -9,13 +9,45 @@ public class GoogleKeepImport(AppData appData)
 {
     private readonly AppData _appData = appData;
 
+    readonly Dictionary<string, string> _namedColors = new()
+    {
+        { "DEFAULT", "transparent" },
+        { "BLUE", "blue" },
+        { "BROWN", "brown" },
+        { "CERULEAN", "steelblue" },
+        { "GRAY", "gray" },
+        { "GREEN", "green" },
+        { "ORANGE", "orange" },
+        { "PINK", "pink" },
+        { "PURPLE", "purple" },
+        { "RED", "red" },
+        { "TEAL", "teal" },
+        { "YELLOW", "yellow" },
+    };
+
+    readonly Dictionary<string, string> _bootstrapClass = new()
+    {
+        { "DEFAULT", "bg-transparent" },
+        { "BLUE", "bg-primary-subtle" },
+        { "BROWN", "bg-dark-subtle" },
+        { "CERULEAN", "bg-light-subtle" },
+        { "GRAY", "bg-secondary-subtle" },
+        { "GREEN", "bg-success-subtle" },
+        { "ORANGE", "bg-body-tertiary" },
+        { "PINK", "bg-body-secondary" },
+        { "PURPLE", "bg-body" },
+        { "RED", "bg-danger-subtle" },
+        { "TEAL", "bg-info-subtle" },
+        { "YELLOW", "bg-warning-subtle" },
+    };
+
     public async Task ImportDataFile(Stream stream)
     {
         List<GoogleKeepNote> googleKeepNotes = await GetGoogleKeepNotes(stream);
 
         UserData userData = new();
 
-        CategoryModel category = new();
+        CategoryModel? category = null;
         NoteModel? note = null;
         TaskModel? task = null;
         HabitModel? habit = null;
@@ -40,6 +72,13 @@ public class GoogleKeepImport(AppData appData)
                 }
             }
 
+            if (category is null)
+            {
+                category = new();
+
+                userData.Categories.Add(category);
+            }
+
             category.Notes ??= new();
             category.Tasks ??= new();
             category.Habits ??= new();
@@ -51,7 +90,7 @@ public class GoogleKeepImport(AppData appData)
                     Title = googleKeepNote.Title,
                     Content = googleKeepNote.TextContent,
                     IsDeleted = googleKeepNote.IsTrashed,
-                    //Color = googleKeepNote.Color
+                    Color = _bootstrapClass[googleKeepNote.Color],
                     CreatedAt = new DateTime(googleKeepNote.CreatedTimestampUsec),
                     UpdatedAt = new DateTime(googleKeepNote.UserEditedTimestampUsec)
                 };
@@ -64,7 +103,7 @@ public class GoogleKeepImport(AppData appData)
                 {
                     Title = googleKeepNote.Title,
                     IsDeleted = googleKeepNote.IsTrashed,
-                    //Color = googleKeepNote.Color
+                    Color = _bootstrapClass[googleKeepNote.Color],
                     CreatedAt = new DateTime(googleKeepNote.CreatedTimestampUsec),
                     UpdatedAt = new DateTime(googleKeepNote.UserEditedTimestampUsec)
                 };
