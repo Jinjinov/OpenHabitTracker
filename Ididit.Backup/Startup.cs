@@ -1,4 +1,5 @@
 ﻿using Ididit.Backup.File;
+using Ididit.Backup.GoogleKeep;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ididit.Backup;
@@ -11,6 +12,8 @@ public static class Startup
         services.AddScoped<TsvBackup>();
         services.AddScoped<YamlBackup>();
         services.AddScoped<MarkdownBackup>();
+
+        services.AddScoped<GoogleKeepImport>();
 
         services.AddScoped<ImportExportService>();
 

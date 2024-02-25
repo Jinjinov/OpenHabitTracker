@@ -1,13 +1,15 @@
 ﻿using Ididit.Backup.File;
+using Ididit.Backup.GoogleKeep;
 
 namespace Ididit.Backup;
 
-public class ImportExportService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBackup yamlBackup, MarkdownBackup markdownBackup)
+public class ImportExportService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBackup yamlBackup, MarkdownBackup markdownBackup, GoogleKeepImport googleKeepImport)
 {
     private readonly JsonBackup _jsonBackup = jsonBackup;
     private readonly TsvBackup _tsvBackup = tsvBackup;
     private readonly YamlBackup _yamlBackup = yamlBackup;
     private readonly MarkdownBackup _markdownBackup = markdownBackup;
+    private readonly GoogleKeepImport _googleKeepImport = googleKeepImport;
 
     public async Task<string> GetDataExportFileString(FileFormat fileFormat)
     {
@@ -38,6 +40,10 @@ public class ImportExportService(JsonBackup jsonBackup, TsvBackup tsvBackup, Yam
         else if (filename.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
         {
             await _markdownBackup.ImportDataFile(stream);
+        }
+        else if (filename.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+        {
+            await _googleKeepImport.ImportDataFile(stream);
         }
     }
 }

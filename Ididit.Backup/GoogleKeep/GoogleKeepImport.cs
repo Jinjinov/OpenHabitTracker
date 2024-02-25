@@ -9,7 +9,7 @@ public class GoogleKeepImport(AppData appData)
 {
     private readonly AppData _appData = appData;
 
-    public async Task ImportData(Stream stream)
+    public async Task ImportDataFile(Stream stream)
     {
         List<GoogleKeepNote> googleKeepNotes = await GetGoogleKeepNotes(stream);
 
