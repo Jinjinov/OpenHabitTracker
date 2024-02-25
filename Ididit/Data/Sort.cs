@@ -8,6 +8,10 @@ public enum Sort
     PlannedAt,
     Duration,
     RepeatInterval,
+    AverageInterval,
+    TimeSpent,
+    AverageTimeSpent,
     ElapsedTime,
-    ElapsedTimeToRepeatIntervalRatio
+    ElapsedTimeToRepeatIntervalRatio,
+    ElapsedTimeToAverageIntervalRatio
 }

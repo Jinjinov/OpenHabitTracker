@@ -62,6 +62,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
             Sort.Duration => tasks.OrderBy(x => x.Duration),
             Sort.ElapsedTime => tasks.OrderBy(x => x.CompletedAt),
             Sort.PlannedAt => tasks.OrderBy(x => x.PlannedAt),
+            Sort.TimeSpent => tasks.OrderBy(x => x.TimeSpent),
             _ => tasks
         };
     }

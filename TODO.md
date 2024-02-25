@@ -26,12 +26,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 localization
 
-!!! sort by
-	average interval
-	duration
-	time spent
-	average time spent
-
 !!! show average interval overdue / ratio after the Title
 
 ---------------------------------------------------------------------------------------------------
