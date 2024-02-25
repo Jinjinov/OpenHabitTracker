@@ -24,6 +24,12 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         return await module.InvokeAsync<string>("showPrompt", message);
     }
 
+    public async ValueTask SetMode(string mode)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("setMode", mode);
+    }
+
     public async ValueTask SetTheme(string theme)
     {
         IJSObjectReference module = await _moduleTask.Value;

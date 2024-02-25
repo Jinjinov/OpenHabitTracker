@@ -6,6 +6,8 @@ public class SettingsEntity
 
     public bool IsDarkMode { get; set; } = true;
 
+    public string Theme { get; set; } = "default";
+
     public string StartPage { get; set; } = string.Empty;
 
     public string StartSidebar { get; set; } = string.Empty;

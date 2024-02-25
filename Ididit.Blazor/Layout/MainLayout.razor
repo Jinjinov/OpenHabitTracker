@@ -89,7 +89,10 @@
         await AppData.InitializeSettings();
 
         if (!AppData.Settings.IsDarkMode)
-            await JsInterop.SetTheme("light");
+            await JsInterop.SetMode("light");
+
+        if (AppData.Settings.Theme != "default")
+            await JsInterop.SetTheme(AppData.Settings.Theme);
 
         Dictionary<string, object> dynamicComponentParameters = new Dictionary<string, object>()
         {

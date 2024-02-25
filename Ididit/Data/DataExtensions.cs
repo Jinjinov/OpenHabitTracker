@@ -101,6 +101,7 @@ public static class DataExtensions
     {
         entity.Id = model.Id;
         entity.IsDarkMode = model.IsDarkMode;
+        entity.Theme = model.Theme;
         entity.StartPage = model.StartPage;
         entity.StartSidebar = model.StartSidebar;
         entity.FirstDayOfWeek = model.FirstDayOfWeek;

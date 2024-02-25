@@ -7,17 +7,18 @@
 @if (Model is not null)
 {
     <InputSelect class="@_background" Value="Model.Color" ValueExpression="() => Model.Color" TValue="string" ValueChanged="SaveColor">
-        <option value="bg-body" class="bg-body"></option>
-        <option value="bg-body-secondary" class="bg-body-secondary"></option>
-        <option value="bg-body-tertiary" class="bg-body-tertiary"></option>
-        <option value="bg-primary-subtle" class="bg-primary-subtle"></option>
-        <option value="bg-secondary-subtle" class="bg-secondary-subtle"></option>
-        <option value="bg-success-subtle" class="bg-success-subtle"></option>
-        <option value="bg-danger-subtle" class="bg-danger-subtle"></option>
-        <option value="bg-warning-subtle" class="bg-warning-subtle"></option>
-        <option value="bg-info-subtle" class="bg-info-subtle"></option>
-        <option value="bg-light-subtle" class="bg-light-subtle"></option>
-        <option value="bg-dark-subtle" class="bg-dark-subtle"></option>
+        <option value="bg-transparent" class="bg-transparent">transparent</option>
+        <option value="bg-body" class="bg-body">body</option>
+        <option value="bg-body-secondary" class="bg-body-secondary">body secondary</option>
+        <option value="bg-body-tertiary" class="bg-body-tertiary">body tertiary</option>
+        <option value="bg-primary-subtle" class="bg-primary-subtle">primary</option>
+        <option value="bg-secondary-subtle" class="bg-secondary-subtle">secondary</option>
+        <option value="bg-success-subtle" class="bg-success-subtle">success</option>
+        <option value="bg-danger-subtle" class="bg-danger-subtle">danger</option>
+        <option value="bg-warning-subtle" class="bg-warning-subtle">warning</option>
+        <option value="bg-info-subtle" class="bg-info-subtle">info</option>
+        <option value="bg-light-subtle" class="bg-light-subtle">light</option>
+        <option value="bg-dark-subtle" class="bg-dark-subtle">dark</option>
     </InputSelect>
 }
 

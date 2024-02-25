@@ -22,8 +22,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-!!! settings: theme: Bootstrap / Bootswatch
-
 ! Google Keep import
 
 localization

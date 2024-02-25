@@ -5,9 +5,13 @@ export function showPrompt(message) {
   return prompt(message, 'Type anything here');
 }
 
-export function setTheme(theme) {
-    document.documentElement.setAttribute('data-bs-theme', theme);
+export function setMode(mode) {
+    document.documentElement.setAttribute('data-bs-theme', mode);
 };
+
+export function setTheme(theme) {
+    document.getElementById("theme-link").href = `_content/Ididit.Blazor/bootstrap/${theme}/bootstrap.min.css`;
+}
 
 export function focusElement(element) {
     element.focus();
