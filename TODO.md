@@ -133,7 +133,6 @@ Google Keep
 
 - online sync - server with SQL
 - calendar streak
-- average interval
 - drag & drop reorder
 - keyboard navigation
 - benchmark: method time & render time
@@ -197,8 +196,6 @@ what is wrong with ididit:
 
 	- I'm not doing the critical tasks
 	- show only highest priority overdue tasks
-
-showing DesiredInterval is a bad idea - no consequences (interval doesn't change) - show AverageInterval
 
 email: copy task list as HTML with checkboxes to clipboard
 sms, message: copy task list with Unicode checkboxes
