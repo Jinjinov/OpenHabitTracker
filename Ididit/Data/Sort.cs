@@ -12,6 +12,5 @@ public enum Sort
     TimeSpent,
     AverageTimeSpent,
     ElapsedTime,
-    ElapsedTimeToRepeatIntervalRatio,
-    ElapsedTimeToAverageIntervalRatio
+    SelectedRatio
 }

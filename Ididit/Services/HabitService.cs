@@ -57,8 +57,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess, SearchFilterS
             Sort.TimeSpent => habits.OrderBy(x => x.TotalTimeSpent),
             Sort.AverageTimeSpent => habits.OrderBy(x => x.AverageTimeSpent),
             Sort.ElapsedTime => habits.OrderBy(x => x.LastTimeDoneAt),
-            Sort.ElapsedTimeToRepeatIntervalRatio => habits.OrderByDescending(x => x.ElapsedTimeToRepeatIntervalRatio * x.NonZeroRepeatCount),
-            Sort.ElapsedTimeToAverageIntervalRatio => habits.OrderByDescending(x => x.ElapsedTimeToAverageIntervalRatio * x.NonZeroRepeatCount),
+            Sort.SelectedRatio => habits.OrderByDescending(x => x.GetRatio(settings.SelectedRatio) * x.NonZeroRepeatCount),
             _ => habits
         };
     }

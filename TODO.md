@@ -24,11 +24,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-!!! ""selected ratio""
-	interval ratio
-	average interval ratio
-	average interval to interval ratio
-
 !!! show ""selected ratio"" after the Title
 
 ---------------------------------------------------------------------------------------------------
