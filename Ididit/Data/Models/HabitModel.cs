@@ -14,6 +14,12 @@ public class HabitModel : ItemsModel
 
     public List<TimeModel>? TimesDone { get; set; }
 
+    internal TimeSpan TotalTimeSpent { get; set; }
+
+    internal TimeSpan AverageTimeSpent { get; set; }
+
+    internal TimeSpan AverageInterval { get; set; }
+
     internal int NonZeroRepeatCount => Math.Max(1, RepeatCount);
 
     internal TimeSpan ElapsedTime => LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : DateTime.Now - CreatedAt;
@@ -22,11 +28,7 @@ public class HabitModel : ItemsModel
 
     internal double ElapsedTimeToAverageIntervalRatio => ElapsedTime / AverageInterval * 100.0;
 
-    internal TimeSpan AverageInterval { get; set; }
-
-    internal TimeSpan TotalTimeSpent { get; set; }
-
-    internal TimeSpan AverageTimeSpent { get; set; }
+    internal double AverageIntervalToRepeatIntervalRatio => AverageInterval / GetRepeatInterval() * 100.0;
 
     internal TimeOnly DurationProxy
     {
