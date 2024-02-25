@@ -23,6 +23,15 @@ public class Label
     public string Name { get; set; } = string.Empty;
 }
 
+public class ListContent
+{
+    [JsonPropertyName("text")]
+    public string Text { get; set; } = string.Empty;
+
+    [JsonPropertyName("isChecked")]
+    public bool IsChecked { get; set; }
+}
+
 public class GoogleKeepNote
 {
     [JsonPropertyName("color")]
@@ -39,6 +48,9 @@ public class GoogleKeepNote
 
     [JsonPropertyName("annotations")]
     public List<Annotation> Annotations { get; set; } = new();
+
+    [JsonPropertyName("listContent")]
+    public List<ListContent> ListContent { get; set; } = new();
 
     [JsonPropertyName("textContent")]
     public string TextContent { get; set; } = string.Empty;
