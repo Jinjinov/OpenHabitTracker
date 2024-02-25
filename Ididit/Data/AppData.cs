@@ -85,8 +85,8 @@ public class AppData(IDataAccess dataAccess)
                     ShowLargeCalendar = settingsEntity.ShowLargeCalendar,
                     InsertTabsInNoteContent = settingsEntity.InsertTabsInNoteContent,
                     DisplayNoteContentAsMarkdown = settingsEntity.DisplayNoteContentAsMarkdown,
-                    ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = settingsEntity.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin,
-                    ElapsedTimeToRepeatIntervalRatioMin = settingsEntity.ElapsedTimeToRepeatIntervalRatioMin,
+                    ShowOnlyOverSelectedRatioMin = settingsEntity.ShowOnlyOverSelectedRatioMin,
+                    SelectedRatioMin = settingsEntity.SelectedRatioMin,
                     SelectedCategoryId = settingsEntity.SelectedCategoryId,
                     SortBy = settingsEntity.SortBy,
                     ShowPriority = settingsEntity.ShowPriority
@@ -107,8 +107,8 @@ public class AppData(IDataAccess dataAccess)
                     ShowLargeCalendar = true,
                     InsertTabsInNoteContent = true,
                     DisplayNoteContentAsMarkdown = true,
-                    ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = false,
-                    ElapsedTimeToRepeatIntervalRatioMin = 0,
+                    ShowOnlyOverSelectedRatioMin = false,
+                    SelectedRatioMin = 0,
                     SelectedCategoryId = 0,
                     SortBy = new()
                     {
@@ -498,8 +498,8 @@ public class AppData(IDataAccess dataAccess)
                 ShowLargeCalendar = true,
                 InsertTabsInNoteContent = true,
                 DisplayNoteContentAsMarkdown = true,
-                ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = false,
-                ElapsedTimeToRepeatIntervalRatioMin = 0,
+                ShowOnlyOverSelectedRatioMin = false,
+                SelectedRatioMin = 0,
                 SelectedCategoryId = 0,
                 SortBy = new()
                 {

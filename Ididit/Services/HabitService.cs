@@ -43,8 +43,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess, SearchFilterS
         if (settings.SelectedCategoryId != 0)
             habits = habits.Where(x => x.CategoryId == settings.SelectedCategoryId);
 
-        if (settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin)
-            habits = habits.Where(x => x.ElapsedTimeToRepeatIntervalRatio > settings.ElapsedTimeToRepeatIntervalRatioMin);
+        if (settings.ShowOnlyOverSelectedRatioMin)
+            habits = habits.Where(x => x.GetRatio(settings.SelectedRatio) > settings.SelectedRatioMin);
 
         return settings.SortBy[ContentType.Habit] switch
         {

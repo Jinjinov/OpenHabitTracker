@@ -111,8 +111,8 @@ public static class DataExtensions
         entity.ShowLargeCalendar = model.ShowLargeCalendar;
         entity.InsertTabsInNoteContent = model.InsertTabsInNoteContent;
         entity.DisplayNoteContentAsMarkdown = model.DisplayNoteContentAsMarkdown;
-        entity.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = model.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin;
-        entity.ElapsedTimeToRepeatIntervalRatioMin = model.ElapsedTimeToRepeatIntervalRatioMin;
+        entity.ShowOnlyOverSelectedRatioMin = model.ShowOnlyOverSelectedRatioMin;
+        entity.SelectedRatioMin = model.SelectedRatioMin;
         entity.SelectedCategoryId = model.SelectedCategoryId;
         entity.SortBy = model.SortBy;
         entity.ShowPriority = model.ShowPriority;

@@ -26,9 +26,9 @@ public class SettingsEntity
 
     public bool DisplayNoteContentAsMarkdown { get; set; }
 
-    public bool ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin { get; set; }
+    public bool ShowOnlyOverSelectedRatioMin { get; set; }
 
-    public int ElapsedTimeToRepeatIntervalRatioMin { get; set; }
+    public int SelectedRatioMin { get; set; }
 
     public long SelectedCategoryId { get; set; }
 

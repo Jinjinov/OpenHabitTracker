@@ -112,7 +112,7 @@ public class HabitModel : ItemsModel
     {
         Ratio.ElapsedToAverage => ElapsedTimeToAverageIntervalRatio,
         Ratio.ElapsedToDesired => ElapsedTimeToRepeatIntervalRatio,
-        Ratio.AverageToDesired => AverageInterval / GetRepeatInterval() * 100.0,
+        Ratio.AverageToDesired => AverageIntervalToRepeatIntervalRatio,
         _ => throw new ArgumentOutOfRangeException(nameof(ratio))
     };
 

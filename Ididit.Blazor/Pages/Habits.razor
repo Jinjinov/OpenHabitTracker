@@ -110,7 +110,7 @@
                             *@
 
                             @{
-                                string color = habit.ElapsedTimeToRepeatIntervalRatio switch
+                                string color = habit.GetRatio(SettingsService.Settings.SelectedRatio) switch
                                 {
                                     >= 100 => "bg-danger-subtle",
                                     >= 80 => "bg-warning-subtle",
@@ -119,7 +119,7 @@
                             }
                             <small class="@($"input-group-text {color}")">
                                 @(habit.LastTimeDoneAt is not null ? ToHighestValueString(habit.ElapsedTime) : "⊘")
-                                (@habit.ElapsedTimeToRepeatIntervalRatio.ToString("N0")%)
+                                (@habit.GetRatio(SettingsService.Settings.SelectedRatio).ToString("N0")%)
                             </small>
 
                             @if (!SettingsService.Settings.ShowSmallCalendar)

@@ -125,14 +125,14 @@
 
             <div class="input-group flex-nowrap">
                 <div class="input-group-text">
-                    <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueExpression="() => _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" ValueChanged="SaveShowOnlyOverElapsedTimeToRepeatIntervalRatioMin" />
+                    <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowOnlyOverSelectedRatioMin" ValueExpression="() => _settings.ShowOnlyOverSelectedRatioMin" ValueChanged="SaveShowOnlyOverSelectedRatioMin" />
                 </div>
-                <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">Show only habits with ratio over @_settings.ElapsedTimeToRepeatIntervalRatioMin%</label>
+                <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">Show only habits with ratio over @_settings.SelectedRatioMin%</label>
             </div>
 
             <div class="input-group flex-nowrap">
                 <div class="input-group-text flex-grow-1">
-                    <input type="range" class="form-range" value="@_settings.ElapsedTimeToRepeatIntervalRatioMin" @oninput="(ChangeEventArgs args) => SaveElapsedTimeToRepeatIntervalRatioMin(Convert.ToInt32(args.Value))">
+                    <input type="range" class="form-range" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))">
                 </div>
             </div>
 
@@ -257,16 +257,16 @@
         await UpdateSettings();
     }
 
-    async Task SaveShowOnlyOverElapsedTimeToRepeatIntervalRatioMin(bool show)
+    async Task SaveShowOnlyOverSelectedRatioMin(bool show)
     {
-        _settings.ShowOnlyOverElapsedTimeToRepeatIntervalRatioMin = show;
+        _settings.ShowOnlyOverSelectedRatioMin = show;
 
         await UpdateSettings();
     }
 
-    async Task SaveElapsedTimeToRepeatIntervalRatioMin(int min)
+    async Task SaveSelectedRatioMin(int min)
     {
-        _settings.ElapsedTimeToRepeatIntervalRatioMin = min;
+        _settings.SelectedRatioMin = min;
 
         await UpdateSettings();
     }
