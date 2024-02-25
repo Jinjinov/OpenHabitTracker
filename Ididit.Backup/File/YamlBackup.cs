@@ -1,7 +1,7 @@
 ﻿using Ididit.Data;
 using YamlDotNet.Serialization;
 
-namespace Ididit.Backup.Drive;
+namespace Ididit.Backup.File;
 
 public class YamlBackup(AppData appData)
 {

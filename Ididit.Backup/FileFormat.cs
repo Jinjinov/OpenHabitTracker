@@ -1,6 +1,6 @@
 ﻿namespace Ididit.Backup;
 
-public enum DataFormat
+public enum FileFormat
 {
     Json,
     Tsv,

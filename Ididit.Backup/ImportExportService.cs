@@ -1,23 +1,23 @@
-﻿using Ididit.Backup.Drive;
+﻿using Ididit.Backup.File;
 
 namespace Ididit.Backup;
 
-public class BackupService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBackup yamlBackup, MarkdownBackup markdownBackup)
+public class ImportExportService(JsonBackup jsonBackup, TsvBackup tsvBackup, YamlBackup yamlBackup, MarkdownBackup markdownBackup)
 {
     private readonly JsonBackup _jsonBackup = jsonBackup;
     private readonly TsvBackup _tsvBackup = tsvBackup;
     private readonly YamlBackup _yamlBackup = yamlBackup;
     private readonly MarkdownBackup _markdownBackup = markdownBackup;
 
-    public async Task<string> GetDataExportFileString(DataFormat dataFormat)
+    public async Task<string> GetDataExportFileString(FileFormat fileFormat)
     {
-        return dataFormat switch
+        return fileFormat switch
         {
-            DataFormat.Json => await _jsonBackup.GetDataExportFileString(),
-            DataFormat.Tsv => await _tsvBackup.GetDataExportFileString(),
-            DataFormat.Yaml => await _yamlBackup.GetDataExportFileString(),
-            DataFormat.Md => await _markdownBackup.GetDataExportFileString(),
-            _ => throw new ArgumentOutOfRangeException(nameof(dataFormat)),
+            FileFormat.Json => await _jsonBackup.GetDataExportFileString(),
+            FileFormat.Tsv => await _tsvBackup.GetDataExportFileString(),
+            FileFormat.Yaml => await _yamlBackup.GetDataExportFileString(),
+            FileFormat.Md => await _markdownBackup.GetDataExportFileString(),
+            _ => throw new ArgumentOutOfRangeException(nameof(fileFormat)),
         };
     }
 

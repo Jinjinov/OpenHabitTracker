@@ -1,7 +1,7 @@
 ﻿using Ididit.Data;
 using System.Text.Json;
 
-namespace Ididit.Backup.Drive;
+namespace Ididit.Backup.File;
 
 public class JsonBackup(AppData appData)
 {

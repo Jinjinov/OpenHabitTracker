@@ -2,7 +2,7 @@
 using Ididit.Data.Models;
 using System.Text;
 
-namespace Ididit.Backup.Drive;
+namespace Ididit.Backup.File;
 
 public class MarkdownBackup(AppData appData)
 {
