@@ -108,6 +108,14 @@ public class HabitModel : ItemsModel
         }
     }
 
+    public double GetRatio(Ratio ratio) => ratio switch
+    {
+        Ratio.ElapsedToAverage => ElapsedTimeToAverageIntervalRatio,
+        Ratio.ElapsedToDesired => ElapsedTimeToRepeatIntervalRatio,
+        Ratio.AverageToDesired => AverageInterval / GetRepeatInterval() * 100.0,
+        _ => throw new ArgumentOutOfRangeException(nameof(ratio))
+    };
+
     public TimeSpan GetRepeatInterval()
     {
         return RepeatPeriod switch
