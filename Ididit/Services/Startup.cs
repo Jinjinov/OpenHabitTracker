@@ -1,5 +1,7 @@
 ﻿using Ididit.Data;
+using Ididit.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 
 namespace Ididit.Services;
 
@@ -19,6 +21,9 @@ public static class Startup
         services.AddScoped<TaskService>();
         services.AddScoped<TrashService>();
         services.AddScoped<SearchFilterService>();
+
+        services.AddLocalization(options => options.ResourcesPath = "Resources");
+        services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
 
         return services;
     }
