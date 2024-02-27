@@ -7,10 +7,10 @@ using System.Text.Json;
 
 namespace Ididit.Localization;
 
-public class JsonStringLocalizer(IFileProvider fileProvider, string resourcePath, string name) : IStringLocalizer
+public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPath, string name) : IStringLocalizer
 {
     private readonly IFileProvider _fileProvider = fileProvider;
-    private readonly string _resourcePath = resourcePath;
+    private readonly string _resourcesPath = resourcesPath;
     private readonly string _name = name;
 
     private readonly ConcurrentDictionary<string, Dictionary<string, string>> _stringMapsCache = new();
@@ -53,10 +53,10 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcePath
         if (_stringMapsCache.GetValueOrDefault(cultureName) is Dictionary<string, string> stringMap)
             return stringMap;
 
-        IFileInfo fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcePath, $"{_name}-{cultureName}.json"));
+        IFileInfo fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcesPath, $"{_name}-{cultureName}.json"));
         if (!fileInfo.Exists)
         {
-            fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcePath, $"{_name}.json"));
+            fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcesPath, $"{_name}.json"));
         }
 
         using Stream stream = fileInfo.CreateReadStream();
