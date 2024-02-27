@@ -32,7 +32,7 @@ public class SearchFilterService
     string MarkSearchResults(string input, string before, string after)
     {
         // Create a pattern to match the search term with case-insensitivity
-        string pattern = "(?i)" + Regex.Escape(SearchTerm);
+        string pattern = "(?i)" + Regex.Escape(SearchTerm!);
 
         // Replace the search term with the marked version
         return Regex.Replace(input, pattern, match =>
