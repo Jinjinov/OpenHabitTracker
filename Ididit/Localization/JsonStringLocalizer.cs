@@ -51,18 +51,13 @@ public class JsonStringLocalizer : IStringLocalizer
     private Dictionary<string, string> LoadStringMap()
     {
         var cultureInfo = CultureInfo.CurrentUICulture;
-
         var cultureName = cultureInfo.TwoLetterISOLanguageName;
 
-        var fileInfo =
-            FileProvider.GetFileInfo(
-                Path.Combine(ResourcesPath, $"{Name}-{cultureName}.json"));
+        var fileInfo = FileProvider.GetFileInfo(Path.Combine(ResourcesPath, $"{Name}-{cultureName}.json"));
 
         if (!fileInfo.Exists)
         {
-            fileInfo =
-                FileProvider.GetFileInfo(
-                    Path.Combine(ResourcesPath, $"{Name}.json"));
+            fileInfo = FileProvider.GetFileInfo(Path.Combine(ResourcesPath, $"{Name}.json"));
         }
 
         using var stream = fileInfo.CreateReadStream();
