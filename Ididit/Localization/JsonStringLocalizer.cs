@@ -1,38 +1,36 @@
 ﻿using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
+using System.Collections.Concurrent;
 using System.Globalization;
+using System.Runtime.Serialization;
 using System.Text.Json;
 
 namespace Ididit.Localization;
 
-public class JsonStringLocalizer : IStringLocalizer
+public class JsonStringLocalizer(IFileProvider fileProvider, string resourcePath, string name) : IStringLocalizer
 {
-    private IFileProvider FileProvider { get; }
-    private string Name { get; }
-    private string ResourcesPath { get; }
+    private readonly IFileProvider _fileProvider = fileProvider;
+    private readonly string _resourcePath = resourcePath;
+    private readonly string _name = name;
 
-    public JsonStringLocalizer(IFileProvider fileProvider, string resourcePath, string name)
-    {
-        FileProvider = fileProvider;
-        Name = name;
-        ResourcesPath = resourcePath;
-    }
+    private readonly ConcurrentDictionary<string, Dictionary<string, string>> _stringMapsCache = new();
 
     public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
     {
-        throw new NotImplementedException();
-    }
-
-    public IStringLocalizer WithCulture(CultureInfo culture)
-    {
-        throw new NotImplementedException();
+        foreach (var stringMap in _stringMapsCache.Values)
+        {
+            foreach ((string name, string value) in stringMap)
+            {
+                yield return new LocalizedString(name, value);
+            }
+        }
     }
 
     public LocalizedString this[string name]
     {
         get
         {
-            var stringMap = LoadStringMap();
+            Dictionary<string, string> stringMap = LoadStringMap();
 
             return new LocalizedString(name, stringMap[name]);
         }
@@ -42,7 +40,7 @@ public class JsonStringLocalizer : IStringLocalizer
     {
         get
         {
-            var stringMap = LoadStringMap();
+            Dictionary<string, string> stringMap = LoadStringMap();
 
             return new LocalizedString(name, string.Format(stringMap[name], arguments));
         }
@@ -50,18 +48,23 @@ public class JsonStringLocalizer : IStringLocalizer
 
     private Dictionary<string, string> LoadStringMap()
     {
-        var cultureInfo = CultureInfo.CurrentUICulture;
-        var cultureName = cultureInfo.TwoLetterISOLanguageName;
+        string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
 
-        var fileInfo = FileProvider.GetFileInfo(Path.Combine(ResourcesPath, $"{Name}-{cultureName}.json"));
+        if (_stringMapsCache.GetValueOrDefault(cultureName) is Dictionary<string, string> stringMap)
+            return stringMap;
 
+        IFileInfo fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcePath, $"{_name}-{cultureName}.json"));
         if (!fileInfo.Exists)
         {
-            fileInfo = FileProvider.GetFileInfo(Path.Combine(ResourcesPath, $"{Name}.json"));
+            fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcePath, $"{_name}.json"));
         }
 
-        using var stream = fileInfo.CreateReadStream();
+        using Stream stream = fileInfo.CreateReadStream();
 
-        return JsonSerializer.DeserializeAsync<Dictionary<string, string>>(stream).Result;
+        stringMap = JsonSerializer.Deserialize<Dictionary<string, string>>(stream) ?? throw new SerializationException($"{_name}-{cultureName}.json");
+
+        _stringMapsCache[cultureName] = stringMap;
+
+        return stringMap;
     }
 }
