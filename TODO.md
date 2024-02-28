@@ -12,9 +12,11 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-fix min Habit / Calendar width - no horizontal scrollbar
+! fix min Habit / Calendar width - no horizontal scrollbar
 
-refresh Trash on Delete
+! refresh Trash on Delete
+
+---------------------------------------------------------------------------------------------------
 
 remove borders: InputSelect, InputCheckbox, input type="range"
 
