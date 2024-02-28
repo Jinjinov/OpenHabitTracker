@@ -30,6 +30,25 @@ https://github.com/dotnet/sdk/issues/13395 - EmbeddedResource with two dots in F
 
 https://github.com/dotnet/roslyn/issues/43820 - Embedded Resources with multiple dots in name does not get embedded
 
+Visual Studio seems to recognise files named in the format <name>.<locale>.<ext> as being specific to a locale, resulting in the creation of a satellite assembly
+Ididit.dll
+de\Ididit.resources.dll
+en\Ididit.resources.dll
+es\Ididit.resources.dll
+sl\Ididit.resources.dll
+
+in the `es\Ididit.resources.dll` the file `MyEmbeddedResource.es-ES.json` becomes `MyEmbeddedResource.json`
+
+var satelliteAssembly = resourceSource.Assembly.GetSatelliteAssembly(CultureInfo.CreateSpecificCulture("es"));
+var names = satelliteAssembly.GetManifestResourceNames();
+
+solution: WithCulture="false"
+
+<ItemGroup>
+    <EmbeddedResource Include="test.en.json" WithCulture="false" />
+    <EmbeddedResource Include="Resources\**" WithCulture="false" />
+<ItemGroup>
+
 ---------------------------------------------------------------------------------------------------
 
 EventCallback<T> Error cannot convert from 'method group' to 'EventCallback'
