@@ -9,8 +9,8 @@
 <div class="input-group flex-nowrap">
     <PriorityComponent Model="Task" />
     <InputText class="form-control" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
-    <button class="btn btn-outline-primary" @onclick="() => CloseSelected.InvokeAsync()"><i class="bi bi-floppy"></i></button>
-    <button class="btn btn-outline-primary" @onclick="() => TaskService.DeleteTask(Task)"><i class="bi bi-trash"></i></button>
+    <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()"><i class="bi bi-floppy"></i></button>
+    <button class="btn btn-outline-primary" @onclick="async () => { await TaskService.DeleteTask(Task); await CloseSelected.InvokeAsync(); }"><i class="bi bi-trash"></i></button>
     <button class="@($"btn {(Task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(Task)"><i class="bi bi-check-square"></i></button>
 </div>
 
