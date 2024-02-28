@@ -20,7 +20,7 @@
             <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Yaml)">@Loc["Export YAML"]</button>
             <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Md)">@Loc["Export Markdown"]</button>
 
-            @OpenFile.OpenFileDialog("list-group-item list-group-item-action", OnFileOpened)
+            @OpenFile.OpenFileDialog("list-group-item list-group-item-action", Loc["Import"], OnFileOpened)
         </div>
 
     </div>

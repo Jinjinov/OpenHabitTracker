@@ -5,7 +5,7 @@ namespace Ididit.Blazor.Maui;
 
 public class OpenFile : IOpenFile
 {
-    public RenderFragment OpenFileDialog(string css, Func<string, Stream, Task> onFileOpened)
+    public RenderFragment OpenFileDialog(string css, string content, Func<string, Stream, Task> onFileOpened)
     {
         return builder =>
         {
@@ -21,7 +21,7 @@ public class OpenFile : IOpenFile
                     await onFileOpened(result.FileName, stream);
                 }
             }));
-            builder.AddContent(3, "Import");
+            builder.AddContent(3, content);
             builder.CloseElement();
         };
     }
