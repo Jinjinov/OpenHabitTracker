@@ -15,6 +15,14 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
 
     private readonly ConcurrentDictionary<string, Dictionary<string, string>> _stringMapsCache = new();
 
+    static Dictionary<string, string> _missing = new();
+
+    public static void Serialize()
+    {
+        string file = JsonSerializer.Serialize(_missing, new JsonSerializerOptions() { WriteIndented = true });
+        File.WriteAllText("en.json", file);
+    }
+
     public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
     {
         foreach (var stringMap in _stringMapsCache.Values)
@@ -36,6 +44,8 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
             {
                 string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
                 translation = $"❗ {cultureName} {name} ❗";
+
+                //_missing[name] = name;
             }
 
             return new LocalizedString(name, translation);
