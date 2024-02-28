@@ -12,6 +12,8 @@ public class SettingsEntity
 
     public string StartSidebar { get; set; } = string.Empty;
 
+    public string Culture { get; set; } = "en";
+
     public DayOfWeek FirstDayOfWeek { get; set; }
 
     public Ratio SelectedRatio { get; set; }
