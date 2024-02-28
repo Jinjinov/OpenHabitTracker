@@ -5,6 +5,7 @@
 @inject CalendarService CalendarService
 @inject HabitService HabitService
 @inject AppData AppData
+@inject IStringLocalizer<Loc> Loc
 
 @if (Habit is null || Habit.TimesDoneByDay is null)
 {
@@ -25,7 +26,8 @@ else
         <div class="bg-body d-flex">
             @for (int i = 0; i < 7; i++)
             {
-                string day = CalendarService.GetDayOfWeek(AppData.Settings.FirstDayOfWeek, i);
+                int dayIdx = CalendarService.GetDayOfWeek(AppData.Settings.FirstDayOfWeek, i);
+                string day = Loc[_days[dayIdx]];
                 <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
             }
         </div>
@@ -100,6 +102,8 @@ else
     int _currentColumnWidth;
 
     CalendarParams _calendarParams = new();
+
+    private readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
 
     protected override async Task OnInitializedAsync()
     {

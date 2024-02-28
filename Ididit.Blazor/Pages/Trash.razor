@@ -4,6 +4,7 @@
 @using Ididit.Services
 
 @inject TrashService TrashService
+@inject IStringLocalizer<Loc> Loc
 
 <PageTitle>Trash</PageTitle>
 
@@ -12,8 +13,8 @@
     <div class="my-1">
 
         <div class="list-group">
-            <button class="list-group-item list-group-item-action" @onclick="RestoreAll">Restore all</button>
-            <button class="list-group-item list-group-item-action" @onclick="EmptyTrash">Empty trash</button>
+            <button class="list-group-item list-group-item-action" @onclick="RestoreAll">@Loc["Restore all"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="EmptyTrash">@Loc["Empty trash"]</button>
         </div>
 
     </div>
@@ -28,7 +29,7 @@
         {
             <div class="input-group flex-nowrap">
                 <span class="input-group-text flex-grow-1 text-wrap">@model.Title</span>
-                <button class="btn btn-outline-primary" @onclick="() => Restore(model)">Restore</button>
+                <button class="btn btn-outline-primary" @onclick="() => Restore(model)">@Loc["Restore"]</button>
                 <button class="btn btn-outline-primary" @onclick="() => Delete(model)"><i class="bi bi-trash"></i></button>
             </div>
         }

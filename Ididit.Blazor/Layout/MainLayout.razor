@@ -35,7 +35,7 @@
                 <div class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px">
 
                     <div class="input-group flex-nowrap my-1">
-                        <span class="input-group-text flex-grow-1">@_titleByTypeName[_dynamicComponentType.Name]</span>
+                        <span class="input-group-text flex-grow-1">@Loc[_dynamicComponentType.Name]</span>
                         <button class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
                     </div>
 
@@ -72,18 +72,18 @@
     private Type? _dynamicComponentType;
     private Dictionary<string, Dictionary<string, object>> _dynamicComponentParametersByName = new ();
 
-    private readonly Dictionary<string, string> _titleByTypeName = new()
-    {
-        { "Menu", "Menu" },
-        { "Search", "Search, Filter, Sort" },
-        { "Settings", "Settings" },
-        { "Backup", "Backup" },
-        { "Categories", "Categories" },
-        { "Data", "Data" },
-        { "Priorities", "Priorities" },
-        { "Trash", "Trash" },
-        { "Help", "Help" }
-    };
+    // private readonly Dictionary<string, string> _titleByTypeName = new()
+    // {
+    //     { "Menu", "Menu" },
+    //     { "Search", "Search, Filter, Sort" },
+    //     { "Settings", "Settings" },
+    //     { "Backup", "Backup" },
+    //     { "Categories", "Categories" },
+    //     { "Data", "Data" },
+    //     { "Priorities", "Priorities" },
+    //     { "Trash", "Trash" },
+    //     { "Help", "Help" }
+    // };
 
     protected override async Task OnInitializedAsync()
     {

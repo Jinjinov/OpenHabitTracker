@@ -1,5 +1,7 @@
 ﻿@page "/menu"
 
+@inject IStringLocalizer<Loc> Loc
+
 <PageTitle>Menu</PageTitle>
 
 <div>
@@ -7,20 +9,20 @@
     <div class="my-1">
 
         <div class="list-group">
-            <NavLink class="list-group-item list-group-item-action" href="/" Match=NavLinkMatch.All>Notes, Tasks, Habits</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="habits">Habits</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="notes">Notes</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="tasks">Tasks</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="about">About</NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="/" Match=NavLinkMatch.All>@Loc["Notes, Tasks, Habits"]</NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="habits">@Loc["Habits"]</NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="notes">@Loc["Notes"]</NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="tasks">@Loc["Tasks"]</NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="about">@Loc["About"]</NavLink>
 
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Trash>">Trash</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Categories>">Categories</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Priorities>">Priorities</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Settings>">Settings</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Data>">Data</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Backup>">Backup</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Help>">Help</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Search>">Search, Filter, Sort</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Trash>">@Loc["Trash"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Categories>">@Loc["Categories"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Priorities>">@Loc["Priorities"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Settings>">@Loc["Settings"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Data>">@Loc["Data"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Backup>">@Loc["Backup"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Help>">@Loc["Help"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Search>">@Loc["Search, Filter, Sort"]</button>
         </div>
 
     </div>

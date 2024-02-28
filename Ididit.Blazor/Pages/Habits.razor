@@ -13,6 +13,7 @@
 @inject SettingsService SettingsService
 @inject JsInterop JsInterop
 @inject SearchFilterService SearchFilterService
+@inject IStringLocalizer<Loc> Loc
 
 <PageTitle>Habits</PageTitle>
 
@@ -21,7 +22,7 @@
     @if (HabitService.NewHabit is null)
     {
         <button class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
-            <span class="input-group-text flex-grow-1">Add new habit</span>
+            <span class="input-group-text flex-grow-1">@Loc["Add new habit"]</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
         </button>
@@ -32,17 +33,17 @@
             <div class="input-group">
                 <PriorityComponent Model="HabitService.NewHabit" />
 
-                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.NewHabit.Title" placeholder="Add new habit" />
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.NewHabit.Title" placeholder="@Loc["Add new habit"]" />
 
                 <button class="btn btn-outline-primary" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.NewHabit.Title)"><i class="bi bi-floppy"></i></button>
                 <button class="btn btn-outline-primary" @onclick="() => HabitService.NewHabit = null"><i class="bi bi-trash"></i></button>
             </div>
 
             <div class="input-group">
-                <label class="input-group-text" for="countInput">Repeat</label>
+                <label class="input-group-text" for="countInput">@Loc["Repeat"]</label>
                 <InputNumber class="form-control" id="countInput" @bind-Value="HabitService.NewHabit.RepeatCount" />
 
-                <label class="input-group-text" for="intervalInput">every</label>
+                <label class="input-group-text" for="intervalInput">@Loc["every"]</label>
                 <InputNumber class="form-control" id="intervalInput" @bind-Value="HabitService.NewHabit.RepeatInterval" />
 
                 <InputSelect class="form-select" @bind-Value="HabitService.NewHabit.RepeatPeriod">
@@ -54,17 +55,17 @@
             </div>
 
             <div class="input-group">
-                <label class="input-group-text" for="durationInput">Duration</label>
+                <label class="input-group-text" for="durationInput">@Loc["Duration"]</label>
                 <InputDate class="form-control" id="durationInput" @bind-Value="HabitService.NewHabit.DurationProxy" Type="InputDateType.Time" />
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">Color</span>
+                <span class="input-group-text col-4">@Loc["Color"]</span>
                 <ColorComponent Model="HabitService.NewHabit" />
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">Category</span>
+                <span class="input-group-text col-4">@Loc["Category"]</span>
                 <CategoryComponent Model="HabitService.NewHabit" />
             </div>
         </div>

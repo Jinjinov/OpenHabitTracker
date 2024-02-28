@@ -7,6 +7,7 @@
 @inject SettingsService SettingsService
 @inject CategoryService CategoryService
 @inject SearchFilterService SearchFilterService
+@inject IStringLocalizer<Loc> Loc
 
 <PageTitle>Search</PageTitle>
 
@@ -20,7 +21,7 @@
         <div class="my-1">
 
             <div class="input-group flex-nowrap">
-                <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="Search" />
+                <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search"]" />
                 @if (SearchFilterService.MatchCase)
                 {
                     <button class="btn btn-primary" @onclick="() => UpdateMatchCase(false)"><i class="bi bi-type"></i></button>
@@ -33,7 +34,7 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)">Planned</button>
+                <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)">@Loc["Planned"]</button>
                 <InputSelect class="form-control w-auto flex-grow-0" Value="SearchFilterService.PlannedAtCompare" ValueExpression="() => SearchFilterService.PlannedAtCompare" TValue="DateCompare" ValueChanged="UpdatePlannedAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
@@ -44,7 +45,7 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <button class="input-group-text col-4" @onclick="() => UpdateDoneAtFilter(DateTime.Today)">Done</button>
+                <button class="input-group-text col-4" @onclick="() => UpdateDoneAtFilter(DateTime.Today)">@Loc["Done"]</button>
                 <InputSelect class="form-control w-auto flex-grow-0" Value="SearchFilterService.DoneAtCompare" ValueExpression="() => SearchFilterService.DoneAtCompare" TValue="DateCompare" ValueChanged="UpdateDoneAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
@@ -55,7 +56,7 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">Category</span>
+                <span class="input-group-text col-4">@Loc["Category"]</span>
                 <InputSelect class="form-select col-8" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long" ValueChanged="SaveCategory">
                     <option value="0" selected>All</option>
                     @foreach (CategoryModel category in CategoryService.Categories)
@@ -81,41 +82,41 @@
                 <div class="input-group-text">
                     <InputCheckbox id="Priority.None" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.None]" ValueExpression="() => _settings.ShowPriority[Priority.None]" ValueChanged="(bool show) => SaveShowPriority(Priority.None, show)" />
                 </div>
-                <label for="Priority.None" class="input-group-text flex-grow-1 text-wrap">Show no priority</label>
+                <label for="Priority.None" class="input-group-text flex-grow-1 text-wrap">@Loc["Show no priority"]</label>
             </div>
             <div class="input-group flex-nowrap">
                 <div class="input-group-text">
                     <InputCheckbox id="Priority.VeryLow" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.VeryLow]" ValueExpression="() => _settings.ShowPriority[Priority.VeryLow]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryLow, show)" />
                 </div>
-                <label for="Priority.VeryLow" class="input-group-text flex-grow-1 text-wrap">Show very low priority</label>
+                <label for="Priority.VeryLow" class="input-group-text flex-grow-1 text-wrap">@Loc["Show very low priority"]</label>
             </div>
             <div class="input-group flex-nowrap">
                 <div class="input-group-text">
                     <InputCheckbox id="Priority.Low" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.Low]" ValueExpression="() => _settings.ShowPriority[Priority.Low]" ValueChanged="(bool show) => SaveShowPriority(Priority.Low, show)" />
                 </div>
-                <label for="Priority.Low" class="input-group-text flex-grow-1 text-wrap">Show low priority</label>
+                <label for="Priority.Low" class="input-group-text flex-grow-1 text-wrap">@Loc["Show low priority"]</label>
             </div>
             <div class="input-group flex-nowrap">
                 <div class="input-group-text">
                     <InputCheckbox id="Priority.Medium" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.Medium]" ValueExpression="() => _settings.ShowPriority[Priority.Medium]" ValueChanged="(bool show) => SaveShowPriority(Priority.Medium, show)" />
                 </div>
-                <label for="Priority.Medium" class="input-group-text flex-grow-1 text-wrap">Show medium priority</label>
+                <label for="Priority.Medium" class="input-group-text flex-grow-1 text-wrap">@Loc["Show medium priority"]</label>
             </div>
             <div class="input-group flex-nowrap">
                 <div class="input-group-text">
                     <InputCheckbox id="Priority.High" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.High]" ValueExpression="() => _settings.ShowPriority[Priority.High]" ValueChanged="(bool show) => SaveShowPriority(Priority.High, show)" />
                 </div>
-                <label for="Priority.High" class="input-group-text flex-grow-1 text-wrap">Show high priority</label>
+                <label for="Priority.High" class="input-group-text flex-grow-1 text-wrap">@Loc["Show high priority"]</label>
             </div>
             <div class="input-group flex-nowrap">
                 <div class="input-group-text">
                     <InputCheckbox id="Priority.VeryHigh" class="form-check-input mt-0" Value="_settings.ShowPriority[Priority.VeryHigh]" ValueExpression="() => _settings.ShowPriority[Priority.VeryHigh]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryHigh, show)" />
                 </div>
-                <label for="Priority.VeryHigh" class="input-group-text flex-grow-1 text-wrap">Show very high priority</label>
+                <label for="Priority.VeryHigh" class="input-group-text flex-grow-1 text-wrap">@Loc["Show very high priority"]</label>
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">Ratio</span>
+                <span class="input-group-text col-4">@Loc["Ratio"]</span>
                 <InputSelect class="form-select col-8" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
                     <option value="@Ratio.ElapsedToAverage">Elapsed time to average interval</option>
                     <option value="@Ratio.ElapsedToDesired">Elapsed time to repeat interval</option>
@@ -127,7 +128,7 @@
                 <div class="input-group-text">
                     <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowOnlyOverSelectedRatioMin" ValueExpression="() => _settings.ShowOnlyOverSelectedRatioMin" ValueChanged="SaveShowOnlyOverSelectedRatioMin" />
                 </div>
-                <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">Show only habits with ratio over @_settings.SelectedRatioMin%</label>
+                <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">@Loc["Show only habits with ratio over"] @_settings.SelectedRatioMin%</label>
             </div>
 
             <div class="input-group flex-nowrap">
@@ -137,7 +138,7 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">Sort notes</span>
+                <span class="input-group-text col-4">@Loc["Sort notes"]</span>
                 <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
                     <option value="@Sort.Category">Category</option>
                     <option value="@Sort.Priority">Priority</option>
@@ -146,7 +147,7 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">Sort tasks</span>
+                <span class="input-group-text col-4">@Loc["Sort tasks"]</span>
                 <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
                     <option value="@Sort.Category">Category</option>
                     <option value="@Sort.Priority">Priority</option>
@@ -159,7 +160,7 @@
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">Sort habits</span>
+                <span class="input-group-text col-4">@Loc["Sort habits"]</span>
                 <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
                     <option value="@Sort.Category">Category</option>
                     <option value="@Sort.Priority">Priority</option>

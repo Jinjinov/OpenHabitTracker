@@ -4,6 +4,7 @@
 
 @inject HabitService HabitService
 @inject SettingsService SettingsService
+@inject IStringLocalizer<Loc> Loc
 
 <div>
     <div class="input-group flex-nowrap">
@@ -29,10 +30,10 @@
     }
 
     <div class="input-group">
-        <label class="input-group-text" for="countInput">Repeat</label>
+        <label class="input-group-text" for="countInput">@Loc["Repeat"]</label>
         <InputNumber class="form-control" id="countInput" Value="Habit.RepeatCount" ValueExpression="() => Habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(Habit, repeatCount)" />
 
-        <label class="input-group-text" for="intervalInput">every</label>
+        <label class="input-group-text" for="intervalInput">@Loc["every"]</label>
         <InputNumber class="form-control" id="intervalInput" Value="Habit.RepeatInterval" ValueExpression="() => Habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(Habit, repeatInterval)" />
 
         <InputSelect class="form-select" Value="Habit.RepeatPeriod" ValueExpression="() => Habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(Habit, repeatPeriod)">
@@ -44,14 +45,14 @@
     </div>
 
     <div class="input-group">
-        <label class="input-group-text" for="durationInput">Duration</label>
+        <label class="input-group-text" for="durationInput">@Loc["Duration"]</label>
         <InputDate class="form-control" id="durationInput" Value="Habit.DurationProxy" ValueExpression="() => Habit.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(Habit, duration)" Type="InputDateType.Time" />
     </div>
 
     <div class="input-group flex-nowrap">
         @if (_timer is null)
         {
-            <span class="input-group-text flex-grow-1">Start timer</span>
+            <span class="input-group-text flex-grow-1">@Loc["Start timer"]</span>
             <button class="btn btn-outline-primary" @onclick="StartTimer"><i class="bi bi-play"></i></button>
         }
         else
@@ -62,46 +63,46 @@
     </div>
 
     <div class="p-1 border rounded-0">
-        <div>Total time spent: @ToReadableString(Habit.TotalTimeSpent)</div>
-        <div>Average time spent: @ToReadableString(Habit.AverageTimeSpent)</div>
+        <div>@Loc["Total time spent"]: @ToReadableString(Habit.TotalTimeSpent)</div>
+        <div>@Loc["Average time spent"]: @ToReadableString(Habit.AverageTimeSpent)</div>
 
-        <div>Repeat interval: @ToReadableString(Habit.GetRepeatInterval())</div>
-        <div>Repeat interval ratio: @Habit.ElapsedTimeToRepeatIntervalRatio.ToString("N0")%</div>
+        <div>@Loc["Repeat interval"]: @ToReadableString(Habit.GetRepeatInterval())</div>
+        <div>@Loc["Repeat interval ratio"]: @Habit.ElapsedTimeToRepeatIntervalRatio.ToString("N0")%</div>
         @if (Habit.ElapsedTimeToRepeatIntervalRatio > 100.0)
         {
-            <div>Repeat interval overdue: @ToReadableString(Habit.ElapsedTime - Habit.GetRepeatInterval())</div>
+            <div>@Loc["Repeat interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.GetRepeatInterval())</div>
         }
 
-        <div>Average interval: @ToReadableString(Habit.AverageInterval)</div>
-        <div>Average interval ratio: @Habit.ElapsedTimeToAverageIntervalRatio.ToString("N0")%</div>
+        <div>@Loc["Average interval"]: @ToReadableString(Habit.AverageInterval)</div>
+        <div>@Loc["Average interval ratio"]: @Habit.ElapsedTimeToAverageIntervalRatio.ToString("N0")%</div>
         @if (Habit.ElapsedTimeToAverageIntervalRatio > 100.0)
         {
-            <div>Average interval overdue: @ToReadableString(Habit.ElapsedTime - Habit.AverageInterval)</div>
+            <div>@Loc["Average interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.AverageInterval)</div>
         }
         
-        <div>Average interval to repeat interval ratio: @Habit.AverageIntervalToRepeatIntervalRatio.ToString("N0")%</div>
+        <div>@Loc["Average interval to repeat interval ratio"]: @Habit.AverageIntervalToRepeatIntervalRatio.ToString("N0")%</div>
     </div>
 
     @if (Habit.TimesDone is not null && Habit.LastTimeDoneAt is not null)
     {
         <div class="p-1 border rounded-0">
-            <small>Completed @Habit.TimesDone.Count times, last time on @Habit.LastTimeDoneAt</small>
+            <small>@Loc["Completed"] @Habit.TimesDone.Count @Loc["times, last time on"] @Habit.LastTimeDoneAt</small>
         </div>
     }
 
     <div class="input-group flex-nowrap">
-        <span class="input-group-text col-4">Color</span>
+        <span class="input-group-text col-4">@Loc["Color"]</span>
         <ColorComponent Model="Habit" />
     </div>
 
     <div class="input-group flex-nowrap">
-        <span class="input-group-text col-4">Category</span>
+        <span class="input-group-text col-4">@Loc["Category"]</span>
         <CategoryComponent Model="Habit" />
     </div>
 
     <div class="p-1 border rounded-0">
-        <small class="d-inline-block mx-1">Created: @Habit.CreatedAt</small>
-        <small class="d-inline-block mx-1">Updated: @Habit.UpdatedAt</small>
+        <small class="d-inline-block mx-1">@Loc["Created"]: @Habit.CreatedAt</small>
+        <small class="d-inline-block mx-1">@Loc["Updated"]: @Habit.UpdatedAt</small>
     </div>
 </div>
 

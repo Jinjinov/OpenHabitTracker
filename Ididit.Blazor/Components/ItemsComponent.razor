@@ -3,6 +3,7 @@
 
 @inject ItemService ItemService
 @inject SearchFilterService SearchFilterService
+@inject IStringLocalizer<Loc> Loc
 
 @if (Items?.Items is not null)
 {
@@ -36,7 +37,7 @@
 {
     <form @onsubmit=AddNewItem>
         <div class="input-group">
-            <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="Add new item" />
+            <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="@Loc["Add new item"]" />
 
             <button class="btn btn-outline-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
         </div>

@@ -5,6 +5,7 @@
 @using Ididit.Services
 
 @inject CategoryService CategoryService
+@inject IStringLocalizer<Loc> Loc
 
 <PageTitle>Categories</PageTitle>
 
@@ -15,7 +16,7 @@
         {
             <form @onsubmit=AddCategory>
                 <div class="input-group">
-                    <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="Add new category" />
+                    <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="@Loc["Add new category"]" />
 
                     <button class="btn btn-outline-primary" @onclick="AddCategory" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
                 </div>

@@ -1,5 +1,14 @@
 {
-  "Menu": "Menu en",
+  "Menu": "Menu",
+  "Search": "Search, Filter, Sort",
+  "Settings": "Settings",
+  "Backup": "Backup",
+  "Categories": "Categories",
+  "Data": "Data",
+  "Priorities": "Priorities",
+  "Trash": "Trash",
+  "Help": "Help",
+
   "Habits": "Habits en",
   "Notes": "Notes en",
   "Tasks": "Tasks en"

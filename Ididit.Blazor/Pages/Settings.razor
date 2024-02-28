@@ -5,6 +5,7 @@
 
 @inject SettingsService SettingsService
 @inject JsInterop JsInterop
+@inject IStringLocalizer<Loc> Loc
 
 <PageTitle>Settings</PageTitle>
 
@@ -15,11 +16,11 @@
             <div class="input-group-text">
                 <InputCheckbox id="IsDarkMode" class="form-check-input mt-0" Value="_settings.IsDarkMode" ValueExpression="() => _settings.IsDarkMode" ValueChanged="SaveIsDarkMode" />
             </div>
-            <label for="IsDarkMode" class="input-group-text flex-grow-1 text-wrap">Dark mode</label>
+            <label for="IsDarkMode" class="input-group-text flex-grow-1 text-wrap">@Loc["Dark mode"]</label>
         </div>
 
         <div class="input-group flex-nowrap">
-            <span class="input-group-text col-4">Theme</span>
+            <span class="input-group-text col-4">@Loc["Theme"]</span>
             <InputSelect class="form-select col-8" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
                 <option value="default">default</option>
                 <option value="cerulean">cerulean</option>
@@ -51,7 +52,7 @@
         </div>
 
         <div class="input-group flex-nowrap">
-            <span class="input-group-text col-4">Start page</span>
+            <span class="input-group-text col-4">@Loc["Start page"]</span>
             <InputSelect class="form-select col-8" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
                 <option value="">Notes, Tasks, Habits</option>
                 <option value="/notes">Notes</option>
@@ -62,7 +63,7 @@
         </div>
 
         <div class="input-group flex-nowrap">
-            <span class="input-group-text col-4">Start sidebar</span>
+            <span class="input-group-text col-4">@Loc["Start sidebar"]</span>
             <InputSelect class="form-select col-8" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
                 <option value="">None</option>
                 <option value="Settings">Settings</option>
@@ -81,27 +82,27 @@
             <div class="input-group-text">
                 <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowItemList" ValueExpression="() => _settings.ShowItemList" ValueChanged="SaveShowItemList" />
             </div>
-            <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">Show item list</label>
+            <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">@Loc["Show item list"]</label>
         </div>
 
         <div class="input-group flex-nowrap">
             <div class="input-group-text">
                 <InputCheckbox id="ShowSmallCalendar" class="form-check-input mt-0" Value="_settings.ShowSmallCalendar" ValueExpression="() => _settings.ShowSmallCalendar" ValueChanged="SaveShowSmallCalendar" />
             </div>
-            <label for="ShowSmallCalendar" class="input-group-text flex-grow-1 text-wrap">Show small calendar</label>
+            <label for="ShowSmallCalendar" class="input-group-text flex-grow-1 text-wrap">@Loc["Show small calendar"]</label>
         </div>
 
         <div class="input-group flex-nowrap">
             <div class="input-group-text">
                 <InputCheckbox id="ShowLargeCalendar" class="form-check-input mt-0" Value="_settings.ShowLargeCalendar" ValueExpression="() => _settings.ShowLargeCalendar" ValueChanged="SaveShowLargeCalendar" />
             </div>
-            <label for="ShowLargeCalendar" class="input-group-text flex-grow-1 text-wrap">Show large calendar</label>
+            <label for="ShowLargeCalendar" class="input-group-text flex-grow-1 text-wrap">@Loc["Show large calendar"]</label>
         </div>
 
         <div class="input-group flex-nowrap">
-            <span class="input-group-text col-4">Language</span>
+            <span class="input-group-text col-4">@Loc["Language"]</span>
             <InputSelect class="form-select col-8" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
-                @foreach ((string key, Loc loc) in Loc.Cultures)
+                @foreach ((string key, Loc loc) in Ididit.Loc.Cultures)
                 {
                     <option @key="key" value="@key">@loc.Language</option>
                 }
@@ -109,7 +110,7 @@
         </div>
 
         <div class="input-group flex-nowrap">
-            <span class="input-group-text col-4">Week start</span>
+            <span class="input-group-text col-4">@Loc["Week start"]</span>
             <InputSelect class="form-select col-8" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
                 {
@@ -122,14 +123,14 @@
             <div class="input-group-text">
                 <InputCheckbox id="InsertTabsInNoteContent" class="form-check-input mt-0" Value="_settings.InsertTabsInNoteContent" ValueExpression="() => _settings.InsertTabsInNoteContent" ValueChanged="SaveInsertTabsInNoteContent" />
             </div>
-            <label for="InsertTabsInNoteContent" class="input-group-text flex-grow-1 text-wrap">Insert tabs in note content</label>
+            <label for="InsertTabsInNoteContent" class="input-group-text flex-grow-1 text-wrap">@Loc["Insert tabs in note content"]</label>
         </div>
 
         <div class="input-group flex-nowrap">
             <div class="input-group-text">
                 <InputCheckbox id="DisplayNoteContentAsMarkdown" class="form-check-input mt-0" Value="_settings.DisplayNoteContentAsMarkdown" ValueExpression="() => _settings.DisplayNoteContentAsMarkdown" ValueChanged="SaveDisplayNoteContentAsMarkdown" />
             </div>
-            <label for="DisplayNoteContentAsMarkdown" class="input-group-text flex-grow-1 text-wrap">Display note content as markdown</label>
+            <label for="DisplayNoteContentAsMarkdown" class="input-group-text flex-grow-1 text-wrap">@Loc["Display note content as markdown"]</label>
         </div>
 
     </div>
@@ -221,7 +222,7 @@
     {
         _settings.Culture = culture;
 
-        Loc.SetCulture(culture);
+        Ididit.Loc.SetCulture(culture);
 
         await UpdateAndRefresh();
     }

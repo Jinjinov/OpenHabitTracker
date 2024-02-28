@@ -4,6 +4,7 @@
 @implements IDisposable
 
 @inject TaskService TaskService
+@inject IStringLocalizer<Loc> Loc
 
 <div class="input-group flex-nowrap">
     <PriorityComponent Model="Task" />
@@ -16,19 +17,19 @@
 <ItemsComponent Items=Task />
 
 <div class="input-group">
-    <span class="input-group-text">Planned at</span>
+    <span class="input-group-text">@Loc["Planned at"]</span>
     <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.PlannedAt" ValueExpression="() => Task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(Task, plannedAt)" />
 </div>
 
 <div class="input-group">
-    <label class="input-group-text" for="durationInput">Duration</label>
+    <label class="input-group-text" for="durationInput">@Loc["Duration"]</label>
     <InputDate class="form-control" id="durationInput" Value="Task.DurationProxy" ValueExpression="() => Task.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(Task, duration)" Type="InputDateType.Time" />
 </div>
 
 <div class="input-group flex-nowrap">
     @if (_timer is null)
     {
-        <span class="input-group-text flex-grow-1">Start timer</span>
+        <span class="input-group-text flex-grow-1">@Loc["Start timer"]</span>
         <button class="btn btn-outline-primary" @onclick="StartTimer"><i class="bi bi-play"></i></button>
     }
     else
@@ -43,35 +44,35 @@
     @if (Task.CompletedAt is not null && Task.StartedAt != Task.CompletedAt)
     {
         <div class="p-1 border rounded-0">
-            <div>Time spent: @Task.TimeSpent?.ToString(@"hh\:mm\:ss")</div>
+            <div>@Loc["Time spent"]: @Task.TimeSpent?.ToString(@"hh\:mm\:ss")</div>
         </div>
     }
 
     <div class="p-1 border rounded-0">
         @if (Task.StartedAt != Task.CompletedAt)
         {
-            <small class="d-inline-block mx-1">Started: @Task.StartedAt</small>
+            <small class="d-inline-block mx-1">@Loc["Started"]: @Task.StartedAt</small>
         }
         @if (Task.CompletedAt is not null)
         {
-            <small class="d-inline-block mx-1">Completed: @Task.CompletedAt</small>
+            <small class="d-inline-block mx-1">@Loc["Completed"]: @Task.CompletedAt</small>
         }
     </div>
 }
 
 <div class="input-group flex-nowrap">
-    <span class="input-group-text col-4">Color</span>
+    <span class="input-group-text col-4">@Loc["Color"]</span>
     <ColorComponent Model="Task" />
 </div>
 
 <div class="input-group flex-nowrap">
-    <span class="input-group-text col-4">Category</span>
+    <span class="input-group-text col-4">@Loc["Category"]</span>
     <CategoryComponent Model="Task" />
 </div>
 
 <div class="p-1 border rounded-0">
-    <small class="d-inline-block mx-1">Created: @Task.CreatedAt</small>
-    <small class="d-inline-block mx-1">Updated: @Task.UpdatedAt</small>
+    <small class="d-inline-block mx-1">@Loc["Created"]: @Task.CreatedAt</small>
+    <small class="d-inline-block mx-1">@Loc["Updated"]: @Task.UpdatedAt</small>
 </div>
 
 @code {
