@@ -21,7 +21,7 @@
         <div class="my-1">
 
             <div class="input-group flex-nowrap">
-                <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search"]" />
+                <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search..."]" />
                 @if (SearchFilterService.MatchCase)
                 {
                     <button class="btn btn-primary" @onclick="() => UpdateMatchCase(false)"><i class="bi bi-type"></i></button>
