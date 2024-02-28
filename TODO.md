@@ -14,7 +14,7 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 remove borders in InputSelect
 
-remove class="input-group" in InputSelect
+replace class="input-group" with class="list-group"
 
 ---------------------------------------------------------------------------------------------------
 
