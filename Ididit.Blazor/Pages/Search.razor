@@ -58,7 +58,7 @@
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">@Loc["Category"]</span>
                 <InputSelect class="form-select col-8" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long" ValueChanged="SaveCategory">
-                    <option value="0" selected>All</option>
+                    <option value="0" selected>@Loc["All"]</option>
                     @foreach (CategoryModel category in CategoryService.Categories)
                     {
                         <option @key="category" value="@category.Id">@category.Title</option>
@@ -118,9 +118,9 @@
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">@Loc["Ratio"]</span>
                 <InputSelect class="form-select col-8" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
-                    <option value="@Ratio.ElapsedToAverage">Elapsed time to average interval</option>
-                    <option value="@Ratio.ElapsedToDesired">Elapsed time to repeat interval</option>
-                    <option value="@Ratio.AverageToDesired">Average interval to repeat interval</option>
+                    <option value="@Ratio.ElapsedToAverage">@Loc["Elapsed time to average interval"]</option>
+                    <option value="@Ratio.ElapsedToDesired">@Loc["Elapsed time to repeat interval"]</option>
+                    <option value="@Ratio.AverageToDesired">@Loc["Average interval to repeat interval"]</option>
                 </InputSelect>
             </div>
 
@@ -140,38 +140,38 @@
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">@Loc["Sort notes"]</span>
                 <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
-                    <option value="@Sort.Category">Category</option>
-                    <option value="@Sort.Priority">Priority</option>
-                    <option value="@Sort.Title">Title</option>
+                    <option value="@Sort.Category">@Loc["Category"]</option>
+                    <option value="@Sort.Priority">@Loc["Priority"]</option>
+                    <option value="@Sort.Title">@Loc["Title"]</option>
                 </InputSelect>
             </div>
 
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">@Loc["Sort tasks"]</span>
                 <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
-                    <option value="@Sort.Category">Category</option>
-                    <option value="@Sort.Priority">Priority</option>
-                    <option value="@Sort.Title">Title</option>
-                    <option value="@Sort.Duration">Duration</option>
-                    <option value="@Sort.ElapsedTime">Elapsed time</option>
-                    <option value="@Sort.PlannedAt">Planned at</option>
-                    <option value="@Sort.TimeSpent">Time spent</option>
+                    <option value="@Sort.Category">@Loc["Category"]</option>
+                    <option value="@Sort.Priority">@Loc["Priority"]</option>
+                    <option value="@Sort.Title">@Loc["Title"]</option>
+                    <option value="@Sort.Duration">@Loc["Duration"]</option>
+                    <option value="@Sort.ElapsedTime">@Loc["Elapsed time"]</option>
+                    <option value="@Sort.PlannedAt">@Loc["Planned at"]</option>
+                    <option value="@Sort.TimeSpent">@Loc["Time spent"]</option>
                 </InputSelect>
             </div>
 
             <div class="input-group flex-nowrap">
                 <span class="input-group-text col-4">@Loc["Sort habits"]</span>
                 <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
-                    <option value="@Sort.Category">Category</option>
-                    <option value="@Sort.Priority">Priority</option>
-                    <option value="@Sort.Title">Title</option>
-                    <option value="@Sort.Duration">Duration</option>
-                    <option value="@Sort.RepeatInterval">Repeat interval</option>
-                    <option value="@Sort.AverageInterval">Average interval</option>
-                    <option value="@Sort.TimeSpent">Time spent</option>
-                    <option value="@Sort.AverageTimeSpent">Average time spent</option>
-                    <option value="@Sort.ElapsedTime">Elapsed time</option>
-                    <option value="@Sort.SelectedRatio">Selected ratio</option>
+                    <option value="@Sort.Category">@Loc["Category"]</option>
+                    <option value="@Sort.Priority">@Loc["Priority"]</option>
+                    <option value="@Sort.Title">@Loc["Title"]</option>
+                    <option value="@Sort.Duration">@Loc["Duration"]</option>
+                    <option value="@Sort.RepeatInterval">@Loc["Repeat interval"]</option>
+                    <option value="@Sort.AverageInterval">@Loc["Average interval"]</option>
+                    <option value="@Sort.TimeSpent">@Loc["Time spent"]</option>
+                    <option value="@Sort.AverageTimeSpent">@Loc["Average time spent"]</option>
+                    <option value="@Sort.ElapsedTime">@Loc["Elapsed time"]</option>
+                    <option value="@Sort.SelectedRatio">@Loc["Selected ratio"]</option>
                 </InputSelect>
             </div>
 

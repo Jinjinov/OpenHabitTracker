@@ -54,27 +54,27 @@
         <div class="input-group flex-nowrap">
             <span class="input-group-text col-4">@Loc["Start page"]</span>
             <InputSelect class="form-select col-8" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
-                <option value="">Notes, Tasks, Habits</option>
-                <option value="/notes">Notes</option>
-                <option value="/tasks">Tasks</option>
-                <option value="/habits">Habits</option>
-                <option value="/about">About</option>
+                <option value="">@Loc["Notes, Tasks, Habits"]</option>
+                <option value="/notes">@Loc["Notes"]</option>
+                <option value="/tasks">@Loc["Tasks"]</option>
+                <option value="/habits">@Loc["Habits"]</option>
+                <option value="/about">@Loc["About"]</option>
             </InputSelect>
         </div>
 
         <div class="input-group flex-nowrap">
             <span class="input-group-text col-4">@Loc["Start sidebar"]</span>
             <InputSelect class="form-select col-8" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
-                <option value="">None</option>
-                <option value="Settings">Settings</option>
-                <option value="Data">Data</option>
-                <option value="Backup">Backup</option>
-                <option value="Search">Search, Filter, Sort</option>
-                <option value="Menu">Menu</option>
-                <option value="Categories">Categories</option>
-                <option value="Priorities">Priorities</option>
-                <option value="Help">Help</option>
-                <option value="Trash">Trash</option>
+                <option value="">@Loc["None"]</option>
+                <option value="Settings">@Loc["Settings"]</option>
+                <option value="Data">@Loc["Data"]</option>
+                <option value="Backup">@Loc["Backup"]</option>
+                <option value="Search">@Loc["Search, Filter, Sort"]</option>
+                <option value="Menu">@Loc["Menu"]</option>
+                <option value="Categories">@Loc["Categories"]</option>
+                <option value="Priorities">@Loc["Priorities"]</option>
+                <option value="Help">@Loc["Help"]</option>
+                <option value="Trash">@Loc["Trash"]</option>
             </InputSelect>
         </div>
 
@@ -114,7 +114,7 @@
             <InputSelect class="form-select col-8" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
                 {
-                    <option @key="dayOfWeek" value="@dayOfWeek">@dayOfWeek</option>
+                    <option @key="dayOfWeek" value="@dayOfWeek">@Loc[dayOfWeek.ToString()]</option>
                 }
             </InputSelect>
         </div>
