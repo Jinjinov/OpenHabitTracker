@@ -12,6 +12,7 @@
 @inject AppData AppData
 @inject JsInterop JsInterop
 @inject SearchFilterService SearchFilterService
+@inject IStringLocalizer<Loc> Loc
 
 <PageTitle>Notes</PageTitle>
 
@@ -20,7 +21,7 @@
     @if (NoteService.NewNote is null)
     {
         <button class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
-            <span class="input-group-text flex-grow-1">Add new note</span>
+            <span class="input-group-text flex-grow-1">@Loc["Add new note"]</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
         </button>

@@ -89,6 +89,8 @@
     {
         await AppData.InitializeSettings();
 
+        Ididit.Loc.SetCulture(AppData.Settings.Culture);
+
         if (!AppData.Settings.IsDarkMode)
             await JsInterop.SetMode("light");
 

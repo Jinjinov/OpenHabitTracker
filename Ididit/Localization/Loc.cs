@@ -4,28 +4,24 @@ namespace Ididit;
 
 public class Loc
 {
-    public Dictionary<string, CultureInfo> Cultures { get; } = new()
+    public required CultureInfo Culture { get; set; }
+
+    public required string Language { get; set; }
+
+    public static Dictionary<string, Loc> Cultures { get; } = new()
     {
-        { "Deutsch", new CultureInfo("de") },
-        { "English", new CultureInfo("en") },
-        { "español", new CultureInfo("es") },
-        { "slovenščina", new CultureInfo("sl") }
+        { "de", new() { Language = "Deutsch", Culture = new CultureInfo("de") } },
+        { "en", new() { Language = "English", Culture = new CultureInfo("en") } },
+        { "es", new() { Language = "español", Culture = new CultureInfo("es") } },
+        { "sl", new() { Language = "slovenščina", Culture = new CultureInfo("sl") } }
     };
 
-    public Dictionary<string, string> Languages { get; } = new()
+    public static void SetCulture(string code)
     {
-        { "de", "Deutsch" },
-        { "en", "English" },
-        { "es", "español" },
-        { "sl", "slovenščina" }
-    };
+        CultureInfo.DefaultThreadCurrentCulture = Cultures[code].Culture;
+        CultureInfo.DefaultThreadCurrentUICulture = Cultures[code].Culture;
 
-    public void ChangeLanguage(string language)
-    {
-        CultureInfo.DefaultThreadCurrentCulture = Cultures[language];
-        CultureInfo.DefaultThreadCurrentUICulture = Cultures[language];
-
-        CultureInfo.CurrentCulture = Cultures[language];
-        CultureInfo.CurrentUICulture = Cultures[language];
+        CultureInfo.CurrentCulture = Cultures[code].Culture;
+        CultureInfo.CurrentUICulture = Cultures[code].Culture;
     }
 }

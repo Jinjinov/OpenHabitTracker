@@ -5,6 +5,7 @@
 @inject NoteService NoteService
 @inject JsInterop JsInterop
 @inject AppData AppData
+@inject IStringLocalizer<Loc> Loc
 
 <div class="input-group flex-nowrap">
     <PriorityComponent Model="Note" />
@@ -16,12 +17,12 @@
 <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" Value="@Note.Content" ValueExpression="() => Note.Content" ValueChanged="(string content) => SaveContent(Note, content)" rows="@(Note.Content.Count(c => c == '\n') + 1)" placeholder="Add note text" />
 
 <div class="input-group flex-nowrap">
-    <span class="input-group-text col-4">Color</span>
+    <span class="input-group-text col-4">@Loc["Color"]</span>
     <ColorComponent Model="Note" />
 </div>
 
 <div class="input-group flex-nowrap">
-    <span class="input-group-text col-4">Category</span>
+    <span class="input-group-text col-4">@Loc["Category"]</span>
     <CategoryComponent Model="Note" />
 </div>
 

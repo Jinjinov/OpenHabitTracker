@@ -99,6 +99,16 @@
         </div>
 
         <div class="input-group flex-nowrap">
+            <span class="input-group-text col-4">Language</span>
+            <InputSelect class="form-select col-8" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
+                @foreach ((string key, Loc loc) in Loc.Cultures)
+                {
+                    <option @key="key" value="@key">@loc.Language</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="input-group flex-nowrap">
             <span class="input-group-text col-4">Week start</span>
             <InputSelect class="form-select col-8" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
@@ -203,6 +213,15 @@
     async Task SaveShowLargeCalendar(bool show)
     {
         _settings.ShowLargeCalendar = show;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveCulture(string culture)
+    {
+        _settings.Culture = culture;
+
+        Loc.SetCulture(culture);
 
         await UpdateAndRefresh();
     }

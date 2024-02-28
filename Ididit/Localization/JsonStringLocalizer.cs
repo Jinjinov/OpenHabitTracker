@@ -32,7 +32,13 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
         {
             Dictionary<string, string> stringMap = LoadStringMap();
 
-            return new LocalizedString(name, stringMap[name]);
+            if (!stringMap.TryGetValue(name, out string? translation))
+            {
+                string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                translation = $"❗ {cultureName} {name} ❗";
+            }
+
+            return new LocalizedString(name, translation);
         }
     }
 
@@ -42,7 +48,13 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
         {
             Dictionary<string, string> stringMap = LoadStringMap();
 
-            return new LocalizedString(name, string.Format(stringMap[name], arguments));
+            if (!stringMap.TryGetValue(name, out string? translation))
+            {
+                string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                translation = $"❗ {cultureName} {name} ❗";
+            }
+
+            return new LocalizedString(name, string.Format(translation, arguments));
         }
     }
 
