@@ -6,16 +6,16 @@ public class Loc
 {
     public Dictionary<string, CultureInfo> Cultures { get; } = new()
     {
-        { "English", new CultureInfo("en") },
         { "Deutsch", new CultureInfo("de") },
+        { "English", new CultureInfo("en") },
         { "español", new CultureInfo("es") },
         { "slovenščina", new CultureInfo("sl") }
     };
 
     public Dictionary<string, string> Languages { get; } = new()
     {
-        { "en", "English" },
         { "de", "Deutsch" },
+        { "en", "English" },
         { "es", "español" },
         { "sl", "slovenščina" }
     };

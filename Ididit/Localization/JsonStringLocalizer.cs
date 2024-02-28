@@ -56,7 +56,7 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
         IFileInfo fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcesPath, $"{_resourcesName}.{cultureName}.json"));
         if (!fileInfo.Exists)
         {
-            fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcesPath, $"{_resourcesName}.json"));
+            fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcesPath, $"{cultureName}.json"));
         }
 
         using Stream stream = fileInfo.CreateReadStream();

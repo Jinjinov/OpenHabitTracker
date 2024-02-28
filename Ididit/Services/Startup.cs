@@ -22,7 +22,7 @@ public static class Startup
         services.AddScoped<TrashService>();
         services.AddScoped<SearchFilterService>();
 
-        services.AddLocalization(options => options.ResourcesPath = "Resources");
+        services.AddLocalization(options => options.ResourcesPath = @"Localization\Resources");
         services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
 
         return services;

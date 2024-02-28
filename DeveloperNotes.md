@@ -26,6 +26,12 @@ If any of these lifecycle methods throws an exception, synchronously or asynchro
 
 ---------------------------------------------------------------------------------------------------
 
+https://github.com/dotnet/sdk/issues/13395 - EmbeddedResource with two dots in Filename not working
+
+https://github.com/dotnet/roslyn/issues/43820 - Embedded Resources with multiple dots in name does not get embedded
+
+---------------------------------------------------------------------------------------------------
+
 EventCallback<T> Error cannot convert from 'method group' to 'EventCallback'
 
 workaround: TValue="int" / TValue="long" for <InputNumber> <InputSelect> <InputDate> <InputRadio> but not <InputCheckbox> <InputText> <InputTextArea>

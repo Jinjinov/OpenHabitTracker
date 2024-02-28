@@ -17,4 +17,9 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Localization\Resources\*.json" />
+    <EmbeddedResource Include="Localization\Resources\*.json" />
+  </ItemGroup>
+
 </Project>
