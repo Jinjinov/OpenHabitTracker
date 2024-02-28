@@ -55,9 +55,9 @@
                 <button class="btn btn-outline-primary" @onclick="() => UpdateDoneAtFilter(null)"><i class="bi bi-x-square"></i></button>
             </div>
 
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">@Loc["Category"]</span>
-                <InputSelect class="form-select col-8" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long" ValueChanged="SaveCategory">
+            <div class="input-group">
+                <span class="input-group-text col-12">@Loc["Category"]</span>
+                <InputSelect class="form-select col-12" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long" ValueChanged="SaveCategory">
                     <option value="0" selected>@Loc["All"]</option>
                     @foreach (CategoryModel category in CategoryService.Categories)
                     {
@@ -115,9 +115,9 @@
                 <label for="Priority.VeryHigh" class="input-group-text flex-grow-1 text-wrap">@Loc["Show very high priority"]</label>
             </div>
 
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">@Loc["Ratio"]</span>
-                <InputSelect class="form-select col-8" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
+            <div class="input-group">
+                <span class="input-group-text col-12">@Loc["Ratio"]</span>
+                <InputSelect class="form-select col-12" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
                     <option value="@Ratio.ElapsedToAverage">@Loc["Elapsed time to average interval"]</option>
                     <option value="@Ratio.ElapsedToDesired">@Loc["Elapsed time to repeat interval"]</option>
                     <option value="@Ratio.AverageToDesired">@Loc["Average interval to repeat interval"]</option>
@@ -137,18 +137,18 @@
                 </div>
             </div>
 
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">@Loc["Sort notes"]</span>
-                <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
+            <div class="input-group">
+                <span class="input-group-text col-12">@Loc["Sort notes"]</span>
+                <InputSelect class="form-select col-12" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>
                     <option value="@Sort.Title">@Loc["Title"]</option>
                 </InputSelect>
             </div>
 
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">@Loc["Sort tasks"]</span>
-                <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
+            <div class="input-group">
+                <span class="input-group-text col-12">@Loc["Sort tasks"]</span>
+                <InputSelect class="form-select col-12" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>
                     <option value="@Sort.Title">@Loc["Title"]</option>
@@ -159,9 +159,9 @@
                 </InputSelect>
             </div>
 
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">@Loc["Sort habits"]</span>
-                <InputSelect class="form-select col-8" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
+            <div class="input-group">
+                <span class="input-group-text col-12">@Loc["Sort habits"]</span>
+                <InputSelect class="form-select col-12" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>
                     <option value="@Sort.Title">@Loc["Title"]</option>

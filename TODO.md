@@ -12,7 +12,11 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-! change all span / InputSelect to 2 lines: small / InputSelect
+remove borders - span / InputSelect
+
+small / InputSelect
+
+fix InputSelect width
 
 ---------------------------------------------------------------------------------------------------
 

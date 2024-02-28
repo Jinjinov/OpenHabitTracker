@@ -19,9 +19,9 @@
             <label for="IsDarkMode" class="input-group-text flex-grow-1 text-wrap">@Loc["Dark mode"]</label>
         </div>
 
-        <div class="input-group flex-nowrap">
-            <span class="input-group-text col-4">@Loc["Theme"]</span>
-            <InputSelect class="form-select col-8" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
+        <div class="input-group">
+            <span class="input-group-text col-12">@Loc["Theme"]</span>
+            <InputSelect class="form-select col-12" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
                 <option value="default">default</option>
                 <option value="cerulean">cerulean</option>
                 <option value="cosmo">cosmo</option>
@@ -51,9 +51,9 @@
             </InputSelect>
         </div>
 
-        <div class="input-group flex-nowrap">
-            <span class="input-group-text col-4">@Loc["Start page"]</span>
-            <InputSelect class="form-select col-8" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
+        <div class="input-group">
+            <span class="input-group-text col-12">@Loc["Start page"]</span>
+            <InputSelect class="form-select col-12" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
                 <option value="">@Loc["Notes, Tasks, Habits"]</option>
                 <option value="/notes">@Loc["Notes"]</option>
                 <option value="/tasks">@Loc["Tasks"]</option>
@@ -62,9 +62,9 @@
             </InputSelect>
         </div>
 
-        <div class="input-group flex-nowrap">
-            <span class="input-group-text col-4">@Loc["Start sidebar"]</span>
-            <InputSelect class="form-select col-8" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
+        <div class="input-group">
+            <span class="input-group-text col-12">@Loc["Start sidebar"]</span>
+            <InputSelect class="form-select col-12" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
                 <option value="">@Loc["None"]</option>
                 <option value="Settings">@Loc["Settings"]</option>
                 <option value="Data">@Loc["Data"]</option>
@@ -99,9 +99,9 @@
             <label for="ShowLargeCalendar" class="input-group-text flex-grow-1 text-wrap">@Loc["Show large calendar"]</label>
         </div>
 
-        <div class="input-group flex-nowrap">
-            <span class="input-group-text col-4">@Loc["Language"]</span>
-            <InputSelect class="form-select col-8" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
+        <div class="input-group">
+            <span class="input-group-text col-12">@Loc["Language"]</span>
+            <InputSelect class="form-select col-12" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
                 @foreach ((string key, Loc loc) in Ididit.Loc.Cultures)
                 {
                     <option @key="key" value="@key">@loc.Language</option>
@@ -109,9 +109,9 @@
             </InputSelect>
         </div>
 
-        <div class="input-group flex-nowrap">
-            <span class="input-group-text col-4">@Loc["Week start"]</span>
-            <InputSelect class="form-select col-8" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
+        <div class="input-group">
+            <span class="input-group-text col-12">@Loc["Week start"]</span>
+            <InputSelect class="form-select col-12" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
                 {
                     <option @key="dayOfWeek" value="@dayOfWeek">@Loc[dayOfWeek.ToString()]</option>
