@@ -12,11 +12,9 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-remove borders - span / InputSelect
+remove borders in InputSelect
 
-small / InputSelect
-
-fix InputSelect width
+remove class="input-group" in InputSelect
 
 ---------------------------------------------------------------------------------------------------
 

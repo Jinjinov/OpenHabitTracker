@@ -20,8 +20,8 @@
         </div>
 
         <div class="input-group">
-            <span class="input-group-text col-12">@Loc["Theme"]</span>
-            <InputSelect class="form-select col-12" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
+            <small class="input-group-text col-12">@Loc["Theme"]:</small>
+            <InputSelect class="form-select col-12 m-0" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
                 <option value="default">default</option>
                 <option value="cerulean">cerulean</option>
                 <option value="cosmo">cosmo</option>
@@ -52,8 +52,8 @@
         </div>
 
         <div class="input-group">
-            <span class="input-group-text col-12">@Loc["Start page"]</span>
-            <InputSelect class="form-select col-12" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
+            <small class="input-group-text col-12">@Loc["Start page"]:</small>
+            <InputSelect class="form-select col-12 m-0" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
                 <option value="">@Loc["Notes, Tasks, Habits"]</option>
                 <option value="/notes">@Loc["Notes"]</option>
                 <option value="/tasks">@Loc["Tasks"]</option>
@@ -63,8 +63,8 @@
         </div>
 
         <div class="input-group">
-            <span class="input-group-text col-12">@Loc["Start sidebar"]</span>
-            <InputSelect class="form-select col-12" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
+            <small class="input-group-text col-12">@Loc["Start sidebar"]:</small>
+            <InputSelect class="form-select col-12 m-0" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
                 <option value="">@Loc["None"]</option>
                 <option value="Settings">@Loc["Settings"]</option>
                 <option value="Data">@Loc["Data"]</option>
@@ -100,8 +100,8 @@
         </div>
 
         <div class="input-group">
-            <span class="input-group-text col-12">@Loc["Language"]</span>
-            <InputSelect class="form-select col-12" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
+            <small class="input-group-text col-12">@Loc["Language"]:</small>
+            <InputSelect class="form-select col-12 m-0" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
                 @foreach ((string key, Loc loc) in Ididit.Loc.Cultures)
                 {
                     <option @key="key" value="@key">@loc.Language</option>
@@ -110,8 +110,8 @@
         </div>
 
         <div class="input-group">
-            <span class="input-group-text col-12">@Loc["Week start"]</span>
-            <InputSelect class="form-select col-12" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
+            <small class="input-group-text col-12">@Loc["Week start"]:</small>
+            <InputSelect class="form-select col-12 m-0" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
                 {
                     <option @key="dayOfWeek" value="@dayOfWeek">@Loc[dayOfWeek.ToString()]</option>
