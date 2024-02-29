@@ -10,18 +10,16 @@
 <PageTitle>Settings</PageTitle>
 
 <div>
-    <div class="my-1">
+    <div class="my-1 list-group">
 
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="IsDarkMode" class="form-check-input mt-0" Value="_settings.IsDarkMode" ValueExpression="() => _settings.IsDarkMode" ValueChanged="SaveIsDarkMode" />
-            </div>
-            <label for="IsDarkMode" class="input-group-text flex-grow-1 text-wrap">@Loc["Dark mode"]</label>
+        <div class="list-group-item">
+            <InputCheckbox id="IsDarkMode" class="form-check-input me-1" Value="_settings.IsDarkMode" ValueExpression="() => _settings.IsDarkMode" ValueChanged="SaveIsDarkMode" />
+            <label for="IsDarkMode" class="form-check-label stretched-link">@Loc["Dark mode"]</label>
         </div>
 
-        <div class="input-group">
-            <small class="input-group-text col-12">@Loc["Theme"]:</small>
-            <InputSelect class="form-select col-12 m-0" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
+        <div class="list-group-item">
+            <small class="">@Loc["Theme"]:</small>
+            <InputSelect class="form-select" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
                 <option value="default">default</option>
                 <option value="cerulean">cerulean</option>
                 <option value="cosmo">cosmo</option>
@@ -51,9 +49,9 @@
             </InputSelect>
         </div>
 
-        <div class="input-group">
-            <small class="input-group-text col-12">@Loc["Start page"]:</small>
-            <InputSelect class="form-select col-12 m-0" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
+        <div class="list-group-item">
+            <small class="">@Loc["Start page"]:</small>
+            <InputSelect class="form-select" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
                 <option value="">@Loc["Notes, Tasks, Habits"]</option>
                 <option value="/notes">@Loc["Notes"]</option>
                 <option value="/tasks">@Loc["Tasks"]</option>
@@ -62,9 +60,9 @@
             </InputSelect>
         </div>
 
-        <div class="input-group">
-            <small class="input-group-text col-12">@Loc["Start sidebar"]:</small>
-            <InputSelect class="form-select col-12 m-0" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
+        <div class="list-group-item">
+            <small class="">@Loc["Start sidebar"]:</small>
+            <InputSelect class="form-select" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
                 <option value="">@Loc["None"]</option>
                 <option value="Settings">@Loc["Settings"]</option>
                 <option value="Data">@Loc["Data"]</option>
@@ -78,30 +76,24 @@
             </InputSelect>
         </div>
 
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="ShowItemList" class="form-check-input mt-0" Value="_settings.ShowItemList" ValueExpression="() => _settings.ShowItemList" ValueChanged="SaveShowItemList" />
-            </div>
-            <label for="ShowItemList" class="input-group-text flex-grow-1 text-wrap">@Loc["Show item list"]</label>
+        <div class="list-group-item">
+            <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowItemList" ValueExpression="() => _settings.ShowItemList" ValueChanged="SaveShowItemList" />
+            <label for="ShowItemList" class="form-check-label stretched-link">@Loc["Show item list"]</label>
         </div>
 
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="ShowSmallCalendar" class="form-check-input mt-0" Value="_settings.ShowSmallCalendar" ValueExpression="() => _settings.ShowSmallCalendar" ValueChanged="SaveShowSmallCalendar" />
-            </div>
-            <label for="ShowSmallCalendar" class="input-group-text flex-grow-1 text-wrap">@Loc["Show small calendar"]</label>
+        <div class="list-group-item">
+            <InputCheckbox id="ShowSmallCalendar" class="form-check-input me-1" Value="_settings.ShowSmallCalendar" ValueExpression="() => _settings.ShowSmallCalendar" ValueChanged="SaveShowSmallCalendar" />
+            <label for="ShowSmallCalendar" class="form-check-label stretched-link">@Loc["Show small calendar"]</label>
         </div>
 
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="ShowLargeCalendar" class="form-check-input mt-0" Value="_settings.ShowLargeCalendar" ValueExpression="() => _settings.ShowLargeCalendar" ValueChanged="SaveShowLargeCalendar" />
-            </div>
-            <label for="ShowLargeCalendar" class="input-group-text flex-grow-1 text-wrap">@Loc["Show large calendar"]</label>
+        <div class="list-group-item">
+            <InputCheckbox id="ShowLargeCalendar" class="form-check-input me-1" Value="_settings.ShowLargeCalendar" ValueExpression="() => _settings.ShowLargeCalendar" ValueChanged="SaveShowLargeCalendar" />
+            <label for="ShowLargeCalendar" class="form-check-label stretched-link">@Loc["Show large calendar"]</label>
         </div>
 
-        <div class="input-group">
-            <small class="input-group-text col-12">@Loc["Language"]:</small>
-            <InputSelect class="form-select col-12 m-0" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
+        <div class="list-group-item">
+            <small class="">@Loc["Language"]:</small>
+            <InputSelect class="form-select" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
                 @foreach ((string key, Loc loc) in Ididit.Loc.Cultures)
                 {
                     <option @key="key" value="@key">@loc.Language</option>
@@ -109,9 +101,9 @@
             </InputSelect>
         </div>
 
-        <div class="input-group">
-            <small class="input-group-text col-12">@Loc["Week start"]:</small>
-            <InputSelect class="form-select col-12 m-0" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
+        <div class="list-group-item">
+            <small class="">@Loc["Week start"]:</small>
+            <InputSelect class="form-select" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
                 {
                     <option @key="dayOfWeek" value="@dayOfWeek">@Loc[dayOfWeek.ToString()]</option>
@@ -119,18 +111,14 @@
             </InputSelect>
         </div>
 
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="InsertTabsInNoteContent" class="form-check-input mt-0" Value="_settings.InsertTabsInNoteContent" ValueExpression="() => _settings.InsertTabsInNoteContent" ValueChanged="SaveInsertTabsInNoteContent" />
-            </div>
-            <label for="InsertTabsInNoteContent" class="input-group-text flex-grow-1 text-wrap">@Loc["Insert tabs in note content"]</label>
+        <div class="list-group-item">
+            <InputCheckbox id="InsertTabsInNoteContent" class="form-check-input me-1" Value="_settings.InsertTabsInNoteContent" ValueExpression="() => _settings.InsertTabsInNoteContent" ValueChanged="SaveInsertTabsInNoteContent" />
+            <label for="InsertTabsInNoteContent" class="form-check-label stretched-link">@Loc["Insert tabs in note content"]</label>
         </div>
 
-        <div class="input-group flex-nowrap">
-            <div class="input-group-text">
-                <InputCheckbox id="DisplayNoteContentAsMarkdown" class="form-check-input mt-0" Value="_settings.DisplayNoteContentAsMarkdown" ValueExpression="() => _settings.DisplayNoteContentAsMarkdown" ValueChanged="SaveDisplayNoteContentAsMarkdown" />
-            </div>
-            <label for="DisplayNoteContentAsMarkdown" class="input-group-text flex-grow-1 text-wrap">@Loc["Display note content as markdown"]</label>
+        <div class="list-group-item">
+            <InputCheckbox id="DisplayNoteContentAsMarkdown" class="form-check-input me-1" Value="_settings.DisplayNoteContentAsMarkdown" ValueExpression="() => _settings.DisplayNoteContentAsMarkdown" ValueChanged="SaveDisplayNoteContentAsMarkdown" />
+            <label for="DisplayNoteContentAsMarkdown" class="form-check-label stretched-link">@Loc["Display note content as markdown"]</label>
         </div>
 
     </div>
