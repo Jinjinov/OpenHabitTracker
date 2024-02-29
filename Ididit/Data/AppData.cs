@@ -145,6 +145,8 @@ public class AppData(IDataAccess dataAccess)
             await InitializeCategories();
             await InitializePriorities();
 
+            await InitializeTimes(); // TODO: remove temp fix
+
             IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
             Habits = habits.Select(x => new HabitModel
             {
@@ -161,8 +163,15 @@ public class AppData(IDataAccess dataAccess)
                 RepeatInterval = x.RepeatInterval,
                 RepeatPeriod = x.RepeatPeriod,
                 Duration = x.Duration,
-                LastTimeDoneAt = x.LastTimeDoneAt
+                LastTimeDoneAt = x.LastTimeDoneAt,
+
+                TimesDone = Times!.Values.Where(y => y.HabitId == x.Id).ToList() // TODO: remove temp fix
             }).ToDictionary(x => x.Id);
+
+            foreach (HabitModel habit in Habits.Values) // TODO: remove temp fix
+            {
+                habit.RefreshTimesDoneByDay(); // TODO: remove temp fix
+            }
         }
     }
 
