@@ -14,6 +14,8 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ! fix min Habit / Calendar width - no horizontal scrollbar
 
+! call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
+
 ---------------------------------------------------------------------------------------------------
 
 ! website
