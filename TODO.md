@@ -16,12 +16,6 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ---------------------------------------------------------------------------------------------------
 
-remove borders: InputSelect, InputCheckbox, input type="range"
-
-replace class="input-group" with class="list-group"
-
----------------------------------------------------------------------------------------------------
-
 ! website
 
 ---------------------------------------------------------------------------------------------------
