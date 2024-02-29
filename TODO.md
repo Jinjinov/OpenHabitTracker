@@ -10,15 +10,15 @@ version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/
 
 ??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
 
----------------------------------------------------------------------------------------------------
-
-! fix min Habit / Calendar width - no horizontal scrollbar
-
-! call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
+call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
 	save TotalTimeSpent
 	save AverageInterval
 	on Habit Initialize - load only last week (last X days, displayed in small calendar)
 	call LoadTimesDone for large calendar
+
+---------------------------------------------------------------------------------------------------
+
+! fix min Habit / Calendar width - no horizontal scrollbar
 
 ---------------------------------------------------------------------------------------------------
 
