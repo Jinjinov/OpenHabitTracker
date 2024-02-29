@@ -41,7 +41,7 @@
                         <button class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
                     </div>
 
-                    <DynamicComponent Type="_dynamicComponentType" Parameters="_dynamicComponentParametersByName.GetValueOrDefault(_dynamicComponentType.Name)" />
+                    <DynamicComponent @ref="dynamicComponent" Type="_dynamicComponentType" Parameters="_dynamicComponentParametersByName.GetValueOrDefault(_dynamicComponentType.Name)" />
 
                 </div>
             }
@@ -49,9 +49,11 @@
             <CascadingValue Name="StateChanged" Value=@_stateChanged>
                 <CascadingValue Name="WindowDimensions" Value=@_windowDimensions>
                     <CascadingValue Name="DynamicComponentType" Value=@_dynamicComponentType>
+                        <CascadingValue Name="ContentDeleted" Value=@_contentDeleted>
 
                         @Body
 
+                        </CascadingValue>
                     </CascadingValue>
                 </CascadingValue>
             </CascadingValue>
@@ -68,6 +70,18 @@
 
 @code {
     private bool _stateChanged;
+
+    DynamicComponent? dynamicComponent;
+
+    EventCallback _contentDeleted;
+
+    void OnContentDeleted()
+    {
+        if (dynamicComponent?.Instance is Trash trash)
+        {
+            trash.Refresh();
+        }
+    }
 
     private Dimensions? _windowDimensions;
 
@@ -98,6 +112,8 @@
 
         if (AppData.Settings.Theme != "default")
             await JsInterop.SetTheme(AppData.Settings.Theme);
+
+        _contentDeleted = EventCallback.Factory.Create(this, OnContentDeleted);
 
         Dictionary<string, object> dynamicComponentParameters = new Dictionary<string, object>()
         {

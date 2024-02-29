@@ -44,6 +44,11 @@
     [Parameter]
     public EventCallback<bool> StateChangedChanged { get; set; }
 
+    public void Refresh()
+    {
+        StateHasChanged();
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await TrashService.Initialize();
