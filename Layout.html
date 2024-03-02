@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+  	#root {
+        overflow: hidden !important;
+        height: 100vh !important;
+    }
+    #main {
+        overflow: auto !important;
+        max-height: 100%;
+    }
+    @media (min-width: 1400px) {
+      .sidebar {
+        flex: 0 0 25% !important;
+      }
+    }
+    @media (min-width: 768px) {
+      .sidebar, #columns {
+        overflow: auto !important;
+      }
+      #main {
+        overflow: hidden !important;
+        height: 100vh !important;
+      }
+    }
+    @media (min-width: 1400px) {
+      .sidebar, .column {
+        overflow: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="root" class="bg-body-secondary">
+  <div id="header" class="bg-primary">
+  	<span>header</span>
+  </div>
+  <div id="main" class="d-flex flex-column flex-md-row">
+    <div id="sidebar" class="bg-info flex-grow-1 sidebar">
+      <div style="height:4000px">sidebar</div>
+    </div>
+    <div id="columns" class="flex-grow-1 d-flex flex-column flex-xxl-row">
+      <div class="flex-grow-1 column bg-danger"><div style="height:400px">column 1</div></div>
+      <div class="flex-grow-1 column bg-warning"><div style="height:400px">column 2</div></div>
+      <div class="flex-grow-1 column bg-success"><div style="height:400px">column 3</div></div>
+    </div>
+  </div>
+ </div>
+
+</body>
+</html>
