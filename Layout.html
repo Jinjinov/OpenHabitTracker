@@ -14,22 +14,16 @@
         overflow: auto !important;
         max-height: 100%;
     }
-    @media (min-width: 1400px) {
-      .sidebar {
-        flex: 0 0 25% !important;
-      }
-    }
     @media (min-width: 768px) {
-      .sidebar, #columns {
+      #sidebar, #columns {
         overflow: auto !important;
       }
-      #main {
-        overflow: hidden !important;
-        height: 100vh !important;
-      }
     }
     @media (min-width: 1400px) {
-      .sidebar, .column {
+      #sidebar {
+        flex: 0 0 25% !important;
+      }
+      .column {
         overflow: auto !important;
       }
     }
@@ -37,18 +31,18 @@
 </head>
 <body>
 
-<div id="root" class="bg-body-secondary">
+<div id="root" class="bg-secondary">
   <div id="header" class="bg-primary">
   	<span>header</span>
   </div>
   <div id="main" class="d-flex flex-column flex-md-row">
-    <div id="sidebar" class="bg-info flex-grow-1 sidebar">
-      <div style="height:4000px">sidebar</div>
+    <div id="sidebar" class="p-3 flex-grow-1">
+      <div class="bg-info" style="height:2000px">sidebar</div>
     </div>
     <div id="columns" class="flex-grow-1 d-flex flex-column flex-xxl-row">
-      <div class="flex-grow-1 column bg-danger"><div style="height:400px">column 1</div></div>
-      <div class="flex-grow-1 column bg-warning"><div style="height:400px">column 2</div></div>
-      <div class="flex-grow-1 column bg-success"><div style="height:400px">column 3</div></div>
+      <div class="flex-grow-1 column p-3"><div class="bg-danger" style="height:500px">column 1</div></div>
+      <div class="flex-grow-1 column p-3"><div class="bg-warning" style="height:500px">column 2</div></div>
+      <div class="flex-grow-1 column p-3"><div class="bg-success" style="height:500px">column 3</div></div>
     </div>
   </div>
  </div>
