@@ -19,6 +19,7 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 ---------------------------------------------------------------------------------------------------
 
 ! fix min Habit / Calendar width - no horizontal scrollbar
+	768 - 1320
 
 ---------------------------------------------------------------------------------------------------
 

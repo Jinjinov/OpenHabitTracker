@@ -9,8 +9,16 @@
 @inject JsInterop JsInterop
 @inject IStringLocalizer<Loc> Loc
 
+@* Root <div> inside <html><body><app> *@
+
 <div class="container-fluid d-flex flex-column vh-100 mh-100 overflow-hidden">
+
+    @* Header row *@
+
     <div class="row flex-shrink-1">
+
+        @* Header column *@
+
         <div class="col bg-body-secondary d-flex align-items-center">
 
             <button class="nav-link" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> @Loc["Menu"]</button>
@@ -30,10 +38,14 @@
 
     @if (_windowDimensions is not null)
     {
+        @* Main body row *@
+
         <div class="row flex-grow-1 parent-row">
 
             @if (_dynamicComponentType is not null)
             {
+                @* Sidebar column *@
+
                 <div class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px">
 
                     <div class="input-group flex-nowrap my-1">
@@ -45,6 +57,8 @@
 
                 </div>
             }
+
+            @* Main body column *@
 
             <CascadingValue Name="StateChanged" Value=@_stateChanged>
                 <CascadingValue Name="WindowDimensions" Value=@_windowDimensions>
