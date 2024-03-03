@@ -38,7 +38,6 @@ SQL Server - Blazor Server
 	EF Core: use `DbContextFactory`
 
 host 24/7 on Raspberry Pi
-	test fan
 
 ---------------------------------------------------------------------------------------------------
 

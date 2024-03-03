@@ -192,8 +192,6 @@ System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData
 
 https://github.com/EdCharbeneau/BlazorSize/wiki
 
----------------------------------------------------------------------------------------------------
-
 // wwwroot/js/interop.js
 window.getScreenWidth = function () {
     return window.innerWidth;
@@ -203,8 +201,6 @@ window.addEventListener("resize", function() {
     var screenWidth = window.innerWidth;
     DotNet.invokeMethodAsync('YourAssemblyName', 'UpdateScreenWidth', screenWidth);
 });
-
----------------------------------------------------------------------------------------------------
 
 @code {
     int screenWidth;
