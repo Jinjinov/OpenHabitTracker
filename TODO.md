@@ -18,11 +18,16 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 
 ---------------------------------------------------------------------------------------------------
 
-! show "Notes, Tasks, Habits" in Menu and Settings only when screen > 1400 px
+! hide "Notes, Tasks, Habits" in Menu and Settings when screen < 1280 px
 
-! EF Core can't create SQLite DB file on MacOS
+! EF Core can't create SQLite DB file on MacOS - MauiProgram - 'SQLite Error 14: 'unable to open database file'.' - Entitlements.plist - Read/Write
 
-! Photino can't open web link in external browser
+	The path that works is within the App Sandbox:
+	/Users/ddarby/Library/Containers/com.cerescape.Accountable/Data/Documents/
+
+	Use the ~/Library/ApplicationSupport folders.
+
+! Photino can't open web link in external browser - https://github.com/tryphotino/photino.Blazor/pull/113/files
 
 ! website
 
