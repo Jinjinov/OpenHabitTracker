@@ -67,6 +67,13 @@ https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1324689082
 
 ---------------------------------------------------------------------------------------------------
 
+Localization:
+
+https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
+https://github.com/xaviersolau/BlazorJsonLocalization
+
+---------------------------------------------------------------------------------------------------
+
 Blazor magic strings: blazor-error-ui , --blazor-load-percentage , --blazor-load-percentage-text , blazor-error-boundary , validation-errors , validation-message
 
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web.JS/src/BootErrors.ts

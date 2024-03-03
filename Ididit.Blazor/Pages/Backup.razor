@@ -54,7 +54,7 @@
 
         string extension = fileFormat.ToString().ToLower();
 
-        await SaveFile.SaveFileDialog($"ididit.{DateTime.Now:yyyyMMddTHHmmss}.{extension}", _fileContent);
+        await SaveFile.SaveFileDialog($"ididit.{DateTime.Now:yyyyMMddHHmmss}.{extension}", _fileContent);
     }
 
     private async Task OnFileOpened(string filename, Stream stream)

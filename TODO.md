@@ -22,6 +22,8 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 
 ! EF Core can't create SQLite DB file on MacOS
 
+! Photino can't open web link in external browser
+
 ! website
 
 ---------------------------------------------------------------------------------------------------
@@ -37,7 +39,7 @@ backup
 
 SQL Server - Blazor Server
 	version history
-	table User
+	table Users
 	column UserId in every other table
 	EF Core: use `DbContextFactory`
 
@@ -117,9 +119,6 @@ Google Keep
 		- underline
 		- clear (\) text (T) formatting
 
-- localization https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
-- https://github.com/xaviersolau/BlazorJsonLocalization
-
 - Ididit.Blazor.Server:
 	- @page "/Error"
 	- app.UseExceptionHandler("/Error");
@@ -139,15 +138,11 @@ Google Keep
 - don't list habits that i always do / never do - or find a solution for displaying them
 
 Ididit.Rest for SQL server for WebView
-	User authentication / table Users
+
+table Users
+	User authentication
 	... or ...
 	Google, Microsoft, Apple log in
-
-Ididit.yyyyMMddHHmmss.json
-	Google Drive
-	OneDrive
-	iCloud
-	Dropbox - NO!
 
 essentials: (highest priority)
 appointments: (very high priority)
