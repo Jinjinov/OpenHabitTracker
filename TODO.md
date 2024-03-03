@@ -18,6 +18,14 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 
 ---------------------------------------------------------------------------------------------------
 
+- when IsEmbedded == true
+	- habits should not recalculate number of calendar visible days when menu closes - when menu opens again, the habit column wraps
+	- habits should not have max height 100%
+
+- _showSecondColumn could change if Sidebar is (not) visible ?
+
+- EF Core can't create SQLite DB file on MacOS
+
 ! website
 
 ---------------------------------------------------------------------------------------------------
