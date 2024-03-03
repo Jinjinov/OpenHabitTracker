@@ -4,10 +4,24 @@
 
 <PageTitle>ididit!</PageTitle>
 
-<Notes IsEmbedded />
-<Tasks IsEmbedded />
-<Habits IsEmbedded />
+@if (_showColumns)
+{
+    <Notes IsEmbedded />
+    <Tasks IsEmbedded />
+    <Habits IsEmbedded />
+}
+else
+{
+    <div class="flex-grow-1 w-auto mh-100" style="overflow-y: auto">
+        <Notes IsEmbedded />
+        <Tasks IsEmbedded />
+        <Habits IsEmbedded />
+    </div>
+}
 
 @code {
+    [CascadingParameter(Name = "WindowDimensions")]
+    public Dimensions? WindowDimensions { get; set; }
 
+    bool _showColumns => WindowDimensions?.Width < 768 || WindowDimensions?.Width > 1470;
 }

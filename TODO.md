@@ -18,44 +18,6 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 
 ---------------------------------------------------------------------------------------------------
 
-! fix min Habit / Calendar width - no horizontal scrollbar
-	768 - 1320
-
-  <div class="d-flex flex-column flex-md-row">
-    <div class="flex-grow-1 border">
-      <h2>Main column</h2>
-    </div>
-    <div class="flex-grow-1 d-flex flex-column flex-xxl-row">
-      <div class="flex-grow-1 border">Subsection 1</div>
-      <div class="flex-grow-1 border">Subsection 2</div>
-      <div class="flex-grow-1 border">Subsection 3</div>
-    </div>
-  </div>
-
-@media (min-width: 1400px) {
-    .sidebar {
-    flex: 0 0 25% !important;
-    }
-}
-
-<div id="root" class="bg-body-secondary">
-  <div id="header" class="bg-primary">
-  	<span>header</span>
-  </div>
-  <div id="main" class="d-flex flex-column flex-md-row">
-    <div id="sidebar" class="bg-info flex-grow-1 sidebar">
-      <span>sidebar</span>
-    </div>
-    <div class="flex-grow-1 d-flex flex-column flex-xxl-row">
-      <div class="flex-grow-1 bg-danger"><div style="height:400px">column 1</div></div>
-      <div class="flex-grow-1 bg-warning"><div style="height:400px">column 2</div></div>
-      <div class="flex-grow-1 bg-success"><div style="height:400px">column 3</div></div>
-    </div>
-  </div>
- </div>
-
----------------------------------------------------------------------------------------------------
-
 ! website
 
 ---------------------------------------------------------------------------------------------------
