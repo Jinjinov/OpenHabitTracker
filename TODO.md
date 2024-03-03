@@ -23,9 +23,10 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 ! EF Core can't create SQLite DB file on MacOS - MauiProgram - 'SQLite Error 14: 'unable to open database file'.' - Entitlements.plist - Read/Write
 
 	The path that works is within the App Sandbox:
-	/Users/ddarby/Library/Containers/com.cerescape.Accountable/Data/Documents/
 
-	Use the ~/Library/ApplicationSupport folders.
+	~/Library/Containers/app-bundle-id/Data/
+
+	/Users/ddarby/Library/Containers/com.cerescape.Accountable/Data/Documents/
 
 ! Photino can't open web link in external browser - https://github.com/tryphotino/photino.Blazor/pull/113/files
 
