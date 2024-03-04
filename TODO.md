@@ -20,9 +20,9 @@ Photino can't open web links in external browser
 	https://github.com/tryphotino/photino.Blazor/issues/111
 	https://github.com/tryphotino/photino.Blazor/pull/113
 
----------------------------------------------------------------------------------------------------
+find out why `padding-left: 12px !important;` is needed on iOS
 
-! iOS safe area
+---------------------------------------------------------------------------------------------------
 
 ! search & replace Maui colors:
 	512BD4
