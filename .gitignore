@@ -9,3 +9,4 @@ GoogleDriveClientSecrets.Hidden.cs
 *.pfx
 Package.StoreAssociation.xml
 Ididit.db*
+Photino.Blazor

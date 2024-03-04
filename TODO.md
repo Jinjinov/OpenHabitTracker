@@ -22,41 +22,20 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 
 ! EF Core can't create SQLite DB file on MacOS - MauiProgram - 'SQLite Error 14: 'unable to open database file'.' - Entitlements.plist - Read/Write
 
-	The path that works is within the App Sandbox:
-
-	~/Library/Containers/app-bundle-id/Data/
-
-	/Users/ddarby/Library/Containers/com.cerescape.Accountable/Data/Documents/
-
-	System.Environment.SpecialFolder.ApplicationData
-	System.Environment.SpecialFolder.LocalApplicationData
-
-	Microsoft.Maui.Storage.FileSystem.Current.CacheDirectory
-	Microsoft.Maui.Storage.FileSystem.Current.AppDataDirectory
-
-	public string CacheDirectory
-		=> PlatformCacheDirectory;
-
-	public string AppDataDirectory
-		=> PlatformAppDataDirectory;
-
-	static string CleanPath(string path) =>
-		string.Join("_", path.Split(Path.GetInvalidFileNameChars()));
-
-	static string AppSpecificPath =>
-		Path.Combine(CleanPath(AppInfoImplementation.PublisherName), CleanPath(AppInfo.PackageName));
-
-	string PlatformCacheDirectory
-		=> AppInfoUtils.IsPackagedApp
-			? ApplicationData.Current.LocalCacheFolder.Path
-			: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppSpecificPath, "Cache");
-
-	string PlatformAppDataDirectory
-		=> AppInfoUtils.IsPackagedApp
-			? ApplicationData.Current.LocalFolder.Path
-			: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppSpecificPath, "Data");
-
 ! Photino can't open web link in external browser - https://github.com/tryphotino/photino.Blazor/pull/113/files
+
+    public Stream HandleWebRequest(object sender, string schema, string url, out string contentType)
+    {
+        // Intercept web requests to external websites (e.g., app://github.com) and open the link in the user's
+        // browser.
+        if (!url.Contains("localhost") && !url.Contains("0.0.0.0")) {
+            Process.Start(new ProcessStartInfo(url.Replace($"{schema}://", "http://")) { UseShellExecute = true });
+            contentType = default;
+            return null;
+        }
+
+        // It would be better if we were told whether or not this is a navigation request, but
+        // since we're not, guess.
 
 ! website
 
