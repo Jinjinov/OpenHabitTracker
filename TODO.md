@@ -24,26 +24,28 @@ Photino can't open web links in external browser
 
 ! EF Core can't create SQLite DB file on MacOS - MauiProgram - 'SQLite Error 14: 'unable to open database file'.' - Entitlements.plist - Read/Write
 
-! website
+! Website
 
 ---------------------------------------------------------------------------------------------------
 
-backup
+Backup
 	Google Drive
 	OneDrive
 	iCloud
 	Dropbox
-		WASM authorisation
-		desktop authorisation
-		mobile authorisation
+		WASM authorisation - REST
+		desktop authorisation - `using Google.Apis.Auth.OAuth2;`
+		mobile authorisation - ASP.NET Core
 
-SQL Server - Blazor Server
+Blazor Server / Web
+	ASP.NET Core
+	SQL Server
 	version history
 	table Users
 	column UserId in every other table
 	EF Core: use `DbContextFactory`
 
-host 24/7 on Raspberry Pi
+Host 24/7 on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
 
@@ -61,7 +63,6 @@ Show only habits with ratio `over` / `under`
 
 when habit is done, uncheck all habit items
 when task is done, check all task items
-
 when all habit items are done, habit is done
 when all task items are done, task is done
 

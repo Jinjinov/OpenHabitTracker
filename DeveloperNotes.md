@@ -244,7 +244,10 @@ System.Environment.SpecialFolder.ApplicationData
 System.Environment.SpecialFolder.LocalApplicationData
 
 Microsoft.Maui.Storage.FileSystem.Current.CacheDirectory
+"C:\\Users\\Urban\\AppData\\Local\\Packages\\ididit.blazor.maui_9zz4h110yvjzm\\LocalCache"
+
 Microsoft.Maui.Storage.FileSystem.Current.AppDataDirectory
+"C:\\Users\\Urban\\AppData\\Local\\Packages\\ididit.blazor.maui_9zz4h110yvjzm\\LocalState"
 
 public string CacheDirectory
 	=> PlatformCacheDirectory;
