@@ -34,11 +34,11 @@ Backup
 	iCloud
 	Dropbox
 		WASM authorisation - REST
-		desktop authorisation - `using Google.Apis.Auth.OAuth2;`
-		mobile authorisation - ASP.NET Core
+		desktop authorisation - using Google.Apis.Auth.OAuth2;
+		mobile authorisation - `ASP.NET Core`
 
 Blazor Server / Web
-	ASP.NET Core
+	`ASP.NET Core`
 	SQL Server
 	version history
 	table Users
