@@ -32,6 +32,13 @@ find out why `padding-left: 12px !important;` is needed on iOS
 	splash.svg
 	dotnet_bot.svg
 
+! prepare for release (Microsoft Store, Google Play, Apple Store)
+	app name
+	app icon
+	app background color
+	app entitlements
+	app metadata
+
 ! Website
 
 ! Register the new domain
