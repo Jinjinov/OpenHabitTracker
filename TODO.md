@@ -16,13 +16,13 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 	on Habit Initialize - load only last week (last X days, displayed in small calendar)
 	call LoadTimesDone for large calendar
 
+Photino can't open web links in external browser
+	https://github.com/tryphotino/photino.Blazor/issues/111
+	https://github.com/tryphotino/photino.Blazor/pull/113
+
 ---------------------------------------------------------------------------------------------------
 
-! hide "Notes, Tasks, Habits" in Menu and Settings when screen < 1280 px
-
 ! EF Core can't create SQLite DB file on MacOS - MauiProgram - 'SQLite Error 14: 'unable to open database file'.' - Entitlements.plist - Read/Write
-
-! Photino can't open web link in external browser - https://github.com/tryphotino/photino.Blazor/pull/113/files
 
 ! website
 

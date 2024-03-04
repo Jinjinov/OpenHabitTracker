@@ -52,7 +52,10 @@
         <div class="list-group-item">
             <small class="">@Loc["Start page"]:</small>
             <InputSelect class="form-select" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
+                @if (WindowDimensions?.Width >= 1280)
+                {
                 <option value="">@Loc["Notes, Tasks, Habits"]</option>
+                }
                 <option value="/notes">@Loc["Notes"]</option>
                 <option value="/tasks">@Loc["Tasks"]</option>
                 <option value="/habits">@Loc["Habits"]</option>
@@ -130,6 +133,9 @@
 
     [Parameter]
     public EventCallback<bool> StateChangedChanged { get; set; }
+
+    [Parameter]
+    public Dimensions? WindowDimensions { get; set; }
 
     SettingsModel _settings => SettingsService.Settings;
 

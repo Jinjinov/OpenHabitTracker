@@ -129,8 +129,17 @@
 
         _contentDeleted = EventCallback.Factory.Create(this, OnContentDeleted);
 
+        SetDynamicComponentParameters();
+
+        if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
+            SelectComponent(AppData.Settings.StartSidebar);
+    }
+
+    void SetDynamicComponentParameters()
+    {
         Dictionary<string, object> dynamicComponentParameters = new Dictionary<string, object>()
         {
+            { "WindowDimensions", _windowDimensions },
             { "DynamicComponentType", _dynamicComponentType },
             { "DynamicComponentTypeChanged", EventCallback.Factory.Create<Type?>(this, val => _dynamicComponentType = val)},
         };
@@ -141,20 +150,24 @@
             { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged = val)},
         };
 
+        Dictionary<string, object> windowDimensionsParameters = new Dictionary<string, object>()
+        {
+            { "WindowDimensions", _windowDimensions },
+            { "StateChanged", _stateChanged },
+            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged = val)},
+        };
+
         _dynamicComponentParametersByName = new Dictionary<string, Dictionary<string, object>>
         {
             { "Menu", dynamicComponentParameters },
             { "Search", stateChangedParameters },
-            { "Settings", stateChangedParameters },
+            { "Settings", windowDimensionsParameters },
             { "Backup", stateChangedParameters },
             { "Categories", stateChangedParameters },
             { "Data", stateChangedParameters },
             { "Priorities", stateChangedParameters },
             { "Trash", stateChangedParameters }
         };
-
-        if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
-            SelectComponent(AppData.Settings.StartSidebar);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -162,6 +175,8 @@
         if (firstRender)
         {
             _windowDimensions = await JsInterop.GetWindowDimensions();
+
+            SetDynamicComponentParameters();
 
             if (!string.IsNullOrEmpty(AppData.Settings.StartPage))
             {
