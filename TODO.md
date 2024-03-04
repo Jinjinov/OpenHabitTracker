@@ -24,19 +24,6 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 
 ! Photino can't open web link in external browser - https://github.com/tryphotino/photino.Blazor/pull/113/files
 
-    public Stream HandleWebRequest(object sender, string schema, string url, out string contentType)
-    {
-        // Intercept web requests to external websites (e.g., app://github.com) and open the link in the user's
-        // browser.
-        if (!url.Contains("localhost") && !url.Contains("0.0.0.0")) {
-            Process.Start(new ProcessStartInfo(url.Replace($"{schema}://", "http://")) { UseShellExecute = true });
-            contentType = default;
-            return null;
-        }
-
-        // It would be better if we were told whether or not this is a navigation request, but
-        // since we're not, guess.
-
 ! website
 
 ---------------------------------------------------------------------------------------------------
