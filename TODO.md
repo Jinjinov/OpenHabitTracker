@@ -28,6 +28,34 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 
 	/Users/ddarby/Library/Containers/com.cerescape.Accountable/Data/Documents/
 
+	System.Environment.SpecialFolder.ApplicationData
+	System.Environment.SpecialFolder.LocalApplicationData
+
+	Microsoft.Maui.Storage.FileSystem.Current.CacheDirectory
+	Microsoft.Maui.Storage.FileSystem.Current.AppDataDirectory
+
+	public string CacheDirectory
+		=> PlatformCacheDirectory;
+
+	public string AppDataDirectory
+		=> PlatformAppDataDirectory;
+
+	static string CleanPath(string path) =>
+		string.Join("_", path.Split(Path.GetInvalidFileNameChars()));
+
+	static string AppSpecificPath =>
+		Path.Combine(CleanPath(AppInfoImplementation.PublisherName), CleanPath(AppInfo.PackageName));
+
+	string PlatformCacheDirectory
+		=> AppInfoUtils.IsPackagedApp
+			? ApplicationData.Current.LocalCacheFolder.Path
+			: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppSpecificPath, "Cache");
+
+	string PlatformAppDataDirectory
+		=> AppInfoUtils.IsPackagedApp
+			? ApplicationData.Current.LocalFolder.Path
+			: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppSpecificPath, "Data");
+
 ! Photino can't open web link in external browser - https://github.com/tryphotino/photino.Blazor/pull/113/files
 
 ! website
