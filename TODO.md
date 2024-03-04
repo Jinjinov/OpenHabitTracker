@@ -22,9 +22,21 @@ Photino can't open web links in external browser
 
 ---------------------------------------------------------------------------------------------------
 
-! EF Core can't create SQLite DB file on MacOS - MauiProgram - 'SQLite Error 14: 'unable to open database file'.' - Entitlements.plist - Read/Write
+! iOS safe area
+
+! search & replace Maui colors:
+	512BD4
+	2B0B98
+	appicon.svg
+	appiconfg.svg
+	splash.svg
+	dotnet_bot.svg
 
 ! Website
+
+! Register the new domain
+
+! Rename the project & repository
 
 ---------------------------------------------------------------------------------------------------
 
