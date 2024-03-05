@@ -24,6 +24,8 @@ find out why `padding-left: 12px !important;` is needed on iOS
 
 ---------------------------------------------------------------------------------------------------
 
+move LoginDisplay / @NavBarFragment.GetNavBarFragment() to Backup
+
 ! search & replace Maui colors:
 	512BD4
 	2B0B98

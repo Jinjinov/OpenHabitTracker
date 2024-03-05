@@ -7,7 +7,8 @@
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="new[] { typeof(Ididit.Blazor.Pages.Home).Assembly }">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            @* <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
                     @if (context.User.Identity?.IsAuthenticated != true)
                     {
@@ -18,7 +19,7 @@
                         <p role="alert">You are not authorized to access this resource.</p>
                     }
                 </NotAuthorized>
-            </AuthorizeRouteView>
+            </AuthorizeRouteView> *@
         </Found>
         <NotFound>
             <PageTitle>Not found</PageTitle>
