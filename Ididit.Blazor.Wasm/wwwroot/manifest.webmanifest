@@ -1,20 +1,20 @@
 {
-  "name": "Ididit.Blazor.Wasm",
-  "short_name": "Ididit.Blazor.Wasm",
+  "name": "ididit!",
+  "short_name": "ididit!",
   "id": "./",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#03173d",
+  "theme_color": "#ffffff",
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icon-512.png",
+      "src": "/icons/icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     },
     {
-      "src": "icon-192.png",
+      "src": "/icons/icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     }

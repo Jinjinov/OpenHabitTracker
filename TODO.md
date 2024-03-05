@@ -22,6 +22,10 @@ Photino can't open web links in external browser
 
 find out why `padding-left: 12px !important;` is needed on iOS
 
+different?
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
 ---------------------------------------------------------------------------------------------------
 
 fix WASM javascript errors
