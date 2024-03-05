@@ -33,8 +33,10 @@ fix WASM javascript errors
 fix WASM habit / indexeddb / settings error
 
 move LoginDisplay / @NavBarFragment.GetNavBarFragment() to Backup
+	appsettings.json
+	appsettings.Development.json
 
-! search & replace WASM colors
+! search & replace WASM colors - manifest.webmanifest
 
 ! search & replace Maui colors:
 	512BD4
