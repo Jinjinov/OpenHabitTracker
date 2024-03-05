@@ -24,7 +24,13 @@ find out why `padding-left: 12px !important;` is needed on iOS
 
 ---------------------------------------------------------------------------------------------------
 
+fix WASM javascript errors
+
+fix WASM habit / indexeddb / settings error
+
 move LoginDisplay / @NavBarFragment.GetNavBarFragment() to Backup
+
+! search & replace WASM colors
 
 ! search & replace Maui colors:
 	512BD4
