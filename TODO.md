@@ -28,15 +28,16 @@ different?
 
 ---------------------------------------------------------------------------------------------------
 
-fix WASM javascript errors
+setup Authentication
 
-    <!--<link rel="manifest" href="manifest.webmanifest" />-->
-    <!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
-    <!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+	<!--<link rel="manifest" href="manifest.webmanifest" />-->
+	<!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
+	<!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
 	@* <CascadingAuthenticationState> *@
 	@* </CascadingAuthenticationState> *@
 
-move LoginDisplay / @NavBarFragment.GetNavBarFragment() to Backup
+	move LoginDisplay / @NavBarFragment.GetNavBarFragment() to Backup
+
 	appsettings.json
 	appsettings.Development.json
 
