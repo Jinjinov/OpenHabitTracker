@@ -28,11 +28,14 @@ different?
 
 ---------------------------------------------------------------------------------------------------
 
-setup Authentication
+setup PWA
 
 	<!--<link rel="manifest" href="manifest.webmanifest" />-->
-	<!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
 	<!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+
+setup Authentication
+
+	<!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
 	@* <CascadingAuthenticationState> *@
 	@* </CascadingAuthenticationState> *@
 
