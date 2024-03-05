@@ -36,4 +36,7 @@ WebAssemblyHost host = builder.Build();
 IDataAccess dataAccess = host.Services.GetRequiredService<IDataAccess>();
 await dataAccess.Initialize();
 
+AppData appData = host.Services.GetRequiredService<AppData>();
+await appData.InitializeSettings();
+
 await host.RunAsync();

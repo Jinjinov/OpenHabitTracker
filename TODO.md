@@ -30,7 +30,11 @@ different?
 
 fix WASM javascript errors
 
-fix WASM habit / indexeddb / settings error
+    <!--<link rel="manifest" href="manifest.webmanifest" />-->
+    <!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
+    <!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+	@* <CascadingAuthenticationState> *@
+	@* </CascadingAuthenticationState> *@
 
 move LoginDisplay / @NavBarFragment.GetNavBarFragment() to Backup
 	appsettings.json
