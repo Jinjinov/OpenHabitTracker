@@ -16,6 +16,27 @@ a difference of 7px in Height and 14px in Width, header 31px
 
 ---------------------------------------------------------------------------------------------------
 
+Transient services are created each time they are requested
+
+Scoped services are created once per scope (usually per HTTP request in web applications)
+
+    Scoped dependencies in server-side Blazor will live for the duration of the user's session.
+
+    Instances of Scoped dependencies will be shared across pages and components for a single user, 
+    but not between different users and not across different tabs in the same browser.
+
+    Scoped services in client-side Blazor are instantiated when the application starts and are available throughout its lifetime.
+
+!!! Scoped services in Blazor WASM have the same instance before and after `app.Run();`
+
+!!! Scoped services in Blazor WebView DO NOT have the same instance before and after `app.Run();`
+
+!!! Scoped services in Blazor Server ARE NOT available before `app.Run();`
+
+Singleton services are created once per application lifetime
+
+---------------------------------------------------------------------------------------------------
+
 Component instantiation
 When Blazor creates instances of your components, it invokes their constructors, as well as constructors for any DI services being supplied to them via @inject or the [Inject] attribute. 
 If any of these constructors throws an exception, or if the setters for [Inject] properties throw exceptions, this is fatal to the circuit because it's impossible for the framework to carry out the intentions of the developer.
