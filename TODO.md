@@ -2,11 +2,6 @@
 
 ---------------------------------------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Components.Forms; InputFile / download
-using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Storage; interface IFileSaver
-using Microsoft.Win32; OpenFileDialog / SaveFileDialog
-using System.Windows.Forms; OpenFileDialog / SaveFileDialog
-
 Ididit.LocalStorage
 
 ---------------------------------------------------------------------------------------------------
