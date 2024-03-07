@@ -2,10 +2,6 @@
 
 ---------------------------------------------------------------------------------------------------
 
-Ididit.LocalStorage
-
----------------------------------------------------------------------------------------------------
-
 Photino can't open web links in external browser
 	https://github.com/tryphotino/photino.Blazor/issues/111
 	https://github.com/tryphotino/photino.Blazor/pull/113 - workaround for Linux only
