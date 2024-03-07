@@ -4,7 +4,7 @@
 @using Ididit.Blazor.Layout
 @using Ididit.Blazor.Wasm.Layout
 
-<CascadingAuthenticationState>
+@* <CascadingAuthenticationState> *@
     <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="new[] { typeof(Ididit.Blazor.Pages.Home).Assembly }">
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -28,4 +28,4 @@
             </LayoutView>
         </NotFound>
     </Router>
-</CascadingAuthenticationState>
+@* </CascadingAuthenticationState> *@

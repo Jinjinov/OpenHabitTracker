@@ -110,7 +110,7 @@
     [CascadingParameter(Name = "WindowDimensions")]
     public Dimensions? WindowDimensions { get; set; }
 
-    bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width > 1100;
+    bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width >= 1280;
 
     InputTextImmediate? inputElement;
 
