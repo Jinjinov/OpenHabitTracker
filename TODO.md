@@ -1,24 +1,19 @@
 # TODO:
 
-!!! Blazor lifecycle methods swallow exceptions !!! -> remove `protected override async Task OnInitializedAsync()`
+---------------------------------------------------------------------------------------------------
 
-!!! Blazor @inject swallows constructor exceptions !!! -> add `@using Microsoft.Extensions.Logging` @inject ILogger Logger
+using Microsoft.AspNetCore.Components.Forms; InputFile / download
+using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Storage; interface IFileSaver
+using Microsoft.Win32; OpenFileDialog / SaveFileDialog
+using System.Windows.Forms; OpenFileDialog / SaveFileDialog
 
-Ididit.Google.Apis
 Ididit.LocalStorage
-version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 
-??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
-
-call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
-	save TotalTimeSpent
-	save AverageInterval
-	on Habit Initialize - load only last week (last X days, displayed in small calendar)
-	call LoadTimesDone for large calendar
+---------------------------------------------------------------------------------------------------
 
 Photino can't open web links in external browser
 	https://github.com/tryphotino/photino.Blazor/issues/111
-	https://github.com/tryphotino/photino.Blazor/pull/113
+	https://github.com/tryphotino/photino.Blazor/pull/113 - workaround for Linux only
 
 find out why `padding-left: 12px !important;` is needed on iOS
 
@@ -27,24 +22,6 @@ different?
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
 ---------------------------------------------------------------------------------------------------
-
-setup PWA
-
-	<!--<link rel="manifest" href="manifest.webmanifest" />-->
-	<!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
-
-setup Authentication
-
-	<!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
-	@* <CascadingAuthenticationState> *@
-	@* </CascadingAuthenticationState> *@
-
-	move LoginDisplay / @NavBarFragment.GetNavBarFragment() to Backup
-
-	appsettings.json
-	appsettings.Development.json
-
-! search & replace WASM colors - manifest.webmanifest
 
 ! search & replace Maui colors:
 	512BD4
@@ -69,19 +46,32 @@ setup Authentication
 
 ---------------------------------------------------------------------------------------------------
 
+setup PWA
+	<!--<link rel="manifest" href="manifest.webmanifest" />-->
+	<!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+	search & replace WASM colors - manifest.webmanifest
+
+setup Authentication
+	<!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
+	@* <CascadingAuthenticationState> *@
+	@* </CascadingAuthenticationState> *@
+	move LoginDisplay / @NavBarFragment.GetNavBarFragment() to Backup
+	appsettings.json
+	appsettings.Development.json
+
 Backup
 	Google Drive
 	OneDrive
 	iCloud
 	Dropbox
 		WASM authorisation - REST
-		desktop authorisation - using Google.Apis.Auth.OAuth2;
+		desktop authorisation - Ididit.Google.Apis - using Google.Apis.Auth.OAuth2;
 		mobile authorisation - `ASP.NET Core`
 
 Blazor Server / Web
 	`ASP.NET Core`
 	SQL Server
-	version history
+	version history: https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables
 	table Users
 	column UserId in every other table
 	EF Core: use `DbContextFactory`
@@ -89,6 +79,19 @@ Blazor Server / Web
 Host 24/7 on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
+
+when habit is done, uncheck all habit items
+when task is done, check all task items
+when all habit items are done, habit is done
+when all task items are done, task is done
+
+call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
+	save TotalTimeSpent
+	save AverageInterval
+	on Habit Initialize - load only last week (last X days, displayed in small calendar)
+	call LoadTimesDone for large calendar
+
+??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
 
 repeat:
 	add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
@@ -101,11 +104,6 @@ textarea Tabs
 	insert Tabs in multiple rows
 
 Show only habits with ratio `over` / `under`
-
-when habit is done, uncheck all habit items
-when task is done, check all task items
-when all habit items are done, habit is done
-when all task items are done, task is done
 
 horizontal calendar with vertical weeks
 

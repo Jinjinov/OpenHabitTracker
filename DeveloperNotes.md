@@ -16,9 +16,9 @@ a difference of 7px in Height and 14px in Width, header 31px
 
 ---------------------------------------------------------------------------------------------------
 
-Transient services are created each time they are requested
+- Transient services are created each time they are requested
 
-Scoped services are created once per scope (usually per HTTP request in web applications)
+- Scoped services are created once per scope (usually per HTTP request in web applications)
 
     Scoped dependencies in server-side Blazor will live for the duration of the user's session.
 
@@ -27,15 +27,18 @@ Scoped services are created once per scope (usually per HTTP request in web appl
 
     Scoped services in client-side Blazor are instantiated when the application starts and are available throughout its lifetime.
 
-!!! Scoped services in Blazor WASM have the same instance before and after `app.Run();`
+    !!! Scoped services in Blazor WASM have the same instance before and after `app.Run();`
 
-!!! Scoped services in Blazor WebView DO NOT have the same instance before and after `app.Run();`
+    !!! Scoped services in Blazor WebView DO NOT have the same instance before and after `app.Run();`
 
-!!! Scoped services in Blazor Server ARE NOT available before `app.Run();`
+    !!! Scoped services in Blazor Server ARE NOT available before `app.Run();`
 
-Singleton services are created once per application lifetime
+- Singleton services are created once per application lifetime
 
 ---------------------------------------------------------------------------------------------------
+
+!!! Blazor lifecycle methods swallow exceptions !!! -> remove `protected override async Task OnInitializedAsync()`
+!!! Blazor @inject swallows constructor exceptions !!! -> add `@using Microsoft.Extensions.Logging` @inject ILogger Logger
 
 Component instantiation
 When Blazor creates instances of your components, it invokes their constructors, as well as constructors for any DI services being supplied to them via @inject or the [Inject] attribute. 
@@ -83,8 +86,13 @@ using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Stor
 using Microsoft.Win32; OpenFileDialog / SaveFileDialog
 using System.Windows.Forms; OpenFileDialog / SaveFileDialog
 
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#enhanced-navigation-and-form-handling
-https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1324689082
+---------------------------------------------------------------------------------------------------
+
+Blazor's enhanced navigation and form handling avoid the need for a full-page reload and preserves more of the page state
+    https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#enhanced-navigation-and-form-handling
+
+Blazor NavigationManager.NavigateTo always scrolls page to the top
+    https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1324689082
 
 ---------------------------------------------------------------------------------------------------
 
@@ -207,14 +215,8 @@ Microsoft.Data.Sqlite.SqliteException: 'SQLite Error 14: 'unable to open databas
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 var sqlitePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"OlsonSoftware\FinanceManager");
-
 Directory.CreateDirectory(sqlitePath);
-
 optionsBuilder.UseSqlite($"Data Source={sqlitePath}\fmd.db");
-
----
-
-System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
 
 ---------------------------------------------------------------------------------------------------
 
@@ -237,21 +239,15 @@ window.addEventListener("resize", function() {
     {
         if (firstRender)
         {
-            await UpdateScreenWidth();
+            screenWidth = await JsRuntime.InvokeAsync<int>("getScreenWidth");
         }
-    }
-
-    async Task UpdateScreenWidth()
-    {
-        screenWidth = await JsRuntime.InvokeAsync<int>("getScreenWidth");
-        StateHasChanged(); // Ensure UI updates after screen width change
     }
 
     [JSInvokable]
     public async Task UpdateScreenWidth(int screenWidth)
     {
         this.screenWidth = screenWidth;
-        StateHasChanged(); // Ensure UI updates after screen width change
+        StateHasChanged();
     }
 }
 
