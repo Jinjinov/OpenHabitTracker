@@ -6,12 +6,14 @@ using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using Photino.Blazor;
 using System;
+using System.Diagnostics;
 
 namespace Ididit.Blazor.Photino;
 
-class Program
+public class Program
 {
     [STAThread]
     static void Main(string[] args)
@@ -67,5 +69,11 @@ class Program
         };
 
         app.Run();
+    }
+
+    [JSInvokable]
+    public static void OpenLink(string url)
+    {
+        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
 }
