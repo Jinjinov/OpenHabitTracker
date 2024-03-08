@@ -1,5 +1,6 @@
 ﻿using Ididit.Data;
 using Ididit.Localization;
+using Markdig;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
@@ -8,6 +9,24 @@ namespace Ididit.Services;
 public static class Startup
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        AddDefaultServices(services);
+
+        services.AddSingleton<MarkdownPipeline>(new MarkdownPipelineBuilder().UseAdvancedExtensions().UseSoftlineBreakAsHardlineBreak().Build());
+
+        return services;
+    }
+
+    public static IServiceCollection AddServices<TExtension>(this IServiceCollection services) where TExtension : class, IMarkdownExtension, new()
+    {
+        AddDefaultServices(services);
+
+        services.AddSingleton<MarkdownPipeline>(new MarkdownPipelineBuilder().UseAdvancedExtensions().UseSoftlineBreakAsHardlineBreak().Use<TExtension>().Build());
+
+        return services;
+    }
+
+    private static void AddDefaultServices(IServiceCollection services)
     {
         services.AddScoped<AppData>();
 
@@ -24,7 +43,5 @@ public static class Startup
 
         services.AddLocalization(options => options.ResourcesPath = @"Localization\Resources");
         services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
-
-        return services;
     }
 }

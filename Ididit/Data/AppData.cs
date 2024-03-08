@@ -4,11 +4,10 @@ using Markdig;
 
 namespace Ididit.Data;
 
-public class AppData(IDataAccess dataAccess)
+public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
-
-    static readonly MarkdownPipeline _markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseSoftlineBreakAsHardlineBreak().Build();
+    private readonly MarkdownPipeline _markdownPipeline = markdownPipeline;
 
     public SettingsModel Settings { get; set; } = new();
     public Dictionary<long, HabitModel>? Habits { get; set; }
@@ -36,7 +35,7 @@ public class AppData(IDataAccess dataAccess)
     public string GetMarkdown(string content)
     {
         //return Settings.DisplayNoteContentAsMarkdown ? Markdown.ToHtml(content, _markdownPipeline) : content;
-        return Markdown.ToHtml(content, _markdownPipeline);
+        return Markdig.Markdown.ToHtml(content, _markdownPipeline);
     }
 
     public async Task UpdateModel(ContentModel model) // TODO: learn to use generics, perhaps you will like them...
