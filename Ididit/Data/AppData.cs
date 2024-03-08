@@ -35,7 +35,7 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
     public string GetMarkdown(string content)
     {
         //return Settings.DisplayNoteContentAsMarkdown ? Markdown.ToHtml(content, _markdownPipeline) : content;
-        return Markdig.Markdown.ToHtml(content, _markdownPipeline);
+        return Markdown.ToHtml(content, _markdownPipeline);
     }
 
     public async Task UpdateModel(ContentModel model) // TODO: learn to use generics, perhaps you will like them...

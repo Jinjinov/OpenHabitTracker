@@ -1,9 +1,5 @@
 # TODO:
 
-Photino can't open web links in external browser
-	https://github.com/tryphotino/photino.Blazor/issues/111
-	https://github.com/tryphotino/photino.Blazor/pull/113 - workaround for Linux only
-
 find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-left: env(safe-area-inset-left) !important;`
 
 ---------------------------------------------------------------------------------------------------

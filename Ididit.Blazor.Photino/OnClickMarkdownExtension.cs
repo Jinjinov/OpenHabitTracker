@@ -10,10 +10,10 @@ public class OnClickMarkdownExtension : IMarkdownExtension
 {
     public void Setup(MarkdownPipelineBuilder pipeline)
     {
-        pipeline.DocumentProcessed += ParserLinkInlines;
+        pipeline.DocumentProcessed += AddOnClickToLinks;
     }
 
-    public void ParserLinkInlines(MarkdownDocument document)
+    public void AddOnClickToLinks(MarkdownDocument document)
     {
         foreach (LinkInline link in document.Descendants<LinkInline>())
         {
