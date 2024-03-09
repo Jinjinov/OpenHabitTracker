@@ -385,7 +385,27 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
 
     public async Task SetUserData(UserData userData)
     {
-        SettingsEntity settings = userData.Settings.ToEntity();
+        if (Settings.Id == 0)
+        {
+            SettingsEntity settings = userData.Settings.ToEntity();
+
+            await _dataAccess.AddSettings(settings);
+
+            userData.Settings.Id = settings.Id;
+
+            Settings = userData.Settings;
+        }
+        else
+        {
+            userData.Settings.Id = Settings.Id;
+
+            SettingsEntity settings = userData.Settings.ToEntity();
+
+            await _dataAccess.UpdateSettings(settings);
+
+            Settings = userData.Settings;
+        }
+
         List<(CategoryModel Model, CategoryEntity Entity)> categories = userData.Categories.Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
         await _dataAccess.AddCategories(categories.Select(x => x.Entity).ToList());
@@ -449,8 +469,6 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
         List<(TimeModel Model, TimeEntity Entity)> times = habits.Where(x => x.Model.TimesDone is not null).SelectMany(x => x.Model.TimesDone!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
         await _dataAccess.AddTimes(times.Select(x => x.Entity).ToList());
-
-        Settings = userData.Settings;
 
         if (Habits is null) Habits = habits.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in habits.ToDictionary(x => x.Model.Id, x => x.Model)) Habits[pair.Key] = pair.Value;
