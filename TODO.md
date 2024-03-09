@@ -66,6 +66,10 @@ when task is done, check all task items
 when all habit items are done, habit is done
 when all task items are done, task is done
 
+content background:
+	list all possible colors
+	whole <div>, not just Title
+
 repeat:
 	add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
 	weekly: which day in week
