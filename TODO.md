@@ -66,14 +66,6 @@ when task is done, check all task items
 when all habit items are done, habit is done
 when all task items are done, task is done
 
-call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
-	save TotalTimeSpent
-	save AverageInterval
-	on Habit Initialize - load only last week (last X days, displayed in small calendar)
-	call LoadTimesDone for large calendar
-
-??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
-
 repeat:
 	add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
 	weekly: which day in week
@@ -90,11 +82,25 @@ horizontal calendar with vertical weeks
 
 ---------------------------------------------------------------------------------------------------
 
+call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
+	save TotalTimeSpent
+	save AverageInterval
+	on Habit Initialize - load only last week (last X days, displayed in small calendar)
+	call LoadTimesDone for large calendar
+
+benchmark method time & render time
+
+read Settings from DB before Run() - !!! Transient / Scoped / Singleton !!!
+
+??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
+
 common `Router`
 	Ididit.Blazor - Routes.razor
 	Ididit.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
 
-benchmark method time & render time
+Ididit.Blazor.Server:
+	- @page "/Error"
+	- app.UseExceptionHandler("/Error");
 
 Google Keep
 	- title
@@ -139,12 +145,6 @@ Google Keep
 		- italic
 		- underline
 		- clear (\) text (T) formatting
-
-- Ididit.Blazor.Server:
-	- @page "/Error"
-	- app.UseExceptionHandler("/Error");
-
-- read Settings from DB before Run()
 
 - filters are query parameters
 
