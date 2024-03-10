@@ -4,9 +4,7 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 
 ---------------------------------------------------------------------------------------------------
 
-! search & replace Maui colors:
-	512BD4
-	2B0B98
+! search & replace Maui icons:
 	appicon.svg
 	appiconfg.svg
 	splash.svg
@@ -30,7 +28,6 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 setup PWA
 	<!--<link rel="manifest" href="manifest.webmanifest" />-->
 	<!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
-	search & replace WASM colors - manifest.webmanifest
 
 setup Authentication
 	<!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
