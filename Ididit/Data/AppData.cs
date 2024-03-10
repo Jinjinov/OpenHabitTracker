@@ -237,7 +237,7 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
                 HabitId = c.HabitId,
                 StartedAt = c.StartedAt,
                 CompletedAt = c.CompletedAt,
-            }).ToDictionary(x => x.StartedAt.Ticks);
+            }).ToDictionary(x => x.Id);
         }
     }
 
@@ -483,8 +483,8 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
         if (Tasks is null) Tasks = tasks.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in tasks.ToDictionary(x => x.Model.Id, x => x.Model)) Tasks[pair.Key] = pair.Value;
 
-        if (Times is null) Times = times.ToDictionary(x => x.Model.StartedAt.Ticks, x => x.Model);
-        else foreach (var pair in times.ToDictionary(x => x.Model.StartedAt.Ticks, x => x.Model)) Times[pair.Key] = pair.Value;
+        if (Times is null) Times = times.ToDictionary(x => x.Model.Id, x => x.Model);
+        else foreach (var pair in times.ToDictionary(x => x.Model.Id, x => x.Model)) Times[pair.Key] = pair.Value;
 
         if (Items is null) Items = items.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in items.ToDictionary(x => x.Model.Id, x => x.Model)) Items[pair.Key] = pair.Value;
