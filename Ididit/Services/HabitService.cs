@@ -189,6 +189,26 @@ public class HabitService(AppData appData, IDataAccess dataAccess, SearchFilterS
         {
             await AddTimeDone(habit, now);
         }
+
+        await UncheckAllItems(habit);
+    }
+
+    private async Task UncheckAllItems(HabitModel habit)
+    {
+        if (habit.Items is null)
+            return;
+
+        foreach (ItemModel item in habit.Items)
+        {
+            item.DoneAt = null;
+
+            if (await _dataAccess.GetItem(item.Id) is ItemEntity itemEntity)
+            {
+                itemEntity.DoneAt = null;
+
+                await _dataAccess.UpdateItem(itemEntity);
+            }
+        }
     }
 
     private async Task SetLastTimeDone(HabitModel habit, DateTime? dateTime)
@@ -228,6 +248,8 @@ public class HabitService(AppData appData, IDataAccess dataAccess, SearchFilterS
 
         if (habit.LastTimeDoneAt is null || habit.LastTimeDoneAt < dateTime)
             await SetLastTimeDone(habit, dateTime);
+
+        await UncheckAllItems(habit);
     }
 
     public async Task RemoveTimeDone(HabitModel habit, TimeModel timeModel)

@@ -156,6 +156,21 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
 
             await _dataAccess.UpdateTask(taskEntity);
         }
+
+        if (task.Items is null)
+            return;
+
+        foreach (ItemModel item in task.Items)
+        {
+            item.DoneAt = dateTime;
+
+            if (await _dataAccess.GetItem(item.Id) is ItemEntity itemEntity)
+            {
+                itemEntity.DoneAt = dateTime;
+
+                await _dataAccess.UpdateItem(itemEntity);
+            }
+        }
     }
 
     public async Task DeleteTask(TaskModel task)
