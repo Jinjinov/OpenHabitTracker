@@ -326,6 +326,10 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
     {
         await _dataAccess.ClearAllTables();
 
+        Settings = new();
+
+        await InitializeSettings();
+
         Habits = null;
         Notes = null;
         Tasks = null;
@@ -395,11 +399,11 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
 
             Settings = userData.Settings;
         }
-        else
+        else if (await _dataAccess.GetSettings(Settings.Id) is SettingsEntity settings)
         {
             userData.Settings.Id = Settings.Id;
 
-            SettingsEntity settings = userData.Settings.ToEntity();
+            userData.Settings.CopyToEntity(settings);
 
             await _dataAccess.UpdateSettings(settings);
 
