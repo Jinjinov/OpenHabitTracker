@@ -46,6 +46,7 @@
   "Average time spent": "Povprečni čas porabljen",
   "Repeat interval": "Interval ponavljanja",
   "Repeat interval ratio": "Razmerje intervala ponavljanja",
+  "Repeat interval overdue": "Interval ponovitve zamuja",
   "Average interval": "Povprečni interval",
   "Average interval ratio": "Povprečno razmerje intervala",
   "Average interval overdue": "Povprečni interval zamude",
