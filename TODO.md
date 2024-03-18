@@ -4,18 +4,22 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 
 ---------------------------------------------------------------------------------------------------
 
+! Register the new domain
+
+! Rename the project & repository
+
+! Microsoft Azure
+
+---------------------------------------------------------------------------------------------------
+
+! Website
+
 ! prepare for release (Microsoft Store, Google Play, Apple Store)
 	app name
 	app icon
 	app background color
 	app entitlements
 	app metadata
-
-! Website
-
-! Register the new domain
-
-! Rename the project & repository
 
 ---------------------------------------------------------------------------------------------------
 
