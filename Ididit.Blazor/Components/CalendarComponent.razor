@@ -43,7 +43,7 @@ else
                 string text = dateTime.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "text-warning" : "text-secondary";
                 if (dateTime.Month == _calendarParams.FirstDayOfMonth.Month)
                     text += "-emphasis";
-                string border = dateTime == selectedDateTime ? "border-4 border-success-subtle" : dateTime.Date == DateTime.Today.Date ? "border-4 border-primary-subtle" : "";
+                string border = dateTime == selectedDateTime ? "border-4 border-success-subtle" : dateTime.Date == DateTime.Today ? "border-4 border-primary-subtle" : "";
                 string background = "bg-body-tertiary";
                 string timesDone = "";
                 List<TimeModel>? list = null;
@@ -193,8 +193,10 @@ else
         if (dateTime > DateTime.Now)
             return;
 
-        if (dateTime.Date == DateTime.Today.Date)
+        if (dateTime.Date == DateTime.Today)
             dateTime = DateTime.Now;
+        else if (dateTime.TimeOfDay == TimeSpan.Zero)
+            dateTime = dateTime.AddHours(12);
 
         await HabitService.AddTimeDone(Habit!, dateTime);
 
