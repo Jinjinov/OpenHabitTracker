@@ -50,7 +50,7 @@ public class SearchFilterService
         if (string.IsNullOrEmpty(SearchTerm))
             return text;
 
-        var htmlDoc = new HtmlDocument();
+        HtmlDocument htmlDoc = new();
         htmlDoc.LoadHtml(text);
 
         HtmlNodeCollection coll = htmlDoc.DocumentNode.SelectNodes("//text()");

@@ -100,7 +100,7 @@ public class HabitModel : ItemsModel
         }
         else
         {
-            var timesDone = TimesDone.Select(x => x.StartedAt).Order().ToList();
+            List<DateTime> timesDone = TimesDone.Select(x => x.StartedAt).Order().ToList();
             AverageInterval = TimeSpan.FromMilliseconds(timesDone.Zip(timesDone.Skip(1), (x, y) => (y - x).TotalMilliseconds).Average());
 
             TotalTimeSpent = new TimeSpan(TimesDone.Sum(x => x.CompletedAt.HasValue ? x.CompletedAt.Value.Ticks - x.StartedAt.Ticks : 0));
