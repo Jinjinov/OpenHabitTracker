@@ -4,8 +4,6 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 
 ---------------------------------------------------------------------------------------------------
 
-add isPaused
-
 ! prepare for release (Microsoft Store, Google Play, Apple Store)
 	app name
 	app icon
