@@ -53,7 +53,7 @@ else
                     if (list.Count > 1)
                         timesDone = $"({list.Count})";
 
-                    if (list.Count < Habit.RepeatCount)
+                    if (Habit.TimesDoneInRepeatInterval(dateTime) < Habit.RepeatCount)
                         background = "bg-warning-subtle";
                     else
                         background = "bg-success-subtle";
