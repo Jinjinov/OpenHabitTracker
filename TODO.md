@@ -4,6 +4,12 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 
 ---------------------------------------------------------------------------------------------------
 
+remove decrease on click in small calendar
+
+refresh selected day times done count when different habit is selected in large calendar
+
+refresh small calendar on times done change in large calendar
+
 ! Register the new domain
 
 ! Rename the project & repository
