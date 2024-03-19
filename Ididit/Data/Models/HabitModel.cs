@@ -88,13 +88,8 @@ public class HabitModel : ItemsModel
         }
         else if (TimesDone.Count == 1)
         {
+            AverageInterval = GetRepeatInterval();
             TimeModel timeDone = TimesDone.First();
-
-            if (timeDone.StartedAt > CreatedAt)
-                AverageInterval = timeDone.StartedAt - CreatedAt;
-            else
-                AverageInterval = CreatedAt - timeDone.StartedAt;
-
             TotalTimeSpent = timeDone.CompletedAt.HasValue ? timeDone.CompletedAt.Value - timeDone.StartedAt : TimeSpan.Zero;
             AverageTimeSpent = TotalTimeSpent;
         }
@@ -102,7 +97,6 @@ public class HabitModel : ItemsModel
         {
             List<DateTime> timesDone = TimesDone.Select(x => x.StartedAt).Order().ToList();
             AverageInterval = TimeSpan.FromMilliseconds(timesDone.Zip(timesDone.Skip(1), (x, y) => (y - x).TotalMilliseconds).Average());
-
             TotalTimeSpent = new TimeSpan(TimesDone.Sum(x => x.CompletedAt.HasValue ? x.CompletedAt.Value.Ticks - x.StartedAt.Ticks : 0));
             AverageTimeSpent = TotalTimeSpent / TimesDone.Count;
         }
