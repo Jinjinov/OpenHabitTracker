@@ -24,7 +24,7 @@
     {
         <div class="input-group-text p-0 border-0 rounded-0">
             <div class="mx-auto">
-                <CalendarComponent Habit="Habit" HabitChanged="StateHasChanged" DisplayMonth />
+                <CalendarComponent Habit="Habit" HabitChanged="OnHabitChanged" DisplayMonth />
             </div>
         </div>
     }
@@ -112,6 +112,9 @@
     public HabitModel Habit { get; set; }
 
     [Parameter]
+    public EventCallback<HabitModel?> HabitChanged { get; set; }
+
+    [Parameter]
     public EventCallback CloseSelected { get; set; }
 
     [CascadingParameter(Name = "ContentDeleted")]
@@ -120,6 +123,11 @@
     PeriodicTimer? _timer;
     TimeSpan _elapsedTime;
     DateTime _taskStartedTime;
+
+    async Task OnHabitChanged()
+    {
+        await HabitChanged.InvokeAsync(Habit);
+    }
 
     async Task StartTimer()
     {

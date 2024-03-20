@@ -162,7 +162,7 @@
     <div class="col child-column px-0 px-md-1 my-1">
         @if (Id is not null && HabitService.NewHabit is null)
         {
-            <HabitComponent Habit="HabitService.SelectedHabit" CloseSelected="CloseSelected" />
+            <HabitComponent Habit="HabitService.SelectedHabit" HabitChanged="StateHasChanged" CloseSelected="CloseSelected" />
         }
     </div>
 }
