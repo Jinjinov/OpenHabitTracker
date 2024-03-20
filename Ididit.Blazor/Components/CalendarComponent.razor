@@ -141,11 +141,13 @@ else
             }
         }
 
-        if (Habit is not null && Habit.TimesDoneByDay is null)
+        if (Habit is not null)
         {
-            await HabitService.LoadTimesDone(Habit);
+            if (Habit.TimesDoneByDay is null)
+                await HabitService.LoadTimesDone(Habit);
 
-            //Habit.RefreshTimesDoneByDay();
+            if (Habit.TimesDoneByDay is not null && selectedDateTime.HasValue)
+                Habit.TimesDoneByDay.TryGetValue(selectedDateTime.Value, out selectedTimeList);
         }
     }
 
