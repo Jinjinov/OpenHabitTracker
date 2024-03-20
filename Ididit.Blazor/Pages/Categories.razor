@@ -18,7 +18,7 @@
                 <div class="input-group">
                     <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="@Loc["Add new category"]" />
 
-                    <button class="btn btn-outline-primary" @onclick="AddCategory" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
+                    <button class="btn btn-outline-primary" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
                 </div>
             </form>
         }

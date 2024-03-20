@@ -39,7 +39,7 @@
         <div class="input-group">
             <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="@Loc["Add new item"]" />
 
-            <button class="btn btn-outline-primary" @onclick="() => ItemService.AddItem(Items)" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
+            <button class="btn btn-outline-primary" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
         </div>
     </form>
 }
