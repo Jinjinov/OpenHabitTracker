@@ -102,16 +102,18 @@ public class HabitModel : ItemsModel
         }
     }
 
-    public int TimesDoneInRepeatInterval(DateTime date)
+    public bool RepeatCountReached(DateTime date)
     {
         if (TimesDone is null)
-            return 0;
+            return false;
 
         TimeSpan repeatInterval = GetRepeatInterval();
         DateTime intervalStart = date - repeatInterval;
         DateTime intervalEnd = date + repeatInterval;
 
-        return TimesDone.Count(x => intervalStart <= x.StartedAt && x.StartedAt <= intervalEnd);
+        int timesDone = TimesDone.Count(x => intervalStart <= x.StartedAt && x.StartedAt <= intervalEnd);
+
+        return timesDone >= RepeatCount;
     }
 
     public double GetRatio(Ratio ratio) => ratio switch

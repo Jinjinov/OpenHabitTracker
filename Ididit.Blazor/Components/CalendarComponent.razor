@@ -53,10 +53,10 @@ else
                     if (list.Count > 1)
                         timesDone = $"({list.Count})";
 
-                    if (Habit.TimesDoneInRepeatInterval(dateTime) < Habit.RepeatCount)
-                        background = "bg-warning-subtle";
-                    else
+                    if ((Habit.RepeatPeriod == Period.Day && list.Count >= Habit.RepeatCount) || (Habit.RepeatPeriod != Period.Day && Habit.RepeatCountReached(dateTime)))
                         background = "bg-success-subtle";
+                    else
+                        background = "bg-warning-subtle";
                 }
 
                 <button class="@($"border {border} {text} d-flex {background}")"
