@@ -147,7 +147,10 @@ else
                 await HabitService.LoadTimesDone(Habit);
 
             if (Habit.TimesDoneByDay is not null && selectedDateTime.HasValue)
-                Habit.TimesDoneByDay.TryGetValue(selectedDateTime.Value, out selectedTimeList);
+            {
+                if (!Habit.TimesDoneByDay.TryGetValue(selectedDateTime.Value, out selectedTimeList))
+                    selectedDateTime = null;
+            }
         }
     }
 
