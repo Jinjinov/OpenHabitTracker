@@ -623,7 +623,7 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
                             Duration = new TimeOnly(1,30),
                             TimesDone = new()
                             {
-                                new() { StartedAt = now.AddDays(-1), CompletedAt = now },
+                                new() { StartedAt = now.AddDays(-1), CompletedAt = now.AddDays(-1) },
                                 new() { StartedAt = now.AddHours(-2), CompletedAt = now }
                             },
                             LastTimeDoneAt = now,
@@ -645,7 +645,7 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
                             Duration = new TimeOnly(1,30),
                             TimesDone = new()
                             {
-                                new() { StartedAt = now.AddDays(-3), CompletedAt = now },
+                                new() { StartedAt = now.AddDays(-3), CompletedAt = now.AddDays(-3) },
                                 new() { StartedAt = now.AddHours(-4), CompletedAt = now }
                             },
                             LastTimeDoneAt = now,
