@@ -39,6 +39,7 @@
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
                     <option value="@DateCompare.After">@(">")</option>
+                    <option value="@DateCompare.NotOn">@("≠")</option>
                 </InputSelect>
                 <InputDate class="form-control" Value="SearchFilterService.PlannedAtFilter" ValueExpression="() => SearchFilterService.PlannedAtFilter" TValue="DateTime?" ValueChanged="UpdatePlannedAtFilter" Type="InputDateType.Date" />
                 <button class="btn btn-outline-primary" @onclick="() => UpdatePlannedAtFilter(null)"><i class="bi bi-x-square"></i></button>
@@ -50,6 +51,7 @@
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
                     <option value="@DateCompare.After">@(">")</option>
+                    <option value="@DateCompare.NotOn">@("≠")</option>
                 </InputSelect>
                 <InputDate class="form-control" Value="SearchFilterService.DoneAtFilter" ValueExpression="() => SearchFilterService.DoneAtFilter" TValue="DateTime?" ValueChanged="UpdateDoneAtFilter" Type="InputDateType.Date" />
                 <button class="btn btn-outline-primary" @onclick="() => UpdateDoneAtFilter(null)"><i class="bi bi-x-square"></i></button>

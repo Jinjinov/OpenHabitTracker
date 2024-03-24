@@ -24,9 +24,9 @@ public class SettingsModel
 
     public bool ShowLargeCalendar { get; set; } = true;
 
-    public bool InsertTabsInNoteContent{ get; set; }
+    public bool InsertTabsInNoteContent{ get; set; } = true;
 
-    public bool DisplayNoteContentAsMarkdown { get; set; }
+    public bool DisplayNoteContentAsMarkdown { get; set; } = true;
 
     public bool ShowOnlyOverSelectedRatioMin { get; set; }
 

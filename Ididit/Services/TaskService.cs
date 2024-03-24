@@ -36,6 +36,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
                 DateCompare.Before => tasks.Where(x => x.CompletedAt?.Date < _searchFilterService.DoneAtFilter.Value.Date),
                 DateCompare.On => tasks.Where(x => x.CompletedAt?.Date == _searchFilterService.DoneAtFilter.Value.Date),
                 DateCompare.After => tasks.Where(x => x.CompletedAt?.Date > _searchFilterService.DoneAtFilter.Value.Date),
+                DateCompare.NotOn => tasks.Where(x => x.CompletedAt?.Date != _searchFilterService.DoneAtFilter.Value.Date),
                 _ => throw new ArgumentOutOfRangeException(nameof(_searchFilterService.DoneAtCompare))
             };
         }
@@ -47,6 +48,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
                 DateCompare.Before => tasks.Where(x => x.PlannedAt?.Date < _searchFilterService.PlannedAtFilter.Value.Date),
                 DateCompare.On => tasks.Where(x => x.PlannedAt?.Date == _searchFilterService.PlannedAtFilter.Value.Date),
                 DateCompare.After => tasks.Where(x => x.PlannedAt?.Date > _searchFilterService.PlannedAtFilter.Value.Date),
+                DateCompare.NotOn => tasks.Where(x => x.PlannedAt?.Date != _searchFilterService.PlannedAtFilter.Value.Date),
                 _ => throw new ArgumentOutOfRangeException(nameof(_searchFilterService.PlannedAtCompare))
             };
         }

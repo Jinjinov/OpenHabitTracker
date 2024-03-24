@@ -36,6 +36,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess, SearchFilterS
                 DateCompare.Before => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date < _searchFilterService.DoneAtFilter.Value.Date) == true),
                 DateCompare.On => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date == _searchFilterService.DoneAtFilter.Value.Date) == true),
                 DateCompare.After => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date > _searchFilterService.DoneAtFilter.Value.Date) == true),
+                DateCompare.NotOn => habits.Where(x => !x.TimesDone?.Any(t => t.CompletedAt?.Date == _searchFilterService.DoneAtFilter.Value.Date) == true),
                 _ => throw new ArgumentOutOfRangeException(nameof(_searchFilterService.DoneAtCompare))
             };
         }

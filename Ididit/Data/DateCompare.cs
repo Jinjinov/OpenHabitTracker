@@ -4,5 +4,6 @@ public enum DateCompare
 {
     Before,
     On,
-    After
+    After,
+    NotOn
 }

@@ -465,14 +465,13 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
 
         await _dataAccess.AddItems(items.Select(x => x.Entity).ToList());
 
-        foreach ((ItemModel Model, ItemEntity Entity) in items)
-        {
-            Model.Id = Entity.Id;
-        }
+        items.ForEach(x => x.Model.Id = x.Entity.Id);
 
         List<(TimeModel Model, TimeEntity Entity)> times = habits.Where(x => x.Model.TimesDone is not null).SelectMany(x => x.Model.TimesDone!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
         await _dataAccess.AddTimes(times.Select(x => x.Entity).ToList());
+
+        times.ForEach(x => x.Model.Id = x.Entity.Id);
 
         if (Habits is null) Habits = habits.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in habits.ToDictionary(x => x.Model.Id, x => x.Model)) Habits[pair.Key] = pair.Value;
