@@ -27,7 +27,7 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
-        string databaseFile = "Ididit.db";
+        string databaseFile = "OpenHabitTracker.db";
         string databaseFolder = "";
 
         //if (DeviceInfo.Platform == DevicePlatform.iOS)

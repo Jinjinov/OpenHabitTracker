@@ -18,7 +18,7 @@ public partial class App : Application
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Ididit", "Error.log");
+                string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker", "Error.log");
                 System.IO.File.WriteAllText(path, message);
 
                 MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);

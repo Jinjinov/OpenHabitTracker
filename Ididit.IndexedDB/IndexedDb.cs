@@ -12,7 +12,7 @@ public class IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options
     {
         IndexedDbDatabaseModel indexedDbDatabaseModel = new()
         {
-            Name = "Ididit",
+            Name = "OpenHabitTracker",
             Version = 1,
             DbModelId = 0,
             UseKeyGenerator = false // Unable to use AutoIncrement = false and AutoIncrement = true in the same IndexedDbDatabaseModel

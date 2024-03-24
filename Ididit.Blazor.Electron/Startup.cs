@@ -26,7 +26,7 @@ public class Startup(IConfiguration configuration)
         services.AddHttpContextAccessor();
 
         services.AddServices();
-        services.AddDataAccess("Ididit.db");
+        services.AddDataAccess("OpenHabitTracker.db");
         services.AddBackup();
         services.AddScoped<IOpenFile, OpenFile>();
         services.AddScoped<JsInterop>();

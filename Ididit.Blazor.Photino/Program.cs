@@ -23,7 +23,7 @@ public class Program
         builder.Services.AddLogging();
 
         builder.Services.AddServices<OnClickMarkdownExtension>();
-        builder.Services.AddDataAccess("Ididit.db");
+        builder.Services.AddDataAccess("OpenHabitTracker.db");
         builder.Services.AddBackup();
         builder.Services.AddScoped<IOpenFile, OpenFile>();
         builder.Services.AddScoped<JsInterop>();
@@ -58,7 +58,7 @@ public class Program
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Ididit", "Error.log");
+                string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker", "Error.log");
                 System.IO.File.WriteAllText(path, message);
 
                 app.MainWindow.ShowMessage("Error", message);
