@@ -6,6 +6,10 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 
 Multiple form field elements in the same form have the same id attribute value. This might prevent the browser from correctly autofilling the form. To fix this issue, use unique id attribute values for each form field.
 
+fix AppData - remove:
+	public Dictionary<long, TimeModel>? Times { get; set; }
+    public Dictionary<long, ItemModel>? Items { get; set; }
+
 ---------------------------------------------------------------------------------------------------
 
 ! Microsoft Azure - App Service - Shared tier - Blazor

@@ -348,6 +348,14 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
 
         await InitializeContent();
 
+        // this is the only place that calls InitializeItems
+
+        // but InitializeTimes can be called from InitializeHabits - so they have old data and this call does nothing because of the null check
+
+        // Times, Items inside every task/habit could be more up to date
+
+        Times = null; // TODO: remove temp fix
+
         await InitializeTimes();
         await InitializeItems();
 
@@ -367,15 +375,20 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
             category.Habits = habitsByCategoryId.GetValueOrDefault(category.Id);
         }
 
+        // set Items, Times in case the task, habit was not displayed / initialized yet
+
+        // this would not be needed if every task/habit was already initialized
+
         foreach (TaskModel task in Tasks.Values)
         {
-            task.Items = itemsByParentId.GetValueOrDefault(task.Id);
+            task.Items ??= itemsByParentId.GetValueOrDefault(task.Id);
         }
 
         foreach (HabitModel habit in Habits.Values)
         {
-            habit.Items = itemsByParentId.GetValueOrDefault(habit.Id);
-            habit.TimesDone = timesByHabitId.GetValueOrDefault(habit.Id);
+            habit.Items ??= itemsByParentId.GetValueOrDefault(habit.Id);
+
+            habit.TimesDone ??= timesByHabitId.GetValueOrDefault(habit.Id);
         }
 
         UserData userData = new()
