@@ -12,9 +12,21 @@ fix AppData - remove:
 
 ---------------------------------------------------------------------------------------------------
 
-! Microsoft Azure - App Service - Shared tier - Blazor
+!!! rename Ididit to OpenHabitTracker !!!
 
-! Microsoft Azure - Static Web Apps - Free tier - HTML
+<AssemblyName>OpenHT</AssemblyName>
+
+---------------------------------------------------------------------------------------------------
+
+! Microsoft Azure - App Service - Shared tier - OpenHabitTracker - Blazor.Web - app.openhabittracker.net
+
+! Microsoft Azure - Static Web Apps - Free tier - OpenHabitTracker - Blazor.WASM - pwa.openhabittracker.net
+! Microsoft Azure - Static Web Apps - Free tier - OpenHabitTracker - HTML - www.openhabittracker.net
+
+! Microsoft Azure - Static Web Apps - Free tier - Ididit - Blazor.WASM - pwa.ididit.today
+! Microsoft Azure - Static Web Apps - Free tier - Ididit - HTML - www.ididit.today
+
+! Microsoft Azure - Static Web Apps - Free tier - www.jinjinov.org
 
 ---------------------------------------------------------------------------------------------------
 
