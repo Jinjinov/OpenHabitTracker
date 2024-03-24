@@ -4,13 +4,13 @@ write unit tests ??? https://bunit.dev/ https://github.com/bUnit-dev/bUnit
 
 find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-left: env(safe-area-inset-left) !important;`
 
+Multiple form field elements in the same form have the same id attribute value. This might prevent the browser from correctly autofilling the form. To fix this issue, use unique id attribute values for each form field.
+
 ---------------------------------------------------------------------------------------------------
 
-Multiple form field elements in the same form have the same id attribute value.
-This might prevent the browser from correctly autofilling the form.
-To fix this issue, use unique id attribute values for each form field.
+! Microsoft Azure - App Service - Shared tier - Blazor
 
-! Microsoft Azure
+! Microsoft Azure - Static Web Apps - Free tier - HTML
 
 ---------------------------------------------------------------------------------------------------
 
