@@ -6,7 +6,9 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 
 ---------------------------------------------------------------------------------------------------
 
-! Register the new domain
+Multiple form field elements in the same form have the same id attribute value.
+This might prevent the browser from correctly autofilling the form.
+To fix this issue, use unique id attribute values for each form field.
 
 ! Rename the project & repository
 
