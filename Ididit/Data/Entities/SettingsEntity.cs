@@ -14,7 +14,7 @@ public class SettingsEntity
 
     public string Culture { get; set; } = "en";
 
-    public DayOfWeek FirstDayOfWeek { get; set; }
+    public DayOfWeek FirstDayOfWeek { get; set; } = DayOfWeek.Monday;
 
     public Ratio SelectedRatio { get; set; }
 
