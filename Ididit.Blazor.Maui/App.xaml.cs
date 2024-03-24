@@ -13,7 +13,7 @@ public partial class App : Application
     {
         Window window = base.CreateWindow(activationState);
 
-        window.Title = "ididit!";
+        window.Title = "OpenHabitTracker";
 
         window.X = 0;
         window.Y = 0;

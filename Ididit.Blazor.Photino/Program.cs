@@ -43,7 +43,7 @@ public class Program
         // customize window
         //if (!OperatingSystem.IsLinux()) // TODO: find out why this works in Photino sample
         app.MainWindow.SetIconFile("favicon.ico");
-        app.MainWindow.SetTitle("ididit!");
+        app.MainWindow.SetTitle("OpenHabitTracker");
         app.MainWindow.SetUseOsDefaultSize(false);
         app.MainWindow.SetSize(1680, 1050);
         app.MainWindow.SetUseOsDefaultLocation(false);

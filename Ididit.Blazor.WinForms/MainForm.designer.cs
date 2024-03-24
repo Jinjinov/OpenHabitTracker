@@ -49,7 +49,7 @@ partial class MainForm
             this.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "ididit!";
+            this.Text = "OpenHabitTracker";
             this.ResumeLayout(false);
 
     }

@@ -1,6 +1,6 @@
 {
-  "name": "ididit!",
-  "short_name": "ididit!",
+  "name": "OpenHabitTracker",
+  "short_name": "OHT",
   "id": "./",
   "start_url": "./",
   "display": "standalone",

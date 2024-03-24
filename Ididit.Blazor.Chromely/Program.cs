@@ -20,7 +20,7 @@ AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
     }
 };
 
-string appName = Assembly.GetEntryAssembly()?.GetName().Name ?? "ididit!";
+string appName = Assembly.GetEntryAssembly()?.GetName().Name ?? "OpenHabitTracker";
 bool firstProcess = ServerAppUtil.IsMainProcess(args);
 int port = ServerAppUtil.AvailablePort;
 
@@ -61,7 +61,7 @@ if (port != -1)
     // start up chromely
     IChromelyConfiguration config = DefaultConfiguration.CreateForRuntimePlatform();
     config.StartUrl = $"https://127.0.0.1:{port}";
-    config.WindowOptions.Title = "ididit!";
+    config.WindowOptions.Title = "OpenHabitTracker";
     config.WindowOptions.RelativePathToIconFile = "favicon.ico";
     config.WindowOptions.Size = new WindowSize(1680, 1050);
     config.WindowOptions.Position = new WindowPosition(0, 0);

@@ -4,7 +4,7 @@
     <TargetFrameworks>net8.0-windows</TargetFrameworks>
     <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
-    <AssemblyName>ididit!</AssemblyName>
+    <AssemblyName>OpenHabitTracker</AssemblyName>
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>favicon.ico</ApplicationIcon>

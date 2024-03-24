@@ -7,7 +7,7 @@
         xmlns:blazor="clr-namespace:Microsoft.AspNetCore.Components.WebView.Wpf;assembly=Microsoft.AspNetCore.Components.WebView.Wpf"
         xmlns:web="clr-namespace:Microsoft.AspNetCore.Components.Web;assembly=Microsoft.AspNetCore.Components.Web"
         mc:Ignorable="d"
-        Title="ididit!" Height="1050" Width="1680" Left="0" Top="0">
+        Title="OpenHabitTracker" Height="1050" Width="1680" Left="0" Top="0">
     
     <blazor:BlazorWebView HostPage="wwwroot\index.html" Services="{StaticResource services}" x:Name="blazorWebView">
         <blazor:BlazorWebView.RootComponents>
