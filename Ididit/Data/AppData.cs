@@ -519,7 +519,7 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
             *italic*
             ***bold and italic***
             `code`
-            [ididit!](https://ididit.today)
+            [OpenHabitTracker](https://openhabittracker.net)
             - one item
             - another item
             ---
