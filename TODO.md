@@ -14,8 +14,6 @@ fix AppData - remove:
 
 !!! rename Ididit to OpenHabitTracker !!!
 
-<AssemblyName>OpenHT</AssemblyName>
-
 ---------------------------------------------------------------------------------------------------
 
 ! Microsoft Azure - App Service - Shared tier - OpenHabitTracker - Blazor.Web - app.openhabittracker.net

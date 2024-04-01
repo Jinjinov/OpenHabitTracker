@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <AssemblyName>OpenHabitTracker</AssemblyName>
+    <AssemblyName>OpenHT</AssemblyName>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <LangVersion>12.0</LangVersion>
