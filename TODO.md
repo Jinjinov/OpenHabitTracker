@@ -17,16 +17,21 @@ fix AppData - remove:
 ---------------------------------------------------------------------------------------------------
 
 ! prepare downloads
-	Windows - Maui
+	Windows - Wpf
 	Linux - Photino
 	macOS - Maui
 
-! prepare for release (Microsoft Store, Google Play, Apple Store)
+! prepare for release
 	app name
 	app icon
 	app background color
 	app entitlements
 	app metadata
+
+! prepare release
+	Microsoft Store - Maui - Windows
+	Google Play - Maui - Android
+	Apple Store - Maui - iOS
 
 ---------------------------------------------------------------------------------------------------
 
