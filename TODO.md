@@ -17,9 +17,9 @@ fix AppData - remove:
 ---------------------------------------------------------------------------------------------------
 
 ! prepare downloads
-	Windows
-	Linux
-	macOS
+	Windows - Maui
+	Linux - Photino
+	macOS - Maui
 
 ! prepare for release (Microsoft Store, Google Play, Apple Store)
 	app name
