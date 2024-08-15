@@ -72,6 +72,13 @@ Host 24/7 on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
 
+task and habit:
+	pause timer
+
+	list all times done
+	edit time done
+	delete time done
+
 when all habit items are done, habit is done
 when all task items are done, task is done
 
