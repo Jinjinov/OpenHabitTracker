@@ -16,7 +16,10 @@ fix AppData - remove:
 
 ---------------------------------------------------------------------------------------------------
 
-! Website
+! prepare downloads
+	Windows
+	Linux
+	macOS
 
 ! prepare for release (Microsoft Store, Google Play, Apple Store)
 	app name
