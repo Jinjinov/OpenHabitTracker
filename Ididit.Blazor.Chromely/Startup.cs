@@ -26,6 +26,7 @@ public class Startup(IConfiguration configuration)
         services.AddScoped<ISaveFile, SaveFile>();
         services.AddScoped<INavBarFragment, NavBarFragment>();
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
+        services.AddScoped<ILinkAttributeService, LinkAttributeService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

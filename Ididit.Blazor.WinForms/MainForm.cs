@@ -31,6 +31,7 @@ public partial class MainForm : Form
         services.AddScoped<ISaveFile, SaveFile>();
         services.AddScoped<INavBarFragment, NavBarFragment>();
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
+        services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 
         InitializeComponent();
 

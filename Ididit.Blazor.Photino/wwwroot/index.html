@@ -16,6 +16,16 @@
     <script src="_content/Ididit.Blazor/skipScrollTo.js"></script>
 
     <script>
+        function addAttributeToLinks(wrapperElement) {
+            const links = wrapperElement.querySelectorAll('a[href]');
+            links.forEach(link => {
+                const hrefValue = link.getAttribute('href');
+                if (hrefValue && (hrefValue.startsWith('http://') || hrefValue.startsWith('https://'))) {
+                    link.setAttribute('onclick', `return openLink('${hrefValue}');`);
+                }
+            });
+        }
+
         function openLink(url) {
             event.preventDefault();
             DotNet.invokeMethodAsync('OpenHT', 'OpenLink', url);

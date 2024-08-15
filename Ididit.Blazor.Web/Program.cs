@@ -20,6 +20,7 @@ builder.Services.AddScoped<JsInterop>();
 builder.Services.AddScoped<ISaveFile, SaveFile>();
 builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
 builder.Services.AddScoped<IAssemblyProvider, Ididit.Blazor.Web.Components.AssemblyProvider>();
+builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 
 WebApplication app = builder.Build();
 

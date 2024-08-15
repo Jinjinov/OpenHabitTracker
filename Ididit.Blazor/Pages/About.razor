@@ -1,10 +1,11 @@
 ﻿@page "/about"
 
 @inject IStringLocalizer<Loc> Loc
+@inject ILinkAttributeService LinkAttributeService
 
 <PageTitle>About</PageTitle>
 
-<div class="col child-column px-0 px-md-1">
+<div @ref="WrapperElement" class="col child-column px-0 px-md-1">
     <div class="my-1">
 
         <h2>@Loc["About"]</h2>
@@ -74,5 +75,13 @@
 </div>
 
 @code {
+    private ElementReference WrapperElement;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LinkAttributeService.AddAttributesToLinks(WrapperElement);
+        }
+    }
 }

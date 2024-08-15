@@ -7,10 +7,11 @@
 @inject IOpenFile OpenFile
 @inject ISaveFile SaveFile
 @inject IStringLocalizer<Loc> Loc
+@inject ILinkAttributeService LinkAttributeService
 
 @* <PageTitle>Backup</PageTitle> *@
 
-<div>
+<div @ref="WrapperElement">
 
     <div class="my-1">
 
@@ -52,6 +53,16 @@
     string _filename = string.Empty;
 
     string _fileContent = string.Empty;
+
+    private ElementReference WrapperElement;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LinkAttributeService.AddAttributesToLinks(WrapperElement);
+        }
+    }
 
     async Task OnStateChanged()
     {

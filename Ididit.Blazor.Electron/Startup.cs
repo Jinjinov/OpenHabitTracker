@@ -33,6 +33,7 @@ public class Startup(IConfiguration configuration)
         services.AddScoped<ISaveFile, SaveFile>();
         services.AddScoped<INavBarFragment, NavBarFragment>();
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
+        services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 
         if (HybridSupport.IsElectronActive)
         {

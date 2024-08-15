@@ -30,6 +30,7 @@ public class Program
         builder.Services.AddScoped<ISaveFile, SaveFile>();
         builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
+        builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 
         // register root component and selector
         builder.RootComponents.Add<Routes>("app");
