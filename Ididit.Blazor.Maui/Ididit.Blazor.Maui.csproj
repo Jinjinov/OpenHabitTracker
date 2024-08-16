@@ -21,11 +21,14 @@
         <EnableDefaultCssItems>false</EnableDefaultCssItems>
         <Nullable>enable</Nullable>
 
+        <!-- Model building is not supported when publishing with NativeAOT. Use a compiled model -->
+        <MtouchInterpreter>all</MtouchInterpreter>
+
         <!-- Display name -->
-        <ApplicationTitle>Ididit.Blazor.Maui</ApplicationTitle>
+        <ApplicationTitle>OpenHT</ApplicationTitle>
 
         <!-- App Identifier -->
-        <ApplicationId>ididit.blazor.maui</ApplicationId>
+        <ApplicationId>net.openhabittracker</ApplicationId>
 
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
