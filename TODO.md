@@ -16,11 +16,6 @@ fix AppData - remove:
 
 ---------------------------------------------------------------------------------------------------
 
-! prepare downloads
-	Windows - Wpf
-	Linux - Photino
-	macOS - Maui
-
 ! prepare for release
 	app name
 	app icon
