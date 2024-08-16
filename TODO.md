@@ -16,8 +16,6 @@ fix AppData - remove:
 
 ---------------------------------------------------------------------------------------------------
 
-start with settings sidebar on desktop - initialize settings differently on mobile - check WindowDimensions
-
 ! prepare downloads
 	Windows - Wpf
 	Linux - Photino
