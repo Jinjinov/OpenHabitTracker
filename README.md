@@ -1,5 +1,7 @@
 # OpenHabitTracker
 
+https://openhabittracker.net/
+
 OpenHabitTracker is free, open source and works on Web, Windows, Linux, Android, iOS and macOS!
 
 Take Markdown notes, plan tasks, track habits.
