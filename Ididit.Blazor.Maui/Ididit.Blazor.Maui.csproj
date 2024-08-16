@@ -13,6 +13,7 @@
             either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
         <!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
+        <AssemblyName>OpenHT</AssemblyName>
         <OutputType>Exe</OutputType>
         <RootNamespace>Ididit.Blazor.Maui</RootNamespace>
         <UseMaui>true</UseMaui>
