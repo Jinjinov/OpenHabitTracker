@@ -62,7 +62,7 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
         }
     }
 
-    public async Task InitializeSettings()
+    public async Task InitializeSettings(bool loadExamples = true)
     {
         if (Settings.Id == 0)
         {
@@ -133,6 +133,11 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
                 await _dataAccess.AddSettings(settingsEntity);
 
                 Settings.Id = settingsEntity.Id;
+
+                if (loadExamples)
+                {
+                    await LoadExamples();
+                }
             }
         }
     }
@@ -328,7 +333,7 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
 
         Settings = new();
 
-        await InitializeSettings();
+        await InitializeSettings(loadExamples: false);
 
         Habits = null;
         Notes = null;
