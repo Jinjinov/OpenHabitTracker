@@ -16,6 +16,11 @@ a difference of 7px in Height and 14px in Width, header 31px
 
 ---------------------------------------------------------------------------------------------------
 
+Photino.Native.so
+sudo apt-get install libwebkit2gtk-4.1
+
+---------------------------------------------------------------------------------------------------
+
 - Transient services are created each time they are requested
 
 - Scoped services are created once per scope (usually per HTTP request in web applications)
