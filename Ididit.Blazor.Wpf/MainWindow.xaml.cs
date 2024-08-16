@@ -32,6 +32,7 @@ public partial class MainWindow : Window
         services.AddScoped<INavBarFragment, NavBarFragment>();
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
+        services.AddScoped<IRuntimeData, RuntimeData>();
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         Resources.Add("services", serviceProvider);

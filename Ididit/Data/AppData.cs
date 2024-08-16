@@ -4,9 +4,10 @@ using Markdig;
 
 namespace Ididit.Data;
 
-public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
+public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownPipeline markdownPipeline)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
+    private readonly IRuntimeData _runtimeData = runtimeData;
     private readonly MarkdownPipeline _markdownPipeline = markdownPipeline;
 
     public SettingsModel Settings { get; set; } = new();
@@ -99,7 +100,7 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
                     IsDarkMode = true,
                     Theme = "default",
                     StartPage = "",
-                    StartSidebar = "",
+                    StartSidebar = await _runtimeData.GetWindowWidth() >= 1280 ? "Settings" : "",
                     Culture = "en",
                     FirstDayOfWeek = DayOfWeek.Monday,
                     SelectedRatio = Ratio.ElapsedToDesired,
@@ -539,7 +540,7 @@ public class AppData(IDataAccess dataAccess, MarkdownPipeline markdownPipeline)
                 IsDarkMode = true,
                 Theme = "default",
                 StartPage = "",
-                StartSidebar = "",
+                StartSidebar = await _runtimeData.GetWindowWidth() >= 1280 ? "Settings" : "",
                 Culture = "en",
                 FirstDayOfWeek = DayOfWeek.Monday,
                 SelectedRatio = Ratio.ElapsedToDesired,

@@ -3,6 +3,7 @@ using ElectronNET.API.Entities;
 using Ididit.Backup;
 using Ididit.Blazor.Files;
 using Ididit.Blazor.Layout;
+using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,7 @@ public class Startup(IConfiguration configuration)
         services.AddScoped<INavBarFragment, NavBarFragment>();
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
+        services.AddScoped<IRuntimeData, RuntimeData>();
 
         if (HybridSupport.IsElectronActive)
         {

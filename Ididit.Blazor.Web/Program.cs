@@ -3,6 +3,7 @@ using Ididit.Blazor;
 using Ididit.Blazor.Files;
 using Ididit.Blazor.Layout;
 using Ididit.Blazor.Web.Components;
+using Ididit.Data;
 using Ididit.EntityFrameworkCore;
 using Ididit.Services;
 
@@ -21,6 +22,7 @@ builder.Services.AddScoped<ISaveFile, SaveFile>();
 builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
 builder.Services.AddScoped<IAssemblyProvider, Ididit.Blazor.Web.Components.AssemblyProvider>();
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
+builder.Services.AddScoped<IRuntimeData, RuntimeData>();
 
 WebApplication app = builder.Build();
 

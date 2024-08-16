@@ -31,6 +31,7 @@ builder.Services.AddScoped<ISaveFile, SaveFile>();
 builder.Services.AddScoped<INavBarFragment, Ididit.Blazor.Wasm.Layout.NavBarFragment>();
 builder.Services.AddScoped<IAssemblyProvider, Ididit.Blazor.Wasm.AssemblyProvider>();
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
+builder.Services.AddScoped<IRuntimeData, RuntimeData>();
 
 WebAssemblyHost host = builder.Build();
 
