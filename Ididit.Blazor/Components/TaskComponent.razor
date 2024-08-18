@@ -78,7 +78,7 @@
 @code {
     [EditorRequired]
     [Parameter]
-    public TaskModel Task { get; set; }
+    public TaskModel Task { get; set; } = null!;
 
     [Parameter]
     public EventCallback CloseSelected { get; set; }

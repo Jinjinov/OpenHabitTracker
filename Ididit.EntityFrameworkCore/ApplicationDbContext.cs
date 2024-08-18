@@ -51,8 +51,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             string? tableName = entityType.GetTableName();
             if (!string.IsNullOrEmpty(tableName))
             {
-                Database.ExecuteSqlRaw($"DELETE FROM {tableName}");
-                Database.ExecuteSqlRaw($"DELETE FROM sqlite_sequence WHERE name = '{tableName}'");
+                Database.ExecuteSqlRaw("DELETE FROM {0}", tableName);
+                Database.ExecuteSqlRaw("DELETE FROM sqlite_sequence WHERE name = '{0}'", tableName);
             }
         }
 

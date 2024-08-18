@@ -109,7 +109,7 @@
 @code {
     [EditorRequired]
     [Parameter]
-    public HabitModel Habit { get; set; }
+    public HabitModel Habit { get; set; } = null!;
 
     [Parameter]
     public EventCallback<HabitModel?> HabitChanged { get; set; }

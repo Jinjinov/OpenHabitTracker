@@ -139,8 +139,8 @@
     {
         Dictionary<string, object> dynamicComponentParameters = new Dictionary<string, object>()
         {
-            { "WindowDimensions", _windowDimensions },
-            { "DynamicComponentType", _dynamicComponentType },
+            { "WindowDimensions", _windowDimensions! },
+            { "DynamicComponentType", _dynamicComponentType! },
             { "DynamicComponentTypeChanged", EventCallback.Factory.Create<Type?>(this, val => _dynamicComponentType = val)},
         };
 
@@ -152,7 +152,7 @@
 
         Dictionary<string, object> windowDimensionsParameters = new Dictionary<string, object>()
         {
-            { "WindowDimensions", _windowDimensions },
+            { "WindowDimensions", _windowDimensions! },
             { "StateChanged", _stateChanged },
             { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged = val)},
         };

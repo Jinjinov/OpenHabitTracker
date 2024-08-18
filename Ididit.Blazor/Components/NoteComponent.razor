@@ -34,7 +34,7 @@
 @code {
     [EditorRequired]
     [Parameter]
-    public NoteModel Note { get; set; }
+    public NoteModel Note { get; set; } = null!;
 
     [Parameter]
     public EventCallback CloseSelected { get; set; }
