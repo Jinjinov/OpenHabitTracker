@@ -52,7 +52,7 @@
         <div class="list-group-item">
             <small class="">@Loc["Start page"]:</small>
             <InputSelect class="form-select" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
-                @if (WindowDimensions?.Width >= 1280)
+                @if (WindowDimensions?.Width >= 1280 || WindowDimensions?.Width < 768)
                 {
                 <option value="">@Loc["Notes, Tasks, Habits"]</option>
                 }

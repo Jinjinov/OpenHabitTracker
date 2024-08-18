@@ -99,7 +99,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 {
                     IsDarkMode = true,
                     Theme = "default",
-                    StartPage = "",
+                    StartPage = await _runtimeData.GetWindowWidth() >= 1280 || await _runtimeData.GetWindowWidth() < 768 ? "" : "/about",
                     StartSidebar = await _runtimeData.GetWindowWidth() >= 1280 ? "Settings" : "",
                     Culture = "en",
                     FirstDayOfWeek = DayOfWeek.Monday,
@@ -539,7 +539,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             {
                 IsDarkMode = true,
                 Theme = "default",
-                StartPage = "",
+                StartPage = await _runtimeData.GetWindowWidth() >= 1280 || await _runtimeData.GetWindowWidth() < 768 ? "" : "/about",
                 StartSidebar = await _runtimeData.GetWindowWidth() >= 1280 ? "Settings" : "",
                 Culture = "en",
                 FirstDayOfWeek = DayOfWeek.Monday,
