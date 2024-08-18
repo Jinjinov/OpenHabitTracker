@@ -7,9 +7,9 @@ public class YamlImportExport(AppData appData)
 {
     private readonly AppData _appData = appData;
 
-    private readonly ISerializer _serializer = new Serializer();
+    private readonly Serializer _serializer = new();
 
-    private readonly IDeserializer _deserializer = new Deserializer();
+    private readonly Deserializer _deserializer = new();
 
     public async Task<string> GetDataExportFileString()
     {

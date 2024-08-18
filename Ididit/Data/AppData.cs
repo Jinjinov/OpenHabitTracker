@@ -285,14 +285,14 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
             if (priorities.Count == 0)
             {
-                List<PriorityEntity> defaultPriorities = new()
-                {
+                List<PriorityEntity> defaultPriorities =
+                [
                     new() { Title = "︾" },
                     new() { Title = "﹀" },
                     new() { Title = "—" },
                     new() { Title = "︿" },
                     new() { Title = "︽" },
-                };
+                ];
 
                 await _dataAccess.AddPriorities(defaultPriorities);
 
@@ -568,13 +568,13 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     { Priority.VeryHigh, true }
                 }
             },
-            Categories = new()
-            {
+            Categories =
+            [
                 new()
                 {
                     Title = "Category",
-                    Notes = new()
-                    {
+                    Notes =
+                    [
                         new()
                         {
                             Title = "Note",
@@ -593,18 +593,18 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             CreatedAt = now,
                             UpdatedAt = now
                         }
-                    },
-                    Tasks = new()
-                    {
+                    ],
+                    Tasks =
+                    [
                         new() 
                         { 
                             Title = "Task",
                             Priority = Priority.High,
-                            Items = new()
-                            {
+                            Items =
+                            [
                                 new() { Title = "Task item 1" },
                                 new() { Title = "Task item 2" }
-                            },
+                            ],
                             PlannedAt = now.AddDays(1),
                             Duration = new TimeOnly(1,30),
                             CreatedAt = now,
@@ -614,37 +614,37 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                         {
                             Title = "Task 2",
                             Priority = Priority.High,
-                            Items = new()
-                            {
+                            Items =
+                            [
                                 new() { Title = "Task item 1" },
                                 new() { Title = "Task item 2" }
-                            },
+                            ],
                             PlannedAt = now.AddDays(2),
                             Duration = new TimeOnly(1,30),
                             CreatedAt = now,
                             UpdatedAt = now
                         }
-                    },
-                    Habits = new()
-                    {
+                    ],
+                    Habits =
+                    [
                         new() 
                         { 
                             Title = "Habit",
                             Priority = Priority.Medium,
-                            Items = new()
-                            {
+                            Items =
+                            [
                                 new() { Title = "Habit item 1" },
                                 new() { Title = "Habit item 2" }
-                            },
+                            ],
                             RepeatCount = 1,
                             RepeatInterval = 2,
                             RepeatPeriod = Period.Day,
                             Duration = new TimeOnly(1,30),
-                            TimesDone = new()
-                            {
+                            TimesDone =
+                            [
                                 new() { StartedAt = now.AddDays(-1), CompletedAt = now.AddDays(-1) },
                                 new() { StartedAt = now.AddHours(-2), CompletedAt = now }
-                            },
+                            ],
                             LastTimeDoneAt = now,
                             CreatedAt = now,
                             UpdatedAt = now
@@ -653,27 +653,27 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                         {
                             Title = "Habit 2",
                             Priority = Priority.Medium,
-                            Items = new()
-                            {
+                            Items =
+                            [
                                 new() { Title = "Habit item 1" },
                                 new() { Title = "Habit item 2" }
-                            },
+                            ],
                             RepeatCount = 2,
                             RepeatInterval = 1,
                             RepeatPeriod = Period.Day,
                             Duration = new TimeOnly(1,30),
-                            TimesDone = new()
-                            {
+                            TimesDone =
+                            [
                                 new() { StartedAt = now.AddDays(-3), CompletedAt = now.AddDays(-3) },
                                 new() { StartedAt = now.AddHours(-4), CompletedAt = now }
-                            },
+                            ],
                             LastTimeDoneAt = now,
                             CreatedAt = now,
                             UpdatedAt = now
                         }
-                    }
+                    ]
                 }
-            }
+            ]
         };
 
         await SetUserData(userData);

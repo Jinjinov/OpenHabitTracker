@@ -6,12 +6,12 @@ public class CalendarParams
 
     public DateTime FirstDayOfMonth { get; set; }
 
-    private DateTime GetFirstDayOfMonth(DateTime day)
+    private static DateTime GetFirstDayOfMonth(DateTime day)
     {
         return new DateTime(day.Year, day.Month, 1);
     }
 
-    private DateTime GetFirstDayOfWeek(DayOfWeek firstDayOfWeek, DateTime day)
+    private static DateTime GetFirstDayOfWeek(DayOfWeek firstDayOfWeek, DateTime day)
     {
         int diff = -((7 + (day.DayOfWeek - firstDayOfWeek)) % 7);
         return day.AddDays(diff).Date;

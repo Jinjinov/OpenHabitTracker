@@ -15,11 +15,12 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
 
     private readonly ConcurrentDictionary<string, Dictionary<string, string>> _stringMapsCache = new();
 
-    static Dictionary<string, string> _missing = new();
+    private static readonly Dictionary<string, string> _missing = [];
+    private static readonly JsonSerializerOptions _options = new() { WriteIndented = true };
 
     public static void Serialize()
     {
-        string file = JsonSerializer.Serialize(_missing, new JsonSerializerOptions() { WriteIndented = true });
+        string file = JsonSerializer.Serialize(_missing, _options);
         File.WriteAllText("en.json", file);
     }
 

@@ -9,9 +9,10 @@ public class SaveFile : ISaveFile
 {
     public async Task<string> SaveFileDialog(string filename, string content)
     {
-        SaveFileDialog saveFileDialog = new();
-
-        saveFileDialog.FileName = filename;
+        SaveFileDialog saveFileDialog = new()
+        {
+            FileName = filename
+        };
 
         if (saveFileDialog.ShowDialog() == DialogResult.OK)
         {

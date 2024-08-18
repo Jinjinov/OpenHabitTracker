@@ -4,14 +4,9 @@ using System.Threading.Tasks;
 
 namespace Ididit.Blazor.Photino;
 
-public class LinkAttributeService : ILinkAttributeService
+public class LinkAttributeService(IJSRuntime jsRuntime) : ILinkAttributeService
 {
-    private readonly IJSRuntime _jsRuntime;
-
-    public LinkAttributeService(IJSRuntime jsRuntime)
-    {
-        _jsRuntime = jsRuntime;
-    }
+    private readonly IJSRuntime _jsRuntime = jsRuntime;
 
     public async Task AddAttributesToLinks(ElementReference elementReference)
     {

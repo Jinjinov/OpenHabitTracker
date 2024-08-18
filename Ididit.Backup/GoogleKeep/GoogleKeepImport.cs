@@ -79,9 +79,9 @@ public class GoogleKeepImport(AppData appData)
                 userData.Categories.Add(category);
             }
 
-            category.Notes ??= new();
-            category.Tasks ??= new();
-            category.Habits ??= new();
+            category.Notes ??= [];
+            category.Tasks ??= [];
+            category.Habits ??= [];
 
             if (googleKeepNote.ListContent.Count == 0)
             {
@@ -110,7 +110,7 @@ public class GoogleKeepImport(AppData appData)
 
                 if (googleKeepNote.ListContent.Count > 0)
                 {
-                    task.Items = new();
+                    task.Items = [];
 
                     foreach (ListContent listContent in googleKeepNote.ListContent)
                     {
@@ -139,7 +139,7 @@ public class GoogleKeepImport(AppData appData)
 
         ZipArchive archive = new(memoryStream);
 
-        List<GoogleKeepNote> googleKeepNotes = new();
+        List<GoogleKeepNote> googleKeepNotes = [];
 
         foreach (ZipArchiveEntry entry in archive.Entries)
         {

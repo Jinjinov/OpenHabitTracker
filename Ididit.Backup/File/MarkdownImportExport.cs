@@ -102,9 +102,9 @@ public class MarkdownImportExport(AppData appData)
                 category = new()
                 {
                     Title = line[2..],
-                    Notes = new(),
-                    Tasks = new(),
-                    Habits = new()
+                    Notes = [],
+                    Tasks = [],
+                    Habits = []
                 };
 
                 userData.Categories.Add(category);
@@ -112,9 +112,9 @@ public class MarkdownImportExport(AppData appData)
                 continue;
             }
 
-            category.Notes ??= new();
-            category.Tasks ??= new();
-            category.Habits ??= new();
+            category.Notes ??= [];
+            category.Tasks ??= [];
+            category.Habits ??= [];
 
             if (line.StartsWith("## "))
             {
@@ -148,7 +148,7 @@ public class MarkdownImportExport(AppData appData)
             {
                 if (line.StartsWith("- "))
                 {
-                    task.Items ??= new();
+                    task.Items ??= [];
 
                     ItemModel item = new() { Title = line[2..] };
                     task.Items.Add(item);

@@ -100,7 +100,7 @@
     private Dimensions? _windowDimensions;
 
     private Type? _dynamicComponentType;
-    private Dictionary<string, Dictionary<string, object>> _dynamicComponentParametersByName = new ();
+    private Dictionary<string, Dictionary<string, object>> _dynamicComponentParametersByName = new();
 
     // private readonly Dictionary<string, string> _titleByTypeName = new()
     // {
@@ -137,27 +137,27 @@
 
     void SetDynamicComponentParameters()
     {
-        Dictionary<string, object> dynamicComponentParameters = new Dictionary<string, object>()
+        Dictionary<string, object> dynamicComponentParameters = new()
         {
             { "WindowDimensions", _windowDimensions! },
             { "DynamicComponentType", _dynamicComponentType! },
             { "DynamicComponentTypeChanged", EventCallback.Factory.Create<Type?>(this, val => _dynamicComponentType = val)},
         };
 
-        Dictionary<string, object> stateChangedParameters = new Dictionary<string, object>()
+        Dictionary<string, object> stateChangedParameters = new()
         {
             { "StateChanged", _stateChanged },
             { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged = val)},
         };
 
-        Dictionary<string, object> windowDimensionsParameters = new Dictionary<string, object>()
+        Dictionary<string, object> windowDimensionsParameters = new()
         {
             { "WindowDimensions", _windowDimensions! },
             { "StateChanged", _stateChanged },
             { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged = val)},
         };
 
-        _dynamicComponentParametersByName = new Dictionary<string, Dictionary<string, object>>
+        _dynamicComponentParametersByName = new()
         {
             { "Menu", dynamicComponentParameters },
             { "Search", stateChangedParameters },

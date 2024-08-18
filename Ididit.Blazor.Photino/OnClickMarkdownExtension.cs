@@ -13,7 +13,7 @@ public class OnClickMarkdownExtension : IMarkdownExtension
         pipeline.DocumentProcessed += AddOnClickToLinks;
     }
 
-    public void AddOnClickToLinks(MarkdownDocument document)
+    public static void AddOnClickToLinks(MarkdownDocument document)
     {
         foreach (LinkInline link in document.Descendants<LinkInline>())
         {

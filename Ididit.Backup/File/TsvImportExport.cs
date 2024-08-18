@@ -21,7 +21,7 @@ public class TsvImportExport(AppData appData)
     {
         UserData userData = await _appData.GetUserData();
 
-        List<Record> records = new();
+        List<Record> records = [];
 
         foreach (CategoryModel category in userData.Categories)
         {
@@ -151,9 +151,9 @@ public class TsvImportExport(AppData appData)
                 userData.Categories.Add(category);
             }
 
-            category.Notes ??= new();
-            category.Tasks ??= new();
-            category.Habits ??= new();
+            category.Notes ??= [];
+            category.Tasks ??= [];
+            category.Habits ??= [];
 
             ItemsModel? items = null;
 
@@ -225,7 +225,7 @@ public class TsvImportExport(AppData appData)
 
             if (items is not null && !string.IsNullOrEmpty(record.Content))
             {
-                items.Items ??= new();
+                items.Items ??= [];
 
                 ItemModel item = new() { Title = record.Content };
 

@@ -6,7 +6,7 @@ namespace Ididit.LocalStorage;
 
 public class DataAccess(ILocalStorageService localStorageService) : IDataAccess
 {
-    ILocalStorageService _localStorageService = localStorageService;
+    private readonly ILocalStorageService _localStorageService = localStorageService;
 
     public async Task Initialize()
     {

@@ -2,11 +2,11 @@
 
 public class CalendarService
 {
-    private readonly Dictionary<long, DateTime> _dateByTicks = new();
+    private readonly Dictionary<long, DateTime> _dateByTicks = [];
 
     private const long _ticksInDay = 864_000_000_000;
 
-    public int GetDayOfWeek(DayOfWeek firstDayOfWeek, int dayIndex)
+    public static int GetDayOfWeek(DayOfWeek firstDayOfWeek, int dayIndex)
     {
         return (dayIndex + (int)firstDayOfWeek) % 7;
     }

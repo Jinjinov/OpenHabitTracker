@@ -47,10 +47,10 @@ public class GoogleKeepNote
     public bool IsArchived { get; set; }
 
     [JsonPropertyName("annotations")]
-    public List<Annotation> Annotations { get; set; } = new();
+    public List<Annotation> Annotations { get; set; } = [];
 
     [JsonPropertyName("listContent")]
-    public List<ListContent> ListContent { get; set; } = new();
+    public List<ListContent> ListContent { get; set; } = [];
 
     [JsonPropertyName("textContent")]
     public string TextContent { get; set; } = string.Empty;
@@ -65,5 +65,5 @@ public class GoogleKeepNote
     public long CreatedTimestampUsec { get; set; }
 
     [JsonPropertyName("labels")]
-    public List<Label> Labels { get; set; } = new();
+    public List<Label> Labels { get; set; } = [];
 }
