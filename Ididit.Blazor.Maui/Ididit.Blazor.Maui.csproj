@@ -51,8 +51,8 @@
         <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
         <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
         <GenerateTestArtifacts>True</GenerateTestArtifacts>
-        <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
         <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+        <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     </PropertyGroup>
 
     <ItemGroup>
