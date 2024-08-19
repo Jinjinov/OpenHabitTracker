@@ -16,7 +16,7 @@ a difference of 7px in Height and 14px in Width, header 31px
 
 ---------------------------------------------------------------------------------------------------
 
-dotnet publish Ididit.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 --output ./bin/Release/net8.0-windows10.0.19041.0/publish /p:GenerateAppxPackageOnBuild=true
+dotnet publish Ididit.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true
 
 Photino.Native.so
 sudo apt-get install libwebkit2gtk-4.1
