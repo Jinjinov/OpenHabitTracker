@@ -61,9 +61,6 @@
 
         <!-- Splash Screen -->
         <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#808080" BaseSize="128,128" />
-
-        <!-- Custom Fonts -->
-        <MauiFont Include="Resources\Fonts\*" />
     </ItemGroup>
 
     <ItemGroup>
