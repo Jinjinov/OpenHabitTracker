@@ -72,8 +72,35 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ididit.Blazor\Ididit.Blazor.csproj" />
-      <ProjectReference Include="..\Ididit.EntityFrameworkCore\Ididit.EntityFrameworkCore.csproj" />
+        <ProjectReference Include="..\Ididit.Blazor\Ididit.Blazor.csproj" />
+        <ProjectReference Include="..\Ididit.EntityFrameworkCore\Ididit.EntityFrameworkCore.csproj" />
     </ItemGroup>
+
+    <PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Release'">
+        <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+
+        <CodesignKey>Apple Distribution: Urban Dzindzinovic (53V66WG4KU)</CodesignKey>
+        <CodesignProvision>openhabittracker.ios</CodesignProvision>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Release'">
+        <CodesignEntitlement>Platforms/MacCatalyst/Entitlements.plist</CodesignEntitlement>
+
+        <!--<CodesignKey>Apple Distribution: Urban Dzindzinovic (53V66WG4KU)</CodesignKey>-->
+        <!--<CodesignProvision>ididit.macos</CodesignProvision>-->
+
+        <!--<CodesignKey>3rd Party Mac Developer Application: Urban Dzindzinovic (53V66WG4KU)</CodesignKey>-->
+        <!--<PackageSigningKey>3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)</PackageSigningKey>-->
+
+        <!--<CodesignKey>Developer ID Application: Urban Dzindzinovic (53V66WG4KU)</CodesignKey>-->
+        <!--<CodesignProvision>ididit.developer</CodesignProvision>-->
+        <!--<PackageSigningKey>Developer ID Installer: Urban Dzindzinovic (53V66WG4KU)</PackageSigningKey>-->
+
+        <!--<EnableCodeSigning>True</EnableCodeSigning>-->
+        <!--<EnablePackageSigning>true</EnablePackageSigning>-->
+        <!--<CreatePackage>true</CreatePackage>-->
+        <!--<ProvisionType>Manual</ProvisionType>-->
+        <!--<UseHardenedRuntime>true</UseHardenedRuntime>-->
+    </PropertyGroup>
 
 </Project>

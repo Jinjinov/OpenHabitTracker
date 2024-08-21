@@ -28,5 +28,13 @@
     </array>
     <key>XSAppIconAssets</key>
     <string>Assets.xcassets/appicon.appiconset</string>
+    <key>CFBundleIdentifier</key>
+    <string>net.openhabittracker</string>
+    <key>CFBundleDisplayName</key>
+    <string>OpenHabitTracker</string>
+    <key>CFBundleName</key>
+    <string>OpenHabitTracker</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
 </dict>
 </plist>
