@@ -22,8 +22,16 @@ dotnet publish Ididit.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.
 
 set msix version in Package.appxmanifest
 
+---------------------------------------------------------------------------------------------------
+
 Photino.Native.so
 sudo apt-get install libwebkit2gtk-4.1
+
+---------------------------------------------------------------------------------------------------
+
+dotnet publish Ididit.Blazor.Maui.csproj -f net8.0-ios -c Release -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64  -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
+
+dotnet publish -f net8.0-maccatalyst -c Release -p:MtouchLink=SdkOnly -p:CreatePackage=true -p:EnableCodeSigning=true -p:EnablePackageSigning=true -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.macos" -p:CodesignEntitlements="Platforms\MacCatalyst\Entitlements.plist" -p:PackageSigningKey="3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)"
 
 ---------------------------------------------------------------------------------------------------
 

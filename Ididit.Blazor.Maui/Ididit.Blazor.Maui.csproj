@@ -84,7 +84,16 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Release'">
-        <CodesignEntitlement>Platforms/MacCatalyst/Entitlements.plist</CodesignEntitlement>
+        <!--<CodesignEntitlement>Platforms/MacCatalyst/Entitlements.plist</CodesignEntitlement>-->
+
+        <MtouchLink>SdkOnly</MtouchLink>
+        <EnableCodeSigning>True</EnableCodeSigning>
+        <EnablePackageSigning>true</EnablePackageSigning>
+        <CreatePackage>true</CreatePackage>
+        <CodesignKey>Apple Distribution: Urban Dzindzinovic (53V66WG4KU)</CodesignKey>
+        <CodesignProvision>openhabittracker.macos</CodesignProvision>
+        <CodesignEntitlements>Platforms\MacCatalyst\Entitlements.plist</CodesignEntitlements>
+        <PackageSigningKey>3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)</PackageSigningKey>
 
         <!--<CodesignKey>Apple Distribution: Urban Dzindzinovic (53V66WG4KU)</CodesignKey>-->
         <!--<CodesignProvision>openhabittracker.macos</CodesignProvision>-->
