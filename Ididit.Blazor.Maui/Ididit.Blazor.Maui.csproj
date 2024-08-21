@@ -87,13 +87,13 @@
         <CodesignEntitlement>Platforms/MacCatalyst/Entitlements.plist</CodesignEntitlement>
 
         <!--<CodesignKey>Apple Distribution: Urban Dzindzinovic (53V66WG4KU)</CodesignKey>-->
-        <!--<CodesignProvision>ididit.macos</CodesignProvision>-->
+        <!--<CodesignProvision>openhabittracker.macos</CodesignProvision>-->
 
         <!--<CodesignKey>3rd Party Mac Developer Application: Urban Dzindzinovic (53V66WG4KU)</CodesignKey>-->
         <!--<PackageSigningKey>3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)</PackageSigningKey>-->
 
         <!--<CodesignKey>Developer ID Application: Urban Dzindzinovic (53V66WG4KU)</CodesignKey>-->
-        <!--<CodesignProvision>ididit.developer</CodesignProvision>-->
+        <!--<CodesignProvision>openhabittracker.developer</CodesignProvision>-->
         <!--<PackageSigningKey>Developer ID Installer: Urban Dzindzinovic (53V66WG4KU)</PackageSigningKey>-->
 
         <!--<EnableCodeSigning>True</EnableCodeSigning>-->
