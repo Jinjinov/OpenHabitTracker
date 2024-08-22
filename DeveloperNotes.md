@@ -10,9 +10,21 @@ background color: #333333
 
 ---------------------------------------------------------------------------------------------------
 
-Screenshots dimensions should be: 1280x800 1440x900 2560x1600 2880x1800
+Screenshots dimensions for macOS should be: 1280x800 1440x900 2560x1600 2880x1800
 https://stackoverflow.com/questions/67972372/why-are-window-height-and-window-width-not-exact-c-wpf
 a difference of 7px in Height and 14px in Width, header 31px
+
+You must upload a screenshot for 12.9-inch iPad Pro (2nd generation) displays.
+                          2048 x 2732 or 2732 x 2048
+You must upload a screenshot for 13-inch iPad displays.
+2064 x 2752, 2752 x 2064, 2048 x 2732 or 2732 x 2048
+
+You must upload a screenshot for 6.7-inch iPhone displays.
+1290 x 2796 or 2796 x 1290
+You must upload a screenshot for 6.5-inch iPhone displays.
+1242 x 2688, 2688 x 1242, 1284 x 2778 or 2778 x 1284
+You must upload a screenshot for 5.5-inch iPhone displays.
+1242 x 2208 or 2208 x 1242
 
 ---------------------------------------------------------------------------------------------------
 
