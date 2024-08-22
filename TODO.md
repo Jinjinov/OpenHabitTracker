@@ -2,6 +2,12 @@
 
 write unit tests ??? https://bunit.dev/ https://github.com/bUnit-dev/bUnit
 
+https://learn.microsoft.com/en-us/samples/dotnet/maui-samples/uitest-appium-nunit/
+https://github.com/dotnet/maui-samples/tree/main/8.0/UITesting/BasicAppiumNunitSample
+
+https://devblogs.microsoft.com/dotnet/dotnet-maui-ui-testing-appium/
+https://github.com/jfversluis/Template.Maui.UITesting
+
 find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-left: env(safe-area-inset-left) !important;`
 
 Multiple form field elements in the same form have the same id attribute value. This might prevent the browser from correctly autofilling the form. To fix this issue, use unique id attribute values for each form field.
@@ -15,13 +21,6 @@ fix AppData - remove:
 !!! rename Ididit to OpenHabitTracker !!!
 
 ---------------------------------------------------------------------------------------------------
-
-! prepare for release
-	app name
-	app icon
-	app background color
-	app entitlements
-	app metadata
 
 ! prepare release
 	Microsoft Store - Maui - Windows
