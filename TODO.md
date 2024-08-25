@@ -22,10 +22,6 @@ fix AppData - remove:
 
 !!! rename Ididit to OpenHabitTracker !!!
 
-!!! setup PWA
-	<!--<link rel="manifest" href="manifest.webmanifest" />-->
-	<!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
-
 ---------------------------------------------------------------------------------------------------
 
 setup Authentication
@@ -58,9 +54,6 @@ Host 24/7 on Raspberry Pi
 ---------------------------------------------------------------------------------------------------
 
 task and habit:
-	pause timer
-	reset timer
-
 	list all times done
 	edit time done
 	delete time done
