@@ -59,6 +59,7 @@ Host 24/7 on Raspberry Pi
 
 task and habit:
 	pause timer
+	reset timer
 
 	list all times done
 	edit time done

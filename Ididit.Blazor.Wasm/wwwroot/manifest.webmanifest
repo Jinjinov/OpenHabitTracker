@@ -1,6 +1,6 @@
 {
   "name": "OpenHabitTracker",
-  "short_name": "OHT",
+  "short_name": "OpenHT",
   "id": "./",
   "start_url": "./",
   "display": "standalone",
