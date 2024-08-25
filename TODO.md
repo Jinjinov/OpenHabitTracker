@@ -1,6 +1,6 @@
 # TODO:
 
-write unit tests ??? https://bunit.dev/ https://github.com/bUnit-dev/bUnit
+!!! write unit tests: https://bunit.dev/ https://github.com/bUnit-dev/bUnit
 
 https://learn.microsoft.com/en-us/samples/dotnet/maui-samples/uitest-appium-nunit/
 https://github.com/dotnet/maui-samples/tree/main/8.0/UITesting/BasicAppiumNunitSample
@@ -10,7 +10,9 @@ https://github.com/jfversluis/Template.Maui.UITesting
 
 find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-left: env(safe-area-inset-left) !important;`
 
-Multiple form field elements in the same form have the same id attribute value. This might prevent the browser from correctly autofilling the form. To fix this issue, use unique id attribute values for each form field.
+!!! Multiple form field elements in the same form have the same id attribute value.
+!!! This might prevent the browser from correctly autofilling the form.
+!!! To fix this issue, use unique id attribute values for each form field.
 
 fix AppData - remove:
 	public Dictionary<long, TimeModel>? Times { get; set; }
@@ -20,18 +22,11 @@ fix AppData - remove:
 
 !!! rename Ididit to OpenHabitTracker !!!
 
----------------------------------------------------------------------------------------------------
-
-! prepare release
-	Microsoft Store - Maui - Windows
-	Google Play - Maui - Android
-	Apple Store - Maui - iOS
-
----------------------------------------------------------------------------------------------------
-
-setup PWA
+!!! setup PWA
 	<!--<link rel="manifest" href="manifest.webmanifest" />-->
 	<!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+
+---------------------------------------------------------------------------------------------------
 
 setup Authentication
 	<!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
@@ -68,6 +63,10 @@ task and habit:
 	list all times done
 	edit time done
 	delete time done
+
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 
 when all habit items are done, habit is done
 when all task items are done, task is done
@@ -158,6 +157,8 @@ Google Keep
 
 - filters are query parameters
 
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
 - online sync - server with SQL
