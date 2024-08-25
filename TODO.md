@@ -14,9 +14,9 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 !!! This might prevent the browser from correctly autofilling the form.
 !!! To fix this issue, use unique id attribute values for each form field.
 
-fix AppData - remove:
+fix AppData GetUserData() - remove these from class AppData:
 	public Dictionary<long, TimeModel>? Times { get; set; }
-    public Dictionary<long, ItemModel>? Items { get; set; }
+	public Dictionary<long, ItemModel>? Items { get; set; }
 
 ---------------------------------------------------------------------------------------------------
 
