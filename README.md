@@ -28,13 +28,3 @@ Import / Export:
 - TSV (Tab Separated Values)
 
 Import from Google Keep
-
-# Coming soon
-
-Backup:
-- Google Drive
-- OneDrive
-- iCloud
-- Dropbox
-
-Version history
