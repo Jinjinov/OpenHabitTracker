@@ -58,6 +58,7 @@
         else
         {
             <span class="input-group-text flex-grow-1">@_elapsedTime.ToString(@"hh\:mm\:ss")</span>
+            <button class="btn btn-outline-primary" @onclick="ResetTimer"><i class="bi bi-arrow-counterclockwise"></i></button>
             <button class="btn btn-outline-primary" @onclick="StopTimer"><i class="bi bi-stop"></i></button>
         }
     </div>
@@ -153,6 +154,11 @@
 
             await InvokeAsync(StateHasChanged);
         }
+    }
+
+    void ResetTimer()
+    {
+        _taskStartedTime = DateTime.Now;
     }
 
     async Task StopTimer()
