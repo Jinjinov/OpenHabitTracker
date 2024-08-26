@@ -157,7 +157,7 @@
         {
             if (!_isPaused)
             {
-                _elapsedTime = DateTime.Now - _taskStartedTime + _previouslyElapsedTime;
+                _elapsedTime = DateTime.Now - _taskStartedTime;
 
                 if (duration is not null && _elapsedTime >= duration)
                 {
@@ -185,7 +185,7 @@
 
     void ResumeTimer()
     {
-        _taskStartedTime = DateTime.Now;
+        _taskStartedTime = DateTime.Now - _previouslyElapsedTime;
         _isPaused = false;
     }
 
