@@ -155,6 +155,11 @@
         if (Task is null || _timer is null)
             return;
 
+        if (_isPaused)
+            ResumeTimer();
+
+        await TaskService.SetStartTime(Task, _taskStartedTime);
+
         await TaskService.MarkAsDone(Task);
 
         _timer.Dispose();

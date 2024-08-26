@@ -141,6 +141,23 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
         }
     }
 
+    public async Task SetStartTime(TaskModel task, DateTime startedAt)
+    {
+        if (Tasks is null)
+            return;
+
+        if (task.StartedAt == null || task.CompletedAt != null)
+            return;
+
+        task.StartedAt = startedAt;
+
+        if (await _dataAccess.GetTask(task.Id) is TaskEntity taskEntity)
+        {
+            taskEntity.StartedAt = startedAt;
+            await _dataAccess.UpdateTask(taskEntity);
+        }
+    }
+
     public async Task MarkAsDone(TaskModel task)
     {
         if (Tasks is null)

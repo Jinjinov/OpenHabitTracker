@@ -194,6 +194,11 @@
         if (Habit is null || _timer is null)
             return;
 
+        if (_isPaused)
+            ResumeTimer();
+
+        await HabitService.SetStartTime(Habit, _taskStartedTime);
+
         await HabitService.MarkAsDone(Habit);
 
         _timer.Dispose();

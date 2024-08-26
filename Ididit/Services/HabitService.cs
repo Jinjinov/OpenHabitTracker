@@ -164,6 +164,29 @@ public class HabitService(AppData appData, IDataAccess dataAccess, SearchFilterS
         timeModel.Id = timeEntity.Id;
     }
 
+    public async Task SetStartTime(HabitModel habit, DateTime startedAt)
+    {
+        if (Habits is null)
+            return;
+
+        if (habit.TimesDone is null)
+            return;
+
+        if (habit.TimesDone.LastOrDefault() is not TimeModel time)
+            return;
+
+        if (time.CompletedAt != null)
+            return;
+
+        time.StartedAt = startedAt;
+
+        if (await _dataAccess.GetTime(time.Id) is TimeEntity timeEntity)
+        {
+            timeEntity.StartedAt = startedAt;
+            await _dataAccess.UpdateTime(timeEntity);
+        }
+    }
+
     public async Task MarkAsDone(HabitModel habit)
     {
         if (Habits is null)
