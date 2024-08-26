@@ -155,78 +155,39 @@ Google Keep
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
-- online sync - server with SQL
-- calendar streak
+copy Loop Habit Tracker
+- History (done count grouped by week, month, quarter, year)
+- Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
+- Best streaks (from date - to date)
+- Frequency (by day of the week - continuous calendar, without dates, done count grouped by days of the week)
+
 - drag & drop reorder
 - keyboard navigation
 - benchmark: method time & render time
-- Google Keep - copy all features
-- don't list habits that i always do / never do - or find a solution for displaying them
 
 Ididit.Rest for SQL server for WebView
 
 table Users
 	User authentication
 	... or ...
-	Google, Microsoft, Apple log in
-
-essentials: (highest priority)
-appointments: (very high priority)
-ASAP tasks: (shopping, etc, ...)
-goals: (high priority)
-maintenance: (normal priority)
+	Google, Microsoft, Apple login
 
 - ASAP tasks
-	- where, when, address, email, phone
 	- when, where, contact/company name, address, phone number, working hours, website, email
 - date & time tasks
-
-1. online sync (c# backend with sql)
-2. new hosting provider - ASP net core
-3. make it very simple
-	- what the first version had
-	- but only the essential things
-	- fix the problems of the first version
-		- priority
-		- never done
-		- speed - blazor profiler
 
 - don't use `event` to refresh everything on every change
 - don't use `StateHasChanged()`
 - don't do this: current screen changed -> save current screen to settings -> data changed -> refresh all
 
-- import google keep notes with all features
-- organize notes
-- category is mandatory
-- auto sync & backup
-
 what is wrong with ididit:
-
-	- one in all, jack of all trades, master of none
-	- too many tasks - should be one task with interval and sub-tasks
-
-	- category tree -> breadcrumbs with dropdown
-
-	- tasks with very low importance
-	- tasks that i never do
-	- tasks that i always do - don't need a reminder
-	- tasks with interval longer than 7 days
-
-	- too many options / settings
-
-	- I'm not doing the critical tasks
+	- I'm not doing the critical tasks - because I see too many unimportant tasts that are overdue and I am satisfied with completing them
 	- show only highest priority overdue tasks
 
 email: copy task list as HTML with checkboxes to clipboard
 sms, message: copy task list with Unicode checkboxes
 
 [X] Category must be set when creating a new note
-
-copy Loop Habit Tracker
-- History (done count grouped by week, month, quarter, year)
-- Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
-- Best streaks (from date - to date)
-- Frequency (by day of the week - continuous calendar, without dates, done count grouped by days of the week)
 
 virtualized container
 
