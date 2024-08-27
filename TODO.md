@@ -22,6 +22,8 @@ fix AppData GetUserData() - remove these from class AppData:
 
 !!! rename Ididit to OpenHabitTracker !!!
 
+!!! replace all `@inject AppData AppData` with appropriate services !!!
+
 ---------------------------------------------------------------------------------------------------
 
 setup Authentication

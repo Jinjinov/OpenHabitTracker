@@ -68,7 +68,7 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
         if (Models is null)
             return;
 
-        foreach (ContentModel model in Models)
+        foreach (ContentModel model in Models) // TODO: learn to use generics, perhaps you will like them...
         {
             model.IsDeleted = false;
 
