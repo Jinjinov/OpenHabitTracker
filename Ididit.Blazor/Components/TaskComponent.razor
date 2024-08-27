@@ -26,6 +26,8 @@
     <InputDate class="form-control" id="durationInput" Value="Task.DurationProxy" ValueExpression="() => Task.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(Task, duration)" Type="InputDateType.Time" />
 </div>
 
+@if (Task.CompletedAt is null)
+{
 <div class="input-group flex-nowrap">
     @if (_timer is null)
     {
@@ -47,6 +49,7 @@
         <button class="btn btn-outline-primary" @onclick="StopTimer"><i class="bi bi-stop"></i></button>
     }
 </div>
+}
 
 @if (Task.StartedAt is not null)
 {

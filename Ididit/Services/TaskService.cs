@@ -163,14 +163,24 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
         if (Tasks is null)
             return;
 
-        DateTime? dateTime = task.CompletedAt is null ? DateTime.Now : null;
+        bool isCompleted = task.CompletedAt != null;
 
-        task.StartedAt ??= dateTime;
+        DateTime? dateTime = isCompleted ? null : DateTime.Now;
+
+        if (isCompleted)
+            task.StartedAt = null;
+        else
+            task.StartedAt ??= dateTime;
+
         task.CompletedAt = dateTime;
 
         if (await _dataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
-            taskEntity.StartedAt ??= dateTime;
+            if (isCompleted)
+                taskEntity.StartedAt = null;
+            else
+                taskEntity.StartedAt ??= dateTime;
+
             taskEntity.CompletedAt = dateTime;
 
             await _dataAccess.UpdateTask(taskEntity);
