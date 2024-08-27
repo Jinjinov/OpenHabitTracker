@@ -22,7 +22,15 @@ fix AppData GetUserData() - remove these from class AppData:
 
 !!! rename Ididit to OpenHabitTracker !!!
 
-!!! replace all `@inject AppData AppData` with appropriate services !!!
+edit times done
+	task: edit date and time 
+	- started at = now - duration 
+	- completed at = now
+	habit:
+	- list all for the selected day
+	- edit time only 
+
+replace all `@inject AppData AppData` with appropriate services
 
 ---------------------------------------------------------------------------------------------------
 
