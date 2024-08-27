@@ -30,6 +30,12 @@ edit times done
 	- list all for the selected day
 	- edit time only 
 
+Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
+Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
+
+F-Droid
+APKPure
+
 replace all `@inject AppData AppData` with appropriate services
 
 ---------------------------------------------------------------------------------------------------
