@@ -39,7 +39,7 @@
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
       
         <!-- AndroidManifest.xml : error XA0003: VersionCode 1.0.1 is invalid. It must be an integer value. (Parameter 'VersionCode') -->
-        <ApplicationVersion>2</ApplicationVersion>
+        <ApplicationVersion>3</ApplicationVersion>
 
         <TargetPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">34</TargetPlatformVersion>
 
