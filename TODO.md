@@ -20,9 +20,50 @@ fix AppData GetUserData() - remove these from class AppData:
 
 ---------------------------------------------------------------------------------------------------
 
+1. !!!
+
+Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
+	https://snapcraft.io/docs/dotnet-apps
+	https://snapcraft.io/docs/dotnet-plugin
+
+Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
+	https://github.com/flathub/org.freedesktop.Sdk.Extension.dotnet8
+
+F-Droid
+	not possible: https://forum.f-droid.org/t/why-isnt-c-net-maui-supported/24842
+
+APKPure
+	https://apkpure.com/submit-apk
+	https://developer.apkpure.com/
+	https://iphone.apkpure.com/ipa-install-online
+
+---------------------------------------------------------------------------------------------------
+
+2. !!!
+
+edit times done
+	task: edit date and time 
+	- started at = now - duration 
+	- completed at = now
+	habit:
+	- list all for the selected day
+	- edit time only 
+
+---------------------------------------------------------------------------------------------------
+
 !!! add `@using Microsoft.Extensions.Logging` @inject ILogger Logger !!!
 
-AppDomain.CurrentDomain.UnhandledException or TaskScheduler.UnobservedTaskException
+---------------------------------------------------------------------------------------------------
+
+catch unhandled exceptions:
+	AppDomain.CurrentDomain.UnhandledException
+	TaskScheduler.UnobservedTaskException
+
+---------------------------------------------------------------------------------------------------
+
+!!! rename Ididit to OpenHabitTracker !!!
+
+---------------------------------------------------------------------------------------------------
 
 2024-08-29 22:24:47.732 29433-29433 penhabittracker         
 net.openhabittracker                 
@@ -63,21 +104,7 @@ AndroidLinkMode=None is the same as setting PublishTrimmed=false
 	<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
 </PropertyGroup>
 
-!!! rename Ididit to OpenHabitTracker !!!
-
-edit times done
-	task: edit date and time 
-	- started at = now - duration 
-	- completed at = now
-	habit:
-	- list all for the selected day
-	- edit time only 
-
-Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
-Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
-
-F-Droid
-APKPure
+---------------------------------------------------------------------------------------------------
 
 replace all `@inject AppData AppData` with appropriate services
 
