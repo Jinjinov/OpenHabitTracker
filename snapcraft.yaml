@@ -1,0 +1,38 @@
+name: openhabittracker
+version: '1.0.0'
+grade: devel
+summary: Take notes, plan tasks, track habits
+description: |
+  - Free and Ad-Free
+  - Open Source
+  - Privacy Focused: All user data is stored locally on your device
+  - Available on Windows, Linux, Android, iOS, macOS, and as a web app
+  - Localized to English, German, Spanish, Slovenian
+  
+  Key Features:
+  
+  - Markdown support for notes
+  - Use categories and priorities to organize your notes, tasks, and habits
+  - Advanced Search, Filter, and Sort
+  - Data Export/Import: JSON, YAML, TSV, Markdown
+  - Import your notes from Google Keep
+  - Available in 26 themes with Dark and Light modes
+
+base: core22
+
+confinement: devmode
+
+parts:
+  whatime:
+    plugin: dotnet
+    dotnet-build-configuration: Release
+    dotnet-self-contained-runtime-identifier: linux-x64
+    source: .
+    build-packages:
+      - dotnet-sdk-6.0
+    stage-packages:
+      - libicu70
+
+apps:
+  whatime:
+    command: OpenHT

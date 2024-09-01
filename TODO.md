@@ -28,6 +28,8 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
 Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
 	https://github.com/flathub/org.freedesktop.Sdk.Extension.dotnet8
+	https://docs.flatpak.org/en/latest/dotnet.html
+	https://flatpak.org/setup/Ubuntu
 
 F-Droid
 	not possible: https://forum.f-droid.org/t/why-isnt-c-net-maui-supported/24842
