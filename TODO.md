@@ -20,8 +20,9 @@ fix AppData GetUserData() - remove these from class AppData:
 
 ---------------------------------------------------------------------------------------------------
 
-1.
-!!! rename Ididit to OpenHabitTracker !!!
+1. !!!
+
+rename Ididit to OpenHabitTracker !!!
 
 ---------------------------------------------------------------------------------------------------
 
