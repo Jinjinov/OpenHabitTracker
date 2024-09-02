@@ -20,7 +20,12 @@ fix AppData GetUserData() - remove these from class AppData:
 
 ---------------------------------------------------------------------------------------------------
 
-1. !!!
+1.
+!!! rename Ididit to OpenHabitTracker !!!
+
+---------------------------------------------------------------------------------------------------
+
+2. !!!
 
 Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
 	https://snapcraft.io/docs/dotnet-apps
@@ -31,11 +36,9 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 	https://docs.flatpak.org/en/latest/dotnet.html
 	https://flatpak.org/setup/Ubuntu
 
-
-
 ---------------------------------------------------------------------------------------------------
 
-2. !!!
+3. !!!
 
 edit times done
 	task: edit date and time 
@@ -54,10 +57,6 @@ edit times done
 catch unhandled exceptions:
 	AppDomain.CurrentDomain.UnhandledException
 	TaskScheduler.UnobservedTaskException
-
----------------------------------------------------------------------------------------------------
-
-!!! rename Ididit to OpenHabitTracker !!!
 
 ---------------------------------------------------------------------------------------------------
 
