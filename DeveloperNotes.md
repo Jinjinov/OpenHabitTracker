@@ -47,6 +47,16 @@ dotnet publish -f net8.0-maccatalyst -c Release -p:MtouchLink=SdkOnly -p:CreateP
 
 ---------------------------------------------------------------------------------------------------
 
+F-Droid
+	not possible: https://forum.f-droid.org/t/why-isnt-c-net-maui-supported/24842
+
+APKPure
+	https://apkpure.com/submit-apk
+	https://developer.apkpure.com/
+	https://iphone.apkpure.com/ipa-install-online
+
+---------------------------------------------------------------------------------------------------
+
 - Transient services are created each time they are requested
 
 - Scoped services are created once per scope (usually per HTTP request in web applications)
