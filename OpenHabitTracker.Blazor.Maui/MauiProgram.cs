@@ -51,6 +51,7 @@ public static class MauiProgram
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         builder.Services.AddScoped<IRuntimeData, RuntimeData>();
+        builder.Services.AddScoped<IPreRenderService, PreRenderService>();
 
         MauiApp mauiApp = builder.Build();
 

@@ -23,6 +23,7 @@ builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
 builder.Services.AddScoped<IAssemblyProvider, OpenHabitTracker.Blazor.Web.Components.AssemblyProvider>();
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddScoped<IRuntimeData, RuntimeData>();
+builder.Services.AddScoped<IPreRenderService, OpenHabitTracker.Blazor.Web.PreRenderService>();
 
 WebApplication app = builder.Build();
 

@@ -33,6 +33,7 @@ public partial class MainWindow : Window
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         services.AddScoped<IRuntimeData, RuntimeData>();
+        services.AddScoped<IPreRenderService, PreRenderService>();
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         Resources.Add("services", serviceProvider);

@@ -33,6 +33,7 @@ public partial class MainForm : Form
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         services.AddScoped<IRuntimeData, RuntimeData>();
+        services.AddScoped<IPreRenderService, PreRenderService>();
 
         InitializeComponent();
 

@@ -36,6 +36,7 @@ public class Startup(IConfiguration configuration)
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         services.AddScoped<IRuntimeData, RuntimeData>();
+        services.AddScoped<IPreRenderService, PreRenderService>();
 
         if (HybridSupport.IsElectronActive)
         {

@@ -32,6 +32,7 @@ public class Program
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         builder.Services.AddScoped<IRuntimeData, RuntimeData>();
+        builder.Services.AddScoped<IPreRenderService, PreRenderService>();
 
         // register root component and selector
         builder.RootComponents.Add<Routes>("app");

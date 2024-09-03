@@ -29,6 +29,7 @@ public class Startup(IConfiguration configuration)
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         services.AddScoped<IRuntimeData, RuntimeData>();
+        services.AddScoped<IPreRenderService, PreRenderService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
