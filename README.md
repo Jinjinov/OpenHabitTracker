@@ -62,7 +62,7 @@ Android apk file:
 *   [WinForms](https://learn.microsoft.com/en-us/dotnet/desktop/winforms)
 *   [Wpf](https://learn.microsoft.com/en-us/dotnet/desktop/wpf)
 
-## Screenshots:
+## Desktop screenshots:
 
 [![](OpenHabitTracker.Web/images/desktop_1_settings.png)](OpenHabitTracker.Web/images/desktop_1_settings.png)
 [![](OpenHabitTracker.Web/images/desktop_2_note.png)](OpenHabitTracker.Web/images/desktop_2_note.png)
@@ -72,9 +72,14 @@ Android apk file:
 [![](OpenHabitTracker.Web/images/desktop_6_habit.png)](OpenHabitTracker.Web/images/desktop_6_habit.png)
 [![](OpenHabitTracker.Web/images/desktop_7_habits.png)](OpenHabitTracker.Web/images/desktop_7_habits.png)
 [![](OpenHabitTracker.Web/images/desktop_8_backup.png)](OpenHabitTracker.Web/images/desktop_8_backup.png)
+
+## Phone screenshots:
+
 [![](OpenHabitTracker.Web/images/phone_1_empty.png)](OpenHabitTracker.Web/images/phone_1_empty.png)
 [![](OpenHabitTracker.Web/images/phone_2_notes.png)](OpenHabitTracker.Web/images/phone_2_notes.png)
 [![](OpenHabitTracker.Web/images/phone_3_markdown.png)](OpenHabitTracker.Web/images/phone_3_markdown.png)
 [![](OpenHabitTracker.Web/images/phone_4_task.png)](OpenHabitTracker.Web/images/phone_4_task.png)
 [![](OpenHabitTracker.Web/images/phone_5_habit.png)](OpenHabitTracker.Web/images/phone_5_habit.png)
 [![](OpenHabitTracker.Web/images/phone_6_search.png)](OpenHabitTracker.Web/images/phone_6_search.png)
+[![](OpenHabitTracker.Web/images/phone_7_settings.png)](OpenHabitTracker.Web/images/phone_7_settings.png)
+[![](OpenHabitTracker.Web/images/phone_8_backup.png)](OpenHabitTracker.Web/images/phone_8_backup.png)
