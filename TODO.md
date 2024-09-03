@@ -38,6 +38,8 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 	https://github.com/flathub/org.freedesktop.Sdk.Extension.dotnet8
 	https://docs.flatpak.org/en/latest/dotnet.html
 	https://flatpak.org/setup/Ubuntu
+	https://github.com/flatpak/flatpak-builder-tools
+	https://github.com/flatpak/flatpak-builder-tools/tree/master/dotnet
 
 	https://flathub.org/
 	https://github.com/flathub/flathub
