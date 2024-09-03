@@ -19,6 +19,8 @@ Key Features:
 - Import your notes from Google Keep
 - Available in 26 themes with Dark and Light modes
 
+## Stores:
+
 Windows:  
 [<img src="OpenHabitTracker.Web/icons/Microsoft.svg" height="48">](https://apps.microsoft.com/detail/9mwzmlxzzllr)
 
@@ -33,3 +35,20 @@ macOS:
 
 Android apk file:  
 [<img src="OpenHabitTracker.Web/icons/APKPure.png">](https://apkpure.com/openhabittracker/net.openhabittracker)
+
+## Screenshots:
+
+[![](OpenHabitTracker.Web/images/desktop_1_settings.png)](OpenHabitTracker.Web/images/desktop_1_settings.png)
+[![](OpenHabitTracker.Web/images/desktop_2_note.png)](OpenHabitTracker.Web/images/desktop_2_note.png)
+[![](OpenHabitTracker.Web/images/desktop_3_notes.png)](OpenHabitTracker.Web/images/desktop_3_notes.png)
+[![](OpenHabitTracker.Web/images/desktop_4_task.png)](OpenHabitTracker.Web/images/desktop_4_task.png)
+[![](OpenHabitTracker.Web/images/desktop_5_tasks.png)](OpenHabitTracker.Web/images/desktop_5_tasks.png)
+[![](OpenHabitTracker.Web/images/desktop_6_habit.png)](OpenHabitTracker.Web/images/desktop_6_habit.png)
+[![](OpenHabitTracker.Web/images/desktop_7_habits.png)](OpenHabitTracker.Web/images/desktop_7_habits.png)
+[![](OpenHabitTracker.Web/images/desktop_8_backup.png)](OpenHabitTracker.Web/images/desktop_8_backup.png)
+[![](OpenHabitTracker.Web/images/phone_1_empty.png)](OpenHabitTracker.Web/images/phone_1_empty.png)
+[![](OpenHabitTracker.Web/images/phone_2_notes.png)](OpenHabitTracker.Web/images/phone_2_notes.png)
+[![](OpenHabitTracker.Web/images/phone_3_markdown.png)](OpenHabitTracker.Web/images/phone_3_markdown.png)
+[![](OpenHabitTracker.Web/images/phone_4_task.png)](OpenHabitTracker.Web/images/phone_4_task.png)
+[![](OpenHabitTracker.Web/images/phone_5_habit.png)](OpenHabitTracker.Web/images/phone_5_habit.png)
+[![](OpenHabitTracker.Web/images/phone_6_search.png)](OpenHabitTracker.Web/images/phone_6_search.png)
