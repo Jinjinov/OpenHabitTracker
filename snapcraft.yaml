@@ -23,16 +23,16 @@ base: core22
 confinement: devmode
 
 parts:
-  whatime:
+  openhabittracker:
     plugin: dotnet
     dotnet-build-configuration: Release
     dotnet-self-contained-runtime-identifier: linux-x64
-    source: .
+    source: ./OpenHabitTracker.Blazor.Photino
     build-packages:
-      - dotnet-sdk-6.0
+      - dotnet-sdk-8.0
     stage-packages:
       - libicu70
 
 apps:
-  whatime:
+  openhabittracker:
     command: OpenHT
