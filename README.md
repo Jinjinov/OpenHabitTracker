@@ -1,30 +1,20 @@
 # OpenHabitTracker
 
-https://openhabittracker.net/
-
 OpenHabitTracker is free, open source and works on Web, Windows, Linux, Android, iOS and macOS!
 
-Take Markdown notes, plan tasks, track habits.
+Take Markdown notes, plan tasks, track habits: https://openhabittracker.net
 
-Use `elapsed time` to `repeat interval` ratio:
-- `elapsed time` is not a good indicator for urgency
-- `elapsed time` to `repeat interval` ratio is a much better indicator for urgency
-- together with setting the `priority`, you have a very good overview on what to do next
+- Free and Ad-Free
+- Open Source
+- Privacy Focused: All user data is stored locally on your device
+- Available on Windows, Linux, Android, iOS, macOS, and as a web app
+- Localized to English, German, Spanish, Slovenian
 
-Advanced search, filter and sort
+Key Features:
 
-Localized in 4 languages:
-- German
-- English
-- Spanish
-- Slovenian
-
-Available in 26 themes
-
-Import / Export:
-- Markdown
-- YAML
-- JSON
-- TSV (Tab Separated Values)
-
-Import from Google Keep
+- Markdown support for notes
+- Use categories and priorities to organize your notes, tasks, and habits
+- Advanced Search, Filter, and Sort
+- Data Export/Import: JSON, YAML, TSV, Markdown
+- Import your notes from Google Keep
+- Available in 26 themes with Dark and Light modes
