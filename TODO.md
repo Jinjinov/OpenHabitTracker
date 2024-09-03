@@ -26,10 +26,21 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 	https://snapcraft.io/docs/dotnet-apps
 	https://snapcraft.io/docs/dotnet-plugin
 
+	https://snapcraft.io/docs/registering-your-app-name
+	https://snapcraft.io/account
+	https://snapcraft.io/docs/pre-built-apps
+
+	https://snapcraft.io/snaps
+	https://dashboard.snapcraft.io/register-snap/
+	https://dashboard.snapcraft.io/register-snap-feedback/openhabittracker/
+
 Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
 	https://github.com/flathub/org.freedesktop.Sdk.Extension.dotnet8
 	https://docs.flatpak.org/en/latest/dotnet.html
 	https://flatpak.org/setup/Ubuntu
+
+	https://flathub.org/
+	https://github.com/flathub/flathub
 
 ---------------------------------------------------------------------------------------------------
 
