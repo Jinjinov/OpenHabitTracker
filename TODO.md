@@ -22,12 +22,6 @@ fix AppData GetUserData() - remove these from class AppData:
 
 1. !!!
 
-rename Ididit to OpenHabitTracker !!!
-
----------------------------------------------------------------------------------------------------
-
-2. !!!
-
 Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
 	https://snapcraft.io/docs/dotnet-apps
 	https://snapcraft.io/docs/dotnet-plugin
@@ -39,7 +33,7 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
 ---------------------------------------------------------------------------------------------------
 
-3. !!!
+2. !!!
 
 edit times done
 	task: edit date and time 
