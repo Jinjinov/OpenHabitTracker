@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit", "Ididit\Ididit.csproj", "{EB300DAE-CC72-4C0D-B93F-8E7719901F3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker", "OpenHabitTracker\OpenHabitTracker.csproj", "{EB300DAE-CC72-4C0D-B93F-8E7719901F3D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor", "Ididit.Blazor\Ididit.Blazor.csproj", "{3CF485FC-FF40-438D-829C-2BB55A7646F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor", "OpenHabitTracker.Blazor\OpenHabitTracker.Blazor.csproj", "{3CF485FC-FF40-438D-829C-2BB55A7646F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.IndexedDB", "Ididit.IndexedDB\Ididit.IndexedDB.csproj", "{C1B727AE-C62B-4A93-BE98-3435BEC1025D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.IndexedDB", "OpenHabitTracker.IndexedDB\OpenHabitTracker.IndexedDB.csproj", "{C1B727AE-C62B-4A93-BE98-3435BEC1025D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.LocalStorage", "Ididit.LocalStorage\Ididit.LocalStorage.csproj", "{77791CD1-2EDC-45CE-96FC-1ED391568B51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.LocalStorage", "OpenHabitTracker.LocalStorage\OpenHabitTracker.LocalStorage.csproj", "{77791CD1-2EDC-45CE-96FC-1ED391568B51}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.EntityFrameworkCore", "Ididit.EntityFrameworkCore\Ididit.EntityFrameworkCore.csproj", "{A166BA91-F664-44CE-A741-EA110FC02258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.EntityFrameworkCore", "OpenHabitTracker.EntityFrameworkCore\OpenHabitTracker.EntityFrameworkCore.csproj", "{A166BA91-F664-44CE-A741-EA110FC02258}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wasm", "Ididit.Blazor.Wasm\Ididit.Blazor.Wasm.csproj", "{40BD5EF3-6A17-49F2-87C3-BA119A51B545}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.Wasm", "OpenHabitTracker.Blazor.Wasm\OpenHabitTracker.Blazor.Wasm.csproj", "{40BD5EF3-6A17-49F2-87C3-BA119A51B545}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Maui", "Ididit.Blazor.Maui\Ididit.Blazor.Maui.csproj", "{D0071377-3D33-41EE-A22F-586BDDE64A5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.Maui", "OpenHabitTracker.Blazor.Maui\OpenHabitTracker.Blazor.Maui.csproj", "{D0071377-3D33-41EE-A22F-586BDDE64A5E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Google.Apis", "Ididit.Google.Apis\Ididit.Google.Apis.csproj", "{F631C389-EECB-41E4-95AE-341C3CBF284F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Google.Apis", "OpenHabitTracker.Google.Apis\OpenHabitTracker.Google.Apis.csproj", "{F631C389-EECB-41E4-95AE-341C3CBF284F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{36C1DB59-1758-4659-BA71-5289BD204001}"
 	ProjectSection(SolutionItems) = preProject
@@ -26,21 +26,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TODO.md = TODO.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Backup", "Ididit.Backup\Ididit.Backup.csproj", "{963111F0-2C40-4468-8AC7-211FC9A79BE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Backup", "OpenHabitTracker.Backup\OpenHabitTracker.Backup.csproj", "{963111F0-2C40-4468-8AC7-211FC9A79BE1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.WinForms", "Ididit.Blazor.WinForms\Ididit.Blazor.WinForms.csproj", "{017266D3-75E1-4D82-B284-1C53C5EF90D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.WinForms", "OpenHabitTracker.Blazor.WinForms\OpenHabitTracker.Blazor.WinForms.csproj", "{017266D3-75E1-4D82-B284-1C53C5EF90D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wpf", "Ididit.Blazor.Wpf\Ididit.Blazor.Wpf.csproj", "{7C93A366-D320-414F-BB50-72E35FFA29F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.Wpf", "OpenHabitTracker.Blazor.Wpf\OpenHabitTracker.Blazor.Wpf.csproj", "{7C93A366-D320-414F-BB50-72E35FFA29F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Photino", "Ididit.Blazor.Photino\Ididit.Blazor.Photino.csproj", "{48B5D138-3C1B-4325-B821-F915F993D51F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.Photino", "OpenHabitTracker.Blazor.Photino\OpenHabitTracker.Blazor.Photino.csproj", "{48B5D138-3C1B-4325-B821-F915F993D51F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Chromely", "Ididit.Blazor.Chromely\Ididit.Blazor.Chromely.csproj", "{1BE64410-6A93-462C-AFCE-1805E6E3504E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.Chromely", "OpenHabitTracker.Blazor.Chromely\OpenHabitTracker.Blazor.Chromely.csproj", "{1BE64410-6A93-462C-AFCE-1805E6E3504E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Wasm.Chromely", "Ididit.Blazor.Wasm.Chromely\Ididit.Blazor.Wasm.Chromely.csproj", "{3D26A83E-0986-470C-8AC6-33793570B3D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.Wasm.Chromely", "OpenHabitTracker.Blazor.Wasm.Chromely\OpenHabitTracker.Blazor.Wasm.Chromely.csproj", "{3D26A83E-0986-470C-8AC6-33793570B3D1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Electron", "Ididit.Blazor.Electron\Ididit.Blazor.Electron.csproj", "{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.Electron", "OpenHabitTracker.Blazor.Electron\OpenHabitTracker.Blazor.Electron.csproj", "{9DD10F90-9F79-40A8-B581-6AE14EB3BCC3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ididit.Blazor.Web", "Ididit.Blazor.Web\Ididit.Blazor.Web.csproj", "{543B00FA-D387-4ECF-96ED-12FA92B15C08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.Web", "OpenHabitTracker.Blazor.Web\OpenHabitTracker.Blazor.Web.csproj", "{543B00FA-D387-4ECF-96ED-12FA92B15C08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

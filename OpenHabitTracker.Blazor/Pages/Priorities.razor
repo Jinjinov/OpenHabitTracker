@@ -1,0 +1,85 @@
+﻿@page "/priorities"
+@page "/priorities/{Id:long}"
+
+@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Services
+
+@inject PriorityService PriorityService
+@inject IStringLocalizer<Loc> Loc
+
+@* <PageTitle>Priorities</PageTitle> *@
+
+<div>
+
+    <div class="my-1">
+        @if (PriorityService.Priorities is null)
+        {
+            @* <p>Failed to load. Try refreshing.</p> *@
+        }
+        else
+        {
+            foreach (PriorityModel priority in PriorityService.Priorities.OrderByDescending(x => x.Id))
+            {
+                <div class="input-group">
+                    <span class="input-group-text">@priority.Id</span>
+                    @if (priority == PriorityService.SelectedPriority)
+                    {
+                        <InputText class="form-control" @ref="inputElement" Value="@priority.Title" ValueExpression="() => priority.Title" ValueChanged="UpdatePriority" @onfocusout="(args) => PriorityService.SelectedPriority = null" />
+                    }
+                    else
+                    {
+                        <button class="input-group-text flex-grow-1" @onclick="() => { PriorityService.SelectedPriority = priority; shouldFocus = true; }">@priority.Title</button>
+                    }
+                </div>
+            }
+        }
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    [Parameter]
+    public bool StateChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> StateChangedChanged { get; set; }
+
+    InputText? inputElement;
+
+    bool shouldFocus;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await PriorityService.Initialize();
+    }
+
+    protected override void OnParametersSet()
+    {
+        PriorityService.SetSelectedPriority(Id);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (shouldFocus && inputElement?.Element is not null)
+        {
+            shouldFocus = false;
+            await inputElement.Element.Value.FocusAsync();
+        }
+    }
+
+    async Task OnStateChanged()
+    {
+        StateChanged = !StateChanged;
+        await StateChangedChanged.InvokeAsync(StateChanged);
+    }
+
+    async Task UpdatePriority(string title)
+    {
+        await PriorityService.UpdatePriority(title);
+
+        await OnStateChanged();
+    }
+}

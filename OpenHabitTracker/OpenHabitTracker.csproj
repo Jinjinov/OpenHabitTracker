@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="OpenHabitTracker.Blazor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.59" />
+    <PackageReference Include="Markdig" Version="0.35.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Localization\Resources\*.json" />
+    <EmbeddedResource Include="Localization\Resources\*.json" />
+  </ItemGroup>
+
+</Project>

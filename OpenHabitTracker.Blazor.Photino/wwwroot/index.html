@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>OpenHabitTracker</title>
+    <base href="/" />
+
+    <link id="theme-link" rel="stylesheet" href="_content/OpenHabitTracker.Blazor/bootstrap/default/bootstrap.min.css" />
+    <link rel="stylesheet" href="_content/OpenHabitTracker.Blazor/bootstrap-icons/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="_content/OpenHabitTracker.Blazor/app.css" />
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+    <script src="_content/OpenHabitTracker.Blazor/skipScrollTo.js"></script>
+
+    <script>
+        function addAttributeToLinks(wrapperElement) {
+            const links = wrapperElement.querySelectorAll('a[href]');
+            links.forEach(link => {
+                const hrefValue = link.getAttribute('href');
+                if (hrefValue && (hrefValue.startsWith('http://') || hrefValue.startsWith('https://'))) {
+                    link.setAttribute('onclick', `return openLink('${hrefValue}');`);
+                }
+            });
+        }
+
+        function openLink(url) {
+            event.preventDefault();
+            DotNet.invokeMethodAsync('OpenHT', 'OpenLink', url);
+            return false;
+        }
+    </script>
+</head>
+
+<body>
+    <app id="app">
+        <div class="spinner-container">
+            <div class="spinner">
+                <div class="spinner-text">¡!</div>
+            </div>
+        </div>
+    </app>
+
+    <script src="_framework/blazor.webview.js"></script>
+</body>
+
+</html>

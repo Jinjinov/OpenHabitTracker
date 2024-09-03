@@ -1,0 +1,286 @@
+﻿@page "/habits"
+@page "/habits/{Id:long}"
+
+@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Services
+@using Microsoft.JSInterop
+
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inject HabitService HabitService
+@inject AppData AppData
+@inject SettingsService SettingsService
+@inject JsInterop JsInterop
+@inject SearchFilterService SearchFilterService
+@inject IStringLocalizer<Loc> Loc
+
+<PageTitle>Habits</PageTitle>
+
+<div @ref="columnRef" class="col child-column px-0 px-md-1">
+
+    @if (HabitService.NewHabit is null)
+    {
+        <button class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
+            <span class="input-group-text flex-grow-1">@Loc["Add new habit"]</span>
+
+            <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
+        </button>
+    }
+    @if (HabitService.NewHabit is not null)
+    {
+        <div class="my-1">
+            <div class="input-group">
+                <PriorityComponent Model="HabitService.NewHabit" />
+
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.NewHabit.Title" placeholder="@Loc["Add new habit"]" />
+
+                <button class="btn btn-outline-primary" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.NewHabit.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => HabitService.NewHabit = null"><i class="bi bi-trash"></i></button>
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-text" for="countInput">@Loc["Repeat"]</label>
+                <InputNumber class="form-control" id="countInput" @bind-Value="HabitService.NewHabit.RepeatCount" />
+
+                <label class="input-group-text" for="intervalInput">@Loc["every"]</label>
+                <InputNumber class="form-control" id="intervalInput" @bind-Value="HabitService.NewHabit.RepeatInterval" />
+
+                <InputSelect class="form-select" @bind-Value="HabitService.NewHabit.RepeatPeriod">
+                    @foreach (Period period in Enum.GetValues<Period>())
+                    {
+                        <option @key="period" value="@period">@Loc[period.ToString()]</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-text" for="durationInput">@Loc["Duration"]</label>
+                <InputDate class="form-control" id="durationInput" @bind-Value="HabitService.NewHabit.DurationProxy" Type="InputDateType.Time" />
+            </div>
+
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">@Loc["Color"]</span>
+                <ColorComponent Model="HabitService.NewHabit" />
+            </div>
+
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">@Loc["Category"]</span>
+                <CategoryComponent Model="HabitService.NewHabit" />
+            </div>
+        </div>
+    }
+
+    @if (HabitService.Habits is null)
+    {
+        @* <p>Failed to load. Try refreshing.</p> *@
+    }
+    else if (columnWidth != 0)
+    {
+        foreach (HabitModel habit in HabitService.GetHabits())
+        {
+            <div class="my-1 d-flex">
+                @if (!_showSecondColumn && habit.Id == Id && HabitService.NewHabit is null)
+                {
+                    <HabitComponent Habit="habit" CloseSelected="CloseSelected" />
+                }
+                else
+                {
+                    string style = "";
+                    if (!IsEmbedded)
+                    {
+                        style = "height: 50px;";
+                    }
+                    <div class="w-100">
+                        <div class="input-group flex-nowrap" style="@style">
+                            <span class="input-group-text">@AppData.GetPriorityTitle(habit.Priority)</span>
+                            <button class="@($"input-group-text flex-grow-1 text-wrap {habit.Color} highlightable")" @onclick="() => OpenSelected(habit.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
+
+                            @*
+                            @if (habit.LastTimeDoneAt is not null)
+                            {
+                                DateTime lastTimeDoneAt = habit.LastTimeDoneAt.Value;
+                                string color = habit.IsOverdue() switch
+                                {
+                                    true => "bg-danger-subtle",
+                                    false => "bg-success-subtle",
+                                    null => ""
+                                };
+                                <small class="@($"input-group-text {color}")">@(lastTimeDoneAt.Date == DateTime.Now.Date ? lastTimeDoneAt.ToShortTimeString() : lastTimeDoneAt.ToShortDateString())</small>
+                            }
+                            *@
+
+                            @{
+                                string color = habit.GetRatio(SettingsService.Settings.SelectedRatio) switch
+                                {
+                                    >= 100 => "bg-danger-subtle",
+                                    >= 80 => "bg-warning-subtle",
+                                    _ => "bg-success-subtle"
+                                };
+                            }
+                            <small class="@($"input-group-text {color}")">
+                                @(habit.LastTimeDoneAt is not null ? ToHighestValueString(habit.ElapsedTime) : "⊘")
+                                (@habit.GetRatio(SettingsService.Settings.SelectedRatio).ToString("N0")%)
+                            </small>
+
+                            @if (!SettingsService.Settings.ShowSmallCalendar)
+                            {
+                                <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                            }
+                        </div>
+
+                        @if (SettingsService.Settings.ShowItemList)
+                        {
+                            <ItemsComponent Items=habit IsReadOnly=true />
+                        }
+
+                        @if (IsEmbedded && SettingsService.Settings.ShowSmallCalendar)
+                        {
+                            <div class="input-group-text p-0 border-0 rounded-0">
+                                <div class="mx-auto">
+                                    <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" />
+                                 </div>
+                            </div>
+                        }
+
+                    </div>
+                    if (!IsEmbedded && SettingsService.Settings.ShowSmallCalendar)
+                    {
+                        <div class="d-flex">
+                            <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" DisplayBasedOnWidth />
+                        </div>
+                    }
+                }
+            </div>
+        }
+    }
+
+</div>
+
+@if (_showSecondColumn)
+{
+    <div class="col child-column px-0 px-md-1 my-1">
+        @if (Id is not null && HabitService.NewHabit is null)
+        {
+            <HabitComponent Habit="HabitService.SelectedHabit" HabitChanged="StateHasChanged" CloseSelected="CloseSelected" />
+        }
+        @* else
+        {
+            <p>Stats:</p>
+
+            foreach (CategoryModel category in CategoryService.Categories)
+            {
+
+            }
+        } *@
+    </div>
+}
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    [Parameter]
+    public bool IsEmbedded { get; set; }
+
+    [CascadingParameter(Name = "StateChanged")]
+    public bool StateChanged { get; set; }
+
+    [CascadingParameter(Name = "WindowDimensions")]
+    public Dimensions? WindowDimensions { get; set; }
+
+    [CascadingParameter(Name = "DynamicComponentType")]
+    public Type? DynamicComponentType { get; set; }
+
+    string? _dynamicComponentTypeName;
+
+    bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width >= 1280;
+
+    InputTextImmediate? inputElement;
+
+    bool shouldFocus;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SettingsService.Initialize();
+
+        await HabitService.Initialize();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await HabitService.SetSelectedHabit(Id);
+    }
+
+    ElementReference columnRef;
+    int columnWidth;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        bool dynamicComponentVisibilityChanged = (_dynamicComponentTypeName is null && DynamicComponentType is not null) || (_dynamicComponentTypeName is not null && DynamicComponentType is null);
+
+        _dynamicComponentTypeName = DynamicComponentType?.Name;
+
+        if (firstRender || dynamicComponentVisibilityChanged)
+        {
+            Dimensions columnDimensions = await JsInterop.GetElementDimensions(columnRef);
+            columnWidth = columnDimensions.Width;
+
+            // TODO: try to make it work without this
+            // or at least move it up the hierarchy, before Habits render for the first time
+            // or don't render habits if columnWidth == 0
+            StateHasChanged();
+            // TODO: make it work without JsInterop and use @media for each day
+            // even better: get <body> dimensions once at startup, calculate everything else from that
+            // first render can be empty in MainLayout, with everything else rendersing only if body dimensions are set
+        }
+
+        if (shouldFocus && inputElement?.Element is not null)
+        {
+            shouldFocus = false;
+            await inputElement.Element.Value.FocusAsync();
+        }
+    }
+
+    void AddNew()
+    {
+        HabitService.NewHabit = new() { Color = "bg-body-secondary" };
+        shouldFocus = true;
+    }
+
+    async Task OpenSelected(long id)
+    {
+        if (IsEmbedded)
+        {
+            Id = id;
+            await HabitService.SetSelectedHabit(Id);
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+
+            NavigationManager.NavigateTo($"/habits/{id}");
+        }
+    }
+
+    async Task CloseSelected()
+    {
+        if (IsEmbedded)
+        {
+            Id = null;
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+
+            NavigationManager.NavigateTo("/habits");
+        }
+    }
+
+    string ToHighestValueString(TimeSpan span)
+    {
+        return span.Days > 0 ? span.Days + " d"
+                             : span.Hours > 0 ? span.Hours + " h"
+                                              : span.Minutes + " m";
+    }
+}

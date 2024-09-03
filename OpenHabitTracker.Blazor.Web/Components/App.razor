@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+
+    <link id="theme-link" rel="stylesheet" href="_content/OpenHabitTracker.Blazor/bootstrap/default/bootstrap.min.css" />
+    <link rel="stylesheet" href="_content/OpenHabitTracker.Blazor/bootstrap-icons/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="_content/OpenHabitTracker.Blazor/app.css" />
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+    <script src="_content/OpenHabitTracker.Blazor/skipScrollTo.js"></script>
+
+    <HeadOutlet @rendermode="@RenderMode.InteractiveServer" />
+</head>
+
+<body>
+    <Routes @rendermode="@RenderMode.InteractiveServer" />
+
+    <script src="_framework/blazor.web.js"></script>
+</body>
+
+</html>

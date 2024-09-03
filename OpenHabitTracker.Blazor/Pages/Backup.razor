@@ -1,0 +1,108 @@
+﻿@page "/backup"
+
+@using OpenHabitTracker.Backup
+@using OpenHabitTracker.Blazor.Files
+
+@inject ImportExportService ImportExportService
+@inject IOpenFile OpenFile
+@inject ISaveFile SaveFile
+@inject IStringLocalizer<Loc> Loc
+@inject ILinkAttributeService LinkAttributeService
+
+@* <PageTitle>Backup</PageTitle> *@
+
+<div @ref="WrapperElement">
+
+    <div class="my-1">
+
+        <div class="list-group">
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Json)">@Loc["Export JSON"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Tsv)">@Loc["Export TSV"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Yaml)">@Loc["Export YAML"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Md)">@Loc["Export Markdown"]</button>
+
+            @OpenFile.OpenFileDialog("list-group-item list-group-item-action", Loc["Import"], OnFileOpened)
+        </div>
+
+    </div>
+
+    <div class="m-1">
+        @Loc["Import"]:
+        <ul>
+            <li>JSON (.json)</li>
+            <li>TSV (.tsv)</li>
+            <li>YAML (.yaml)</li>
+            <li>Markdown (.md)</li>
+            <li><a href="https://takeout.google.com/">Google Keep (.zip)</a></li>
+        </ul>
+    </div>
+
+    @* @_filename
+
+    <pre>@_fileContent</pre> *@
+
+</div>
+
+@code {
+    [Parameter]
+    public bool StateChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> StateChangedChanged { get; set; }
+
+    string _filename = string.Empty;
+
+    string _fileContent = string.Empty;
+
+    private ElementReference WrapperElement;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LinkAttributeService.AddAttributesToLinks(WrapperElement);
+        }
+    }
+
+    async Task OnStateChanged()
+    {
+        StateChanged = !StateChanged;
+        await StateChangedChanged.InvokeAsync(StateChanged);
+    }
+
+    private async Task ExportFile(FileFormat fileFormat)
+    {
+        _fileContent = await ImportExportService.GetDataExportFileString(fileFormat);
+
+        string extension = fileFormat.ToString().ToLower();
+
+        await SaveFile.SaveFileDialog($"OpenHabitTracker.{DateTime.Now:yyyyMMddHHmmss}.{extension}", _fileContent);
+    }
+
+    private async Task OnFileOpened(string filename, Stream stream)
+    {
+#if DEBUG
+        _filename = filename;
+
+        using MemoryStream memoryStream = new();
+
+        await stream.CopyToAsync(memoryStream);
+        memoryStream.Position = 0;
+
+        using StreamReader streamReader = new(memoryStream);
+
+        _fileContent = await streamReader.ReadToEndAsync();
+
+        memoryStream.Position = 0;
+        streamReader.DiscardBufferedData();
+
+        StateHasChanged();
+
+        stream = memoryStream;
+#endif
+
+        await ImportExportService.ImportDataFile(filename, stream);
+
+        await OnStateChanged();
+    }
+}

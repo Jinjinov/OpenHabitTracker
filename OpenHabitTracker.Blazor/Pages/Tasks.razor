@@ -1,0 +1,193 @@
+﻿@page "/tasks"
+@page "/tasks/{Id:long}"
+
+@using OpenHabitTracker.Blazor.Components
+@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Services
+@using Microsoft.JSInterop
+
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inject TaskService TaskService
+@inject AppData AppData
+@inject SettingsService SettingsService
+@inject SearchFilterService SearchFilterService
+@inject IStringLocalizer<Loc> Loc
+
+<PageTitle>Tasks</PageTitle>
+
+<div class="col child-column px-0 px-md-1">
+
+    @if (TaskService.NewTask is null)
+    {
+        <NavLink class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
+            <span class="input-group-text flex-grow-1">@Loc["Add new task"]</span>
+
+            <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
+        </NavLink>
+    }
+    @if (TaskService.NewTask is not null)
+    {
+        <div class="my-1">
+            <div class="input-group">
+                <PriorityComponent Model="TaskService.NewTask" />
+
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="TaskService.NewTask.Title" placeholder="@Loc["Add new task"]" />
+
+                <button class="btn btn-outline-primary" @onclick="TaskService.AddTask" disabled="@string.IsNullOrWhiteSpace(TaskService.NewTask.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => TaskService.NewTask = null"><i class="bi bi-trash"></i></button>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">@Loc["Planned at"]</span>
+                <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.NewTask.PlannedAt" />
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-text" for="durationInput">@Loc["Duration"]</label>
+                <InputDate class="form-control" id="durationInput" @bind-Value="TaskService.NewTask.DurationProxy" Type="InputDateType.Time" />
+            </div>
+
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">@Loc["Color"]</span>
+                <ColorComponent Model="TaskService.NewTask" />
+            </div>
+
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text col-4">@Loc["Category"]</span>
+                <CategoryComponent Model="TaskService.NewTask" />
+            </div>
+        </div>
+    }
+
+    @if (TaskService.Tasks is null)
+    {
+        @* <p>Failed to load. Try refreshing.</p> *@
+    }
+    else
+    {
+        foreach (TaskModel task in TaskService.GetTasks())
+        {
+            <div class="my-1">
+                @if (!_showSecondColumn && task.Id == Id && TaskService.NewTask is null)
+                {
+                    <TaskComponent Task="task" CloseSelected="CloseSelected" />
+                }
+                else
+                {
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
+                        <button class="@($"input-group-text flex-grow-1 text-wrap {task.Color} highlightable")" @onclick="() => OpenSelected(task.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
+                        @if (task.PlannedAt is not null)
+                        {
+                            <small class="input-group-text">@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
+                        }
+                        <button class="@($"btn {(task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
+                    </div>
+
+                    if (SettingsService.Settings.ShowItemList)
+                    {
+                        <ItemsComponent Items=task IsReadOnly=true />
+                    }
+                }
+            </div>
+        }
+    }
+
+</div>
+
+@if (_showSecondColumn)
+{
+    <div class="col child-column px-0 px-md-1 my-1">
+        @if (Id is not null && TaskService.NewTask is null)
+        {
+            <TaskComponent Task="TaskService.SelectedTask" CloseSelected="CloseSelected" />
+        }
+        @* else
+        {
+            <p>Stats:</p>
+
+            foreach (CategoryModel category in CategoryService.Categories)
+            {
+
+            }
+        } *@
+    </div>
+}
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    [Parameter]
+    public bool IsEmbedded { get; set; }
+
+    [CascadingParameter(Name = "StateChanged")]
+    public bool StateChanged { get; set; }
+
+    [CascadingParameter(Name = "WindowDimensions")]
+    public Dimensions? WindowDimensions { get; set; }
+
+    bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width >= 1280;
+
+    InputTextImmediate? inputElement;
+
+    bool shouldFocus;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SettingsService.Initialize();
+
+        await TaskService.Initialize();
+    }
+
+    protected override void OnParametersSet()
+    {
+        TaskService.SetSelectedTask(Id);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (shouldFocus && inputElement?.Element is not null)
+        {
+            shouldFocus = false;
+            await inputElement.Element.Value.FocusAsync();
+        }
+    }
+
+    void AddNew()
+    {
+        TaskService.NewTask = new() { Color = "bg-body-secondary" };
+        shouldFocus = true;
+    }
+
+    async Task OpenSelected(long id)
+    {
+        if (IsEmbedded)
+        {
+            Id = id;
+            TaskService.SetSelectedTask(Id);
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+
+            NavigationManager.NavigateTo($"/tasks/{id}");
+        }
+    }
+
+    async Task CloseSelected()
+    {
+        if (IsEmbedded)
+        {
+            Id = null;
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("skipNextScrollTo");
+
+            NavigationManager.NavigateTo("/tasks");
+        }
+    }
+}

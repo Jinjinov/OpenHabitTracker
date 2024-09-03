@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>OpenHT</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <SelfContained>true</SelfContained>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Chromely" Version="5.2.101" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PublishProfileDirectory>$(SolutionDir)OpenHabitTracker.Blazor.Wasm\Properties\PublishProfiles</PublishProfileDirectory>
+    <PublishProfileFileName>OpenHabitTrackerWasmChromely</PublishProfileFileName>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+
+    <MSBuild 
+      Projects="$(SolutionDir)OpenHabitTracker.Blazor.Wasm\OpenHabitTracker.Blazor.Wasm.csproj" 
+      Properties="DeployOnBuild=true;PublishProfile=$(PublishProfileFileName);PublishProfileRootFolder=$(PublishProfileDirectory);PublishUrl=$(TargetDir);PlatformTarget=AnyCPU" />
+
+  </Target>
+
+</Project>
