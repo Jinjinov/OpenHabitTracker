@@ -34,14 +34,22 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 	https://dashboard.snapcraft.io/register-snap/
 	https://dashboard.snapcraft.io/register-snap-feedback/openhabittracker/
 
-	python3 flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 nuget-sources.json OpenHabitTracker/OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
-
 Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
 	https://github.com/flathub/org.freedesktop.Sdk.Extension.dotnet8
 	https://docs.flatpak.org/en/latest/dotnet.html
 	https://flatpak.org/setup/Ubuntu
 	https://github.com/flatpak/flatpak-builder-tools
 	https://github.com/flatpak/flatpak-builder-tools/tree/master/dotnet
+
+	flatpak-builder build-dir --user --install-deps-from=flathub --download-only net.openhabittracker.app.yaml
+
+	python3 flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 nuget-sources.json OpenHabitTracker/OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
+
+	flatpak-builder build-dir --user --force-clean --install --repo=repo net.openhabittracker.app.yaml
+
+	error: 'net.openhabittracker' is not a valid application name: Names must contain at least 2 periods
+
+	flatpak run net.openhabittracker.app
 
 	https://flathub.org/
 	https://github.com/flathub/flathub

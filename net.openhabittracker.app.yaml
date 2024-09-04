@@ -1,4 +1,4 @@
-id: net.openhabittracker
+id: net.openhabittracker.app
 runtime: org.freedesktop.Platform
 runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
@@ -31,6 +31,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/Jinjinov/OpenHabitTracker.git
+        branch: main
       - ./nuget-sources.json
     build-commands:
       - dotnet publish OpenHabitTracker.Blazor.Photino.csproj -c Release --no-self-contained --source ./nuget-sources
