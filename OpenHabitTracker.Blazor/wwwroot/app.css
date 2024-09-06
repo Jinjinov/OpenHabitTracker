@@ -42,6 +42,10 @@ html, body {
     border-radius: 0 !important;
 }
 
+.nav-link.active {
+    background-color: var(--bs-body-bg) !important;
+}
+
 /* SEARCH HIGHLIGHT */
 
 .mark, mark {
