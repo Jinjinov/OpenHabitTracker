@@ -20,15 +20,12 @@ fix AppData GetUserData() - remove these from class AppData:
 
 ---------------------------------------------------------------------------------------------------
 
-Desktop. A few very simple things out the gate...
-
-https://imgur.com/a/kYlVFMq
-
 !!!
 !!! close menu on navigation !!!
 
 -The modules' title bars look and act too similar to fields which confuses the experience to me - I think that's the one simple biggest UI fix I'd make. 
 Make it a solid color and not part of the "add new" logic. 
+https://imgur.com/a/kYlVFMq
 
 !!! - Cancel besides every Save !!!
 !!!
