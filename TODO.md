@@ -25,14 +25,16 @@ Desktop. A few very simple things out the gate...
 https://imgur.com/a/kYlVFMq
 
 !!!
-close menu on navigation
+!!! close menu on navigation !!!
 
 -The modules' title bars look and act too similar to fields which confuses the experience to me - I think that's the one simple biggest UI fix I'd make. 
 Make it a solid color and not part of the "add new" logic. 
 
+!!! - Cancel besides every Save !!!
 !!!
 In the upper right, some modules you have an X to close the module, in some you have a trash can which deletes. 
-I found myself clicking on the trash just wanting to close or cancel. Have clear consistency with the save, close and trash icons.
+I found myself clicking on the trash just wanting to close or cancel. 
+Have clear consistency with the save, close and trash icons.
 
 -I feel like the modules should be collapsible? 
 I don't quite understand what the box that contains the up/straight line/down arrow/no symbol is for (prioritizing and sorting I'm assuming) but I keep clicking on that thinking it will collapse the module.
