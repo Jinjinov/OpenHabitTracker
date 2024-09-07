@@ -21,9 +21,6 @@ fix AppData GetUserData() - remove these from class AppData:
 ---------------------------------------------------------------------------------------------------
 
 !!! 1.
-!!! Task, Habit duration: change from Time to int hours 0-23, int minutes 0-59
-
-!!! 2.
 !!! compact mode / relaxed mode !!! - set vertical margin: 0,1,2,3,4,5
 !!!
 maybe you could put a "expert" or "compact" mode toggle in the settings or on the topbar so that if you do happen to need clarity, 
@@ -33,7 +30,7 @@ or have the vertical room with desktop, your modules can have some room to breat
 Make it a solid color and not part of the "add new" logic. 
 https://imgur.com/a/kYlVFMq
 
-!!! 3.
+!!! 2.
 !!! - Cancel besides every Save !!!
 !!!
 In the upper right, some modules you have an X to close the module, in some you have a trash can which deletes. 

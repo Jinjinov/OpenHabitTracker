@@ -45,8 +45,23 @@
             </div>
 
             <div class="input-group">
-                <label class="input-group-text" for="durationInput">@Loc["Duration"]</label>
-                <InputDate class="form-control" id="durationInput" @bind-Value="TaskService.NewTask.DurationProxy" Type="InputDateType.Time" />
+                <span class="input-group-text">@Loc["Duration"]</span>
+
+                <InputSelect class="form-select" @bind-Value="TaskService.NewTask.DurationHour" TValue="int">
+                    @for (int i = 0; i <= 23; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </InputSelect>
+                <span class="input-group-text">h</span>
+
+                <InputSelect class="form-select" @bind-Value="TaskService.NewTask.DurationMinute" TValue="int">
+                    @for (int i = 0; i <= 59; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </InputSelect>
+                <span class="input-group-text">min</span>
             </div>
 
             <div class="input-group flex-nowrap">
