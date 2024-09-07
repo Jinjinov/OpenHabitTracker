@@ -24,7 +24,7 @@ public partial class MainWindow : Window
 #endif
 
         services.AddServices();
-        services.AddDataAccess("OpenHabitTracker.db");
+        services.AddDataAccess("OpenHT.db");
         services.AddBackup();
         services.AddScoped<IOpenFile, OpenFile>();
         services.AddScoped<JsInterop>();

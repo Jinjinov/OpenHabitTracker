@@ -22,7 +22,7 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
-        string databaseFile = "OpenHabitTracker.db";
+        string databaseFile = "OpenHT.db";
         string databaseFolder = "";
 
         //if (DeviceInfo.Platform == DevicePlatform.iOS)

@@ -23,7 +23,7 @@ public class Program
         builder.Services.AddLogging();
 
         builder.Services.AddServices<OnClickMarkdownExtension>();
-        builder.Services.AddDataAccess("OpenHabitTracker.db");
+        builder.Services.AddDataAccess("OpenHT.db");
         builder.Services.AddBackup();
         builder.Services.AddScoped<IOpenFile, OpenFile>();
         builder.Services.AddScoped<JsInterop>();
