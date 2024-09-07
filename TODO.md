@@ -20,17 +20,6 @@ fix AppData GetUserData() - remove these from class AppData:
 
 ---------------------------------------------------------------------------------------------------
 
--The modules' title bars look and act too similar to fields which confuses the experience to me - I think that's the one simple biggest UI fix I'd make. 
-Make it a solid color and not part of the "add new" logic. 
-https://imgur.com/a/kYlVFMq
-
--I feel like the modules should be collapsible? 
-I don't quite understand what the box that contains the up/straight line/down arrow/no symbol is for (prioritizing and sorting I'm assuming) but I keep clicking on that thinking it will collapse the module.
-
--I'm a big fan of animations, and the simple ones are fairly easy with Blazor and CSS - even small or fast animations can make things feel much more intuitive
-
----------------------------------------------------------------------------------------------------
-
 1. !!!
 
 Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
@@ -307,3 +296,14 @@ virtualized container
 
 method trace logging - benchmark method performance
 https://learn.microsoft.com/en-us/aspnet/core/blazor/performance
+
+---------------------------------------------------------------------------------------------------
+
+- The modules' title bars look and act too similar to fields which confuses the experience to me - I think that's the one simple biggest UI fix I'd make. 
+Make it a solid color and not part of the "add new" logic. 
+https://imgur.com/a/kYlVFMq
+
+- I feel like the modules should be collapsible? 
+I don't quite understand what the box that contains the up/straight line/down arrow/no symbol is for (prioritizing and sorting I'm assuming) but I keep clicking on that thinking it will collapse the module.
+
+- I'm a big fan of animations, and the simple ones are fairly easy with Blazor and CSS - even small or fast animations can make things feel much more intuitive
