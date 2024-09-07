@@ -24,12 +24,6 @@ fix AppData GetUserData() - remove these from class AppData:
 - 3 catergories
 - 3 notes, 3 tasks, 3 habits
 
-!!! 1.
-!!! compact mode / relaxed mode !!! - set vertical margin: 0,1,2,3,4,5
-!!!
-maybe you could put a "expert" or "compact" mode toggle in the settings or on the topbar so that if you do happen to need clarity, 
-or have the vertical room with desktop, your modules can have some room to breath.
-
 -The modules' title bars look and act too similar to fields which confuses the experience to me - I think that's the one simple biggest UI fix I'd make. 
 Make it a solid color and not part of the "add new" logic. 
 https://imgur.com/a/kYlVFMq

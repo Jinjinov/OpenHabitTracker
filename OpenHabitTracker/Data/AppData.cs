@@ -575,52 +575,146 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             [
                 new()
                 {
-                    Title = "Category",
+                    Title = "Work",
                     Notes =
                     [
                         new()
                         {
-                            Title = "Note",
-                            Priority = Priority.Low,
-                            Content = "Note 1 line 1\nLine 2",
-                            ContentMarkdown = GetMarkdown("Note 1 line 1\nLine 2"),
-                            CreatedAt = now,
-                            UpdatedAt = now
-                        },
-                        new()
-                        {
-                            Title = "Note 2",
-                            Priority = Priority.Low,
-                            Content = markdown,
-                            ContentMarkdown = GetMarkdown(markdown),
+                            Title = "Meeting Notes",
+                            Priority = Priority.Medium,
+                            Content = "Discuss project milestones\nAssign tasks to team members\nReview budget allocation",
+                            ContentMarkdown = GetMarkdown("Discuss project milestones\nAssign tasks to team members\nReview budget allocation"),
                             CreatedAt = now,
                             UpdatedAt = now
                         }
                     ],
                     Tasks =
                     [
-                        new() 
-                        { 
-                            Title = "Task",
-                            Priority = Priority.High,
-                            Items =
-                            [
-                                new() { Title = "Task item 1" },
-                                new() { Title = "Task item 2" }
-                            ],
-                            PlannedAt = now.AddDays(1),
-                            Duration = new TimeOnly(1,30),
-                            CreatedAt = now,
-                            UpdatedAt = now
-                        },
                         new()
                         {
-                            Title = "Task 2",
+                            Title = "Prepare Project Report",
                             Priority = Priority.High,
                             Items =
                             [
-                                new() { Title = "Task item 1" },
-                                new() { Title = "Task item 2" }
+                                new() { Title = "Collect data from team" },
+                                new() { Title = "Draft the report" },
+                                new() { Title = "Review with manager" }
+                            ],
+                            PlannedAt = now.AddDays(1),
+                            Duration = new TimeOnly(2,0),
+                            CreatedAt = now,
+                            UpdatedAt = now
+                        }
+                    ],
+                    Habits =
+                    [
+                        new()
+                        {
+                            Title = "Daily Code Review",
+                            Priority = Priority.High,
+                            Items =
+                            [
+                                new() { Title = "Review pull requests" },
+                                new() { Title = "Comment on code quality" }
+                            ],
+                            RepeatCount = 1,
+                            RepeatInterval = 1,
+                            RepeatPeriod = Period.Day,
+                            Duration = new TimeOnly(0,45),
+                            TimesDone =
+                            [
+                                new() { StartedAt = now.AddDays(-1), CompletedAt = now.AddDays(-1) }
+                            ],
+                            LastTimeDoneAt = now,
+                            CreatedAt = now,
+                            UpdatedAt = now
+                        }
+                    ]
+                },
+                new()
+                {
+                    Title = "Personal Development",
+                    Notes =
+                    [
+                        new()
+                        {
+                            Title = "Book Summary: Atomic Habits",
+                            Priority = Priority.Low,
+                            Content = "Key concepts: Habit stacking, 1% improvement, Cue-Routine-Reward loop",
+                            ContentMarkdown = GetMarkdown("Key concepts: Habit stacking, 1% improvement, Cue-Routine-Reward loop"),
+                            CreatedAt = now,
+                            UpdatedAt = now
+                        }
+                    ],
+                    Tasks =
+                    [
+                        new()
+                        {
+                            Title = "Complete Online Course",
+                            Priority = Priority.Medium,
+                            Items =
+                            [
+                                new() { Title = "Watch module 1" },
+                                new() { Title = "Complete module 1 quiz" }
+                            ],
+                            PlannedAt = now.AddDays(3),
+                            Duration = new TimeOnly(1,0),
+                            CreatedAt = now,
+                            UpdatedAt = now
+                        }
+                    ],
+                    Habits =
+                    [
+                        new()
+                        {
+                            Title = "Morning Meditation",
+                            Priority = Priority.Medium,
+                            Items =
+                            [
+                                new() { Title = "Find a quiet place" },
+                                new() { Title = "Focus on breathing" }
+                            ],
+                            RepeatCount = 1,
+                            RepeatInterval = 1,
+                            RepeatPeriod = Period.Day,
+                            Duration = new TimeOnly(0,20),
+                            TimesDone =
+                            [
+                                new() { StartedAt = now.AddDays(-2), CompletedAt = now.AddDays(-2) },
+                                new() { StartedAt = now.AddMinutes(-20), CompletedAt = now }
+                            ],
+                            LastTimeDoneAt = now,
+                            CreatedAt = now,
+                            UpdatedAt = now
+                        }
+                    ]
+                },
+                new()
+                {
+                    Title = "Health & Fitness",
+                    Notes =
+                    [
+                        new()
+                        {
+                            Title = "Diet Plan",
+                            Priority = Priority.Low,
+                            Content = "Breakfast: Oatmeal with fruits\nLunch: Grilled chicken with salad\nDinner: Steamed veggies with quinoa",
+                            ContentMarkdown = GetMarkdown("Breakfast: Oatmeal with fruits\nLunch: Grilled chicken with salad\nDinner: Steamed veggies with quinoa"),
+                            CreatedAt = now,
+                            UpdatedAt = now
+                        }
+                    ],
+                    Tasks =
+                    [
+                        new()
+                        {
+                            Title = "Grocery Shopping",
+                            Priority = Priority.Low,
+                            Items =
+                            [
+                                new() { Title = "Buy fruits and vegetables" },
+                                new() { Title = "Get whole grains" },
+                                new() { Title = "Restock on lean proteins" }
                             ],
                             PlannedAt = now.AddDays(2),
                             Duration = new TimeOnly(1,30),
@@ -630,45 +724,24 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     ],
                     Habits =
                     [
-                        new() 
-                        { 
-                            Title = "Habit",
-                            Priority = Priority.Medium,
+                        new()
+                        {
+                            Title = "Daily Exercise Routine",
+                            Priority = Priority.High,
                             Items =
                             [
-                                new() { Title = "Habit item 1" },
-                                new() { Title = "Habit item 2" }
+                                new() { Title = "Warm-up" },
+                                new() { Title = "Strength training" },
+                                new() { Title = "Cool down" }
                             ],
                             RepeatCount = 1,
-                            RepeatInterval = 2,
+                            RepeatInterval = 1,
                             RepeatPeriod = Period.Day,
-                            Duration = new TimeOnly(1,30),
+                            Duration = new TimeOnly(1,0),
                             TimesDone =
                             [
                                 new() { StartedAt = now.AddDays(-1), CompletedAt = now.AddDays(-1) },
-                                new() { StartedAt = now.AddHours(-2), CompletedAt = now }
-                            ],
-                            LastTimeDoneAt = now,
-                            CreatedAt = now,
-                            UpdatedAt = now
-                        },
-                        new()
-                        {
-                            Title = "Habit 2",
-                            Priority = Priority.Medium,
-                            Items =
-                            [
-                                new() { Title = "Habit item 1" },
-                                new() { Title = "Habit item 2" }
-                            ],
-                            RepeatCount = 2,
-                            RepeatInterval = 1,
-                            RepeatPeriod = Period.Day,
-                            Duration = new TimeOnly(1,30),
-                            TimesDone =
-                            [
-                                new() { StartedAt = now.AddDays(-3), CompletedAt = now.AddDays(-3) },
-                                new() { StartedAt = now.AddHours(-4), CompletedAt = now }
+                                new() { StartedAt = now.AddHours(-1), CompletedAt = now }
                             ],
                             LastTimeDoneAt = now,
                             CreatedAt = now,
