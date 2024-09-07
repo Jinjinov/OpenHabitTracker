@@ -90,7 +90,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     SelectedRatioMin = settingsEntity.SelectedRatioMin,
                     SelectedCategoryId = settingsEntity.SelectedCategoryId,
                     SortBy = settingsEntity.SortBy,
-                    ShowPriority = settingsEntity.ShowPriority
+                    ShowPriority = settingsEntity.ShowPriority,
+                    VerticalMargin = settingsEntity.VerticalMargin
                 };
             }
             else
@@ -112,6 +113,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     ShowOnlyOverSelectedRatioMin = false,
                     SelectedRatioMin = 0,
                     SelectedCategoryId = 0,
+                    VerticalMargin = 1,
                     SortBy = new()
                     {
                         { ContentType.Note, Sort.Priority },
@@ -552,6 +554,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 ShowOnlyOverSelectedRatioMin = false,
                 SelectedRatioMin = 0,
                 SelectedCategoryId = 0,
+                VerticalMargin = 1,
                 SortBy = new()
                 {
                     { ContentType.Note, Sort.Priority },

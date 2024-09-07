@@ -20,6 +20,10 @@ fix AppData GetUserData() - remove these from class AppData:
 
 ---------------------------------------------------------------------------------------------------
 
+- new, better examples: what is new in version 1.0.5
+- 3 catergories
+- 3 notes, 3 tasks, 3 habits
+
 !!! 1.
 !!! compact mode / relaxed mode !!! - set vertical margin: 0,1,2,3,4,5
 !!!
@@ -148,6 +152,8 @@ replace all `@inject AppData AppData` with appropriate services
 ---------------------------------------------------------------------------------------------------
 
 !!! Auto sync to external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox)
+
+---------------------------------------------------------------------------------------------------
 
 setup Authentication
 	<!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->

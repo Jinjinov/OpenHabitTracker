@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace OpenHabitTracker.EntityFrameworkCore;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+public class ApplicationDbContext : DbContext
 {
     public DbSet<ContentEntity> Contents { get; set; }
     public DbSet<HabitEntity> Habits { get; set; }
@@ -19,6 +19,22 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<PriorityEntity> Priorities { get; set; }
     public DbSet<SettingsEntity> Settings { get; set; }
 
+    // Constructor with no argument is required and it is used when adding/removing migrations from class library
+    public ApplicationDbContext()
+    {
+    }
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+        //Database.EnsureCreated();
+        Database.Migrate();
+    }
+
+    // It is required to override this method when adding/removing migrations from class library
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+        => options.UseSqlite();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ContentEntity>().HasIndex(x => x.CategoryId);
@@ -27,19 +43,33 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         modelBuilder.Entity<ItemEntity>().HasIndex(x => x.ParentId);
 
+        var dictionaryComparer = new ValueComparer<Dictionary<ContentType, Sort>>(
+            (c1, c2) => c1.SequenceEqual(c2),
+            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+            c => c.ToDictionary(entry => entry.Key, entry => entry.Value)
+        );
+
         modelBuilder.Entity<SettingsEntity>()
             .Property(e => e.SortBy)
             .HasColumnName("SortBy")
             .HasConversion(
                 dictionary => JsonSerializer.Serialize(dictionary, (JsonSerializerOptions?)null),
-                json => JsonSerializer.Deserialize<Dictionary<ContentType, Sort>>(json, (JsonSerializerOptions?)null)!);
+                json => JsonSerializer.Deserialize<Dictionary<ContentType, Sort>>(json, (JsonSerializerOptions?)null)!,
+                dictionaryComparer);
+
+        var boolDictionaryComparer = new ValueComparer<Dictionary<Priority, bool>>(
+            (c1, c2) => c1.SequenceEqual(c2),
+            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+            c => c.ToDictionary(entry => entry.Key, entry => entry.Value)
+        );
 
         modelBuilder.Entity<SettingsEntity>()
             .Property(e => e.ShowPriority)
             .HasColumnName("ShowPriority")
             .HasConversion(
                 dictionary => JsonSerializer.Serialize(dictionary, (JsonSerializerOptions?)null),
-                json => JsonSerializer.Deserialize<Dictionary<Priority, bool>>(json, (JsonSerializerOptions?)null)!);
+                json => JsonSerializer.Deserialize<Dictionary<Priority, bool>>(json, (JsonSerializerOptions?)null)!,
+                boolDictionaryComparer);
 
         base.OnModelCreating(modelBuilder);
     }

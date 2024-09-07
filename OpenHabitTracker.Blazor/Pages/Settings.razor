@@ -124,6 +124,16 @@
             <label for="DisplayNoteContentAsMarkdown" class="form-check-label stretched-link d-inline">@Loc["Display note content as markdown"]</label>
         </div>
 
+        <div class="list-group-item">
+            <small class="">@Loc["Vertical space"]:</small>
+            <InputSelect class="form-select" Value="_settings.VerticalMargin" ValueExpression="() => _settings.VerticalMargin" TValue="int" ValueChanged="SaveVerticalMargin">
+                @for (int i = 0; i <= 5; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </InputSelect>
+        </div>
+
     </div>
 </div>
 
@@ -238,6 +248,13 @@
     async Task SaveDisplayNoteContentAsMarkdown(bool val)
     {
         _settings.DisplayNoteContentAsMarkdown = val;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveVerticalMargin(int verticalMargin)
+    {
+        _settings.VerticalMargin = verticalMargin;
 
         await UpdateAndRefresh();
     }

@@ -34,6 +34,8 @@ public class SettingsEntity
 
     public long SelectedCategoryId { get; set; }
 
+    public int VerticalMargin { get; set; } = 1;
+
     public Dictionary<ContentType, Sort> SortBy { get; set; } = new()
     {
         { ContentType.Note, Sort.Priority },

@@ -94,7 +94,7 @@
     {
         foreach (HabitModel habit in HabitService.GetHabits())
         {
-            <div class="my-1 d-flex">
+            <div class="@($"my-{AppData.Settings.VerticalMargin} d-flex")">
                 @if (!_showSecondColumn && habit.Id == Id && HabitService.NewHabit is null)
                 {
                     <HabitComponent Habit="habit" CloseSelected="CloseSelected" />

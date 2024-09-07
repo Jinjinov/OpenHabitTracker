@@ -11,12 +11,12 @@ public class DataAccess : IDataAccess
     public DataAccess(ApplicationDbContext dataContext)
     {
         _dataContext = dataContext;
-        _dataContext.Database.EnsureCreated();
+        _dataContext.Database.Migrate();
     }
 
     public async Task Initialize()
     {
-        await _dataContext.Database.EnsureCreatedAsync();
+        await _dataContext.Database.MigrateAsync();
     }
 
     public async Task AddHabit(HabitEntity habit)

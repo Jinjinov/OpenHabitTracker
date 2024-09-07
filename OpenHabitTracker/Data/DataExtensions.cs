@@ -117,6 +117,7 @@ public static class DataExtensions
         entity.SelectedCategoryId = model.SelectedCategoryId;
         entity.SortBy = model.SortBy;
         entity.ShowPriority = model.ShowPriority;
+        entity.VerticalMargin = model.VerticalMargin;
     }
 
     public static TaskEntity ToEntity(this TaskModel model)
