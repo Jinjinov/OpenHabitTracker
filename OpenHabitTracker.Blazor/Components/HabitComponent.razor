@@ -45,8 +45,23 @@
     </div>
 
     <div class="input-group">
-        <label class="input-group-text" for="durationInput">@Loc["Duration"]</label>
-        <InputDate class="form-control" id="durationInput" Value="Habit.DurationProxy" ValueExpression="() => Habit.DurationProxy" ValueChanged="(TimeOnly duration) => SaveDuration(Habit, duration)" Type="InputDateType.Time" />
+        <span class="input-group-text">@Loc["Duration"]</span>
+
+        <InputSelect class="form-select" Value="Habit.DurationHour" ValueExpression="() => Habit.DurationHour" TValue="int" ValueChanged="(int hour) => SaveDuration(Habit, hour, Habit.DurationMinute)">
+            @for (int i = 0; i <= 23; i++)
+            {
+                <option value="@i">@i.ToString("D2")</option>
+            }
+        </InputSelect>
+        <span class="input-group-text">h</span>
+
+        <InputSelect class="form-select" Value="Habit.DurationMinute" ValueExpression="() => Habit.DurationMinute" TValue="int" ValueChanged="(int minute) => SaveDuration(Habit, Habit.DurationHour, minute)">
+            @for (int i = 0; i <= 59; i++)
+            {
+                <option value="@i">@i.ToString("D2")</option>
+            }
+        </InputSelect>
+        <span class="input-group-text">min</span>
     </div>
 
     <div class="input-group flex-nowrap">
@@ -238,9 +253,9 @@
         await HabitService.UpdateHabit();
     }
 
-    async Task SaveDuration(HabitModel habit, TimeOnly duration)
+    async Task SaveDuration(HabitModel habit, int hour, int minute)
     {
-        habit.DurationProxy = duration;
+        habit.DurationProxy = new TimeOnly(hour, minute);
 
         await HabitService.UpdateHabit();
     }

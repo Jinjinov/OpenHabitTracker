@@ -16,5 +16,8 @@ public class TaskModel : ItemsModel
         set => Duration = value == TimeOnly.MinValue ? null : value;
     }
 
+    internal int DurationHour => DurationProxy.Hour;
+    internal int DurationMinute => DurationProxy.Minute;
+
     internal TimeSpan? TimeSpent => CompletedAt - StartedAt;
 }

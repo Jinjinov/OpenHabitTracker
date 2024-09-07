@@ -36,6 +36,9 @@ public class HabitModel : ItemsModel
         set => Duration = value == TimeOnly.MinValue ? null : value;
     }
 
+    internal int DurationHour => DurationProxy.Hour;
+    internal int DurationMinute => DurationProxy.Minute;
+
     internal Dictionary<DateTime, List<TimeModel>>? TimesDoneByDay { get; set; }
 
     public void RefreshTimesDoneByDay()
