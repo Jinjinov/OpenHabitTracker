@@ -24,8 +24,8 @@ fix AppData GetUserData() - remove these from class AppData:
 Make it a solid color and not part of the "add new" logic. 
 https://imgur.com/a/kYlVFMq
 
-!!! 2.
-!!! - Cancel besides every Save !!!
+!!! 1.
+!!! - Cancel besides every Save - 6x = 3x new, 3x selected
 !!!
 In the upper right, some modules you have an X to close the module, in some you have a trash can which deletes. 
 I found myself clicking on the trash just wanting to close or cancel. 

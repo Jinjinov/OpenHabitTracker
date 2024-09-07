@@ -113,7 +113,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     ShowOnlyOverSelectedRatioMin = false,
                     SelectedRatioMin = 0,
                     SelectedCategoryId = 0,
-                    VerticalMargin = 1,
+                    VerticalMargin = 2,
                     SortBy = new()
                     {
                         { ContentType.Note, Sort.Priority },
@@ -567,7 +567,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 ShowOnlyOverSelectedRatioMin = false,
                 SelectedRatioMin = 0,
                 SelectedCategoryId = 0,
-                VerticalMargin = 1,
+                VerticalMargin = 2,
                 SortBy = new()
                 {
                     { ContentType.Note, Sort.Priority },
