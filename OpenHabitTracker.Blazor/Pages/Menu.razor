@@ -9,15 +9,14 @@
     <div class="my-1">
 
         <div class="list-group">
-            @* TODO:: close on navigation if WindowDimensions?.Width < 768 *@
             @if (WindowDimensions?.Width >= 1280 || WindowDimensions?.Width < 768)
             {
-            <NavLink class="list-group-item list-group-item-action" href="/" Match=NavLinkMatch.All>@Loc["Notes, Tasks, Habits"]</NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="/" @onclick="CloseMenu" Match=NavLinkMatch.All>@Loc["Notes, Tasks, Habits"]</NavLink>
             }
-            <NavLink class="list-group-item list-group-item-action" href="notes">@Loc["Notes"]</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="tasks">@Loc["Tasks"]</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="habits">@Loc["Habits"]</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="about">@Loc["About"]</NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="notes" @onclick="CloseMenu">@Loc["Notes"]</NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="tasks" @onclick="CloseMenu">@Loc["Tasks"]</NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="habits" @onclick="CloseMenu">@Loc["Habits"]</NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="about" @onclick="CloseMenu">@Loc["About"]</NavLink>
 
             <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Trash>">@Loc["Trash"]</button>
             <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Search>">@Loc["Search, Filter, Sort"]</button>
@@ -46,6 +45,13 @@
     async Task SelectComponent<T>()
     {
         DynamicComponentType = typeof(T);
+
+        await DynamicComponentTypeChanged.InvokeAsync(DynamicComponentType);
+    }
+
+    async Task CloseMenu()
+    {
+        DynamicComponentType = null;
 
         await DynamicComponentTypeChanged.InvokeAsync(DynamicComponentType);
     }
