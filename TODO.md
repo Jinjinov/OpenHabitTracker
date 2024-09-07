@@ -20,13 +20,23 @@ fix AppData GetUserData() - remove these from class AppData:
 
 ---------------------------------------------------------------------------------------------------
 
-!!!
+!!! 1.
+!!! Task, Habit duration: change from Time to int hours 0-23, int minutes 0-59
+
+!!! 2.
 !!! close menu on navigation !!!
+
+!!! 3.
+!!! compact mode / relaxed mode !!! - set vertical margin: 0,1,2,3,4,5
+!!!
+maybe you could put a "expert" or "compact" mode toggle in the settings or on the topbar so that if you do happen to need clarity, 
+or have the vertical room with desktop, your modules can have some room to breath.
 
 -The modules' title bars look and act too similar to fields which confuses the experience to me - I think that's the one simple biggest UI fix I'd make. 
 Make it a solid color and not part of the "add new" logic. 
 https://imgur.com/a/kYlVFMq
 
+!!! 4.
 !!! - Cancel besides every Save !!!
 !!!
 In the upper right, some modules you have an X to close the module, in some you have a trash can which deletes. 
@@ -142,6 +152,8 @@ AndroidLinkMode=None is the same as setting PublishTrimmed=false
 replace all `@inject AppData AppData` with appropriate services
 
 ---------------------------------------------------------------------------------------------------
+
+!!! Auto sync to external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox)
 
 setup Authentication
 	<!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
