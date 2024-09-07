@@ -51,8 +51,11 @@
 
     async Task CloseMenu()
     {
-        DynamicComponentType = null;
+        if (WindowDimensions?.Width < 768)
+        {
+            DynamicComponentType = null;
 
-        await DynamicComponentTypeChanged.InvokeAsync(DynamicComponentType);
+            await DynamicComponentTypeChanged.InvokeAsync(DynamicComponentType);
+        }
     }
 }

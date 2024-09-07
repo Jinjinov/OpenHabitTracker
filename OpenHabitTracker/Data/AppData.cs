@@ -517,6 +517,19 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
     {
         DateTime now = DateTime.Now;
 
+        string releaseNotes =
+            """
+            What is new in 1.0.5:
+            - new, better examples
+            - clicking on Menu closes it if it is open
+            - titlebar Notes, Tasks, Habits have different background when selected
+            - selecting Notes, Tasks, Habits form the menu closes the menu on phones
+            - changed Duration control from time picker to dropdown
+            - added Vertical Space setting for the space between Notes, Tasks, Habits
+
+            *Thank you all for your valuable feedback!*
+            """;
+
         string markdown =
             """
             # Markdown
@@ -573,6 +586,31 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             },
             Categories =
             [
+                new()
+                {
+                    Title = "Examples",
+                    Notes =
+                    [
+                        new()
+                        {
+                            Title = "Release notes",
+                            Priority = Priority.Medium,
+                            Content = releaseNotes,
+                            ContentMarkdown = GetMarkdown(releaseNotes),
+                            CreatedAt = now,
+                            UpdatedAt = now
+                        },
+                        new()
+                        {
+                            Title = "Markdown example",
+                            Priority = Priority.Medium,
+                            Content = markdown,
+                            ContentMarkdown = GetMarkdown(markdown),
+                            CreatedAt = now,
+                            UpdatedAt = now
+                        }
+                    ]
+                },
                 new()
                 {
                     Title = "Work",

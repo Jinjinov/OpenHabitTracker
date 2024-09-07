@@ -20,10 +20,6 @@ fix AppData GetUserData() - remove these from class AppData:
 
 ---------------------------------------------------------------------------------------------------
 
-- new, better examples: what is new in version 1.0.5
-- 3 catergories
-- 3 notes, 3 tasks, 3 habits
-
 -The modules' title bars look and act too similar to fields which confuses the experience to me - I think that's the one simple biggest UI fix I'd make. 
 Make it a solid color and not part of the "add new" logic. 
 https://imgur.com/a/kYlVFMq
