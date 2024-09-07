@@ -24,13 +24,6 @@ fix AppData GetUserData() - remove these from class AppData:
 Make it a solid color and not part of the "add new" logic. 
 https://imgur.com/a/kYlVFMq
 
-!!! 1.
-!!! - Cancel besides every Save - 6x = 3x new, 3x selected
-!!!
-In the upper right, some modules you have an X to close the module, in some you have a trash can which deletes. 
-I found myself clicking on the trash just wanting to close or cancel. 
-Have clear consistency with the save, close and trash icons.
-
 -I feel like the modules should be collapsible? 
 I don't quite understand what the box that contains the up/straight line/down arrow/no symbol is for (prioritizing and sorting I'm assuming) but I keep clicking on that thinking it will collapse the module.
 

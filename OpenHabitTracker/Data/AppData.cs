@@ -522,10 +522,11 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             What is new in 1.0.5:
             - new, better examples
             - clicking on Menu closes it if it is open
-            - titlebar Notes, Tasks, Habits have different background when selected
+            - title bar Notes, Tasks, Habits have different background when selected
             - selecting Notes, Tasks, Habits form the menu closes the menu on phones
             - changed Duration control from time picker to dropdown
             - added Vertical Space setting for the space between Notes, Tasks, Habits
+            - close button X in now always in the top right corner
 
             *Thank you all for your valuable feedback!*
             """;

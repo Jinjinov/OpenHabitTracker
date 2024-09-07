@@ -35,7 +35,7 @@
                 <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="NoteService.NewNote.Title" placeholder="@Loc["Add new note"]" />
 
                 <button class="btn btn-outline-primary" @onclick="NoteService.AddNote" disabled="@string.IsNullOrWhiteSpace(NoteService.NewNote.Title)"><i class="bi bi-floppy"></i></button>
-                <button class="btn btn-outline-primary" @onclick="() => NoteService.NewNote = null"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => NoteService.NewNote = null"><i class="bi bi-x-square"></i></button>
             </div>
 
             <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.NewNote.Content" placeholder="@Loc["Add note text"]" />

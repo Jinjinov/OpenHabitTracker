@@ -36,7 +36,7 @@
                 <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.NewHabit.Title" placeholder="@Loc["Add new habit"]" />
 
                 <button class="btn btn-outline-primary" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.NewHabit.Title)"><i class="bi bi-floppy"></i></button>
-                <button class="btn btn-outline-primary" @onclick="() => HabitService.NewHabit = null"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => HabitService.NewHabit = null"><i class="bi bi-x-square"></i></button>
             </div>
 
             <div class="input-group">

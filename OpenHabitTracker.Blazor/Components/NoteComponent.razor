@@ -10,8 +10,8 @@
 <div class="input-group flex-nowrap">
     <PriorityComponent Model="Note" />
     <InputText class="form-control" Value="@Note.Title" ValueExpression="() => Note.Title" ValueChanged="(string title) => SaveTitle(Note, title)" />
-    <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()"><i class="bi bi-floppy"></i></button>
     <button class="btn btn-outline-primary" @onclick="async () => { await NoteService.DeleteNote(Note); await CloseSelected.InvokeAsync(); await ContentDeleted.InvokeAsync(); }"><i class="bi bi-trash"></i></button>
+    <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()"><i class="bi bi-x-square"></i></button>
 </div>
 
 <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" Value="@Note.Content" ValueExpression="() => Note.Content" ValueChanged="(string content) => SaveContent(Note, content)" rows="@(Note.Content.Count(c => c == '\n') + 1)" placeholder="Add note text" />
