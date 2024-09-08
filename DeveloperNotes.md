@@ -28,6 +28,13 @@ You must upload a screenshot for 5.5-inch iPhone displays.
 
 ---------------------------------------------------------------------------------------------------
 
+Default project: OpenHabitTracker.EntityFrameworkCore
+Add-Migration Initial -StartupProject OpenHabitTracker.Blazor.WinForms
+
+dotnet ef migrations add Initial --startup-project OpenHabitTracker.Blazor.WinForms
+
+---------------------------------------------------------------------------------------------------
+
 dotnet publish Ididit.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:SelfContained=true /p:GenerateAppxPackageOnBuild=true
 
 dotnet publish Ididit.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:SelfContained=true /p:PublishAppxPackage=true
