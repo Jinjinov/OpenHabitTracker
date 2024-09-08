@@ -31,7 +31,7 @@
     <key>CFBundleIdentifier</key>
     <string>net.openhabittracker</string>
     <key>CFBundleDisplayName</key>
-    <string>OpenHabitTracker</string>
+    <string>OpenHT</string>
     <key>CFBundleName</key>
     <string>OpenHabitTracker</string>
     <key>ITSAppUsesNonExemptEncryption</key>
