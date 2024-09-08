@@ -20,8 +20,6 @@ fix AppData GetUserData() - remove these from class AppData:
 
 ---------------------------------------------------------------------------------------------------
 
-1. !!!
-
 Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
 	https://snapcraft.io/docs/dotnet-apps
 	https://snapcraft.io/docs/dotnet-plugin
@@ -53,15 +51,6 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
 	https://flathub.org/
 	https://github.com/flathub/flathub
-
----------------------------------------------------------------------------------------------------
-
-2. !!!
-
-edit times done
-	habit:
-	- list all for the selected day
-	- edit time only 
 
 ---------------------------------------------------------------------------------------------------
 
