@@ -292,6 +292,25 @@ public class HabitService(AppData appData, IDataAccess dataAccess, SearchFilterS
         await SetLastTimeDone(habit, last?.CompletedAt);
     }
 
+    public async Task UpdateTimeDone(HabitModel habit, TimeModel time)
+    {
+        if (habit.TimesDone is null || habit.TimesDoneByDay is null)
+            return;
+
+        habit.RefreshTimesDoneByDay();
+
+        if (await _dataAccess.GetTime(time.Id) is TimeEntity timeEntity)
+        {
+            timeEntity.StartedAt = time.StartedAt;
+            timeEntity.CompletedAt = time.CompletedAt;
+            await _dataAccess.UpdateTime(timeEntity);
+        }
+
+        TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault();
+
+        await SetLastTimeDone(habit, last?.CompletedAt);
+    }
+
     public async Task DeleteHabit(HabitModel habit)
     {
         if (_appData.Habits is null)

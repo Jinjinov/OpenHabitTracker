@@ -82,9 +82,9 @@ else
             {
                 <div class="input-group">
                     <span class="input-group-text">@Loc["From"]</span>
-                    <InputDate class="form-control" Type="InputDateType.Time" Value="time.StartedAt" ValueExpression="() => time.StartedAt"  />
+                    <InputDate class="form-control" Type="InputDateType.Time" Value="time.StartedAt" ValueExpression="() => time.StartedAt" ValueChanged="(DateTime? startedAt) => UpdateStartedAt(time, startedAt)" />
                     <span class="input-group-text">@Loc["to"]</span>
-                    <InputDate class="form-control" Type="InputDateType.Time" Value="time.CompletedAt" ValueExpression="() => time.CompletedAt"  />
+                    <InputDate class="form-control" Type="InputDateType.Time" Value="time.CompletedAt" ValueExpression="() => time.CompletedAt" ValueChanged="(DateTime? completedAt) => UpdateCompletedAt(time, completedAt)" />
                     <button class="btn btn-outline-primary" @onclick="() => RemoveTimeDone(time)"><i class="bi bi-trash"></i></button>
                 </div>
             }
@@ -232,6 +232,27 @@ else
     async Task RemoveTimeDone(TimeModel time)
     {
         await HabitService.RemoveTimeDone(Habit!, time);
+
+        await HabitChanged.InvokeAsync(Habit);
+    }
+
+    async Task UpdateStartedAt(TimeModel time, DateTime? startedAt)
+    {
+        if (startedAt is null)
+            return;
+
+        time.StartedAt = startedAt.Value;
+
+        await HabitService.UpdateTimeDone(Habit!, time);
+
+        await HabitChanged.InvokeAsync(Habit);
+    }
+
+    async Task UpdateCompletedAt(TimeModel time, DateTime? completedAt)
+    {
+        time.CompletedAt = completedAt;
+
+        await HabitService.UpdateTimeDone(Habit!, time);
 
         await HabitChanged.InvokeAsync(Habit);
     }
