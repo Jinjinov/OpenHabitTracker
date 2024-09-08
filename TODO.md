@@ -14,6 +14,8 @@ add `@using Microsoft.Extensions.Logging` @inject ILogger Logger
 
 find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-left: env(safe-area-inset-left) !important;`
 
+---------------------------------------------------------------------------------------------------
+
 fix AppData GetUserData() which calls InitializeContent()
 search for // TODO:: remove temp fix
 InitializeItems and InitializeTimes have null checks - both load data directly from DB with _dataAccess.GetTimes() and _dataAccess.GetItems()
@@ -22,6 +24,13 @@ InitializeItems and InitializeTimes have null checks - both load data directly f
 remove these from class AppData:
 	public Dictionary<long, TimeModel>? Times { get; set; }
 	public Dictionary<long, ItemModel>? Items { get; set; }
+or make sure that other services update them
+this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
+Ididit did not have this proble, `Repository` was the only class with `IDatabaseAccess`
+
+---------------------------------------------------------------------------------------------------
+
+organize `builder.Services.AddScoped` into methods
 
 ---------------------------------------------------------------------------------------------------
 
