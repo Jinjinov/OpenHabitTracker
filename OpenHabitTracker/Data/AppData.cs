@@ -599,7 +599,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             Content = releaseNotes,
                             ContentMarkdown = GetMarkdown(releaseNotes),
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         },
                         new()
                         {
@@ -608,7 +609,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             Content = markdown,
                             ContentMarkdown = GetMarkdown(markdown),
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         }
                     ]
                 },
@@ -624,7 +626,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             Content = "Discuss project milestones\nAssign tasks to team members\nReview budget allocation",
                             ContentMarkdown = GetMarkdown("Discuss project milestones\nAssign tasks to team members\nReview budget allocation"),
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         }
                     ],
                     Tasks =
@@ -642,7 +645,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             PlannedAt = now.AddDays(1),
                             Duration = new TimeOnly(2,0),
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         }
                     ],
                     Habits =
@@ -664,9 +668,10 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             [
                                 new() { StartedAt = now.AddDays(-1), CompletedAt = now.AddDays(-1) }
                             ],
-                            LastTimeDoneAt = now,
+                            LastTimeDoneAt = now.AddDays(-1),
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         }
                     ]
                 },
@@ -682,7 +687,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             Content = "Key concepts: Habit stacking, 1% improvement, Cue-Routine-Reward loop",
                             ContentMarkdown = GetMarkdown("Key concepts: Habit stacking, 1% improvement, Cue-Routine-Reward loop"),
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         }
                     ],
                     Tasks =
@@ -699,7 +705,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             PlannedAt = now.AddDays(3),
                             Duration = new TimeOnly(1,0),
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         }
                     ],
                     Habits =
@@ -724,7 +731,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             ],
                             LastTimeDoneAt = now,
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         }
                     ]
                 },
@@ -740,7 +748,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             Content = "Breakfast: Oatmeal with fruits\nLunch: Grilled chicken with salad\nDinner: Steamed veggies with quinoa",
                             ContentMarkdown = GetMarkdown("Breakfast: Oatmeal with fruits\nLunch: Grilled chicken with salad\nDinner: Steamed veggies with quinoa"),
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         }
                     ],
                     Tasks =
@@ -758,7 +767,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             PlannedAt = now.AddDays(2),
                             Duration = new TimeOnly(1,30),
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         }
                     ],
                     Habits =
@@ -784,7 +794,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                             ],
                             LastTimeDoneAt = now,
                             CreatedAt = now,
-                            UpdatedAt = now
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
                         }
                     ]
                 }

@@ -125,6 +125,50 @@ replace all `@inject AppData AppData` with appropriate services
 
 !!! Auto sync to external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox)
 
+save and load without file dialog
+sync: - save last loaded filename to DB, load if there is a new file / more recent
+
+AndroidManifest.xml
+
+MANAGE_EXTERNAL_STORAGE
+
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using Android.Content.PM;
+using Android.OS;
+using Xamarin.Essentials;
+using Android;
+using Android.Content.PM;
+using Android.Support.V4.App;
+using Android.Support.V4.Content;
+
+if (ContextCompat.CheckSelfPermission(Android.App.Application.Context, Manifest.Permission.WriteExternalStorage) != (int)Permission.Granted)
+{
+    ActivityCompat.RequestPermissions(MainActivity.Instance, new string[] { Manifest.Permission.WriteExternalStorage }, 1);
+}
+
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+{
+    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+}
+if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+{
+    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+}
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Android))
+{
+    path = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "MyAppFolder");
+    return Path.Combine(Android.OS.Environment.ExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath, "MyAppFolder");
+}
+if (RuntimeInformation.IsOSPlatform(OSPlatform.iOS))
+{
+    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+}
+
 ---------------------------------------------------------------------------------------------------
 
 setup Authentication
