@@ -14,7 +14,12 @@ add `@using Microsoft.Extensions.Logging` @inject ILogger Logger
 
 find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-left: env(safe-area-inset-left) !important;`
 
-fix AppData GetUserData() - remove these from class AppData:
+fix AppData GetUserData() which calls InitializeContent()
+search for // TODO:: remove temp fix
+InitializeItems and InitializeTimes have null checks - both load data directly from DB with _dataAccess.GetTimes() and _dataAccess.GetItems()
+	but LoadTimesDone also loads data with _dataAccess.GetTimes() - these are not the same objects as in InitializeTimes
+	and ItemService.Initialize also loads data with _dataAccess.GetItems() - these are not the same objects as in InitializeItems
+remove these from class AppData:
 	public Dictionary<long, TimeModel>? Times { get; set; }
 	public Dictionary<long, ItemModel>? Items { get; set; }
 
