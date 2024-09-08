@@ -28,12 +28,7 @@ You must upload a screenshot for 5.5-inch iPhone displays.
 
 ---------------------------------------------------------------------------------------------------
 
-Default project: OpenHabitTracker.EntityFrameworkCore
-Add-Migration Initial -StartupProject OpenHabitTracker.Blazor.WinForms
-
-dotnet ef migrations add Initial --startup-project OpenHabitTracker.Blazor.WinForms
-
----------------------------------------------------------------------------------------------------
+Publish Windows:
 
 dotnet publish Ididit.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:SelfContained=true /p:GenerateAppxPackageOnBuild=true
 
@@ -43,16 +38,24 @@ set msix version in Package.appxmanifest
 
 ---------------------------------------------------------------------------------------------------
 
+Publish iOS:
+
+dotnet publish Ididit.Blazor.Maui.csproj -f net8.0-ios -c Release -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64  -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
+
+Publish macOS:
+
+dotnet publish -f net8.0-maccatalyst -c Release -p:MtouchLink=SdkOnly -p:CreatePackage=true -p:EnableCodeSigning=true -p:EnablePackageSigning=true -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.macos" -p:CodesignEntitlements="Platforms\MacCatalyst\Entitlements.plist" -p:PackageSigningKey="3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)"
+
+---------------------------------------------------------------------------------------------------
+
+Linux:
+
 Photino.Native.so
 sudo apt-get install libwebkit2gtk-4.1
 
 ---------------------------------------------------------------------------------------------------
 
-dotnet publish Ididit.Blazor.Maui.csproj -f net8.0-ios -c Release -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64  -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
-
-dotnet publish -f net8.0-maccatalyst -c Release -p:MtouchLink=SdkOnly -p:CreatePackage=true -p:EnableCodeSigning=true -p:EnablePackageSigning=true -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.macos" -p:CodesignEntitlements="Platforms\MacCatalyst\Entitlements.plist" -p:PackageSigningKey="3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)"
-
----------------------------------------------------------------------------------------------------
+Android:
 
 F-Droid
 	not possible: https://forum.f-droid.org/t/why-isnt-c-net-maui-supported/24842
@@ -61,6 +64,13 @@ APKPure
 	https://apkpure.com/submit-apk
 	https://developer.apkpure.com/
 	https://iphone.apkpure.com/ipa-install-online
+
+---------------------------------------------------------------------------------------------------
+
+Default project: OpenHabitTracker.EntityFrameworkCore
+Add-Migration Initial -StartupProject OpenHabitTracker.Blazor.WinForms
+
+dotnet ef migrations add Initial --startup-project OpenHabitTracker.Blazor.WinForms
 
 ---------------------------------------------------------------------------------------------------
 
