@@ -76,7 +76,7 @@ else
             <button class="btn btn-outline-primary" @onclick="AddToSelectedDay"><i class="bi bi-plus"></i></button>
         </div>
 
-        if (selectedTimeList is not null)
+        if (DisplayTimeList && selectedTimeList is not null)
         {
             foreach (TimeModel time in selectedTimeList)
             {
@@ -106,6 +106,9 @@ else
 
     [Parameter]
     public bool DisplayBasedOnWidth { get; set; }
+
+    [Parameter]
+    public bool DisplayTimeList { get; set; }
 
     int rowCount = 0;
     int daysInRow = 0;
