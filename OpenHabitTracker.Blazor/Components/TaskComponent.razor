@@ -17,7 +17,7 @@
 <ItemsComponent Items=Task />
 
 <div class="input-group">
-    <span class="input-group-text">@Loc["Planned at"]</span>
+    <span class="input-group-text col-4">@Loc["Planned at"]</span>
     <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.PlannedAt" ValueExpression="() => Task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(Task, plannedAt)" />
 </div>
 
@@ -66,24 +66,23 @@
 </div>
 }
 
-@if (Task.StartedAt is not null)
+@if (_timer is null && Task.StartedAt is not null && Task.CompletedAt is not null)
 {
-    @if (Task.CompletedAt is not null && Task.StartedAt != Task.CompletedAt)
+    @if (Task.StartedAt != Task.CompletedAt && Task.TimeSpent is TimeSpan timeSpent)
     {
         <div class="p-1 border rounded-0">
-            <div>@Loc["Time spent"]: @Task.TimeSpent?.ToString(@"hh\:mm\:ss")</div>
+            <div>@Loc["Time spent"]: @(timeSpent.Days > 0 ? $"{timeSpent.Days}.{timeSpent:hh\\:mm\\:ss}" : timeSpent.ToString(@"hh\:mm\:ss"))</div>
         </div>
     }
 
-    <div class="p-1 border rounded-0">
-        @if (Task.StartedAt != Task.CompletedAt)
-        {
-            <small class="d-inline-block mx-1">@Loc["Started"]: @Task.StartedAt</small>
-        }
-        @if (Task.CompletedAt is not null)
-        {
-            <small class="d-inline-block mx-1">@Loc["Completed"]: @Task.CompletedAt</small>
-        }
+    <div class="input-group">
+        <span class="input-group-text col-4">@Loc["Started"]</span>
+        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.StartedAt" ValueExpression="() => Task.StartedAt" ValueChanged="(DateTime? startedAt) => SaveStartedAt(Task, startedAt)" />
+    </div>
+
+    <div class="input-group">
+        <span class="input-group-text col-4">@Loc["Completed"]</span>
+        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.CompletedAt" ValueExpression="() => Task.CompletedAt" ValueChanged="(DateTime? completedAt) => SaveCompletedAt(Task, completedAt)" />
     </div>
 }
 
@@ -201,6 +200,26 @@
         task.PlannedAt = plannedAt;
 
         await TaskService.UpdateTask();
+    }
+
+    async Task SaveStartedAt(TaskModel task, DateTime? startedAt)
+    {
+        if (startedAt <= task.CompletedAt)
+        {
+            task.StartedAt = startedAt;
+
+            await TaskService.UpdateTask();
+        }
+    }
+
+    async Task SaveCompletedAt(TaskModel task, DateTime? completedAt)
+    {
+        if (completedAt >= task.StartedAt)
+        {
+            task.CompletedAt = completedAt;
+
+            await TaskService.UpdateTask();
+        }
     }
 
     async Task SaveDuration(TaskModel task, int hour, int minute)
