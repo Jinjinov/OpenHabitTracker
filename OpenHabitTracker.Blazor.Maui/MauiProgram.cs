@@ -12,6 +12,28 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
+        AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
+        {
+            try
+            {
+                string? message = error.ExceptionObject.ToString();
+
+                System.Diagnostics.Debug.WriteLine(message);
+
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker", "Error.log");
+                File.WriteAllText(path, message);
+
+                Application.Current?.Dispatcher.Dispatch(async () =>
+                {
+                    if (Application.Current.MainPage != null)
+                        await Application.Current.MainPage.DisplayAlert("Error", message, "OK");
+                });
+            }
+            catch
+            {
+            }
+        };
+
         MauiAppBuilder builder = MauiApp.CreateBuilder();
         builder.UseMauiApp<App>();
 

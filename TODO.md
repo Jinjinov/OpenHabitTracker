@@ -54,58 +54,7 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
 ---------------------------------------------------------------------------------------------------
 
-!!! add `@using Microsoft.Extensions.Logging` @inject ILogger Logger !!!
-
----------------------------------------------------------------------------------------------------
-
-catch unhandled exceptions:
-	AppDomain.CurrentDomain.UnhandledException
-	TaskScheduler.UnobservedTaskException
-
----------------------------------------------------------------------------------------------------
-
-2024-08-29 22:24:47.732 29433-29433 penhabittracker         
-net.openhabittracker                 
-E  * Assertion at /__w/1/s/src/mono/mono/mini/aot-runtime.c:3810, 
-condition `is_ok (error)' not met, 
-function:decode_patch, 
-module 'OpenHT.dll.so' is unusable (GUID of dependent assembly Microsoft.AspNetCore.Components.WebView.Maui doesn't match (expected '25DD9A5A-6B30-4279-9CB3-056987FB48E7', got '7D3793C6-311B-4DDD-9CF3-6EC16FF9BC9D'))
-
-Delete bin and obj folders from your project.
-Clear the local NuGet cache on your machine.
-
-https://devblogs.microsoft.com/visualstudio/introducing-visual-studio-rollback/
-
-/p:RunAOTCompilation=False /p:PublishTrimmed=False
-
-AndroidLinkMode=None is the same as setting PublishTrimmed=false
-
-<PropertyGroup>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <RunAOTCompilation>False</RunAOTCompilation>
-    <PublishTrimmed>False</PublishTrimmed>
-</PropertyGroup>
-
-<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and $(Configuration)=='Release'">
-	<AndroidLinkResources>true</AndroidLinkResources>
-	<AndroidLinkMode>None</AndroidLinkMode>
-	<RunAOTCompilation>false</RunAOTCompilation>
-	<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-</PropertyGroup>
-
-<PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and $(Configuration)=='Release'">
-	<MtouchLink>None</MtouchLink>
-</PropertyGroup>
-
-<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
-	<AndroidLinkMode>None</AndroidLinkMode>
-	<RunAOTCompilation>false</RunAOTCompilation>
-	<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-</PropertyGroup>
-
----------------------------------------------------------------------------------------------------
-
-replace all `@inject AppData AppData` with appropriate services
+add `@using Microsoft.Extensions.Logging` @inject ILogger Logger
 
 ---------------------------------------------------------------------------------------------------
 
@@ -185,13 +134,6 @@ Blazor Server / Web
 Host 24/7 on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
-
-task and habit:
-	list all times done
-	edit time done
-	delete time done
-
----------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
@@ -217,6 +159,8 @@ Show only habits with ratio `over` / `under`
 horizontal calendar with vertical weeks
 
 ---------------------------------------------------------------------------------------------------
+
+replace all `@inject AppData AppData` with appropriate services
 
 call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
 	save TotalTimeSpent
