@@ -75,6 +75,20 @@ else
             <span class="input-group-text flex-grow-1" style="justify-content: center;">@(selectedTimeList?.Count ?? 0)</span>
             <button class="btn btn-outline-primary" @onclick="AddToSelectedDay"><i class="bi bi-plus"></i></button>
         </div>
+
+        if (selectedTimeList is not null)
+        {
+            foreach (TimeModel time in selectedTimeList)
+            {
+                <div class="input-group">
+                    <span class="input-group-text">@Loc["From"]</span>
+                    <InputDate class="form-control" Type="InputDateType.Time" Value="time.StartedAt" ValueExpression="() => time.StartedAt"  />
+                    <span class="input-group-text">@Loc["to"]</span>
+                    <InputDate class="form-control" Type="InputDateType.Time" Value="time.CompletedAt" ValueExpression="() => time.CompletedAt"  />
+                    <button class="btn btn-outline-primary" @onclick="() => RemoveTimeDone(time)"><i class="bi bi-trash"></i></button>
+                </div>
+            }
+        }
     }
 }
 
@@ -211,6 +225,13 @@ else
             return;
 
         await HabitService.RemoveTimeDone(Habit!, timeList.Last());
+
+        await HabitChanged.InvokeAsync(Habit);
+    }
+
+    async Task RemoveTimeDone(TimeModel time)
+    {
+        await HabitService.RemoveTimeDone(Habit!, time);
 
         await HabitChanged.InvokeAsync(Habit);
     }

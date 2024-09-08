@@ -59,9 +59,6 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 2. !!!
 
 edit times done
-	task: edit date and time 
-	- started at = now - duration 
-	- completed at = now
 	habit:
 	- list all for the selected day
 	- edit time only 
