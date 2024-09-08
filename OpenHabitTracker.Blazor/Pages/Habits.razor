@@ -241,11 +241,11 @@
             Dimensions columnDimensions = await JsInterop.GetElementDimensions(columnRef);
             columnWidth = columnDimensions.Width;
 
-            // TODO: try to make it work without this
+            // TODO:: try to make it work without this
             // or at least move it up the hierarchy, before Habits render for the first time
             // or don't render habits if columnWidth == 0
             StateHasChanged();
-            // TODO: make it work without JsInterop and use @media for each day
+            // TODO:: make it work without JsInterop and use @media for each day
             // even better: get <body> dimensions once at startup, calculate everything else from that
             // first render can be empty in MainLayout, with everything else rendersing only if body dimensions are set
         }

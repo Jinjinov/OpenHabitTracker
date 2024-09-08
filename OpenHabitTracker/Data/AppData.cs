@@ -39,7 +39,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         return Markdown.ToHtml(content, _markdownPipeline);
     }
 
-    public async Task UpdateModel(ContentModel model) // TODO: learn to use generics, perhaps you will like them...
+    public async Task UpdateModel(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
     {
         if (model is HabitModel habitModel && await _dataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)
         {
@@ -152,7 +152,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             await InitializeCategories();
             await InitializePriorities();
 
-            await InitializeTimes(); // TODO: remove temp fix
+            await InitializeTimes(); // TODO:: remove temp fix
 
             IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
             Habits = habits.Select(x => new HabitModel
@@ -172,12 +172,12 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 Duration = x.Duration,
                 LastTimeDoneAt = x.LastTimeDoneAt,
 
-                TimesDone = Times!.Values.Where(y => y.HabitId == x.Id).ToList() // TODO: remove temp fix
+                TimesDone = Times!.Values.Where(y => y.HabitId == x.Id).ToList() // TODO:: remove temp fix
             }).ToDictionary(x => x.Id);
 
-            foreach (HabitModel habit in Habits.Values) // TODO: remove temp fix
+            foreach (HabitModel habit in Habits.Values) // TODO:: remove temp fix
             {
-                habit.RefreshTimesDoneByDay(); // TODO: remove temp fix
+                habit.RefreshTimesDoneByDay(); // TODO:: remove temp fix
             }
         }
     }
@@ -281,7 +281,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
     {
         if (Priorities is null)
         {
-            Priorities = []; // TODO: add bool _isInitializing, remove this line
+            Priorities = []; // TODO:: add bool _isInitializing, remove this line
 
             IReadOnlyList<PriorityEntity> priorities = await _dataAccess.GetPriorities();
 
@@ -362,7 +362,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
         // Times, Items inside every task/habit could be more up to date
 
-        Times = null; // TODO: remove temp fix
+        Times = null; // TODO:: remove temp fix
 
         await InitializeTimes();
         await InitializeItems();

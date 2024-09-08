@@ -14,11 +14,11 @@ public class HabitModel : ItemsModel
 
     public List<TimeModel>? TimesDone { get; set; }
 
-    internal TimeSpan TotalTimeSpent { get; set; } // TODO: save it ?
+    internal TimeSpan TotalTimeSpent { get; set; } // TODO:: save it ?
 
-    internal TimeSpan AverageTimeSpent { get; set; } // TODO: could be computed every time - AverageTimeSpent => TotalTimeSpent / TimesDone.Count;
+    internal TimeSpan AverageTimeSpent { get; set; } // TODO:: could be computed every time - AverageTimeSpent => TotalTimeSpent / TimesDone.Count;
 
-    internal TimeSpan AverageInterval { get; set; } // TODO: save it ?
+    internal TimeSpan AverageInterval { get; set; } // TODO:: save it ?
 
     internal int NonZeroRepeatCount => Math.Max(1, RepeatCount);
 
@@ -148,12 +148,12 @@ public class HabitModel : ItemsModel
         };
     }
 
-    public bool? IsOverdue() // TODO: add a field, call the method only when TimesDone changes
+    public bool? IsOverdue() // TODO:: add a field, call the method only when TimesDone changes
     {
         if (LastTimeDoneAt is null)
             return null;
 
-        // TODO: use RepeatCount
+        // TODO:: use RepeatCount
 
         // do NOT use LastTimeDoneAt
 

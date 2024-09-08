@@ -81,8 +81,8 @@ public class ItemService(IDataAccess dataAccess)
             await _dataAccess.UpdateItem(itemEntity);
         }
 
-        // TODO: when all habit items are done, habit is done
-        // TODO: when all task items are done, task is done
+        // TODO:: when all habit items are done, habit is done
+        // TODO:: when all task items are done, task is done
     }
 
     public async Task DeleteItem(ItemsModel? items, ItemModel item)

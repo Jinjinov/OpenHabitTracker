@@ -44,7 +44,7 @@ public class Program
         dataAccess.Initialize();
 
         // customize window
-        if (!OperatingSystem.IsLinux()) // TODO: find out why this works in Photino sample
+        if (!OperatingSystem.IsLinux()) // TODO:: find out why this works in Photino sample
             app.MainWindow.SetIconFile("favicon.ico");
         app.MainWindow.SetTitle("OpenHabitTracker");
         app.MainWindow.SetUseOsDefaultSize(false);
