@@ -18,9 +18,12 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 
 fix AppData GetUserData() which calls InitializeContent()
 search for `// TODO:: remove temp fix`
-InitializeItems and InitializeTimes have null checks - both load data directly from DB with _dataAccess.GetTimes() and _dataAccess.GetItems()
+InitializeItems and InitializeTimes have null checks and do not update data when called in GetUserData()
+	both load data directly from DB with _dataAccess.GetTimes() and _dataAccess.GetItems()
 	but LoadTimesDone also loads data with _dataAccess.GetTimes() - these are not the same objects as in InitializeTimes
 	and ItemService.Initialize also loads data with _dataAccess.GetItems() - these are not the same objects as in InitializeItems
+	user can add or remove Items and Times list but the code does not update Items and Times in the AppData
+	so without temp fix, GetUserData() would return Items and Times that were loaded with Initialize()
 remove these from class AppData:
 	public Dictionary<long, TimeModel>? Times { get; set; }
 	public Dictionary<long, ItemModel>? Items { get; set; }
