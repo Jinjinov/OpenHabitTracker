@@ -115,7 +115,7 @@
 @if (_showSecondColumn)
 {
     <div class="col child-column px-0 px-md-1 my-1">
-        @if (Id is not null && TaskService.NewTask is null)
+        @if (Id is not null && TaskService.SelectedTask is not null && TaskService.NewTask is null)
         {
             <TaskComponent Task="TaskService.SelectedTask" CloseSelected="CloseSelected" />
         }

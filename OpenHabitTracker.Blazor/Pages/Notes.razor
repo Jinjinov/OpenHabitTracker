@@ -90,7 +90,7 @@
 @if (_showSecondColumn)
 {
     <div class="col child-column px-0 px-md-1 my-1">
-        @if (Id is not null && NoteService.NewNote is null)
+        @if (Id is not null && NoteService.SelectedNote is not null && NoteService.NewNote is null)
         {
             <NoteComponent Note="NoteService.SelectedNote" CloseSelected="CloseSelected" />
         }

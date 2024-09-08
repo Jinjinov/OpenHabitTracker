@@ -8,5 +8,5 @@ GoogleDriveClientSecrets.Hidden.cs
 *.keystore
 *.pfx
 Package.StoreAssociation.xml
-OpenHabitTracker.db*
+OpenHT.db*
 Photino.Blazor
