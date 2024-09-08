@@ -141,7 +141,7 @@ Backup
 	iCloud
 	Dropbox
 		WASM authorisation - REST
-		desktop authorisation - Ididit.Google.Apis - using Google.Apis.Auth.OAuth2;
+		desktop authorisation - OpenHabitTracker.Google.Apis - using Google.Apis.Auth.OAuth2;
 		mobile authorisation - `ASP.NET Core`
 
 Blazor Server / Web
@@ -201,10 +201,10 @@ read Settings from DB before Run() - !!! Transient / Scoped / Singleton !!!
 ??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
 
 common `Router`
-	Ididit.Blazor - Routes.razor
-	Ididit.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
+	OpenHabitTracker.Blazor - Routes.razor
+	OpenHabitTracker.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
 
-Ididit.Blazor.Server:
+OpenHabitTracker.Blazor.Server:
 	- @page "/Error"
 	- app.UseExceptionHandler("/Error");
 
@@ -268,7 +268,7 @@ copy Loop Habit Tracker
 - keyboard navigation
 - benchmark: method time & render time
 
-Ididit.Rest for SQL server for WebView
+OpenHabitTracker.Rest for SQL server for WebView
 
 table Users
 	User authentication

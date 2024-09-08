@@ -30,9 +30,9 @@ You must upload a screenshot for 5.5-inch iPhone displays.
 
 Publish Windows:
 
-dotnet publish Ididit.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:SelfContained=true /p:GenerateAppxPackageOnBuild=true
+dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:SelfContained=true /p:GenerateAppxPackageOnBuild=true
 
-dotnet publish Ididit.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:SelfContained=true /p:PublishAppxPackage=true
+dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:SelfContained=true /p:PublishAppxPackage=true
 
 set msix version in Package.appxmanifest
 
@@ -40,7 +40,7 @@ set msix version in Package.appxmanifest
 
 Publish iOS:
 
-dotnet publish Ididit.Blazor.Maui.csproj -f net8.0-ios -c Release -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64  -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
+dotnet publish OpenHabitTracker.Blazor.Maui.csproj -f net8.0-ios -c Release -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64  -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
 
 Publish macOS:
 
@@ -113,13 +113,13 @@ https://github.com/dotnet/sdk/issues/13395 - EmbeddedResource with two dots in F
 https://github.com/dotnet/roslyn/issues/43820 - Embedded Resources with multiple dots in name does not get embedded
 
 Visual Studio seems to recognise files named in the format <name>.<locale>.<ext> as being specific to a locale, resulting in the creation of a satellite assembly
-Ididit.dll
-de\Ididit.resources.dll
-en\Ididit.resources.dll
-es\Ididit.resources.dll
-sl\Ididit.resources.dll
+OpenHabitTracker.dll
+de\OpenHabitTracker.resources.dll
+en\OpenHabitTracker.resources.dll
+es\OpenHabitTracker.resources.dll
+sl\OpenHabitTracker.resources.dll
 
-in the `es\Ididit.resources.dll` the file `MyEmbeddedResource.es-ES.json` becomes `MyEmbeddedResource.json`
+in the `es\OpenHabitTracker.resources.dll` the file `MyEmbeddedResource.es-ES.json` becomes `MyEmbeddedResource.json`
 
 var satelliteAssembly = resourceSource.Assembly.GetSatelliteAssembly(CultureInfo.CreateSpecificCulture("es"));
 var names = satelliteAssembly.GetManifestResourceNames();
