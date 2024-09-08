@@ -17,7 +17,7 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 ---------------------------------------------------------------------------------------------------
 
 fix AppData GetUserData() which calls InitializeContent()
-search for // TODO:: remove temp fix
+search for `// TODO:: remove temp fix`
 InitializeItems and InitializeTimes have null checks - both load data directly from DB with _dataAccess.GetTimes() and _dataAccess.GetItems()
 	but LoadTimesDone also loads data with _dataAccess.GetTimes() - these are not the same objects as in InitializeTimes
 	and ItemService.Initialize also loads data with _dataAccess.GetItems() - these are not the same objects as in InitializeItems
@@ -26,7 +26,7 @@ remove these from class AppData:
 	public Dictionary<long, ItemModel>? Items { get; set; }
 or make sure that other services update them
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
-Ididit did not have this proble, `Repository` was the only class with `IDatabaseAccess`
+Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
 ---------------------------------------------------------------------------------------------------
 
