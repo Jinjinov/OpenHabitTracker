@@ -55,8 +55,6 @@ Android apk file:
 
 *   [Blazor WASM](https://learn.microsoft.com/en-us/aspnet/core/blazor)
 *   [Blazor Server](https://learn.microsoft.com/en-us/aspnet/core/blazor)
-*   [Chromely](https://github.com/chromelyapps/Chromely)
-*   [Electron.NET](https://github.com/ElectronNET/Electron.NET)
 *   [MAUI](https://learn.microsoft.com/en-us/dotnet/maui)
 *   [Photino.Blazor](https://github.com/tryphotino/photino.Blazor)
 *   [WinForms](https://learn.microsoft.com/en-us/dotnet/desktop/winforms)
