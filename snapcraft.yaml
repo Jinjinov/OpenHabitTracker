@@ -22,6 +22,10 @@ base: core22
 
 confinement: devmode
 
+layout:
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.1:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.1
+
 parts:
   openhabittracker:
     plugin: dotnet
@@ -29,8 +33,10 @@ parts:
     dotnet-self-contained-runtime-identifier: linux-x64
     source: ./OpenHabitTracker.Blazor.Photino
     build-packages:
+      - libwebkit2gtk-4.1-dev
       - dotnet-sdk-8.0
     stage-packages:
+      - libwebkit2gtk-4.1-0
       - libicu70
 
 apps:
