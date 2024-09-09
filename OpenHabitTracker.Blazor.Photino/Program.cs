@@ -25,13 +25,12 @@ public class Program
         builder.Services.AddServices<OnClickMarkdownExtension>();
         builder.Services.AddDataAccess("OpenHT.db");
         builder.Services.AddBackup();
+        builder.Services.AddBlazor();
         builder.Services.AddScoped<IOpenFile, OpenFile>();
-        builder.Services.AddScoped<JsInterop>();
         builder.Services.AddScoped<ISaveFile, SaveFile>();
         builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
-        builder.Services.AddScoped<IRuntimeData, RuntimeData>();
         builder.Services.AddScoped<IPreRenderService, PreRenderService>();
 
         // register root component and selector

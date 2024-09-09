@@ -25,13 +25,12 @@ builder.Services.AddOidcAuthentication(options =>
 builder.Services.AddServices();
 builder.Services.AddDataAccess();
 builder.Services.AddBackup();
+builder.Services.AddBlazor();
 builder.Services.AddScoped<IOpenFile, OpenFile>();
-builder.Services.AddScoped<JsInterop>();
 builder.Services.AddScoped<ISaveFile, SaveFile>();
 builder.Services.AddScoped<INavBarFragment, OpenHabitTracker.Blazor.Wasm.Layout.NavBarFragment>();
 builder.Services.AddScoped<IAssemblyProvider, OpenHabitTracker.Blazor.Wasm.AssemblyProvider>();
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
-builder.Services.AddScoped<IRuntimeData, RuntimeData>();
 builder.Services.AddScoped<IPreRenderService, PreRenderService>();
 
 WebAssemblyHost host = builder.Build();

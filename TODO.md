@@ -33,10 +33,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-organize `builder.Services.AddScoped` into methods
-
----------------------------------------------------------------------------------------------------
-
 Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
 	https://snapcraft.io/docs/dotnet-apps
 	https://snapcraft.io/docs/dotnet-plugin

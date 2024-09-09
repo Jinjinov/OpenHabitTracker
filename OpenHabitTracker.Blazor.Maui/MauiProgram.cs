@@ -66,14 +66,13 @@ public static class MauiProgram
         builder.Services.AddServices();
         builder.Services.AddDataAccess(databasePath); // %localappdata%\Packages\...\LocalState - Environment.SpecialFolder.LocalApplicationData - FileSystem.Current.AppDataDirectory
         builder.Services.AddBackup();
-        builder.Services.AddScoped<IOpenFile, OpenFile>();
-        builder.Services.AddScoped<JsInterop>();
-        builder.Services.AddScoped<ISaveFile, SaveFile>();
-        builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
-        builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
-        builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
-        builder.Services.AddScoped<IRuntimeData, RuntimeData>();
-        builder.Services.AddScoped<IPreRenderService, PreRenderService>();
+        builder.Services.AddBlazor();
+        builder.Services.AddScoped<IOpenFile, OpenFile>(); // different in Maui, WinForms, Wpf
+        builder.Services.AddScoped<ISaveFile, SaveFile>(); // different in Maui, WinForms, Wpf
+        builder.Services.AddScoped<INavBarFragment, NavBarFragment>(); // different in Wasm
+        builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>(); // different in Wasm, Web
+        builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>(); // different in Photino
+        builder.Services.AddScoped<IPreRenderService, PreRenderService>(); // different in Web
 
         MauiApp mauiApp = builder.Build();
 

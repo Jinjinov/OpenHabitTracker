@@ -3,7 +3,6 @@ using OpenHabitTracker.Blazor;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web.Components;
-using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
 using OpenHabitTracker.Services;
 
@@ -16,13 +15,12 @@ builder.Services.AddRazorComponents()
 builder.Services.AddServices();
 builder.Services.AddDataAccess("OpenHT.db");
 builder.Services.AddBackup();
+builder.Services.AddBlazor();
 builder.Services.AddScoped<IOpenFile, OpenFile>();
-builder.Services.AddScoped<JsInterop>();
 builder.Services.AddScoped<ISaveFile, SaveFile>();
 builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
 builder.Services.AddScoped<IAssemblyProvider, OpenHabitTracker.Blazor.Web.Components.AssemblyProvider>();
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
-builder.Services.AddScoped<IRuntimeData, RuntimeData>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPreRenderService, OpenHabitTracker.Blazor.Web.PreRenderService>();
 

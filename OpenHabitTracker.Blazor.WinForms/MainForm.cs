@@ -26,13 +26,12 @@ public partial class MainForm : Form
         services.AddServices();
         services.AddDataAccess("OpenHT.db");
         services.AddBackup();
+        services.AddBlazor();
         services.AddScoped<IOpenFile, OpenFile>();
-        services.AddScoped<JsInterop>();
         services.AddScoped<ISaveFile, SaveFile>();
         services.AddScoped<INavBarFragment, NavBarFragment>();
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
-        services.AddScoped<IRuntimeData, RuntimeData>();
         services.AddScoped<IPreRenderService, PreRenderService>();
 
         InitializeComponent();
