@@ -1,7 +1,10 @@
 id: net.openhabittracker.app
-runtime: org.freedesktop.Platform
-runtime-version: '23.08'
-sdk: org.freedesktop.Sdk
+#runtime: org.freedesktop.Platform
+#runtime-version: '23.08'
+#sdk: org.freedesktop.Sdk
+runtime: org.gnome.Platform
+runtime-version: '46'
+sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.dotnet8
 build-options:
@@ -34,6 +37,6 @@ modules:
         branch: main
       - ./nuget-sources.json
     build-commands:
-      - dotnet publish OpenHabitTracker.Blazor.Photino.csproj -c Release --no-self-contained --source ./nuget-sources
+      - dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
-      - cp -r bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
+      - cp -r OpenHabitTracker.Blazor.Photino/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin

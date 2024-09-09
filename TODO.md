@@ -39,6 +39,9 @@ runtime: org.gnome.Platform
 runtime-version: '46'
 sdk: org.gnome.Sdk
 
+https://github.com/flathub/org.nickvision.money/blob/master/org.nickvision.money.json
+https://github.com/flathub/org.nickvision.tubeconverter/blob/master/org.nickvision.tubeconverter.json
+
 https://v2.tauri.app/distribute/snapcraft/
 
 layout:
