@@ -54,6 +54,45 @@ build-packages:
 stage-packages:
       libwebkit2gtk-4.1-0
 
+
+
+
+
+I’ve solved my issue:
+
+1) I’ve changed my .yaml to
+
+name: snaptest
+base: core18
+version: ‘0.1’
+summary: Single-line elevator pitch for your amazing snap # 79 char long summary
+description: | This is my-snap’s description. You have a paragraph or two to tell the most important story about your snap. Keep it under 100 words though, we live in tweetspace and your description wants to look good in the snap store.
+
+grade: devel # must be ‘stable’ to release into candidate/stable channels
+confinement: devmode # use ‘strict’ once you have the right plugs and slots
+
+apps:
+snaptest:
+command: ./ProjectA
+
+parts:
+mysnap:
+plugin: dotnet
+dotnet-version: 6.0
+dotnet-runtime-version: ‘6.0.0’
+source: .
+source-type: local
+override-build: |
+dotnet build -c Release
+dotnet publish -r linux-x64 -c Release -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -p:PublishReadyToRun=true -p:IncludeNativeLibrariesForSelfExtract=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
+chmod 0755 $SNAPCRAFT_PART_INSTALL/ProjectA
+
+2) I’ve used ‘snapcraft --use-lxd’ instead of 'snapcraft snap’
+
+
+
+
+
 Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
 	https://snapcraft.io/docs/dotnet-apps
 	https://snapcraft.io/docs/dotnet-plugin
