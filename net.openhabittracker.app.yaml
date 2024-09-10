@@ -37,6 +37,6 @@ modules:
         branch: main
       - ./nuget-sources.json
     build-commands:
-      - dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release --no-self-contained --source ./nuget-sources
+      - dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -p:PublishSingleFile=true -p:SelfContained=true --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r OpenHabitTracker.Blazor.Photino/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
