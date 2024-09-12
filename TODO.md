@@ -56,6 +56,9 @@ stage-packages:
 
 
 
+https://snapcraft.io/docs/gpu-support
+
+
 
 urban@urban-VirtualBox:~/Jinjinov/OpenHabitTracker$ snap run openhabittracker
 Photino.NET: "Photino".SetTitle(Photino.Blazor App)
