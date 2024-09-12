@@ -48,9 +48,21 @@ parts:
       - libicu70
       - libglu1-mesa
       - freeglut3
-      #- webkit2gtk-driver
-      #- libcanberra-gtk3-module
+      - libwebkit2gtk-4.0-dev
+      - webkit2gtk-driver
+      - libcanberra-gtk3-module
+      - libcanberra-gtk-module
+      - libgl1-mesa-dri
+      - mesa-vulkan-drivers
+      - libgbm1
+      - libglx-mesa0
 
 apps:
   openhabittracker:
     command: OpenHT
+    plugs:
+      - opengl
+      - hardware-observe
+    environment:
+      LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
