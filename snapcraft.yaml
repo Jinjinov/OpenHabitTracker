@@ -56,7 +56,6 @@ parts:
       - mesa-vulkan-drivers
       - libgbm1
       - libglx-mesa0
-      - libglu1-mesa
 
 apps:
   openhabittracker:
