@@ -39,9 +39,6 @@ runtime: org.gnome.Platform
 runtime-version: '46'
 sdk: org.gnome.Sdk
 
-https://github.com/flathub/org.nickvision.money/blob/master/org.nickvision.money.json
-https://github.com/flathub/org.nickvision.tubeconverter/blob/master/org.nickvision.tubeconverter.json
-
 https://v2.tauri.app/distribute/snapcraft/
 
 layout:
@@ -54,59 +51,20 @@ build-packages:
 stage-packages:
       libwebkit2gtk-4.1-0
 
+---------------------------------------------------------------------------------------------------
 
+I've solved my issue:
 
-https://snapcraft.io/docs/gpu-support
-
-
-
-urban@urban-VirtualBox:~/Jinjinov/OpenHabitTracker$ snap run openhabittracker
-Photino.NET: "Photino".SetTitle(Photino.Blazor App)
-Photino.NET: "Photino.Blazor App".SetUseOsDefaultSize(False)
-Photino.NET: "Photino.Blazor App".SetUseOsDefaultLocation(False)
-Photino.NET: "Photino.Blazor App".SetWidth(1000)
-Photino.NET: "Photino.Blazor App".SetHeight(900)
-Photino.NET: "Photino.Blazor App".SetLeft(0)
-Photino.NET: "Photino.Blazor App".SetTop(100)
-Photino.NET: "Photino.Blazor App".SetTitle(OpenHabitTracker)
-Photino.NET: "OpenHabitTracker".SetUseOsDefaultSize(False)
-Photino.NET: "OpenHabitTracker".SetSize(1680, 1050)
-Photino.NET: "OpenHabitTracker".SetUseOsDefaultLocation(False)
-Photino.NET: "OpenHabitTracker".SetTop(0)
-Photino.NET: "OpenHabitTracker".SetLeft(450)
-Photino.NET: "OpenHabitTracker".Load(/)
-Photino.NET: "OpenHabitTracker" ** File "/" could not be found.
-Photino.NET: "OpenHabitTracker".Load(app://localhost/)
-Gtk-Message: 08:19:04.503: Failed to load module "canberra-gtk-module"
-Gtk-Message: 08:19:04.508: Failed to load module "canberra-gtk-module"
-Gtk-Message: 08:19:05.301: Failed to load module "canberra-gtk-module"
-Gtk-Message: 08:19:05.302: Failed to load module "canberra-gtk-module"
-VMware: No 3D enabled (0, Success).
-VMware: No 3D enabled (0, Success).
-Photino.NET: "OpenHabitTracker".SendWebMessage(__bwv:["BeginInvokeJS",2,"Blazor._internal.attachWebRendererInterop","[3,{\u0022__dotNetObject\u0022:1},{},{}]",3,0])
-Photino.NET: "OpenHabitTracker".SendWebMessage(__bwv:["AttachToDocument",0,"app"])
-Photino.NET: "OpenHabitTracker".SendWebMessage(__bwv:["BeginInvokeJS",3,"import","[\u0022./_content/OpenHabitTracker.Blazor/jsInterop.js\u0022]",1,0])
-Photino.NET: "OpenHabitTracker".SendWebMessage(__bwv:["RenderBatch",1,"AAAAAAEAAAABAAAAAAAAAAAAAAD/////AQAAAAEAAAABAAAAAAAAAAUAAAD/////AgAAAAEAAAABAAAAAAAAAAgAAAD/////AwAAAAEAAAABAAAAAAAAAAsAAAD/////BAAAAAMAAAABAAAAAAAAAA0AAAD/////AQAAAAEAAAAnAAAA/////wEAAAACAAAAKAAAAP////8FAAAAAQAAAAEAAAAAAAAAKQAAAP////8GAAAAAQAAAAEAAAAAAAAALwAAAP////8HAAAAAQAAAAEAAAAAAAAANQAAAP////8IAAAAAAAAABgAAAAwAAAASAAAAGAAAACYAAAAsAAAAMgAAAA7AAAABAAAAAUAAAABAAAAAAAAAAAAAAADAAAAAAAAAP////8AAAAAAAAAAAMAAAABAAAA/////wAAAAAAAAAAAwAAAAIAAAD/////AAAAAAAAAAADAAAAAwAAAP////8AAAAAAAAAAAQAAAADAAAAAgAAAAAAAAAAAAAAAwAAAAQAAAD/////AAAAAAAAAAADAAAABQAAAP////8AAAAAAAAAAAQAAAADAAAAAwAAAAAAAAAAAAAAAwAAAAYAAAD/////AAAAAAAAAAADAAAABwAAAP////8AAAAAAAAAAAQAAAACAAAABAAAAAAAAAAAAAAAAwAAAAgAAAD/////AAAAAAAAAAABAAAAGgAAAAkAAAAAAAAAAAAAAAMAAAAKAAAACwAAAAAAAAAAAAAAAQAAABgAAAAJAAAAAAAAAAAAAAADAAAACgAAAAwAAAAAAAAAAAAAAAEAAAAWAAAACQAAAAAAAAAAAAAAAwAAAAoAAAANAAAAAAAAAAAAAAABAAAABQAAAA4AAAAAAAAAAAAAAAMAAAAKAAAADwAAAAAAAAAAAAAAAwAAABAAAAD/////AQAAAAAAAAAIAAAAEQAAAAAAAAAAAAAAAAAAAAIAAAASAAAAAAAAAAAAAAAAAAAACAAAABMAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAUAAAAAAAAAAAAAAAMAAAAKAAAAFAAAAAAAAAAAAAAAAwAAABUAAAAWAAAAAAAAAAAAAAADAAAABwAAAP////8AAAAAAAAAAAgAAAAXAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAGAAAAAAAAAAAAAAADAAAACgAAABgAAAAAAAAAAAAAAAMAAAAVAAAAGQAAAAAAAAAAAAAAAwAAAAcAAAD/////AAAAAAAAAAAIAAAAGgAAAAAAAAAAAAAAAAAAAAQAAAAEAAAABwAAAAAAAAAAAAAAAwAAAAoAAAAbAAAAAAAAAAAAAAADAAAAFQAAABwAAAAAAAAAAAAAAAMAAAAHAAAA/////wAAAAAAAAAACAAAAB0AAAAAAAAAAAAAAAAAAAAIAAAAHgAAAAAAAAAAAAAAAAAAAAEAAAAGAAAAHwAAAAAAAAAAAAAAAwAAABUAAAAgAAAAAAAAAAAAAAADAAAACgAAACEAAAAAAAAAAAAAAAUAAAADAAAAAAAAAAAAAAAAAAAACAAAACIAAAAAAAAAAAAAAAAAAAACAAAAIwAAAAAAAAAAAAAAAAAAAAEAAAAGAAAAHwAAAAAAAAAAAAAAAwAAABUAAAAkAAAAAAAAAAAAAAADAAAACgAAACUAAAAAAAAAAAAAAAUAAAADAAAAAAAAAAAAAAAAAAAACAAAACYAAAAAAAAAAAAAAAAAAAACAAAAJwAAAAAAAAAAAAAAAAAAAAEAAAAGAAAAHwAAAAAAAAAAAAAAAwAAABUAAAAoAAAAAAAAAAAAAAADAAAACgAAACkAAAAAAAAAAAAAAAUAAAADAAAAAAAAAAAAAAAAAAAACAAAACoAAAAAAAAAAAAAAAAAAAACAAAAKwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC0FwcEFzc2VtYmx5FEFkZGl0aW9uYWxBc3NlbWJsaWVzBUZvdW5kCE5vdEZvdW5kCVJvdXRlRGF0YQ1EZWZhdWx0TGF5b3V0BkxheW91dAxDaGlsZENvbnRlbnQEQm9keQNkaXYFY2xhc3NAY29udGFpbmVyLWZsdWlkIGQtZmxleCBmbGV4LWNvbHVtbiB2aC0xMDAgbWgtMTAwIG92ZXJmbG93LWhpZGRlbhFyb3cgZmxleC1zaHJpbmstMS9jb2wgYmctYm9keS1zZWNvbmRhcnkgZC1mbGV4IGFsaWduLWl0ZW1zLWNlbnRlcgZidXR0b24SbmF2LWxpbmsgcHgtMSBweS0yB29uY2xpY2sbPGkgY2xhc3M9ImJpIGJpLWxpc3QiPjwvaT4gBE1lbnUPCgoKICAgICAgICAgICAgF25hdi1saW5rIHB4LTEgcHktMiBtcy0yBGhyZWYFbm90ZXMNCiAgICAgICAgICAgIBduYXYtbGluayBweC0xIHB5LTIgbXMtMgV0YXNrcw0KICAgICAgICAgICAgF25hdi1saW5rIHB4LTEgcHktMiBtcy0yBmhhYml0cwIKCosBPGRpdiBpZD0iYmxhem9yLWVycm9yLXVpIj4KICAgIEFuIHVuaGFuZGxlZCBlcnJvciBoYXMgb2NjdXJyZWQuCiAgICA8YSBocmVmIGNsYXNzPSJyZWxvYWQiPlJlbG9hZDwvYT4KICAgIDxhIGNsYXNzPSJkaXNtaXNzIj7wn5eZPC9hPjwvZGl2PgFhBW5vdGVzF25hdi1saW5rIHB4LTEgcHktMiBtcy0yIDxpIGNsYXNzPSJiaSBiaS1jYXJkLXRleHQiPjwvaT4gBU5vdGVzBXRhc2tzF25hdi1saW5rIHB4LTEgcHktMiBtcy0yJTxpIGNsYXNzPSJiaSBiaS1jYXJkLWNoZWNrbGlzdCI\u002BPC9pPiAFVGFza3MGaGFiaXRzF25hdi1saW5rIHB4LTEgcHktMiBtcy0yIDxpIGNsYXNzPSJiaSBiaS1jYXJkLWxpc3QiPjwvaT4gBkhhYml0c6wFAAC4BQAAzQUAANMFAADcBQAA5gUAAPQFAAD7BQAACAYAAA0GAAARBgAAFwYAAFgGAABqBgAAmgYAAKEGAAC0BgAAvAYAANgGAADdBgAA7QYAAAUHAAAKBwAAEAcAAB4HAAA2BwAAPAcAAEoHAABiBwAAaQcAAGwHAAD5BwAA\u002BwcAAAEIAAAZCAAAOggAAEAIAABGCAAAXggAAIQIAACKCAAAkQgAAKkIAADKCAAA4AAAAAQBAACkBQAAqAUAANEIAAA="])
-Photino.NET: "OpenHabitTracker".SendWebMessage(__bwv:["AttachToDocument",8,"head::after"])
-Photino.NET: "OpenHabitTracker".SendWebMessage(__bwv:["RenderBatch",2,"CAAAAAIAAAABAAAAAAAAAAAAAAD/////AQAAAAEAAAACAAAA/////wkAAAABAAAAAQAAAAAAAAAEAAAA/////wkAAAAAAAAACgAAAAEAAAABAAAAAAAAAAYAAAD/////CgAAAAAAAAALAAAAAAAAAAsAAAAAAAAADAAAAAAAAAAMAAAAAAAAAAkAAAAAAAAAKAAAAEAAAABIAAAAYAAAAGgAAABwAAAAeAAAAIAAAAAIAAAABAAAAAIAAAAJAAAAAAAAAAAAAAADAAAAAAAAAP////8AAAAAAAAAAAQAAAACAAAACgAAAAAAAAAAAAAAAwAAAAAAAAD/////AAAAAAAAAAAEAAAAAgAAAAsAAAAAAAAAAAAAAAMAAAABAAAA/////wAAAAAAAAAABAAAAAIAAAAMAAAAAAAAAAAAAAADAAAAAQAAAP////8AAAAAAAAAAAAAAAAAAAAACVNlY3Rpb25JZAdjb250ZW50XAEAAGYBAACIAAAAsAAAAFQBAABYAQAAbgEAAA=="])
-urban@urban-VirtualBox:~/Jinjinov/OpenHabitTracker$ 
-
-
-
-
-
-I�ve solved my issue:
-
-1) I�ve changed my .yaml to
+1) I've changed my .yaml to
 
 name: snaptest
 base: core18
-version: �0.1�
+version: '0.1'
 summary: Single-line elevator pitch for your amazing snap # 79 char long summary
-description: | This is my-snap�s description. You have a paragraph or two to tell the most important story about your snap. Keep it under 100 words though, we live in tweetspace and your description wants to look good in the snap store.
+description: | This is my-snap's description. You have a paragraph or two to tell the most important story about your snap. Keep it under 100 words though, we live in tweetspace and your description wants to look good in the snap store.
 
-grade: devel # must be �stable� to release into candidate/stable channels
-confinement: devmode # use �strict� once you have the right plugs and slots
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
 snaptest:
@@ -116,7 +74,7 @@ parts:
 mysnap:
 plugin: dotnet
 dotnet-version: 6.0
-dotnet-runtime-version: �6.0.0�
+dotnet-runtime-version: '6.0.0'
 source: .
 source-type: local
 override-build: |
@@ -124,11 +82,13 @@ dotnet build -c Release
 dotnet publish -r linux-x64 -c Release -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -p:PublishReadyToRun=true -p:IncludeNativeLibrariesForSelfExtract=true --self-contained true -o $SNAPCRAFT_PART_INSTALL
 chmod 0755 $SNAPCRAFT_PART_INSTALL/ProjectA
 
-2) I�ve used �snapcraft --use-lxd� instead of 'snapcraft snap�
+2) I've used 'snapcraft --use-lxd' instead of 'snapcraft snap'
 
+---------------------------------------------------------------------------------------------------
 
-
-
+https://docs.tryphotino.io/Photino-Comparison-with-Electron
+https://github.com/tryphotino/photino.Documentation/issues/18
+https://github.com/tryphotino/photino.Samples/tree/debug/Photino.PublishPhotino
 
 Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
 	https://snapcraft.io/docs/dotnet-apps
@@ -146,16 +106,29 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 	https://snapcraft.io/account
 	https://snapcraft.io/docs/pre-built-apps
 
+	https://snapcraft.io/docs/gpu-support
+
 	https://snapcraft.io/snaps
 	https://dashboard.snapcraft.io/register-snap/
 	https://dashboard.snapcraft.io/register-snap-feedback/openhabittracker/
 
+	https://github.com/AvaloniaUI/Avalonia/discussions/15245
+	https://forum.snapcraft.io/t/launching-net-7-binaries-seems-is-broken/37880
+	https://forum.snapcraft.io/t/problem-to-build-snap-for-net6-0/31251
+
 Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
+	error: 'net.openhabittracker' is not a valid application name: Names must contain at least 2 periods
+
 	https://github.com/flathub/org.freedesktop.Sdk.Extension.dotnet8
+
 	https://docs.flatpak.org/en/latest/dotnet.html
+	https://docs.flatpak.org/en/latest/available-runtimes.html
+
 	https://flatpak.org/setup/Ubuntu
 	https://github.com/flatpak/flatpak-builder-tools
 	https://github.com/flatpak/flatpak-builder-tools/tree/master/dotnet
+
+	https://github.com/NickvisionApps/FlatpakGenerator
 
 	flatpak-builder build-dir --user --install-deps-from=flathub --download-only net.openhabittracker.app.yaml
 
@@ -163,12 +136,16 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
 	flatpak-builder build-dir --user --force-clean --install --repo=repo net.openhabittracker.app.yaml
 
-	error: 'net.openhabittracker' is not a valid application name: Names must contain at least 2 periods
-
 	flatpak run net.openhabittracker.app
 
 	https://flathub.org/
 	https://github.com/flathub/flathub
+
+	https://github.com/flathub/org.nickvision.money/blob/master/org.nickvision.money.json
+	https://github.com/flathub/org.nickvision.tubeconverter/blob/master/org.nickvision.tubeconverter.json
+
+	https://github.com/flathub/net.jenyay.Outwiker/blob/master/net.jenyay.Outwiker.yml
+	https://github.com/flathub/in.cinny.Cinny/blob/master/in.cinny.Cinny.yml
 
 ---------------------------------------------------------------------------------------------------
 
