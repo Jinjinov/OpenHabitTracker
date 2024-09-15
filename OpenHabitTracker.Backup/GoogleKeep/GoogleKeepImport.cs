@@ -50,7 +50,7 @@ public class GoogleKeepImport(AppData appData)
         CategoryModel? category = null;
         NoteModel? note = null;
         TaskModel? task = null;
-        HabitModel? habit = null;
+        //HabitModel? habit = null;
 
         DateTime now = DateTime.Now;
 

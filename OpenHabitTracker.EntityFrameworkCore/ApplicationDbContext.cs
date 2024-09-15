@@ -44,7 +44,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<ItemEntity>().HasIndex(x => x.ParentId);
 
         var dictionaryComparer = new ValueComparer<Dictionary<ContentType, Sort>>(
-            (c1, c2) => c1.SequenceEqual(c2),
+            (c1, c2) => ReferenceEquals(c1, c2) || (c1 != null && c2 != null && c1.SequenceEqual(c2)),
             c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
             c => c.ToDictionary(entry => entry.Key, entry => entry.Value)
         );
@@ -58,7 +58,7 @@ public class ApplicationDbContext : DbContext
                 dictionaryComparer);
 
         var boolDictionaryComparer = new ValueComparer<Dictionary<Priority, bool>>(
-            (c1, c2) => c1.SequenceEqual(c2),
+            (c1, c2) => ReferenceEquals(c1, c2) || (c1 != null && c2 != null && c1.SequenceEqual(c2)),
             c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
             c => c.ToDictionary(entry => entry.Key, entry => entry.Value)
         );

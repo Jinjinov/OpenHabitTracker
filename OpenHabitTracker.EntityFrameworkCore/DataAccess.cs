@@ -307,8 +307,10 @@ public class DataAccess : IDataAccess
         await _dataContext.Settings.ExecuteDeleteAsync();
     }
 
-    public async Task ClearAllTables()
+    public Task ClearAllTables()
     {
         _dataContext.ClearAllTables();
+
+        return Task.CompletedTask;
     }
 }

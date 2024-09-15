@@ -88,7 +88,7 @@ public class MarkdownImportExport(AppData appData)
         CategoryModel category = new();
         NoteModel? note = null;
         TaskModel? task = null;
-        HabitModel? habit = null;
+        //HabitModel? habit = null;
         string? newTitle = null;
 
         string? line;
@@ -130,7 +130,7 @@ public class MarkdownImportExport(AppData appData)
                     category.Tasks.Add(task);
 
                     note = null;
-                    habit = null;
+                    //habit = null;
                 }
                 else
                 {
@@ -138,7 +138,7 @@ public class MarkdownImportExport(AppData appData)
                     category.Notes.Add(note);
 
                     task = null;
-                    habit = null;
+                    //habit = null;
                 }
 
                 newTitle = null;
