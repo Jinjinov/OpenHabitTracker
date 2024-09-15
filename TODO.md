@@ -94,6 +94,11 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 	https://snapcraft.io/docs/dotnet-apps
 	https://snapcraft.io/docs/dotnet-plugin
 
+	sudo snap install snapcraft --classic
+
+	By default, Snapcraft relies on a build provider to create an isolated build environment inside which applications can be built and packaged as snaps without changing the host system.
+	sudo snap install lxd
+
 	snapcraft --debug
 
 	sudo snap install openhabittracker_1.0.0_amd64.snap --devmode --dangerous
@@ -130,7 +135,24 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
 	https://github.com/NickvisionApps/FlatpakGenerator
 
-	flatpak-builder build-dir --user --install-deps-from=flathub --download-only net.openhabittracker.app.yaml
+	sudo apt install flatpak
+
+	sudo apt install gnome-software-plugin-flatpak
+
+	flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+	sudo apt install flatpak-builder
+
+	runtime: org.freedesktop.Platform
+	runtime-version: '23.08'
+	sdk: org.freedesktop.Sdk
+
+	flatpak-builder build-dir --user --install-deps-from=flathub --download-only net.openhabittracker.app.yaml --force-clean
+
+    <Configuration>Release</Configuration>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
 
 	python3 flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 nuget-sources.json OpenHabitTracker/OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
 
