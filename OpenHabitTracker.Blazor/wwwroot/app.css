@@ -86,11 +86,16 @@ html, body {
     color: var(--bs-secondary-color);
 }
 
-table {
+.markdown-block-margin table {
     width: 100%;
 }
 
-tbody, td, tfoot, th, thead, tr {
+.markdown-block-margin tbody,
+.markdown-block-margin td,
+.markdown-block-margin tfoot,
+.markdown-block-margin th,
+.markdown-block-margin thead,
+.markdown-block-margin tr {
     border-width: 1px;
 }
 

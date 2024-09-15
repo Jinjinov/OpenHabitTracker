@@ -553,9 +553,9 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             subscript: H~2~O
             superscript: X^2^
 
-            | table  | with   | headers |
-            | :---   | :---:  |    ---: |
-            | left   | middle | right   |
+            | table | with   | headers |
+            | :---  | :---:  |    ---: |
+            | left  | middle | right   |
             """;
 
         UserData userData = new()
