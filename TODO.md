@@ -69,6 +69,57 @@ public sealed class ErrorBoundaryLogger : IErrorBoundaryLogger
     }
 }
 
+dotnet add package Microsoft.Extensions.Logging
+dotnet add package Microsoft.Extensions.Logging.Console
+dotnet add package Microsoft.Extensions.Logging.File
+
+	{
+		var host = Host.CreateDefaultBuilder(args)
+			.ConfigureLogging(logging =>
+			{
+				// Clear default providers if needed
+				logging.ClearProviders();
+
+				// Add console logging
+				logging.AddConsole();
+
+				// Add file logging
+				logging.AddFile("Logs/myapp-{Date}.txt");
+
+				// Set minimum log level
+				logging.SetMinimumLevel(LogLevel.Error);
+			})
+			.Build();
+
+		var logger = host.Services.GetRequiredService<ILogger<Program>>();
+
+		logger.LogError("This is an error message");
+
+		host.Run();
+	}
+
+	Checking the Configured Providers in Your Application
+	If you want to see which logging providers are configured in your application programmatically, you can inspect the ILoggerFactory services.
+
+	{
+        var host = Host.CreateDefaultBuilder(args)
+            .Build();
+
+        var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
+
+        // List all logging providers
+        var providers = loggerFactory.GetType().GetProperty("Providers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                                      ?.GetValue(loggerFactory) as IEnumerable<ILoggerProvider>;
+
+        Console.WriteLine("Configured Logging Providers:");
+        foreach (var provider in providers)
+        {
+            Console.WriteLine(provider.GetType().Name);
+        }
+
+        host.Run();
+    }
+
 ---------------------------------------------------------------------------------------------------
 
 find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-left: env(safe-area-inset-left) !important;`
