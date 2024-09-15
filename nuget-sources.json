@@ -22,6 +22,13 @@
     },
     {
         "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.app.runtime.linux-x64/8.0.8/microsoft.aspnetcore.app.runtime.linux-x64.8.0.8.nupkg",
+        "sha512": "9912abe28750c7a38a0606f63ef02c0543b55a9eaf2aeccc043b4d9bf9fabce6e17998a5e7ec53566e4e80f66b62e16820d7d53f66d1a5e5fb5f0d65b0989aff",
+        "dest": "nuget-sources",
+        "dest-filename": "microsoft.aspnetcore.app.runtime.linux-x64.8.0.8.nupkg"
+    },
+    {
+        "type": "file",
         "url": "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.authorization/8.0.8/microsoft.aspnetcore.authorization.8.0.8.nupkg",
         "sha512": "3f7273657455cd237079c67ebc13c11fcca94426aead493b1ebeeb2900cfa670918192eeca81a2eae30ba62ed1507dbbd691257aee87a65a9375cce46aa7d27b",
         "dest": "nuget-sources",
@@ -320,6 +327,20 @@
         "sha512": "56a71e4b3e41475352c4a673232669cdce9e1e2f064531163c686ab7e1541cae1d47b972e470a9803e44f4ef35beac37f9e15a2bfd8d52f5094b6765a1895fdd",
         "dest": "nuget-sources",
         "dest-filename": "microsoft.jsinterop.8.0.8.nupkg"
+    },
+    {
+        "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/microsoft.net.illink.tasks/8.0.8/microsoft.net.illink.tasks.8.0.8.nupkg",
+        "sha512": "1c2a41e709bc210e925fadc90e8bcd23a389329ef989cd19783f06dc81a520753b4e99f54749ad85b5792763896a02a6cbfad03ee02efaaf94fb14fa96ed7114",
+        "dest": "nuget-sources",
+        "dest-filename": "microsoft.net.illink.tasks.8.0.8.nupkg"
+    },
+    {
+        "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.runtime.linux-x64/8.0.8/microsoft.netcore.app.runtime.linux-x64.8.0.8.nupkg",
+        "sha512": "e1e335711505187d34fd4a78996a3d3341d700cdf0fca9d3b527c6d9d5ac1ff159f2d54987d0925788dac45cf33e39dc63153640171c631e179b2521b7eae6f0",
+        "dest": "nuget-sources",
+        "dest-filename": "microsoft.netcore.app.runtime.linux-x64.8.0.8.nupkg"
     },
     {
         "type": "file",
