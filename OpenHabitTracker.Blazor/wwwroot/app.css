@@ -63,7 +63,8 @@ html, body {
 .markdown-block-margin > p,
 .markdown-block-margin > ol,
 .markdown-block-margin > ul,
-.markdown-block-margin > pre {
+.markdown-block-margin > pre,
+.markdown-block-margin > blockquote {
     margin-bottom: calc(1em * var(--bs-body-line-height));
 }
 
@@ -77,13 +78,22 @@ html, body {
 .markdown-block-margin > p:last-child,
 .markdown-block-margin > ol:last-child,
 .markdown-block-margin > ul:last-child,
-.markdown-block-margin > pre:last-child {
+.markdown-block-margin > pre:last-child,
+.markdown-block-margin > blockquote:last-child {
+    margin-bottom: 0;
+}
+
+/* bottom margin for the last nested element within the markdown block - covers elements inside a blockquote */
+.markdown-block-margin > :last-child > p:last-child,
+.markdown-block-margin > :last-child > ol:last-child,
+.markdown-block-margin > :last-child > ul:last-child,
+.markdown-block-margin > :last-child > pre:last-child,
+.markdown-block-margin > :last-child > blockquote:last-child {
     margin-bottom: 0;
 }
 
 /* Blockquote styles */
 .markdown-block-margin > blockquote {
-    margin-bottom: calc(1em * var(--bs-body-line-height));
     padding-left: 1em;
     border-left: 4px solid var(--bs-secondary-color);
     color: var(--bs-secondary-color);
