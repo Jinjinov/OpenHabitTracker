@@ -64,6 +64,7 @@ html, body {
 .markdown-block-margin > ol,
 .markdown-block-margin > ul,
 .markdown-block-margin > pre,
+.markdown-block-margin > table,
 .markdown-block-margin > blockquote {
     margin-bottom: calc(1em * var(--bs-body-line-height));
 }
@@ -79,13 +80,14 @@ html, body {
     margin-bottom: 0;
 }
 
-/* Blockquote styles */
+/* blockquote styles */
 .markdown-block-margin blockquote {
     padding-left: 1em;
     border-left: 4px solid var(--bs-secondary-color);
     color: var(--bs-secondary-color);
 }
 
+/* table styles */
 .markdown-block-margin table {
     width: 100%;
 }
