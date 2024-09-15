@@ -79,6 +79,14 @@ html, body {
     margin-bottom: 0;
 }
 
+/* Blockquote styles */
+.markdown-block-margin > blockquote {
+    margin: 0 0 calc(1em * var(--bs-body-line-height));
+    padding-left: 1em;
+    border-left: 4px solid var(--bs-secondary-color);
+    color: var(--bs-secondary-color);
+}
+
 /* MAIN ROW AND COLUMNS SCROLLBARS */
 
 /* Mobile: show scrollbar in parent row */
