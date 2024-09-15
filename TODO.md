@@ -8,7 +8,66 @@ https://github.com/dotnet/maui-samples/tree/main/8.0/UITesting/BasicAppiumNunitS
 https://devblogs.microsoft.com/dotnet/dotnet-maui-ui-testing-appium/
 https://github.com/jfversluis/Template.Maui.UITesting
 
+---------------------------------------------------------------------------------------------------
+
+https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#global-exception-handling
+https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#error-boundaries
+https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#alternative-global-exception-handling
+
+https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#places-where-errors-may-occur
+https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#component-instantiation
+https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#lifecycle-methods
+
 add `@using Microsoft.Extensions.Logging` @inject ILogger Logger
+
+https://stackoverflow.com/questions/57539330/is-there-a-way-to-globally-catch-all-unhandled-errors-in-a-blazor-single-page-ap
+https://stackoverflow.com/questions/66695516/tracking-down-unhandled-exceptions-in-blazor-webassembly
+https://stackoverflow.com/questions/75534867/how-to-globally-handle-catch-exceptions-in-blazor-server-c-sharp
+
+OpenHabitTracker.Blazor.Server:
+	- @page "/Error"
+	- app.UseExceptionHandler("/Error");
+
+<ErrorBoundary>
+    <ChildContent>
+        <EmbeddedCounter />
+    </ChildContent>
+    <ErrorContent>
+        <p class="errorUI">A rotten gremlin got us. Sorry!</p>
+    </ErrorContent>
+</ErrorBoundary>
+
+https://stackoverflow.com/questions/70198098/catch-and-display-on-the-page-any-error-in-a-net-maui-blazor-project
+https://github.com/bUnit-dev/bUnit/issues/410
+https://github.com/bUnit-dev/bUnit/pull/418
+
+To use <ErrorBoundary> the DI needs IErrorBoundaryLogger
+
+You should check if each platform already registers IErrorBoundaryLogger on start to DI with AddSingleton<IErrorBoundaryLogger, ErrorBoundaryLogger>();
+
+If it does not register it, write your own and register it
+
+https://github.com/dotnet/maui/issues/4502
+https://github.com/dotnet/aspnetcore/blob/main/src/Components/WebAssembly/WebAssembly/src/Services/WebAssemblyErrorBoundaryLogger.cs
+
+public sealed class ErrorBoundaryLogger : IErrorBoundaryLogger
+{
+    private readonly ILogger<ErrorBoundary> _errorBoundaryLogger;
+
+    public ErrorBoundaryLogger(ILogger<ErrorBoundary> errorBoundaryLogger)
+    {
+        _errorBoundaryLogger = errorBoundaryLogger ?? throw new ArgumentNullException(nameof(errorBoundaryLogger));
+    }
+
+    public ValueTask LogErrorAsync(Exception exception)
+    {
+        // For client-side code, all internal state is visible to the end user.
+        // We can just log directly to the console.
+        _errorBoundaryLogger.LogError(exception, "ErrorBoundary");
+
+        return ValueTask.CompletedTask;
+    }
+}
 
 ---------------------------------------------------------------------------------------------------
 
