@@ -534,6 +534,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             ---
             1. first item
             2. second item
+
+            > blockquote
             """;
 
         string extendedMarkdown =
