@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="8.0.8" />
-    <PackageReference Include="Photino.Blazor" Version="3.1.8" />
+    <PackageReference Include="Photino.Blazor" Version="3.1.9" />
   </ItemGroup>
 
   <ItemGroup>
