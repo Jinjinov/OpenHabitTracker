@@ -517,24 +517,11 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
     {
         DateTime now = DateTime.Now;
 
-        string releaseNotes =
-            """
-            What is new in 1.0.5:
-            - new, better examples
-            - clicking on Menu closes it if it is open
-            - title bar Notes, Tasks, Habits have different background when selected
-            - selecting Notes, Tasks, Habits form the menu closes the menu on phones
-            - changed Duration control from time picker to dropdown
-            - added Vertical space setting for the space between Notes, Tasks, Habits
-            - close button X in now always in the top right corner
-
-            *Thank you all for your valuable feedback!*
-            """;
-
         string markdown =
             """
             # Markdown
             ## Heading
+                indented
                 code
                 block
             **bold**
@@ -547,6 +534,26 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             ---
             1. first item
             2. second item
+            """;
+
+        string extendedMarkdown =
+            """
+            here is a footnote[^1]
+            [^1]: this is the footnote
+
+            ```
+            fenced
+            code
+            block
+            ```
+            ~~strikethrough~~
+            ==highlight==
+            subscript: H~2~O
+            superscript: X^2^
+
+            | table  | with   | headers |
+            | :---   | :---:  |    ---: |
+            | left   | middle | right   |
             """;
 
         UserData userData = new()
@@ -594,20 +601,20 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     [
                         new()
                         {
-                            Title = "Release notes",
+                            Title = "Markdown example",
                             Priority = Priority.Medium,
-                            Content = releaseNotes,
-                            ContentMarkdown = GetMarkdown(releaseNotes),
+                            Content = markdown,
+                            ContentMarkdown = GetMarkdown(markdown),
                             CreatedAt = now,
                             UpdatedAt = now,
                             Color = "bg-info-subtle"
                         },
                         new()
                         {
-                            Title = "Markdown example",
+                            Title = "Extended Markdown example",
                             Priority = Priority.Medium,
-                            Content = markdown,
-                            ContentMarkdown = GetMarkdown(markdown),
+                            Content = extendedMarkdown,
+                            ContentMarkdown = GetMarkdown(extendedMarkdown),
                             CreatedAt = now,
                             UpdatedAt = now,
                             Color = "bg-info-subtle"

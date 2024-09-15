@@ -86,6 +86,14 @@ html, body {
     color: var(--bs-secondary-color);
 }
 
+table {
+    width: 100%;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    border-width: 1px;
+}
+
 /* MAIN ROW AND COLUMNS SCROLLBARS */
 
 /* Mobile: show scrollbar in parent row */
