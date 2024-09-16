@@ -123,6 +123,15 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+PhotinoBlazorApp app = builder.Build();
+	app.MainWindow.ShowSaveFile();
+	app.MainWindow.ShowOpenFile();
+
+builder.Services.AddScoped<IOpenFile, OpenFile>();
+builder.Services.AddScoped<ISaveFile, SaveFile>();
+
+---------------------------------------------------------------------------------------------------
+
 https://v2.tauri.app/distribute/flatpak/
 
 runtime: org.gnome.Platform
