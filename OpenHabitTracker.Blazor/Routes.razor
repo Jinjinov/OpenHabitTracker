@@ -2,7 +2,14 @@
 
 <Router AppAssembly="@AssemblyProvider.AppAssembly" AdditionalAssemblies="@AssemblyProvider.AdditionalAssemblies">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
+        <ErrorBoundary>
+            <ChildContent>
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
+            </ChildContent>
+            <ErrorContent Context="Exception">
+                @Exception.ToString()
+            </ErrorContent>
+        </ErrorBoundary>
     </Found>
     <NotFound>
         <p role="alert">Sorry, there's nothing at this address.</p>
