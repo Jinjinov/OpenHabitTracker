@@ -42,12 +42,9 @@ public static class MauiProgram
 #if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
+        builder.Logging.SetMinimumLevel(LogLevel.Debug);
 #endif
-
-        builder.Services.AddLogging(loggingBuilder =>
-        {
-            loggingBuilder.AddConsole();
-        });
+        builder.Logging.AddConsole();
 
         string databaseFile = "OpenHT.db";
         string databaseFolder = "";
@@ -83,6 +80,9 @@ public static class MauiProgram
 
         //ILoggerFactory loggerFactory = mauiApp.Services.GetRequiredService<ILoggerFactory>();
         // Microsoft.Extensions.Logging.Debug.DebugLoggerProvider
+
+        ILogger logger = mauiApp.Services.GetRequiredService<ILogger>();
+        logger.LogDebug("Initializing databese");
 
         IDataAccess dataAccess = mauiApp.Services.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();

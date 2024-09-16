@@ -25,8 +25,10 @@ public class Program
         {
 #if DEBUG
             loggingBuilder.AddDebug();
+            loggingBuilder.SetMinimumLevel(LogLevel.Debug);
 #endif
             loggingBuilder.AddConsole();
+
         });
 
         builder.Services.AddServices<OnClickMarkdownExtension>();
@@ -48,6 +50,9 @@ public class Program
 
         //ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
         // 0
+
+        ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
+        logger.LogDebug("Initializing databese");
 
         IDataAccess dataAccess = app.Services.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();

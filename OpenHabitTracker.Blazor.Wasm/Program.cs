@@ -26,6 +26,7 @@ builder.Services.AddLogging(loggingBuilder =>
 {
 #if DEBUG
     loggingBuilder.AddDebug();
+    loggingBuilder.SetMinimumLevel(LogLevel.Debug);
 #endif
 });
 
@@ -44,6 +45,9 @@ WebAssemblyHost host = builder.Build();
 
 //ILoggerFactory loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
 // Microsoft.AspNetCore.Components.WebAssembly.Services.WebAssemblyConsoleLoggerProvider
+
+ILogger<Program> logger = host.Services.GetRequiredService<ILogger<Program>>();
+logger.LogDebug("Initializing databese");
 
 IDataAccess dataAccess = host.Services.GetRequiredService<IDataAccess>();
 await dataAccess.Initialize();

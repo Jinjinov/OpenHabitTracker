@@ -28,6 +28,7 @@ public partial class MainWindow : Window
         {
 #if DEBUG
             loggingBuilder.AddDebug();
+            loggingBuilder.SetMinimumLevel(LogLevel.Debug);
 #endif
             loggingBuilder.AddConsole();
         });
@@ -56,6 +57,9 @@ public partial class MainWindow : Window
 
         //ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
         // 0
+
+        ILogger<MainWindow> logger = serviceProvider.GetRequiredService<ILogger<MainWindow>>();
+        logger.LogDebug("Initializing databese");
 
         IDataAccess dataAccess = serviceProvider.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();

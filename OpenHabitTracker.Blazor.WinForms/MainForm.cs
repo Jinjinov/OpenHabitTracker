@@ -28,6 +28,7 @@ public partial class MainForm : Form
         {
 #if DEBUG
             loggingBuilder.AddDebug();
+            loggingBuilder.SetMinimumLevel(LogLevel.Debug);
 #endif
             loggingBuilder.AddConsole();
         });
@@ -57,6 +58,9 @@ public partial class MainForm : Form
 
         //ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
         // 0
+
+        ILogger<MainForm> logger = serviceProvider.GetRequiredService<ILogger<MainForm>>();
+        logger.LogDebug("Initializing databese");
 
         IDataAccess dataAccess = serviceProvider.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();

@@ -24,15 +24,6 @@ https://stackoverflow.com/questions/57539330/is-there-a-way-to-globally-catch-al
 https://stackoverflow.com/questions/66695516/tracking-down-unhandled-exceptions-in-blazor-webassembly
 https://stackoverflow.com/questions/75534867/how-to-globally-handle-catch-exceptions-in-blazor-server-c-sharp
 
-<ErrorBoundary>
-    <ChildContent>
-        <EmbeddedCounter />
-    </ChildContent>
-    <ErrorContent>
-        <p class="errorUI">A rotten gremlin got us. Sorry!</p>
-    </ErrorContent>
-</ErrorBoundary>
-
 https://stackoverflow.com/questions/70198098/catch-and-display-on-the-page-any-error-in-a-net-maui-blazor-project
 https://github.com/bUnit-dev/bUnit/issues/410
 https://github.com/bUnit-dev/bUnit/pull/418
