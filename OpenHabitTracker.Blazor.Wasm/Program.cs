@@ -22,13 +22,10 @@ builder.Services.AddOidcAuthentication(options =>
     builder.Configuration.Bind("Local", options.ProviderOptions);
 });
 
-builder.Services.AddLogging(loggingBuilder =>
-{
 #if DEBUG
-    loggingBuilder.AddDebug();
-    //loggingBuilder.SetMinimumLevel(LogLevel.Debug);
+builder.Logging.AddDebug();
+//builder.Logging.SetMinimumLevel(LogLevel.Debug);
 #endif
-});
 
 builder.Services.AddServices();
 builder.Services.AddDataAccess();
