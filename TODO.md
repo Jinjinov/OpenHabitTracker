@@ -24,10 +24,6 @@ https://stackoverflow.com/questions/57539330/is-there-a-way-to-globally-catch-al
 https://stackoverflow.com/questions/66695516/tracking-down-unhandled-exceptions-in-blazor-webassembly
 https://stackoverflow.com/questions/75534867/how-to-globally-handle-catch-exceptions-in-blazor-server-c-sharp
 
-OpenHabitTracker.Blazor.Server:
-	- @page "/Error"
-	- app.UseExceptionHandler("/Error");
-
 <ErrorBoundary>
     <ChildContent>
         <EmbeddedCounter />
@@ -42,9 +38,7 @@ https://github.com/bUnit-dev/bUnit/issues/410
 https://github.com/bUnit-dev/bUnit/pull/418
 
 To use <ErrorBoundary> the DI needs IErrorBoundaryLogger
-
 You should check if each platform already registers IErrorBoundaryLogger on start to DI with AddSingleton<IErrorBoundaryLogger, ErrorBoundaryLogger>();
-
 If it does not register it, write your own and register it
 
 https://github.com/dotnet/maui/issues/4502
@@ -68,35 +62,6 @@ public sealed class ErrorBoundaryLogger : IErrorBoundaryLogger
         return ValueTask.CompletedTask;
     }
 }
-
-dotnet add package Microsoft.Extensions.Logging
-dotnet add package Microsoft.Extensions.Logging.Console
-dotnet add package Microsoft.Extensions.Logging.File
-
-	{
-		var host = Host.CreateDefaultBuilder(args)
-			.ConfigureLogging(logging =>
-			{
-				// Clear default providers if needed
-				logging.ClearProviders();
-
-				// Add console logging
-				logging.AddConsole();
-
-				// Add file logging
-				logging.AddFile("Logs/myapp-{Date}.txt");
-
-				// Set minimum log level
-				logging.SetMinimumLevel(LogLevel.Error);
-			})
-			.Build();
-
-		var logger = host.Services.GetRequiredService<ILogger<Program>>();
-
-		logger.LogError("This is an error message");
-
-		host.Run();
-	}
 
 https://stackoverflow.com/questions/50744024/iloggerfactory-vs-servicecollection-addlogging-vs-webhostbuilder-configureloggin
 
