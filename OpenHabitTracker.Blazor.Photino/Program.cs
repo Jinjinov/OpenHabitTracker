@@ -25,7 +25,7 @@ public class Program
         {
 #if DEBUG
             loggingBuilder.AddDebug();
-            loggingBuilder.SetMinimumLevel(LogLevel.Debug);
+            //loggingBuilder.SetMinimumLevel(LogLevel.Debug);
 #endif
             loggingBuilder.AddConsole();
 

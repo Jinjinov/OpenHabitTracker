@@ -26,7 +26,7 @@ builder.Services.AddLogging(loggingBuilder =>
 {
 #if DEBUG
     loggingBuilder.AddDebug();
-    loggingBuilder.SetMinimumLevel(LogLevel.Debug);
+    //loggingBuilder.SetMinimumLevel(LogLevel.Debug);
 #endif
 });
 

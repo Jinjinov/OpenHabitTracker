@@ -42,7 +42,7 @@ public static class MauiProgram
 #if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
-        builder.Logging.SetMinimumLevel(LogLevel.Debug);
+        //builder.Logging.SetMinimumLevel(LogLevel.Debug);
 #endif
         builder.Logging.AddConsole();
 
@@ -81,7 +81,7 @@ public static class MauiProgram
         //ILoggerFactory loggerFactory = mauiApp.Services.GetRequiredService<ILoggerFactory>();
         // Microsoft.Extensions.Logging.Debug.DebugLoggerProvider
 
-        ILogger logger = mauiApp.Services.GetRequiredService<ILogger>();
+        ILogger<MauiApp> logger = mauiApp.Services.GetRequiredService<ILogger<MauiApp>>();
         logger.LogDebug("Initializing databese");
 
         IDataAccess dataAccess = mauiApp.Services.GetRequiredService<IDataAccess>();
