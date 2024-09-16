@@ -26,6 +26,12 @@ builder.Services.AddScoped<IPreRenderService, OpenHabitTracker.Blazor.Web.PreRen
 
 WebApplication app = builder.Build();
 
+//ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
+// Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider
+// Microsoft.Extensions.Logging.Debug.DebugLoggerProvider
+// Microsoft.Extensions.Logging.EventSource.EventSourceLoggerProvider
+// Microsoft.Extensions.Logging.EventLog.EventLogLoggerProvider
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

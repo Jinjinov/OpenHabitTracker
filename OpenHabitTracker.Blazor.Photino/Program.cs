@@ -1,12 +1,13 @@
-﻿using OpenHabitTracker.Backup;
+﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
+using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
 using OpenHabitTracker.Services;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
 using Photino.Blazor;
 using System;
 using System.Diagnostics;
@@ -20,7 +21,13 @@ public class Program
     {
         PhotinoBlazorAppBuilder builder = PhotinoBlazorAppBuilder.CreateDefault(args);
 
-        builder.Services.AddLogging();
+        builder.Services.AddLogging(loggingBuilder =>
+        {
+#if DEBUG
+            loggingBuilder.AddDebug();
+#endif
+            loggingBuilder.AddConsole();
+        });
 
         builder.Services.AddServices<OnClickMarkdownExtension>();
         builder.Services.AddDataAccess("OpenHT.db");
@@ -38,6 +45,9 @@ public class Program
         builder.RootComponents.Add<HeadOutlet>("head::after");
 
         PhotinoBlazorApp app = builder.Build();
+
+        //ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
+        // 0
 
         IDataAccess dataAccess = app.Services.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();

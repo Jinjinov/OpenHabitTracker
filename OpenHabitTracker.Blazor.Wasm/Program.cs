@@ -22,6 +22,13 @@ builder.Services.AddOidcAuthentication(options =>
     builder.Configuration.Bind("Local", options.ProviderOptions);
 });
 
+builder.Services.AddLogging(loggingBuilder =>
+{
+#if DEBUG
+    loggingBuilder.AddDebug();
+#endif
+});
+
 builder.Services.AddServices();
 builder.Services.AddDataAccess();
 builder.Services.AddBackup();
@@ -34,6 +41,9 @@ builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddScoped<IPreRenderService, PreRenderService>();
 
 WebAssemblyHost host = builder.Build();
+
+//ILoggerFactory loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
+// Microsoft.AspNetCore.Components.WebAssembly.Services.WebAssemblyConsoleLoggerProvider
 
 IDataAccess dataAccess = host.Services.GetRequiredService<IDataAccess>();
 await dataAccess.Initialize();

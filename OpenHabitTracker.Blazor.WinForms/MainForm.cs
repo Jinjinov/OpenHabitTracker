@@ -1,12 +1,13 @@
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebView.WindowsForms;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
 using OpenHabitTracker.Services;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebView.WindowsForms;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -22,6 +23,14 @@ public partial class MainForm : Form
 #if DEBUG
         services.AddBlazorWebViewDeveloperTools();
 #endif
+
+        services.AddLogging(loggingBuilder =>
+        {
+#if DEBUG
+            loggingBuilder.AddDebug();
+#endif
+            loggingBuilder.AddConsole();
+        });
 
         services.AddServices();
         services.AddDataAccess("OpenHT.db");
@@ -45,6 +54,9 @@ public partial class MainForm : Form
         blazorWebView.RootComponents.Add<HeadOutlet>("head::after");
 
         //serviceProvider.UseServices();
+
+        //ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+        // 0
 
         IDataAccess dataAccess = serviceProvider.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();

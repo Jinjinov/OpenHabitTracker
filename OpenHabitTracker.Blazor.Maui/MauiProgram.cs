@@ -44,6 +44,11 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
+        builder.Services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.AddConsole();
+        });
+
         string databaseFile = "OpenHT.db";
         string databaseFolder = "";
 
@@ -75,6 +80,9 @@ public static class MauiProgram
         builder.Services.AddScoped<IPreRenderService, PreRenderService>(); // different in Web
 
         MauiApp mauiApp = builder.Build();
+
+        //ILoggerFactory loggerFactory = mauiApp.Services.GetRequiredService<ILoggerFactory>();
+        // Microsoft.Extensions.Logging.Debug.DebugLoggerProvider
 
         IDataAccess dataAccess = mauiApp.Services.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();
