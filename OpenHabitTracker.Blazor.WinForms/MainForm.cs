@@ -60,10 +60,12 @@ public partial class MainForm : Form
         // 0
 
         ILogger<MainForm> logger = serviceProvider.GetRequiredService<ILogger<MainForm>>();
-        logger.LogDebug("Initializing databese");
+        logger.LogInformation("Initializing databese");
 
         IDataAccess dataAccess = serviceProvider.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();
+
+        logger.LogInformation("Running app");
     }
 
 }

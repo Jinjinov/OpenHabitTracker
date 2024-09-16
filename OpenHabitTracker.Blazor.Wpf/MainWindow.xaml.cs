@@ -59,10 +59,12 @@ public partial class MainWindow : Window
         // 0
 
         ILogger<MainWindow> logger = serviceProvider.GetRequiredService<ILogger<MainWindow>>();
-        logger.LogDebug("Initializing databese");
+        logger.LogInformation("Initializing databese");
 
         IDataAccess dataAccess = serviceProvider.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();
+
+        logger.LogInformation("Running app");
     }
 }
 

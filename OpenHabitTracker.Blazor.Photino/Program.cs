@@ -52,7 +52,7 @@ public class Program
         // 0
 
         ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
-        logger.LogDebug("Initializing databese");
+        logger.LogInformation("Initializing databese");
 
         IDataAccess dataAccess = app.Services.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();
@@ -84,6 +84,8 @@ public class Program
             {
             }
         };
+
+        logger.LogInformation("Running app");
 
         app.Run();
     }

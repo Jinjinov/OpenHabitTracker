@@ -82,10 +82,12 @@ public static class MauiProgram
         // Microsoft.Extensions.Logging.Debug.DebugLoggerProvider
 
         ILogger<MauiApp> logger = mauiApp.Services.GetRequiredService<ILogger<MauiApp>>();
-        logger.LogDebug("Initializing databese");
+        logger.LogInformation("Initializing databese");
 
         IDataAccess dataAccess = mauiApp.Services.GetRequiredService<IDataAccess>();
         dataAccess.Initialize();
+
+        logger.LogInformation("Running app");
 
         return mauiApp;
     }

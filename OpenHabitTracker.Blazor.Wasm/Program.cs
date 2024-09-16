@@ -44,12 +44,14 @@ WebAssemblyHost host = builder.Build();
 // Microsoft.AspNetCore.Components.WebAssembly.Services.WebAssemblyConsoleLoggerProvider
 
 ILogger<Program> logger = host.Services.GetRequiredService<ILogger<Program>>();
-logger.LogDebug("Initializing databese");
+logger.LogInformation("Initializing databese");
 
 IDataAccess dataAccess = host.Services.GetRequiredService<IDataAccess>();
 await dataAccess.Initialize();
 
 AppData appData = host.Services.GetRequiredService<AppData>();
 await appData.InitializeSettings();
+
+logger.LogInformation("Running app");
 
 await host.RunAsync();
