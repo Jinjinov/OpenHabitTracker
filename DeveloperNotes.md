@@ -28,6 +28,44 @@ You must upload a screenshot for 5.5-inch iPhone displays.
 
 ---------------------------------------------------------------------------------------------------
 
+.NET runtime version: 8.0.8
+.NET SDK version: 8.0.400
+dotnet workload version: 8.0.82 for windows, 34.0.138 for Android, 17.5.8030 for iOS, macOS
+NuGet package version: 8.0.8
+
+Windows version: 10.0.19041.0
+Windows supported version: 10.0.17763.0
+Windows SDK version: 1.5.240607001
+Android SDK version: 34 - one version of Android Studion - for multiple Android SDK versions just select and download them
+iOS version: 17.5 - each version of Xcode comes with its own SDK version - for multiple SDK versions install multiple versions of Xcode (rename the .app before installing new version)
+Xcode version: 15.4
+macOS version: 14.4
+
+https://github.com/dotnet/maui/wiki/Release-Versions
+
+`dotnet --info`
+
+`dotnet workload search`
+
+`dotnet workload list`
+
+Installed Workload Id      Manifest Version       Installation Source
+---------------------------------------------------------------------------------
+android                    34.0.138/8.0.100       SDK 8.0.400, VS 17.11.35303.130
+aspire                     8.2.0/8.0.100          SDK 8.0.400, VS 17.11.35303.130
+ios                        17.5.8030/8.0.100      SDK 8.0.400, VS 17.11.35303.130
+maccatalyst                17.5.8030/8.0.100      SDK 8.0.400, VS 17.11.35303.130
+maui-windows               8.0.82/8.0.100         SDK 8.0.400, VS 17.11.35303.130
+wasm-tools                 8.0.8/8.0.100          SDK 8.0.400, VS 17.11.35303.130
+wasm-tools-net6            8.0.8/8.0.100          SDK 8.0.400, VS 17.11.35303.130
+
+`dotnet workload update`
+
+NuGet package versions: MauiVersion == Manifest Version
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
+
 Publish Windows:
 
 dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:SelfContained=true /p:GenerateAppxPackageOnBuild=true
@@ -40,9 +78,17 @@ set msix version in Package.appxmanifest
 
 Publish iOS:
 
+run on iOS simulator:
+    dotnet build -t:Run -f net8.0-ios
+    dotnet build -t:Run -f net8.0-ios -p:_DeviceName=:v2:udid=YOUR_UDID
+    https://learn.microsoft.com/en-us/dotnet/maui/ios/cli?view=net-maui-8.0#launch-the-app-on-a-specific-simulator
+
 dotnet publish OpenHabitTracker.Blazor.Maui.csproj -f net8.0-ios -c Release -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64  -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
 
 Publish macOS:
+
+run on macOS:
+    dotnet build -t:Run -f net8.0-maccatalyst
 
 dotnet publish -f net8.0-maccatalyst -c Release -p:MtouchLink=SdkOnly -p:CreatePackage=true -p:EnableCodeSigning=true -p:EnablePackageSigning=true -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.macos" -p:CodesignEntitlements="Platforms\MacCatalyst\Entitlements.plist" -p:PackageSigningKey="3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)"
 
@@ -56,6 +102,10 @@ sudo apt-get install libwebkit2gtk-4.1
 ---------------------------------------------------------------------------------------------------
 
 Android:
+
+run on Android emulator:
+    dotnet build -t:Run -f net8.0-android
+    https://dev.to/csharpfritz/i-built-an-android-app-on-my-linux-machine-using-net-7-and-maui-41if
 
 F-Droid
 	not possible: https://forum.f-droid.org/t/why-isnt-c-net-maui-supported/24842
