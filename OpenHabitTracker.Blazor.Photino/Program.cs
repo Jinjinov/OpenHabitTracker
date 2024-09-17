@@ -11,6 +11,7 @@ using OpenHabitTracker.Services;
 using Photino.Blazor;
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace OpenHabitTracker.Blazor.Photino;
 
@@ -31,8 +32,12 @@ public class Program
 
         });
 
+        string databaseDirectory = Environment.GetEnvironmentVariable("SNAP_USER_COMMON") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".OpenHabitTracker");
+        Directory.CreateDirectory(databaseDirectory);
+        string databasePath = Path.Combine(databaseDirectory, "OpenHT.db");
+
         builder.Services.AddServices<OnClickMarkdownExtension>();
-        builder.Services.AddDataAccess("OpenHT.db");
+        builder.Services.AddDataAccess(databasePath);
         builder.Services.AddBackup();
         builder.Services.AddBlazor();
         builder.Services.AddScoped<IOpenFile, OpenFile>();

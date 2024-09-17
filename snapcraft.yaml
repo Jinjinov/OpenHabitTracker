@@ -1,6 +1,6 @@
 name: openhabittracker
 version: '1.0.0'
-grade: devel
+grade: stable #devel
 summary: Take notes, plan tasks, track habits
 description: |
   - Free and Ad-Free
@@ -20,7 +20,7 @@ description: |
 
 base: core22
 
-confinement: devmode
+confinement: strict #devmode
 
 layout:
   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.0:
@@ -37,6 +37,11 @@ parts:
     override-build: |
      dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -r linux-x64 -c Release -p:PublishSingleFile=true --self-contained true -f net8.0 -o $SNAPCRAFT_PART_INSTALL
      chmod 0755 $SNAPCRAFT_PART_INSTALL/OpenHT
+     
+     mkdir -p $SNAPCRAFT_PART_INSTALL/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0/2.10.0
+     cp -r "/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/*" "$SNAPCRAFT_PART_INSTALL/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0/"
+
+     $SNAPCRAFT_PART_INSTALL/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0/gdk-pixbuf-query-loaders > $SNAPCRAFT_PART_INSTALL/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0/2.10.0/loaders.cache
     build-packages:
       #- libwebkit2gtk-4.1-dev
       - dotnet-sdk-8.0
@@ -55,6 +60,12 @@ parts:
       - mesa-vulkan-drivers
       - libgbm1
       - libglx-mesa0
+      - gtk2-engines-murrine  # Add Murrine engine for theme rendering
+      - gtk2-engines-pixbuf   # Pixbuf engine for GTK2 themes
+      - hicolor-icon-theme    # Adds the hicolor icon theme
+      - adwaita-icon-theme    # Adds the default GNOME icon theme
+      - gnome-themes-standard # Provides Adwaita theme
+      - libgdk-pixbuf2.0-0    # Required for loading image files in GTK
 
 apps:
   openhabittracker:
@@ -62,6 +73,17 @@ apps:
     plugs:
       - opengl
       - hardware-observe
+      - home
+      - removable-media
+      - x11
+      - wayland
+      - desktop
+      - desktop-legacy
+      - mount-observe
+      - gsettings
     environment:
       LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
       LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+      GDK_PIXBUF_MODULE_FILE: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0/2.10.0/loaders.cache
+      GTK_DATA_PREFIX: $SNAP
+      XDG_DATA_DIRS: $SNAP/usr/share:$SNAP/usr/local/share:/usr/share:/usr/local/share
