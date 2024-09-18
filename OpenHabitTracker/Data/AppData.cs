@@ -376,7 +376,18 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         Dictionary<long, List<TimeModel>> timesByHabitId = Times.Values.GroupBy(x => x.HabitId).ToDictionary(g => g.Key, g => g.ToList());
         Dictionary<long, List<ItemModel>> itemsByParentId = Items.Values.GroupBy(x => x.ParentId).ToDictionary(g => g.Key, g => g.ToList());
 
-        foreach (CategoryModel category in Categories.Values)
+        UserData userData = new()
+        {
+            Settings = Settings,
+            Categories = Categories.Values.ToList()
+        };
+
+        if (userData.Categories.Count == 0)
+        {
+            userData.Categories.Add(new CategoryModel());
+        }
+
+        foreach (CategoryModel category in userData.Categories)
         {
             category.Notes = notesByCategoryId.GetValueOrDefault(category.Id);
             category.Tasks = tasksByCategoryId.GetValueOrDefault(category.Id);
@@ -398,12 +409,6 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
             habit.TimesDone ??= timesByHabitId.GetValueOrDefault(habit.Id);
         }
-
-        UserData userData = new()
-        {
-            Settings = Settings,
-            Categories = Categories.Values.ToList(),
-        };
 
         return userData;
     }
