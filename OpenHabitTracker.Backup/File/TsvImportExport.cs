@@ -29,7 +29,7 @@ public class TsvImportExport(AppData appData)
             {
                 foreach (NoteModel note in category.Notes)
                 {
-                    foreach (string line in note.Content.Split('\n'))
+                    foreach (string line in note.Content.Replace("\r", "").Split('\n'))
                     {
                         records.Add(new Record
                         {
