@@ -436,7 +436,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             Settings = userData.Settings;
         }
 
-        List<(CategoryModel Model, CategoryEntity Entity)> categories = userData.Categories.Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(CategoryModel Model, CategoryEntity Entity)> categories = userData.Categories.Where(x => !string.IsNullOrEmpty(x.Title)).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
         await _dataAccess.AddCategories(categories.Select(x => x.Entity).ToList());
 
