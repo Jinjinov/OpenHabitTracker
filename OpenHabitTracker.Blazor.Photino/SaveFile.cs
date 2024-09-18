@@ -1,26 +1,27 @@
 ﻿using OpenHabitTracker.Blazor.Files;
+using Photino.NET;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace OpenHabitTracker.Blazor.WinForms;
+namespace OpenHabitTracker.Blazor.Photino;
 
-public class SaveFile : ISaveFile
+public class SaveFile(PhotinoWindow mainWindow) : ISaveFile
 {
+    private readonly PhotinoWindow _mainWindow = mainWindow;
+
     public async Task<string> SaveFileDialog(string filename, string content)
     {
         string extension = Path.GetExtension(filename);
 
-        SaveFileDialog saveFileDialog = new()
+        var filters = new (string Name, string[] Extensions)[]
         {
-            FileName = filename,
-            Filter = $"{extension.TrimStart('.').ToUpper()}|*{extension}"
+            (extension.TrimStart('.').ToUpper(), new string[] { extension })
         };
 
-        if (saveFileDialog.ShowDialog() == DialogResult.OK)
-        {
-            string path = saveFileDialog.FileName;
+        string path = _mainWindow.ShowSaveFile(filters: filters);
 
+        if (!string.IsNullOrEmpty(path))
+        {
             if (!path.EndsWith(extension))
             {
                 path += extension;

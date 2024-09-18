@@ -17,7 +17,10 @@ public class OpenFile : IOpenFile
             builder.AddAttribute(1, "class", css);
             builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, async () =>
             {
-                OpenFileDialog openFileDialog = new();
+                OpenFileDialog openFileDialog = new()
+                {
+                    Filter = "JSON|*.json|TSV|*.tsv|YAML|*.yaml|Markdown|*.md|Google Keep Takeout ZIP|*.zip"
+                };
 
                 if (openFileDialog.ShowDialog() == true)
                 {

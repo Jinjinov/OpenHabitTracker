@@ -16,9 +16,7 @@ public class SaveFile : ISaveFile
         {
             return fileSaverResult.FilePath;
         }
-        else
-        {
-            throw fileSaverResult.Exception;
-        }
+
+        return filename;
     }
 }
