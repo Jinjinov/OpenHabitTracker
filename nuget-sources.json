@@ -295,6 +295,13 @@
     },
     {
         "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.debug/8.0.0/microsoft.extensions.logging.debug.8.0.0.nupkg",
+        "sha512": "dea0193f529935259a32bd8d89f2e24f5877dfa1be7b36eb74135d2682c59a24dd7d24ef36c409597d1dac07657f13cea3deebbb8c29488a9bb7a3aa054655b1",
+        "dest": "nuget-sources",
+        "dest-filename": "microsoft.extensions.logging.debug.8.0.0.nupkg"
+    },
+    {
+        "type": "file",
         "url": "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.options/8.0.0/microsoft.extensions.options.8.0.0.nupkg",
         "sha512": "1c004082a132e7b75a0c95acef3578a4d5db42c55e0996e40b95b663e9a83c5a20ed481a85db7567fff7e3de3dbba6a7d4fe5c825dc7ce95de956689afa16c5a",
         "dest": "nuget-sources",
@@ -344,24 +351,24 @@
     },
     {
         "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/photino.blazor/3.1.8/photino.blazor.3.1.8.nupkg",
-        "sha512": "36213b0171513d95c3c8b973ab9a2765f45fb76ca3cf0df8c2f545b262a8655acc5c8208dbb4a177dff206b4529cefb33e7c1d67a017428836003eac2c4f7607",
+        "url": "https://api.nuget.org/v3-flatcontainer/photino.blazor/3.1.9/photino.blazor.3.1.9.nupkg",
+        "sha512": "d05bb41774830b7717ff0d90ce7b52b65f6d05a6287b3491ecbd7b810350035efd4d42d2f4be50ad13dfd5081a4b3abf1ece7c259896fb8487b7be64ab684295",
         "dest": "nuget-sources",
-        "dest-filename": "photino.blazor.3.1.8.nupkg"
+        "dest-filename": "photino.blazor.3.1.9.nupkg"
     },
     {
         "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/photino.native/3.1.5/photino.native.3.1.5.nupkg",
-        "sha512": "c6eb0badb76cf23b2e7c74ef095e32c12ea128121c0c7add06bdb64af7f1c439d5ade3f48994ec8719b920e3b41aa88da53897cb50118c20ad63084961f506cf",
+        "url": "https://api.nuget.org/v3-flatcontainer/photino.native/3.1.6/photino.native.3.1.6.nupkg",
+        "sha512": "5743a443639304a765ef960f215154eef8b1241fe28c9fafe40d07aa9956455c7a2472d9cd371872ae90d995843532a008027230b70c0e05e0fb88aa84b31785",
         "dest": "nuget-sources",
-        "dest-filename": "photino.native.3.1.5.nupkg"
+        "dest-filename": "photino.native.3.1.6.nupkg"
     },
     {
         "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/photino.net/3.1.14/photino.net.3.1.14.nupkg",
-        "sha512": "f6e012c95bac44fee7982e260a3e9395f03635eee002aa68094bbfc209c1fdff8767da71ce8693d6e4891aacaa15499f293f3a5afdcbc9306d462ccf06ffe7af",
+        "url": "https://api.nuget.org/v3-flatcontainer/photino.net/3.1.17/photino.net.3.1.17.nupkg",
+        "sha512": "564bee168fc174d5b3b27fc82ba39c60b05bf3c331b6ff400f15d2889651f4825de2817f3cda13bbe443df8591fa83627e63ee89057681b20fa4be506bb9e029",
         "dest": "nuget-sources",
-        "dest-filename": "photino.net.3.1.14.nupkg"
+        "dest-filename": "photino.net.3.1.17.nupkg"
     },
     {
         "type": "file",
@@ -428,9 +435,9 @@
     },
     {
         "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/yamldotnet/16.1.0/yamldotnet.16.1.0.nupkg",
-        "sha512": "02169aa993b04aef78171665aa2fdd427301d54727fb0f4f11fbca9938e9a361d24e12d8bb5a8a5596e13f91ea6528c162e83cc2e7d33919ef23ca575843117c",
+        "url": "https://api.nuget.org/v3-flatcontainer/yamldotnet/16.1.2/yamldotnet.16.1.2.nupkg",
+        "sha512": "d955d212ec6cc99ecf79732955466c1884db22050c55ee161753f4d6c5d3a581cf9c3e15a23fcf20834f110f732e639efc22fe67ef8d2f0f3249bf4274c511d1",
         "dest": "nuget-sources",
-        "dest-filename": "yamldotnet.16.1.0.nupkg"
+        "dest-filename": "yamldotnet.16.1.2.nupkg"
     }
 ]
