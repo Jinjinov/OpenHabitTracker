@@ -156,7 +156,7 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
 	snapcraft --debug
 
-	sudo snap install openhabittracker_1.0.0_amd64.snap --devmode --dangerous
+	sudo snap install openhabittracker_1.0.0_amd64.snap --dangerous --devmode
 
 	snap list
 
@@ -195,6 +195,7 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 	sudo apt install gnome-software-plugin-flatpak
 
 	flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+	flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 	sudo apt install flatpak-builder
 
