@@ -1,4 +1,4 @@
-id: net.openhabittracker.app
+id: com.github.Jinjinov.OpenHabitTracker
 #runtime: org.freedesktop.Platform
 #runtime-version: '23.08'
 #sdk: org.freedesktop.Sdk

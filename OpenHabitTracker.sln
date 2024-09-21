@@ -21,8 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Google.Api
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{36C1DB59-1758-4659-BA71-5289BD204001}"
 	ProjectSection(SolutionItems) = preProject
+		com.github.Jinjinov.OpenHabitTracker.desktop = com.github.Jinjinov.OpenHabitTracker.desktop
+		com.github.Jinjinov.OpenHabitTracker.metainfo.xml = com.github.Jinjinov.OpenHabitTracker.metainfo.xml
+		com.github.Jinjinov.OpenHabitTracker.svg = com.github.Jinjinov.OpenHabitTracker.svg
+		com.github.Jinjinov.OpenHabitTracker.yaml = com.github.Jinjinov.OpenHabitTracker.yaml
 		DeveloperNotes.md = DeveloperNotes.md
-		net.openhabittracker.app.yaml = net.openhabittracker.app.yaml
 		README.md = README.md
 		snapcraft.yaml = snapcraft.yaml
 		TODO.md = TODO.md

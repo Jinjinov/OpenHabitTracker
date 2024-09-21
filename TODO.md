@@ -203,7 +203,7 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 	runtime-version: '23.08'
 	sdk: org.freedesktop.Sdk
 
-	flatpak-builder build-dir --user --install-deps-from=flathub --download-only net.openhabittracker.app.yaml --force-clean
+	flatpak-builder build-dir --user --install-deps-from=flathub --download-only com.github.Jinjinov.OpenHabitTracker.yaml --force-clean
 
     <Configuration>Release</Configuration>
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
@@ -212,9 +212,9 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
 	python3 flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 nuget-sources.json OpenHabitTracker/OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
 
-	flatpak-builder build-dir --user --force-clean --install --repo=repo net.openhabittracker.app.yaml
+	flatpak-builder build-dir --user --force-clean --install --repo=repo com.github.Jinjinov.OpenHabitTracker.yaml
 
-	flatpak run net.openhabittracker.app
+	flatpak run com.github.Jinjinov.OpenHabitTracker
 
 	https://flathub.org/
 	https://github.com/flathub/flathub
