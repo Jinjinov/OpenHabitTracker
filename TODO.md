@@ -10,54 +10,6 @@ https://github.com/jfversluis/Template.Maui.UITesting
 
 ---------------------------------------------------------------------------------------------------
 
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#global-exception-handling
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#error-boundaries
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#alternative-global-exception-handling
-
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#places-where-errors-may-occur
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#component-instantiation
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#lifecycle-methods
-
-add `@using Microsoft.Extensions.Logging` @inject ILogger Logger
-
-https://stackoverflow.com/questions/57539330/is-there-a-way-to-globally-catch-all-unhandled-errors-in-a-blazor-single-page-ap
-https://stackoverflow.com/questions/66695516/tracking-down-unhandled-exceptions-in-blazor-webassembly
-https://stackoverflow.com/questions/75534867/how-to-globally-handle-catch-exceptions-in-blazor-server-c-sharp
-
-https://stackoverflow.com/questions/70198098/catch-and-display-on-the-page-any-error-in-a-net-maui-blazor-project
-https://github.com/bUnit-dev/bUnit/issues/410
-https://github.com/bUnit-dev/bUnit/pull/418
-
-To use <ErrorBoundary> the DI needs IErrorBoundaryLogger
-You should check if each platform already registers IErrorBoundaryLogger on start to DI with AddSingleton<IErrorBoundaryLogger, ErrorBoundaryLogger>();
-If it does not register it, write your own and register it
-
-https://github.com/dotnet/maui/issues/4502
-https://github.com/dotnet/aspnetcore/blob/main/src/Components/WebAssembly/WebAssembly/src/Services/WebAssemblyErrorBoundaryLogger.cs
-
-public sealed class ErrorBoundaryLogger : IErrorBoundaryLogger
-{
-    private readonly ILogger<ErrorBoundary> _errorBoundaryLogger;
-
-    public ErrorBoundaryLogger(ILogger<ErrorBoundary> errorBoundaryLogger)
-    {
-        _errorBoundaryLogger = errorBoundaryLogger ?? throw new ArgumentNullException(nameof(errorBoundaryLogger));
-    }
-
-    public ValueTask LogErrorAsync(Exception exception)
-    {
-        // For client-side code, all internal state is visible to the end user.
-        // We can just log directly to the console.
-        _errorBoundaryLogger.LogError(exception, "ErrorBoundary");
-
-        return ValueTask.CompletedTask;
-    }
-}
-
-https://stackoverflow.com/questions/50744024/iloggerfactory-vs-servicecollection-addlogging-vs-webhostbuilder-configureloggin
-
----------------------------------------------------------------------------------------------------
-
 find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-left: env(safe-area-inset-left) !important;`
 
 ---------------------------------------------------------------------------------------------------
@@ -76,15 +28,6 @@ remove these from class AppData:
 or make sure that other services update them
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
-
----------------------------------------------------------------------------------------------------
-
-PhotinoBlazorApp app = builder.Build();
-	app.MainWindow.ShowSaveFile();
-	app.MainWindow.ShowOpenFile();
-
-builder.Services.AddScoped<IOpenFile, OpenFile>();
-builder.Services.AddScoped<ISaveFile, SaveFile>();
 
 ---------------------------------------------------------------------------------------------------
 
@@ -233,9 +176,7 @@ save and load without file dialog
 sync: - save last loaded filename to DB, load if there is a new file / more recent
 
 AndroidManifest.xml
-
 MANAGE_EXTERNAL_STORAGE
-
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
