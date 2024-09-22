@@ -92,6 +92,9 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 	https://snapcraft.io/docs/dotnet-apps
 	https://snapcraft.io/docs/dotnet-plugin
 
+	https://snapcraft.io/docs/gnome-extension
+	extensions: [gnome]
+
 	sudo snap install snapcraft --classic
 
 	By default, Snapcraft relies on a build provider to create an isolated build environment inside which applications can be built and packaged as snaps without changing the host system.
