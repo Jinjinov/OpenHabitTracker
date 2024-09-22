@@ -36,10 +36,10 @@
         Assets file 'project.assets.json' doesn't have a target for 'net7.0-windows10.0.19041.0'. 
         Ensure that restore has run and that you have included 'net7.0-windows10.0.19041.0' in the TargetFrameworks for your project.
         -->
-        <ApplicationDisplayVersion>1.0.6</ApplicationDisplayVersion>
+        <ApplicationDisplayVersion>1.0.7</ApplicationDisplayVersion>
       
         <!-- AndroidManifest.xml : error XA0003: VersionCode 1.0.1 is invalid. It must be an integer value. (Parameter 'VersionCode') -->
-        <ApplicationVersion>6</ApplicationVersion>
+        <ApplicationVersion>7</ApplicationVersion>
 
         <TargetPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">34</TargetPlatformVersion>
 
