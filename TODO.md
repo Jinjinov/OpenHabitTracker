@@ -95,6 +95,16 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 	https://snapcraft.io/docs/gnome-extension
 	extensions: [gnome]
 
+	still missing in snapcraft.yaml:
+		icon
+		category: Productivity
+		images
+		banner
+		website: https://openhabittracker.net
+		source-code: https://github.com/Jinjinov/OpenHabitTracker
+		issues: https://github.com/Jinjinov/OpenHabitTracker/issues
+		license: GPL-3.0
+
 	sudo snap install snapcraft --classic
 
 	By default, Snapcraft relies on a build provider to create an isolated build environment inside which applications can be built and packaged as snaps without changing the host system.
