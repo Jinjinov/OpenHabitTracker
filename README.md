@@ -28,6 +28,9 @@ Key Features:
 Windows:  
 [<img src="OpenHabitTracker.Web/icons/Microsoft.svg" height="48">](https://apps.microsoft.com/detail/9mwzmlxzzllr)
 
+Linux - Snap Store:  
+[<img src="OpenHabitTracker.Web/icons/SnapStore.svg" height="48">](https://snapcraft.io/openhabittracker)
+
 Android:  
 [<img src="OpenHabitTracker.Web/icons/Google.svg" height="48">](https://play.google.com/store/apps/details?id=net.openhabittracker)
 
@@ -37,8 +40,8 @@ iOS:
 macOS:  
 [<img src="OpenHabitTracker.Web/icons/MacAppStore.svg" height="48">](https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=mac)
 
-Android apk file:  
-[<img src="OpenHabitTracker.Web/icons/APKPure.png">](https://apkpure.com/openhabittracker/net.openhabittracker)
+Android - APKPure:  
+[<img src="OpenHabitTracker.Web/icons/APKPure.svg" height="48">](https://apkpure.com/openhabittracker/net.openhabittracker)
 
 ## Made with:
 
