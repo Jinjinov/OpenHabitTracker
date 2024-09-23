@@ -95,16 +95,7 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 	https://snapcraft.io/docs/gnome-extension
 	extensions: [gnome]
 
-	still missing in snapcraft.yaml: https://snapcraft.io/docs/snapcraft-yaml-schema
-		title: OpenHabitTracker
-		icon: com.github.Jinjinov.OpenHabitTracker.svg
-		--category: Productivity
-		--images
-		--banner
-		website: https://openhabittracker.net
-		source-code: https://github.com/Jinjinov/OpenHabitTracker
-		issues: https://github.com/Jinjinov/OpenHabitTracker/issues
-		license: GPL-3.0
+	https://snapcraft.io/docs/snapcraft-yaml-schema
 
 	sudo snap install snapcraft --classic
 
