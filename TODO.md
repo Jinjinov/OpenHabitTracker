@@ -71,6 +71,19 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
 	flatpak run com.github.Jinjinov.OpenHabitTracker
 
+		https://docs.flathub.org/docs/for-app-authors/linter/
+
+		https://github.com/flathub-infra/flatpak-builder-lint
+		https://github.com/flathub-infra/flatpak-builder-lint#flatpak
+
+		flatpak install flathub -y org.flatpak.Builder
+		flatpak run --command=flatpak-builder-lint org.flatpak.Builder --help
+
+		flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest <manifest>
+		flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo
+
+		https://docs.flathub.org/docs/for-app-authors/submission/#submission-pr
+
 	https://flathub.org/
 	https://github.com/flathub/flathub
 
