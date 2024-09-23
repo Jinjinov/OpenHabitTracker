@@ -113,6 +113,8 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
 	snapcraft upload --release=stable openhabittracker_1.0.0_amd64.snap
 
+	snapcraft status openhabittracker
+
 	https://snapcraft.io/docs/registering-your-app-name
 	https://snapcraft.io/account
 	https://snapcraft.io/docs/pre-built-apps
