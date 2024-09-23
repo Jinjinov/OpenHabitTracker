@@ -22,12 +22,6 @@ base: core22
 
 confinement: strict #devmode
 
-layout:
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.0:
-    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.0
-#  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.1:
-#    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.1
-
 parts:
   openhabittracker:
     plugin: dotnet
@@ -38,48 +32,14 @@ parts:
      dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -r linux-x64 -c Release -p:PublishSingleFile=true --self-contained true -f net8.0 -o $SNAPCRAFT_PART_INSTALL
      chmod 0755 $SNAPCRAFT_PART_INSTALL/OpenHT
     build-packages:
-      #- libwebkit2gtk-4.1-dev
       - dotnet-sdk-8.0
-    stage-packages:
-      #- libwebkit2gtk-4.1-0
-      - libwebkit2gtk-4.0-37
-      - libnotify4
-      - libicu70
-      - libglu1-mesa
-      - freeglut3
-      - libwebkit2gtk-4.0-dev
-      - webkit2gtk-driver
-      - libcanberra-gtk3-module
-      - libcanberra-gtk-module
-      - libgl1-mesa-dri
-      - mesa-vulkan-drivers
-      - libgbm1
-      - libglx-mesa0
-      - gtk2-engines-murrine  # Add Murrine engine for theme rendering
-      - gtk2-engines-pixbuf   # Pixbuf engine for GTK2 themes
-      - hicolor-icon-theme    # Adds the hicolor icon theme
-      - adwaita-icon-theme    # Adds the default GNOME icon theme
-      - gnome-themes-standard # Provides Adwaita theme
-      - libgdk-pixbuf2.0-0    # Required for loading image files in GTK
 
 apps:
   openhabittracker:
+    extensions: [gnome]
     command: OpenHT
     plugs:
-      - opengl
       - hardware-observe
       - home
       - removable-media
-      - x11
-      - wayland
-      - desktop
-      - desktop-legacy
-      - mount-observe
-      - gsettings
       - network
-    environment:
-      LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
-      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
-      GDK_PIXBUF_MODULE_FILE: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0/2.10.0/loaders.cache
-      GTK_DATA_PREFIX: $SNAP
-      XDG_DATA_DIRS: $SNAP/usr/share:$SNAP/usr/local/share:/usr/share:/usr/local/share

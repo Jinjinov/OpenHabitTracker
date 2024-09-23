@@ -98,6 +98,7 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 	sudo snap install snapcraft --classic
 
 	By default, Snapcraft relies on a build provider to create an isolated build environment inside which applications can be built and packaged as snaps without changing the host system.
+	
 	sudo snap install lxd
 
 	snapcraft --debug
