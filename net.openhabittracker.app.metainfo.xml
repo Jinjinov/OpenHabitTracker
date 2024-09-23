@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
-  <id>com.github.Jinjinov.OpenHabitTracker</id>
-  <icon type="cached">com.github.Jinjinov.OpenHabitTracker</icon>
-  <launchable type="desktop-id">com.github.Jinjinov.OpenHabitTracker.desktop</launchable>
+  <id>net.openhabittracker.app</id>
+  <icon type="cached">net.openhabittracker.app</icon>
+  <launchable type="desktop-id">net.openhabittracker.app.desktop</launchable>
   <name>OpenHabitTracker</name>
   <developer_name>Jinjinov</developer_name>
   <license>GPL-3.0-or-later</license>

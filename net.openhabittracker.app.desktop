@@ -2,6 +2,6 @@
 Name=OpenHabitTracker
 Comment=Take notes, plan tasks, track habits
 Exec=OpenHT
-Icon=com.github.Jinjinov.OpenHabitTracker
+Icon=net.openhabittracker.app
 Type=Application
 Categories=Productivity;
