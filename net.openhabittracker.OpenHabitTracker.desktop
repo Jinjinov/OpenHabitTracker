@@ -2,6 +2,6 @@
 Name=OpenHabitTracker
 Comment=Take notes, plan tasks, track habits
 Exec=OpenHT
-Icon=net.openhabittracker.app
+Icon=net.openhabittracker.OpenHabitTracker
 Type=Application
 Categories=Productivity;
