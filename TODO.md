@@ -31,6 +31,29 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+!!! category filter -> drop-down to checkbox
+combine with add new, delete
+
+set category color 
+
+combine priorities with add new, delete
+
+!!! remove "Show" priority 
+
+remove Categories 
+
+remove Priorities 
+
+!!! merge Backup under Data
+
+!!! if sidebar / menu is open, display a big title Notes / Tasks / Habits in primary color 
+
+!!! display the opened sidebar title in primary color
+
+add actual Help, above Icons
+
+---------------------------------------------------------------------------------------------------
+
 Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
 	error: 'net.openhabittracker' is not a valid application name: Names must contain at least 2 periods
 
