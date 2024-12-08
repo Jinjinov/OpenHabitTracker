@@ -33,17 +33,15 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 !!! category filter -> drop-down to checkbox [Search.razor](OpenHabitTracker.Blazor/Pages/Search.razor)
 
-combine with add new, delete
+- combine with add new, delete
+- remove Categories 
 
 set category color 
 
-combine priorities with add new, delete
+- combine priorities with add new, delete
+- remove Priorities 
 
 !!! remove "Show" priority [Search.razor](OpenHabitTracker.Blazor/Pages/Search.razor)
-
-remove Categories 
-
-remove Priorities 
 
 !!! merge Backup under Data [Backup.razor](OpenHabitTracker.Blazor/Pages/Backup.razor)
 [Data.razor](OpenHabitTracker.Blazor/Pages/Data.razor)
@@ -58,7 +56,7 @@ remove Priorities
 !!! display the opened sidebar title in primary color - DynamicComponent Title - (Menu, Trash, Search, Settings, ...)
 [MainLayout.razor](OpenHabitTracker.Blazor/Layout/MainLayout.razor)
 
-add actual Help, above Icons
+- add actual Help, above Icons
 
 ---------------------------------------------------------------------------------------------------
 
