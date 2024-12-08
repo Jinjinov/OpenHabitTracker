@@ -31,7 +31,7 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-!!! category filter -> drop-down to checkbox [Search.razor](OpenHabitTracker.Blazor\Pages\Search.razor)
+!!! category filter -> drop-down to checkbox [Search.razor](OpenHabitTracker.Blazor/Pages/Search.razor)
 
 combine with add new, delete
 
@@ -39,24 +39,24 @@ set category color
 
 combine priorities with add new, delete
 
-!!! remove "Show" priority [Search.razor](OpenHabitTracker.Blazor\Pages\Search.razor)
+!!! remove "Show" priority [Search.razor](OpenHabitTracker.Blazor/Pages/Search.razor)
 
 remove Categories 
 
 remove Priorities 
 
-!!! merge Backup under Data [Backup.razor](OpenHabitTracker.Blazor\Pages\Backup.razor)
-[Data.razor](OpenHabitTracker.Blazor\Pages\Data.razor)
+!!! merge Backup under Data [Backup.razor](OpenHabitTracker.Blazor/Pages/Backup.razor)
+[Data.razor](OpenHabitTracker.Blazor/Pages/Data.razor)
 
 !!! if sidebar / menu is open, display a big title Notes / Tasks / Habits in primary color 
-[Notes.razor](OpenHabitTracker.Blazor\Pages\Notes.razor)
-[Tasks.razor](OpenHabitTracker.Blazor\Pages\Tasks.razor)
-[Habits.razor](OpenHabitTracker.Blazor\Pages\Habits.razor)
+[Notes.razor](OpenHabitTracker.Blazor/Pages/Notes.razor)
+[Tasks.razor](OpenHabitTracker.Blazor/Pages/Tasks.razor)
+[Habits.razor](OpenHabitTracker.Blazor/Pages/Habits.razor)
 
 !!! make "Add new ... Note / Task / Habit" move visible
 
 !!! display the opened sidebar title in primary color - DynamicComponent Title - (Menu, Trash, Search, Settings, ...)
-[MainLayout.razor](OpenHabitTracker.Blazor\Layout\MainLayout.razor)
+[MainLayout.razor](OpenHabitTracker.Blazor/Layout/MainLayout.razor)
 
 add actual Help, above Icons
 
