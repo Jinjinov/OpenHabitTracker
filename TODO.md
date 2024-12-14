@@ -50,9 +50,9 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 
 
-!!! if sidebar / menu is open, display a big title Notes / Tasks / Habits in primary color [Notes.razor](OpenHabitTracker.Blazor/Pages/Notes.razor) [Tasks.razor](OpenHabitTracker.Blazor/Pages/Tasks.razor) [Habits.razor](OpenHabitTracker.Blazor/Pages/Habits.razor)
-!!! make "Add new ... Note / Task / Habit" move visible
-!!! display the opened sidebar title in primary color - DynamicComponent Title - (Menu, Trash, Search, Settings, ...) [MainLayout.razor](OpenHabitTracker.Blazor/Layout/MainLayout.razor)
+OK if sidebar / menu is open, display a title Notes / Tasks / Habits [Notes.razor](OpenHabitTracker.Blazor/Pages/Notes.razor) [Tasks.razor](OpenHabitTracker.Blazor/Pages/Tasks.razor) [Habits.razor](OpenHabitTracker.Blazor/Pages/Habits.razor)
+OK make "Add new ... Note / Task / Habit" move visible
+OK display the opened sidebar title in primary color - DynamicComponent Title - (Menu, Trash, Search, Settings, ...) [MainLayout.razor](OpenHabitTracker.Blazor/Layout/MainLayout.razor)
 
 
 
