@@ -39,14 +39,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 
 
-OK separate Search, Filter, Sort with titles
-OK "Ratio" -> "Habit interval ratio"
-OK "Show only habits with ratio over" -> "Habits with interval ratio"
-OK "Sort notes" > "Notes"
-OK "Sort tasks" > "Tasks"
-OK "Sort habits" > "Habits"
-
-
 !!! add "Priorities" to Filter
 !!! toggle priority check / radio
 !!! priority combo
