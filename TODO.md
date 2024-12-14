@@ -32,23 +32,21 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 ---------------------------------------------------------------------------------------------------
 
 !!! enum AndOr
-!!! "category" -> "categories"
+
+!!! "Category"
+!!! "Categories"
 !!! toggle category check / radio
+
 !!! category combo
-!!! category checkbox [Search.razor](OpenHabitTracker.Blazor/Pages/Search.razor)
+!!! category checkbox
 
 
 
+!!! add "Priority" to Filter
 !!! add "Priorities" to Filter
 !!! toggle priority check / radio
+
 !!! priority combo
-!!! remove "Show" priority [Search.razor](OpenHabitTracker.Blazor/Pages/Search.razor)
-!!! "Show no priority": "none",
-!!! "Show very low priority": "very low",
-!!! "Show low priority": "low",
-!!! "Show medium priority": "medium",
-!!! "Show high priority": "high",
-!!! "Show very high priority": "very high",
 
 
 
