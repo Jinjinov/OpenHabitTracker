@@ -13,11 +13,13 @@
 @inject AppData AppData
 @inject SettingsService SettingsService
 @inject SearchFilterService SearchFilterService
-@inject IStringLocalizer<Loc> Loc
+@inject IStringLocalizer Loc
 
 <PageTitle>OpenHabitTracker - Tasks</PageTitle>
 
 <div class="col child-column px-0 px-md-1">
+
+    @* <small class="m-1">@Loc["Add new task"]</small> *@
 
     @if (TaskService.NewTask is null)
     {
@@ -82,6 +84,8 @@
     }
     else
     {
+        <small class="m-1">@Loc["Tasks"]</small>
+
         foreach (TaskModel task in TaskService.GetTasks())
         {
             <div class="@($"my-{AppData.Settings.VerticalMargin}")">

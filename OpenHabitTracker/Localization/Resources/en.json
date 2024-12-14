@@ -1,6 +1,6 @@
 {
   "Menu": "Menu",
-  "Search": "Search, Filter, Sort",
+  "Search, Filter, Sort": "Search, Filter, Sort",
   "Settings": "Settings",
   "Backup": "Backup",
   "Categories": "Categories",
@@ -18,7 +18,9 @@
   "Add new task": "Add new task",
 
   "Search...": "Search...",
-  "Search, Filter, Sort": "Search, Filter, Sort",
+  "Search": "Search",
+  "Filter": "Filter",
+  "Sort": "Sort",
   "Notes, Tasks, Habits": "Notes, Tasks, Habits",
   "About": "About",
   "Add note text": "Add note text",
@@ -97,11 +99,8 @@
   "Show medium priority": "Show medium priority",
   "Show high priority": "Show high priority",
   "Show very high priority": "Show very high priority",
-  "Ratio": "Ratio",
-  "Show only habits with ratio over": "Show habits with ratio over",
-  "Sort notes": "Sort notes",
-  "Sort tasks": "Sort tasks",
-  "Sort habits": "Sort habits",
+  "Habit interval ratio": "Habit interval ratio",
+  "Habits with interval ratio": "Show habits with ratio over",
 
   "Day": "Day",
   "Week": "Week",

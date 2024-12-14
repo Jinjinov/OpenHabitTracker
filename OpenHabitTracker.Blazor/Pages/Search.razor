@@ -7,7 +7,7 @@
 @inject SettingsService SettingsService
 @inject CategoryService CategoryService
 @inject SearchFilterService SearchFilterService
-@inject IStringLocalizer<Loc> Loc
+@inject IStringLocalizer Loc
 
 @* <PageTitle>OpenHabitTracker - Search</PageTitle> *@
 
@@ -19,6 +19,8 @@
     else
     {
         <div class="my-1 list-group">
+
+            <small class="m-1">@Loc["Search"]</small>
 
             <div class="input-group flex-nowrap">
                 <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search..."]" />
@@ -32,6 +34,8 @@
                 }
                 <button class="btn btn-outline-primary" @onclick="() => UpdateSearchTerm(null)"><i class="bi bi-x-square"></i></button>
             </div>
+
+            <small class="m-1">@Loc["Filter"]</small>
 
             <div class="input-group flex-nowrap">
                 <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)">@Loc["Planned"]</button>
@@ -104,7 +108,7 @@
             </div>
 
             <div class="list-group-item">
-                <small class="">@Loc["Ratio"]:</small>
+                <small class="">@Loc["Habit interval ratio"]:</small>
                 <InputSelect class="form-select" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
                     <option value="@Ratio.ElapsedToAverage">@Loc["Elapsed time to average interval"]</option>
                     <option value="@Ratio.ElapsedToDesired">@Loc["Elapsed time to repeat interval"]</option>
@@ -116,14 +120,16 @@
 
                 <div class="position-relative">
                     <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowOnlyOverSelectedRatioMin" ValueExpression="() => _settings.ShowOnlyOverSelectedRatioMin" ValueChanged="SaveShowOnlyOverSelectedRatioMin" />
-                    <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show only habits with ratio over"] @_settings.SelectedRatioMin%</label>
+                    <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Habits with interval ratio"] @_settings.SelectedRatioMin%</label>
                 </div>
 
                 <input type="range" class="form-range d-block" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))">
             </div>
 
+            <small class="m-1">@Loc["Sort"]</small>
+
             <div class="list-group-item">
-                <small class="2">@Loc["Sort notes"]:</small>
+                <small class="">@Loc["Notes"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>
@@ -132,7 +138,7 @@
             </div>
 
             <div class="list-group-item">
-                <small class="">@Loc["Sort tasks"]:</small>
+                <small class="">@Loc["Tasks"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>
@@ -145,7 +151,7 @@
             </div>
 
             <div class="list-group-item">
-                <small class="">@Loc["Sort habits"]:</small>
+                <small class="">@Loc["Habits"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>

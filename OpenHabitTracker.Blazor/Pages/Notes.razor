@@ -12,11 +12,13 @@
 @inject AppData AppData
 @inject JsInterop JsInterop
 @inject SearchFilterService SearchFilterService
-@inject IStringLocalizer<Loc> Loc
+@inject IStringLocalizer Loc
 
 <PageTitle>OpenHabitTracker - Notes</PageTitle>
 
 <div class="col child-column px-0 px-md-1">
+
+    @* <small class="m-1">@Loc["Add new note"]</small> *@
 
     @if (NoteService.NewNote is null)
     {
@@ -58,6 +60,8 @@
     }
     else
     {
+        <small class="m-1">@Loc["Notes"]</small>
+
         foreach (NoteModel note in NoteService.GetNotes())
         {
             <div class="@($"my-{AppData.Settings.VerticalMargin}")">

@@ -1,6 +1,6 @@
 {
   "Menu": "Meni",
-  "Search": "Iskanje, Filtriranje, Razvrščanje",
+  "Search, Filter, Sort": "Iskanje, Filtriranje, Razvrščanje",
   "Settings": "Nastavitve",
   "Backup": "Varnostna kopija",
   "Categories": "Kategorije",
@@ -18,7 +18,9 @@
   "Add new task": "Dodaj novo nalogo",
 
   "Search...": "Išči...",
-  "Search, Filter, Sort": "Iskanje, Filtriranje, Razvrščanje",
+  "Search": "Iskanje",
+  "Filter": "Filtriranje",
+  "Sort": "Razvrščanje",
   "Notes, Tasks, Habits": "Opombe, Naloge, Navade",
   "About": "O programu",
   "Add note text": "Dodaj besedilo opombe",
@@ -97,11 +99,8 @@
   "Show medium priority": "Prikaži srednjo prioriteto",
   "Show high priority": "Prikaži visoko prioriteto",
   "Show very high priority": "Prikaži zelo visoko prioriteto",
-  "Ratio": "Razmerje",
-  "Show only habits with ratio over": "Prikaži samo navade z razmerjem nad",
-  "Sort notes": "Razvrsti opombe",
-  "Sort tasks": "Razvrsti naloge",
-  "Sort habits": "Razvrsti navade",
+  "Habit interval ratio": "Intervalno razmerje navade",
+  "Habits with interval ratio": "Navade z intervalnim razmerjem",
 
   "Day": "Dan",
   "Week": "Teden",

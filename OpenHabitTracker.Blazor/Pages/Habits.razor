@@ -13,11 +13,13 @@
 @inject SettingsService SettingsService
 @inject JsInterop JsInterop
 @inject SearchFilterService SearchFilterService
-@inject IStringLocalizer<Loc> Loc
+@inject IStringLocalizer Loc
 
 <PageTitle>OpenHabitTracker - Habits</PageTitle>
 
 <div @ref="columnRef" class="col child-column px-0 px-md-1">
+
+    @* <small class="m-1">@Loc["Add new habit"]</small> *@
 
     @if (HabitService.NewHabit is null)
     {
@@ -92,6 +94,8 @@
     }
     else if (columnWidth != 0)
     {
+        <small class="m-1">@Loc["Habits"]</small>
+
         foreach (HabitModel habit in HabitService.GetHabits())
         {
             <div class="@($"my-{AppData.Settings.VerticalMargin} d-flex")">

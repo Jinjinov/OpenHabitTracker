@@ -8,7 +8,7 @@
 @inject INavBarFragment NavBarFragment
 @inject NavigationManager NavigationManager
 @inject JsInterop JsInterop
-@inject IStringLocalizer<Loc> Loc
+@inject IStringLocalizer Loc
 
 @* Root <div> inside <html><body><app> *@
 
@@ -25,7 +25,15 @@
             @* <button class="nav-link px-1 py-2 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> @Loc["Menu"]</button> *@
             <button class="nav-link px-1 py-2" @onclick="ToggleMenu"><i class="bi bi-list"></i> @Loc["Menu"]</button>
 
-            @* <button class="nav-link" @onclick="Localization.JsonStringLocalizer.Serialize"><i class="bi bi-floppy"></i> Save</button> *@
+            @* <button class="nav-link" @onclick="Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues"><i class="bi bi-floppy"></i> Save</button>
+            <button class="nav-link" @onclick="() => 
+                {
+                    if(Loc is Localization.JsonStringLocalizer jsonStringLocalizer)
+                    {
+                        Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues();
+                        jsonStringLocalizer.SerializeDuplicateValues();
+                    }
+                }"><i class="bi bi-floppy"></i> Save</button> *@
 
             <NavLink class="nav-link px-1 py-2 ms-2" href="notes"><i class="bi bi-card-text"></i> @Loc["Notes"]</NavLink>
             <NavLink class="nav-link px-1 py-2 ms-2" href="tasks"><i class="bi bi-card-checklist"></i> @Loc["Tasks"]</NavLink>

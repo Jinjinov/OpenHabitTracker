@@ -3,6 +3,7 @@ using OpenHabitTracker.Localization;
 using Markdig;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using System.Reflection;
 
 namespace OpenHabitTracker.Services;
 
@@ -43,5 +44,6 @@ public static class Startup
 
         services.AddLocalization(options => options.ResourcesPath = @"Localization\Resources");
         services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
+        services.AddSingleton<IStringLocalizer>(sp => sp.GetRequiredService<IStringLocalizerFactory>().Create(string.Empty, Assembly.GetExecutingAssembly().GetName().Name));
     }
 }

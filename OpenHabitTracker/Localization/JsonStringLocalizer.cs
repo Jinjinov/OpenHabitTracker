@@ -16,12 +16,27 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
     private readonly ConcurrentDictionary<string, Dictionary<string, string>> _stringMapsCache = new();
 
     private static readonly Dictionary<string, string> _missing = [];
+    private static readonly Dictionary<string, string> _unused = [];
     private static readonly JsonSerializerOptions _options = new() { WriteIndented = true };
 
-    public static void Serialize()
+    public static void SerializeMissingAndUnusedValues()
     {
-        string file = JsonSerializer.Serialize(_missing, _options);
-        File.WriteAllText("en.json", file);
+        string missingFile = JsonSerializer.Serialize(_missing, _options);
+        File.WriteAllText("missing.json", missingFile);
+
+        string unusedFile = JsonSerializer.Serialize(_unused, _options);
+        File.WriteAllText("unused.json", unusedFile);
+    }
+
+    public void SerializeDuplicateValues()
+    {
+        Dictionary<string, List<string>> duplicateValues = LoadStringMap()
+            .GroupBy(kvp => kvp.Value)
+            .Where(group => group.Count() > 1)
+            .ToDictionary(group => group.Key, group => group.Select(kvp => kvp.Key).ToList());
+
+        string duplicateFile = JsonSerializer.Serialize(duplicateValues, _options);
+        File.WriteAllText("duplicate.json", duplicateFile);
     }
 
     public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
@@ -46,7 +61,11 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
                 string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
                 translation = $"❗ {cultureName} {name} ❗";
 
-                //_missing[name] = name;
+                _missing[name] = name;
+            }
+            else
+            {
+                _unused.Remove(name);
             }
 
             return new LocalizedString(name, translation);
@@ -63,6 +82,12 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
             {
                 string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
                 translation = $"❗ {cultureName} {name} ❗";
+
+                _missing[name] = name;
+            }
+            else
+            {
+                _unused.Remove(name);
             }
 
             return new LocalizedString(name, string.Format(translation, arguments));
@@ -76,7 +101,10 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
         if (_stringMapsCache.GetValueOrDefault(cultureName) is Dictionary<string, string> stringMap)
             return stringMap;
 
-        IFileInfo fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcesPath, $"{_resourcesName}.{cultureName}.json"));
+        // use "name-xx.ext" because files with "name.xx.ext" are not embedded as resources
+        // https://github.com/dotnet/sdk/issues/13395
+        // https://github.com/dotnet/roslyn/issues/43820
+        IFileInfo fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcesPath, $"{_resourcesName}-{cultureName}.json"));
         if (!fileInfo.Exists)
         {
             fileInfo = _fileProvider.GetFileInfo(Path.Combine(_resourcesPath, $"{cultureName}.json"));
@@ -85,6 +113,11 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
         using Stream stream = fileInfo.CreateReadStream();
 
         stringMap = JsonSerializer.Deserialize<Dictionary<string, string>>(stream) ?? throw new SerializationException(fileInfo.Name);
+
+        foreach (string key in stringMap.Keys)
+        {
+            _unused[key] = key;
+        }
 
         _stringMapsCache[cultureName] = stringMap;
 
