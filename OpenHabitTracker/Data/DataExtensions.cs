@@ -114,10 +114,14 @@ public static class DataExtensions
         entity.DisplayNoteContentAsMarkdown = model.DisplayNoteContentAsMarkdown;
         entity.ShowOnlyOverSelectedRatioMin = model.ShowOnlyOverSelectedRatioMin;
         entity.SelectedRatioMin = model.SelectedRatioMin;
-        entity.SelectedCategoryId = model.SelectedCategoryId;
-        entity.SortBy = model.SortBy;
-        entity.ShowPriority = model.ShowPriority;
         entity.VerticalMargin = model.VerticalMargin;
+        entity.SelectedCategoryId = model.SelectedCategoryId;
+        entity.SelectedCategoryIds = model.SelectedCategoryIds;
+        entity.CategoryFilterLogic = model.CategoryFilterLogic;
+        entity.PriorityFilterLogic = model.PriorityFilterLogic;
+        entity.SelectedPriority = model.SelectedPriority;
+        entity.ShowPriority = model.ShowPriority;
+        entity.SortBy = model.SortBy;
     }
 
     public static TaskEntity ToEntity(this TaskModel model)

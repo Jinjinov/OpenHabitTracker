@@ -32,16 +32,17 @@ public class SettingsEntity
 
     public int SelectedRatioMin { get; set; }
 
-    public long SelectedCategoryId { get; set; }
-
     public int VerticalMargin { get; set; } = 1;
 
-    public Dictionary<ContentType, Sort> SortBy { get; set; } = new()
-    {
-        { ContentType.Note, Sort.Priority },
-        { ContentType.Task, Sort.Priority },
-        { ContentType.Habit, Sort.Priority }
-    };
+    public long SelectedCategoryId { get; set; }
+
+    public long[] SelectedCategoryIds { get; set; } = [];
+
+    public FilterLogic CategoryFilterLogic { get; set; } = FilterLogic.Or;
+
+    public FilterLogic PriorityFilterLogic { get; set; } = FilterLogic.And;
+
+    public Priority SelectedPriority { get; set; } = Priority.VeryHigh;
 
     public Dictionary<Priority, bool> ShowPriority { get; set; } = new()
     {
@@ -51,5 +52,12 @@ public class SettingsEntity
         { Priority.Medium, true },
         { Priority.High, true },
         { Priority.VeryHigh, true }
+    };
+
+    public Dictionary<ContentType, Sort> SortBy { get; set; } = new()
+    {
+        { ContentType.Note, Sort.Priority },
+        { ContentType.Task, Sort.Priority },
+        { ContentType.Habit, Sort.Priority }
     };
 }

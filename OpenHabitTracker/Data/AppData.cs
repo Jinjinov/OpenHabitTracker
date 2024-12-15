@@ -88,10 +88,14 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     DisplayNoteContentAsMarkdown = settingsEntity.DisplayNoteContentAsMarkdown,
                     ShowOnlyOverSelectedRatioMin = settingsEntity.ShowOnlyOverSelectedRatioMin,
                     SelectedRatioMin = settingsEntity.SelectedRatioMin,
+                    VerticalMargin = settingsEntity.VerticalMargin,
                     SelectedCategoryId = settingsEntity.SelectedCategoryId,
-                    SortBy = settingsEntity.SortBy,
+                    SelectedCategoryIds = settingsEntity.SelectedCategoryIds,
+                    CategoryFilterLogic = settingsEntity.CategoryFilterLogic,
+                    PriorityFilterLogic = settingsEntity.PriorityFilterLogic,
+                    SelectedPriority = settingsEntity.SelectedPriority,
                     ShowPriority = settingsEntity.ShowPriority,
-                    VerticalMargin = settingsEntity.VerticalMargin
+                    SortBy = settingsEntity.SortBy
                 };
             }
             else
@@ -112,14 +116,12 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     DisplayNoteContentAsMarkdown = true,
                     ShowOnlyOverSelectedRatioMin = false,
                     SelectedRatioMin = 0,
-                    SelectedCategoryId = 0,
                     VerticalMargin = 2,
-                    SortBy = new()
-                    {
-                        { ContentType.Note, Sort.Priority },
-                        { ContentType.Task, Sort.Priority },
-                        { ContentType.Habit, Sort.Priority }
-                    },
+                    SelectedCategoryId = 0,
+                    SelectedCategoryIds = [],
+                    CategoryFilterLogic = FilterLogic.Or,
+                    PriorityFilterLogic = FilterLogic.And,
+                    SelectedPriority = Priority.VeryHigh,
                     ShowPriority = new()
                     {
                         { Priority.None, true },
@@ -128,6 +130,12 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                         { Priority.Medium, true },
                         { Priority.High, true },
                         { Priority.VeryHigh, true }
+                    },
+                    SortBy = new()
+                    {
+                        { ContentType.Note, Sort.Priority },
+                        { ContentType.Task, Sort.Priority },
+                        { ContentType.Habit, Sort.Priority }
                     }
                 };
 
@@ -581,14 +589,12 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 DisplayNoteContentAsMarkdown = true,
                 ShowOnlyOverSelectedRatioMin = false,
                 SelectedRatioMin = 0,
-                SelectedCategoryId = 0,
                 VerticalMargin = 2,
-                SortBy = new()
-                {
-                    { ContentType.Note, Sort.Priority },
-                    { ContentType.Task, Sort.Priority },
-                    { ContentType.Habit, Sort.Priority }
-                },
+                SelectedCategoryId = 0,
+                SelectedCategoryIds = [],
+                CategoryFilterLogic = FilterLogic.Or,
+                PriorityFilterLogic = FilterLogic.And,
+                SelectedPriority = Priority.VeryHigh,
                 ShowPriority = new()
                 {
                     { Priority.None, true },
@@ -597,6 +603,12 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     { Priority.Medium, true },
                     { Priority.High, true },
                     { Priority.VeryHigh, true }
+                },
+                SortBy = new()
+                {
+                    { ContentType.Note, Sort.Priority },
+                    { ContentType.Task, Sort.Priority },
+                    { ContentType.Habit, Sort.Priority }
                 }
             },
             Categories =

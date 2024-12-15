@@ -1,6 +1,6 @@
 ﻿namespace OpenHabitTracker.Data;
 
-enum FilterLogic
+public enum FilterLogic
 {
     And,
     Or
