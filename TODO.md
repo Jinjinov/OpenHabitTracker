@@ -31,28 +31,20 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-!!! enum AndOr
+!!! checkbox, radio, select option, select multiple option
 
-!!! "Category"
-!!! "Categories"
 !!! toggle category check / radio
-
 !!! category combo
 !!! category checkbox
 
-
-
-!!! add "Priority" to Filter
-!!! add "Priorities" to Filter
 !!! toggle priority check / radio
-
 !!! priority combo
 
 
 
-OK if sidebar / menu is open, display a title Notes / Tasks / Habits [Notes.razor](OpenHabitTracker.Blazor/Pages/Notes.razor) [Tasks.razor](OpenHabitTracker.Blazor/Pages/Tasks.razor) [Habits.razor](OpenHabitTracker.Blazor/Pages/Habits.razor)
+OK if sidebar / menu is open, display a title Notes / Tasks / Habits
 OK make "Add new ... Note / Task / Habit" move visible
-OK display the opened sidebar title in primary color - DynamicComponent Title - (Menu, Trash, Search, Settings, ...) [MainLayout.razor](OpenHabitTracker.Blazor/Layout/MainLayout.razor)
+OK display the opened sidebar title in primary color - DynamicComponent Title - (Menu, Trash, Search, Settings, ...)
 
 
 
