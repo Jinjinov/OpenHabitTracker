@@ -31,26 +31,15 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-!!! checkbox, radio, select option, select multiple option
-
-!!! toggle category check / radio
-!!! category combo
+!!! toggle category checkbox / select option
 !!! category checkbox
 
-!!! toggle priority check / radio
-!!! priority combo
+!!! toggle priority checkbox / select option
+!!! priority select option
 
 
 
-OK if sidebar / menu is open, display a title Notes / Tasks / Habits
-OK make "Add new ... Note / Task / Habit" move visible
-OK display the opened sidebar title in primary color - DynamicComponent Title - (Menu, Trash, Search, Settings, ...)
-
-
-
-- add actual Help, above Icons
-
-NO!		set category color
+!!! add actual Help, above Icons
 
 ---------------------------------------------------------------------------------------------------
 
