@@ -77,8 +77,10 @@
                 {
                     @foreach (CategoryModel category in CategoryService.Categories)
                     {
+                        bool isSelected = _settings.SelectedCategoryIds.Contains(category.Id);
+
                         <div class="form-check position-relative">
-                            @* <InputCheckbox id="@($"category-{category.Id}")" class="form-check-input me-1" Value="_settings.SelectedCategoryIds.Contains(category.Id)" ValueExpression="() => _settings.SelectedCategoryIds.Contains(category.Id)" ValueChanged="(bool show) => SaveCategoryIds(category.Id, show)" /> *@
+                            <InputCheckbox id="@($"category-{category.Id}")" class="form-check-input me-1" Value="isSelected" ValueExpression="() => isSelected" ValueChanged="(bool show) => SaveCategoryIds(category.Id, show)" />
                             <label for="@($"category-{category.Id}")" class="form-check-label stretched-link d-inline">@category.Title</label>
                         </div>
                     }
