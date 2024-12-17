@@ -55,7 +55,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
             };
         }
 
-        tasks = tasks.Where(x => settings.SelectedCategoryIds.Contains(x.CategoryId));
+        tasks = tasks.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
 
         return settings.SortBy[ContentType.Task] switch
         {

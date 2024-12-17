@@ -115,7 +115,7 @@ public static class DataExtensions
         entity.ShowOnlyOverSelectedRatioMin = model.ShowOnlyOverSelectedRatioMin;
         entity.SelectedRatioMin = model.SelectedRatioMin;
         entity.VerticalMargin = model.VerticalMargin;
-        entity.SelectedCategoryIds = model.SelectedCategoryIds;
+        entity.HiddenCategoryIds = model.HiddenCategoryIds;
         entity.ShowPriority = model.ShowPriority;
         entity.SortBy = model.SortBy;
     }

@@ -71,5 +71,22 @@ public class CategoryService(AppData appData, IDataAccess dataAccess)
         _appData.Categories.Remove(category.Id);
 
         await _dataAccess.RemoveCategory(category.Id);
+
+        if (_appData.Settings.HiddenCategoryIds.Contains(category.Id))
+        {
+            _appData.Settings.HiddenCategoryIds.Remove(category.Id);
+
+            await UpdateSettings();
+        }
+    }
+
+    private async Task UpdateSettings()
+    {
+        if (await _dataAccess.GetSettings(_appData.Settings.Id) is SettingsEntity settings)
+        {
+            _appData.Settings.CopyToEntity(settings);
+
+            await _dataAccess.UpdateSettings(settings);
+        }
     }
 }

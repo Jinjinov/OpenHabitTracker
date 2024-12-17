@@ -31,7 +31,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess, SearchFilterSe
             notes = notes.Where(x => x.Title.Contains(_searchFilterService.SearchTerm, comparisonType) || x.Content.Contains(_searchFilterService.SearchTerm, comparisonType));
         }
 
-        notes = notes.Where(x => settings.SelectedCategoryIds.Contains(x.CategoryId));
+        notes = notes.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
 
         return settings.SortBy[ContentType.Note] switch
         {

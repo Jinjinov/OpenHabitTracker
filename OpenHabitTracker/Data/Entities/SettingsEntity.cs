@@ -34,7 +34,7 @@ public class SettingsEntity
 
     public int VerticalMargin { get; set; } = 1;
 
-    public List<long> SelectedCategoryIds { get; set; } = [];
+    public List<long> HiddenCategoryIds { get; set; } = [];
 
     public Dictionary<Priority, bool> ShowPriority { get; set; } = new()
     {

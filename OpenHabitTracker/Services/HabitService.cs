@@ -43,7 +43,7 @@ public class HabitService(AppData appData, IDataAccess dataAccess, SearchFilterS
             };
         }
 
-        habits = habits.Where(x => settings.SelectedCategoryIds.Contains(x.CategoryId));
+        habits = habits.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
 
         if (settings.ShowOnlyOverSelectedRatioMin)
             habits = habits.Where(x => x.GetRatio(settings.SelectedRatio) > settings.SelectedRatioMin);
