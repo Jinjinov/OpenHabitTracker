@@ -1,5 +1,4 @@
-﻿
-<div class="custom-control custom-checkbox">
-    <input @ref=_elementReference class="custom-control-input" id="@_elementId" type="checkbox" checked="@_internalChecked" @onchange="OnChange" />
-    <label class="custom-control-label" for="@_elementId">@ChildContent</label>
+﻿<div class="form-check">
+    <input @ref="_elementReference" class="form-check-input" id="@_elementId" type="checkbox" checked="@_internalChecked" @onchange="OnChange" />
+    <label class="form-check-label" for="@_elementId">@ChildContent</label>
 </div>
