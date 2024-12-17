@@ -290,28 +290,28 @@
 
     async Task SetShowAllCategories()
     {
-        if (_settings.HiddenCategoryIds.Count == 0)
-        {
-            _settings.HiddenCategoryIds = CategoryService.Categories.Select(x => x.Id).ToList();
-            await UpdateSettings();
-        }
-        else if (_settings.HiddenCategoryIds.Count == CategoryService.Categories.Count)
+        if (_settings.HiddenCategoryIds.Count == CategoryService.Categories.Count)
         {
             _settings.HiddenCategoryIds.Clear();
+            await UpdateSettings();
+        }
+        else // if (_settings.HiddenCategoryIds.Count == 0)
+        {
+            _settings.HiddenCategoryIds = CategoryService.Categories.Select(x => x.Id).ToList();
             await UpdateSettings();
         }
     }
 
     async Task SetShowAllPriorities()
     {
-        if (_settings.ShowPriority.Values.All(x => x))
-        {
-            _settings.ShowPriority.Keys.ToList().ForEach(key => _settings.ShowPriority[key] = false);
-            await UpdateSettings();
-        }
-        else if (!_settings.ShowPriority.Values.Any(x => x))
+        if (!_settings.ShowPriority.Values.Any(x => x))
         {
             _settings.ShowPriority.Keys.ToList().ForEach(key => _settings.ShowPriority[key] = true);
+            await UpdateSettings();
+        }
+        else // if (_settings.ShowPriority.Values.All(x => x))
+        {
+            _settings.ShowPriority.Keys.ToList().ForEach(key => _settings.ShowPriority[key] = false);
             await UpdateSettings();
         }
     }
