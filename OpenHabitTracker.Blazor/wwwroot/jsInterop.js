@@ -17,6 +17,10 @@ export function focusElement(element) {
     element.focus();
 }
 
+export function setElementProperty(element, property, value) {
+    element[property] = value;
+}
+
 export function getWindowDimensions() {
     return {
         width: window.innerWidth,

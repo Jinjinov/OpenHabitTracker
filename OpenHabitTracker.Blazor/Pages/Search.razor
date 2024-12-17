@@ -76,7 +76,13 @@
             </div>
 
             <div class="list-group-item">
-                <small class="">@Loc["Priority"]:</small>
+                <div class="form-check position-relative">
+                    @* <InputCheckbox id="Priorities" class="form-check-input me-1" Value="ShowAllPriorities" ValueExpression="() => ShowAllPriorities" ValueChanged="(bool show) => {}" /> *@
+
+                    <CheckBox IsTriState="true" Checked="ShowAllPriorities" CheckedChanged="() => {}">
+                        <span class="form-check-label stretched-link d-inline">@Loc["Priorities"]</span>
+                    </CheckBox>
+                </div>
 
                 <div class="form-check position-relative">
                     <InputCheckbox id="Priority.None" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.None]" ValueExpression="() => _settings.ShowPriority[Priority.None]" ValueChanged="(bool show) => SaveShowPriority(Priority.None, show)" />
@@ -172,6 +178,23 @@
     public EventCallback<bool> StateChangedChanged { get; set; }
 
     SettingsModel _settings => SettingsService.Settings;
+
+    bool? ShowAllPriorities
+    {
+        get
+        {
+            if (_settings.ShowPriority.Values.All(x => x))
+                return true;
+
+            if (!_settings.ShowPriority.Values.Any(x => x))
+                return false;
+
+            return null;
+        }
+        set
+        {
+        }
+    }
 
     Dictionary<Priority, string> _priorityNameByPriority = new()
     {
