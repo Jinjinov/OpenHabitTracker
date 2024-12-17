@@ -20,7 +20,16 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
     {
         SettingsModel settings = _appData.Settings;
 
-        IEnumerable<TaskModel> tasks = Tasks!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
+        IEnumerable<TaskModel> tasks = Tasks!.Where(x => !x.IsDeleted);
+
+        if (settings.PriorityFilterLogic == FilterLogic.And)
+        {
+            tasks = tasks.Where(x => settings.ShowPriority[x.Priority]);
+        }
+        else if (settings.PriorityFilterLogic == FilterLogic.Or)
+        {
+            tasks = tasks.Where(x => settings.SelectedPriority == x.Priority);
+        }
 
         if (_searchFilterService.SearchTerm is not null)
         {

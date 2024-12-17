@@ -31,12 +31,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-OK toggle category checkbox / select option
-!!! category checkbox
-
-OK toggle priority checkbox / select option
-!!! priority select option
-
 !!! add actual Help, above Icons
 
 ---------------------------------------------------------------------------------------------------

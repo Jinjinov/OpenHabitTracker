@@ -20,7 +20,16 @@ public class NoteService(AppData appData, IDataAccess dataAccess, SearchFilterSe
     {
         SettingsModel settings = _appData.Settings;
 
-        IEnumerable<NoteModel> notes = Notes!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
+        IEnumerable<NoteModel> notes = Notes!.Where(x => !x.IsDeleted);
+
+        if (settings.PriorityFilterLogic == FilterLogic.And)
+        {
+            notes = notes.Where(x => settings.ShowPriority[x.Priority]);
+        }
+        else if (settings.PriorityFilterLogic == FilterLogic.Or)
+        {
+            notes = notes.Where(x => settings.SelectedPriority == x.Priority);
+        }
 
         if (_searchFilterService.SearchTerm is not null)
         {

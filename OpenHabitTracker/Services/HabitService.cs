@@ -20,7 +20,16 @@ public class HabitService(AppData appData, IDataAccess dataAccess, SearchFilterS
     {
         SettingsModel settings = _appData.Settings;
 
-        IEnumerable<HabitModel> habits = Habits!.Where(x => !x.IsDeleted && settings.ShowPriority[x.Priority]);
+        IEnumerable<HabitModel> habits = Habits!.Where(x => !x.IsDeleted);
+
+        if (settings.PriorityFilterLogic == FilterLogic.And)
+        {
+            habits = habits.Where(x => settings.ShowPriority[x.Priority]);
+        }
+        else if (settings.PriorityFilterLogic == FilterLogic.Or)
+        {
+            habits = habits.Where(x => settings.SelectedPriority == x.Priority);
+        }
 
         if (_searchFilterService.SearchTerm is not null)
         {
