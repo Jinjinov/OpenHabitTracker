@@ -62,9 +62,11 @@
             </div>
 
             <div class="list-group-item">
-                <CheckBox IsTriState="true" Checked="ShowAllCategories" CheckedChanged="() => {}">
-                    <span>@Loc["Categories"]</span>
+                <CheckBox IsTriState="true" Checked="ShowAllCategories" CheckedChanged="(bool? show) => SetShowAllCategories()">
+                    <span>@Loc["Categories"]:</span>
                 </CheckBox>
+
+                <div class="mt-3" />
 
                 @foreach (CategoryModel category in CategoryService.Categories)
                 {
@@ -78,11 +80,11 @@
             </div>
 
             <div class="list-group-item">
-                <CheckBox IsTriState="true" Checked="ShowAllPriorities" CheckedChanged="() => {}">
-                    <span>@Loc["Priorities"]</span>
+                <CheckBox IsTriState="true" Checked="ShowAllPriorities" CheckedChanged="(bool? show) => SetShowAllPriorities()">
+                    <span>@Loc["Priorities"]:</span>
                 </CheckBox>
 
-                <div class="form-check position-relative">
+                <div class="form-check position-relative mt-3">
                     <InputCheckbox id="Priority.None" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.None]" ValueExpression="() => _settings.ShowPriority[Priority.None]" ValueChanged="(bool show) => SaveShowPriority(Priority.None, show)" />
                     <label for="Priority.None" class="form-check-label stretched-link d-inline">@Loc["None"]</label>
                 </div>
@@ -282,6 +284,34 @@
         if (show && _settings.HiddenCategoryIds.Contains(categoryId))
         {
             _settings.HiddenCategoryIds.Remove(categoryId);
+            await UpdateSettings();
+        }
+    }
+
+    async Task SetShowAllCategories()
+    {
+        if (_settings.HiddenCategoryIds.Count == 0)
+        {
+            _settings.HiddenCategoryIds = CategoryService.Categories.Select(x => x.Id).ToList();
+            await UpdateSettings();
+        }
+        else if (_settings.HiddenCategoryIds.Count == CategoryService.Categories.Count)
+        {
+            _settings.HiddenCategoryIds.Clear();
+            await UpdateSettings();
+        }
+    }
+
+    async Task SetShowAllPriorities()
+    {
+        if (_settings.ShowPriority.Values.All(x => x))
+        {
+            _settings.ShowPriority.Keys.ToList().ForEach(key => _settings.ShowPriority[key] = false);
+            await UpdateSettings();
+        }
+        else if (!_settings.ShowPriority.Values.Any(x => x))
+        {
+            _settings.ShowPriority.Keys.ToList().ForEach(key => _settings.ShowPriority[key] = true);
             await UpdateSettings();
         }
     }
