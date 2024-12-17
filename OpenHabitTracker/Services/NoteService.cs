@@ -29,8 +29,15 @@ public class NoteService(AppData appData, IDataAccess dataAccess, SearchFilterSe
             notes = notes.Where(x => x.Title.Contains(_searchFilterService.SearchTerm, comparisonType) || x.Content.Contains(_searchFilterService.SearchTerm, comparisonType));
         }
 
-        if (settings.SelectedCategoryId != 0)
-            notes = notes.Where(x => x.CategoryId == settings.SelectedCategoryId);
+        if (settings.CategoryFilterLogic == FilterLogic.Or)
+        {
+            if (settings.SelectedCategoryId != 0)
+                notes = notes.Where(x => x.CategoryId == settings.SelectedCategoryId);
+        }
+        else if (settings.CategoryFilterLogic == FilterLogic.And)
+        {
+            notes = notes.Where(x => settings.SelectedCategoryIds.Contains(x.CategoryId));
+        }
 
         return settings.SortBy[ContentType.Note] switch
         {

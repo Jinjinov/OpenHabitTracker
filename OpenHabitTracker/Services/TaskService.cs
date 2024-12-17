@@ -53,8 +53,15 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
             };
         }
 
-        if (settings.SelectedCategoryId != 0)
-            tasks = tasks.Where(x => x.CategoryId == settings.SelectedCategoryId);
+        if (settings.CategoryFilterLogic == FilterLogic.Or)
+        {
+            if (settings.SelectedCategoryId != 0)
+                tasks = tasks.Where(x => x.CategoryId == settings.SelectedCategoryId);
+        }
+        else if (settings.CategoryFilterLogic == FilterLogic.And)
+        {
+            tasks = tasks.Where(x => settings.SelectedCategoryIds.Contains(x.CategoryId));
+        }
 
         return settings.SortBy[ContentType.Task] switch
         {
