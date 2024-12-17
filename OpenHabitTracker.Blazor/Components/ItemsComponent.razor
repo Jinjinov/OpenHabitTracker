@@ -13,9 +13,9 @@
             @if (IsReadOnly)
             {
                 <div class="input-group-text">
-                    <InputCheckbox id="@item.Id" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
+                    <InputCheckbox id="@($"item-{item.Id}")" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
                 </div>
-                <label for="@item.Id" class="input-group-text flex-grow-1 text-wrap highlightable">@((MarkupString)SearchFilterService.MarkSearchResults(item.Title))</label>
+                <label for="@($"item-{item.Id}")" class="input-group-text flex-grow-1 text-wrap highlightable">@((MarkupString)SearchFilterService.MarkSearchResults(item.Title))</label>
             }
             else
             {

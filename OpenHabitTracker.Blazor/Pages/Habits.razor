@@ -51,7 +51,7 @@
                 <InputSelect class="form-select" @bind-Value="HabitService.NewHabit.RepeatPeriod">
                     @foreach (Period period in Enum.GetValues<Period>())
                     {
-                        <option @key="period" value="@period">@Loc[period.ToString()]</option>
+                        <option value="@period">@Loc[period.ToString()]</option>
                     }
                 </InputSelect>
             </div>

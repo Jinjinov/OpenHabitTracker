@@ -10,7 +10,7 @@
     <InputSelect class="form-select flex-grow-0 w-auto" Value="Model.Priority" ValueExpression="() => Model.Priority" TValue="Priority" ValueChanged="SavePriority">
         @foreach (Priority priority in Enum.GetValues<Priority>().OrderDescending())
         {
-            <option @key="priority" value="@priority">@AppData.GetPriorityTitle(priority)</option>
+            <option value="@priority">@AppData.GetPriorityTitle(priority)</option>
         }
     </InputSelect>
 }

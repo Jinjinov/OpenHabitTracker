@@ -12,7 +12,7 @@
         <option value="0" disabled selected hidden>@Loc["None"]</option>
         @foreach (CategoryModel category in CategoryService.Categories)
         {
-            <option @key="category" value="@category.Id">@category.Title</option>
+            <option @key="category.Id" value="@category.Id">@category.Title</option>
         }
     </InputSelect>
 }

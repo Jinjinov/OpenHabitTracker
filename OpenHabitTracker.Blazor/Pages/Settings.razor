@@ -99,7 +99,7 @@
             <InputSelect class="form-select" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
                 @foreach ((string key, Loc loc) in OpenHabitTracker.Loc.Cultures)
                 {
-                    <option @key="key" value="@key">@loc.Language</option>
+                    <option value="@key">@loc.Language</option>
                 }
             </InputSelect>
         </div>
@@ -109,7 +109,7 @@
             <InputSelect class="form-select" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
                 {
-                    <option @key="dayOfWeek" value="@dayOfWeek">@Loc[dayOfWeek.ToString()]</option>
+                    <option value="@dayOfWeek">@Loc[dayOfWeek.ToString()]</option>
                 }
             </InputSelect>
         </div>

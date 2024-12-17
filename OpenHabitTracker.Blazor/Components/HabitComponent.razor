@@ -30,16 +30,16 @@
     }
 
     <div class="input-group">
-        <label class="input-group-text" for="countInput">@Loc["Repeat"]</label>
-        <InputNumber class="form-control" id="countInput" Value="Habit.RepeatCount" ValueExpression="() => Habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(Habit, repeatCount)" />
+        <label class="input-group-text" for="@($"countInput-{Habit.Id}")">@Loc["Repeat"]</label>
+        <InputNumber class="form-control" id="@($"countInput-{Habit.Id}")" Value="Habit.RepeatCount" ValueExpression="() => Habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(Habit, repeatCount)" />
 
-        <label class="input-group-text" for="intervalInput">@Loc["every"]</label>
-        <InputNumber class="form-control" id="intervalInput" Value="Habit.RepeatInterval" ValueExpression="() => Habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(Habit, repeatInterval)" />
+        <label class="input-group-text" for="@($"intervalInput-{Habit.Id}")">@Loc["every"]</label>
+        <InputNumber class="form-control" id="@($"intervalInput-{Habit.Id}")" Value="Habit.RepeatInterval" ValueExpression="() => Habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(Habit, repeatInterval)" />
 
         <InputSelect class="form-select" Value="Habit.RepeatPeriod" ValueExpression="() => Habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(Habit, repeatPeriod)">
             @foreach (Period period in Enum.GetValues<Period>())
             {
-                <option @key="period" value="@period">@Loc[period.ToString()]</option>
+                <option value="@period">@Loc[period.ToString()]</option>
             }
         </InputSelect>
     </div>

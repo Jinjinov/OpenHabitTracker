@@ -36,7 +36,7 @@ public class SettingsEntity
 
     public long SelectedCategoryId { get; set; }
 
-    public long[] SelectedCategoryIds { get; set; } = [];
+    public List<long> SelectedCategoryIds { get; set; } = [];
 
     public FilterLogic CategoryFilterLogic { get; set; } = FilterLogic.Or;
 
