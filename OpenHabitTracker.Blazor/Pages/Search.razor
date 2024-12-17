@@ -62,69 +62,46 @@
             </div>
 
             <div class="list-group-item">
-                <small class="" @onclick="ToggleCategoryFilterLogic">@Loc["Category"]:</small>
-                @if (_settings.CategoryFilterLogic == FilterLogic.Or)
-                {
-                    <InputSelect class="form-select" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long" ValueChanged="SaveCategoryId">
-                        <option value="0" selected>@Loc["All"]</option>
-                        @foreach (CategoryModel category in CategoryService.Categories)
-                        {
-                            <option @key="category.Id" value="@category.Id">@category.Title</option>
-                        }
-                    </InputSelect>
-                }
-                else if (_settings.CategoryFilterLogic == FilterLogic.And)
-                {
-                    @foreach (CategoryModel category in CategoryService.Categories)
-                    {
-                        bool isSelected = _settings.SelectedCategoryIds.Contains(category.Id);
+                <small class="">@Loc["Category"]:</small>
 
-                        <div class="form-check position-relative">
-                            <InputCheckbox id="@($"category-{category.Id}")" class="form-check-input me-1" Value="isSelected" ValueExpression="() => isSelected" ValueChanged="(bool show) => SaveCategoryIds(category.Id, show)" />
-                            <label for="@($"category-{category.Id}")" class="form-check-label stretched-link d-inline">@category.Title</label>
-                        </div>
-                    }
+                @foreach (CategoryModel category in CategoryService.Categories)
+                {
+                    bool isSelected = _settings.SelectedCategoryIds.Contains(category.Id);
+
+                    <div class="form-check position-relative">
+                        <InputCheckbox id="@($"category-{category.Id}")" class="form-check-input me-1" Value="isSelected" ValueExpression="() => isSelected" ValueChanged="(bool show) => SaveCategoryIds(category.Id, show)" />
+                        <label for="@($"category-{category.Id}")" class="form-check-label stretched-link d-inline">@category.Title</label>
+                    </div>
                 }
             </div>
 
             <div class="list-group-item">
-                <small class="" @onclick="TogglePriorityFilterLogic">@Loc["Priority"]:</small>
-                @if (_settings.PriorityFilterLogic == FilterLogic.Or)
-                {
-                    <InputSelect class="form-select" Value="_settings.SelectedPriority" ValueExpression="() => _settings.SelectedPriority" TValue="Priority" ValueChanged="SaveSelectedPriority">
-                        @foreach (Priority priority in Enum.GetValues<Priority>())
-                        {
-                            <option value="@priority">@Loc[_priorityNameByPriority[priority]]</option>
-                        }
-                    </InputSelect>
-                }
-                else if (_settings.PriorityFilterLogic == FilterLogic.And)
-                {
-                    <div class="form-check position-relative">
-                        <InputCheckbox id="Priority.None" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.None]" ValueExpression="() => _settings.ShowPriority[Priority.None]" ValueChanged="(bool show) => SaveShowPriority(Priority.None, show)" />
-                        <label for="Priority.None" class="form-check-label stretched-link d-inline">@Loc["None"]</label>
-                    </div>
-                    <div class="form-check position-relative">
-                        <InputCheckbox id="Priority.VeryLow" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.VeryLow]" ValueExpression="() => _settings.ShowPriority[Priority.VeryLow]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryLow, show)" />
-                        <label for="Priority.VeryLow" class="form-check-label stretched-link d-inline">@Loc["Very low"]</label>
-                    </div>
-                    <div class="form-check position-relative">
-                        <InputCheckbox id="Priority.Low" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.Low]" ValueExpression="() => _settings.ShowPriority[Priority.Low]" ValueChanged="(bool show) => SaveShowPriority(Priority.Low, show)" />
-                        <label for="Priority.Low" class="form-check-label stretched-link d-inline">@Loc["Low"]</label>
-                    </div>
-                    <div class="form-check position-relative">
-                        <InputCheckbox id="Priority.Medium" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.Medium]" ValueExpression="() => _settings.ShowPriority[Priority.Medium]" ValueChanged="(bool show) => SaveShowPriority(Priority.Medium, show)" />
-                        <label for="Priority.Medium" class="form-check-label stretched-link d-inline">@Loc["Medium"]</label>
-                    </div>
-                    <div class="form-check position-relative">
-                        <InputCheckbox id="Priority.High" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.High]" ValueExpression="() => _settings.ShowPriority[Priority.High]" ValueChanged="(bool show) => SaveShowPriority(Priority.High, show)" />
-                        <label for="Priority.High" class="form-check-label stretched-link d-inline">@Loc["High"]</label>
-                    </div>
-                    <div class="form-check position-relative">
-                        <InputCheckbox id="Priority.VeryHigh" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.VeryHigh]" ValueExpression="() => _settings.ShowPriority[Priority.VeryHigh]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryHigh, show)" />
-                        <label for="Priority.VeryHigh" class="form-check-label stretched-link d-inline">@Loc["Very high"]</label>
-                    </div>
-                }
+                <small class="">@Loc["Priority"]:</small>
+
+                <div class="form-check position-relative">
+                    <InputCheckbox id="Priority.None" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.None]" ValueExpression="() => _settings.ShowPriority[Priority.None]" ValueChanged="(bool show) => SaveShowPriority(Priority.None, show)" />
+                    <label for="Priority.None" class="form-check-label stretched-link d-inline">@Loc["None"]</label>
+                </div>
+                <div class="form-check position-relative">
+                    <InputCheckbox id="Priority.VeryLow" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.VeryLow]" ValueExpression="() => _settings.ShowPriority[Priority.VeryLow]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryLow, show)" />
+                    <label for="Priority.VeryLow" class="form-check-label stretched-link d-inline">@Loc["Very low"]</label>
+                </div>
+                <div class="form-check position-relative">
+                    <InputCheckbox id="Priority.Low" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.Low]" ValueExpression="() => _settings.ShowPriority[Priority.Low]" ValueChanged="(bool show) => SaveShowPriority(Priority.Low, show)" />
+                    <label for="Priority.Low" class="form-check-label stretched-link d-inline">@Loc["Low"]</label>
+                </div>
+                <div class="form-check position-relative">
+                    <InputCheckbox id="Priority.Medium" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.Medium]" ValueExpression="() => _settings.ShowPriority[Priority.Medium]" ValueChanged="(bool show) => SaveShowPriority(Priority.Medium, show)" />
+                    <label for="Priority.Medium" class="form-check-label stretched-link d-inline">@Loc["Medium"]</label>
+                </div>
+                <div class="form-check position-relative">
+                    <InputCheckbox id="Priority.High" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.High]" ValueExpression="() => _settings.ShowPriority[Priority.High]" ValueChanged="(bool show) => SaveShowPriority(Priority.High, show)" />
+                    <label for="Priority.High" class="form-check-label stretched-link d-inline">@Loc["High"]</label>
+                </div>
+                <div class="form-check position-relative">
+                    <InputCheckbox id="Priority.VeryHigh" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.VeryHigh]" ValueExpression="() => _settings.ShowPriority[Priority.VeryHigh]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryHigh, show)" />
+                    <label for="Priority.VeryHigh" class="form-check-label stretched-link d-inline">@Loc["Very high"]</label>
+                </div>
             </div>
 
             <div class="list-group-item">
@@ -262,13 +239,6 @@
         await UpdateStateChanged();
     }
 
-    async Task SaveCategoryId(long categoryId)
-    {
-        _settings.SelectedCategoryId = categoryId;
-
-        await UpdateSettings();
-    }
-
     async Task SaveCategoryIds(long categoryId, bool show)
     {
         if (show && !_settings.SelectedCategoryIds.Contains(categoryId))
@@ -282,34 +252,6 @@
             _settings.SelectedCategoryIds.Remove(categoryId);
             await UpdateSettings();
         }
-    }
-
-    async Task ToggleCategoryFilterLogic()
-    {
-        if (_settings.CategoryFilterLogic == FilterLogic.And)
-        {
-            _settings.CategoryFilterLogic = FilterLogic.Or;
-        }
-        else if (_settings.CategoryFilterLogic == FilterLogic.Or)
-        {
-            _settings.CategoryFilterLogic = FilterLogic.And;
-        }
-
-        await UpdateSettings();
-    }
-
-    async Task TogglePriorityFilterLogic()
-    {
-        if (_settings.PriorityFilterLogic == FilterLogic.And)
-        {
-            _settings.PriorityFilterLogic = FilterLogic.Or;
-        }
-        else if (_settings.PriorityFilterLogic == FilterLogic.Or)
-        {
-            _settings.PriorityFilterLogic = FilterLogic.And;
-        }
-
-        await UpdateSettings();
     }
 
     async Task SaveSelectedRatio(Ratio ratio)
@@ -329,13 +271,6 @@
     async Task SaveSelectedRatioMin(int min)
     {
         _settings.SelectedRatioMin = min;
-
-        await UpdateSettings();
-    }
-
-    async Task SaveSelectedPriority(Priority priority)
-    {
-        _settings.SelectedPriority = priority;
 
         await UpdateSettings();
     }

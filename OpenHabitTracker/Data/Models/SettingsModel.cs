@@ -34,15 +34,7 @@ public class SettingsModel
 
     public int VerticalMargin { get; set; } = 1;
 
-    public long SelectedCategoryId { get; set; }
-
     public List<long> SelectedCategoryIds { get; set; } = [];
-
-    public FilterLogic CategoryFilterLogic { get; set; } = FilterLogic.Or;
-
-    public FilterLogic PriorityFilterLogic { get; set; } = FilterLogic.And;
-
-    public Priority SelectedPriority { get; set; } = Priority.VeryHigh;
 
     public Dictionary<Priority, bool> ShowPriority { get; set; } = new()
     {

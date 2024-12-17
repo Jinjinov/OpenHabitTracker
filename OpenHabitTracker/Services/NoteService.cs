@@ -22,14 +22,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess, SearchFilterSe
 
         IEnumerable<NoteModel> notes = Notes!.Where(x => !x.IsDeleted);
 
-        if (settings.PriorityFilterLogic == FilterLogic.And)
-        {
-            notes = notes.Where(x => settings.ShowPriority[x.Priority]);
-        }
-        else if (settings.PriorityFilterLogic == FilterLogic.Or)
-        {
-            notes = notes.Where(x => settings.SelectedPriority == x.Priority);
-        }
+        notes = notes.Where(x => settings.ShowPriority[x.Priority]);
 
         if (_searchFilterService.SearchTerm is not null)
         {
@@ -38,15 +31,7 @@ public class NoteService(AppData appData, IDataAccess dataAccess, SearchFilterSe
             notes = notes.Where(x => x.Title.Contains(_searchFilterService.SearchTerm, comparisonType) || x.Content.Contains(_searchFilterService.SearchTerm, comparisonType));
         }
 
-        if (settings.CategoryFilterLogic == FilterLogic.Or)
-        {
-            if (settings.SelectedCategoryId != 0)
-                notes = notes.Where(x => x.CategoryId == settings.SelectedCategoryId);
-        }
-        else if (settings.CategoryFilterLogic == FilterLogic.And)
-        {
-            notes = notes.Where(x => settings.SelectedCategoryIds.Contains(x.CategoryId));
-        }
+        notes = notes.Where(x => settings.SelectedCategoryIds.Contains(x.CategoryId));
 
         return settings.SortBy[ContentType.Note] switch
         {

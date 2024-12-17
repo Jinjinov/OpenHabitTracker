@@ -22,14 +22,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
 
         IEnumerable<TaskModel> tasks = Tasks!.Where(x => !x.IsDeleted);
 
-        if (settings.PriorityFilterLogic == FilterLogic.And)
-        {
-            tasks = tasks.Where(x => settings.ShowPriority[x.Priority]);
-        }
-        else if (settings.PriorityFilterLogic == FilterLogic.Or)
-        {
-            tasks = tasks.Where(x => settings.SelectedPriority == x.Priority);
-        }
+        tasks = tasks.Where(x => settings.ShowPriority[x.Priority]);
 
         if (_searchFilterService.SearchTerm is not null)
         {
@@ -62,15 +55,7 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
             };
         }
 
-        if (settings.CategoryFilterLogic == FilterLogic.Or)
-        {
-            if (settings.SelectedCategoryId != 0)
-                tasks = tasks.Where(x => x.CategoryId == settings.SelectedCategoryId);
-        }
-        else if (settings.CategoryFilterLogic == FilterLogic.And)
-        {
-            tasks = tasks.Where(x => settings.SelectedCategoryIds.Contains(x.CategoryId));
-        }
+        tasks = tasks.Where(x => settings.SelectedCategoryIds.Contains(x.CategoryId));
 
         return settings.SortBy[ContentType.Task] switch
         {

@@ -89,11 +89,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     ShowOnlyOverSelectedRatioMin = settingsEntity.ShowOnlyOverSelectedRatioMin,
                     SelectedRatioMin = settingsEntity.SelectedRatioMin,
                     VerticalMargin = settingsEntity.VerticalMargin,
-                    SelectedCategoryId = settingsEntity.SelectedCategoryId,
                     SelectedCategoryIds = settingsEntity.SelectedCategoryIds,
-                    CategoryFilterLogic = settingsEntity.CategoryFilterLogic,
-                    PriorityFilterLogic = settingsEntity.PriorityFilterLogic,
-                    SelectedPriority = settingsEntity.SelectedPriority,
                     ShowPriority = settingsEntity.ShowPriority,
                     SortBy = settingsEntity.SortBy
                 };
@@ -117,11 +113,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     ShowOnlyOverSelectedRatioMin = false,
                     SelectedRatioMin = 0,
                     VerticalMargin = 2,
-                    SelectedCategoryId = 0,
                     SelectedCategoryIds = [],
-                    CategoryFilterLogic = FilterLogic.Or,
-                    PriorityFilterLogic = FilterLogic.And,
-                    SelectedPriority = Priority.VeryHigh,
                     ShowPriority = new()
                     {
                         { Priority.None, true },
@@ -590,11 +582,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 ShowOnlyOverSelectedRatioMin = false,
                 SelectedRatioMin = 0,
                 VerticalMargin = 2,
-                SelectedCategoryId = 0,
                 SelectedCategoryIds = [],
-                CategoryFilterLogic = FilterLogic.Or,
-                PriorityFilterLogic = FilterLogic.And,
-                SelectedPriority = Priority.VeryHigh,
                 ShowPriority = new()
                 {
                     { Priority.None, true },

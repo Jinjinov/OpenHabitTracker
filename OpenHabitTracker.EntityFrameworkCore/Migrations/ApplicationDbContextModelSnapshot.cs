@@ -15,271 +15,258 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
             modelBuilder.Entity("OpenHabitTracker.Data.Entities.CategoryEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Categories");
-                });
+                b.ToTable("Categories");
+            });
 
             modelBuilder.Entity("OpenHabitTracker.Data.Entities.ContentEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<long>("CategoryId")
-                        .HasColumnType("INTEGER");
+                b.Property<long>("CategoryId")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Color")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("TEXT");
+                b.Property<string>("Discriminator")
+                    .IsRequired()
+                    .HasMaxLength(13)
+                    .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("IsDeleted")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("Priority")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("Priority")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                b.HasIndex("CategoryId");
 
-                    b.ToTable("Contents");
+                b.ToTable("Contents");
 
-                    b.HasDiscriminator().HasValue("ContentEntity");
+                b.HasDiscriminator().HasValue("ContentEntity");
 
-                    b.UseTphMappingStrategy();
-                });
+                b.UseTphMappingStrategy();
+            });
 
             modelBuilder.Entity("OpenHabitTracker.Data.Entities.ItemEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("DoneAt")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime?>("DoneAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<long>("ParentId")
-                        .HasColumnType("INTEGER");
+                b.Property<long>("ParentId")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("ParentId");
+                b.HasIndex("ParentId");
 
-                    b.ToTable("Items");
-                });
+                b.ToTable("Items");
+            });
 
             modelBuilder.Entity("OpenHabitTracker.Data.Entities.PriorityEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Priorities");
-                });
+                b.ToTable("Priorities");
+            });
 
             modelBuilder.Entity("OpenHabitTracker.Data.Entities.SettingsEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoryFilterLogic")
-                        .HasColumnType("INTEGER");
+                b.Property<string>("Culture")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Culture")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<bool>("DisplayNoteContentAsMarkdown")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<bool>("DisplayNoteContentAsMarkdown")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("FirstDayOfWeek")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("FirstDayOfWeek")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("InsertTabsInNoteContent")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<bool>("InsertTabsInNoteContent")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("IsDarkMode")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsDarkMode")
-                        .HasColumnType("INTEGER");
+                b.Property<long>("SelectedCategoryId")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("PriorityFilterLogic")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("SelectedRatio")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<long>("SelectedCategoryId")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("SelectedRatioMin")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("SelectedCategoryIds")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<bool>("ShowItemList")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("SelectedPriority")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("ShowLargeCalendar")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("SelectedRatio")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("ShowOnlyOverSelectedRatioMin")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("SelectedRatioMin")
-                        .HasColumnType("INTEGER");
+                b.Property<string>("ShowPriority")
+                    .IsRequired()
+                    .HasColumnType("TEXT")
+                    .HasColumnName("ShowPriority");
 
-                    b.Property<bool>("ShowItemList")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("ShowSmallCalendar")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowLargeCalendar")
-                        .HasColumnType("INTEGER");
+                b.Property<string>("SortBy")
+                    .IsRequired()
+                    .HasColumnType("TEXT")
+                    .HasColumnName("SortBy");
 
-                    b.Property<bool>("ShowOnlyOverSelectedRatioMin")
-                        .HasColumnType("INTEGER");
+                b.Property<string>("StartPage")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ShowPriority")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("ShowPriority");
+                b.Property<string>("StartSidebar")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<bool>("ShowSmallCalendar")
-                        .HasColumnType("INTEGER");
+                b.Property<string>("Theme")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("SortBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("SortBy");
+                b.Property<int>("VerticalMargin")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("StartPage")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.HasKey("Id");
 
-                    b.Property<string>("StartSidebar")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Theme")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("VerticalMargin")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Settings");
-                });
+                b.ToTable("Settings");
+            });
 
             modelBuilder.Entity("OpenHabitTracker.Data.Entities.TimeEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime?>("CompletedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<long>("HabitId")
-                        .HasColumnType("INTEGER");
+                b.Property<long>("HabitId")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("StartedAt")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("StartedAt")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("HabitId");
+                b.HasIndex("HabitId");
 
-                    b.ToTable("Times");
-                });
+                b.ToTable("Times");
+            });
 
             modelBuilder.Entity("OpenHabitTracker.Data.Entities.HabitEntity", b =>
-                {
-                    b.HasBaseType("OpenHabitTracker.Data.Entities.ContentEntity");
+            {
+                b.HasBaseType("OpenHabitTracker.Data.Entities.ContentEntity");
 
-                    b.Property<TimeOnly?>("Duration")
-                        .HasColumnType("TEXT");
+                b.Property<TimeOnly?>("Duration")
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("LastTimeDoneAt")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime?>("LastTimeDoneAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<int>("RepeatCount")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("RepeatCount")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("RepeatInterval")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("RepeatInterval")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<int>("RepeatPeriod")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("RepeatPeriod")
+                    .HasColumnType("INTEGER");
 
-                    b.HasDiscriminator().HasValue("HabitEntity");
-                });
+                b.HasDiscriminator().HasValue("HabitEntity");
+            });
 
             modelBuilder.Entity("OpenHabitTracker.Data.Entities.NoteEntity", b =>
-                {
-                    b.HasBaseType("OpenHabitTracker.Data.Entities.ContentEntity");
+            {
+                b.HasBaseType("OpenHabitTracker.Data.Entities.ContentEntity");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Content")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasDiscriminator().HasValue("NoteEntity");
-                });
+                b.HasDiscriminator().HasValue("NoteEntity");
+            });
 
             modelBuilder.Entity("OpenHabitTracker.Data.Entities.TaskEntity", b =>
+            {
+                b.HasBaseType("OpenHabitTracker.Data.Entities.ContentEntity");
+
+                b.Property<DateTime?>("CompletedAt")
+                    .HasColumnType("TEXT");
+
+                b.Property<TimeOnly?>("Duration")
+                    .HasColumnType("TEXT");
+
+                b.Property<DateTime?>("PlannedAt")
+                    .HasColumnType("TEXT");
+
+                b.Property<DateTime?>("StartedAt")
+                    .HasColumnType("TEXT");
+
+                b.ToTable("Contents", t =>
                 {
-                    b.HasBaseType("OpenHabitTracker.Data.Entities.ContentEntity");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<TimeOnly?>("Duration")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("PlannedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("StartedAt")
-                        .HasColumnType("TEXT");
-
-                    b.ToTable("Contents", t =>
-                        {
-                            t.Property("Duration")
-                                .HasColumnName("TaskEntity_Duration");
-                        });
-
-                    b.HasDiscriminator().HasValue("TaskEntity");
+                    t.Property("Duration")
+                        .HasColumnName("TaskEntity_Duration");
                 });
+
+                b.HasDiscriminator().HasValue("TaskEntity");
+            });
 #pragma warning restore 612, 618
         }
     }
