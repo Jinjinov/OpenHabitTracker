@@ -1,8 +1,8 @@
 // This is a JavaScript module that is loaded on demand.
 // It can export any number of functions, and may import other JavaScript modules if required.
 
-export function showPrompt(message) {
-  return prompt(message, 'Type anything here');
+export function consoleLog(message) {
+    console.log(message);
 }
 
 export function setMode(mode) {
@@ -19,6 +19,10 @@ export function focusElement(element) {
 
 export function setElementProperty(element, property, value) {
     element[property] = value;
+}
+
+export function getElementProperty(element, property) {
+    return element[property];
 }
 
 export function getWindowDimensions() {

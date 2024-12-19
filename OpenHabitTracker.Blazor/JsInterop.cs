@@ -18,10 +18,10 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/OpenHabitTracker.Blazor/jsInterop.js").AsTask());
 
-    public async ValueTask<string> Prompt(string message)
+    public async ValueTask ConsoleLog(string message)
     {
         IJSObjectReference module = await _moduleTask.Value;
-        return await module.InvokeAsync<string>("showPrompt", message);
+        await module.InvokeVoidAsync("consoleLog", message);
     }
 
     public async ValueTask SetMode(string mode)
@@ -46,6 +46,12 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
     {
         IJSObjectReference module = await _moduleTask.Value;
         await module.InvokeVoidAsync("setElementProperty", element, property, value);
+    }
+
+    public async ValueTask<object> GetElementProperty(ElementReference element, string property)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        return await module.InvokeAsync<object>("getElementProperty", element, property);
     }
 
     public async Task<Dimensions> GetWindowDimensions()

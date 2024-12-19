@@ -31,6 +31,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+AppData -> ClientSideData
+
+Initialize -> LoadSavedData
+
 !!! add actual Help, above Icons
 
 ---------------------------------------------------------------------------------------------------
