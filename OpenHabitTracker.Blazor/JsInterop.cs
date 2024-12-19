@@ -48,10 +48,10 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         await module.InvokeVoidAsync("setElementProperty", element, property, value);
     }
 
-    public async ValueTask<object> GetElementProperty(ElementReference element, string property)
+    public async ValueTask<T> GetElementProperty<T>(ElementReference element, string property)
     {
         IJSObjectReference module = await _moduleTask.Value;
-        return await module.InvokeAsync<object>("getElementProperty", element, property);
+        return await module.InvokeAsync<T>("getElementProperty", element, property);
     }
 
     public async Task<Dimensions> GetWindowDimensions()

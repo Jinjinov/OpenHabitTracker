@@ -82,5 +82,12 @@ public partial class CheckBox
         SetInternalChecked();
 
         await SetIndeterminate();
+
+        bool isChecked = await JsInterop.GetElementProperty<bool>(_elementReference, "checked");
+
+        if (isChecked != _internalChecked)
+        {
+            await JsInterop.SetElementProperty(_elementReference, "checked", _internalChecked);
+        }
     }
 }
