@@ -5,7 +5,7 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Wasm;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.IndexedDB;
-using OpenHabitTracker.Services;
+using OpenHabitTracker;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 

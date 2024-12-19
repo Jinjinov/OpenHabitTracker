@@ -31,9 +31,32 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+UserData -> UserImportExportData
+
 AppData -> ClientSideData
+	- hold state
+	- load state
+	- map to models
+	- interact with _dataAccess
+	- interact with _runtimeData
+	- interact with _markdownPipeline
+	- import, export / GetUserData, SetUserData
+	- LoadExamples
+
+IRuntimeData -> IClientSideRuntimeData
 
 Initialize -> LoadSavedData
+
+ClientSideState:
+	public Dictionary<long, HabitModel>? Habits { get; set; }
+	public Dictionary<long, NoteModel>? Notes { get; set; }
+	public Dictionary<long, TaskModel>? Tasks { get; set; }
+	public Dictionary<long, TimeModel>? Times { get; set; }
+	public Dictionary<long, ItemModel>? Items { get; set; }
+	public Dictionary<long, CategoryModel>? Categories { get; set; }
+	public Dictionary<long, PriorityModel>? Priorities { get; set; }
+
+---------------------------------------------------------------------------------------------------
 
 !!! add actual Help, above Icons
 

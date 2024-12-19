@@ -5,7 +5,6 @@ using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
-using OpenHabitTracker.Services;
 using System;
 using System.Windows;
 

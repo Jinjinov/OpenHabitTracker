@@ -4,7 +4,7 @@ using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web.Components;
 using OpenHabitTracker.EntityFrameworkCore;
-using OpenHabitTracker.Services;
+using OpenHabitTracker;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
