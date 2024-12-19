@@ -45,6 +45,10 @@ public static class Startup
 
         services.AddLocalization(options => options.ResourcesPath = @"Localization\Resources");
         services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
-        services.AddSingleton<IStringLocalizer>(sp => sp.GetRequiredService<IStringLocalizerFactory>().Create(string.Empty, Assembly.GetExecutingAssembly().GetName().Name));
+        services.AddSingleton<IStringLocalizer>(sp =>
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            return sp.GetRequiredService<IStringLocalizerFactory>().Create(string.Empty, assembly.Location);
+        });
     }
 }
