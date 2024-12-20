@@ -48,7 +48,9 @@ public static class Startup
         services.AddSingleton<IStringLocalizer>(sp =>
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            return sp.GetRequiredService<IStringLocalizerFactory>().Create(string.Empty, assembly.Location);
+            AssemblyName assemblyName = assembly.GetName();
+            string name = assemblyName.Name!;
+            return sp.GetRequiredService<IStringLocalizerFactory>().Create(string.Empty, name);
         });
     }
 }

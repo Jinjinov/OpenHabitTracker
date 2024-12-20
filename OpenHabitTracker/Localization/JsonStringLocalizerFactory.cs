@@ -33,7 +33,18 @@ public class JsonStringLocalizerFactory(IOptions<LocalizationOptions> options) :
         if (_localizerCache.GetValueOrDefault(key) is JsonStringLocalizer jsonStringLocalizer)
             return jsonStringLocalizer;
 
-        Assembly assembly = Assembly.LoadFrom(location);
+        Assembly assembly;
+
+        if (!string.IsNullOrEmpty(location))
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            assembly = assemblies.FirstOrDefault(a => a.GetName().Name == location)
+                ?? throw new InvalidOperationException($"Assembly '{location}' could not be found.");
+        }
+        else
+        {
+            assembly = Assembly.GetExecutingAssembly();
+        }
 
         EmbeddedFileProvider resources = new(assembly);
 
