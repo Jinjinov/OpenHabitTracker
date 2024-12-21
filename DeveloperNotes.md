@@ -68,9 +68,9 @@ NuGet package versions: MauiVersion == Manifest Version
 
 Publish Windows:
 
-dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net8.0-windows10.0.19041.0 -p:SelfContained=true -p:GenerateAppxPackageOnBuild=true
+dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-windows10.0.19041.0 -p:SelfContained=true -p:GenerateAppxPackageOnBuild=true
 
-dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net8.0-windows10.0.19041.0 -p:SelfContained=true -p:PublishAppxPackage=true
+dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-windows10.0.19041.0 -p:SelfContained=true -p:PublishAppxPackage=true
 
 set msix version in Package.appxmanifest
 
@@ -79,18 +79,18 @@ set msix version in Package.appxmanifest
 Publish iOS:
 
 run on iOS simulator:
-    dotnet build OpenHabitTracker.Blazor.Maui.csproj -t:Run -c:Release -f:net8.0-ios
-    dotnet build OpenHabitTracker.Blazor.Maui.csproj -t:Run -c:Release -f:net8.0-ios -p:_DeviceName=:v2:udid=YOUR_UDID
+    dotnet build OpenHabitTracker.Blazor.Maui.csproj -t:Run -c:Release -f:net9.0-ios
+    dotnet build OpenHabitTracker.Blazor.Maui.csproj -t:Run -c:Release -f:net9.0-ios -p:_DeviceName=:v2:udid=YOUR_UDID
     https://learn.microsoft.com/en-us/dotnet/maui/ios/cli?view=net-maui-8.0#launch-the-app-on-a-specific-simulator
 
-dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net8.0-ios -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64 -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
+dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-ios -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64 -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
 
 Publish macOS:
 
 run on macOS:
-    dotnet build OpenHabitTracker.Blazor.Maui.csproj -t:Run -c:Release -f:net8.0-maccatalyst
+    dotnet build OpenHabitTracker.Blazor.Maui.csproj -t:Run -c:Release -f:net9.0-maccatalyst
 
-dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net8.0-maccatalyst -p:MtouchLink=SdkOnly -p:CreatePackage=true -p:EnableCodeSigning=true -p:EnablePackageSigning=true -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.macos" -p:CodesignEntitlements="Platforms\MacCatalyst\Entitlements.plist" -p:PackageSigningKey="3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)"
+dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-maccatalyst -p:MtouchLink=SdkOnly -p:CreatePackage=true -p:EnableCodeSigning=true -p:EnablePackageSigning=true -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.macos" -p:CodesignEntitlements="Platforms\MacCatalyst\Entitlements.plist" -p:PackageSigningKey="3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)"
 
 ---------------------------------------------------------------------------------------------------
 
@@ -104,7 +104,7 @@ sudo apt-get install libwebkit2gtk-4.1
 Android:
 
 run on Android emulator:
-    dotnet build -t:Run -f:net8.0-android
+    dotnet build -t:Run -f:net9.0-android
     https://dev.to/csharpfritz/i-built-an-android-app-on-my-linux-machine-using-net-7-and-maui-41if
 
 F-Droid
