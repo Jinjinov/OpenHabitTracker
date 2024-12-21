@@ -33,8 +33,8 @@
 
         <!--
         if ApplicationDisplayVersion != 1.0
-        Assets file 'project.assets.json' doesn't have a target for 'net7.0-windows10.0.19041.0'. 
-        Ensure that restore has run and that you have included 'net7.0-windows10.0.19041.0' in the TargetFrameworks for your project.
+        Assets file 'project.assets.json' doesn't have a target for 'net9.0-windows10.0.19041.0'. 
+        Ensure that restore has run and that you have included 'net9.0-windows10.0.19041.0' in the TargetFrameworks for your project.
         -->
         <ApplicationDisplayVersion>1.0.7</ApplicationDisplayVersion>
       

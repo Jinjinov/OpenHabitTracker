@@ -57,9 +57,12 @@ ios                        17.5.8030/8.0.100      SDK 8.0.400, VS 17.11.35303.13
 maccatalyst                17.5.8030/8.0.100      SDK 8.0.400, VS 17.11.35303.130
 maui-windows               8.0.82/8.0.100         SDK 8.0.400, VS 17.11.35303.130
 wasm-tools                 8.0.8/8.0.100          SDK 8.0.400, VS 17.11.35303.130
-wasm-tools-net6            8.0.8/8.0.100          SDK 8.0.400, VS 17.11.35303.130
 
 `dotnet workload update`
+
+`dotnet nuget locals all --list`
+
+`dotnet nuget locals all --clear`
 
 NuGet package versions: MauiVersion == Manifest Version
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />

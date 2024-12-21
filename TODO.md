@@ -65,7 +65,7 @@ ClientSideState:
 Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
 	error: 'net.openhabittracker' is not a valid application name: Names must contain at least 2 periods
 
-	https://github.com/flathub/org.freedesktop.Sdk.Extension.dotnet8
+	https://github.com/flathub/org.freedesktop.Sdk.Extension.dotnet9
 
 	https://docs.flatpak.org/en/latest/dotnet.html
 	https://docs.flatpak.org/en/latest/available-runtimes.html
