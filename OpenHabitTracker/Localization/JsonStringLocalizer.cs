@@ -59,7 +59,7 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
             if (!stringMap.TryGetValue(name, out string? translation))
             {
                 string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-                translation = $"❗ {cultureName} {name} ❗";
+                translation = name;
 
                 _missing[name] = name;
             }
@@ -81,7 +81,7 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
             if (!stringMap.TryGetValue(name, out string? translation))
             {
                 string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-                translation = $"❗ {cultureName} {name} ❗";
+                translation = name;
 
                 _missing[name] = name;
             }
@@ -97,6 +97,11 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
     private Dictionary<string, string> LoadStringMap()
     {
         string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+        if (!Loc.Cultures.ContainsKey(cultureName))
+        {
+            cultureName = "en";
+        }
 
         if (_stringMapsCache.GetValueOrDefault(cultureName) is Dictionary<string, string> stringMap)
             return stringMap;
