@@ -97,7 +97,7 @@
         <div class="list-group-item">
             <small class="">@Loc["Language"]:</small>
             <InputSelect class="form-select" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
-                @foreach ((string key, Loc loc) in Localization.Loc.Cultures)
+                @foreach ((string key, Localization.Loc loc) in Localization.Loc.Cultures)
                 {
                     <option value="@key">@loc.Language</option>
                 }
