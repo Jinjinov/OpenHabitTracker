@@ -186,7 +186,7 @@
         if (_settings.HiddenCategoryIds.Count == 0)
             return true;
 
-        if (_settings.HiddenCategoryIds.Count == CategoryService.Categories.Count)
+        if (_settings.HiddenCategoryIds.Count == CategoryService.Categories?.Count)
             return false;
 
         return null;
@@ -290,7 +290,8 @@
     {
         if (_settings.HiddenCategoryIds.Count == 0)
         {
-            _settings.HiddenCategoryIds = CategoryService.Categories.Select(x => x.Id).ToList();
+            if (CategoryService.Categories is not null)
+                _settings.HiddenCategoryIds = CategoryService.Categories.Select(x => x.Id).ToList();
             await UpdateSettings();
         }
         else // if (_settings.HiddenCategoryIds.Count == CategoryService.Categories.Count)
