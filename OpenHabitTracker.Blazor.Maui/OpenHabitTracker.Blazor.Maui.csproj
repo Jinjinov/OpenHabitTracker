@@ -41,6 +41,9 @@
         <!-- AndroidManifest.xml : error XA0003: VersionCode 1.0.1 is invalid. It must be an integer value. (Parameter 'VersionCode') -->
         <ApplicationVersion>7</ApplicationVersion>
 
+        <!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
+        <WindowsPackageType>None</WindowsPackageType>
+
         <TargetPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">35</TargetPlatformVersion>
 
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
