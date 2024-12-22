@@ -131,7 +131,7 @@
 
         await AppData.InitializeSettings();
 
-        OpenHabitTracker.Loc.SetCulture(AppData.Settings.Culture);
+        Localization.Loc.SetCulture(AppData.Settings.Culture);
 
         if (!AppData.Settings.IsDarkMode)
             await JsInterop.SetMode("light");

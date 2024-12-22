@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace OpenHabitTracker;
+namespace OpenHabitTracker.Localization;
 
 public class Loc
 {

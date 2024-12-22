@@ -58,7 +58,6 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
 
             if (!stringMap.TryGetValue(name, out string? translation))
             {
-                string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
                 translation = name;
 
                 _missing[name] = name;
@@ -80,7 +79,6 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
 
             if (!stringMap.TryGetValue(name, out string? translation))
             {
-                string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
                 translation = name;
 
                 _missing[name] = name;

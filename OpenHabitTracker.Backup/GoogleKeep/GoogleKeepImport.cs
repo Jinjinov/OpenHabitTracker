@@ -9,21 +9,21 @@ public class GoogleKeepImport(AppData appData)
 {
     private readonly AppData _appData = appData;
 
-    readonly Dictionary<string, string> _namedColors = new()
-    {
-        { "DEFAULT", "transparent" },
-        { "BLUE", "blue" },
-        { "BROWN", "brown" },
-        { "CERULEAN", "steelblue" },
-        { "GRAY", "gray" },
-        { "GREEN", "green" },
-        { "ORANGE", "orange" },
-        { "PINK", "pink" },
-        { "PURPLE", "purple" },
-        { "RED", "red" },
-        { "TEAL", "teal" },
-        { "YELLOW", "yellow" },
-    };
+    //readonly Dictionary<string, string> _namedColors = new()
+    //{
+    //    { "DEFAULT", "transparent" },
+    //    { "BLUE", "blue" },
+    //    { "BROWN", "brown" },
+    //    { "CERULEAN", "steelblue" },
+    //    { "GRAY", "gray" },
+    //    { "GREEN", "green" },
+    //    { "ORANGE", "orange" },
+    //    { "PINK", "pink" },
+    //    { "PURPLE", "purple" },
+    //    { "RED", "red" },
+    //    { "TEAL", "teal" },
+    //    { "YELLOW", "yellow" },
+    //};
 
     readonly Dictionary<string, string> _bootstrapClass = new()
     {
