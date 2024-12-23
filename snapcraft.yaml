@@ -5,7 +5,7 @@ website: https://openhabittracker.net
 source-code: https://github.com/Jinjinov/OpenHabitTracker
 issues: https://github.com/Jinjinov/OpenHabitTracker/issues
 license: GPL-3.0
-version: '1.0.0'
+version: '1.0.8'
 grade: stable #devel
 summary: Take notes, plan tasks, track habits
 description: |
@@ -38,7 +38,7 @@ parts:
      dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -r linux-x64 -c Release -p:PublishSingleFile=true --self-contained true -f net9.0 -o $SNAPCRAFT_PART_INSTALL
      chmod 0755 $SNAPCRAFT_PART_INSTALL/OpenHT
     build-packages:
-      - dotnet-sdk-8.0
+      - dotnet-sdk-9.0
 
 apps:
   openhabittracker:
