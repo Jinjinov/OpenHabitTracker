@@ -570,6 +570,8 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
 	sudo snap install lxd
 
+    lxd init --auto
+
 	snapcraft --debug
 
 	sudo snap install openhabittracker_1.0.0_amd64.snap --dangerous --devmode
