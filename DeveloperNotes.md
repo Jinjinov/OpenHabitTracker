@@ -570,7 +570,7 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
 	sudo snap install lxd
 
-    lxd init --auto
+	lxd init --auto
 
 	snapcraft --debug
 
