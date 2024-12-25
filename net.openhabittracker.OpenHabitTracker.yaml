@@ -3,11 +3,11 @@ runtime: org.freedesktop.Platform
 runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.dotnet9
+  - org.freedesktop.Sdk.Extension.dotnet8
 build-options:
-  prepend-path: "/usr/lib/sdk/dotnet9/bin"
-  append-ld-library-path: "/usr/lib/sdk/dotnet9/lib"
-  prepend-pkg-config-path: "/usr/lib/sdk/dotnet9/lib/pkgconfig"
+  prepend-path: "/usr/lib/sdk/dotnet8/bin"
+  append-ld-library-path: "/usr/lib/sdk/dotnet8/lib"
+  prepend-pkg-config-path: "/usr/lib/sdk/dotnet8/lib/pkgconfig"
 
 command: OpenHT
 
@@ -24,7 +24,7 @@ modules:
   - name: dotnet
     buildsystem: simple
     build-commands:
-    - /usr/lib/sdk/dotnet9/bin/install.sh
+    - /usr/lib/sdk/dotnet8/bin/install.sh
 
   - name: OpenHabitTracker
     buildsystem: simple
@@ -34,9 +34,9 @@ modules:
         tag: 1.1.0.4
       - ./nuget-sources.json
     build-commands:
-      - dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net9.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true --source ./nuget-sources
+      - dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net8.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
-      - cp -r OpenHabitTracker.Blazor.Photino/bin/Release/net9.0/linux-x64/publish/* ${FLATPAK_DEST}/bin
+      - cp -r OpenHabitTracker.Blazor.Photino/bin/Release/net8.0/linux-x64/publish/* ${FLATPAK_DEST}/bin
       - install -Dm644 net.openhabittracker.OpenHabitTracker.desktop -t /app/share/applications/
       - install -Dm644 net.openhabittracker.OpenHabitTracker.metainfo.xml -t /app/share/metainfo/
       - install -Dm644 net.openhabittracker.OpenHabitTracker.svg -t /app/share/icons/hicolor/scalable/apps/

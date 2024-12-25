@@ -35,10 +35,10 @@ parts:
     dotnet-self-contained-runtime-identifier: linux-x64
     source: .
     override-build: |
-     dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net9.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true -o $SNAPCRAFT_PART_INSTALL
+     dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net8.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true -o $SNAPCRAFT_PART_INSTALL
      chmod 0755 $SNAPCRAFT_PART_INSTALL/OpenHT
     build-packages:
-      - dotnet-sdk-9.0
+      - dotnet-sdk-8.0
 
 apps:
   openhabittracker:
