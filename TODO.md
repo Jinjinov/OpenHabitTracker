@@ -31,6 +31,21 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+sort by:
+Selected ratio -> Selected interval ratio
+
+[ ] Show Color
+[ ] Show Created & Updated
+
+Color below Category
+
+!!! add actual Help, above Icons
+
+add Google Analytics to the website
+add events to: Run PWA, Download, Visit store
+
+---------------------------------------------------------------------------------------------------
+
 UserData -> UserImportExportData
 
 AppData -> ClientSideData
@@ -55,10 +70,6 @@ ClientSideState:
 	public Dictionary<long, ItemModel>? Items { get; set; }
 	public Dictionary<long, CategoryModel>? Categories { get; set; }
 	public Dictionary<long, PriorityModel>? Priorities { get; set; }
-
----------------------------------------------------------------------------------------------------
-
-!!! add actual Help, above Icons
 
 ---------------------------------------------------------------------------------------------------
 
