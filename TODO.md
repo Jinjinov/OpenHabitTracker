@@ -39,6 +39,8 @@ Selected ratio -> Selected interval ratio
 
 Color below Category
 
+Horizontal space: 0,1,2,3,4,5
+
 !!! add actual Help, above Icons
 
 add Google Analytics to the website
