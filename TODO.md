@@ -37,8 +37,6 @@ Selected ratio -> Selected interval ratio
 [ ] Show Color
 [ ] Show Created & Updated
 
-Color below Category
-
 Horizontal space: 0,1,2,3,4,5
 
 !!! add actual Help, above Icons
