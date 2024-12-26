@@ -31,9 +31,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-sort by:
-Selected ratio -> Selected interval ratio
-
 [ ] Show Color
 [ ] Show Created & Updated
 
