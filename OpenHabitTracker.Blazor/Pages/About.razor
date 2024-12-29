@@ -52,6 +52,12 @@
 </div>
 
 @code {
+    [CascadingParameter(Name = "StateChanged")]
+    public bool StateChanged { get; set; }
+
+    [CascadingParameter(Name = "WindowDimensions")]
+    public Dimensions? WindowDimensions { get; set; }
+
     private ElementReference WrapperElement;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
