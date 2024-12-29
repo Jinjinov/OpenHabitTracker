@@ -122,6 +122,7 @@
     private Dimensions? _windowDimensions;
 
     private Type? _dynamicComponentType;
+    private Type? _previousDynamicComponentType;
     private Dictionary<string, Dictionary<string, object>> _dynamicComponentParametersByName = new();
 
     private readonly Dictionary<string, string> _titleByTypeName = new()
@@ -224,11 +225,12 @@
     {
         if (_dynamicComponentType != typeof(Menu))
         {
+            _previousDynamicComponentType = _dynamicComponentType;
             SelectComponent<Menu>();
         }
         else
         {
-            _dynamicComponentType = null;
+            _dynamicComponentType = _previousDynamicComponentType;
         }
     }
 

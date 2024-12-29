@@ -31,9 +31,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-- sidebar menu opens / toggles from top - the previous sidebar state is restored on close
-- sidebar menu is replaced by chosen option
-
 [ ] Show Color
 [ ] Show Created & Updated
 
