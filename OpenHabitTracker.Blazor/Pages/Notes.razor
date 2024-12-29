@@ -47,10 +47,13 @@
                 <CategoryComponent Model="NoteService.NewNote" />
             </div>
 
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">@Loc["Color"]</span>
-                <ColorComponent Model="NoteService.NewNote" />
-            </div>
+            @if (AppData.Settings.ShowColor)
+            {
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text col-4">@Loc["Color"]</span>
+                    <ColorComponent Model="NoteService.NewNote" />
+                </div>
+            }
         </div>
     }
 

@@ -103,7 +103,7 @@
         {
             <div>@Loc["Average interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.AverageInterval)</div>
         }
-        
+
         <div>@Loc["Average interval to repeat interval ratio"]: @Habit.AverageIntervalToRepeatIntervalRatio.ToString("N0")%</div>
     </div>
 
@@ -119,15 +119,21 @@
         <CategoryComponent Model="Habit" />
     </div>
 
-    <div class="input-group flex-nowrap">
-        <span class="input-group-text col-4">@Loc["Color"]</span>
-        <ColorComponent Model="Habit" />
-    </div>
+    @if (SettingsService.Settings.ShowColor)
+    {
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text col-4">@Loc["Color"]</span>
+            <ColorComponent Model="Habit" />
+        </div>
+    }
 
-    <div class="p-1 border rounded-0">
-        <small class="d-inline-block mx-1">@Loc["Created"]: @Habit.CreatedAt</small>
-        <small class="d-inline-block mx-1">@Loc["Updated"]: @Habit.UpdatedAt</small>
-    </div>
+    @if (SettingsService.Settings.ShowCreatedUpdated)
+    {
+        <div class="p-1 border rounded-0">
+            <small class="d-inline-block mx-1">@Loc["Created"]: @Habit.CreatedAt</small>
+            <small class="d-inline-block mx-1">@Loc["Updated"]: @Habit.UpdatedAt</small>
+        </div>
+    }
 </div>
 
 @code {

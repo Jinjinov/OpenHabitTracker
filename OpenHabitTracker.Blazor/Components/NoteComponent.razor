@@ -21,15 +21,21 @@
     <CategoryComponent Model="Note" />
 </div>
 
-<div class="input-group flex-nowrap">
-    <span class="input-group-text col-4">@Loc["Color"]</span>
-    <ColorComponent Model="Note" />
-</div>
+@if (AppData.Settings.ShowColor)
+{
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text col-4">@Loc["Color"]</span>
+        <ColorComponent Model="Note" />
+    </div>
+}
 
-<div class="p-1 border rounded-0">
-    <small class="d-inline-block mx-1">@Loc["Created"]: @Note.CreatedAt</small>
-    <small class="d-inline-block mx-1">@Loc["Updated"]: @Note.UpdatedAt</small>
-</div>
+@if (AppData.Settings.ShowCreatedUpdated)
+{
+    <div class="p-1 border rounded-0">
+        <small class="d-inline-block mx-1">@Loc["Created"]: @Note.CreatedAt</small>
+        <small class="d-inline-block mx-1">@Loc["Updated"]: @Note.UpdatedAt</small>
+    </div>
+}
 
 @code {
     [EditorRequired]

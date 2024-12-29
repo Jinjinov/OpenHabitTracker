@@ -110,10 +110,13 @@ public static class DataExtensions
         entity.ShowItemList = model.ShowItemList;
         entity.ShowSmallCalendar = model.ShowSmallCalendar;
         entity.ShowLargeCalendar = model.ShowLargeCalendar;
+        entity.ShowColor = model.ShowColor;
+        entity.ShowCreatedUpdated = model.ShowCreatedUpdated;
         entity.InsertTabsInNoteContent = model.InsertTabsInNoteContent;
         entity.DisplayNoteContentAsMarkdown = model.DisplayNoteContentAsMarkdown;
         entity.ShowOnlyOverSelectedRatioMin = model.ShowOnlyOverSelectedRatioMin;
         entity.SelectedRatioMin = model.SelectedRatioMin;
+        entity.HorizontalMargin = model.HorizontalMargin;
         entity.VerticalMargin = model.VerticalMargin;
         entity.HiddenCategoryIds = model.HiddenCategoryIds;
         entity.ShowPriority = model.ShowPriority;

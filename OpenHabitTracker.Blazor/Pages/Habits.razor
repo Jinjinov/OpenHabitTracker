@@ -81,10 +81,13 @@
                 <CategoryComponent Model="HabitService.NewHabit" />
             </div>
 
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">@Loc["Color"]</span>
-                <ColorComponent Model="HabitService.NewHabit" />
-            </div>
+            @if (SettingsService.Settings.ShowColor)
+            {
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text col-4">@Loc["Color"]</span>
+                    <ColorComponent Model="HabitService.NewHabit" />
+                </div>
+            }
         </div>
     }
 

@@ -31,9 +31,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-[ ] Show Color
-[ ] Show Created & Updated
-
 Horizontal space: 0,1,2,3,4,5
 
 !!! add actual Help, above Icons

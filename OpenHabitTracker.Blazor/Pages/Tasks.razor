@@ -71,10 +71,13 @@
                 <CategoryComponent Model="TaskService.NewTask" />
             </div>
 
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">@Loc["Color"]</span>
-                <ColorComponent Model="TaskService.NewTask" />
-            </div>
+            @if (SettingsService.Settings.ShowColor)
+            {
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text col-4">@Loc["Color"]</span>
+                    <ColorComponent Model="TaskService.NewTask" />
+                </div>
+            }
         </div>
     }
 

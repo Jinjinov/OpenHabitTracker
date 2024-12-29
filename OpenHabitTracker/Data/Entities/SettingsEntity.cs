@@ -24,6 +24,10 @@ public class SettingsEntity
 
     public bool ShowLargeCalendar { get; set; } = true;
 
+    public bool ShowColor { get; set; } = false;
+
+    public bool ShowCreatedUpdated { get; set; } = false;
+
     public bool InsertTabsInNoteContent { get; set; } = true;
 
     public bool DisplayNoteContentAsMarkdown { get; set; } = true;
@@ -31,6 +35,8 @@ public class SettingsEntity
     public bool ShowOnlyOverSelectedRatioMin { get; set; }
 
     public int SelectedRatioMin { get; set; }
+
+    public int HorizontalMargin { get; set; } = 1;
 
     public int VerticalMargin { get; set; } = 1;
 
