@@ -25,8 +25,8 @@
             @* <button class="nav-link px-1 py-2 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> @Loc["Menu"]</button> *@
             <button class="nav-link px-1 py-2" @onclick="ToggleMenu"><i class="bi bi-three-dots-vertical"></i></button>
 
-            @* <button class="nav-link" @onclick="Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues"><i class="bi bi-floppy"></i> Save</button>
-            <button class="nav-link" @onclick="() => 
+            @* <button class="nav-link" @onclick="Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues"><i class="bi bi-floppy"></i> Save</button> *@
+            @* <button class="nav-link" @onclick="() => 
                 {
                     if(Loc is Localization.JsonStringLocalizer jsonStringLocalizer)
                     {
