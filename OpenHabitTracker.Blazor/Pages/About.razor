@@ -1,11 +1,14 @@
 ﻿@page "/about"
 
+@using OpenHabitTracker.Services
+
 @inject IStringLocalizer Loc
 @inject ILinkAttributeService LinkAttributeService
+@inject SettingsService SettingsService
 
 <PageTitle>OpenHabitTracker - About</PageTitle>
 
-<div @ref="WrapperElement" class="col child-column px-0 px-md-1">
+<div @ref="WrapperElement" class="@($"col child-column px-0 px-md-{SettingsService.Settings.HorizontalMargin}")">
     <div class="my-1">
 
         <h2>@Loc["About"]</h2>

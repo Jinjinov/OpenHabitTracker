@@ -117,7 +117,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     DisplayNoteContentAsMarkdown = true,
                     ShowOnlyOverSelectedRatioMin = false,
                     SelectedRatioMin = 0,
-                    HorizontalMargin = 2,
+                    HorizontalMargin = 1,
                     VerticalMargin = 2,
                     HiddenCategoryIds = [],
                     ShowPriority = new()
@@ -589,7 +589,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 DisplayNoteContentAsMarkdown = true,
                 ShowOnlyOverSelectedRatioMin = false,
                 SelectedRatioMin = 0,
-                HorizontalMargin = 2,
+                HorizontalMargin = 1,
                 VerticalMargin = 2,
                 HiddenCategoryIds = [],
                 ShowPriority = new()
