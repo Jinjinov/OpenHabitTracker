@@ -200,14 +200,23 @@ setup Authentication
 	appsettings.json
 	appsettings.Development.json
 
+https://github.com/openiddict/openiddict-core
+
+https://github.com/aspnet-contrib/AspNet.Security.OAuth.Providers
+
 Backup
-	Google Drive
-	OneDrive
-	iCloud
-	Dropbox
+	Google Drive https://www.nuget.org/packages/Google.Apis.Drive.v3
+	OneDrive https://www.nuget.org/packages/Microsoft.Graph
+	iCloud --- https://github.com/gachris/iCloud.Dav ---
+	Dropbox https://www.nuget.org/packages/Dropbox.Api
 		WASM authorisation - REST
 		desktop authorisation - OpenHabitTracker.Google.Apis - using Google.Apis.Auth.OAuth2;
 		mobile authorisation - `ASP.NET Core`
+
+Nextcloud
+	https://www.nuget.org/packages/NextcloudApi
+ownCloud
+	https://www.nuget.org/packages/bnoffer.owncloudsharp
 
 Blazor Server / Web
 	`ASP.NET Core`
