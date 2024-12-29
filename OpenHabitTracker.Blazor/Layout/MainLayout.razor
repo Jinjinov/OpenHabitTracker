@@ -23,7 +23,7 @@
         <div class="col bg-body-secondary d-flex align-items-center">
 
             @* <button class="nav-link px-1 py-2 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> @Loc["Menu"]</button> *@
-            <button class="nav-link px-1 py-2" @onclick="ToggleMenu"><i class="bi bi-list"></i> @Loc["Menu"]</button>
+            <button class="nav-link px-1 py-2" @onclick="ToggleMenu"><i class="bi bi-three-dots-vertical"></i></button>
 
             @* <button class="nav-link" @onclick="Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues"><i class="bi bi-floppy"></i> Save</button>
             <button class="nav-link" @onclick="() => 
@@ -35,9 +35,14 @@
                     }
                 }"><i class="bi bi-floppy"></i> Save</button> *@
 
-            <NavLink class="nav-link px-1 py-2 ms-2" href="notes"><i class="bi bi-card-text"></i> @Loc["Notes"]</NavLink>
-            <NavLink class="nav-link px-1 py-2 ms-2" href="tasks"><i class="bi bi-card-checklist"></i> @Loc["Tasks"]</NavLink>
-            <NavLink class="nav-link px-1 py-2 ms-2" href="habits"><i class="bi bi-card-list"></i> @Loc["Habits"]</NavLink>
+            @if (_windowDimensions?.Width >= 1280 || _windowDimensions?.Width < 768)
+            {
+                <NavLink class="nav-link px-2 py-1 ms-3" href="/" Match=NavLinkMatch.All><i class="bi bi-house"></i></NavLink>
+            }
+            <NavLink class="nav-link px-2 py-1 ms-3" href="notes"><i class="bi bi-sticky"></i></NavLink>
+            <NavLink class="nav-link px-2 py-1 ms-3" href="tasks"><i class="bi bi-list-task"></i></NavLink>
+            <NavLink class="nav-link px-2 py-1 ms-3" href="habits"><i class="bi bi-repeat"></i></NavLink>
+            <NavLink class="nav-link px-2 py-1 ms-3" href="about"><i class="bi bi-info-circle"></i></NavLink>
 
             @* <span class="ms-3">
                 @NavBarFragment.GetNavBarFragment()
@@ -58,12 +63,19 @@
 
                 <div class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px">
 
+                @* Sidebar title *@
+
+                @if (_dynamicComponentType != typeof(Menu))
+                {
                     <div class="input-group flex-nowrap my-1">
                         <span class="input-group-text fw-bold text-primary flex-grow-1">@Loc[_titleByTypeName[_dynamicComponentType.Name]]</span>
                         <button class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
                     </div>
+                }
 
-                    <DynamicComponent @ref="dynamicComponent" Type="_dynamicComponentType" Parameters="_dynamicComponentParametersByName.GetValueOrDefault(_dynamicComponentType.Name)" />
+                @* Sidebar content *@
+
+                <DynamicComponent @ref="dynamicComponent" Type="_dynamicComponentType" Parameters="_dynamicComponentParametersByName.GetValueOrDefault(_dynamicComponentType.Name)" />
 
                 </div>
             }

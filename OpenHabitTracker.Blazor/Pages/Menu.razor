@@ -9,23 +9,23 @@
     <div class="my-1">
 
         <div class="list-group">
-            @if (WindowDimensions?.Width >= 1280 || WindowDimensions?.Width < 768)
+            @* @if (WindowDimensions?.Width >= 1280 || WindowDimensions?.Width < 768)
             {
-            <NavLink class="list-group-item list-group-item-action" href="/" @onclick="CloseMenu" Match=NavLinkMatch.All>@Loc["Notes, Tasks, Habits"]</NavLink>
-            }
-            <NavLink class="list-group-item list-group-item-action" href="notes" @onclick="CloseMenu">@Loc["Notes"]</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="tasks" @onclick="CloseMenu">@Loc["Tasks"]</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="habits" @onclick="CloseMenu">@Loc["Habits"]</NavLink>
-            <NavLink class="list-group-item list-group-item-action" href="about" @onclick="CloseMenu">@Loc["About"]</NavLink>
+                <NavLink class="list-group-item list-group-item-action" href="/" @onclick="CloseMenu" Match=NavLinkMatch.All><i class="bi bi-house"></i> @Loc["Home"]</NavLink>
+            } *@
+            @* <NavLink class="list-group-item list-group-item-action" href="notes" @onclick="CloseMenu"><i class="bi bi-sticky"></i> @Loc["Notes"]</NavLink> *@
+            @* <NavLink class="list-group-item list-group-item-action" href="tasks" @onclick="CloseMenu"><i class="bi bi-list-task"></i> @Loc["Tasks"]</NavLink> *@
+            @* <NavLink class="list-group-item list-group-item-action" href="habits" @onclick="CloseMenu"><i class="bi bi-repeat"></i> @Loc["Habits"]</NavLink> *@
+            @* <NavLink class="list-group-item list-group-item-action" href="about" @onclick="CloseMenu"><i class="bi bi-info-circle"></i> @Loc["About"]</NavLink> *@
 
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Trash>">@Loc["Trash"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Search>">@Loc["Search, Filter, Sort"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Settings>">@Loc["Settings"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Categories>">@Loc["Categories"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Trash>"><i class="bi bi-trash"></i> @Loc["Trash"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Search>"><i class="bi bi-search"></i> @Loc["Search, Filter, Sort"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Settings>"><i class="bi bi-gear"></i> @Loc["Settings"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Categories>"><i class="bi bi-tag"></i> @Loc["Categories"]</button>
             @* <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Priorities>">@Loc["Priorities"]</button> *@
             @* <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Backup>">@Loc["Backup"]</button> *@
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Data>">@Loc["Data"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Help>">@Loc["Help"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Data>"><i class="bi bi-database"></i> @Loc["Data"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Help>"><i class="bi bi-question-circle"></i> @Loc["Help"]</button>
         </div>
 
     </div>

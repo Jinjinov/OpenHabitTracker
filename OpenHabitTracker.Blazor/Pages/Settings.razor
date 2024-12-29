@@ -54,7 +54,7 @@
             <InputSelect class="form-select" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
                 @if (WindowDimensions?.Width >= 1280 || WindowDimensions?.Width < 768)
                 {
-                <option value="">@Loc["Notes, Tasks, Habits"]</option>
+                    <option value="">@Loc["Home"]</option>
                 }
                 <option value="/notes">@Loc["Notes"]</option>
                 <option value="/tasks">@Loc["Tasks"]</option>
@@ -67,7 +67,7 @@
             <small class="">@Loc["Start sidebar"]:</small>
             <InputSelect class="form-select" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
                 <option value="">@Loc["None"]</option>
-                <option value="Menu">@Loc["Menu"]</option>
+                @* <option value="Menu">@Loc["Menu"]</option> *@
                 <option value="Trash">@Loc["Trash"]</option>
                 <option value="Search">@Loc["Search, Filter, Sort"]</option>
                 <option value="Settings">@Loc["Settings"]</option>

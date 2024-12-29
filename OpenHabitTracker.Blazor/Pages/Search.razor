@@ -20,7 +20,7 @@
     {
         <div class="my-1 list-group">
 
-            <small class="m-1">@Loc["Search"]</small>
+            <small class="m-1"><i class="bi bi-search"></i> @Loc["Search"]</small>
 
             <div class="input-group flex-nowrap">
                 <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search..."]" />
@@ -35,7 +35,7 @@
                 <button class="btn btn-outline-primary" @onclick="() => UpdateSearchTerm(null)"><i class="bi bi-x-square"></i></button>
             </div>
 
-            <small class="m-1">@Loc["Filter"]</small>
+            <small class="m-1"><i class="bi bi-filter"></i> @Loc["Filter"]</small>
 
             <div class="input-group flex-nowrap">
                 <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)">@Loc["Planned"]</button>
@@ -126,7 +126,7 @@
                 <input type="range" class="form-range d-block" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))">
             </div>
 
-            <small class="m-1">@Loc["Sort"]</small>
+            <small class="m-1"><i class="bi bi-arrow-down-up"></i> @Loc["Sort"]</small>
 
             <div class="list-group-item">
                 <small class="">@Loc["Notes"]:</small>

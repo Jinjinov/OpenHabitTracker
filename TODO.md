@@ -31,15 +31,8 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-- remove "Menu" before icon
-- remove icons from Notes, Tasks, Habits
-- Notes, Tasks, Habits -> Home --- add to top
-- About -> (?) --- add to top
-- remove pages from Menu
-- remove Menu title from sidebar
 - sidebar menu opens / toggles from top - the previous sidebar state is restored on close
 - sidebar menu is replaced by chosen option
-- remove Menu from Starting sidebar
 
 [ ] Show Color
 [ ] Show Created & Updated
