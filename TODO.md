@@ -33,11 +33,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 !!! add actual Help, above Icons
 
-add cookie consent to the website
-	https://github.com/osano/cookieconsent
-	https://github.com/orestbida/cookieconsent
-	https://github.com/klaro-org/klaro-js
-
 ---------------------------------------------------------------------------------------------------
 
 UserData -> UserImportExportData
