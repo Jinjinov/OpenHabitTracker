@@ -51,6 +51,26 @@
 
       gtag('config', 'G-RMDS3FFLKW');
     </script>
+    <script>
+      function trackAppUsage() {
+        gtag('event', 'app_usage', {
+          'transport': 'beacon'
+        });
+      }
+      function trackStoreVisit(store) {
+        gtag('event', 'store_visit', {
+          'store': store,
+          'transport': 'beacon'
+        });
+      }
+      function trackAppDownload(version, platform) {
+        gtag('event', 'app_download', {
+          'version': version,
+          'platform': platform,
+          'transport': 'beacon'
+        });
+      }
+    </script>
 
     <style>
       html {
@@ -179,61 +199,61 @@
           <h3 id="webapp" class="card-title mt-5">Web app</h3>
 
           <h4 class="card-subtitle my-3 text-muted">Current version <span class="fs-6">(2024.12.31)</span></h4>
-          <p><a href="https://app.openhabittracker.net" class="btn btn-primary">Use <span class="caveat large">OpenHabitTracker </span> in your browser</a></p>
+          <p><a href="https://app.openhabittracker.net" onclick="trackAppUsage()" class="btn btn-primary">Use <span class="caveat large">OpenHabitTracker </span> in your browser</a></p>
 
           <h3 id="stores" class="card-title mt-5">Stores</h3>
 
           <h4 class="card-subtitle my-3 text-muted"><span class="caveat large">OpenHabitTracker</span> is available on</h4>
-          <p><i class="fab fa-microsoft"></i> Windows:<br><a href="https://apps.microsoft.com/detail/9mwzmlxzzllr" class="card-link"><img src="icons/Microsoft.svg" style="height:64px;"></a></p>
-          <p><i class="fab fa-linux"></i> Linux - Snap Store:<br><a href="https://snapcraft.io/openhabittracker" class="card-link"><img src="icons/SnapStore.svg" style="height:64px;"></a></p>
-          <p><i class="fab fa-android"></i> Android:<br><a href="https://play.google.com/store/apps/details?id=net.openhabittracker" class="card-link"><img src="icons/Google.svg" style="height:64px;"></a></p>
-          <p><i class="fab fa-apple"></i> iOS:<br><a href="https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=iphone" class="card-link"><img src="icons/AppStore.svg" style="height:64px;"></a></p>
-          <p><i class="fab fa-apple"></i> macOS:<br><a href="https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=mac" class="card-link"><img src="icons/MacAppStore.svg" style="height:64px;"></a></p>
-          <p><i class="fab fa-android"></i> Android - APKPure:<br><a href="https://apkpure.com/openhabittracker/net.openhabittracker" class="card-link"><img src="icons/APKPure.svg" style="height:64px;"></a></p>
+          <p><i class="fab fa-microsoft"></i> Windows:<br><a href="https://apps.microsoft.com/detail/9mwzmlxzzllr" onclick="trackStoreVisit('Microsoft')" class="card-link"><img src="icons/Microsoft.svg" style="height:64px;"></a></p>
+          <p><i class="fab fa-linux"></i> Linux - Snap Store:<br><a href="https://snapcraft.io/openhabittracker" onclick="trackStoreVisit('Snap')" class="card-link"><img src="icons/SnapStore.svg" style="height:64px;"></a></p>
+          <p><i class="fab fa-android"></i> Android:<br><a href="https://play.google.com/store/apps/details?id=net.openhabittracker" onclick="trackStoreVisit('Google')" class="card-link"><img src="icons/Google.svg" style="height:64px;"></a></p>
+          <p><i class="fab fa-apple"></i> iOS:<br><a href="https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=iphone" onclick="trackStoreVisit('Apple iOS')" class="card-link"><img src="icons/AppStore.svg" style="height:64px;"></a></p>
+          <p><i class="fab fa-apple"></i> macOS:<br><a href="https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=mac" onclick="trackStoreVisit('Apple macOS')" class="card-link"><img src="icons/MacAppStore.svg" style="height:64px;"></a></p>
+          <p><i class="fab fa-android"></i> Android - APKPure:<br><a href="https://apkpure.com/openhabittracker/net.openhabittracker" onclick="trackStoreVisit('APKPure')" class="card-link"><img src="icons/APKPure.svg" style="height:64px;"></a></p>
 
           <h3 id="downloads" class="card-title mt-5">Downloads</h3>
 
           <h4 class="card-subtitle my-3 text-muted">1.0.9 <span class="fs-6">(2024.12.31)</span></h4>
-          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.9.zip" class="card-link">OpenHabitTracker.Windows.1.0.9.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
-          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.9.zip" class="card-link">OpenHabitTracker.Linux.1.0.9.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
-          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.9.pkg" class="card-link">OpenHabitTracker.macOS.1.0.9.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
-          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.9.apk" class="card-link">OpenHabitTracker.Android.1.0.9.apk</a></p>
+          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.9.zip" onclick="trackAppDownload('1.0.9', 'Windows')" class="card-link">OpenHabitTracker.Windows.1.0.9.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
+          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.9.zip" onclick="trackAppDownload('1.0.9', 'Linux')" class="card-link">OpenHabitTracker.Linux.1.0.9.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
+          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.9.pkg" onclick="trackAppDownload('1.0.9', 'macOS')" class="card-link">OpenHabitTracker.macOS.1.0.9.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
+          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.9.apk" onclick="trackAppDownload('1.0.9', 'Android')" class="card-link">OpenHabitTracker.Android.1.0.9.apk</a></p>
 
           <h4 class="card-subtitle my-3 text-muted">1.0.8 <span class="fs-6">(2024.12.24)</span></h4>
-          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.8.zip" class="card-link">OpenHabitTracker.Windows.1.0.8.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
-          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.8.zip" class="card-link">OpenHabitTracker.Linux.1.0.8.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
-          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.8.pkg" class="card-link">OpenHabitTracker.macOS.1.0.8.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
-          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.8.apk" class="card-link">OpenHabitTracker.Android.1.0.8.apk</a></p>
+          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.8.zip" onclick="trackAppDownload('1.0.8', 'Windows')" class="card-link">OpenHabitTracker.Windows.1.0.8.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
+          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.8.zip" onclick="trackAppDownload('1.0.8', 'Linux')" class="card-link">OpenHabitTracker.Linux.1.0.8.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
+          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.8.pkg" onclick="trackAppDownload('1.0.8', 'macOS')" class="card-link">OpenHabitTracker.macOS.1.0.8.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
+          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.8.apk" onclick="trackAppDownload('1.0.8', 'Android')" class="card-link">OpenHabitTracker.Android.1.0.8.apk</a></p>
 
           <h4 class="card-subtitle my-3 text-muted">1.0.7 <span class="fs-6">(2024.09.22)</span></h4>
-          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.7.zip" class="card-link">OpenHabitTracker.Windows.1.0.7.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
-          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.7.zip" class="card-link">OpenHabitTracker.Linux.1.0.7.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
-          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.7.pkg" class="card-link">OpenHabitTracker.macOS.1.0.7.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
-          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.7.apk" class="card-link">OpenHabitTracker.Android.1.0.7.apk</a></p>
+          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.7.zip" onclick="trackAppDownload('1.0.7', 'Windows')" class="card-link">OpenHabitTracker.Windows.1.0.7.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
+          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.7.zip" onclick="trackAppDownload('1.0.7', 'Linux')" class="card-link">OpenHabitTracker.Linux.1.0.7.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
+          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.7.pkg" onclick="trackAppDownload('1.0.7', 'macOS')" class="card-link">OpenHabitTracker.macOS.1.0.7.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
+          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.7.apk" onclick="trackAppDownload('1.0.7', 'Android')" class="card-link">OpenHabitTracker.Android.1.0.7.apk</a></p>
 
           <h4 class="card-subtitle my-3 text-muted">1.0.6 <span class="fs-6">(2024.09.15)</span></h4>
-          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.6.zip" class="card-link">OpenHabitTracker.Windows.1.0.6.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
-          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.6.zip" class="card-link">OpenHabitTracker.Linux.1.0.6.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
-          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.6.pkg" class="card-link">OpenHabitTracker.macOS.1.0.6.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
-          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.6.apk" class="card-link">OpenHabitTracker.Android.1.0.6.apk</a></p>
+          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.6.zip" onclick="trackAppDownload('1.0.6', 'Windows')" class="card-link">OpenHabitTracker.Windows.1.0.6.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
+          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.6.zip" onclick="trackAppDownload('1.0.6', 'Linux')" class="card-link">OpenHabitTracker.Linux.1.0.6.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
+          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.6.pkg" onclick="trackAppDownload('1.0.6', 'macOS')" class="card-link">OpenHabitTracker.macOS.1.0.6.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
+          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.6.apk" onclick="trackAppDownload('1.0.6', 'Android')" class="card-link">OpenHabitTracker.Android.1.0.6.apk</a></p>
 
           <h4 class="card-subtitle my-3 text-muted">1.0.5 <span class="fs-6">(2024.09.09)</span></h4>
-          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.5.zip" class="card-link">OpenHabitTracker.Windows.1.0.5.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
-          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.5.zip" class="card-link">OpenHabitTracker.Linux.1.0.5.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
-          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.5.pkg" class="card-link">OpenHabitTracker.macOS.1.0.5.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
-          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.5.apk" class="card-link">OpenHabitTracker.Android.1.0.5.apk</a></p>
+          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.5.zip" onclick="trackAppDownload('1.0.5', 'Windows')" class="card-link">OpenHabitTracker.Windows.1.0.5.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
+          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.5.zip" onclick="trackAppDownload('1.0.5', 'Linux')" class="card-link">OpenHabitTracker.Linux.1.0.5.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
+          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.5.pkg" onclick="trackAppDownload('1.0.5', 'macOS')" class="card-link">OpenHabitTracker.macOS.1.0.5.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
+          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.5.apk" onclick="trackAppDownload('1.0.5', 'Android')" class="card-link">OpenHabitTracker.Android.1.0.5.apk</a></p>
 
           <h4 class="card-subtitle my-3 text-muted">1.0.3 <span class="fs-6">(2024.08.28)</span></h4>
-          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.3.zip" class="card-link">OpenHabitTracker.Windows.1.0.3.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
-          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.3.zip" class="card-link">OpenHabitTracker.Linux.1.0.3.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
-          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.3.pkg" class="card-link">OpenHabitTracker.macOS.1.0.3.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
-          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.3.apk" class="card-link">OpenHabitTracker.Android.1.0.3.apk</a></p>
+          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.3.zip" onclick="trackAppDownload('1.0.3', 'Windows')" class="card-link">OpenHabitTracker.Windows.1.0.3.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
+          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.3.zip" onclick="trackAppDownload('1.0.3', 'Linux')" class="card-link">OpenHabitTracker.Linux.1.0.3.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
+          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.3.pkg" onclick="trackAppDownload('1.0.3', 'macOS')" class="card-link">OpenHabitTracker.macOS.1.0.3.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
+          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.3.apk" onclick="trackAppDownload('1.0.3', 'Android')" class="card-link">OpenHabitTracker.Android.1.0.3.apk</a></p>
 
           <h4 class="card-subtitle my-3 text-muted">1.0.0 <span class="fs-6">(2024.08.08)</span></h4>
-          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.0.zip" class="card-link">OpenHabitTracker.Windows.1.0.0.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
-          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.0.zip" class="card-link">OpenHabitTracker.Linux.1.0.0.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
-          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.0.pkg" class="card-link">OpenHabitTracker.macOS.1.0.0.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
-          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.0.apk" class="card-link">OpenHabitTracker.Android.1.0.0.apk</a></p>
+          <p><i class="fab fa-microsoft"></i> <b>Windows:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Windows.1.0.0.zip" onclick="trackAppDownload('1.0.0', 'Windows')" class="card-link">OpenHabitTracker.Windows.1.0.0.zip</a> - run <span class="text-light bg-dark font-monospace">setup.exe</span></p>
+          <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.0.zip" onclick="trackAppDownload('1.0.0', 'Linux')" class="card-link">OpenHabitTracker.Linux.1.0.0.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
+          <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.0.pkg" onclick="trackAppDownload('1.0.0', 'macOS')" class="card-link">OpenHabitTracker.macOS.1.0.0.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
+          <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.0.apk" onclick="trackAppDownload('1.0.0', 'Android')" class="card-link">OpenHabitTracker.Android.1.0.0.apk</a></p>
 
           <h3 id="features" class="card-title mt-5">Features</h3>
 
