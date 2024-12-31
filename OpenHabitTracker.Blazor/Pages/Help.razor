@@ -8,31 +8,93 @@
 <PageTitle>OpenHabitTracker - Help</PageTitle>
 
 <div class="@($"col child-column px-0 px-md-{SettingsService.Settings.HorizontalMargin}")">
-    <div class="my-1">
+    <div class="m-2">
 
-        <div class="list-group">
-            <div class="list-group-item"><i class="bi bi-three-dots-vertical"></i> <span class="mx-3">@Loc["Menu"]</span></div>
-            <div class="list-group-item"><i class="bi bi-house"></i> <span class="mx-3">@Loc["Home"]</span></div>
-            <div class="list-group-item"><i class="bi bi-sticky"></i> <span class="mx-3">@Loc["Notes"]</span></div>
-            <div class="list-group-item"><i class="bi bi-list-task"></i> <span class="mx-3">@Loc["Tasks"]</span></div>
-            <div class="list-group-item"><i class="bi bi-repeat"></i> <span class="mx-3">@Loc["Habits"]</span></div>
-            <div class="list-group-item"><i class="bi bi-plus-square"></i> <span class="mx-3">@Loc["Add"]</span></div>
-            <div class="list-group-item"><i class="bi bi-x-square"></i> <span class="mx-3">@Loc["Close"]</span></div>
-            <div class="list-group-item"><i class="bi bi-check-square"></i> <span class="mx-3">@Loc["Done"]</span></div>
-            <div class="list-group-item"><i class="bi bi-floppy"></i> <span class="mx-3">@Loc["Save"]</span></div>
-            <div class="list-group-item"><i class="bi bi-trash"></i> <span class="mx-3">@Loc["Delete"]</span></div>
-            <div class="list-group-item"><i class="bi bi-type"></i> <span class="mx-3">@Loc["Match case"]</span></div>
-            <div class="list-group-item"><i class="bi bi-play"></i> <span class="mx-3">@Loc["Start"]</span></div>
-            <div class="list-group-item"><i class="bi bi-arrow-counterclockwise"></i> <span class="mx-3">@Loc["Reset"]</span></div>
-            <div class="list-group-item"><i class="bi bi-pause"></i> <span class="mx-3">@Loc["Pause"]</span></div>
-            <div class="list-group-item"><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></div>
-            <div class="list-group-item"><i class="bi bi-chevron-double-up"></i> <span class="mx-3">@Loc["Previous week"]</span></div>
-            <div class="list-group-item"><i class="bi bi-chevron-double-left"></i> <span class="mx-3">@Loc["Previous month"]</span></div>
-            <div class="list-group-item"><i class="bi bi-chevron-double-right"></i> <span class="mx-3">@Loc["Next month"]</span></div>
-            <div class="list-group-item"><i class="bi bi-chevron-double-down"></i> <span class="mx-3">@Loc["Next week"]</span></div>
-            <div class="list-group-item"><i class="bi bi-dash"></i> <span class="mx-3">@Loc["Decrease"]</span></div>
-            <div class="list-group-item"><i class="bi bi-plus"></i> <span class="mx-3">@Loc["Increase"]</span></div>
-        </div>
+        <h5>@Loc["Header"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-three-dots-vertical"></i> <span class="mx-3">@Loc["Menu"]</span></li>
+            <li><i class="bi bi-house"></i> <span class="mx-3">@Loc["Home"]</span></li>
+            <li><i class="bi bi-sticky"></i> <span class="mx-3">@Loc["Notes"]</span></li>
+            <li><i class="bi bi-list-task"></i> <span class="mx-3">@Loc["Tasks"]</span></li>
+            <li><i class="bi bi-repeat"></i> <span class="mx-3">@Loc["Habits"]</span></li>
+        </ul>
+
+        <h5>@Loc["Menu"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-trash"></i> <span class="mx-3">@Loc["Trash"]</span></li>
+            <li><i class="bi bi-search"></i> <span class="mx-3">@Loc["Search, Filter, Sort"]</span></li>
+            <li><i class="bi bi-gear"></i> <span class="mx-3">@Loc["Settings"]</span></li>
+            <li><i class="bi bi-tag"></i> <span class="mx-3">@Loc["Categories"]</span></li>
+            <li><i class="bi bi-database"></i> <span class="mx-3">@Loc["Data"]</span></li>
+        </ul>
+
+        <h5>@Loc["Home"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-sticky"></i> <span class="mx-3">@Loc["Notes"]</span></li>
+            <li><i class="bi bi-list-task"></i> <span class="mx-3">@Loc["Tasks"]</span></li>
+            <li><i class="bi bi-repeat"></i> <span class="mx-3">@Loc["Habits"]</span></li>
+        </ul>
+
+        <h5>@Loc["Notes"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+        </ul>
+
+        <h5>@Loc["Tasks"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+        </ul>
+
+        <h5>@Loc["Habits"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+        </ul>
+
+        <h5>@Loc["Trash"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+        </ul>
+
+        <h5>@Loc["Search, Filter, Sort"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-search"></i> <span class="mx-3">@Loc["Search"]</span></li>
+            <li><i class="bi bi-filter"></i> <span class="mx-3">@Loc["Filter"]</span></li>
+            <li><i class="bi bi-arrow-down-up"></i> <span class="mx-3">@Loc["Sort"]</span></li>
+        </ul>
+
+        <h5>@Loc["Settings"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+        </ul>
+
+        <h5>@Loc["Categories"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+        </ul>
+
+        <h5>@Loc["Data"]:</h5>
+        <ul class="list-unstyled">
+            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+        </ul>
+
+        <ul class="list-unstyled">
+            <li><i class="bi bi-plus-square"></i> <span class="mx-3">@Loc["Add"]</span></li>
+            <li><i class="bi bi-x-square"></i> <span class="mx-3">@Loc["Close"]</span></li>
+            <li><i class="bi bi-check-square"></i> <span class="mx-3">@Loc["Done"]</span></li>
+            <li><i class="bi bi-floppy"></i> <span class="mx-3">@Loc["Save"]</span></li>
+            <li><i class="bi bi-trash"></i> <span class="mx-3">@Loc["Delete"]</span></li>
+            <li><i class="bi bi-type"></i> <span class="mx-3">@Loc["Match case"]</span></li>
+            <li><i class="bi bi-play"></i> <span class="mx-3">@Loc["Start"]</span></li>
+            <li><i class="bi bi-arrow-counterclockwise"></i> <span class="mx-3">@Loc["Reset"]</span></li>
+            <li><i class="bi bi-pause"></i> <span class="mx-3">@Loc["Pause"]</span></li>
+            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+            <li><i class="bi bi-chevron-double-up"></i> <span class="mx-3">@Loc["Previous week"]</span></li>
+            <li><i class="bi bi-chevron-double-left"></i> <span class="mx-3">@Loc["Previous month"]</span></li>
+            <li><i class="bi bi-chevron-double-right"></i> <span class="mx-3">@Loc["Next month"]</span></li>
+            <li><i class="bi bi-chevron-double-down"></i> <span class="mx-3">@Loc["Next week"]</span></li>
+            <li><i class="bi bi-dash"></i> <span class="mx-3">@Loc["Decrease"]</span></li>
+            <li><i class="bi bi-plus"></i> <span class="mx-3">@Loc["Increase"]</span></li>
+        </ul>
 
     </div>
 </div>
