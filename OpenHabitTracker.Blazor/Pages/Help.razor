@@ -1,10 +1,13 @@
 ﻿@page "/help"
 
+@using OpenHabitTracker.Services
+
 @inject IStringLocalizer Loc
+@inject SettingsService SettingsService
 
-@* <PageTitle>OpenHabitTracker - Help</PageTitle> *@
+<PageTitle>OpenHabitTracker - Help</PageTitle>
 
-<div>
+<div class="@($"col child-column px-0 px-md-{SettingsService.Settings.HorizontalMargin}")">
     <div class="my-1">
 
         <div class="list-group">
@@ -35,5 +38,9 @@
 </div>
 
 @code {
+    [CascadingParameter(Name = "StateChanged")]
+    public bool StateChanged { get; set; }
 
+    [CascadingParameter(Name = "WindowDimensions")]
+    public Dimensions? WindowDimensions { get; set; }
 }

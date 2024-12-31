@@ -1,14 +1,11 @@
 ﻿@page "/about"
 
-@using OpenHabitTracker.Services
-
 @inject IStringLocalizer Loc
 @inject ILinkAttributeService LinkAttributeService
-@inject SettingsService SettingsService
 
-<PageTitle>OpenHabitTracker - About</PageTitle>
+@* <PageTitle>OpenHabitTracker - About</PageTitle> *@
 
-<div @ref="WrapperElement" class="@($"col child-column px-0 px-md-{SettingsService.Settings.HorizontalMargin}")">
+<div @ref="WrapperElement" class="px-0 px-md-1">
     <div class="my-1">
 
         <h3><span class="" style="font-family: 'Caveat', cursive; font-size: 1.5em;">OpenHabitTracker</span></h3>
@@ -19,7 +16,7 @@
 
         <ul>
             <li>@Loc["Free and Ad-Free"]: <a href="https://openhabittracker.net/">https://openhabittracker.net</a></li>
-            <li>@Loc["Open Source"]: <a href="https://github.com/Jinjinov/OpenHabitTracker">https://github.com/Jinjinov/OpenHabitTracker</a></li>
+            <li>@Loc["Open Source"]: <a href="https://github.com/Jinjinov/OpenHabitTracker"><i class="bi bi-github"></i></a></li>
             <li>@Loc["Privacy Focused: All user data is stored locally on your device"]</li>
             <li>@Loc["Available on Windows, Linux, Android, iOS, macOS, and as a web app"]</li>
             <li>@Loc["Localized to English, German, Spanish, Slovenian"]</li>
@@ -52,12 +49,6 @@
 </div>
 
 @code {
-    [CascadingParameter(Name = "StateChanged")]
-    public bool StateChanged { get; set; }
-
-    [CascadingParameter(Name = "WindowDimensions")]
-    public Dimensions? WindowDimensions { get; set; }
-
     private ElementReference WrapperElement;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
