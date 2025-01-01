@@ -99,43 +99,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             }
             else
             {
-                Settings = new SettingsModel
-                {
-                    IsDarkMode = true,
-                    Theme = "default",
-                    StartPage = await _runtimeData.GetWindowWidth() >= 1280 || await _runtimeData.GetWindowWidth() < 768 ? "" : "/help",
-                    StartSidebar = await _runtimeData.GetWindowWidth() >= 1280 ? "Settings" : "",
-                    Culture = "en",
-                    FirstDayOfWeek = DayOfWeek.Monday,
-                    SelectedRatio = Ratio.ElapsedToDesired,
-                    ShowItemList = true,
-                    ShowSmallCalendar = true,
-                    ShowLargeCalendar = true,
-                    ShowColor = false,
-                    ShowCreatedUpdated = false,
-                    InsertTabsInNoteContent = true,
-                    DisplayNoteContentAsMarkdown = true,
-                    ShowOnlyOverSelectedRatioMin = false,
-                    SelectedRatioMin = 0,
-                    HorizontalMargin = 1,
-                    VerticalMargin = 2,
-                    HiddenCategoryIds = [],
-                    ShowPriority = new()
-                    {
-                        { Priority.None, true },
-                        { Priority.VeryLow, true },
-                        { Priority.Low, true },
-                        { Priority.Medium, true },
-                        { Priority.High, true },
-                        { Priority.VeryHigh, true }
-                    },
-                    SortBy = new()
-                    {
-                        { ContentType.Note, Sort.Priority },
-                        { ContentType.Task, Sort.Priority },
-                        { ContentType.Habit, Sort.Priority }
-                    }
-                };
+                Settings = GetDefaultSettings();
 
                 settingsEntity = Settings.ToEntity();
 
@@ -149,6 +113,47 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 }
             }
         }
+    }
+
+    private static SettingsModel GetDefaultSettings()
+    {
+        return new SettingsModel
+        {
+            IsDarkMode = true,
+            Theme = "default",
+            StartPage = "/notes",
+            StartSidebar = "",
+            Culture = "en",
+            FirstDayOfWeek = DayOfWeek.Monday,
+            SelectedRatio = Ratio.ElapsedToDesired,
+            ShowItemList = true,
+            ShowSmallCalendar = true,
+            ShowLargeCalendar = true,
+            ShowColor = false,
+            ShowCreatedUpdated = false,
+            InsertTabsInNoteContent = true,
+            DisplayNoteContentAsMarkdown = true,
+            ShowOnlyOverSelectedRatioMin = false,
+            SelectedRatioMin = 0,
+            HorizontalMargin = 1,
+            VerticalMargin = 2,
+            HiddenCategoryIds = [],
+            ShowPriority = new()
+            {
+                { Priority.None, true },
+                { Priority.VeryLow, true },
+                { Priority.Low, true },
+                { Priority.Medium, true },
+                { Priority.High, true },
+                { Priority.VeryHigh, true }
+            },
+            SortBy = new()
+            {
+                { ContentType.Note, Sort.Priority },
+                { ContentType.Task, Sort.Priority },
+                { ContentType.Habit, Sort.Priority }
+            }
+        };
     }
 
     public async Task InitializeHabits()
@@ -571,43 +576,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
         UserData userData = new()
         {
-            Settings = new()
-            {
-                IsDarkMode = true,
-                Theme = "default",
-                StartPage = await _runtimeData.GetWindowWidth() >= 1280 || await _runtimeData.GetWindowWidth() < 768 ? "" : "/help",
-                StartSidebar = await _runtimeData.GetWindowWidth() >= 1280 ? "Settings" : "",
-                Culture = "en",
-                FirstDayOfWeek = DayOfWeek.Monday,
-                SelectedRatio = Ratio.ElapsedToDesired,
-                ShowItemList = true,
-                ShowSmallCalendar = true,
-                ShowLargeCalendar = true,
-                ShowColor = false,
-                ShowCreatedUpdated = false,
-                InsertTabsInNoteContent = true,
-                DisplayNoteContentAsMarkdown = true,
-                ShowOnlyOverSelectedRatioMin = false,
-                SelectedRatioMin = 0,
-                HorizontalMargin = 1,
-                VerticalMargin = 2,
-                HiddenCategoryIds = [],
-                ShowPriority = new()
-                {
-                    { Priority.None, true },
-                    { Priority.VeryLow, true },
-                    { Priority.Low, true },
-                    { Priority.Medium, true },
-                    { Priority.High, true },
-                    { Priority.VeryHigh, true }
-                },
-                SortBy = new()
-                {
-                    { ContentType.Note, Sort.Priority },
-                    { ContentType.Task, Sort.Priority },
-                    { ContentType.Habit, Sort.Priority }
-                }
-            },
+            Settings = GetDefaultSettings(),
             Categories =
             [
                 new()
