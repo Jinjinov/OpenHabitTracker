@@ -610,12 +610,13 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             ```
             ~~strikethrough~~
             ==highlight==
-            subscript: H~2~O
-            superscript: X^2^
 
             | table | with   | headers |
             | :---  | :---:  |    ---: |
             | left  | middle | right   |
+
+            subscript: H~2~O
+            superscript: X^2^
             """;
 
         UserData userData = new()
