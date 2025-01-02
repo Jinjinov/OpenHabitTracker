@@ -63,7 +63,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         }
     }
 
-    public async Task InitializeSettings(bool loadExamples = true)
+    public async Task InitializeSettings(bool loadWelcomeNote = true)
     {
         if (Settings.Id == 0)
         {
@@ -107,9 +107,9 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
                 Settings.Id = settingsEntity.Id;
 
-                if (loadExamples)
+                if (loadWelcomeNote)
                 {
-                    await LoadExamples();
+                    await LoadWelcomeNote();
                 }
             }
         }
@@ -347,7 +347,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
         Settings = new();
 
-        await InitializeSettings(loadExamples: false);
+        await InitializeSettings(loadWelcomeNote: false);
 
         Habits = null;
         Notes = null;
@@ -527,6 +527,48 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
         if (Categories is null) Categories = categories.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in categories.ToDictionary(x => x.Model.Id, x => x.Model)) Categories[pair.Key] = pair.Value;
+    }
+
+    public async Task LoadWelcomeNote()
+    {
+        DateTime now = DateTime.Now;
+
+        string markdown =
+            """
+            **A few tips:**
+            - click on the title of this note to enter edit mode where you can also change the priority (`⊘`,`︾`,`﹀`,`—`,`︿`,`︽`)
+            - to exit edit mode click on `✕`
+            - in `Settings` you can set which screen opens every time you start OpenHT
+            - load examples in the `Data` → `Load examples` submenu
+            - use `Search, Filter, Sort` to display only what you want to focus on
+            """;
+
+        UserData userData = new()
+        {
+            Settings = GetDefaultSettings(),
+            Categories =
+            [
+                new()
+                {
+                    Title = "Welcome",
+                    Notes =
+                    [
+                        new()
+                        {
+                            Title = "Welcome!",
+                            Priority = Priority.None,
+                            Content = markdown,
+                            ContentMarkdown = GetMarkdown(markdown),
+                            CreatedAt = now,
+                            UpdatedAt = now,
+                            Color = "bg-info-subtle"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        await SetUserData(userData);
     }
 
     public async Task LoadExamples()
