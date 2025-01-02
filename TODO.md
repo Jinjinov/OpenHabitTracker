@@ -31,8 +31,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-!!! replace initial examples with one simple Welcome note
-
 !!! add actual Help
 
 Blazor WASM -> Google Drive REST API

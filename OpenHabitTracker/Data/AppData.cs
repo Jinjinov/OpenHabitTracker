@@ -541,6 +541,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             - in `Settings` you can set which screen opens every time you start OpenHT
             - load examples in the `Data` → `Load examples` submenu
             - use `Search, Filter, Sort` to display only what you want to focus on
+
+            *Feedback is welcome at [GitHub](https://github.com/Jinjinov/OpenHabitTracker/issues)*
             """;
 
         UserData userData = new()
