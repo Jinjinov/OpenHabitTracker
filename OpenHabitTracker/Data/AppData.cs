@@ -122,7 +122,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             IsDarkMode = true,
             Theme = "default",
             StartPage = "/notes",
-            StartSidebar = "",
+            StartSidebar = "Menu",
             Culture = "en",
             FirstDayOfWeek = DayOfWeek.Monday,
             SelectedRatio = Ratio.ElapsedToDesired,
