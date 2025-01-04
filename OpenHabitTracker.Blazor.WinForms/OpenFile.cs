@@ -27,7 +27,11 @@ public class OpenFile : IOpenFile
                     await onFileOpened(openFileDialog.FileName, openFileDialog.OpenFile());
                 }
             }));
-            builder.AddContent(3, content);
+            builder.OpenElement(3, "i");
+            builder.AddAttribute(4, "class", "bi bi-box-arrow-in-right");
+            builder.CloseElement();
+            builder.AddContent(5, " ");
+            builder.AddContent(6, content);
             builder.CloseElement();
         };
     }
