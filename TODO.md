@@ -33,6 +33,8 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 !!! add actual Help
 
+!!! fix Photino file dialog exception
+
 ---------------------------------------------------------------------------------------------------
 
 Blazor WASM -> Google Drive REST API
@@ -49,7 +51,11 @@ https://app.openhabittracker.net/ -> https://pwa.openhabittracker.net/
 
 !!! add comments to methods - 1. for any open source contributor - 2. for GitHub Copilot
 
+---------------------------------------------------------------------------------------------------
+
 !!! run Jetbrains Rider code analysis
+
+---------------------------------------------------------------------------------------------------
 
 !!! refactor classes:
 

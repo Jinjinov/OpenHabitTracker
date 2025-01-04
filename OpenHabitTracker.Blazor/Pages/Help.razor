@@ -88,8 +88,69 @@
         <h5>@Loc["Search, Filter, Sort"]:</h5>
         <ul class="list-unstyled">
             <li><i class="bi bi-search"></i> <span class="mx-3">@Loc["Search"]</span></li>
+            <ul style="list-style: none;">
+                <li>@Loc["Search notes, tasks, habits"]</li>
+                <li><i class="bi bi-type"></i> <span class="mx-3">@Loc["Match search case"]</span></li>
+                <li><i class="bi bi-x-square"></i> <span class="mx-3">@Loc["Clear search"]</span></li>
+            </ul>
             <li><i class="bi bi-filter"></i> <span class="mx-3">@Loc["Filter"]</span></li>
+            <ul style="list-style: none;">
+                <li>@Loc["Planned"]</li>
+                <ul style="list-style: none;">
+                    <li>@Loc["Planned: click to filter by current date"]</li>
+                    <li>@Loc["Operator: choose date comparison (<,=,>,≠)"]</li>
+                    <li>@Loc["Date: set the date for comparison"]</li>
+                    <li><i class="bi bi-x-square"></i> <span class="mx-3">@Loc["Clear the date"]</span></li>
+                </ul>
+                <li>@Loc["Done"]</li>
+                <ul style="list-style: none;">
+                    <li>@Loc["Done: click to filter by current date"]</li>
+                    <li>@Loc["Operator: choose date comparison (<,=,>,≠)"]</li>
+                    <li>@Loc["Date: set the date for comparison"]</li>
+                    <li><i class="bi bi-x-square"></i> <span class="mx-3">@Loc["Clear the date"]</span></li>
+                </ul>
+                <li>@Loc["Categories: filter notes, tasks and habity by category"]</li>
+                <li>@Loc["Priorities: filter notes, tasks and habity by priority"]</li>
+                <li>@Loc["Habit interval ratio"]</li>
+                <ul style="list-style: none;">
+                    <li>@Loc["Elapsed time to average interval: compare the time elapsed since the habit was last done to the average repeat interval for the habit"]</li>
+                    <li>@Loc["Elapsed time to repeat interval: compare the time elapsed since the habit was last done to the desired repeat interval for the habit"]</li>
+                    <li>@Loc["Average interval to repeat interval: compare the average repeat interval to the desired repeat interval for the habit"]</li>
+                </ul>
+                <li>@Loc["Habits with interval ratio: show only habits that have the selected interval ratio at least X% where X is between 0 and 100"]</li>
+            </ul>
             <li><i class="bi bi-arrow-down-up"></i> <span class="mx-3">@Loc["Sort"]</span></li>
+            <ul style="list-style: none;">
+                <li>@Loc["Notes"]</li>
+                <ul style="list-style: none;">
+                    <li>@Loc["Category"]</li>
+                    <li>@Loc["Priority"]</li>
+                    <li>@Loc["Title"]</li>
+                </ul>
+                <li>@Loc["Tasks"]</li>
+                <ul style="list-style: none;">
+                    <li>@Loc["Category"]</li>
+                    <li>@Loc["Priority"]</li>
+                    <li>@Loc["Title"]</li>
+                    <li>@Loc["Duration"]</li>
+                    <li>@Loc["Elapsed time"]</li>
+                    <li>@Loc["Planned at"]</li>
+                    <li>@Loc["Time spent"]</li>
+                </ul>
+                <li>@Loc["Habits"]</li>
+                <ul style="list-style: none;">
+                    <li>@Loc["Category"]</li>
+                    <li>@Loc["Priority"]</li>
+                    <li>@Loc["Title"]</li>
+                    <li>@Loc["Duration"]</li>
+                    <li>@Loc["Repeat interval"]</li>
+                    <li>@Loc["Average interval"]</li>
+                    <li>@Loc["Time spent"]</li>
+                    <li>@Loc["Average time spent"]</li>
+                    <li>@Loc["Elapsed time"]</li>
+                    <li>@Loc["Selected interval ratio"]</li>
+                </ul>
+            </ul>
         </ul>
 
         <h5>@Loc["Settings"]:</h5>
