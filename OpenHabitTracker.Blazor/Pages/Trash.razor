@@ -29,7 +29,7 @@
         {
             <div class="input-group flex-nowrap">
                 <span class="input-group-text flex-grow-1 text-wrap">@model.Title</span>
-                <button class="btn btn-outline-primary" @onclick="() => Restore(model)">@Loc["Restore"]</button>
+                <button class="btn btn-outline-primary" @onclick="() => Restore(model)"><i class="bi bi-recycle"></i></button>
                 <button class="btn btn-outline-primary" @onclick="() => Delete(model)"><i class="bi bi-trash"></i></button>
             </div>
         }

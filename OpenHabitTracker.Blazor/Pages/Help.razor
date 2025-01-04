@@ -12,42 +12,65 @@
 
         <h5>@Loc["Header"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-three-dots-vertical"></i> <span class="mx-3">@Loc["Menu"]</span></li>
-            <li><i class="bi bi-house"></i> <span class="mx-3">@Loc["Home"]</span></li>
-            <li><i class="bi bi-sticky"></i> <span class="mx-3">@Loc["Notes"]</span></li>
-            <li><i class="bi bi-list-task"></i> <span class="mx-3">@Loc["Tasks"]</span></li>
-            <li><i class="bi bi-repeat"></i> <span class="mx-3">@Loc["Habits"]</span></li>
+            <li><i class="bi bi-three-dots-vertical"></i> <span class="mx-3">@Loc["Menu"]:</span>@Loc["toggle the menu on and off"]</li>
+            <li><i class="bi bi-house"></i> <span class="mx-3">@Loc["Home"]:</span>@Loc["see all your items"]</li>
+            <li><i class="bi bi-sticky"></i> <span class="mx-3">@Loc["Notes"]:</span>@Loc["see all your Notes"]</li>
+            <li><i class="bi bi-list-task"></i> <span class="mx-3">@Loc["Tasks"]:</span>@Loc["see all your Tasks"]</li>
+            <li><i class="bi bi-repeat"></i> <span class="mx-3">@Loc["Habits"]:</span>@Loc["see all your Habits"]</li>
         </ul>
 
         <h5>@Loc["Menu"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-trash"></i> <span class="mx-3">@Loc["Trash"]</span></li>
-            <li><i class="bi bi-search"></i> <span class="mx-3">@Loc["Search, Filter, Sort"]</span></li>
-            <li><i class="bi bi-gear"></i> <span class="mx-3">@Loc["Settings"]</span></li>
-            <li><i class="bi bi-tag"></i> <span class="mx-3">@Loc["Categories"]</span></li>
-            <li><i class="bi bi-database"></i> <span class="mx-3">@Loc["Data"]</span></li>
+            <li><i class="bi bi-trash"></i> <span class="mx-3">@Loc["Trash"]:</span>@Loc["see all your deleted items"]</li>
+            <li><i class="bi bi-search"></i> <span class="mx-3">@Loc["Search, Filter, Sort"]:</span>@Loc["Search, filter and sort all your items"]</li>
+            <li><i class="bi bi-gear"></i> <span class="mx-3">@Loc["Settings"]:</span>@Loc["Adjust app appearance"]</li>
+            <li><i class="bi bi-tag"></i> <span class="mx-3">@Loc["Categories"]:</span>@Loc["manage categories"]</li>
+            <li><i class="bi bi-database"></i> <span class="mx-3">@Loc["Data"]:</span>@Loc["export, import or delete all your data"]</li>
         </ul>
 
         <h5>@Loc["Home"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-sticky"></i> <span class="mx-3">@Loc["Notes"]</span></li>
-            <li><i class="bi bi-list-task"></i> <span class="mx-3">@Loc["Tasks"]</span></li>
-            <li><i class="bi bi-repeat"></i> <span class="mx-3">@Loc["Habits"]</span></li>
+            <li><i class="bi bi-sticky"></i> <span class="mx-3">@Loc["Notes"]:</span>@Loc["see all your Notes"]</li>
+            <li><i class="bi bi-list-task"></i> <span class="mx-3">@Loc["Tasks"]:</span>@Loc["see all your Tasks"]</li>
+            <li><i class="bi bi-repeat"></i> <span class="mx-3">@Loc["Habits"]:</span>@Loc["see all your Habits"]</li>
         </ul>
 
         <h5>@Loc["Notes"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+            <li><i class="bi bi-plus-square"></i> <span class="mx-3">@Loc["Add new note"]</span></li>
+            <ul style="list-style: none;">
+                <li>@Loc["Set note priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@Loc["Add note title"]</li>
+                <li><i class="bi bi-floppy"></i> <span class="mx-3">@Loc["Save new note"]</span></li>
+                <li><i class="bi bi-x-square"></i> <span class="mx-3">@Loc["Cancel adding new note"]</span></li>
+                <li>@Loc["Add note text"]</li>
+                <li>@Loc["Set note category"]</li>
+            </ul>
+            <li>@Loc["Read only note"]</li>
+            <ul style="list-style: none;">
+                <li>@Loc["Note priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@Loc["Note title: click to enter edit mode"]</li>
+                <li>@Loc["Note text: displayed as Markdown (HTTP links are clickable) if 'Display note content as Markdown' is checked in Settings"]</li>
+            </ul>
+            <li>@Loc["Edit note"]</li>
+            <ul style="list-style: none;">
+                <li>@Loc["Set note priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@Loc["Edit note title"]</li>
+                <li><i class="bi bi-trash"></i> <span class="mx-3">@Loc["Delete note"]</span></li>
+                <li><i class="bi bi-x-square"></i> <span class="mx-3">@Loc["Exit edit mode"]</span></li>
+                <li>@Loc["Edit note text"]</li>
+                <li>@Loc["Set note category"]</li>
+            </ul>
         </ul>
 
         <h5>@Loc["Tasks"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+            <li><i class="bi bi-plus-square"></i> <span class="mx-3">@Loc["Add new task"]</span></li>
         </ul>
 
         <h5>@Loc["Habits"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+            <li><i class="bi bi-plus-square"></i> <span class="mx-3">@Loc["Add new habit"]</span></li>
         </ul>
 
         <h5>@Loc["Trash"]:</h5>
