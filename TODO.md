@@ -34,8 +34,14 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 !!! add actual Help
 
 on the new PC:
+
+1. build photino.Native with C++
 	https://github.com/flyingpie/photino.Native/tree/webkit41
 	https://github.com/flyingpie/photino.Native/pull/1
+2. build photino.NET with C#
+	reference photino.Native
+3. build photino.Blazor with C#
+	reference photino.NET
 
 ---------------------------------------------------------------------------------------------------
 
