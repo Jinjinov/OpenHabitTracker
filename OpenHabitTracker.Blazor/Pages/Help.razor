@@ -3,11 +3,12 @@
 @using OpenHabitTracker.Services
 
 @inject IStringLocalizer Loc
+@inject ILinkAttributeService LinkAttributeService
 @inject SettingsService SettingsService
 
 <PageTitle>OpenHabitTracker - Help</PageTitle>
 
-<div class="@($"col child-column px-0 px-md-{SettingsService.Settings.HorizontalMargin}")">
+<div @ref="WrapperElement" class="@($"col child-column px-0 px-md-{SettingsService.Settings.HorizontalMargin}")">
     <div class="m-2">
 
         <h5>@Loc["Header"]:</h5>
@@ -75,7 +76,13 @@
 
         <h5>@Loc["Trash"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+            <li><i class="bi bi-recycle"></i> <span class="mx-3">@Loc["Restore all"]:</span>@Loc["restore all deleted items"]</li>
+            <li><i class="bi bi-trash"></i> <span class="mx-3">@Loc["Empty trash"]:</span>@Loc["permanently delete all trash items"]</li>
+            <li>@Loc["Deleted item"]</li>
+            <ul style="list-style: none;">
+                <li><i class="bi bi-recycle"></i> <span class="mx-3">@Loc["Restore deleted item"]</span></li>
+                <li><i class="bi bi-trash"></i> <span class="mx-3">@Loc["Permanently delete trash item"]</span></li>
+            </ul>
         </ul>
 
         <h5>@Loc["Search, Filter, Sort"]:</h5>
@@ -87,17 +94,42 @@
 
         <h5>@Loc["Settings"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+            <li>@Loc["Dark mode: toggle between light and dark mode"]</li>
+            <li>@Loc["Theme: choose between 26 themes"]</li>
+            <li>@Loc["Start page: choose which main screen is shown every time the app starts"]</li>
+            <li>@Loc["Start sidebar: choose which submenu screen screen is shown every time the app starts"]</li>
+            <li>@Loc["Show item list: display the list of items under tasks and habits"]</li>
+            <li>@Loc["Show small calendar: show the one line calendar in habits"]</li>
+            <li>@Loc["Show large calendar: show the month calendar in habits"]</li>
+            <li>@Loc["Show color: show the setting for the title color in notes, tasks and habits"]</li>
+            <li>@Loc["Show created & updated: show time and date when a note/task/habit was created and last updated"]</li>
+            <li>@Loc["Language: choose the app language"]</li>
+            <li>@Loc["Week start: choose the first day of the week for the month calendar in habits"]</li>
+            <li>@Loc["Insert tabs in note content: pressing the TAB key will insert a tab in note text instead of shifting focus away from the edit window"]</li>
+            <li>@Loc["Display note content as Markdown: note text will be converted to Markdown for display, HTML links will be clickable"]</li>
+            <li>@Loc["Horizontal space: set the horizontal spacing between columns on the main screen"]</li>
+            <li>@Loc["Vertical space: set the vertical spacing between each note/task/habit"]</li>
         </ul>
 
         <h5>@Loc["Categories"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+            <li><i class="bi bi-plus-square"></i> <span class="mx-3">@Loc["Add new category"]</span></li>
+            <li>@Loc["Category"]</li>
+            <ul style="list-style: none;">
+                <li>@Loc["Click on title: edit category title"]</li>
+                <li><i class="bi bi-trash"></i> <span class="mx-3">@Loc["Delete category"]</span></li>
+            </ul>
         </ul>
 
         <h5>@Loc["Data"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-stop"></i> <span class="mx-3">@Loc["Stop"]</span></li>
+            <li><i class="bi bi-download"></i> <span class="mx-3">@Loc["Load examples"]:</span>@Loc["load example notes, tasks and habits"]</li>
+            <li><i class="bi bi-trash"></i> <span class="mx-3">@Loc["Delete all data"]:</span>@Loc["permanently delete all items"]</li>
+            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-3">@Loc["Export JSON"]:</span>@Loc["export categories, notes, tasks, habits and settings to a JSON file"]</li>
+            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-3">@Loc["Export TSV"]:</span>@Loc["export categories, notes, tasks and habits to a TSV file"]</li>
+            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-3">@Loc["Export YAML"]:</span>@Loc["export categories, notes, tasks, habits and settings to a YAML file"]</li>
+            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-3">@Loc["Export Markdown"]:</span>@Loc["export categories, notes, tasks and habits to a MD file"]</li>
+            <li><i class="bi bi-box-arrow-in-right"></i> <span class="mx-3">@Loc["Import"]:</span>@Loc["import a JSON, TSV, YAML, MD or Google Keep takeout ZIP file"] <a href="https://takeout.google.com">https://takeout.google.com</a></li>
         </ul>
 
         <ul class="list-unstyled">
@@ -128,4 +160,14 @@
 
     [CascadingParameter(Name = "WindowDimensions")]
     public Dimensions? WindowDimensions { get; set; }
+
+    private ElementReference WrapperElement;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LinkAttributeService.AddAttributesToLinks(WrapperElement);
+        }
+    }
 }
