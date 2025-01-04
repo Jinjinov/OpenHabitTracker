@@ -39,8 +39,10 @@ on the new PC:
 	https://github.com/flyingpie/photino.Native/tree/webkit41
 	https://github.com/flyingpie/photino.Native/pull/1
 2. build photino.NET with C#
+	https://github.com/tryphotino/photino.NET
 	reference photino.Native
 3. build photino.Blazor with C#
+	https://github.com/tryphotino/photino.Blazor
 	reference photino.NET
 
 ---------------------------------------------------------------------------------------------------
