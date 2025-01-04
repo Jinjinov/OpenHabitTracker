@@ -33,7 +33,9 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 !!! add actual Help
 
-!!! fix Photino file dialog exception
+on the new PC:
+	https://github.com/flyingpie/photino.Native/tree/webkit41
+	https://github.com/flyingpie/photino.Native/pull/1
 
 ---------------------------------------------------------------------------------------------------
 
