@@ -33,7 +33,11 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 !!! add actual Help
 
-on the new PC:
+!!! localize Help to all languages
+
+---------------------------------------------------------------------------------------------------
+
+!!! fix Flatpak / Flathub - on the new PC:
 
 1. build photino.Native with C++
 	https://github.com/flyingpie/photino.Native/tree/webkit41
