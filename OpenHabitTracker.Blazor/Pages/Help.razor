@@ -104,6 +104,12 @@
                 <li>@Loc["Set task planned at date"]</li>
                 <li>@Loc["Set task duration"]</li>
                 <li>@Loc["Start timer"]</li>
+                <ul style="list-style: none;">
+                    <li><i class="bi bi-play"></i> <span class="mx-2">@Loc["Start"]</span></li>
+                    <li><i class="bi bi-arrow-counterclockwise"></i> <span class="mx-2">@Loc["Reset"]</span></li>
+                    <li><i class="bi bi-pause"></i> <span class="mx-2">@Loc["Pause"]</span></li>
+                    <li><i class="bi bi-stop"></i> <span class="mx-2">@Loc["Stop"]</span></li>
+                </ul>
                 <li>@Loc["Set task category"]</li>
                 <li>@Loc["Set task color"]</li>
             </ul>
@@ -117,14 +123,18 @@
                 <li>@Loc["Add habit title"]</li>
                 <li><i class="bi bi-floppy"></i> <span class="mx-2">@Loc["Save new habit"]</span></li>
                 <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Cancel adding new habit"]</span></li>
-
+                <li>@Loc["Set desired habit repeat interval"]</li>
+                <li>@Loc["Set habit duration"]</li>
                 <li>@Loc["Set habit category"]</li>
                 <li>@Loc["Set habit color"]</li>
             </ul>
             <li>@Loc["Read only habit"]</li>
             <ul style="list-style: none;">
                 <li>@Loc["Habit priority (⊘,︾,﹀,—,︿,︽)"]</li>
-
+                <li>@Loc["Habit title: click on habit title to enter edit mode"]</li>
+                <li>@Loc["Time elapsed since habit was last done and the selected habit interval ratio"]</li>
+                <li>@Loc["Small calendar: click on a day to mark habit as done"]</li>
+                <li>@Loc["Habit items: click on a habit item to mark it as done"]</li>
             </ul>
             <li>@Loc["Edit habit"]</li>
             <ul style="list-style: none;">
@@ -132,29 +142,43 @@
                 <li>@Loc["Edit habit title"]</li>
                 <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete habit"]</span></li>
                 <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Exit edit mode"]</span></li>
-
+                <li>@Loc["Habit items"]</li>
+                <ul style="list-style: none;">
+                    <li>@Loc["Mark habit item as done"]</li>
+                    <li>@Loc["Click on habit item to edit it"]</li>
+                    <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete habit item"]</span></li>
+                </ul>
+                <li>@Loc["Add new item"]</li>
+                <li>@Loc["Month calendar"]</li>
+                <ul style="list-style: none;">
+                    <li><i class="bi bi-chevron-double-up"></i> <span class="mx-2">@Loc["Previous week"]</span></li>
+                    <li><i class="bi bi-chevron-double-left"></i> <span class="mx-2">@Loc["Previous month"]</span></li>
+                    <li><i class="bi bi-chevron-double-right"></i> <span class="mx-2">@Loc["Next month"]</span></li>
+                    <li><i class="bi bi-chevron-double-down"></i> <span class="mx-2">@Loc["Next week"]</span></li>
+                    <li>@Loc["Selected day"]</li>
+                    <ul style="list-style: none;">
+                        <li><i class="bi bi-dash"></i> <span class="mx-2">@Loc["Remove the last Habit Done Time"]</span></li>
+                        <li><i class="bi bi-plus"></i> <span class="mx-2">@Loc["Add a new Habit Done Time"]</span></li>
+                        <li>@Loc["Habit Done Times"]</li>
+                        <ul style="list-style: none;">
+                            <li>@Loc["From: set time when habit was started"]</li>
+                            <li>@Loc["to: set time when habit was completed"]</li>
+                            <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete the Habit Done Time"]</span></li>
+                        </ul>
+                    </ul>
+                </ul>
+                <li>@Loc["Set desired habit repeat interval"]</li>
+                <li>@Loc["Set habit duration"]</li>
+                <li>@Loc["Start timer"]</li>
+                <ul style="list-style: none;">
+                    <li><i class="bi bi-play"></i> <span class="mx-2">@Loc["Start"]</span></li>
+                    <li><i class="bi bi-arrow-counterclockwise"></i> <span class="mx-2">@Loc["Reset"]</span></li>
+                    <li><i class="bi bi-pause"></i> <span class="mx-2">@Loc["Pause"]</span></li>
+                    <li><i class="bi bi-stop"></i> <span class="mx-2">@Loc["Stop"]</span></li>
+                </ul>
                 <li>@Loc["Set habit category"]</li>
                 <li>@Loc["Set habit color"]</li>
             </ul>
-        </ul>
-
-        <ul class="list-unstyled">
-            <li><i class="bi bi-plus-square"></i> <span class="mx-2">@Loc["Add"]</span></li>
-            <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Close"]</span></li>
-            <li><i class="bi bi-check-square"></i> <span class="mx-2">@Loc["Done"]</span></li>
-            <li><i class="bi bi-floppy"></i> <span class="mx-2">@Loc["Save"]</span></li>
-            <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete"]</span></li>
-            <li><i class="bi bi-type"></i> <span class="mx-2">@Loc["Match case"]</span></li>
-            <li><i class="bi bi-play"></i> <span class="mx-2">@Loc["Start"]</span></li>
-            <li><i class="bi bi-arrow-counterclockwise"></i> <span class="mx-2">@Loc["Reset"]</span></li>
-            <li><i class="bi bi-pause"></i> <span class="mx-2">@Loc["Pause"]</span></li>
-            <li><i class="bi bi-stop"></i> <span class="mx-2">@Loc["Stop"]</span></li>
-            <li><i class="bi bi-chevron-double-up"></i> <span class="mx-2">@Loc["Previous week"]</span></li>
-            <li><i class="bi bi-chevron-double-left"></i> <span class="mx-2">@Loc["Previous month"]</span></li>
-            <li><i class="bi bi-chevron-double-right"></i> <span class="mx-2">@Loc["Next month"]</span></li>
-            <li><i class="bi bi-chevron-double-down"></i> <span class="mx-2">@Loc["Next week"]</span></li>
-            <li><i class="bi bi-dash"></i> <span class="mx-2">@Loc["Decrease"]</span></li>
-            <li><i class="bi bi-plus"></i> <span class="mx-2">@Loc["Increase"]</span></li>
         </ul>
 
         <h5>@Loc["Trash"]:</h5>
