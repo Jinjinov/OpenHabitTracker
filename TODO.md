@@ -31,26 +31,15 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-!!! add actual Help
-
 !!! localize Help to all languages
 
 ---------------------------------------------------------------------------------------------------
 
 !!! fix Flatpak / Flathub - on the new PC:
 
-!!! build photino.Native with C++
+build photino.Native with C++ / Docker
 	https://github.com/flyingpie/photino.Native/tree/webkit41
 	https://github.com/flyingpie/photino.Native/pull/1
-
-You need to create a nuget.config file in the same directory as your .sln file
-
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-    <packageSources>
-        <add key="LocalPackages" value="./LocalPackages" />
-    </packageSources>
-</configuration>
 
 ---------------------------------------------------------------------------------------------------
 
