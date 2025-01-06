@@ -5,7 +5,7 @@ website: https://openhabittracker.net
 source-code: https://github.com/Jinjinov/OpenHabitTracker
 issues: https://github.com/Jinjinov/OpenHabitTracker/issues
 license: GPL-3.0
-version: '1.0.9'
+version: '1.1.0'
 grade: stable #devel
 summary: Take notes, plan tasks, track habits
 description: |
