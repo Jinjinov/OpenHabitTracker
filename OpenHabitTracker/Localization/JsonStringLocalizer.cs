@@ -59,7 +59,11 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
 
             if (!stringMap.TryGetValue(name, out string? translation))
             {
+#if DEBUG
+                translation = $"❗ {name} ❗";
+#else
                 translation = name;
+#endif
 
                 _missing[name] = name;
             }
@@ -80,7 +84,11 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
 
             if (!stringMap.TryGetValue(name, out string? translation))
             {
+#if DEBUG
+                translation = $"❗ {name} ❗";
+#else
                 translation = name;
+#endif
 
                 _missing[name] = name;
             }
