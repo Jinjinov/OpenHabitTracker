@@ -31,10 +31,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-!!! localize Help to all languages
-
----------------------------------------------------------------------------------------------------
-
 !!! fix Flatpak / Flathub - on the new PC:
 
 build photino.Native with C++ / Docker
