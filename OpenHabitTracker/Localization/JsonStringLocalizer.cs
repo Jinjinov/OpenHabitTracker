@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace OpenHabitTracker.Localization;
@@ -17,7 +18,7 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
 
     private static readonly Dictionary<string, string> _missing = [];
     private static readonly Dictionary<string, string> _unused = [];
-    private static readonly JsonSerializerOptions _options = new() { WriteIndented = true };
+    private static readonly JsonSerializerOptions _options = new() { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 
     public static void SerializeMissingAndUnusedValues()
     {
