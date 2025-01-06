@@ -3,6 +3,7 @@
 @using OpenHabitTracker.Services
 
 @inject IStringLocalizer Loc
+@inject IStringLocalizer<OpenHabitTracker.Localization.Loc> HelpLoc
 @inject ILinkAttributeService LinkAttributeService
 @inject SettingsService SettingsService
 
@@ -11,58 +12,58 @@
 <div @ref="WrapperElement" class="@($"col child-column px-0 px-md-{SettingsService.Settings.HorizontalMargin}")">
     <div class="m-2">
 
-        <h5>@Loc["Header"]:</h5>
+        <h5>@HelpLoc["Header"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-three-dots-vertical"></i> <span class="mx-2">@Loc["Menu"]:</span>@Loc["toggle the menu on and off"]</li>
-            <li><i class="bi bi-house"></i> <span class="mx-2">@Loc["Home"]:</span>@Loc["see all your items"]</li>
-            <li><i class="bi bi-sticky"></i> <span class="mx-2">@Loc["Notes"]:</span>@Loc["see all your Notes"]</li>
-            <li><i class="bi bi-list-task"></i> <span class="mx-2">@Loc["Tasks"]:</span>@Loc["see all your Tasks"]</li>
-            <li><i class="bi bi-repeat"></i> <span class="mx-2">@Loc["Habits"]:</span>@Loc["see all your Habits"]</li>
+            <li><i class="bi bi-three-dots-vertical"></i> <span class="mx-2">@Loc["Menu"]:</span>@HelpLoc["toggle the menu on and off"]</li>
+            <li><i class="bi bi-house"></i> <span class="mx-2">@Loc["Home"]:</span>@HelpLoc["see all your items"]</li>
+            <li><i class="bi bi-sticky"></i> <span class="mx-2">@Loc["Notes"]:</span>@HelpLoc["see all your Notes"]</li>
+            <li><i class="bi bi-list-task"></i> <span class="mx-2">@Loc["Tasks"]:</span>@HelpLoc["see all your Tasks"]</li>
+            <li><i class="bi bi-repeat"></i> <span class="mx-2">@Loc["Habits"]:</span>@HelpLoc["see all your Habits"]</li>
         </ul>
 
         <h5>@Loc["Menu"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Trash"]:</span>@Loc["see all your deleted items"]</li>
-            <li><i class="bi bi-search"></i> <span class="mx-2">@Loc["Search, Filter, Sort"]:</span>@Loc["Search, filter and sort all your items"]</li>
-            <li><i class="bi bi-gear"></i> <span class="mx-2">@Loc["Settings"]:</span>@Loc["Adjust app appearance"]</li>
-            <li><i class="bi bi-tag"></i> <span class="mx-2">@Loc["Categories"]:</span>@Loc["manage categories"]</li>
-            <li><i class="bi bi-database"></i> <span class="mx-2">@Loc["Data"]:</span>@Loc["export, import or delete all your data"]</li>
+            <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Trash"]:</span>@HelpLoc["see all your deleted items"]</li>
+            <li><i class="bi bi-search"></i> <span class="mx-2">@Loc["Search, Filter, Sort"]:</span>@HelpLoc["Search, filter and sort all your items"]</li>
+            <li><i class="bi bi-gear"></i> <span class="mx-2">@Loc["Settings"]:</span>@HelpLoc["Adjust app appearance"]</li>
+            <li><i class="bi bi-tag"></i> <span class="mx-2">@Loc["Categories"]:</span>@HelpLoc["manage categories"]</li>
+            <li><i class="bi bi-database"></i> <span class="mx-2">@Loc["Data"]:</span>@HelpLoc["export, import or delete all your data"]</li>
         </ul>
 
         <h5>@Loc["Home"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-sticky"></i> <span class="mx-2">@Loc["Notes"]:</span>@Loc["see all your Notes"]</li>
-            <li><i class="bi bi-list-task"></i> <span class="mx-2">@Loc["Tasks"]:</span>@Loc["see all your Tasks"]</li>
-            <li><i class="bi bi-repeat"></i> <span class="mx-2">@Loc["Habits"]:</span>@Loc["see all your Habits"]</li>
+            <li><i class="bi bi-sticky"></i> <span class="mx-2">@Loc["Notes"]:</span>@HelpLoc["see all your Notes"]</li>
+            <li><i class="bi bi-list-task"></i> <span class="mx-2">@Loc["Tasks"]:</span>@HelpLoc["see all your Tasks"]</li>
+            <li><i class="bi bi-repeat"></i> <span class="mx-2">@Loc["Habits"]:</span>@HelpLoc["see all your Habits"]</li>
         </ul>
 
         <h5>@Loc["Notes"]:</h5>
         <ul class="list-unstyled">
             <li><i class="bi bi-plus-square"></i> <span class="mx-2">@Loc["Add new note"]</span></li>
             <ul style="list-style: none;">
-                <li>@Loc["Set note priority (⊘,︾,﹀,—,︿,︽)"]</li>
-                <li>@Loc["Add note title"]</li>
-                <li><i class="bi bi-floppy"></i> <span class="mx-2">@Loc["Save new note"]</span></li>
-                <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Cancel adding new note"]</span></li>
+                <li>@HelpLoc["Set note priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@HelpLoc["Add note title"]</li>
+                <li><i class="bi bi-floppy"></i> <span class="mx-2">@HelpLoc["Save new note"]</span></li>
+                <li><i class="bi bi-x-square"></i> <span class="mx-2">@HelpLoc["Cancel adding new note"]</span></li>
                 <li>@Loc["Add note text"]</li>
-                <li>@Loc["Set note category"]</li>
-                <li>@Loc["Set note color"]</li>
+                <li>@HelpLoc["Set note category"]</li>
+                <li>@HelpLoc["Set note color"]</li>
             </ul>
-            <li>@Loc["Read only note"]</li>
+            <li>@HelpLoc["Read only note"]</li>
             <ul style="list-style: none;">
-                <li>@Loc["Note priority (⊘,︾,﹀,—,︿,︽)"]</li>
-                <li>@Loc["Note title: click to enter edit mode"]</li>
-                <li>@Loc["Note text: displayed as Markdown (HTTP links are clickable) if 'Display note content as Markdown' is checked in Settings"]</li>
+                <li>@HelpLoc["Note priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@HelpLoc["Note title: click to enter edit mode"]</li>
+                <li>@HelpLoc["Note text: displayed as Markdown (HTTP links are clickable) if 'Display note content as Markdown' is checked in Settings"]</li>
             </ul>
-            <li>@Loc["Edit note"]</li>
+            <li>@HelpLoc["Edit note"]</li>
             <ul style="list-style: none;">
-                <li>@Loc["Set note priority (⊘,︾,﹀,—,︿,︽)"]</li>
-                <li>@Loc["Edit note title"]</li>
-                <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete note"]</span></li>
-                <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Exit edit mode"]</span></li>
-                <li>@Loc["Edit note text"]</li>
-                <li>@Loc["Set note category"]</li>
-                <li>@Loc["Set note color"]</li>
+                <li>@HelpLoc["Set note priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@HelpLoc["Edit note title"]</li>
+                <li><i class="bi bi-trash"></i> <span class="mx-2">@HelpLoc["Delete note"]</span></li>
+                <li><i class="bi bi-x-square"></i> <span class="mx-2">@HelpLoc["Exit edit mode"]</span></li>
+                <li>@HelpLoc["Edit note text"]</li>
+                <li>@HelpLoc["Set note category"]</li>
+                <li>@HelpLoc["Set note color"]</li>
             </ul>
         </ul>
 
@@ -70,39 +71,39 @@
         <ul class="list-unstyled">
             <li><i class="bi bi-plus-square"></i> <span class="mx-2">@Loc["Add new task"]</span></li>
             <ul style="list-style: none;">
-                <li>@Loc["Set task priority (⊘,︾,﹀,—,︿,︽)"]</li>
-                <li>@Loc["Add task title"]</li>
-                <li><i class="bi bi-floppy"></i> <span class="mx-2">@Loc["Save new task"]</span></li>
-                <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Cancel adding new task"]</span></li>
-                <li>@Loc["Set task planned at date"]</li>
-                <li>@Loc["Set task duration"]</li>
-                <li>@Loc["Set task category"]</li>
-                <li>@Loc["Set task color"]</li>
+                <li>@HelpLoc["Set task priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@HelpLoc["Add task title"]</li>
+                <li><i class="bi bi-floppy"></i> <span class="mx-2">@HelpLoc["Save new task"]</span></li>
+                <li><i class="bi bi-x-square"></i> <span class="mx-2">@HelpLoc["Cancel adding new task"]</span></li>
+                <li>@HelpLoc["Set task planned at date"]</li>
+                <li>@HelpLoc["Set task duration"]</li>
+                <li>@HelpLoc["Set task category"]</li>
+                <li>@HelpLoc["Set task color"]</li>
             </ul>
-            <li>@Loc["Read only task"]</li>
+            <li>@HelpLoc["Read only task"]</li>
             <ul style="list-style: none;">
-                <li>@Loc["Task priority (⊘,︾,﹀,—,︿,︽)"]</li>
-                <li>@Loc["Task title: click on task title to enter edit mode"]</li>
-                <li>@Loc["Planned at date/time"]</li>
-                <li><i class="bi bi-check-square"></i> <span class="mx-2">@Loc["Mark task as done"]</span></li>
-                <li>@Loc["Task items: click on a task item to mark it as done"]</li>
+                <li>@HelpLoc["Task priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@HelpLoc["Task title: click on task title to enter edit mode"]</li>
+                <li>@HelpLoc["Planned at date/time"]</li>
+                <li><i class="bi bi-check-square"></i> <span class="mx-2">@HelpLoc["Mark task as done"]</span></li>
+                <li>@HelpLoc["Task items: click on a task item to mark it as done"]</li>
             </ul>
-            <li>@Loc["Edit task"]</li>
+            <li>@HelpLoc["Edit task"]</li>
             <ul style="list-style: none;">
-                <li>@Loc["Set task priority (⊘,︾,﹀,—,︿,︽)"]</li>
-                <li>@Loc["Edit task title"]</li>
-                <li><i class="bi bi-check-square"></i> <span class="mx-2">@Loc["Mark task as done"]</span></li>
-                <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete task"]</span></li>
-                <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Exit edit mode"]</span></li>
-                <li>@Loc["Task items"]</li>
+                <li>@HelpLoc["Set task priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@HelpLoc["Edit task title"]</li>
+                <li><i class="bi bi-check-square"></i> <span class="mx-2">@HelpLoc["Mark task as done"]</span></li>
+                <li><i class="bi bi-trash"></i> <span class="mx-2">@HelpLoc["Delete task"]</span></li>
+                <li><i class="bi bi-x-square"></i> <span class="mx-2">@HelpLoc["Exit edit mode"]</span></li>
+                <li>@HelpLoc["Task items"]</li>
                 <ul style="list-style: none;">
-                    <li>@Loc["Mark task item as done"]</li>
-                    <li>@Loc["Click on task item to edit it"]</li>
-                    <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete task item"]</span></li>
+                    <li>@HelpLoc["Mark task item as done"]</li>
+                    <li>@HelpLoc["Click on task item to edit it"]</li>
+                    <li><i class="bi bi-trash"></i> <span class="mx-2">@HelpLoc["Delete task item"]</span></li>
                 </ul>
                 <li>@Loc["Add new item"]</li>
-                <li>@Loc["Set task planned at date"]</li>
-                <li>@Loc["Set task duration"]</li>
+                <li>@HelpLoc["Set task planned at date"]</li>
+                <li>@HelpLoc["Set task duration"]</li>
                 <li>@Loc["Start timer"]</li>
                 <ul style="list-style: none;">
                     <li><i class="bi bi-play"></i> <span class="mx-2">@Loc["Start"]</span></li>
@@ -110,8 +111,8 @@
                     <li><i class="bi bi-pause"></i> <span class="mx-2">@Loc["Pause"]</span></li>
                     <li><i class="bi bi-stop"></i> <span class="mx-2">@Loc["Stop"]</span></li>
                 </ul>
-                <li>@Loc["Set task category"]</li>
-                <li>@Loc["Set task color"]</li>
+                <li>@HelpLoc["Set task category"]</li>
+                <li>@HelpLoc["Set task color"]</li>
             </ul>
         </ul>
 
@@ -119,56 +120,56 @@
         <ul class="list-unstyled">
             <li><i class="bi bi-plus-square"></i> <span class="mx-2">@Loc["Add new habit"]</span></li>
             <ul style="list-style: none;">
-                <li>@Loc["Set habit priority (⊘,︾,﹀,—,︿,︽)"]</li>
-                <li>@Loc["Add habit title"]</li>
-                <li><i class="bi bi-floppy"></i> <span class="mx-2">@Loc["Save new habit"]</span></li>
-                <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Cancel adding new habit"]</span></li>
-                <li>@Loc["Set desired habit repeat interval"]</li>
-                <li>@Loc["Set habit duration"]</li>
-                <li>@Loc["Set habit category"]</li>
-                <li>@Loc["Set habit color"]</li>
+                <li>@HelpLoc["Set habit priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@HelpLoc["Add habit title"]</li>
+                <li><i class="bi bi-floppy"></i> <span class="mx-2">@HelpLoc["Save new habit"]</span></li>
+                <li><i class="bi bi-x-square"></i> <span class="mx-2">@HelpLoc["Cancel adding new habit"]</span></li>
+                <li>@HelpLoc["Set desired habit repeat interval"]</li>
+                <li>@HelpLoc["Set habit duration"]</li>
+                <li>@HelpLoc["Set habit category"]</li>
+                <li>@HelpLoc["Set habit color"]</li>
             </ul>
-            <li>@Loc["Read only habit"]</li>
+            <li>@HelpLoc["Read only habit"]</li>
             <ul style="list-style: none;">
-                <li>@Loc["Habit priority (⊘,︾,﹀,—,︿,︽)"]</li>
-                <li>@Loc["Habit title: click on habit title to enter edit mode"]</li>
-                <li>@Loc["Time elapsed since habit was last done and the selected habit interval ratio"]</li>
-                <li>@Loc["Small calendar: click on a day to mark habit as done"]</li>
-                <li>@Loc["Habit items: click on a habit item to mark it as done"]</li>
+                <li>@HelpLoc["Habit priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@HelpLoc["Habit title: click on habit title to enter edit mode"]</li>
+                <li>@HelpLoc["Time elapsed since habit was last done and the selected habit interval ratio"]</li>
+                <li>@HelpLoc["Small calendar: click on a day to mark habit as done"]</li>
+                <li>@HelpLoc["Habit items: click on a habit item to mark it as done"]</li>
             </ul>
-            <li>@Loc["Edit habit"]</li>
+            <li>@HelpLoc["Edit habit"]</li>
             <ul style="list-style: none;">
-                <li>@Loc["Set habit priority (⊘,︾,﹀,—,︿,︽)"]</li>
-                <li>@Loc["Edit habit title"]</li>
-                <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete habit"]</span></li>
-                <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Exit edit mode"]</span></li>
-                <li>@Loc["Habit items"]</li>
+                <li>@HelpLoc["Set habit priority (⊘,︾,﹀,—,︿,︽)"]</li>
+                <li>@HelpLoc["Edit habit title"]</li>
+                <li><i class="bi bi-trash"></i> <span class="mx-2">@HelpLoc["Delete habit"]</span></li>
+                <li><i class="bi bi-x-square"></i> <span class="mx-2">@HelpLoc["Exit edit mode"]</span></li>
+                <li>@HelpLoc["Habit items"]</li>
                 <ul style="list-style: none;">
-                    <li>@Loc["Mark habit item as done"]</li>
-                    <li>@Loc["Click on habit item to edit it"]</li>
-                    <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete habit item"]</span></li>
+                    <li>@HelpLoc["Mark habit item as done"]</li>
+                    <li>@HelpLoc["Click on habit item to edit it"]</li>
+                    <li><i class="bi bi-trash"></i> <span class="mx-2">@HelpLoc["Delete habit item"]</span></li>
                 </ul>
                 <li>@Loc["Add new item"]</li>
-                <li>@Loc["Month calendar"]</li>
+                <li>@HelpLoc["Month calendar"]</li>
                 <ul style="list-style: none;">
                     <li><i class="bi bi-chevron-double-up"></i> <span class="mx-2">@Loc["Previous week"]</span></li>
                     <li><i class="bi bi-chevron-double-left"></i> <span class="mx-2">@Loc["Previous month"]</span></li>
                     <li><i class="bi bi-chevron-double-right"></i> <span class="mx-2">@Loc["Next month"]</span></li>
                     <li><i class="bi bi-chevron-double-down"></i> <span class="mx-2">@Loc["Next week"]</span></li>
-                    <li>@Loc["Selected day"]</li>
+                    <li>@HelpLoc["Selected day"]</li>
                     <ul style="list-style: none;">
-                        <li><i class="bi bi-dash"></i> <span class="mx-2">@Loc["Remove the last Habit Done Time"]</span></li>
-                        <li><i class="bi bi-plus"></i> <span class="mx-2">@Loc["Add a new Habit Done Time"]</span></li>
-                        <li>@Loc["Habit Done Times"]</li>
+                        <li><i class="bi bi-dash"></i> <span class="mx-2">@HelpLoc["Remove the last Habit Done Time"]</span></li>
+                        <li><i class="bi bi-plus"></i> <span class="mx-2">@HelpLoc["Add a new Habit Done Time"]</span></li>
+                        <li>@HelpLoc["Habit Done Times"]</li>
                         <ul style="list-style: none;">
-                            <li>@Loc["From: set time when habit was started"]</li>
-                            <li>@Loc["to: set time when habit was completed"]</li>
-                            <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete the Habit Done Time"]</span></li>
+                            <li>@HelpLoc["From: set time when habit was started"]</li>
+                            <li>@HelpLoc["to: set time when habit was completed"]</li>
+                            <li><i class="bi bi-trash"></i> <span class="mx-2">@HelpLoc["Delete the Habit Done Time"]</span></li>
                         </ul>
                     </ul>
                 </ul>
-                <li>@Loc["Set desired habit repeat interval"]</li>
-                <li>@Loc["Set habit duration"]</li>
+                <li>@HelpLoc["Set desired habit repeat interval"]</li>
+                <li>@HelpLoc["Set habit duration"]</li>
                 <li>@Loc["Start timer"]</li>
                 <ul style="list-style: none;">
                     <li><i class="bi bi-play"></i> <span class="mx-2">@Loc["Start"]</span></li>
@@ -176,19 +177,19 @@
                     <li><i class="bi bi-pause"></i> <span class="mx-2">@Loc["Pause"]</span></li>
                     <li><i class="bi bi-stop"></i> <span class="mx-2">@Loc["Stop"]</span></li>
                 </ul>
-                <li>@Loc["Set habit category"]</li>
-                <li>@Loc["Set habit color"]</li>
+                <li>@HelpLoc["Set habit category"]</li>
+                <li>@HelpLoc["Set habit color"]</li>
             </ul>
         </ul>
 
         <h5>@Loc["Trash"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-recycle"></i> <span class="mx-2">@Loc["Restore all"]:</span>@Loc["restore all deleted items"]</li>
-            <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Empty trash"]:</span>@Loc["permanently delete all trash items"]</li>
-            <li>@Loc["Deleted item"]</li>
+            <li><i class="bi bi-recycle"></i> <span class="mx-2">@Loc["Restore all"]:</span>@HelpLoc["restore all deleted items"]</li>
+            <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Empty trash"]:</span>@HelpLoc["permanently delete all trash items"]</li>
+            <li>@HelpLoc["Deleted item"]</li>
             <ul style="list-style: none;">
-                <li><i class="bi bi-recycle"></i> <span class="mx-2">@Loc["Restore deleted item"]</span></li>
-                <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Permanently delete trash item"]</span></li>
+                <li><i class="bi bi-recycle"></i> <span class="mx-2">@HelpLoc["Restore deleted item"]</span></li>
+                <li><i class="bi bi-trash"></i> <span class="mx-2">@HelpLoc["Permanently delete trash item"]</span></li>
             </ul>
         </ul>
 
@@ -196,87 +197,87 @@
         <ul class="list-unstyled">
             <li><i class="bi bi-search"></i> <span class="mx-2">@Loc["Search"]</span></li>
             <ul style="list-style: none;">
-                <li>@Loc["Search notes, tasks, habits"]</li>
-                <li><i class="bi bi-type"></i> <span class="mx-2">@Loc["Match search case"]</span></li>
-                <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Clear search"]</span></li>
+                <li>@HelpLoc["Search notes, tasks, habits"]</li>
+                <li><i class="bi bi-type"></i> <span class="mx-2">@HelpLoc["Match search case"]</span></li>
+                <li><i class="bi bi-x-square"></i> <span class="mx-2">@HelpLoc["Clear search"]</span></li>
             </ul>
             <li><i class="bi bi-filter"></i> <span class="mx-2">@Loc["Filter"]</span></li>
             <ul style="list-style: none;">
                 <li>@Loc["Planned"]</li>
                 <ul style="list-style: none;">
-                    <li>@Loc["Planned: click to filter by current date"]</li>
-                    <li>@Loc["Operator: choose date comparison (<,=,>,≠)"]</li>
-                    <li>@Loc["Date: set the date for comparison"]</li>
-                    <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Clear the date"]</span></li>
+                    <li>@HelpLoc["Planned: click to filter by current date"]</li>
+                    <li>@HelpLoc["Operator: choose date comparison (<,=,>,≠)"]</li>
+                    <li>@HelpLoc["Date: set the date for comparison"]</li>
+                    <li><i class="bi bi-x-square"></i> <span class="mx-2">@HelpLoc["Clear the date"]</span></li>
                 </ul>
                 <li>@Loc["Done"]</li>
                 <ul style="list-style: none;">
-                    <li>@Loc["Done: click to filter by current date"]</li>
-                    <li>@Loc["Operator: choose date comparison (<,=,>,≠)"]</li>
-                    <li>@Loc["Date: set the date for comparison"]</li>
-                    <li><i class="bi bi-x-square"></i> <span class="mx-2">@Loc["Clear the date"]</span></li>
+                    <li>@HelpLoc["Done: click to filter by current date"]</li>
+                    <li>@HelpLoc["Operator: choose date comparison (<,=,>,≠)"]</li>
+                    <li>@HelpLoc["Date: set the date for comparison"]</li>
+                    <li><i class="bi bi-x-square"></i> <span class="mx-2">@HelpLoc["Clear the date"]</span></li>
                 </ul>
-                <li>@Loc["Categories: filter notes, tasks and habity by category"]</li>
-                <li>@Loc["Priorities: filter notes, tasks and habity by priority"]</li>
+                <li>@HelpLoc["Categories: filter notes, tasks and habity by category"]</li>
+                <li>@HelpLoc["Priorities: filter notes, tasks and habity by priority"]</li>
                 <li>@Loc["Habit interval ratio"]</li>
                 <ul style="list-style: none;">
-                    <li>@Loc["Elapsed time to average interval: compare the time elapsed since the habit was last done to the average repeat interval for the habit"]</li>
-                    <li>@Loc["Elapsed time to repeat interval: compare the time elapsed since the habit was last done to the desired repeat interval for the habit"]</li>
-                    <li>@Loc["Average interval to repeat interval: compare the average repeat interval to the desired repeat interval for the habit"]</li>
+                    <li>@HelpLoc["Elapsed time to average interval: compare the time elapsed since the habit was last done to the average repeat interval for the habit"]</li>
+                    <li>@HelpLoc["Elapsed time to repeat interval: compare the time elapsed since the habit was last done to the desired repeat interval for the habit"]</li>
+                    <li>@HelpLoc["Average interval to repeat interval: compare the average repeat interval to the desired repeat interval for the habit"]</li>
                 </ul>
-                <li>@Loc["Habits with interval ratio: show only habits that have the selected interval ratio at least X% where X is between 0 and 100"]</li>
+                <li>@HelpLoc["Habits with interval ratio: show only habits that have the selected interval ratio at least X% where X is between 0 and 100"]</li>
             </ul>
             <li><i class="bi bi-arrow-down-up"></i> <span class="mx-2">@Loc["Sort"]</span></li>
             <ul style="list-style: none;">
                 <li><i class="bi bi-sticky"></i> <span class="mx-2">@Loc["Notes"]</span></li>
                 <ul style="list-style: none;">
-                    <li>@Loc["Category: sort notes by category"]</li>
-                    <li>@Loc["Priority: sort notes by priority"]</li>
-                    <li>@Loc["Title: sort notes by title"]</li>
+                    <li>@HelpLoc["Category: sort notes by category"]</li>
+                    <li>@HelpLoc["Priority: sort notes by priority"]</li>
+                    <li>@HelpLoc["Title: sort notes by title"]</li>
                 </ul>
                 <li><i class="bi bi-list-task"></i> <span class="mx-2">@Loc["Tasks"]</span></li>
                 <ul style="list-style: none;">
-                    <li>@Loc["Category: sort tasks by category"]</li>
-                    <li>@Loc["Priority: sort tasks by priority"]</li>
-                    <li>@Loc["Title: sort tasks by title"]</li>
-                    <li>@Loc["Duration: sort tasks by duration"]</li>
-                    <li>@Loc["Elapsed time: sort tasks by elapsed time"]</li>
-                    <li>@Loc["Planned at: sort tasks by 'Planned at' date"]</li>
-                    <li>@Loc["Time spent: sort tasks by time spent"]</li>
+                    <li>@HelpLoc["Category: sort tasks by category"]</li>
+                    <li>@HelpLoc["Priority: sort tasks by priority"]</li>
+                    <li>@HelpLoc["Title: sort tasks by title"]</li>
+                    <li>@HelpLoc["Duration: sort tasks by duration"]</li>
+                    <li>@HelpLoc["Elapsed time: sort tasks by elapsed time"]</li>
+                    <li>@HelpLoc["Planned at: sort tasks by 'Planned at' date"]</li>
+                    <li>@HelpLoc["Time spent: sort tasks by time spent"]</li>
                 </ul>
                 <li><i class="bi bi-repeat"></i> <span class="mx-2">@Loc["Habits"]</span></li>
                 <ul style="list-style: none;">
-                    <li>@Loc["Category: sort habits by category"]</li>
-                    <li>@Loc["Priority: sort habits by priority"]</li>
-                    <li>@Loc["Title: sort habits by title"]</li>
-                    <li>@Loc["Duration: sort habits by duration"]</li>
-                    <li>@Loc["Repeat interval: sort habits by desired repeat interval"]</li>
-                    <li>@Loc["Average interval: sort habits by average repeat interval"]</li>
-                    <li>@Loc["Time spent: sort habits by total time spent"]</li>
-                    <li>@Loc["Average time spent: sort habits by average time spent"]</li>
-                    <li>@Loc["Elapsed time: sort habits by time elapsed since habit was last done"]</li>
-                    <li>@Loc["Selected interval ratio: sort habits by the selected habit interval ratio"]</li>
+                    <li>@HelpLoc["Category: sort habits by category"]</li>
+                    <li>@HelpLoc["Priority: sort habits by priority"]</li>
+                    <li>@HelpLoc["Title: sort habits by title"]</li>
+                    <li>@HelpLoc["Duration: sort habits by duration"]</li>
+                    <li>@HelpLoc["Repeat interval: sort habits by desired repeat interval"]</li>
+                    <li>@HelpLoc["Average interval: sort habits by average repeat interval"]</li>
+                    <li>@HelpLoc["Time spent: sort habits by total time spent"]</li>
+                    <li>@HelpLoc["Average time spent: sort habits by average time spent"]</li>
+                    <li>@HelpLoc["Elapsed time: sort habits by time elapsed since habit was last done"]</li>
+                    <li>@HelpLoc["Selected interval ratio: sort habits by the selected habit interval ratio"]</li>
                 </ul>
             </ul>
         </ul>
 
         <h5>@Loc["Settings"]:</h5>
         <ul class="list-unstyled">
-            <li>@Loc["Dark mode: toggle between light and dark mode"]</li>
-            <li>@Loc["Theme: choose between 26 themes"]</li>
-            <li>@Loc["Start page: choose which main screen is shown every time the app starts"]</li>
-            <li>@Loc["Start sidebar: choose which submenu screen screen is shown every time the app starts"]</li>
-            <li>@Loc["Show item list: display the list of items under tasks and habits"]</li>
-            <li>@Loc["Show small calendar: show the one line calendar in habits"]</li>
-            <li>@Loc["Show large calendar: show the month calendar in habits"]</li>
-            <li>@Loc["Show color: show the setting for the title color in notes, tasks and habits"]</li>
-            <li>@Loc["Show created & updated: show time and date when a note/task/habit was created and last updated"]</li>
-            <li>@Loc["Language: choose the app language"]</li>
-            <li>@Loc["Week start: choose the first day of the week for the month calendar in habits"]</li>
-            <li>@Loc["Insert tabs in note content: pressing the TAB key will insert a tab in note text instead of shifting focus away from the edit window"]</li>
-            <li>@Loc["Display note content as Markdown: note text will be converted to Markdown for display, HTML links will be clickable"]</li>
-            <li>@Loc["Horizontal space: set the horizontal spacing between columns on the main screen"]</li>
-            <li>@Loc["Vertical space: set the vertical spacing between each note/task/habit"]</li>
+            <li>@HelpLoc["Dark mode: toggle between light and dark mode"]</li>
+            <li>@HelpLoc["Theme: choose between 26 themes"]</li>
+            <li>@HelpLoc["Start page: choose which main screen is shown every time the app starts"]</li>
+            <li>@HelpLoc["Start sidebar: choose which submenu screen screen is shown every time the app starts"]</li>
+            <li>@HelpLoc["Show item list: display the list of items under tasks and habits"]</li>
+            <li>@HelpLoc["Show small calendar: show the one line calendar in habits"]</li>
+            <li>@HelpLoc["Show large calendar: show the month calendar in habits"]</li>
+            <li>@HelpLoc["Show color: show the setting for the title color in notes, tasks and habits"]</li>
+            <li>@HelpLoc["Show created & updated: show time and date when a note/task/habit was created and last updated"]</li>
+            <li>@HelpLoc["Language: choose the app language"]</li>
+            <li>@HelpLoc["Week start: choose the first day of the week for the month calendar in habits"]</li>
+            <li>@HelpLoc["Insert tabs in note content: pressing the TAB key will insert a tab in note text instead of shifting focus away from the edit window"]</li>
+            <li>@HelpLoc["Display note content as Markdown: note text will be converted to Markdown for display, HTML links will be clickable"]</li>
+            <li>@HelpLoc["Horizontal space: set the horizontal spacing between columns on the main screen"]</li>
+            <li>@HelpLoc["Vertical space: set the vertical spacing between each note/task/habit"]</li>
         </ul>
 
         <h5>@Loc["Categories"]:</h5>
@@ -284,20 +285,20 @@
             <li><i class="bi bi-plus-square"></i> <span class="mx-2">@Loc["Add new category"]</span></li>
             <li>@Loc["Category"]</li>
             <ul style="list-style: none;">
-                <li>@Loc["Click on title: edit category title"]</li>
-                <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete category"]</span></li>
+                <li>@HelpLoc["Click on title: edit category title"]</li>
+                <li><i class="bi bi-trash"></i> <span class="mx-2">@HelpLoc["Delete category"]</span></li>
             </ul>
         </ul>
 
         <h5>@Loc["Data"]:</h5>
         <ul class="list-unstyled">
-            <li><i class="bi bi-download"></i> <span class="mx-2">@Loc["Load examples"]:</span>@Loc["load example notes, tasks and habits"]</li>
-            <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete all data"]:</span>@Loc["permanently delete all items"]</li>
-            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-2">@Loc["Export JSON"]:</span>@Loc["export categories, notes, tasks, habits and settings to a JSON file"]</li>
-            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-2">@Loc["Export TSV"]:</span>@Loc["export categories, notes, tasks and habits to a TSV file"]</li>
-            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-2">@Loc["Export YAML"]:</span>@Loc["export categories, notes, tasks, habits and settings to a YAML file"]</li>
-            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-2">@Loc["Export Markdown"]:</span>@Loc["export categories, notes, tasks and habits to a MD file"]</li>
-            <li><i class="bi bi-box-arrow-in-right"></i> <span class="mx-2">@Loc["Import"]:</span>@Loc["import a JSON, TSV, YAML, MD or Google Keep takeout ZIP file"] <a href="https://takeout.google.com">https://takeout.google.com</a></li>
+            <li><i class="bi bi-download"></i> <span class="mx-2">@Loc["Load examples"]:</span>@HelpLoc["load example notes, tasks and habits"]</li>
+            <li><i class="bi bi-trash"></i> <span class="mx-2">@Loc["Delete all data"]:</span>@HelpLoc["permanently delete all items"]</li>
+            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-2">@Loc["Export JSON"]:</span>@HelpLoc["export categories, notes, tasks, habits and settings to a JSON file"]</li>
+            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-2">@Loc["Export TSV"]:</span>@HelpLoc["export categories, notes, tasks and habits to a TSV file"]</li>
+            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-2">@Loc["Export YAML"]:</span>@HelpLoc["export categories, notes, tasks, habits and settings to a YAML file"]</li>
+            <li><i class="bi bi-box-arrow-right"></i> <span class="mx-2">@Loc["Export Markdown"]:</span>@HelpLoc["export categories, notes, tasks and habits to a MD file"]</li>
+            <li><i class="bi bi-box-arrow-in-right"></i> <span class="mx-2">@Loc["Import"]:</span>@HelpLoc["import a JSON, TSV, YAML, MD or Google Keep takeout ZIP file"] <a href="https://takeout.google.com">https://takeout.google.com</a></li>
         </ul>
 
     </div>
