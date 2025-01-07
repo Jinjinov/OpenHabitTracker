@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="9.0.0" />
     <PackageReference Include="Photino.Blazor" Version="3.2.0" />
-    <PackageReference Include="Photino.Native" Version="4.0.0-pre1" Condition="'$(OS)' == 'Linux'" />
+    <PackageReference Include="Photino.Native" Version="4.0.0-pre1" Condition="'$(RuntimeIdentifier)' == 'linux-x64'" />
   </ItemGroup>
 
   <ItemGroup>
