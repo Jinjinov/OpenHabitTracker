@@ -138,8 +138,7 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
 		flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest net.openhabittracker.OpenHabitTracker.yaml
 		flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo
-
-																		the second "repo" is the folder named "repo" created by flatpak-builder in the same folder as the manifest yaml file
+																		^	^	the second "repo" is the folder named "repo" created by flatpak-builder in the same folder as the manifest yaml file
 
 		https://docs.flathub.org/docs/for-app-authors/submission/#submission-pr
 
