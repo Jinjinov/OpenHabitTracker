@@ -43,8 +43,8 @@ build photino.Native with C++ / Docker
     Blazor WASM -> Google Drive REST API
     Blazor Desktop -> Google Drive API
 !!! add Blazor Server
-    Blazor Server -> Google Drive API
     Blazor Mobile -> Blazor Server
+    Blazor Server -> Google Drive API
     https://app.openhabittracker.net/ -> https://pwa.openhabittracker.net/
 
 ---------------------------------------------------------------------------------------------------
