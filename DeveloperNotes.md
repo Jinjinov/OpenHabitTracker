@@ -1,5 +1,17 @@
 # Notes:
 
+Host and deploy ASP.NET Core Blazor WebAssembly on IIS:
+
+https://learn.microsoft.com/en-us/aspnet/core/blazor/host-and-deploy/webassembly?view=aspnetcore-9.0#install-the-url-rewrite-module
+
+Install the URL Rewrite Module:
+
+https://www.iis.net/downloads/microsoft/url-rewrite
+
+https://www.iis.net/downloads/microsoft/url-rewrite#additionalDownloads
+
+---------------------------------------------------------------------------------------------------
+
 text: ¡!
 background shape: Circle
 font: Miltonian
