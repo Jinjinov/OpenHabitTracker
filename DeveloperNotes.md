@@ -12,13 +12,17 @@ https://www.iis.net/downloads/microsoft/url-rewrite#additionalDownloads
 
 ---------------------------------------------------------------------------------------------------
 
-text: ¡!
+text: Â¡!
 background shape: Circle
 font: Miltonian
 Regular 400 Normal
 font size: 110
 font color: #EEEEEE
 background color: #333333
+
+---------------------------------------------------------------------------------------------------
+
+RegEx to find all trailing whitespace: (?<=\S)[ ]{2,}$
 
 ---------------------------------------------------------------------------------------------------
 
@@ -325,7 +329,7 @@ public class ApplicationDbContext : DbContext
             default:
                 throw new NotImplementedException("Platform not supported");
         }
-        optionsBuilder.UseSqlite($"Filename={databasePath}"); // “Filename” and “DataSource” are aliases for “Data Source”
+        optionsBuilder.UseSqlite($"Filename={databasePath}"); // â€œFilenameâ€ and â€œDataSourceâ€ are aliases for â€œData Sourceâ€
     }
 }
 

@@ -237,7 +237,7 @@ Host 24/7 on Raspberry Pi
 
 	Simply put if one of the devices is off a docker (always running server) could hold the data for when another device comes online.
 	I have a service with the following parts.
-	Mobile Client - Server (docker container) - cliënt / laptop / webapp etc. they all sync the encrypted data to the docker. If one dies it's on the others if the docker dies it's on the cliënts.
+	Mobile Client - Server (docker container) - cliÃ«nt / laptop / webapp etc. they all sync the encrypted data to the docker. If one dies it's on the others if the docker dies it's on the cliÃ«nts.
 	The user sets a passphrase that works on all clients the server doesn't know anything except the size.
 	A docker container is an easy way to host a service but also on someone's homelab if you have a fill in field for the server address the user could choose to do local sync and skip the internet and keep privacy.
 

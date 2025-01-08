@@ -1,0 +1,37 @@
+# Set this file as the root .editorconfig
+root = true
+
+# Apply to all files
+[*]
+# Ensure UTF-8 encoding without BOM (recommended for cross-platform compatibility)
+charset = utf-8
+
+# Use LF as the line ending (Unix-style line endings)
+end_of_line = lf
+
+# Trim trailing whitespace
+trim_trailing_whitespace = true
+
+# Ensure files end with a newline
+insert_final_newline = true
+
+# Use spaces for indentation
+indent_style = space
+
+# Set indentation size
+indent_size = 4
+
+# Set tab width
+tab_width = 4
+
+# Specific rules for text files
+[*.{txt,md,yml,json}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+# Specific rules for C# files
+[*.cs]
+dotnet_sort_system_directives_first = true
+csharp_style_namespace_declarations = file_scoped
