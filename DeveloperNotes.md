@@ -127,12 +127,12 @@ run on Android emulator:
     https://dev.to/csharpfritz/i-built-an-android-app-on-my-linux-machine-using-net-7-and-maui-41if
 
 F-Droid
-	not possible: https://forum.f-droid.org/t/why-isnt-c-net-maui-supported/24842
+    not possible: https://forum.f-droid.org/t/why-isnt-c-net-maui-supported/24842
 
 APKPure
-	https://apkpure.com/submit-apk
-	https://developer.apkpure.com/
-	https://iphone.apkpure.com/ipa-install-online
+    https://apkpure.com/submit-apk
+    https://developer.apkpure.com/
+    https://iphone.apkpure.com/ipa-install-online
 
 ---------------------------------------------------------------------------------------------------
 
@@ -214,8 +214,8 @@ using Microsoft.Win32; OpenFileDialog / SaveFileDialog
 using System.Windows.Forms; OpenFileDialog / SaveFileDialog
 
 PhotinoBlazorApp app = builder.Build();
-	app.MainWindow.ShowSaveFile();
-	app.MainWindow.ShowOpenFile();
+    app.MainWindow.ShowSaveFile();
+    app.MainWindow.ShowOpenFile();
 
 ---------------------------------------------------------------------------------------------------
 
@@ -298,15 +298,15 @@ Virtualize					https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore
 ---------------------------------------------------------------------------------------------------
 
 - Calendar
-	- 7 row, one for each day of the week
-	- 6 columns = one month - 4 full weeks = 28 - another 0/1/2/3 days can take max 2 weeks more
-	- find the last monday of the previous month
-		DateTime currentDate = DateTime.Now;
-		DateTime lastDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-		DateTime lastMonday = lastDayOfMonth.AddDays((int)DayOfWeek.Monday - (int)lastDayOfMonth.DayOfWeek);
-	- previous month DaysInMonth
-	- this month DaysInMonth
-	- next month until sunday - until max 14.
+    - 7 row, one for each day of the week
+    - 6 columns = one month - 4 full weeks = 28 - another 0/1/2/3 days can take max 2 weeks more
+    - find the last monday of the previous month
+        DateTime currentDate = DateTime.Now;
+        DateTime lastDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+        DateTime lastMonday = lastDayOfMonth.AddDays((int)DayOfWeek.Monday - (int)lastDayOfMonth.DayOfWeek);
+    - previous month DaysInMonth
+    - this month DaysInMonth
+    - next month until sunday - until max 14.
 
 ---------------------------------------------------------------------------------------------------
 
@@ -385,8 +385,8 @@ window.addEventListener("resize", function() {
 ---------------------------------------------------------------------------------------------------
 
 The path that works is within the App Sandbox:
-	~/Library/Containers/app-bundle-id/Data/
-	/Users/ddarby/Library/Containers/com.cerescape.Accountable/Data/Documents/
+    ~/Library/Containers/app-bundle-id/Data/
+    /Users/ddarby/Library/Containers/com.cerescape.Accountable/Data/Documents/
 
 System.Environment.SpecialFolder.ApplicationData
 System.Environment.SpecialFolder.LocalApplicationData
@@ -398,26 +398,26 @@ Microsoft.Maui.Storage.FileSystem.Current.AppDataDirectory
 "C:\\Users\\Urban\\AppData\\Local\\Packages\\ididit.blazor.maui_9zz4h110yvjzm\\LocalState"
 
 public string CacheDirectory
-	=> PlatformCacheDirectory;
+    => PlatformCacheDirectory;
 
 public string AppDataDirectory
-	=> PlatformAppDataDirectory;
+    => PlatformAppDataDirectory;
 
 static string CleanPath(string path) =>
-	string.Join("_", path.Split(Path.GetInvalidFileNameChars()));
+    string.Join("_", path.Split(Path.GetInvalidFileNameChars()));
 
 static string AppSpecificPath =>
-	Path.Combine(CleanPath(AppInfoImplementation.PublisherName), CleanPath(AppInfo.PackageName));
+    Path.Combine(CleanPath(AppInfoImplementation.PublisherName), CleanPath(AppInfo.PackageName));
 
 string PlatformCacheDirectory
-	=> AppInfoUtils.IsPackagedApp
-		? ApplicationData.Current.LocalCacheFolder.Path
-		: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppSpecificPath, "Cache");
+    => AppInfoUtils.IsPackagedApp
+        ? ApplicationData.Current.LocalCacheFolder.Path
+        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppSpecificPath, "Cache");
 
 string PlatformAppDataDirectory
-	=> AppInfoUtils.IsPackagedApp
-		? ApplicationData.Current.LocalFolder.Path
-		: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppSpecificPath, "Data");
+    => AppInfoUtils.IsPackagedApp
+        ? ApplicationData.Current.LocalFolder.Path
+        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppSpecificPath, "Data");
 
 ---------------------------------------------------------------------------------------------------
 
@@ -448,20 +448,20 @@ AndroidLinkMode=None is the same as setting PublishTrimmed=false
 </PropertyGroup>
 
 <PropertyGroup Condition="$(TargetFramework.Contains('-android')) and $(Configuration)=='Release'">
-	<AndroidLinkResources>true</AndroidLinkResources>
-	<AndroidLinkMode>None</AndroidLinkMode>
-	<RunAOTCompilation>false</RunAOTCompilation>
-	<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <AndroidLinkResources>true</AndroidLinkResources>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <RunAOTCompilation>false</RunAOTCompilation>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
 </PropertyGroup>
 
 <PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and $(Configuration)=='Release'">
-	<MtouchLink>None</MtouchLink>
+    <MtouchLink>None</MtouchLink>
 </PropertyGroup>
 
 <PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
-	<AndroidLinkMode>None</AndroidLinkMode>
-	<RunAOTCompilation>false</RunAOTCompilation>
-	<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <RunAOTCompilation>false</RunAOTCompilation>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
 </PropertyGroup>
 
 ---------------------------------------------------------------------------------------------------
@@ -572,46 +572,46 @@ https://github.com/tryphotino/photino.Documentation/issues/18
 https://github.com/tryphotino/photino.Samples/tree/debug/Photino.PublishPhotino
 
 Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
-	https://snapcraft.io/docs/dotnet-apps
-	https://snapcraft.io/docs/dotnet-plugin
+    https://snapcraft.io/docs/dotnet-apps
+    https://snapcraft.io/docs/dotnet-plugin
 
-	https://snapcraft.io/docs/gnome-extension
-	extensions: [gnome]
+    https://snapcraft.io/docs/gnome-extension
+    extensions: [gnome]
 
-	https://snapcraft.io/docs/snapcraft-yaml-schema
+    https://snapcraft.io/docs/snapcraft-yaml-schema
 
-	sudo snap install snapcraft --classic
+    sudo snap install snapcraft --classic
 
-	By default, Snapcraft relies on a build provider to create an isolated build environment inside which applications can be built and packaged as snaps without changing the host system.
+    By default, Snapcraft relies on a build provider to create an isolated build environment inside which applications can be built and packaged as snaps without changing the host system.
 
-	sudo snap install lxd
+    sudo snap install lxd
 
-	lxd init --auto
+    lxd init --auto
 
-	snapcraft --debug
+    snapcraft --debug
 
-	sudo snap install openhabittracker_1.0.0_amd64.snap --dangerous --devmode
+    sudo snap install openhabittracker_1.0.0_amd64.snap --dangerous --devmode
 
-	snap list
+    snap list
 
-	snap run openhabittracker
+    snap run openhabittracker
 
-	snapcraft login
+    snapcraft login
 
-	snapcraft upload --release=stable openhabittracker_1.0.0_amd64.snap
+    snapcraft upload --release=stable openhabittracker_1.0.0_amd64.snap
 
-	snapcraft status openhabittracker
+    snapcraft status openhabittracker
 
-	https://snapcraft.io/docs/registering-your-app-name
-	https://snapcraft.io/account
-	https://snapcraft.io/docs/pre-built-apps
+    https://snapcraft.io/docs/registering-your-app-name
+    https://snapcraft.io/account
+    https://snapcraft.io/docs/pre-built-apps
 
-	https://snapcraft.io/docs/gpu-support
+    https://snapcraft.io/docs/gpu-support
 
-	https://snapcraft.io/snaps
-	https://dashboard.snapcraft.io/register-snap/
-	https://dashboard.snapcraft.io/register-snap-feedback/openhabittracker/
+    https://snapcraft.io/snaps
+    https://dashboard.snapcraft.io/register-snap/
+    https://dashboard.snapcraft.io/register-snap-feedback/openhabittracker/
 
-	https://github.com/AvaloniaUI/Avalonia/discussions/15245
-	https://forum.snapcraft.io/t/launching-net-7-binaries-seems-is-broken/37880
-	https://forum.snapcraft.io/t/problem-to-build-snap-for-net6-0/31251
+    https://github.com/AvaloniaUI/Avalonia/discussions/15245
+    https://forum.snapcraft.io/t/launching-net-7-binaries-seems-is-broken/37880
+    https://forum.snapcraft.io/t/problem-to-build-snap-for-net6-0/31251
