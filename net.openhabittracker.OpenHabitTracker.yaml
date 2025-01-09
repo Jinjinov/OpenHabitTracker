@@ -31,7 +31,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/Jinjinov/OpenHabitTracker.git
-        tag: 1.1.0.3
+        tag: 1.1.0.4
       - ./nuget-sources.json
     build-commands:
       - dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net9.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true --source ./nuget-sources
