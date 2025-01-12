@@ -68,6 +68,10 @@ email will be unique user id
 requires scope with permission to get email
 store refresh token for each cloud provider
 
+all client/server communication: (including the GUID key)
+    blazor server: DI / SignalR
+    blazor wasm, windows, linux, macOS, iOS, android: REST API endpoints
+
 ---------------------------------------------------------------------------------------------------
 
 Example .env File:
