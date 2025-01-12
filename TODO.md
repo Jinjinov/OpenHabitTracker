@@ -468,8 +468,7 @@ copy Loop Habit Tracker
 - don't use `StateHasChanged()`
 - don't do this: current screen changed -> save current screen to settings -> data changed -> refresh all
 
-what is wrong with ididit:
-    - I'm not doing the critical tasks - because I see too many unimportant tasts that are overdue and I am satisfied with completing them
+what is wrong: I'm not doing the critical tasks - because I see too many unimportant tasts that are overdue and I am satisfied with completing them
 
 email: copy task list as HTML with checkboxes to clipboard
 sms, message: copy task list with Unicode checkboxes
