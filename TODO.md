@@ -83,6 +83,7 @@ Example docker-compose.yml:
       app:
         image: your-server-image
         environment:
+          - OWNER_NAME=${OWNER_NAME}  # Use the name from the .env file
           - SECRET_KEY=${SECRET_KEY}  # Use the key from the .env file
         ports:
           - "5000:5000"
@@ -91,6 +92,7 @@ Server:
 
     public class ServerConfiguration
     {
+        public string OwnerName { get; set; }
         public string SecretKey { get; set; }
     }
 
@@ -99,8 +101,9 @@ Server:
         public void ConfigureServices(IServiceCollection services)
         {
             // Get the key from environment variables
+            var ownerName = Environment.GetEnvironmentVariable("OWNER_NAME");
             var secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
-            services.AddSingleton(new ServerConfiguration { SecretKey = secretKey });
+            services.AddSingleton(new ServerConfiguration { OwnerName = ownerName, SecretKey = secretKey });
         }
 
         public void Configure(IApplicationBuilder app)
