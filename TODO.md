@@ -37,15 +37,123 @@ build photino.Native with C++ / Docker
     https://github.com/flyingpie/photino.Native/tree/webkit41
     https://github.com/flyingpie/photino.Native/pull/1
 
+git branch tag - in yaml
+    org.freedesktop.Platform, org.freedesktop.Sdk
+    org.gnome.Platform, org.gnome.Sdk
+    org.kde.Platform, org.kde.Sdk
+    io.elementary.Platform, io.elementary.Sdk
+
 ---------------------------------------------------------------------------------------------------
 
 !!! add Google Drive
     Blazor WASM -> Google Drive REST API
     Blazor Desktop -> Google Drive API
-!!! add Blazor Server
+!!! add Blazor Server - OAuth REST, CRUD REST, SignalR for instant UI refresh on multiple devices
     Blazor Mobile -> Blazor Server
     Blazor Server -> Google Drive API
     https://app.openhabittracker.net/ -> https://pwa.openhabittracker.net/
+
+---------------------------------------------------------------------------------------------------
+
+only blazor server will offer online sync 
+
+login will be with Google, Microsoft, DropBox 
+email will be unique user id
+requires scope with permission to get email
+store refresh token for each cloud provider
+
+blazor server will require guid key on app.*
+offer pwa.* for offline version
+offer docker for own server
+
+---------------------------------------------------------------------------------------------------
+
+Example .env File:
+
+    SECRET_KEY=my-super-secret-key-1234
+
+Example docker-compose.yml:
+
+    version: '3.8'
+
+    services:
+      app:
+        image: your-server-image
+        environment:
+          - SECRET_KEY=${SECRET_KEY}  # Use the key from the .env file
+        ports:
+          - "5000:5000"
+
+Server:
+
+    public class ServerConfiguration
+    {
+        public string SecretKey { get; set; }
+    }
+
+    public class Startup
+    {
+        public void ConfigureServices(IServiceCollection services)
+        {
+            // Get the key from environment variables
+            var secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
+            services.AddSingleton(new ServerConfiguration { SecretKey = secretKey });
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+            app.UseRouting();
+            app.MapPost("/auth", (ServerConfiguration config, [FromBody] string key) =>
+            {
+                if (key != config.SecretKey)
+                {
+                    return Results.Unauthorized("Invalid key.");
+                }
+
+                return Results.Ok("Authenticated.");
+            });
+        }
+    }
+
+Client:
+
+    @inject HttpClient HttpClient
+    @inject SecureStorage SecureStorage
+
+    @code {
+        private string _serverIp;
+        private string _userKey;
+
+        private HubConnection _hubConnection;
+
+        private async Task ConnectToServer()
+        {
+            if (string.IsNullOrEmpty(_serverIp) || string.IsNullOrEmpty(_userKey))
+            {
+                // Prompt user to enter both IP and Key
+                return;
+            }
+
+            // Authenticate with the server using the key
+            var response = await HttpClient.PostAsJsonAsync($"http://{_serverIp}:5000/auth", _userKey);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Key is valid, now proceed to connect to SignalR Hub
+                _hubConnection = new HubConnectionBuilder()
+                    .WithUrl($"http://{_serverIp}:5000/chatHub")
+                    .Build();
+
+                await _hubConnection.StartAsync();
+                // Proceed to chat or other operations
+            }
+            else
+            {
+                // Invalid key, show error message
+                ShowErrorMessage("Invalid key or server IP.");
+            }
+        }
+    }
 
 ---------------------------------------------------------------------------------------------------
 
