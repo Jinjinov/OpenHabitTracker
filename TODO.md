@@ -55,8 +55,8 @@ git branch tag - in yaml
 
 ---------------------------------------------------------------------------------------------------
 
-only blazor server will offer online sync - one user with multiple devices per server
-blazor server will require guid key on app.*
+only blazor server will offer online sync - one user per server
+blazor server will require guid key on app.* - saved with Blazored.LocalStorage on client / browser
 offer pwa.* for offline version
 offer docker for own server
 
