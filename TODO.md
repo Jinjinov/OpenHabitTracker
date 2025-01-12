@@ -55,10 +55,13 @@ git branch tag - in yaml
 
 ---------------------------------------------------------------------------------------------------
 
-only blazor server will offer online sync - one user per server
+only blazor server will offer online sync - one user per server https://app.openhabittracker.net
 blazor server will require guid key on app.* - saved with Blazored.LocalStorage on client / browser
-offer pwa.* for offline version
+offer pwa.* for offline version https://pwa.openhabittracker.net
 offer docker for own server
+    Docker Hub : https://hub.docker.com
+    GitHub Container Registry : https://github.com/Jinjinov/OpenHabitTracker/packages
+    https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry
 
 login will be with Google, Microsoft, Dropbox 
 email will be unique user id
@@ -69,6 +72,7 @@ store refresh token for each cloud provider
 
 Example .env File:
 
+    OWNER_NAME=Jinjinov
     SECRET_KEY=my-super-secret-key-1234
 
 Example docker-compose.yml:
