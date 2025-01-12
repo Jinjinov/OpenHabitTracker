@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ididit="clr-namespace:OpenHabitTracker.Blazor;assembly=OpenHabitTracker.Blazor"
+        xmlns:oht="clr-namespace:OpenHabitTracker.Blazor;assembly=OpenHabitTracker.Blazor"
         xmlns:blazor="clr-namespace:Microsoft.AspNetCore.Components.WebView.Wpf;assembly=Microsoft.AspNetCore.Components.WebView.Wpf"
         xmlns:web="clr-namespace:Microsoft.AspNetCore.Components.Web;assembly=Microsoft.AspNetCore.Components.Web"
         mc:Ignorable="d"
@@ -11,7 +11,7 @@
     
     <blazor:BlazorWebView HostPage="wwwroot\index.html" Services="{StaticResource services}" x:Name="blazorWebView">
         <blazor:BlazorWebView.RootComponents>
-            <blazor:RootComponent Selector="#app" ComponentType="{x:Type ididit:Routes}" />
+            <blazor:RootComponent Selector="#app" ComponentType="{x:Type oht:Routes}" />
             <blazor:RootComponent Selector="head::after" ComponentType="{x:Type web:HeadOutlet}" />
         </blazor:BlazorWebView.RootComponents>
     </blazor:BlazorWebView>
