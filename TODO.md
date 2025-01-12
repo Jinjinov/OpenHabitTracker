@@ -55,16 +55,15 @@ git branch tag - in yaml
 
 ---------------------------------------------------------------------------------------------------
 
-only blazor server will offer online sync 
+only blazor server will offer online sync - one user with multiple devices per server
+blazor server will require guid key on app.*
+offer pwa.* for offline version
+offer docker for own server
 
 login will be with Google, Microsoft, Dropbox 
 email will be unique user id
 requires scope with permission to get email
 store refresh token for each cloud provider
-
-blazor server will require guid key on app.*
-offer pwa.* for offline version
-offer docker for own server
 
 ---------------------------------------------------------------------------------------------------
 
