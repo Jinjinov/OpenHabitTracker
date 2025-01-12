@@ -57,7 +57,7 @@ git branch tag - in yaml
 
 only blazor server will offer online sync 
 
-login will be with Google, Microsoft, DropBox 
+login will be with Google, Microsoft, Dropbox 
 email will be unique user id
 requires scope with permission to get email
 store refresh token for each cloud provider
@@ -259,7 +259,9 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
 ---------------------------------------------------------------------------------------------------
 
-Auto sync to external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox)
+Auto sync to external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox) - use MyDocuments instead of ApplicationData
+
+foreach(folder in enum SpecialFolder) string path = Environment.GetFolderPath(folder); // Windows, Linux, macOS, iOS, Android
 
 save and load without file dialog
 sync: - save last loaded filename to DB, load if there is a new file / more recent
@@ -396,6 +398,8 @@ OpenHabitTracker.Blazor.Server:
     - @page "/Error"
     - app.UseExceptionHandler("/Error");
 
+---------------------------------------------------------------------------------------------------
+
 Google Keep
     - title
     - pin
@@ -456,13 +460,6 @@ copy Loop Habit Tracker
 - keyboard navigation
 - benchmark: method time & render time
 
-OpenHabitTracker.Rest for SQL server for WebView
-
-table Users
-    User authentication
-    ... or ...
-    Google, Microsoft, Apple login
-
 - ASAP tasks
     - when, where, contact/company name, address, phone number, working hours, website, email
 - date & time tasks
@@ -473,7 +470,6 @@ table Users
 
 what is wrong with ididit:
     - I'm not doing the critical tasks - because I see too many unimportant tasts that are overdue and I am satisfied with completing them
-    - show only highest priority overdue tasks
 
 email: copy task list as HTML with checkboxes to clipboard
 sms, message: copy task list with Unicode checkboxes
