@@ -49,18 +49,13 @@ all client/server communication: (including the GUID key)
 ---------------------------------------------------------------------------------------------------
 
 1.
-https://app.openhabittracker.net/ -> https://pwa.openhabittracker.net/
-    website
-    Readme.md
-
-2.
 only blazor server will offer online sync - one user per server https://app.openhabittracker.net
 blazor server will require guid key on app.* - saved with Blazored.LocalStorage on client / browser
 
-3.
+2.
 offer pwa.* for offline version https://pwa.openhabittracker.net
 
-4.
+3.
 offer docker image for own server
     Docker Hub : https://hub.docker.com
     GitHub Container Registry : https://github.com/Jinjinov/OpenHabitTracker/packages

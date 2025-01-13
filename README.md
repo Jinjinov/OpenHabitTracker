@@ -4,7 +4,7 @@ https://openhabittracker.net
 
 ## App:
 
-https://app.openhabittracker.net
+https://pwa.openhabittracker.net
 
 Take Markdown notes, plan tasks, track habits
 
