@@ -31,20 +31,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-!!! fix Flatpak / Flathub - on the new PC:
-
-build photino.Native with C++ / Docker
-    https://github.com/flyingpie/photino.Native/tree/webkit41
-    https://github.com/flyingpie/photino.Native/pull/1
-
-git branch tag - in yaml
-    org.freedesktop.Platform, org.freedesktop.Sdk
-    org.gnome.Platform, org.gnome.Sdk
-    org.kde.Platform, org.kde.Sdk
-    io.elementary.Platform, io.elementary.Sdk
-
----------------------------------------------------------------------------------------------------
-
 !!! add Google Drive
     Blazor WASM -> Google Drive REST API
     Blazor Desktop -> Google Drive API
@@ -204,91 +190,9 @@ ClientSideState:
 
 ---------------------------------------------------------------------------------------------------
 
-Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
-    error: 'net.openhabittracker' is not a valid application name: Names must contain at least 2 periods
+Auto sync to external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox)
 
-    https://github.com/flathub/org.freedesktop.Sdk.Extension.dotnet9
-
-    https://docs.flatpak.org/en/latest/dotnet.html
-    https://docs.flatpak.org/en/latest/available-runtimes.html
-
-    https://flatpak.org/setup/Ubuntu
-    https://github.com/flatpak/flatpak-builder-tools
-    https://github.com/flatpak/flatpak-builder-tools/tree/master/dotnet
-
-    https://github.com/NickvisionApps/FlatpakGenerator
-
-    sudo apt install flatpak
-
-    sudo apt install gnome-software-plugin-flatpak
-
-    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
-    sudo apt install flatpak-builder
-
-        flatpak-builder --version
-
-        sudo add-apt-repository ppa:flatpak/development
-        sudo apt update
-        sudo apt install flatpak-builder
-
-    runtime: org.freedesktop.Platform
-    runtime-version: '23.08'
-    sdk: org.freedesktop.Sdk
-
-    flatpak-builder build-dir --user --install-deps-from=flathub --download-only net.openhabittracker.OpenHabitTracker.yaml --force-clean
-
-    <Configuration>Release</Configuration>
-    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-    <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>true</SelfContained>
-
-    python3 flatpak-dotnet-generator.py --dotnet 9 --freedesktop 24.08 nuget-sources.json OpenHabitTracker/OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
-
-    desktop-file-validate net.openhabittracker.OpenHabitTracker.desktop
-
-    sudo apt install appstream-util
-    appstream-util validate-relax net.openhabittracker.OpenHabitTracker.metainfo.xml
-    appstream-util validate net.openhabittracker.OpenHabitTracker.metainfo.xml
-
-    flatpak install -y flathub org.flatpak.Builder
-
-    flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream net.openhabittracker.OpenHabitTracker.metainfo.xml
-
-    flatpak-builder build-dir --user --force-clean --install --repo=repo net.openhabittracker.OpenHabitTracker.yaml
-
-    flatpak run net.openhabittracker.OpenHabitTracker
-
-        https://docs.flathub.org/docs/for-app-authors/linter/
-
-        https://github.com/flathub-infra/flatpak-builder-lint
-        https://github.com/flathub-infra/flatpak-builder-lint#flatpak
-
-        flatpak install flathub -y org.flatpak.Builder
-        flatpak run --command=flatpak-builder-lint org.flatpak.Builder --help
-
-        flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest net.openhabittracker.OpenHabitTracker.yaml
-        flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo
-                                                                        ^	^	the second "repo" is the folder named "repo" created by flatpak-builder in the same folder as the manifest yaml file
-
-        https://docs.flathub.org/docs/for-app-authors/submission/#submission-pr
-
-        Comment in the GitHub pull request:
-            bot, build net.openhabittracker.OpenHabitTracker
-
-    https://flathub.org/
-    https://github.com/flathub/flathub
-
-    https://github.com/flathub/org.nickvision.money/blob/master/org.nickvision.money.json
-    https://github.com/flathub/org.nickvision.tubeconverter/blob/master/org.nickvision.tubeconverter.json
-
-    https://github.com/flathub/net.jenyay.Outwiker/blob/master/net.jenyay.Outwiker.yml
-    https://github.com/flathub/in.cinny.Cinny/blob/master/in.cinny.Cinny.yml
-
----------------------------------------------------------------------------------------------------
-
-Auto sync to external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox) - use MyDocuments instead of ApplicationData
+use MyDocuments instead of ApplicationData
 
 foreach(folder in enum SpecialFolder) string path = Environment.GetFolderPath(folder); // Windows, Linux, macOS, iOS, Android
 
