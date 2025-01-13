@@ -31,19 +31,26 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-!!! add Google Drive
+add Google Drive
     Blazor WASM -> Google Drive REST API
     Blazor Desktop -> Google Drive API
-!!! add Blazor Server - OAuth REST, CRUD REST, SignalR for instant UI refresh on multiple devices
+add Blazor Server - OAuth REST, CRUD REST, SignalR for instant UI refresh on multiple devices
     Blazor Mobile -> Blazor Server
     Blazor Server -> Google Drive API
-    https://app.openhabittracker.net/ -> https://pwa.openhabittracker.net/
+
+1.
+https://app.openhabittracker.net/ -> https://pwa.openhabittracker.net/
 
 ---------------------------------------------------------------------------------------------------
 
+2.
 only blazor server will offer online sync - one user per server https://app.openhabittracker.net
 blazor server will require guid key on app.* - saved with Blazored.LocalStorage on client / browser
+
+3.
 offer pwa.* for offline version https://pwa.openhabittracker.net
+
+4.
 offer docker image for own server
     Docker Hub : https://hub.docker.com
     GitHub Container Registry : https://github.com/Jinjinov/OpenHabitTracker/packages
