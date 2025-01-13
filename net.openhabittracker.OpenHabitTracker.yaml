@@ -1,10 +1,7 @@
 id: net.openhabittracker.OpenHabitTracker
-#runtime: org.freedesktop.Platform
-#runtime-version: '24.08'
-#sdk: org.freedesktop.Sdk
-runtime: org.gnome.Platform
-runtime-version: '47'
-sdk: org.gnome.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.dotnet9
 build-options:
@@ -34,10 +31,18 @@ modules:
     sources:
       - type: git
         url: https://github.com/Jinjinov/OpenHabitTracker.git
-        tag: 1.1.0.5-gnome
+        tag: 1.1.0.6
       - ./nuget-sources.json
+    build-options:
+      arch:
+        aarch64:
+          env:
+            RUNTIME: linux-arm64
+        x86_64:
+          env:
+            RUNTIME: linux-x64
     build-commands:
-      - dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net9.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true --source ./nuget-sources
+      - dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net9.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true --source ./nuget-sources --source /usr/lib/sdk/dotnet9/nuget/packages
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r OpenHabitTracker.Blazor.Photino/bin/Release/net9.0/linux-x64/publish/* ${FLATPAK_DEST}/bin
       - install -Dm644 net.openhabittracker.OpenHabitTracker.desktop -t /app/share/applications/
