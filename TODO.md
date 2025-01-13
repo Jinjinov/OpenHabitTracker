@@ -240,6 +240,10 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
     python3 flatpak-dotnet-generator.py --dotnet 9 --freedesktop 24.08 nuget-sources.json OpenHabitTracker/OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
 
+    desktop-file-validate net.openhabittracker.OpenHabitTracker.desktop
+    sudo apt install appstream-util
+    appstream-util validate-relax net.openhabittracker.OpenHabitTracker.metainfo.xml
+
     flatpak-builder build-dir --user --force-clean --install --repo=repo net.openhabittracker.OpenHabitTracker.yaml
 
     flatpak run net.openhabittracker.OpenHabitTracker
