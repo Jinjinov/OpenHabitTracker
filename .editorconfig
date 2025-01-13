@@ -18,7 +18,7 @@ indent_size = 4
 
 trim_trailing_whitespace = true
 
-[*.{csproj,json,yaml}]
+[*.{csproj,json,yaml,xml,svg}]
 indent_size = 2
 
 # Two trailing spaces = line break in Markdown

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>net.openhabittracker.OpenHabitTracker</id>
-  <icon type="cached">net.openhabittracker.OpenHabitTracker</icon>
+  <icon type="stock">net.openhabittracker.OpenHabitTracker</icon>
   <launchable type="desktop-id">net.openhabittracker.OpenHabitTracker.desktop</launchable>
   <name>OpenHabitTracker</name>
   <developer_name>Jinjinov</developer_name>
-  <license>GPL-3.0-or-later</license>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <url type="homepage">https://openhabittracker.net</url>
@@ -69,9 +68,11 @@
       <caption>Backup</caption>
     </screenshot>
   </screenshots>
-  <release version="1.0.0" date="2024-12-31">
-    <description>
-      <p>Initial release of OpenHabitTracker.</p>
-    </description>
-  </release>
+  <releases>
+    <release version="1.0.0" date="2024-12-31">
+      <description>
+        <p>Initial release of OpenHabitTracker.</p>
+      </description>
+    </release>
+  </releases>
 </component>

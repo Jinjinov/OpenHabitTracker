@@ -252,6 +252,10 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
     appstream-util validate-relax net.openhabittracker.OpenHabitTracker.metainfo.xml
     appstream-util validate net.openhabittracker.OpenHabitTracker.metainfo.xml
 
+    flatpak install -y flathub org.flatpak.Builder
+
+    flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream net.openhabittracker.OpenHabitTracker.metainfo.xml
+
     flatpak-builder build-dir --user --force-clean --install --repo=repo net.openhabittracker.OpenHabitTracker.yaml
 
     flatpak run net.openhabittracker.OpenHabitTracker
