@@ -274,6 +274,9 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
         https://docs.flathub.org/docs/for-app-authors/submission/#submission-pr
 
+        Comment in the GitHub pull request:
+            bot, build net.openhabittracker.OpenHabitTracker
+
     https://flathub.org/
     https://github.com/flathub/flathub
 
