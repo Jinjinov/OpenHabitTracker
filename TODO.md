@@ -38,10 +38,20 @@ add Blazor Server - OAuth REST, CRUD REST, SignalR for instant UI refresh on mul
     Blazor Mobile -> Blazor Server
     Blazor Server -> Google Drive API
 
-1.
-https://app.openhabittracker.net/ -> https://pwa.openhabittracker.net/
+login will be with Google, Microsoft, Dropbox - requires scope with permission to get email
+email will be unique user id
+store the refresh token for each cloud provider
+
+all client/server communication: (including the GUID key)
+    blazor server: SignalR
+    blazor wasm, windows, linux, macOS, iOS, android: REST API endpoints
 
 ---------------------------------------------------------------------------------------------------
+
+1.
+https://app.openhabittracker.net/ -> https://pwa.openhabittracker.net/
+    website
+    Readme.md
 
 2.
 only blazor server will offer online sync - one user per server https://app.openhabittracker.net
@@ -55,14 +65,6 @@ offer docker image for own server
     Docker Hub : https://hub.docker.com
     GitHub Container Registry : https://github.com/Jinjinov/OpenHabitTracker/packages
     https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry
-
-login will be with Google, Microsoft, Dropbox - requires scope with permission to get email
-email will be unique user id
-store the refresh token for each cloud provider
-
-all client/server communication: (including the GUID key)
-    blazor server: SignalR
-    blazor wasm, windows, linux, macOS, iOS, android: REST API endpoints
 
 ---------------------------------------------------------------------------------------------------
 
