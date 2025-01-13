@@ -274,13 +274,11 @@ Blazor Server / Web
     column UserId in every other table
     EF Core: use `DbContextFactory`
 
-Host 24/7 on Raspberry Pi
+---------------------------------------------------------------------------------------------------
 
-    Simply put if one of the devices is off a docker (always running server) could hold the data for when another device comes online.
-    I have a service with the following parts.
-    Mobile Client - Server (docker container) - cliënt / laptop / webapp etc. they all sync the encrypted data to the docker. If one dies it's on the others if the docker dies it's on the cliënts.
-    The user sets a passphrase that works on all clients the server doesn't know anything except the size.
-    A docker container is an easy way to host a service but also on someone's homelab if you have a fill in field for the server address the user could choose to do local sync and skip the internet and keep privacy.
+Host 24/7 on
+    Raspberry Pi 5
+    Synology NAS DS224+
 
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
@@ -414,12 +412,3 @@ method trace logging - benchmark method performance
 https://learn.microsoft.com/en-us/aspnet/core/blazor/performance
 
 ---------------------------------------------------------------------------------------------------
-
-- The modules' title bars look and act too similar to fields which confuses the experience to me - I think that's the one simple biggest UI fix I'd make. 
-Make it a solid color and not part of the "add new" logic. 
-https://imgur.com/a/kYlVFMq
-
-- I feel like the modules should be collapsible? 
-I don't quite understand what the box that contains the up/straight line/down arrow/no symbol is for (prioritizing and sorting I'm assuming) but I keep clicking on that thinking it will collapse the module.
-
-- I'm a big fan of animations, and the simple ones are fairly easy with Blazor and CSS - even small or fast animations can make things feel much more intuitive
