@@ -44,18 +44,17 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 only blazor server will offer online sync - one user per server https://app.openhabittracker.net
 blazor server will require guid key on app.* - saved with Blazored.LocalStorage on client / browser
 offer pwa.* for offline version https://pwa.openhabittracker.net
-offer docker for own server
+offer docker image for own server
     Docker Hub : https://hub.docker.com
     GitHub Container Registry : https://github.com/Jinjinov/OpenHabitTracker/packages
     https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry
 
-login will be with Google, Microsoft, Dropbox 
+login will be with Google, Microsoft, Dropbox - requires scope with permission to get email
 email will be unique user id
-requires scope with permission to get email
-store refresh token for each cloud provider
+store the refresh token for each cloud provider
 
 all client/server communication: (including the GUID key)
-    blazor server: DI / SignalR
+    blazor server: SignalR
     blazor wasm, windows, linux, macOS, iOS, android: REST API endpoints
 
 ---------------------------------------------------------------------------------------------------
@@ -73,43 +72,61 @@ Example docker-compose.yml:
       app:
         image: your-server-image
         environment:
-          - OWNER_NAME=${OWNER_NAME}  # Use the name from the .env file
-          - SECRET_KEY=${SECRET_KEY}  # Use the key from the .env file
+          - AppSettings__OwnerName=${OWNER_NAME}
+          - AppSettings__SecretKey=${SECRET_KEY}
         ports:
           - "5000:5000"
 
+appsettings.json
+
+    {
+      "AppSettings": {
+        "OwnerName": "DefaultOwner",
+        "SecretKey": "default-secret-key"
+      }
+    }
+
 Server:
 
-    public class ServerConfiguration
+    public class AppSettings
     {
         public string OwnerName { get; set; }
         public string SecretKey { get; set; }
     }
 
-    public class Startup
+    var builder = WebApplication.CreateBuilder(args);
+
+    // Load configuration from appsettings.json and environment variables
+    builder.Configuration
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddEnvironmentVariables();
+
+    // Bind AppSettings section to a strongly-typed class
+    builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+    var app = builder.Build();
+
+    // Use the configuration in the app
+    app.MapGet("/", (IOptions<AppSettings> options) =>
     {
-        public void ConfigureServices(IServiceCollection services)
+        var appSettings = options.Value;
+        return $"Owner: {appSettings.OwnerName}";
+    });
+
+    app.UseRouting();
+
+    app.MapPost("/auth", (AppSettings config, [FromBody] string key) =>
+    {
+        if (key != config.SecretKey)
         {
-            // Get the key from environment variables
-            var ownerName = Environment.GetEnvironmentVariable("OWNER_NAME");
-            var secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
-            services.AddSingleton(new ServerConfiguration { OwnerName = ownerName, SecretKey = secretKey });
+            return Results.Unauthorized("Invalid key.");
         }
 
-        public void Configure(IApplicationBuilder app)
-        {
-            app.UseRouting();
-            app.MapPost("/auth", (ServerConfiguration config, [FromBody] string key) =>
-            {
-                if (key != config.SecretKey)
-                {
-                    return Results.Unauthorized("Invalid key.");
-                }
+        return Results.Ok("Authenticated.");
+    });
 
-                return Results.Ok("Authenticated.");
-            });
-        }
-    }
+    app.Run();
 
 Client:
 
