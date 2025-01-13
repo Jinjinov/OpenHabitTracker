@@ -11,6 +11,13 @@
   <url type="help">https://github.com/Jinjinov/OpenHabitTracker</url>
   <url type="bugtracker">https://github.com/Jinjinov/OpenHabitTracker/issues</url>
   <summary>Take notes, plan tasks, track habits</summary>
+  <categories>
+    <category>Office</category>
+  </categories>
+  <keywords>
+    <keyword>Open source</keyword>
+    <keyword>Habit tracker</keyword>
+  </keywords>
   <description>
     <p>OpenHabitTracker is:</p>
     <ul>
