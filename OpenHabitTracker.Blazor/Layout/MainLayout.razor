@@ -1,4 +1,4 @@
-﻿@using OpenHabitTracker.Blazor.Pages
+@using OpenHabitTracker.Blazor.Pages
 @using OpenHabitTracker.Data
 
 @inherits LayoutComponentBase
@@ -63,26 +63,47 @@
 
                 <div class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px">
 
-                @* Sidebar title *@
+                    @* Sidebar title *@
 
-                @if (_dynamicComponentType != typeof(Menu))
-                {
-                    <div class="input-group flex-nowrap my-1">
-                        <span class="input-group-text fw-bold text-primary flex-grow-1">@Loc[_titleByTypeName[_dynamicComponentType.Name]]</span>
-                        <button class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
-                    </div>
-                }
+                    @if (_dynamicComponentType != typeof(Menu))
+                    {
+                        <div class="input-group flex-nowrap my-1">
+                            <span class="input-group-text fw-bold text-primary flex-grow-1">@Loc[_titleByTypeName[_dynamicComponentType.Name]]</span>
+                            <button class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
+                        </div>
+                    }
 
-                @* Sidebar content *@
+                    @* Sidebar content *@
 
-                <DynamicComponent @ref="dynamicComponent" Type="_dynamicComponentType" Parameters="_dynamicComponentParametersByName.GetValueOrDefault(_dynamicComponentType.Name)" />
+                    <DynamicComponent @ref="dynamicComponent" Type="_dynamicComponentType" Parameters="_dynamicComponentParametersByName.GetValueOrDefault(_dynamicComponentType.Name)" />
 
                 </div>
             }
 
             @* Main body column *@
 
-            <CascadingValue Name="StateChanged" Value=@_stateChanged>
+            <div class="col child-column">
+                <table>
+                    @foreach (var group in Enum.GetValues<Environment.SpecialFolder>().OrderBy(folder => folder.ToString()).GroupBy(folder => IsTheoreticallyWritable(folder)))
+                    {
+                        <tr>
+                            <td colspan="3">
+                                <strong>@(group.Key ? "Writable" : "Non-Writable")</strong>
+                            </td>
+                        </tr>
+                        @foreach (var folder in group)
+                        {
+                            <tr>
+                                <td>@folder</td>
+                                <td>@group.Key</td>
+                                <td>@Environment.GetFolderPath(folder)</td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+
+            @* <CascadingValue Name="StateChanged" Value=@_stateChanged>
                 <CascadingValue Name="WindowDimensions" Value=@_windowDimensions>
                     <CascadingValue Name="DynamicComponentType" Value=@_dynamicComponentType>
                         <CascadingValue Name="ContentDeleted" Value=@_contentDeleted>
@@ -92,7 +113,7 @@
                         </CascadingValue>
                     </CascadingValue>
                 </CascadingValue>
-            </CascadingValue>
+            </CascadingValue> *@
 
         </div>
     }
@@ -218,6 +239,25 @@
             StateHasChanged();
 
             Logger.LogInformation("MainLayout.OnAfterRenderAsync end");
+        }
+    }
+
+    bool IsTheoreticallyWritable(Environment.SpecialFolder folder)
+    {
+        try
+        {
+            string path = Environment.GetFolderPath(folder);
+            if (string.IsNullOrEmpty(path)) return false;
+
+            // Test if we can create a temporary file
+            string testFile = Path.Combine(path, "writetest.tmp");
+            File.WriteAllText(testFile, "test");
+            File.Delete(testFile);
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 
