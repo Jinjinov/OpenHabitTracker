@@ -60,6 +60,9 @@
       function microsoftStoreVisit() {
         gtag('event', 'oht_microsoft_store_visit', {'transport': 'beacon'});
       }
+      function flathubStoreVisit() {
+        gtag('event', 'oht_flathub_store_visit', {'transport': 'beacon'});
+      }
       function snapStoreVisit() {
         gtag('event', 'oht_snap_store_visit', {'transport': 'beacon'});
       }
@@ -222,6 +225,7 @@
 
           <h4 class="card-subtitle my-3 text-muted"><span class="caveat large">OpenHabitTracker</span> is available on</h4>
           <p><i class="fab fa-microsoft"></i> Windows:<br><a href="https://apps.microsoft.com/detail/9mwzmlxzzllr" onclick="microsoftStoreVisit()" class="card-link"><img src="icons/Microsoft.svg" style="height:64px;"></a></p>
+          <p><i class="fab fa-linux"></i> Linux - Flathub:<br><a href="https://flathub.org/apps/net.openhabittracker.OpenHabitTracker" onclick="flathubStoreVisit()" class="card-link"><img src="icons/Flathub.svg" style="height:64px;"></a></p>
           <p><i class="fab fa-linux"></i> Linux - Snap Store:<br><a href="https://snapcraft.io/openhabittracker" onclick="snapStoreVisit()" class="card-link"><img src="icons/SnapStore.svg" style="height:64px;"></a></p>
           <p><i class="fab fa-android"></i> Android:<br><a href="https://play.google.com/store/apps/details?id=net.openhabittracker" onclick="googleStoreVisit()" class="card-link"><img src="icons/Google.svg" style="height:64px;"></a></p>
           <p><i class="fab fa-apple"></i> iOS:<br><a href="https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=iphone" onclick="iosStoreVisit()" class="card-link"><img src="icons/AppStore.svg" style="height:64px;"></a></p>

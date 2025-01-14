@@ -28,6 +28,9 @@ Key Features:
 Windows:  
 [<img src="OpenHabitTracker.Web/icons/Microsoft.svg" height="48">](https://apps.microsoft.com/detail/9mwzmlxzzllr)
 
+Linux - Flathub:  
+[<img src="OpenHabitTracker.Web/icons/Flathub.svg" height="48">](https://flathub.org/apps/net.openhabittracker.OpenHabitTracker)
+
 Linux - Snap Store:  
 [<img src="OpenHabitTracker.Web/icons/SnapStore.svg" height="48">](https://snapcraft.io/openhabittracker)
 
