@@ -245,12 +245,14 @@ ClientSideState:
 
 save SQLite DB in MyDocuments instead of ApplicationData
 
-use an external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox)
+    use an external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox)
 
-foreach(folder in enum SpecialFolder) string path = Environment.GetFolderPath(folder); // Windows, Linux, macOS, iOS, Android
+    foreach(folder in enum SpecialFolder) string path = Environment.GetFolderPath(folder); // Windows, Linux, macOS, iOS, Android
 
-save and load without file dialog
-sync: - save last loaded filename to DB, load if there is a new file / more recent
+    LocalApplicationData, ApplicationData
+    UserProfile
+    Personal, MyDocuments
+    Desktop, DesktopDirectory
 
 AndroidManifest.xml
 MANAGE_EXTERNAL_STORAGE
