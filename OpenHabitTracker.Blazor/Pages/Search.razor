@@ -1,4 +1,4 @@
-﻿@page "/search"
+@page "/search"
 
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
@@ -204,16 +204,6 @@
 
         return null;
     }
-
-    Dictionary<Priority, string> _priorityNameByPriority = new()
-    {
-        { Priority.None, "None" },
-        { Priority.VeryLow, "Very low" },
-        { Priority.Low, "Low" },
-        { Priority.Medium, "Medium" },
-        { Priority.High, "High" },
-        { Priority.VeryHigh, "Very high" },
-    };
 
     protected override async Task OnInitializedAsync()
     {

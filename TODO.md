@@ -31,6 +31,38 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+1.
+protect Blazor Server with key, deploy it to https://app.openhabittracker.net, create Docker image, host Docker image on Raspberry Pi 5 / Synology NAS DS224+
+
+2.
+add option to save SQLite DB in MyDocuments instead of ApplicationData
+
+3.
+add Google Drive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
+
+4.
+add Microsoft OneDrive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
+
+5.
+add Dropbox OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
+
+6.
+refactor OpenHabitTracker
+
+7.
+run Jetbrains Rider code analysis
+
+8.
+add comments to methods
+
+9.
+use DB in Blazor Server for multi user sync, use Google, Microsoft, Dropbox OAuth for login, add REST API endpoints and use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
+
+10.
+write unit tests with Appium / bUnit
+
+---------------------------------------------------------------------------------------------------
+
 add Google Drive
     Blazor WASM -> Google Drive REST API
     Blazor Desktop -> Google Drive API
@@ -211,9 +243,9 @@ ClientSideState:
 
 ---------------------------------------------------------------------------------------------------
 
-Auto sync to external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox)
+save SQLite DB in MyDocuments instead of ApplicationData
 
-use MyDocuments instead of ApplicationData
+use an external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox)
 
 foreach(folder in enum SpecialFolder) string path = Environment.GetFolderPath(folder); // Windows, Linux, macOS, iOS, Android
 
@@ -396,6 +428,8 @@ Google Keep
         - underline
         - clear (\) text (T) formatting
 
+---------------------------------------------------------------------------------------------------
+
 - filters are query parameters
 
 ---------------------------------------------------------------------------------------------------
@@ -408,24 +442,20 @@ copy Loop Habit Tracker
 - Best streaks (from date - to date)
 - Frequency (by day of the week - continuous calendar, without dates, done count grouped by days of the week)
 
+---------------------------------------------------------------------------------------------------
+
 - drag & drop reorder
 - keyboard navigation
 - benchmark: method time & render time
 
-- ASAP tasks
-    - when, where, contact/company name, address, phone number, working hours, website, email
-- date & time tasks
+- ASAP tasks: when, where, contact/company name, address, phone number, working hours, website, email
 
 - don't use `event` to refresh everything on every change
 - don't use `StateHasChanged()`
 - don't do this: current screen changed -> save current screen to settings -> data changed -> refresh all
 
-what is wrong: I'm not doing the critical tasks - because I see too many unimportant tasts that are overdue and I am satisfied with completing them
-
 email: copy task list as HTML with checkboxes to clipboard
 sms, message: copy task list with Unicode checkboxes
-
-[X] Category must be set when creating a new note
 
 virtualized container
 
@@ -433,3 +463,5 @@ method trace logging - benchmark method performance
 https://learn.microsoft.com/en-us/aspnet/core/blazor/performance
 
 ---------------------------------------------------------------------------------------------------
+
+what is wrong: I'm not doing the critical tasks - because I see too many unimportant tasts that are overdue and I am satisfied with completing them
