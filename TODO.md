@@ -35,7 +35,7 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 protect Blazor Server with key, deploy it to https://app.openhabittracker.net, create Docker image, host Docker image on Raspberry Pi 5 / Synology NAS DS224+
 
 2.
-add option to save SQLite DB in MyDocuments instead of ApplicationData
+add option to save SQLite DB in MyDocuments instead of ApplicationData - save this option with with Blazored.LocalStorage
 
 3.
 add Google Drive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
