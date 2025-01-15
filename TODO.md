@@ -31,6 +31,13 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+i have a Blazor Server app. i want my users to login to their cloud storage (Google Drive or Microsoft OneDrive or Apple iCloud or Dropbox) so that my app can save and read files to their cloud storage.
+when users login to their cloud storage i want to get their name and their email. i want to store their name and email in my db.
+i also want their login to cloud storage to serve as a login to my Blazor Server app. i want my app to remember their login between sessions.
+besides users loggin in to their cloud storage, i also want a separate login that is not tied to a cloud storage account.
+i also want my app to remember this login between sessions. do you understand which features i want?
+
+
 1.
 protect Blazor Server with key, deploy it to https://app.openhabittracker.net
 2.
@@ -46,13 +53,22 @@ add comments to methods
 add REST API endpoints for online data sync to Blazor Server - use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
 
 7.
-add Google Drive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui - add backup to Google Drive
+add OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
+    Google Drive
+    Microsoft OneDrive
+    Dropbox
+
 8.
-add Microsoft OneDrive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui - add backup to OneDrive
+use Google, Microsoft, Dropbox OAuth for unique user id and login
+
 9.
-add Dropbox OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui - add backup to Dropbox
+add backup to
+    Google Drive
+    Microsoft OneDrive
+    Dropbox
+
 10.
-use DB in Blazor Server for multi user sync with add REST API endpoints - use Google, Microsoft, Dropbox OAuth for unique user id and login
+use DB in Blazor Server for multi user sync with add REST API endpoints
 
 11.
 write unit tests with Appium / bUnit
