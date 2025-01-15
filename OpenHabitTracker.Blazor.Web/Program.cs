@@ -1,12 +1,22 @@
+using OpenHabitTracker;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
+using OpenHabitTracker.Blazor.Web;
 using OpenHabitTracker.Blazor.Web.Components;
 using OpenHabitTracker.EntityFrameworkCore;
-using OpenHabitTracker;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+// Load configuration from appsettings.json and environment variables
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
+// Bind AppSettings section to a strongly-typed class
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
