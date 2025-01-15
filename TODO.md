@@ -34,7 +34,7 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 1.
 protect Blazor Server with key, deploy it to https://app.openhabittracker.net
 2.
-create Docker image, deploy it to Raspberry Pi 5 / Synology NAS DS224+ and offer it on Docker Hub, GitHub Container Registry
+create Blazor Server Docker image, deploy it to Raspberry Pi 5 / Synology NAS DS224+ and offer it on Docker Hub, GitHub Container Registry
 
 3.
 refactor OpenHabitTracker
@@ -42,7 +42,6 @@ refactor OpenHabitTracker
 run Jetbrains Rider code analysis
 5.
 add comments to methods
-
 6.
 add REST API endpoints for online data sync - use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
 
@@ -52,7 +51,6 @@ add Google Drive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Ma
 add Microsoft OneDrive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui - add backup to OneDrive
 9.
 add Dropbox OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui - add backup to Dropbox
-
 10.
 use DB in Blazor Server for multi user sync with add REST API endpoints - use Google, Microsoft, Dropbox OAuth for unique user id and login
 
