@@ -43,7 +43,7 @@ run Jetbrains Rider code analysis
 5.
 add comments to methods
 6.
-add REST API endpoints for online data sync - use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
+add REST API endpoints for online data sync to Blazor Server - use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
 
 7.
 add Google Drive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui - add backup to Google Drive
