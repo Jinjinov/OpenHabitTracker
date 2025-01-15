@@ -32,34 +32,35 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 ---------------------------------------------------------------------------------------------------
 
 1.
-protect Blazor Server with key, deploy it to https://app.openhabittracker.net, create Docker image, host Docker image on Raspberry Pi 5 / Synology NAS DS224+
-
+protect Blazor Server with key, deploy it to https://app.openhabittracker.net
 2.
-add option to save SQLite DB in MyDocuments instead of ApplicationData - save this option in another SQLite DB in ApplicationData (Blazored.LocalStorage is too late)
+create Docker image, deploy it to Raspberry Pi 5 / Synology NAS DS224+ and offer it on Docker Hub, GitHub Container Registry
 
 3.
-add Google Drive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
-
-4.
-add Microsoft OneDrive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
-
-5.
-add Dropbox OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
-
-6.
 refactor OpenHabitTracker
-
-7.
+4.
 run Jetbrains Rider code analysis
-
-8.
+5.
 add comments to methods
 
+6.
+add REST API endpoints for online data sync - use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
+
+7.
+add Google Drive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui - add backup to Google Drive
+8.
+add Microsoft OneDrive OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui - add backup to OneDrive
 9.
-use DB in Blazor Server for multi user sync, use Google, Microsoft, Dropbox OAuth for login, add REST API endpoints and use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
+add Dropbox OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui - add backup to Dropbox
 
 10.
+use DB in Blazor Server for multi user sync with add REST API endpoints - use Google, Microsoft, Dropbox OAuth for unique user id and login
+
+11.
 write unit tests with Appium / bUnit
+
+12.
+Android: get permission to save SQLite DB in an external folder that can be part of Google Drive, OneDrive, iCloud, Dropbox
 
 ---------------------------------------------------------------------------------------------------
 
@@ -243,16 +244,9 @@ ClientSideState:
 
 ---------------------------------------------------------------------------------------------------
 
-save SQLite DB in MyDocuments instead of ApplicationData
-
-    use an external folder (that can be part of Google Drive, OneDrive, iCloud, Dropbox)
-
-    foreach(folder in enum SpecialFolder) string path = Environment.GetFolderPath(folder); // Windows, Linux, macOS, iOS, Android
-
-    LocalApplicationData, ApplicationData
-    UserProfile
-    Personal, MyDocuments
-    Desktop, DesktopDirectory
+Android:
+    save SQLite DB in an external folder
+    can be part of Google Drive, OneDrive, iCloud, Dropbox
 
 AndroidManifest.xml
 MANAGE_EXTERNAL_STORAGE
@@ -270,21 +264,20 @@ using Android.Content.PM;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 
-if (ContextCompat.CheckSelfPermission(Android.App.Application.Context, Manifest.Permission.WriteExternalStorage) != (int)Permission.Granted)
-{
-    ActivityCompat.RequestPermissions(MainActivity.Instance, new string[] { Manifest.Permission.WriteExternalStorage }, 1);
-}
-
-if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) // LocalApplicationData, ApplicationData, UserProfile, Personal, MyDocuments, Desktop, DesktopDirectory
 {
     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 }
-if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) // LocalApplicationData, ApplicationData, UserProfile, Personal, MyDocuments, Desktop, DesktopDirectory
 {
     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 }
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Android))
 {
+    if (ContextCompat.CheckSelfPermission(Android.App.Application.Context, Manifest.Permission.WriteExternalStorage) != (int)Permission.Granted)
+    {
+        ActivityCompat.RequestPermissions(MainActivity.Instance, new string[] { Manifest.Permission.WriteExternalStorage }, 1);
+    }
     path = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "MyAppFolder");
     return Path.Combine(Android.OS.Environment.ExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath, "MyAppFolder");
 }
