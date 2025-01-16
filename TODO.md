@@ -43,7 +43,7 @@ do you understand which features i want?
 add UserId to Category
 add UserId to Settings
 add class User with Id, Name, Email, Password
-make every ...Id a Required field in EF Core
+make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
 UserId can't be null
     - add default user if there is none (same as settings)
     - get default user name, email, password from ... somewhere ...
