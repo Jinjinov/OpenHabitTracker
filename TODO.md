@@ -43,6 +43,9 @@ do you understand which features i want?
 add UserId to Category
 add UserId to Settings
 add class User with Name and Email
+UserId can't be null
+    - add default user if there is none (same as settings)
+    - get default user name, email, password from ... somewhere ...
 CategoryId can't be null
     - add default category if there is none (same as settings)
     - add DefaultCategoryId to Settings
