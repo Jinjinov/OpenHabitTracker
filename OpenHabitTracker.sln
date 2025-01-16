@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.Was
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Blazor.Maui", "OpenHabitTracker.Blazor.Maui\OpenHabitTracker.Blazor.Maui.csproj", "{D0071377-3D33-41EE-A22F-586BDDE64A5E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.Google.Apis", "OpenHabitTracker.Google.Apis\OpenHabitTracker.Google.Apis.csproj", "{F631C389-EECB-41E4-95AE-341C3CBF284F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenHabitTracker.CloudStorage", "OpenHabitTracker.CloudStorage\OpenHabitTracker.CloudStorage.csproj", "{F631C389-EECB-41E4-95AE-341C3CBF284F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{36C1DB59-1758-4659-BA71-5289BD204001}"
 	ProjectSection(SolutionItems) = preProject
