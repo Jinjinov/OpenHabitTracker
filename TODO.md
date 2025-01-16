@@ -40,7 +40,9 @@ i also want my app to remember this login between sessions.
 i also want to add REST api endpoints to the Blazor Server. these endpoints will be used by the Maui Blazor version of the same app and will provide two things: login to cloud providers and CRUD access to the Notes DB.
 do you understand which features i want?
 
-
+add UserId to Category
+add UserId to Settings
+add class User with Name and Email
 CategoryId can't be null
     - add default category if there is none (same as settings)
     - add DefaultCategoryId to Settings
