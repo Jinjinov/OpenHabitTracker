@@ -121,6 +121,8 @@ offer docker image for own server
     GitHub Container Registry : https://github.com/Jinjinov/OpenHabitTracker/packages
     https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry
 
+https://learn.microsoft.com/en-us/dotnet/core/compatibility/containers/8.0/aspnet-port
+
 ---------------------------------------------------------------------------------------------------
 
 services:

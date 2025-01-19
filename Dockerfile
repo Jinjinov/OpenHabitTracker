@@ -1,8 +1,6 @@
 # Use the official .NET SDK image to build the app
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-EXPOSE 80
-EXPOSE 443
 
 # Copy the project files and restore dependencies
 COPY ["OpenHabitTracker/OpenHabitTracker.csproj", "OpenHabitTracker/"]

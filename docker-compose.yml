@@ -2,8 +2,8 @@ services:
   openhabittracker:
     build: .
     ports:
-      - "5000:80"
-      - "5001:443"
+      - "5000:8080"
+      - "5001:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - AppSettings__UserName=${APPSETTINGS_USERNAME}
