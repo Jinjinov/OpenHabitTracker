@@ -26,7 +26,15 @@ builder.Services.AddRazorComponents()
 builder.Services.AddServices();
 builder.Services.AddDataAccess("OpenHT.db");
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequiredLength = 1;
+        options.SignIn.RequireConfirmedAccount = false;
+    })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
@@ -48,6 +56,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPreRenderService, OpenHabitTracker.Blazor.Web.PreRenderService>();
 
 WebApplication app = builder.Build();
+
+await CreateDefaultUserAsync(app);
 
 //ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
 // Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider
@@ -73,3 +83,36 @@ app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(typeof(OpenHabitTracker.Blazor.Pages.Home).Assembly);
 
 app.Run();
+
+async Task CreateDefaultUserAsync(WebApplication app)
+{
+    using var scope = app.Services.CreateScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    var defaultUser = await userManager.FindByNameAsync("admin");
+
+    if (defaultUser == null)
+    {
+        // Create the default user
+        var newUser = new ApplicationUser
+        {
+            UserName = "admin",
+            Email = "admin@admin.com",
+        };
+
+        var result = await userManager.CreateAsync(newUser, "admin"); // Using "admin" as the password
+
+        if (result.Succeeded)
+        {
+            Console.WriteLine("Default user created successfully.");
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Console.WriteLine($"Error: {error.Description}");
+            }
+        }
+    }
+}
