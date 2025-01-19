@@ -1,4 +1,4 @@
-﻿using OpenHabitTracker.Data;
+using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,9 +6,9 @@ namespace OpenHabitTracker.EntityFrameworkCore;
 
 public class DataAccess : IDataAccess
 {
-    private readonly ApplicationDbContext _dataContext;
+    private readonly IApplicationDbContext _dataContext;
 
-    public DataAccess(ApplicationDbContext dataContext)
+    public DataAccess(IApplicationDbContext dataContext)
     {
         _dataContext = dataContext;
         _dataContext.Database.Migrate();

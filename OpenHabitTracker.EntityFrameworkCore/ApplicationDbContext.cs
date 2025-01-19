@@ -1,13 +1,9 @@
-﻿using OpenHabitTracker.Data;
-using OpenHabitTracker.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System.Text.Json;
+using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.EntityFrameworkCore;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public DbSet<ContentEntity> Contents { get; set; }
     public DbSet<HabitEntity> Habits { get; set; }
@@ -37,60 +33,8 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ContentEntity>().HasIndex(x => x.CategoryId);
-
-        modelBuilder.Entity<TimeEntity>().HasIndex(x => x.HabitId);
-
-        modelBuilder.Entity<ItemEntity>().HasIndex(x => x.ParentId);
-
-        var dictionaryComparer = new ValueComparer<Dictionary<ContentType, Sort>>(
-            (c1, c2) => ReferenceEquals(c1, c2) || (c1 != null && c2 != null && c1.SequenceEqual(c2)),
-            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-            c => c.ToDictionary(entry => entry.Key, entry => entry.Value)
-        );
-
-        modelBuilder.Entity<SettingsEntity>()
-            .Property(e => e.SortBy)
-            .HasColumnName("SortBy")
-            .HasConversion(
-                dictionary => JsonSerializer.Serialize(dictionary, (JsonSerializerOptions?)null),
-                json => JsonSerializer.Deserialize<Dictionary<ContentType, Sort>>(json, (JsonSerializerOptions?)null)!,
-                dictionaryComparer);
-
-        var boolDictionaryComparer = new ValueComparer<Dictionary<Priority, bool>>(
-            (c1, c2) => ReferenceEquals(c1, c2) || (c1 != null && c2 != null && c1.SequenceEqual(c2)),
-            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-            c => c.ToDictionary(entry => entry.Key, entry => entry.Value)
-        );
-
-        modelBuilder.Entity<SettingsEntity>()
-            .Property(e => e.ShowPriority)
-            .HasColumnName("ShowPriority")
-            .HasConversion(
-                dictionary => JsonSerializer.Serialize(dictionary, (JsonSerializerOptions?)null),
-                json => JsonSerializer.Deserialize<Dictionary<Priority, bool>>(json, (JsonSerializerOptions?)null)!,
-                boolDictionaryComparer);
+        modelBuilder.OnModelCreating();
 
         base.OnModelCreating(modelBuilder);
-    }
-
-    public void ClearAllTables()
-    {
-        foreach (IEntityType entityType in Model.GetEntityTypes())
-        {
-            string? tableName = entityType.GetTableName();
-            if (!string.IsNullOrEmpty(tableName))
-            {
-#pragma warning disable EF1002 // Risk of vulnerability to SQL injection.
-                Database.ExecuteSqlRaw($"DELETE FROM {tableName}");
-                Database.ExecuteSqlRaw($"DELETE FROM sqlite_sequence WHERE name = '{tableName}'");
-#pragma warning restore EF1002 // Risk of vulnerability to SQL injection.
-            }
-        }
-
-        foreach (EntityEntry entry in ChangeTracker.Entries().ToList())
-        {
-            entry.State = EntityState.Detached;
-        }
     }
 }
