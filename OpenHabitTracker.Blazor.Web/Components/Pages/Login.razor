@@ -6,6 +6,8 @@
 @using Microsoft.AspNetCore.Identity
 @using OpenHabitTracker.Blazor.Web.Data
 
+@attribute [ExcludeFromInteractiveRouting]
+
 @layout LoginLayout
 
 @inject NavigationManager NavigationManager
@@ -13,7 +15,7 @@
 
 <h3>Login</h3>
 
-<EditForm Model="@loginModel" OnValidSubmit="@HandleValidSubmit">
+<EditForm FormName="login" Model="@loginModel" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary class="alert alert-danger" />
 

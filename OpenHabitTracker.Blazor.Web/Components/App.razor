@@ -1,4 +1,5 @@
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Routing
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -16,13 +17,20 @@
 
     <script src="_content/OpenHabitTracker.Blazor/skipScrollTo.js"></script>
 
-    <HeadOutlet @rendermode="@RenderMode.InteractiveServer" />
+    <HeadOutlet @rendermode="PageRenderMode" />
 </head>
 
 <body>
-    <OpenHabitTracker.Blazor.Web.Components.Routes @rendermode="@RenderMode.InteractiveServer" />
+    <OpenHabitTracker.Blazor.Web.Components.Routes @rendermode="PageRenderMode" />
 
     <script src="_framework/blazor.web.js"></script>
 </body>
 
 </html>
+
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private IComponentRenderMode? PageRenderMode => HttpContext.AcceptsInteractiveRouting() ? RenderMode.InteractiveServer : null;
+}
