@@ -43,24 +43,20 @@
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();
 
-    private string loginErrorMessage = string.Empty; // To hold the error message
+    private string loginErrorMessage = string.Empty;
 
     private async Task HandleValidSubmit()
     {
-        // Attempt to sign in with the provided username and password
         SignInResult result = await SignInManager.PasswordSignInAsync(Input.Username, Input.Password, isPersistent: true, lockoutOnFailure: false);
 
         if (result.Succeeded)
         {
-            // On successful login, navigate to the home page (or wherever appropriate)
             NavigationManager.NavigateTo("/");
         }
         else
         {
-            // Handle login failure: Set the error message
             loginErrorMessage = "Invalid username or password. Please try again.";
 
-            // Optionally, log the reason for the failure or add more detailed handling
             if (result.IsLockedOut)
             {
                 loginErrorMessage = "Your account is locked. Please try again later.";

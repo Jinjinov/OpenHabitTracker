@@ -89,13 +89,12 @@ async Task CreateDefaultUserAsync(WebApplication app)
     using IServiceScope scope = app.Services.CreateScope();
 
     UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    AppSettings appSettings = scope.ServiceProvider.GetRequiredService<AppSettings>();
 
-    ApplicationUser? defaultUser = await userManager.FindByNameAsync("admin");
+    ApplicationUser? defaultUser = await userManager.FindByNameAsync(appSettings.UserName);
 
     if (defaultUser == null)
     {
-        AppSettings appSettings = scope.ServiceProvider.GetRequiredService<AppSettings>();
-
         ApplicationUser user = new()
         {
             UserName = appSettings.UserName,
