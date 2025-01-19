@@ -6,8 +6,6 @@
 @using Microsoft.AspNetCore.Identity
 @using OpenHabitTracker.Blazor.Web.Data
 
-@* @attribute [AllowAnonymous] *@
-
 @layout LoginLayout
 
 @inject NavigationManager NavigationManager
@@ -17,13 +15,21 @@
 
 <EditForm Model="@loginModel" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
-    <ValidationSummary />
+    <ValidationSummary class="alert alert-danger" />
 
-    <p><label>Username:</label><InputText @bind-Value="loginModel.Username" /></p>
-    <p><label>Password:</label><InputText @bind-Value="loginModel.Password" type="password" /></p>
+    <div class="mb-3">
+        <label for="username" class="form-label">Username:</label>
+        <InputText id="username" class="form-control" @bind-Value="loginModel.Username" />
+    </div>
 
-    <button type="submit">Log in</button>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <InputText id="password" class="form-control" @bind-Value="loginModel.Password" type="password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Log in</button>
 </EditForm>
+
 
 @code {
     private LoginModel loginModel = new();
