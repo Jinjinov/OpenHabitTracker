@@ -6,3 +6,6 @@ services:
       - "5001:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      - AppSettings__UserName=${APPSETTINGS_USERNAME}
+      - AppSettings__Email=${APPSETTINGS_EMAIL}
+      - AppSettings__Password=${APPSETTINGS_PASSWORD}
