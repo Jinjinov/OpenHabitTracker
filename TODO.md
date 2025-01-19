@@ -51,7 +51,9 @@ CategoryId can't be null
     - add migration that sets any null CategoryId to DefaultCategoryId
 
 1.
-create Blazor Server Docker image, deploy it to Raspberry Pi 5 / Synology NAS DS224+ and offer it on Docker Hub, GitHub Container Registry
+create Blazor Server Docker image, 
+deploy it to Raspberry Pi 5 / Synology NAS DS224+ 
+offer it on Docker Hub, GitHub Container Registry
 2.
 deploy Blazor Server to https://app.openhabittracker.net
 
@@ -109,7 +111,6 @@ all client/server communication: (including the GUID key)
 
 1.
 only blazor server will offer online sync - one user per server https://app.openhabittracker.net
-blazor server will require guid key on app.* - saved with Blazored.LocalStorage on client / browser
 
 2.
 offer pwa.* for offline version https://pwa.openhabittracker.net
