@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using OpenHabitTracker;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor;
@@ -5,7 +6,7 @@ using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web;
 using OpenHabitTracker.Blazor.Web.Components;
-using OpenHabitTracker.EntityFrameworkCore;
+using OpenHabitTracker.Blazor.Web.Data;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,18 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddServices();
 builder.Services.AddDataAccess("OpenHT.db");
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication("Cookies")
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/login";
+    });
+builder.Services.AddAuthorizationCore();
+
 builder.Services.AddBackup();
 builder.Services.AddBlazor();
 builder.Services.AddScoped<IOpenFile, OpenFile>();

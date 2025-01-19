@@ -1,0 +1,241 @@
+@using OpenHabitTracker.Blazor.Pages
+@using OpenHabitTracker.Data
+
+@inject ILogger<Main> Logger
+@inject AppData AppData
+@inject INavBarFragment NavBarFragment
+@inject NavigationManager NavigationManager
+@inject JsInterop JsInterop
+@inject IStringLocalizer Loc
+
+@* Root <div> inside <html><body><app> *@
+
+<div class="container-fluid d-flex flex-column vh-100 mh-100 overflow-hidden">
+
+    @* Header row *@
+
+    <div class="row flex-shrink-1">
+
+        @* Header column *@
+
+        <div class="col bg-body-secondary d-flex align-items-center">
+
+            @* <button class="nav-link px-1 py-2 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> @Loc["Menu"]</button> *@
+            <button class="nav-link px-1 py-2" @onclick="ToggleMenu"><i class="bi bi-three-dots-vertical"></i></button>
+
+            @* <button class="nav-link" @onclick="Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues"><i class="bi bi-floppy"></i> Save</button> *@
+            @* <button class="nav-link" @onclick="() => 
+                {
+                    if(Loc is Localization.JsonStringLocalizer jsonStringLocalizer)
+                    {
+                        Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues();
+                        jsonStringLocalizer.SerializeDuplicateValues();
+                    }
+                }"><i class="bi bi-floppy"></i> Save</button> *@
+
+            @if (_windowDimensions?.Width >= 1280 || _windowDimensions?.Width < 768)
+            {
+                <NavLink class="nav-link px-2 py-1 ms-3" href="/" Match=NavLinkMatch.All><i class="bi bi-house"></i></NavLink>
+            }
+            <NavLink class="nav-link px-2 py-1 ms-3" href="notes"><i class="bi bi-sticky"></i></NavLink>
+            <NavLink class="nav-link px-2 py-1 ms-3" href="tasks"><i class="bi bi-list-task"></i></NavLink>
+            <NavLink class="nav-link px-2 py-1 ms-3" href="habits"><i class="bi bi-repeat"></i></NavLink>
+            <NavLink class="nav-link px-2 py-1 ms-3" href="help"><i class="bi bi-question-circle"></i></NavLink>
+
+            @* <span class="ms-3">
+                @NavBarFragment.GetNavBarFragment()
+            </span> *@
+
+        </div>
+    </div>
+
+    @if (_windowDimensions is not null)
+    {
+        @* Main body row *@
+
+        <div class="row flex-grow-1 parent-row">
+
+            @if (_dynamicComponentType is not null)
+            {
+                @* Sidebar column *@
+
+                <div class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px">
+
+                    @* Sidebar title *@
+
+                    @if (_dynamicComponentType != typeof(Menu))
+                    {
+                        <div class="input-group flex-nowrap my-1">
+                            <span class="input-group-text fw-bold text-primary flex-grow-1">@Loc[_titleByTypeName[_dynamicComponentType.Name]]</span>
+                            <button class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
+                        </div>
+                    }
+
+                    @* Sidebar content *@
+
+                    <DynamicComponent @ref="dynamicComponent" Type="_dynamicComponentType" Parameters="_dynamicComponentParametersByName.GetValueOrDefault(_dynamicComponentType.Name)" />
+
+                </div>
+            }
+
+            @* Main body column *@
+
+            <CascadingValue Name="StateChanged" Value=@_stateChanged>
+                <CascadingValue Name="WindowDimensions" Value=@_windowDimensions>
+                    <CascadingValue Name="DynamicComponentType" Value=@_dynamicComponentType>
+                        <CascadingValue Name="ContentDeleted" Value=@_contentDeleted>
+
+                            @ChildContent
+
+                        </CascadingValue>
+                    </CascadingValue>
+                </CascadingValue>
+            </CascadingValue>
+
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    private bool _stateChanged;
+
+    DynamicComponent? dynamicComponent;
+
+    EventCallback _contentDeleted;
+
+    void OnContentDeleted()
+    {
+        if (dynamicComponent?.Instance is Trash trash)
+        {
+            trash.Refresh();
+        }
+    }
+
+    private Dimensions? _windowDimensions;
+
+    private Type? _dynamicComponentType;
+    private Type? _previousDynamicComponentType;
+    private Dictionary<string, Dictionary<string, object>> _dynamicComponentParametersByName = new();
+
+    private readonly Dictionary<string, string> _titleByTypeName = new()
+    {
+        { "Menu", "Menu" },
+        { "Search", "Search, Filter, Sort" },
+        { "Settings", "Settings" },
+        //{ "Backup", "Backup" },
+        { "Categories", "Categories" },
+        { "Data", "Data" },
+        //{ "Priorities", "Priorities" },
+        { "Trash", "Trash" },
+        { "About", "About" }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        Logger.LogInformation("MainLayout.OnInitializedAsync start");
+
+        await AppData.InitializeSettings();
+
+        Localization.Loc.SetCulture(AppData.Settings.Culture);
+
+        if (!AppData.Settings.IsDarkMode)
+            await JsInterop.SetMode("light");
+
+        if (AppData.Settings.Theme != "default")
+            await JsInterop.SetTheme(AppData.Settings.Theme);
+
+        _contentDeleted = EventCallback.Factory.Create(this, OnContentDeleted);
+
+        SetDynamicComponentParameters();
+
+        if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
+            SelectComponent(AppData.Settings.StartSidebar);
+
+        Logger.LogInformation("MainLayout.OnInitializedAsync end");
+    }
+
+    void SetDynamicComponentParameters()
+    {
+        Dictionary<string, object> dynamicComponentParameters = new()
+        {
+            { "WindowDimensions", _windowDimensions! },
+            { "DynamicComponentType", _dynamicComponentType! },
+            { "DynamicComponentTypeChanged", EventCallback.Factory.Create<Type?>(this, val => _dynamicComponentType = val)},
+        };
+
+        Dictionary<string, object> stateChangedParameters = new()
+        {
+            { "StateChanged", _stateChanged },
+            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged = val)},
+        };
+
+        Dictionary<string, object> windowDimensionsParameters = new()
+        {
+            { "WindowDimensions", _windowDimensions! },
+            { "StateChanged", _stateChanged },
+            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged = val)},
+        };
+
+        _dynamicComponentParametersByName = new()
+        {
+            { "Menu", dynamicComponentParameters },
+            { "Search", stateChangedParameters },
+            { "Settings", windowDimensionsParameters },
+            //{ "Backup", stateChangedParameters },
+            { "Categories", stateChangedParameters },
+            { "Data", stateChangedParameters },
+            //{ "Priorities", stateChangedParameters },
+            { "Trash", stateChangedParameters }
+        };
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Logger.LogInformation("MainLayout.OnAfterRenderAsync start");
+
+            _windowDimensions = await JsInterop.GetWindowDimensions();
+
+            SetDynamicComponentParameters();
+
+            if (!string.IsNullOrEmpty(AppData.Settings.StartPage))
+            {
+                if (!NavigationManager.Uri.Contains(AppData.Settings.StartPage)) // fix for ERR_TOO_MANY_REDIRECTS on Blazor Server which calls OnInitializedAsync twice
+                {
+                    NavigationManager.NavigateTo(AppData.Settings.StartPage);
+                }
+            }
+
+            StateHasChanged();
+
+            Logger.LogInformation("MainLayout.OnAfterRenderAsync end");
+        }
+    }
+
+    private void ToggleMenu()
+    {
+        if (_dynamicComponentType != typeof(Menu))
+        {
+            _previousDynamicComponentType = _dynamicComponentType;
+            SelectComponent<Menu>();
+        }
+        else
+        {
+            _dynamicComponentType = _previousDynamicComponentType;
+        }
+    }
+
+    private void SelectComponent<T>()
+    {
+        _dynamicComponentType = typeof(T);
+    }
+
+    private void SelectComponent(string name)
+    {
+        _dynamicComponentType = Type.GetType($"OpenHabitTracker.Blazor.Pages.{name}");
+    }
+}

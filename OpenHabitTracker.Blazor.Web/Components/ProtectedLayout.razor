@@ -1,0 +1,42 @@
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using OpenHabitTracker.Blazor.Layout
+
+@inherits LayoutComponentBase
+
+@* @attribute [Authorize] *@
+
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <Authorized>
+        <Main>
+            @Body
+        </Main>
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+</AuthorizeView>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     // Get the current authentication state
+    //     var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+    //     // Check if the user is authenticated and not already on the login page
+    //     if (authState.User.Identity?.IsAuthenticated != true && NavigationManager.Uri != NavigationManager.ToAbsoluteUri("/login").ToString())
+    //     {
+    //         // If the user is not authenticated and not on the login page, redirect to the login page
+    //         await InvokeAsync(() => NavigationManager.NavigateTo("/login"));
+    //     }
+    // }
+}

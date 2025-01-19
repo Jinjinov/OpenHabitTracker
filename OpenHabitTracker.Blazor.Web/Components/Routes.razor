@@ -1,0 +1,39 @@
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+
+@inject IAssemblyProvider AssemblyProvider
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@AssemblyProvider.AppAssembly" AdditionalAssemblies="@AssemblyProvider.AdditionalAssemblies">
+        <Found Context="routeData">
+            <ErrorBoundary>
+                <ChildContent>
+                    <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(ProtectedLayout)">
+                        <Authorizing>
+                            <text>Please wait, we are authorizing you...</text>
+                        </Authorizing>
+                        <NotAuthorized>
+                            @if (context.User.Identity?.IsAuthenticated != true)
+                            {
+                                <RedirectToLogin />
+                            }
+                            else
+                            {
+                                <p>You are not authorized to access this resource.</p>
+                            }
+                        </NotAuthorized>
+                    </AuthorizeRouteView>
+                </ChildContent>
+                <ErrorContent Context="Exception">
+                    @Exception.ToString()
+                </ErrorContent>
+            </ErrorBoundary>
+        </Found>
+        <NotFound>
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
