@@ -15,18 +15,18 @@
 
 <h3>Login</h3>
 
-<EditForm FormName="login" Model="@loginModel" OnValidSubmit="@HandleValidSubmit">
+<EditForm FormName="login" Model="@Input" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary class="alert alert-danger" />
 
     <div class="mb-3">
         <label for="username" class="form-label">Username:</label>
-        <InputText id="username" class="form-control" @bind-Value="loginModel.Username" />
+        <InputText id="username" class="form-control" @bind-Value="Input.Username" />
     </div>
 
     <div class="mb-3">
         <label for="password" class="form-label">Password:</label>
-        <InputText id="password" class="form-control" @bind-Value="loginModel.Password" type="password" />
+        <InputText id="password" class="form-control" @bind-Value="Input.Password" type="password" />
     </div>
 
     <button type="submit" class="btn btn-primary w-100">Log in</button>
@@ -40,13 +40,15 @@
 </EditForm>
 
 @code {
-    private LoginModel loginModel = new();
+    [SupplyParameterFromForm]
+    private InputModel Input { get; set; } = new();
+
     private string loginErrorMessage = string.Empty; // To hold the error message
 
     private async Task HandleValidSubmit()
     {
         // Attempt to sign in with the provided username and password
-        var result = await SignInManager.PasswordSignInAsync(loginModel.Username, loginModel.Password, true, lockoutOnFailure: false);
+        var result = await SignInManager.PasswordSignInAsync(Input.Username, Input.Password, isPersistent: true, lockoutOnFailure: false);
 
         if (result.Succeeded)
         {
@@ -70,7 +72,7 @@
         }
     }
 
-    public class LoginModel
+    public class InputModel
     {
         [Required]
         public string Username { get; set; }
