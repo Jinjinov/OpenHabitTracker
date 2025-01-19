@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using OpenHabitTracker;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor;
@@ -89,7 +90,8 @@ async Task CreateDefaultUserAsync(WebApplication app)
     using IServiceScope scope = app.Services.CreateScope();
 
     UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    AppSettings appSettings = scope.ServiceProvider.GetRequiredService<AppSettings>();
+    IOptions<AppSettings> options = scope.ServiceProvider.GetRequiredService<IOptions<AppSettings>>();
+    AppSettings appSettings = options.Value;
 
     ApplicationUser? defaultUser = await userManager.FindByNameAsync(appSettings.UserName);
 
