@@ -123,114 +123,30 @@ offer docker image for own server
 
 ---------------------------------------------------------------------------------------------------
 
-Example .env File:
+services:
+  openhabittracker:
+    build: .
+    ports:
+      - "5000:80"
+      - "5001:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - AppSettings__UserName=${APPSETTINGS_USERNAME}
+      - AppSettings__Email=${APPSETTINGS_EMAIL}
+      - AppSettings__Password=${APPSETTINGS_PASSWORD}
 
-    OWNER_NAME=Jinjinov
-    SECRET_KEY=my-super-secret-key-1234
+---------------------------------------------------------------------------------------------------
 
-Example docker-compose.yml:
-
-    version: '3.8'
-
-    services:
-      app:
-        image: your-server-image
-        environment:
-          - AppSettings__OwnerName=${OWNER_NAME}
-          - AppSettings__SecretKey=${SECRET_KEY}
-        ports:
-          - "5000:5000"
-
-appsettings.json
-
-    {
-      "AppSettings": {
-        "OwnerName": "DefaultOwner",
-        "SecretKey": "default-secret-key"
-      }
-    }
-
-Server:
-
-    public class AppSettings
-    {
-        public string OwnerName { get; set; }
-        public string SecretKey { get; set; }
-    }
-
-    var builder = WebApplication.CreateBuilder(args);
-
-    // Load configuration from appsettings.json and environment variables
-    builder.Configuration
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddEnvironmentVariables();
-
-    // Bind AppSettings section to a strongly-typed class
-    builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-
-    var app = builder.Build();
-
-    // Use the configuration in the app
-    app.MapGet("/", (IOptions<AppSettings> options) =>
-    {
-        var appSettings = options.Value;
-        return $"Owner: {appSettings.OwnerName}";
-    });
-
-    app.UseRouting();
-
-    app.MapPost("/auth", (AppSettings config, [FromBody] string key) =>
-    {
-        if (key != config.SecretKey)
-        {
-            return Results.Unauthorized("Invalid key.");
-        }
-
-        return Results.Ok("Authenticated.");
-    });
-
-    app.Run();
-
-Client:
-
-    @inject HttpClient HttpClient
-    @inject SecureStorage SecureStorage
-
-    @code {
-        private string _serverIp;
-        private string _userKey;
-
-        private HubConnection _hubConnection;
-
-        private async Task ConnectToServer()
-        {
-            if (string.IsNullOrEmpty(_serverIp) || string.IsNullOrEmpty(_userKey))
-            {
-                // Prompt user to enter both IP and Key
-                return;
-            }
-
-            // Authenticate with the server using the key
-            var response = await HttpClient.PostAsJsonAsync($"http://{_serverIp}:5000/auth", _userKey);
-
-            if (response.IsSuccessStatusCode)
-            {
-                // Key is valid, now proceed to connect to SignalR Hub
-                _hubConnection = new HubConnectionBuilder()
-                    .WithUrl($"http://{_serverIp}:5000/chatHub")
-                    .Build();
-
-                await _hubConnection.StartAsync();
-                // Proceed to chat or other operations
-            }
-            else
-            {
-                // Invalid key, show error message
-                ShowErrorMessage("Invalid key or server IP.");
-            }
-        }
-    }
+services:
+  openhabittracker:
+    image: your-dockerhub-username/openhabittracker:latest
+    ports:
+      - "5000:80"
+      - "5001:443"
+    environment:
+      - AppSettings__UserName=${APPSETTINGS_USERNAME}
+      - AppSettings__Email=${APPSETTINGS_EMAIL}
+      - AppSettings__Password=${APPSETTINGS_PASSWORD}
 
 ---------------------------------------------------------------------------------------------------
 
