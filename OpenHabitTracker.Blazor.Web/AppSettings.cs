@@ -2,7 +2,9 @@ namespace OpenHabitTracker.Blazor.Web;
 
 public class AppSettings
 {
-    public string OwnerName { get; set; } = "DefaultOwner";
+    public string UserName { get; set; } = "admin";
 
-    public string SecretKey { get; set; } = "default-secret-key";
+    public string Email { get; set; } = "admin@admin.com";
+
+    public string Password { get; set; } = "admin";
 }

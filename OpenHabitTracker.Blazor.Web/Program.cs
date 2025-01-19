@@ -86,22 +86,23 @@ app.Run();
 
 async Task CreateDefaultUserAsync(WebApplication app)
 {
-    using var scope = app.Services.CreateScope();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    using IServiceScope scope = app.Services.CreateScope();
 
-    var defaultUser = await userManager.FindByNameAsync("admin");
+    UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+    ApplicationUser? defaultUser = await userManager.FindByNameAsync("admin");
 
     if (defaultUser == null)
     {
-        // Create the default user
-        var newUser = new ApplicationUser
+        AppSettings appSettings = scope.ServiceProvider.GetRequiredService<AppSettings>();
+
+        ApplicationUser user = new()
         {
-            UserName = "admin",
-            Email = "admin@admin.com",
+            UserName = appSettings.UserName,
+            Email = appSettings.Email,
         };
 
-        var result = await userManager.CreateAsync(newUser, "admin"); // Using "admin" as the password
+        IdentityResult result = await userManager.CreateAsync(user, appSettings.Password);
 
         if (result.Succeeded)
         {
@@ -109,7 +110,7 @@ async Task CreateDefaultUserAsync(WebApplication app)
         }
         else
         {
-            foreach (var error in result.Errors)
+            foreach (IdentityError error in result.Errors)
             {
                 Console.WriteLine($"Error: {error.Description}");
             }
