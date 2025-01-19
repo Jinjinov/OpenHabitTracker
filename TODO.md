@@ -35,8 +35,6 @@ i have a Blazor Server app Notes. every note has Title and Content.
 i want my users to login to their cloud storage (Google Drive or Microsoft OneDrive or Apple iCloud or Dropbox) so that my app can save and read each Note as a TXT file in their cloud storage.
 when users login to their cloud storage i want to get their name and their email. i want to store their name and email in my db and use email as unique id.
 i also want their login to cloud storage to serve as a login to my Blazor Server app. i want my app to remember their login between sessions.
-besides user login to their cloud storage, i also want a separate login that is not tied to a cloud storage account.
-i also want my app to remember this login between sessions.
 i also want to add REST api endpoints to the Blazor Server. these endpoints will be used by the Maui Blazor version of the same app and will provide two things: login to cloud providers and CRUD access to the Notes DB.
 do you understand which features i want?
 
