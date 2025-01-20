@@ -57,6 +57,8 @@ Blazor Server Docker image
 2.
 deploy Blazor Server to https://app.openhabittracker.net
 
+https://www.plesk.com/blog/product-technology/dotnet-application-hosting-in-plesk/
+
 3.
 refactor OpenHabitTracker
 4.
