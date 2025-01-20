@@ -90,6 +90,12 @@
       function androidAppDownload() {
         gtag('event', 'oht_android_app_download', {'transport': 'beacon'});
       }
+      function dockerHubVisit() {
+        gtag('event', 'oht_docker_hub_visit', {'transport': 'beacon'});
+      }
+      function gitHubContainerRegistryVisit() {
+        gtag('event', 'oht_github_container_registry_visit', {'transport': 'beacon'});
+      }
     </script>
 
     <style>
@@ -246,8 +252,8 @@
           <ul>
           <li>host on your own server</li>
           <li>all data is saved online</li>
-          <li><a href="https://hub.docker.com/repository/docker/jinjinov/openhabittracker">Docker Hub</a></li>
-          <li><a href="https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker">GitHub Container Registry</a></li>
+          <li><a href="https://hub.docker.com/repository/docker/jinjinov/openhabittracker" onclick="dockerHubVisit()">Docker Hub</a></li>
+          <li><a href="https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker" onclick="gitHubContainerRegistryVisit()">GitHub Container Registry</a></li>
           </ul>
 
           <h3 id="downloads" class="card-title mt-5">Downloads</h3>
