@@ -128,9 +128,9 @@ https://learn.microsoft.com/en-us/dotnet/core/compatibility/containers/8.0/aspne
 services:
   openhabittracker:
     build: .
+    image: openhabittracker
     ports:
-      - "5000:80"
-      - "5001:443"
+      - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - AppSettings__UserName=${APPSETTINGS_USERNAME}
@@ -141,10 +141,9 @@ services:
 
 services:
   openhabittracker:
-    image: your-dockerhub-username/openhabittracker:latest
+    image: jinjinov/openhabittracker:latest
     ports:
-      - "5000:80"
-      - "5001:443"
+      - "5000:8080"
     environment:
       - AppSettings__UserName=${APPSETTINGS_USERNAME}
       - AppSettings__Email=${APPSETTINGS_EMAIL}
