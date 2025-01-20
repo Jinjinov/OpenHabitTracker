@@ -1,5 +1,7 @@
 # Use the official .NET SDK image to build the app
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+LABEL org.opencontainers.image.source https://github.com/Jinjinov/OpenHabitTracker
+
 WORKDIR /src
 
 # Copy the project files and restore dependencies
