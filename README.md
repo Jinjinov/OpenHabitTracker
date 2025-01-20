@@ -46,6 +46,34 @@ macOS:
 Android - APKPure:  
 [<img src="OpenHabitTracker.Web/icons/APKPure.svg" height="48">](https://apkpure.com/openhabittracker/net.openhabittracker)
 
+## Docker image contains OpenHabitTracker Blazor Server app for one user
+
+https://hub.docker.com/repository/docker/jinjinov/openhabittracker
+
+https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker
+
+Set your username and password with environment variables:
+
+.env
+```
+APPSETTINGS_USERNAME=admin
+APPSETTINGS_EMAIL=admin@admin.com
+APPSETTINGS_PASSWORD=admin
+```
+
+docker-compose.yml
+```
+services:
+  openhabittracker:
+    image: jinjinov/openhabittracker:latest
+    ports:
+      - "5000:8080"
+    environment:
+      - AppSettings__UserName=${APPSETTINGS_USERNAME}
+      - AppSettings__Email=${APPSETTINGS_EMAIL}
+      - AppSettings__Password=${APPSETTINGS_PASSWORD}
+```
+
 ## Made with:
 
 *   [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor)
