@@ -3,6 +3,7 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Identity
 @using OpenHabitTracker.Blazor.Web.Data
 
@@ -13,7 +14,23 @@
 @inject NavigationManager NavigationManager
 @inject SignInManager<ApplicationUser> SignInManager
 
-<h3>Login</h3>
+<PageTitle>OpenHabitTracker</PageTitle>
+
+<div class="text-center mb-4">
+    <h3><a href="https://openhabittracker.net" class="text-decoration-none text-reset"><span class="" style="font-family: 'Caveat', cursive; font-size: 1.5em;">OpenHabitTracker</span></a></h3>
+</div>
+
+<div class="mb-3">
+    <a href="https://pwa.openhabittracker.net" class="btn btn-primary w-100">Use the Progressive web app</a>
+    <small>* Data is stored on your device</small>
+</div>
+
+<div class="mb-3">
+    <a href="https://hub.docker.com/repository/docker/jinjinov/openhabittracker" class="btn btn-primary w-100">Get the Docker image</a>
+    <small>* Data is stored on your server</small>
+</div>
+
+<hr />
 
 <EditForm FormName="login" Model="@Input" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
