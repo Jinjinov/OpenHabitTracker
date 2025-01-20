@@ -31,33 +31,19 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-i have a Blazor Server app Notes. every note has Title and Content.
-i want my users to login to their cloud storage (Google Drive or Microsoft OneDrive or Apple iCloud or Dropbox) so that my app can save and read each Note as a TXT file in their cloud storage.
-when users login to their cloud storage i want to get their name and their email. i want to store their name and email in my db and use email as unique id.
-i also want their login to cloud storage to serve as a login to my Blazor Server app. i want my app to remember their login between sessions.
-i also want to add REST api endpoints to the Blazor Server. these endpoints will be used by the Maui Blazor version of the same app and will provide two things: login to cloud providers and CRUD access to the Notes DB.
-do you understand which features i want?
-
-add UserId to Category
-add UserId to Settings
-add class User with Id, Name, Email, Password
-make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
-UserId can't be null
-    - add default user if there is none (same as settings)
-    - get default user name, email, password from ... somewhere ...
+1.
 CategoryId can't be null
     - add default category if there is none (same as settings)
     - add DefaultCategoryId to Settings
     - add migration that sets any null CategoryId to DefaultCategoryId
 
-1.
-Blazor Server Docker image
-    deploy it to Raspberry Pi 5 / Synology NAS DS224+
-    offer it on Docker Hub, GitHub Container Registry
-2.
-deploy Blazor Server to https://app.openhabittracker.net
+add class User with string Id, Name, Email, PasswordHash
+    add UserId to Category
+    add UserId to Settings
+    UserId can't be null
 
-https://www.plesk.com/blog/product-technology/dotnet-application-hosting-in-plesk/
+2.
+make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
 
 3.
 refactor OpenHabitTracker
@@ -92,6 +78,9 @@ write unit tests with Appium / bUnit
 12.
 Android: get permission to save SQLite DB in an external folder that can be part of Google Drive, OneDrive, iCloud, Dropbox
 
+13.
+deploy Blazor Server Docker image to Raspberry Pi 5 / Synology NAS DS224+
+
 ---------------------------------------------------------------------------------------------------
 
 add Google Drive
@@ -104,19 +93,6 @@ add Blazor Server - OAuth REST, CRUD REST, SignalR for instant UI refresh on mul
 login will be with Google, Microsoft, Dropbox - requires scope with permission to get email
 email will be unique user id
 store the refresh token for each cloud provider
-
----------------------------------------------------------------------------------------------------
-
-1.
-only blazor server will offer online sync - one user per server https://app.openhabittracker.net
-
-2.
-offer pwa.* for offline version https://pwa.openhabittracker.net
-
-3.
-offer docker image for own server
-    Docker Hub : https://hub.docker.com
-    GitHub Container Registry : https://github.com/Jinjinov/OpenHabitTracker/packages
 
 ---------------------------------------------------------------------------------------------------
 
