@@ -46,7 +46,7 @@ macOS:
 Android - APKPure:  
 [<img src="OpenHabitTracker.Web/icons/APKPure.svg" height="48">](https://apkpure.com/openhabittracker/net.openhabittracker)
 
-## Docker image contains Blazor Server app for one user
+## Docker image contains a Blazor Server app for one user
 
 https://hub.docker.com/repository/docker/jinjinov/openhabittracker
 
