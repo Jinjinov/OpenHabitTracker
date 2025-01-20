@@ -51,8 +51,8 @@ CategoryId can't be null
     - add migration that sets any null CategoryId to DefaultCategoryId
 
 1.
-create Blazor Server Docker image, 
-deploy it to Raspberry Pi 5 / Synology NAS DS224+ 
+create Blazor Server Docker image
+deploy it to Raspberry Pi 5 / Synology NAS DS224+
 offer it on Docker Hub, GitHub Container Registry
 2.
 deploy Blazor Server to https://app.openhabittracker.net
@@ -103,7 +103,7 @@ login will be with Google, Microsoft, Dropbox - requires scope with permission t
 email will be unique user id
 store the refresh token for each cloud provider
 
-all client/server communication: (including the GUID key)
+all client/server communication:
     blazor server: SignalR
     blazor wasm, windows, linux, macOS, iOS, android: REST API endpoints
 
@@ -120,52 +120,6 @@ offer docker image for own server
     Docker Hub : https://hub.docker.com
     GitHub Container Registry : https://github.com/Jinjinov/OpenHabitTracker/packages
     https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry
-
-https://learn.microsoft.com/en-us/dotnet/core/compatibility/containers/8.0/aspnet-port
-
-Docker Hub:
-
-docker login
-docker tag openhabittracker jinjinov/openhabittracker:latest
-docker push jinjinov/openhabittracker:latest
-
-https://hub.docker.com/repository/docker/jinjinov/openhabittracker
-
-GitHub Container Registry:
-
-echo <GitHubToken> | docker login ghcr.io -u Jinjinov --password-stdin
-docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:latest
-docker push ghcr.io/jinjinov/openhabittracker:latest
-
-https://github.com/users/Jinjinov/packages/container/package/openhabittracker
-
-https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker
-
----------------------------------------------------------------------------------------------------
-
-services:
-  openhabittracker:
-    build: .
-    image: openhabittracker
-    ports:
-      - "5000:8080"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - AppSettings__UserName=${APPSETTINGS_USERNAME}
-      - AppSettings__Email=${APPSETTINGS_EMAIL}
-      - AppSettings__Password=${APPSETTINGS_PASSWORD}
-
----------------------------------------------------------------------------------------------------
-
-services:
-  openhabittracker:
-    image: jinjinov/openhabittracker:latest
-    ports:
-      - "5000:8080"
-    environment:
-      - AppSettings__UserName=${APPSETTINGS_USERNAME}
-      - AppSettings__Email=${APPSETTINGS_EMAIL}
-      - AppSettings__Password=${APPSETTINGS_PASSWORD}
 
 ---------------------------------------------------------------------------------------------------
 

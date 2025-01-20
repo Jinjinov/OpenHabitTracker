@@ -673,3 +673,23 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
     https://github.com/flathub/in.cinny.Cinny/blob/master/in.cinny.Cinny.yml
 
 ---------------------------------------------------------------------------------------------------
+
+https://learn.microsoft.com/en-us/dotnet/core/compatibility/containers/8.0/aspnet-port
+
+Docker Hub:
+
+docker login
+docker tag openhabittracker jinjinov/openhabittracker:latest
+docker push jinjinov/openhabittracker:latest
+
+https://hub.docker.com/repository/docker/jinjinov/openhabittracker
+
+GitHub Container Registry:
+
+echo <GitHubToken> | docker login ghcr.io -u Jinjinov --password-stdin
+docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:latest
+docker push ghcr.io/jinjinov/openhabittracker:latest
+
+https://github.com/users/Jinjinov/packages/container/package/openhabittracker
+
+https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker
