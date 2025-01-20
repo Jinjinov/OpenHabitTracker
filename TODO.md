@@ -123,6 +123,12 @@ offer docker image for own server
 
 https://learn.microsoft.com/en-us/dotnet/core/compatibility/containers/8.0/aspnet-port
 
+docker login
+docker tag openhabittracker jinjinov/openhabittracker:latest
+docker push jinjinov/openhabittracker:latest
+
+https://hub.docker.com/repository/docker/jinjinov/openhabittracker
+
 ---------------------------------------------------------------------------------------------------
 
 services:
