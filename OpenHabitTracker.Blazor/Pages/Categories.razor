@@ -1,10 +1,11 @@
-﻿@page "/categories"
+@page "/categories"
 @page "/categories/{Id:long}"
 
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
 @inject CategoryService CategoryService
+@inject SettingsService SettingsService
 @inject IStringLocalizer Loc
 
 @* <PageTitle>OpenHabitTracker - Categories</PageTitle> *@
@@ -41,7 +42,7 @@
                 {
                     <button class="input-group-text flex-grow-1 text-wrap" @onclick="() => { CategoryService.SelectedCategory = category; shouldFocus = true; }">@category.Title</button>
                 }
-                <button class="btn btn-outline-primary" @onclick="() => DeleteCategory(category)"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-outline-primary" @onclick="() => DeleteCategory(category)" disabled="@(category.Id == SettingsService.Settings.DefaultCategoryId)"><i class="bi bi-trash"></i></button>
             </div>
         }
     }

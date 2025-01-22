@@ -8,20 +8,22 @@ namespace OpenHabitTracker.EntityFrameworkCore;
 
 public interface IApplicationDbContext
 {
-    DbSet<CategoryEntity> Categories { get; set; }
-    DbSet<ContentEntity> Contents { get; set; }
-    DbSet<HabitEntity> Habits { get; set; }
-    DbSet<ItemEntity> Items { get; set; }
-    DbSet<NoteEntity> Notes { get; set; }
-    DbSet<PriorityEntity> Priorities { get; set; }
-    DbSet<SettingsEntity> Settings { get; set; }
-    DbSet<TaskEntity> Tasks { get; set; }
-    DbSet<TimeEntity> Times { get; set; }
+    IQueryable<IUserEntity> Users { get; }
+    DbSet<CategoryEntity> Categories { get; }
+    DbSet<ContentEntity> Contents { get; }
+    DbSet<HabitEntity> Habits { get; }
+    DbSet<ItemEntity> Items { get; }
+    DbSet<NoteEntity> Notes { get; }
+    DbSet<PriorityEntity> Priorities { get; }
+    DbSet<SettingsEntity> Settings { get; }
+    DbSet<TaskEntity> Tasks { get; }
+    DbSet<TimeEntity> Times { get; }
 
     DatabaseFacade Database { get; }
     IModel Model { get; }
     ChangeTracker ChangeTracker { get; }
 
+    DbSet<TEntity> Set<TEntity>() where TEntity : class;
     EntityEntry<TEntity> Add<TEntity>(TEntity entity) where TEntity : class;
     void AddRange(IEnumerable<object> entities);
     EntityEntry<TEntity> Update<TEntity>(TEntity entity) where TEntity : class;

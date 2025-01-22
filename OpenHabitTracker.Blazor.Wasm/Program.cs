@@ -50,6 +50,7 @@ IDataAccess dataAccess = host.Services.GetRequiredService<IDataAccess>();
 await dataAccess.Initialize();
 
 AppData appData = host.Services.GetRequiredService<AppData>();
+await appData.InitializeUsers();
 await appData.InitializeSettings();
 
 logger.LogInformation("Running app");

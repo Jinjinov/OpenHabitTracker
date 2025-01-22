@@ -1,15 +1,18 @@
-﻿using OpenHabitTracker.Data.Entities;
+using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 using Markdig;
+using Microsoft.Extensions.Localization;
 
 namespace OpenHabitTracker.Data;
 
-public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownPipeline markdownPipeline)
+public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownPipeline markdownPipeline, IStringLocalizer loc)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
     private readonly IRuntimeData _runtimeData = runtimeData;
     private readonly MarkdownPipeline _markdownPipeline = markdownPipeline;
+    private readonly IStringLocalizer _loc = loc;
 
+    public UserModel User { get; set; } = new();
     public SettingsModel Settings { get; set; } = new();
     public Dictionary<long, HabitModel>? Habits { get; set; }
     public Dictionary<long, NoteModel>? Notes { get; set; }
@@ -63,6 +66,39 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         }
     }
 
+    public async Task InitializeUsers()
+    {
+        if (User.Id == 0)
+        {
+            IReadOnlyList<UserEntity> users = await _dataAccess.GetUsers();
+
+            if (users.Count > 0 && users[0] is UserEntity userEntity)
+            {
+                User = new UserModel
+                {
+                    Id = userEntity.Id,
+                    UserName = userEntity.UserName,
+                    Email = userEntity.Email,
+                    PasswordHash = userEntity.PasswordHash
+                };
+            }
+            else
+            {
+                User = new UserModel
+                {
+                    UserName = "admin",
+                    Email = "admin@admin.com"
+                };
+
+                userEntity = User.ToEntity();
+
+                await _dataAccess.AddUser(userEntity);
+
+                User.Id = userEntity.Id;
+            }
+        }
+    }
+
     public async Task InitializeSettings(bool loadWelcomeNote = true)
     {
         if (Settings.Id == 0)
@@ -74,6 +110,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 Settings = new SettingsModel
                 {
                     Id = settingsEntity.Id,
+                    UserId = settingsEntity.UserId,
                     IsDarkMode = settingsEntity.IsDarkMode,
                     Theme = settingsEntity.Theme,
                     StartPage = settingsEntity.StartPage,
@@ -92,6 +129,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     SelectedRatioMin = settingsEntity.SelectedRatioMin,
                     HorizontalMargin = settingsEntity.HorizontalMargin,
                     VerticalMargin = settingsEntity.VerticalMargin,
+                    DefaultCategoryId = settingsEntity.DefaultCategoryId,
                     HiddenCategoryIds = settingsEntity.HiddenCategoryIds,
                     ShowPriority = settingsEntity.ShowPriority,
                     SortBy = settingsEntity.SortBy
@@ -99,6 +137,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             }
             else
             {
+                await InitializeUsers();
+
                 Settings = GetDefaultSettings();
 
                 settingsEntity = Settings.ToEntity();
@@ -115,10 +155,11 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         }
     }
 
-    private static SettingsModel GetDefaultSettings()
+    private SettingsModel GetDefaultSettings()
     {
         return new SettingsModel
         {
+            UserId = User.Id,
             IsDarkMode = true,
             Theme = "default",
             StartPage = "/notes",
@@ -280,11 +321,50 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         if (Categories is null)
         {
             IReadOnlyList<CategoryEntity> categories = await _dataAccess.GetCategories();
-            Categories = categories.Select(c => new CategoryModel
+
+            if (categories.Count > 0)
             {
-                Id = c.Id,
-                Title = c.Title,
-            }).ToDictionary(x => x.Id);
+                Categories = categories.Select(c => new CategoryModel
+                {
+                    Id = c.Id,
+                    UserId = c.UserId,
+                    Title = c.Title,
+                }).ToDictionary(x => x.Id);
+            }
+            else
+            {
+                CategoryEntity categoryEntity = new()
+                {
+                    UserId = User.Id,
+                    Title = _loc["Default"],
+                };
+
+                await _dataAccess.AddCategory(categoryEntity);
+
+                CategoryModel categoryModel = new()
+                {
+                    Id = categoryEntity.Id,
+                    UserId = categoryEntity.UserId,
+                    Title = categoryEntity.Title,
+                    Notes = new(),
+                    Tasks = new(),
+                    Habits = new()
+                };
+
+                Categories = new()
+                {
+                    { categoryModel.Id, categoryModel }
+                };
+
+                Settings.DefaultCategoryId = categoryModel.Id;
+
+                if (await _dataAccess.GetSettings(Settings.Id) is SettingsEntity settings)
+                {
+                    Settings.CopyToEntity(settings);
+
+                    await _dataAccess.UpdateSettings(settings);
+                }
+            }
         }
     }
 
@@ -395,7 +475,13 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
         if (userData.Categories.Count == 0)
         {
-            userData.Categories.Add(new CategoryModel());
+            CategoryModel category = new()
+            {
+                UserId = User.Id,
+                Title = _loc["Default"],
+            };
+
+            userData.Categories.Add(category);
         }
 
         foreach (CategoryModel category in userData.Categories)
@@ -445,6 +531,18 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             await _dataAccess.UpdateSettings(settings);
 
             Settings = userData.Settings;
+        }
+
+        if (userData.Categories.Count == 0)
+        {
+            return;
+        }
+
+        await InitializeCategories();
+
+        foreach (CategoryModel category in userData.Categories)
+        {
+            category.UserId = User.Id;
         }
 
         List<(CategoryModel Model, CategoryEntity Entity)> categories = userData.Categories.Where(x => !string.IsNullOrEmpty(x.Title)).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
@@ -552,6 +650,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             [
                 new()
                 {
+                    UserId = User.Id,
                     Title = "Welcome",
                     Notes =
                     [
@@ -626,6 +725,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             [
                 new()
                 {
+                    UserId = User.Id,
                     Title = "Examples",
                     Notes =
                     [
@@ -653,6 +753,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 },
                 new()
                 {
+                    UserId = User.Id,
                     Title = "Work",
                     Notes =
                     [
@@ -714,6 +815,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 },
                 new()
                 {
+                    UserId = User.Id,
                     Title = "Personal Development",
                     Notes =
                     [
@@ -775,6 +877,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                 },
                 new()
                 {
+                    UserId = User.Id,
                     Title = "Health & Fitness",
                     Notes =
                     [

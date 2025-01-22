@@ -137,6 +137,7 @@
     {
         Logger.LogInformation("MainLayout.OnInitializedAsync start");
 
+        await AppData.InitializeUsers();
         await AppData.InitializeSettings();
 
         Localization.Loc.SetCulture(AppData.Settings.Culture);

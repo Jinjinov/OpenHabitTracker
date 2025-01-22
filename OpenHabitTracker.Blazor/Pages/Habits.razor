@@ -1,4 +1,4 @@
-﻿@page "/habits"
+@page "/habits"
 @page "/habits/{Id:long}"
 
 @using OpenHabitTracker.Data
@@ -266,7 +266,7 @@
 
     void AddNew()
     {
-        HabitService.NewHabit = new() { Color = "bg-info-subtle" };
+        HabitService.NewHabit = new() { CategoryId = SettingsService.Settings.DefaultCategoryId, Color = "bg-info-subtle" };
         shouldFocus = true;
     }
 

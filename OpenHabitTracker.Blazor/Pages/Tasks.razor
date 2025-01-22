@@ -1,4 +1,4 @@
-﻿@page "/tasks"
+@page "/tasks"
 @page "/tasks/{Id:long}"
 
 @using OpenHabitTracker.Blazor.Components
@@ -180,7 +180,7 @@
 
     void AddNew()
     {
-        TaskService.NewTask = new() { Color = "bg-info-subtle" };
+        TaskService.NewTask = new() { CategoryId = SettingsService.Settings.DefaultCategoryId, Color = "bg-info-subtle" };
         shouldFocus = true;
     }
 

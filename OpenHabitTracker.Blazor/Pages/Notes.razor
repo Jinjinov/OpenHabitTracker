@@ -1,4 +1,4 @@
-﻿@page "/notes"
+@page "/notes"
 @page "/notes/{Id:long}"
 
 @using OpenHabitTracker.Data
@@ -163,7 +163,7 @@
 
     void AddNew()
     {
-        NoteService.NewNote = new() { Color = "bg-info-subtle" };
+        NoteService.NewNote = new() { CategoryId = AppData.Settings.DefaultCategoryId, Color = "bg-info-subtle" };
         shouldFocus = true;
     }
 

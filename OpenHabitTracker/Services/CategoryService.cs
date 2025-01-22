@@ -1,4 +1,4 @@
-﻿using OpenHabitTracker.Data;
+using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 
@@ -19,7 +19,7 @@ public class CategoryService(AppData appData, IDataAccess dataAccess)
     {
         await _appData.InitializeCategories();
 
-        NewCategory ??= new();
+        NewCategory ??= new() { UserId = _appData.User.Id };
     }
 
     public void SetSelectedCategory(long? id)
@@ -43,7 +43,7 @@ public class CategoryService(AppData appData, IDataAccess dataAccess)
 
         _appData.Categories.Add(NewCategory.Id, NewCategory);
 
-        NewCategory = new();
+        NewCategory = new() { UserId = _appData.User.Id };
     }
 
     public async Task UpdateCategory(string title)
@@ -67,6 +67,10 @@ public class CategoryService(AppData appData, IDataAccess dataAccess)
     {
         if (_appData.Categories is null)
             return;
+
+        category.Notes?.ForEach(x => x.CategoryId = _appData.Settings.DefaultCategoryId);
+        category.Tasks?.ForEach(x => x.CategoryId = _appData.Settings.DefaultCategoryId);
+        category.Habits?.ForEach(x => x.CategoryId = _appData.Settings.DefaultCategoryId);
 
         _appData.Categories.Remove(category.Id);
 

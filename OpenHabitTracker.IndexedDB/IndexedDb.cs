@@ -1,4 +1,4 @@
-﻿using DnetIndexedDb;
+using DnetIndexedDb;
 using DnetIndexedDb.Fluent;
 using DnetIndexedDb.Models;
 using OpenHabitTracker.Data.Entities;
@@ -13,10 +13,16 @@ public class IndexedDb(IJSRuntime jsRuntime, IndexedDbOptions<IndexedDb> options
         IndexedDbDatabaseModel indexedDbDatabaseModel = new()
         {
             Name = "OpenHabitTracker",
-            Version = 1,
+            Version = 2,
             DbModelId = 0,
             UseKeyGenerator = false // Unable to use AutoIncrement = false and AutoIncrement = true in the same IndexedDbDatabaseModel
         };
+
+        indexedDbDatabaseModel.AddStore(nameof(UserEntity))
+            .WithKey(nameof(UserEntity.Id))
+            .AddUniqueIndex(nameof(UserEntity.Id))
+            .AddIndex(nameof(UserEntity.UserName)) // warning: name.ToCamelCase();
+            .AddIndex(nameof(UserEntity.Email)); // warning: name.ToCamelCase();
 
         indexedDbDatabaseModel.AddStore(nameof(HabitEntity))
             .WithKey(nameof(HabitEntity.Id))

@@ -1,8 +1,10 @@
-﻿namespace OpenHabitTracker.Data.Models;
+namespace OpenHabitTracker.Data.Models;
 
 public class CategoryModel
 {
     internal long Id { get; set; }
+
+    public long UserId { get; set; }
 
     public string Title { get; set; } = string.Empty;
 

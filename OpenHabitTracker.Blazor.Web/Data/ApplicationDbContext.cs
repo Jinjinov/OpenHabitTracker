@@ -5,7 +5,7 @@ using OpenHabitTracker.EntityFrameworkCore;
 
 namespace OpenHabitTracker.Blazor.Web.Data;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, long>, IApplicationDbContext
 {
     public DbSet<ContentEntity> Contents { get; set; }
     public DbSet<HabitEntity> Habits { get; set; }
@@ -16,6 +16,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<CategoryEntity> Categories { get; set; }
     public DbSet<PriorityEntity> Priorities { get; set; }
     public DbSet<SettingsEntity> Settings { get; set; }
+
+    IQueryable<IUserEntity> IApplicationDbContext.Users => Users;
 
     // Constructor with no argument is required and it is used when adding/removing migrations from class library
     public ApplicationDbContext()

@@ -32,15 +32,11 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 ---------------------------------------------------------------------------------------------------
 
 1.
-CategoryId can't be null
-    - add default category if there is none (same as settings)
-    - add DefaultCategoryId to Settings
-    - add migration that sets any null CategoryId to DefaultCategoryId
+- add migration that sets any null CategoryId to default category id
 
-add class User with string Id, Name, Email, PasswordHash
-    add UserId to Category
-    add UserId to Settings
-    UserId can't be null
+UserData -> UserModel - add Settings and Categories to UserModel
+
+AppData public Initialize() => local methods: InitializeUser, InitializeSettings, InitializePriorities
 
 2.
 make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
@@ -53,6 +49,8 @@ run Jetbrains Rider code analysis
 add comments to methods
 6.
 add REST API endpoints for online data sync to Blazor Server - use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
+
+---------------------------------------------------------------------------------------------------
 
 7.
 add OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui

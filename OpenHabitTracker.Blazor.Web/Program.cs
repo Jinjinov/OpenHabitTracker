@@ -27,7 +27,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddServices();
 builder.Services.AddDataAccess("OpenHT.db");
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     {
         options.Password.RequireDigit = false;
         options.Password.RequireLowercase = false;

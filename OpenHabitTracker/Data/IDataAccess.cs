@@ -1,4 +1,4 @@
-﻿using OpenHabitTracker.Data.Entities;
+using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.Data;
 
@@ -6,6 +6,7 @@ public interface IDataAccess
 {
     Task Initialize();
 
+    Task AddUser(UserEntity user);
     Task AddHabit(HabitEntity habit);
     Task AddNote(NoteEntity note);
     Task AddTask(TaskEntity task);
@@ -15,6 +16,7 @@ public interface IDataAccess
     Task AddPriority(PriorityEntity priority);
     Task AddSettings(SettingsEntity settings);
 
+    Task AddUsers(IReadOnlyCollection<UserEntity> users);
     Task AddHabits(IReadOnlyCollection<HabitEntity> habits);
     Task AddNotes(IReadOnlyCollection<NoteEntity> notes);
     Task AddTasks(IReadOnlyCollection<TaskEntity> tasks);
@@ -24,6 +26,7 @@ public interface IDataAccess
     Task AddPriorities(IReadOnlyCollection<PriorityEntity> priorities);
     Task AddSettings(IReadOnlyCollection<SettingsEntity> settings);
 
+    Task<IReadOnlyList<UserEntity>> GetUsers();
     Task<IReadOnlyList<HabitEntity>> GetHabits();
     Task<IReadOnlyList<NoteEntity>> GetNotes();
     Task<IReadOnlyList<TaskEntity>> GetTasks();
@@ -33,6 +36,7 @@ public interface IDataAccess
     Task<IReadOnlyList<PriorityEntity>> GetPriorities();
     Task<IReadOnlyList<SettingsEntity>> GetSettings();
 
+    Task<UserEntity?> GetUser(long id);
     Task<HabitEntity?> GetHabit(long id);
     Task<NoteEntity?> GetNote(long id);
     Task<TaskEntity?> GetTask(long id);
@@ -42,6 +46,7 @@ public interface IDataAccess
     Task<PriorityEntity?> GetPriority(long id);
     Task<SettingsEntity?> GetSettings(long id);
 
+    Task UpdateUser(UserEntity user);
     Task UpdateHabit(HabitEntity habit);
     Task UpdateNote(NoteEntity note);
     Task UpdateTask(TaskEntity task);
@@ -51,6 +56,7 @@ public interface IDataAccess
     Task UpdatePriority(PriorityEntity priority);
     Task UpdateSettings(SettingsEntity settings);
 
+    Task RemoveUser(long id);
     Task RemoveHabit(long id);
     Task RemoveNote(long id);
     Task RemoveTask(long id);
@@ -60,6 +66,7 @@ public interface IDataAccess
     Task RemovePriority(long id);
     Task RemoveSettings(long id);
 
+    Task RemoveUsers();
     Task RemoveHabits();
     Task RemoveNotes();
     Task RemoveTasks();

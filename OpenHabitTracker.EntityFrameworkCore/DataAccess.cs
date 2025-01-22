@@ -6,7 +6,7 @@ namespace OpenHabitTracker.EntityFrameworkCore;
 
 public class DataAccess : IDataAccess
 {
-    private readonly IApplicationDbContext _dataContext;
+    protected readonly IApplicationDbContext _dataContext;
 
     public DataAccess(IApplicationDbContext dataContext)
     {
@@ -19,6 +19,11 @@ public class DataAccess : IDataAccess
         await _dataContext.Database.MigrateAsync();
     }
 
+    public virtual async Task AddUser(UserEntity user)
+    {
+        _dataContext.Add(user);
+        await _dataContext.SaveChangesAsync();
+    }
     public async Task AddHabit(HabitEntity habit)
     {
         _dataContext.Add(habit);
@@ -60,6 +65,11 @@ public class DataAccess : IDataAccess
         await _dataContext.SaveChangesAsync();
     }
 
+    public virtual async Task AddUsers(IReadOnlyCollection<UserEntity> users)
+    {
+        _dataContext.AddRange(users);
+        await _dataContext.SaveChangesAsync();
+    }
     public async Task AddHabits(IReadOnlyCollection<HabitEntity> habits)
     {
         _dataContext.AddRange(habits);
@@ -101,6 +111,10 @@ public class DataAccess : IDataAccess
         await _dataContext.SaveChangesAsync();
     }
 
+    public virtual async Task<IReadOnlyList<UserEntity>> GetUsers()
+    {
+        return await _dataContext.Set<UserEntity>().ToListAsync();
+    }
     public async Task<IReadOnlyList<HabitEntity>> GetHabits()
     {
         return await _dataContext.Habits.ToListAsync();
@@ -140,6 +154,10 @@ public class DataAccess : IDataAccess
         return await _dataContext.Settings.ToListAsync();
     }
 
+    public virtual async Task<UserEntity?> GetUser(long id)
+    {
+        return await _dataContext.Set<UserEntity>().FindAsync(id);
+    }
     public async Task<HabitEntity?> GetHabit(long id)
     {
         return await _dataContext.Habits.FindAsync(id);
@@ -173,6 +191,11 @@ public class DataAccess : IDataAccess
         return await _dataContext.Settings.FindAsync(id);
     }
 
+    public virtual async Task UpdateUser(UserEntity user)
+    {
+        _dataContext.Update(user);
+        await _dataContext.SaveChangesAsync();
+    }
     public async Task UpdateHabit(HabitEntity habit)
     {
         habit.UpdatedAt = DateTime.Now;
@@ -217,6 +240,13 @@ public class DataAccess : IDataAccess
         await _dataContext.SaveChangesAsync();
     }
 
+    public virtual async Task RemoveUser(long id)
+    {
+        var entity = _dataContext.Set<UserEntity>().Find(id);
+        if (entity is not null)
+            _dataContext.Set<UserEntity>().Remove(entity);
+        await _dataContext.SaveChangesAsync();
+    }
     public async Task RemoveHabit(long id)
     {
         var entity = _dataContext.Habits.Find(id);
@@ -274,6 +304,10 @@ public class DataAccess : IDataAccess
         await _dataContext.SaveChangesAsync();
     }
 
+    public virtual async Task RemoveUsers()
+    {
+        await _dataContext.Users.ExecuteDeleteAsync();
+    }
     public async Task RemoveHabits()
     {
         await _dataContext.Habits.ExecuteDeleteAsync();

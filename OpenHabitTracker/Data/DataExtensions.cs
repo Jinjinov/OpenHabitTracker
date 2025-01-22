@@ -1,4 +1,4 @@
-﻿using OpenHabitTracker.Data.Entities;
+using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Data;
@@ -15,6 +15,7 @@ public static class DataExtensions
     public static void CopyToEntity(this CategoryModel model, CategoryEntity entity)
     {
         entity.Id = model.Id;
+        entity.UserId = model.UserId;
         entity.Title = model.Title;
     }
 
@@ -90,6 +91,21 @@ public static class DataExtensions
         entity.Title = model.Title;
     }
 
+    public static UserEntity ToEntity(this UserModel model)
+    {
+        UserEntity entity = new();
+        model.CopyToEntity(entity);
+        return entity;
+    }
+
+    public static void CopyToEntity(this UserModel model, UserEntity entity)
+    {
+        entity.Id = model.Id;
+        entity.UserName = model.UserName;
+        entity.Email = model.Email;
+        entity.PasswordHash = model.PasswordHash;
+    }
+
     public static SettingsEntity ToEntity(this SettingsModel model)
     {
         SettingsEntity entity = new();
@@ -100,6 +116,7 @@ public static class DataExtensions
     public static void CopyToEntity(this SettingsModel model, SettingsEntity entity)
     {
         entity.Id = model.Id;
+        entity.UserId = model.UserId;
         entity.IsDarkMode = model.IsDarkMode;
         entity.Theme = model.Theme;
         entity.StartPage = model.StartPage;
@@ -118,6 +135,7 @@ public static class DataExtensions
         entity.SelectedRatioMin = model.SelectedRatioMin;
         entity.HorizontalMargin = model.HorizontalMargin;
         entity.VerticalMargin = model.VerticalMargin;
+        entity.DefaultCategoryId = model.DefaultCategoryId;
         entity.HiddenCategoryIds = model.HiddenCategoryIds;
         entity.ShowPriority = model.ShowPriority;
         entity.SortBy = model.SortBy;

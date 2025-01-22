@@ -12,7 +12,7 @@ public static class Startup
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>());
 
-        services.AddScoped<IDataAccess, DataAccess>();
+        services.AddScoped<IDataAccess, OpenHabitTracker.Blazor.Web.Data.ApplicationDataAccess>();
 
         return services;
     }

@@ -1,8 +1,10 @@
-﻿namespace OpenHabitTracker.Data.Entities;
+namespace OpenHabitTracker.Data.Entities;
 
 public class SettingsEntity
 {
     public long Id { get; set; }
+
+    public long UserId { get; set; }
 
     public bool IsDarkMode { get; set; } = true;
 
@@ -39,6 +41,8 @@ public class SettingsEntity
     public int HorizontalMargin { get; set; } = 1;
 
     public int VerticalMargin { get; set; } = 1;
+
+    public long DefaultCategoryId { get; set; }
 
     public List<long> HiddenCategoryIds { get; set; } = [];
 

@@ -1,4 +1,4 @@
-﻿using OpenHabitTracker.Data;
+using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.IndexedDB;
@@ -41,7 +41,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
 
     private static long GetMax(long a, long b, long c) => Math.Max(a, Math.Max(b, c));
 
-    private async Task<long> MaxKey()
+    private async Task<long> GetMaxContentKey()
     {
         return GetMax(
             await _indexedDb.GetMaxKey<long, NoteEntity>(),
@@ -55,19 +55,24 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         _dbModelId ??= await _indexedDb.OpenIndexedDb();
     }
 
+    public async Task AddUser(UserEntity user)
+    {
+        user.Id = 1 + await _indexedDb.GetMaxKey<long, UserEntity>();
+        await _indexedDb.AddItems(new List<UserEntity> { user });
+    }
     public async Task AddHabit(HabitEntity habit)
     {
-        habit.Id = 1 + await MaxKey();
+        habit.Id = 1 + await GetMaxContentKey();
         await _indexedDb.AddItems(new List<HabitEntity> { habit });
     }
     public async Task AddNote(NoteEntity note)
     {
-        note.Id = 1 + await MaxKey();
+        note.Id = 1 + await GetMaxContentKey();
         await _indexedDb.AddItems(new List<NoteEntity> { note });
     }
     public async Task AddTask(TaskEntity task)
     {
-        task.Id = 1 + await MaxKey();
+        task.Id = 1 + await GetMaxContentKey();
         await _indexedDb.AddItems(new List<TaskEntity> { task });
     }
     public async Task AddTime(TimeEntity time)
@@ -96,9 +101,18 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         await _indexedDb.AddItems(new List<SettingsEntity> { settings });
     }
 
+    public async Task AddUsers(IReadOnlyCollection<UserEntity> users)
+    {
+        long maxKey = await _indexedDb.GetMaxKey<long, UserEntity>();
+        foreach (UserEntity user in users)
+        {
+            user.Id = ++maxKey;
+        }
+        await _indexedDb.AddItems(users.ToList());
+    }
     public async Task AddHabits(IReadOnlyCollection<HabitEntity> habits)
     {
-        long maxKey = await MaxKey();
+        long maxKey = await GetMaxContentKey();
         foreach (HabitEntity habit in habits)
         {
             habit.Id = ++maxKey;
@@ -107,7 +121,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     }
     public async Task AddNotes(IReadOnlyCollection<NoteEntity> notes)
     {
-        long maxKey = await MaxKey();
+        long maxKey = await GetMaxContentKey();
         foreach (NoteEntity note in notes)
         {
             note.Id = ++maxKey;
@@ -116,7 +130,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
     }
     public async Task AddTasks(IReadOnlyCollection<TaskEntity> tasks)
     {
-        long maxKey = await MaxKey();
+        long maxKey = await GetMaxContentKey();
         foreach (TaskEntity task in tasks)
         {
             task.Id = ++maxKey;
@@ -169,6 +183,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         await _indexedDb.AddItems(settings.ToList());
     }
 
+    public async Task<IReadOnlyList<UserEntity>> GetUsers()
+    {
+        return await _indexedDb.GetAll<UserEntity>();
+    }
     public async Task<IReadOnlyList<HabitEntity>> GetHabits()
     {
         return await _indexedDb.GetAll<HabitEntity>();
@@ -208,6 +226,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         return await _indexedDb.GetAll<SettingsEntity>();
     }
 
+    public async Task<UserEntity?> GetUser(long id)
+    {
+        return await _indexedDb.GetByKey<long, UserEntity>(id);
+    }
     public async Task<HabitEntity?> GetHabit(long id)
     {
         return await _indexedDb.GetByKey<long, HabitEntity>(id);
@@ -241,6 +263,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         return await _indexedDb.GetByKey<long, SettingsEntity>(id);
     }
 
+    public async Task UpdateUser(UserEntity user)
+    {
+        await _indexedDb.UpdateItems(new List<UserEntity> { user });
+    }
     public async Task UpdateHabit(HabitEntity habit)
     {
         habit.UpdatedAt = DateTime.Now;
@@ -277,6 +303,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         await _indexedDb.UpdateItems(new List<SettingsEntity> { settings });
     }
 
+    public async Task RemoveUser(long id)
+    {
+        await _indexedDb.DeleteByKey<long, UserEntity>(id);
+    }
     public async Task RemoveHabit(long id)
     {
         await _indexedDb.DeleteByKey<long, HabitEntity>(id);
@@ -310,6 +340,10 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         await _indexedDb.DeleteByKey<long, SettingsEntity>(id);
     }
 
+    public async Task RemoveUsers()
+    {
+        await _indexedDb.DeleteAll<UserEntity>();
+    }
     public async Task RemoveHabits()
     {
         await _indexedDb.DeleteAll<HabitEntity>();
@@ -345,6 +379,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
 
     public async Task ClearAllTables()
     {
+        await _indexedDb.DeleteAll<UserEntity>();
         await _indexedDb.DeleteAll<HabitEntity>();
         await _indexedDb.DeleteAll<NoteEntity>();
         await _indexedDb.DeleteAll<TaskEntity>();
