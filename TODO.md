@@ -104,6 +104,8 @@ store the refresh token for each cloud provider
 
 !!! refactor classes:
 
+AppData, CalendarParams, IRuntimeData - not in Data(base) namespace
+
 UserData -> UserImportExportData
 
 AppData -> ClientSideData
