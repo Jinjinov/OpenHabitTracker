@@ -32,10 +32,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 ---------------------------------------------------------------------------------------------------
 
 1.
-- add migration that sets any null CategoryId to default category id
+add migration that sets any null CategoryId to default category id
+recreate initial migration in OpenHabitTracker.Blazor.Web
 
 UserData -> UserModel - add Settings and Categories to UserModel
-
 AppData public Initialize() => local methods: InitializeUser, InitializeSettings, InitializePriorities
 
 2.
