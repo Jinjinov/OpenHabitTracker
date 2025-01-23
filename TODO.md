@@ -31,8 +31,15 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+remove 
+- DefaultCategoryId
+- "Default"
+- await _dataAccess.AddCategory(DefaultCategory);
+- fix GetUserData
+- fix SetUserData
+move all items from deleted category to trash
+
 1.
-add migration that sets any null CategoryId to default category id
 recreate initial migration in OpenHabitTracker.Blazor.Web
 
 UserData -> UserModel - add Settings and Categories to UserModel
