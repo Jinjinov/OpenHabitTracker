@@ -135,7 +135,6 @@ public static class DataExtensions
         entity.SelectedRatioMin = model.SelectedRatioMin;
         entity.HorizontalMargin = model.HorizontalMargin;
         entity.VerticalMargin = model.VerticalMargin;
-        entity.DefaultCategoryId = model.DefaultCategoryId;
         entity.HiddenCategoryIds = model.HiddenCategoryIds;
         entity.ShowPriority = model.ShowPriority;
         entity.SortBy = model.SortBy;

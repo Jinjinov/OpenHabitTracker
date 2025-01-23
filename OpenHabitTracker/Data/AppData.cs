@@ -5,12 +5,11 @@ using Microsoft.Extensions.Localization;
 
 namespace OpenHabitTracker.Data;
 
-public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownPipeline markdownPipeline, IStringLocalizer loc)
+public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownPipeline markdownPipeline)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
     private readonly IRuntimeData _runtimeData = runtimeData;
     private readonly MarkdownPipeline _markdownPipeline = markdownPipeline;
-    private readonly IStringLocalizer _loc = loc;
 
     public UserModel User { get; set; } = new();
     public SettingsModel Settings { get; set; } = new();
@@ -129,7 +128,6 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
                     SelectedRatioMin = settingsEntity.SelectedRatioMin,
                     HorizontalMargin = settingsEntity.HorizontalMargin,
                     VerticalMargin = settingsEntity.VerticalMargin,
-                    DefaultCategoryId = settingsEntity.DefaultCategoryId,
                     HiddenCategoryIds = settingsEntity.HiddenCategoryIds,
                     ShowPriority = settingsEntity.ShowPriority,
                     SortBy = settingsEntity.SortBy
@@ -322,49 +320,12 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         {
             IReadOnlyList<CategoryEntity> categories = await _dataAccess.GetCategories();
 
-            if (categories.Count > 0)
+            Categories = categories.Select(c => new CategoryModel
             {
-                Categories = categories.Select(c => new CategoryModel
-                {
-                    Id = c.Id,
-                    UserId = c.UserId,
-                    Title = c.Title,
-                }).ToDictionary(x => x.Id);
-            }
-            else
-            {
-                CategoryEntity categoryEntity = new()
-                {
-                    UserId = User.Id,
-                    Title = _loc["Default"],
-                };
-
-                await _dataAccess.AddCategory(categoryEntity);
-
-                CategoryModel categoryModel = new()
-                {
-                    Id = categoryEntity.Id,
-                    UserId = categoryEntity.UserId,
-                    Title = categoryEntity.Title,
-                    Notes = new(),
-                    Tasks = new(),
-                    Habits = new()
-                };
-
-                Categories = new()
-                {
-                    { categoryModel.Id, categoryModel }
-                };
-
-                Settings.DefaultCategoryId = categoryModel.Id;
-
-                if (await _dataAccess.GetSettings(Settings.Id) is SettingsEntity settings)
-                {
-                    Settings.CopyToEntity(settings);
-
-                    await _dataAccess.UpdateSettings(settings);
-                }
-            }
+                Id = c.Id,
+                UserId = c.UserId,
+                Title = c.Title,
+            }).ToDictionary(x => x.Id);
         }
     }
 

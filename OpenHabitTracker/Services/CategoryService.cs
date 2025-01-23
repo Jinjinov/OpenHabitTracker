@@ -68,9 +68,9 @@ public class CategoryService(AppData appData, IDataAccess dataAccess)
         if (_appData.Categories is null)
             return;
 
-        category.Notes?.ForEach(x => x.CategoryId = _appData.Settings.DefaultCategoryId);
-        category.Tasks?.ForEach(x => x.CategoryId = _appData.Settings.DefaultCategoryId);
-        category.Habits?.ForEach(x => x.CategoryId = _appData.Settings.DefaultCategoryId);
+        category.Notes?.ForEach(async x => { x.CategoryId = 0; x.IsDeleted = true; await _appData.UpdateModel(x); });
+        category.Tasks?.ForEach(async x => { x.CategoryId = 0; x.IsDeleted = true; await _appData.UpdateModel(x); });
+        category.Habits?.ForEach(async x => { x.CategoryId = 0; x.IsDeleted = true; await _appData.UpdateModel(x); });
 
         _appData.Categories.Remove(category.Id);
 

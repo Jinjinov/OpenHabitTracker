@@ -31,13 +31,9 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-remove 
-- DefaultCategoryId
-- "Default"
-- await _dataAccess.AddCategory(DefaultCategory);
+for items where CategoryId is 0
 - fix GetUserData
 - fix SetUserData
-move all items from deleted category to trash
 
 1.
 recreate initial migration in OpenHabitTracker.Blazor.Web
