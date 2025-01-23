@@ -1,7 +1,6 @@
+using Markdig;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
-using Markdig;
-using Microsoft.Extensions.Localization;
 
 namespace OpenHabitTracker.Data;
 
@@ -436,11 +435,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
         if (userData.Categories.Count == 0)
         {
-            CategoryModel category = new()
-            {
-                UserId = User.Id,
-                Title = _loc["Default"],
-            };
+            CategoryModel category = new() { UserId = User.Id };
 
             userData.Categories.Add(category);
         }
@@ -498,8 +493,6 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         {
             return;
         }
-
-        await InitializeCategories();
 
         foreach (CategoryModel category in userData.Categories)
         {
