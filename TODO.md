@@ -31,11 +31,9 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-for items where CategoryId is 0
-- fix GetUserData
-- fix SetUserData
-
 1.
+add a migration for the User
+
 recreate initial migration in OpenHabitTracker.Blazor.Web
 
 UserData -> UserModel - add Settings and Categories to UserModel

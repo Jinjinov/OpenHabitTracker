@@ -433,7 +433,19 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             Categories = Categories.Values.ToList()
         };
 
-        if (userData.Categories.Count == 0)
+        /*
+        - no category, no items --> no problem
+        - categories, no items --> no problem
+        - no category, items --> add one default category with id 0, items already have CategoryId 0 by default
+        - categories, items
+            - every item has CategoryId != 0 --> no problem
+            - some items have CategoryId != 0 --> add one default category with id 0, items already have CategoryId 0 by default
+        */
+
+        if (userData.Categories.Count == 0 ||
+            Habits.Values.Any(x => x.CategoryId == 0) ||
+            Notes.Values.Any(x => x.CategoryId == 0) ||
+            Tasks.Values.Any(x => x.CategoryId == 0))
         {
             CategoryModel category = new() { UserId = User.Id };
 
@@ -468,6 +480,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
     public async Task SetUserData(UserData userData)
     {
+        userData.Settings.UserId = User.Id;
+
         if (Settings.Id == 0)
         {
             SettingsEntity settings = userData.Settings.ToEntity();
@@ -499,9 +513,16 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             category.UserId = User.Id;
         }
 
-        List<(CategoryModel Model, CategoryEntity Entity)> categories = userData.Categories.Where(x => !string.IsNullOrEmpty(x.Title)).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        // add categories to DB
+
+        List<(CategoryModel Model, CategoryEntity Entity)> categories = userData.Categories
+            .Where(x => !string.IsNullOrEmpty(x.Title)) // don't add the default category with no Title
+            .Select(x => (Model: x, Entity: x.ToEntity()))
+            .ToList();
 
         await _dataAccess.AddCategories(categories.Select(x => x.Entity).ToList());
+
+        // each CategoryEntity now has the id, set it to CategoryModel and to all items
 
         categories.ForEach(x => x.Model.Id = x.Entity.Id);
 
@@ -514,6 +535,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             Model.Habits?.ForEach(x => x.CategoryId = Model.Id);
         }
 
+        // add all items to DB, including those from the default category that have CategoryId 0
+
         List<(NoteModel Model, NoteEntity Entity)> notes = userData.Categories.Where(x => x.Notes is not null).SelectMany(x => x.Notes!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
         List<(TaskModel Model, TaskEntity Entity)> tasks = userData.Categories.Where(x => x.Tasks is not null).SelectMany(x => x.Tasks!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
         List<(HabitModel Model, HabitEntity Entity)> habits = userData.Categories.Where(x => x.Habits is not null).SelectMany(x => x.Habits!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
@@ -521,6 +544,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         await _dataAccess.AddNotes(notes.Select(x => x.Entity).ToList());
         await _dataAccess.AddTasks(tasks.Select(x => x.Entity).ToList());
         await _dataAccess.AddHabits(habits.Select(x => x.Entity).ToList());
+
+        // NoteEntity TaskEntity HabitEntity have id now, set it to NoteModel TaskModel HabitModel
 
         foreach ((NoteModel Model, NoteEntity Entity) in notes)
         {
@@ -546,6 +571,8 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             Model.RefreshTimesDoneByDay();
         }
 
+        // add all task items and habit items to DB
+
         List<(ItemModel Model, ItemEntity Entity)> items =
             [
                 .. tasks.Where(x => x.Model.Items is not null).SelectMany(x => x.Model.Items!).Select(x => (Model: x, Entity: x.ToEntity())),
@@ -554,13 +581,21 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
 
         await _dataAccess.AddItems(items.Select(x => x.Entity).ToList());
 
+        // each ItemEntity now has id, set it to ItemModel
+
         items.ForEach(x => x.Model.Id = x.Entity.Id);
+
+        // add all habit times done to DB
 
         List<(TimeModel Model, TimeEntity Entity)> times = habits.Where(x => x.Model.TimesDone is not null).SelectMany(x => x.Model.TimesDone!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
         await _dataAccess.AddTimes(times.Select(x => x.Entity).ToList());
 
+        // each TimeEntity now has id, set it to TimeModel
+
         times.ForEach(x => x.Model.Id = x.Entity.Id);
+
+        // add every model to the class member dictionary
 
         if (Habits is null) Habits = habits.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in habits.ToDictionary(x => x.Model.Id, x => x.Model)) Habits[pair.Key] = pair.Value;
