@@ -34,6 +34,8 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 1.
 Flatpak:
     finish-args: Replace this with wayland and fallback-x11 once Wayland support becomes available
+        - --socket=wayland
+        - --socket=fallback-x11
     - test in Ubuntu
         - appstream-util validate net.openhabittracker.OpenHabitTracker.metainfo.xml
     build-commands: aarch64
