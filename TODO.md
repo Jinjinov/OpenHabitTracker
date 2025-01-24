@@ -33,8 +33,16 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 1.
 Flatpak:
-    aarch64
-    Replace this with wayland and fallback-x11 once Wayland support becomes available
+    finish-args: Replace this with wayland and fallback-x11 once Wayland support becomes available
+    - test in Ubuntu
+        - appstream-util validate net.openhabittracker.OpenHabitTracker.metainfo.xml
+    build-commands: aarch64
+        - remove flathub.json
+    - test on Raspberry Pi
+
+Flathub
+    - remove flathub.json
+    - remove .gitmodules
 
 2.
 UserData -> UserModel - add Settings and Categories to UserModel
