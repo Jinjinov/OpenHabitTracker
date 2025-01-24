@@ -32,19 +32,17 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 ---------------------------------------------------------------------------------------------------
 
 1.
-add a migration for the User
-
 recreate initial migration in OpenHabitTracker.Blazor.Web
 
 Flatpak:
     aarch64
     Replace this with wayland and fallback-x11 once Wayland support becomes available
 
+2.
 UserData -> UserModel - add Settings and Categories to UserModel
 
 AppData public Initialize() => local methods: InitializeUser, InitializeSettings, InitializePriorities
 
-2.
 make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
 
 3.
