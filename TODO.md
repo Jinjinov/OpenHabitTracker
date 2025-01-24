@@ -32,8 +32,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 ---------------------------------------------------------------------------------------------------
 
 1.
-recreate initial migration in OpenHabitTracker.Blazor.Web
-
 Flatpak:
     aarch64
     Replace this with wayland and fallback-x11 once Wayland support becomes available
