@@ -150,6 +150,7 @@ APKPure
 Default project: OpenHabitTracker.EntityFrameworkCore
 Add-Migration Initial -StartupProject OpenHabitTracker.Blazor.WinForms
 
+dotnet tool update --global dotnet-ef
 dotnet ef migrations add Initial --project OpenHabitTracker.EntityFrameworkCore --startup-project OpenHabitTracker.Blazor.WinForms
 
 ---------------------------------------------------------------------------------------------------

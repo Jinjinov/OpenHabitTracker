@@ -13,8 +13,7 @@ command: OpenHT
 
 finish-args:
   - --device=dri
-  # TODO: Replace this with wayland and fallback-x11 once Wayland support
-  #       becomes available:
+  # TODO: Replace this with wayland and fallback-x11 once Wayland support becomes available:
   #       https://github.com/AvaloniaUI/Avalonia/pull/8003
   - --socket=x11
   - --share=ipc
