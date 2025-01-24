@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Dropbox.Api" Version="7.0.0" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3627" />
-    <PackageReference Include="Microsoft.Graph" Version="5.68.0" />
+    <PackageReference Include="Microsoft.Graph" Version="5.69.0" />
     <PackageReference Include="WebDav.Client" Version="2.8.0" />
     <PackageReference Include="WebDAVClient" Version="2.2.1" />
   </ItemGroup>
