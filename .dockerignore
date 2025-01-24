@@ -17,7 +17,6 @@
 **/OpenHabitTracker.Blazor.Wpf
 **/OpenHabitTracker.IndexedDB
 **/OpenHabitTracker.Web
-**/Photino.Blazor
 .editorconfig
 DeveloperNotes.md
 flathub.json

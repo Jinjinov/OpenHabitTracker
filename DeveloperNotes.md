@@ -1,5 +1,16 @@
 # Notes:
 
+nuget.config
+
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <packageSources>
+        <add key="PhotinoPackages" value="./OpenHabitTracker.Blazor.Photino/Packages" />
+    </packageSources>
+</configuration>
+
+---------------------------------------------------------------------------------------------------
+
 Host and deploy ASP.NET Core Blazor WebAssembly on IIS:
 
 https://learn.microsoft.com/en-us/aspnet/core/blazor/host-and-deploy/webassembly?view=aspnetcore-9.0#install-the-url-rewrite-module
@@ -511,6 +522,43 @@ public sealed class ErrorBoundaryLogger : IErrorBoundaryLogger
 }
 
 https://stackoverflow.com/questions/50744024/iloggerfactory-vs-servicecollection-addlogging-vs-webhostbuilder-configureloggin
+
+---------------------------------------------------------------------------------------------------
+
+PhotinoWebViewManager.cs
+
+        public Stream HandleWebRequest(object sender, string schema, string url, out string contentType)
+        {
+            // Intercept web requests to external websites (e.g., app://github.com) and open the link in the user's
+            // browser.
+            if (!url.Contains("localhost") && !url.Contains("0.0.0.0"))
+            {
+                Process.Start(new ProcessStartInfo(url.Replace($"{schema}://", "http://")) { UseShellExecute = true });
+                contentType = default;
+                return null;
+            }
+
+            // It would be better if we were told whether or not this is a navigation request, but
+            // since we're not, guess.
+            var localPath = (new Uri(url)).LocalPath;
+            var hasFileExtension = localPath.LastIndexOf('.') > localPath.LastIndexOf('/');
+
+            //Remove parameters before attempting to retrieve the file. For example: http://localhost/_content/Blazorise/button.js?v=1.0.7.0
+            if (url.Contains('?')) url = url.Substring(0, url.IndexOf('?'));
+
+            if (url.StartsWith(AppBaseUri, StringComparison.Ordinal)
+                && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage,
+                    out var content, out var headers))
+            {
+                headers.TryGetValue("Content-Type", out contentType);
+                return content;
+            }
+            else
+            {
+                contentType = default;
+                return null;
+            }
+        }
 
 ---------------------------------------------------------------------------------------------------
 
