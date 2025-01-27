@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component type="desktop">
+<component type="desktop-application">
   <id>net.openhabittracker.OpenHabitTracker</id>
-  <icon type="stock">net.openhabittracker.OpenHabitTracker</icon>
-  <launchable type="desktop-id">net.openhabittracker.OpenHabitTracker.desktop</launchable>
-  <name>OpenHabitTracker</name>
-  <developer_name>Jinjinov</developer_name>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <url type="homepage">https://openhabittracker.net</url>
-  <url type="help">https://github.com/Jinjinov/OpenHabitTracker</url>
-  <url type="bugtracker">https://github.com/Jinjinov/OpenHabitTracker/issues</url>
+  <name>OpenHabitTracker</name>
   <summary>Take notes, plan tasks, track habits</summary>
-  <categories>
-    <category>Office</category>
-  </categories>
-  <keywords>
-    <keyword>Open source</keyword>
-    <keyword>Habit tracker</keyword>
-  </keywords>
+  <developer id="net.openhabittracker">
+    <name>Jinjinov</name>
+  </developer>
   <description>
     <p>OpenHabitTracker is:</p>
     <ul>
@@ -37,10 +27,22 @@
       <li>Available in 26 themes with Dark and Light modes</li>
     </ul>
   </description>
+  <launchable type="desktop-id">net.openhabittracker.OpenHabitTracker.desktop</launchable>
   <provides>
     <binary>OpenHT</binary>
   </provides>
+  <categories>
+    <category>Office</category>
+  </categories>
+  <keywords>
+    <keyword>Open source</keyword>
+    <keyword>Habit tracker</keyword>
+  </keywords>
+  <icon type="stock">net.openhabittracker.OpenHabitTracker</icon>
   <content_rating type="oars-1.1" />
+  <url type="homepage">https://openhabittracker.net</url>
+  <url type="help">https://github.com/Jinjinov/OpenHabitTracker</url>
+  <url type="bugtracker">https://github.com/Jinjinov/OpenHabitTracker/issues</url>
   <screenshots>
     <screenshot type="default">
       <image>https://openhabittracker.net/images/desktop_1_settings.png</image>
@@ -76,6 +78,16 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.1.0" date="2025-01-13">
+      <description>
+        <p>Improved UI:</p>
+        <ul>
+          <li>display a welcome note instead of examples when user opens the app for the first time</li>
+          <li>added a lot of new icons</li>
+          <li>completely new Help screen</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.0" date="2024-12-31">
       <description>
         <p>Initial release of OpenHabitTracker.</p>
