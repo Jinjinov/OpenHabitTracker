@@ -13,9 +13,8 @@ command: OpenHT
 
 finish-args:
   - --device=dri
-  # TODO: Replace this with wayland and fallback-x11 once Wayland support becomes available:
-  #       https://github.com/AvaloniaUI/Avalonia/pull/8003
-  - --socket=x11
+  - --socket=wayland
+  - --socket=fallback-x11
   - --share=ipc
   - --env=DOTNET_ROOT=/app/lib/dotnet
 
@@ -30,7 +29,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/Jinjinov/OpenHabitTracker.git
-        tag: 1.1.0.10
+        tag: 1.1.0.11
       - ./nuget-sources.json
     build-options:
       arch:
@@ -41,9 +40,9 @@ modules:
           env:
             RUNTIME: linux-x64
     build-commands:
-      - dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net9.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true --source ./nuget-sources --source /usr/lib/sdk/dotnet9/nuget/packages
+      - dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net9.0 -r $RUNTIME -p:PublishSingleFile=true -p:SelfContained=true --source ./nuget-sources --source /usr/lib/sdk/dotnet9/nuget/packages
       - mkdir -p ${FLATPAK_DEST}/bin
-      - cp -r OpenHabitTracker.Blazor.Photino/bin/Release/net9.0/linux-x64/publish/* ${FLATPAK_DEST}/bin
+      - cp -r OpenHabitTracker.Blazor.Photino/bin/Release/net9.0/$RUNTIME/publish/* ${FLATPAK_DEST}/bin
       - install -Dm644 net.openhabittracker.OpenHabitTracker.desktop -t /app/share/applications/
       - install -Dm644 net.openhabittracker.OpenHabitTracker.metainfo.xml -t /app/share/metainfo/
       - install -Dm644 net.openhabittracker.OpenHabitTracker.svg -t /app/share/icons/hicolor/scalable/apps/
