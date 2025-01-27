@@ -725,19 +725,46 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
 https://learn.microsoft.com/en-us/dotnet/core/compatibility/containers/8.0/aspnet-port
 
+docker compose up: Starts services.
+docker compose down: Stops and removes services.
+docker compose build: Builds images.
+docker compose ps: Lists containers.
+docker compose logs: Shows logs.
+docker compose stop: Stops containers.
+docker compose start: Starts stopped containers.
+docker compose restart: Restarts containers.
+docker compose exec: Runs a command inside a container.
+docker compose run: Runs a one-off command in a container.
+
+old Python tool:
+    docker-compose build
+    docker-compose up
+
+new Go tool:
+    docker compose build
+    docker compose up
+
 Docker Hub:
 
 docker login
+
 docker tag openhabittracker jinjinov/openhabittracker:latest
 docker push jinjinov/openhabittracker:latest
+
+docker tag openhabittracker jinjinov/openhabittracker:1.0.0
+docker push jinjinov/openhabittracker:1.0.0
 
 https://hub.docker.com/repository/docker/jinjinov/openhabittracker
 
 GitHub Container Registry:
 
 echo <GitHubToken> | docker login ghcr.io -u Jinjinov --password-stdin
+
 docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:latest
 docker push ghcr.io/jinjinov/openhabittracker:latest
+
+docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:1.0.0
+docker push ghcr.io/jinjinov/openhabittracker:1.0.0
 
 https://github.com/users/Jinjinov/packages/container/package/openhabittracker
 
