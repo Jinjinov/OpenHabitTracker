@@ -72,6 +72,8 @@ services:
       - AppSettings__UserName=${APPSETTINGS_USERNAME}
       - AppSettings__Email=${APPSETTINGS_EMAIL}
       - AppSettings__Password=${APPSETTINGS_PASSWORD}
+    volumes:
+      - ./.OpenHabitTracker:/app/.OpenHabitTracker
 ```
 
 ## Made with:
