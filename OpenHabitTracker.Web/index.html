@@ -96,6 +96,15 @@
       function gitHubContainerRegistryVisit() {
         gtag('event', 'oht_github_container_registry_visit', {'transport': 'beacon'});
       }
+      function gitHubVisit() {
+        gtag('event', 'oht_github_visit', {'transport': 'beacon'});
+      }
+      function gitHubDiscussionsVisit() {
+        gtag('event', 'oht_github_discussions_visit', {'transport': 'beacon'});
+      }
+      function gitRedditVisit() {
+        gtag('event', 'oht_reddit_visit', {'transport': 'beacon'});
+      }
     </script>
 
     <style>
@@ -189,7 +198,7 @@
         <h1 class="caveat display-1">OpenHabitTracker</h1>
         <p class="lead">Take notes, plan tasks, track habits</p>
         <hr class="my-4">
-        <p><span class="caveat large">OpenHabitTracker </span> is free, <a href="https://github.com/Jinjinov/OpenHabitTracker" class="text-decoration-none">open source</a> and works on Web, Windows, Linux, Android, iOS and macOS!</p>
+        <p><span class="caveat large">OpenHabitTracker </span> is free, <a href="https://github.com/Jinjinov/OpenHabitTracker" onclick="gitHubVisit()" class="text-decoration-none">open source</a> and works on Web, Windows, Linux, Android, iOS and macOS!</p>
       </div>
 
       <nav id="navbar" class="nav nav-pills bg-body sticky-top mb-4">
@@ -222,6 +231,8 @@
             </ul>
             <li>It allows you to easily prioritize your tasks based on their level of urgency</li>
           </ul>
+
+          <p>Your feedback is welcome on <a href="https://www.reddit.com/r/OpenHabitTracker" onclick="gitRedditVisit()">Reddit</a> and <a href="https://github.com/Jinjinov/OpenHabitTracker/discussions" onclick="gitHubDiscussionsVisit()">GitHub</a></p>
 
           <h3 id="webapp" class="card-title mt-5">Web app</h3>
 
@@ -362,7 +373,7 @@
           <h4 class="card-subtitle my-3 text-muted"><span class="caveat large">OpenHabitTracker </span> is:</h4>
           <ul>
             <li>Free</li>
-            <li>Open source: <a href="https://github.com/Jinjinov/OpenHabitTracker">GitHub</a></li>
+            <li>Open source: <a href="https://github.com/Jinjinov/OpenHabitTracker" onclick="gitHubVisit()">GitHub</a></li>
             <li>Cross platform: Web, Windows, Android, iOS, macOS and Linux</li>
           </ul>
 
