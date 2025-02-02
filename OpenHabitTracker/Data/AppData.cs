@@ -629,7 +629,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             - load examples in the `Data` → `Load examples` submenu
             - use `Search, Filter, Sort` to display only what you want to focus on
 
-            *Feedback is welcome at [GitHub](https://github.com/Jinjinov/OpenHabitTracker/issues)*
+            *Feedback is welcome on [Reddit](https://www.reddit.com/r/OpenHabitTracker) and [GitHub](https://github.com/Jinjinov/OpenHabitTracker/discussions)*
             """;
 
         UserData userData = new()
