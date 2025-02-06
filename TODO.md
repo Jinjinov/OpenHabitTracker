@@ -42,11 +42,38 @@ AppData public Initialize() => local methods: InitializeUser, InitializeSettings
 make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
 
 3.
-refactor OpenHabitTracker
+refactor classes:
+
+AppData, CalendarParams, IRuntimeData - not in Data(base) namespace
+
+UserData -> UserImportExportData
+
+AppData -> ClientSideData
+    - hold state
+    - load state
+    - map to models
+    - interact with _dataAccess
+    - interact with _runtimeData
+    - interact with _markdownPipeline
+    - import, export / GetUserData, SetUserData
+    - LoadExamples
+
+IRuntimeData -> IClientSideRuntimeData
+
+Initialize -> LoadSavedData
+
+ClientSideState:
+    public Dictionary<long, HabitModel>? Habits { get; set; }
+    public Dictionary<long, NoteModel>? Notes { get; set; }
+    public Dictionary<long, TaskModel>? Tasks { get; set; }
+    public Dictionary<long, TimeModel>? Times { get; set; }
+    public Dictionary<long, ItemModel>? Items { get; set; }
+    public Dictionary<long, CategoryModel>? Categories { get; set; }
+    public Dictionary<long, PriorityModel>? Priorities { get; set; }
 4.
 run Jetbrains Rider code analysis
 5.
-add comments to methods
+add comments to methods - 1. for any open source contributor - 2. for GitHub Copilot
 6.
 add REST API endpoints for online data sync to Blazor Server - use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
 
@@ -91,45 +118,6 @@ add Blazor Server - OAuth REST, CRUD REST, SignalR for instant UI refresh on mul
 login will be with Google, Microsoft, Dropbox - requires scope with permission to get email
 email will be unique user id
 store the refresh token for each cloud provider
-
----------------------------------------------------------------------------------------------------
-
-!!! add comments to methods - 1. for any open source contributor - 2. for GitHub Copilot
-
----------------------------------------------------------------------------------------------------
-
-!!! run Jetbrains Rider code analysis
-
----------------------------------------------------------------------------------------------------
-
-!!! refactor classes:
-
-AppData, CalendarParams, IRuntimeData - not in Data(base) namespace
-
-UserData -> UserImportExportData
-
-AppData -> ClientSideData
-    - hold state
-    - load state
-    - map to models
-    - interact with _dataAccess
-    - interact with _runtimeData
-    - interact with _markdownPipeline
-    - import, export / GetUserData, SetUserData
-    - LoadExamples
-
-IRuntimeData -> IClientSideRuntimeData
-
-Initialize -> LoadSavedData
-
-ClientSideState:
-    public Dictionary<long, HabitModel>? Habits { get; set; }
-    public Dictionary<long, NoteModel>? Notes { get; set; }
-    public Dictionary<long, TaskModel>? Tasks { get; set; }
-    public Dictionary<long, TimeModel>? Times { get; set; }
-    public Dictionary<long, ItemModel>? Items { get; set; }
-    public Dictionary<long, CategoryModel>? Categories { get; set; }
-    public Dictionary<long, PriorityModel>? Priorities { get; set; }
 
 ---------------------------------------------------------------------------------------------------
 
