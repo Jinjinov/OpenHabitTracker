@@ -18,8 +18,8 @@ fix AppData GetUserData() which calls InitializeContent()
 search for `// TODO:: remove temp fix`
 InitializeItems and InitializeTimes have null checks and do not update data when called in GetUserData()
     both load data directly from DB with _dataAccess.GetTimes() and _dataAccess.GetItems()
-    but LoadTimesDone also loads data with _dataAccess.GetTimes() - these are not the same objects as in InitializeTimes
-    and ItemService.Initialize also loads data with _dataAccess.GetItems() - these are not the same objects as in InitializeItems
+    but HabitService.LoadTimesDone also loads data with _dataAccess.GetTimes(habit.Id) - these are not the same objects as in InitializeTimes
+    and ItemService.Initialize also loads data with _dataAccess.GetItems(items.Id) - these are not the same objects as in InitializeItems
     user can add or remove Items and Times list but the code does not update Items and Times in the AppData
     so without temp fix, GetUserData() would return Items and Times that were loaded with Initialize()
 remove these from class AppData:
@@ -28,6 +28,12 @@ remove these from class AppData:
 or make sure that other services update them
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
+
+client side:
+    Dictionary, List from System.Collections.Generic
+
+server side:
+    MemoryCache from Microsoft.Extensions.Caching.Memory
 
 ---------------------------------------------------------------------------------------------------
 
