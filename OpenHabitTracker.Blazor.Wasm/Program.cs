@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using OpenHabitTracker;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor;
 using OpenHabitTracker.Blazor.Files;
@@ -5,9 +9,6 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Wasm;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.IndexedDB;
-using OpenHabitTracker;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

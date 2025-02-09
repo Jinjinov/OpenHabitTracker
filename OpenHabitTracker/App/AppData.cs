@@ -1,8 +1,9 @@
 using Markdig;
+using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 
-namespace OpenHabitTracker.Data;
+namespace OpenHabitTracker.App;
 
 public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownPipeline markdownPipeline)
 {

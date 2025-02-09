@@ -1,7 +1,7 @@
 ﻿using Markdig;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using OpenHabitTracker.Data;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Localization;
 using OpenHabitTracker.Services;
 using System.Reflection;

@@ -1,4 +1,4 @@
-﻿using OpenHabitTracker.Data;
+﻿using OpenHabitTracker.App;
 
 namespace OpenHabitTracker.Blazor;
 

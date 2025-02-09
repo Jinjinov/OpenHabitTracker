@@ -52,8 +52,6 @@ make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add 
 3.
 refactor classes:
 
-    AppData, CalendarParams, IRuntimeData - not in Data(base) namespace
-
     UserData -> UserImportExportData
 
     IRuntimeData -> IClientSideRuntimeData

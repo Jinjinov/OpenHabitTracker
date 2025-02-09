@@ -1,5 +1,5 @@
+@using OpenHabitTracker.App
 @using OpenHabitTracker.Blazor.Pages
-@using OpenHabitTracker.Data
 
 @inject ILogger<Main> Logger
 @inject AppData AppData
@@ -98,7 +98,7 @@
 
 @code {
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment? ChildContent { get; set; }
 
     private bool _stateChanged;
 

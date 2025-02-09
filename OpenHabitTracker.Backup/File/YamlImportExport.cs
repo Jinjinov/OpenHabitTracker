@@ -1,4 +1,5 @@
-﻿using OpenHabitTracker.Data;
+﻿using OpenHabitTracker.App;
+using OpenHabitTracker.Data;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.Converters;
 

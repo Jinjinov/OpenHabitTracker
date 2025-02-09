@@ -1,4 +1,4 @@
-﻿namespace OpenHabitTracker.Data;
+namespace OpenHabitTracker.App;
 
 public class CalendarParams
 {
