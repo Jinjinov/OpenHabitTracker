@@ -67,6 +67,10 @@ builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPreRenderService, OpenHabitTracker.Blazor.Web.PreRenderService>();
 
+builder.Services.AddControllers();
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
+
 WebApplication app = builder.Build();
 
 await CreateDefaultUserAsync(app);
@@ -78,6 +82,10 @@ await CreateDefaultUserAsync(app);
 // Microsoft.Extensions.Logging.EventLog.EventLogLoggerProvider
 
 // Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
@@ -86,6 +94,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
