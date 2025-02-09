@@ -50,7 +50,7 @@ logger.LogInformation("Initializing databese");
 IDataAccess dataAccess = host.Services.GetRequiredService<IDataAccess>();
 await dataAccess.Initialize();
 
-AppData appData = host.Services.GetRequiredService<AppData>();
+ClientSideData appData = host.Services.GetRequiredService<ClientSideData>();
 await appData.LoadUsers();
 await appData.LoadSettings();
 

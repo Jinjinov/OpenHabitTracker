@@ -5,9 +5,9 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class CategoryService(AppData appData, IDataAccess dataAccess)
+public class CategoryService(ClientSideData appData, IDataAccess dataAccess)
 {
-    private readonly AppData _appData = appData;
+    private readonly ClientSideData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
     public IReadOnlyCollection<CategoryModel>? Categories => _appData.Categories?.Values;

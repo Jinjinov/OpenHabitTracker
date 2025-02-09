@@ -5,9 +5,9 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class TrashService(AppData appData, IDataAccess dataAccess)
+public class TrashService(ClientSideData appData, IDataAccess dataAccess)
 {
-    private readonly AppData _appData = appData;
+    private readonly ClientSideData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
     public IReadOnlyList<ContentModel>? Models => _appData.Trash;

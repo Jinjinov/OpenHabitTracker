@@ -7,9 +7,9 @@ using System.Globalization;
 
 namespace OpenHabitTracker.Backup.File;
 
-public class TsvImportExport(AppData appData)
+public class TsvImportExport(ClientSideData appData)
 {
-    private readonly AppData _appData = appData;
+    private readonly ClientSideData _appData = appData;
 
     private readonly CsvConfiguration _csvConfiguration = new(CultureInfo.InvariantCulture)
     {

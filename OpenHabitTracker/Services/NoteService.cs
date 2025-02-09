@@ -5,9 +5,9 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class NoteService(AppData appData, IDataAccess dataAccess, SearchFilterService searchFilterService)
+public class NoteService(ClientSideData appData, IDataAccess dataAccess, SearchFilterService searchFilterService)
 {
-    private readonly AppData _appData = appData;
+    private readonly ClientSideData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
     private readonly SearchFilterService _searchFilterService = searchFilterService;
 

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace OpenHabitTracker.Backup.File;
 
-public class MarkdownImportExport(AppData appData)
+public class MarkdownImportExport(ClientSideData appData)
 {
-    private readonly AppData _appData = appData;
+    private readonly ClientSideData _appData = appData;
 
     public async Task<string> GetDataExportFileString()
     {

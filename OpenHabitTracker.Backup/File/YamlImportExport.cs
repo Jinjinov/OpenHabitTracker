@@ -5,9 +5,9 @@ using YamlDotNet.Serialization.Converters;
 
 namespace OpenHabitTracker.Backup.File;
 
-public class YamlImportExport(AppData appData)
+public class YamlImportExport(ClientSideData appData)
 {
-    private readonly AppData _appData = appData;
+    private readonly ClientSideData _appData = appData;
 
     private readonly ISerializer _serializer = new SerializerBuilder().WithTypeConverter(new TimeOnlyConverter(formats: ["HH:mm:ss"])).Build();
 
