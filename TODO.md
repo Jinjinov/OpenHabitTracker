@@ -22,10 +22,10 @@ InitializeItems and InitializeTimes have null checks and do not update data when
     and ItemService.Initialize also loads data with _dataAccess.GetItems(items.Id) - these are not the same objects as in InitializeItems
     user can add or remove Items and Times list but the code does not update Items and Times in the AppData
     so without temp fix, GetUserData() would return Items and Times that were loaded with Initialize()
-remove these from class AppData:
+either remove these from class AppData:
     public Dictionary<long, TimeModel>? Times { get; set; }
     public Dictionary<long, ItemModel>? Items { get; set; }
-
+or
 !!! make sure that other services update them !!!
 
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth

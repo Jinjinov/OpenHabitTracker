@@ -147,7 +147,7 @@ public class ClientSideData(IDataAccess dataAccess, IClientSideRuntimeData runti
 
                 if (loadWelcomeNote)
                 {
-                    await LoadWelcomeNote();
+                    await AddWelcomeNote();
                 }
             }
         }
@@ -617,7 +617,7 @@ public class ClientSideData(IDataAccess dataAccess, IClientSideRuntimeData runti
         else foreach (var pair in categories.ToDictionary(x => x.Model.Id, x => x.Model)) Categories[pair.Key] = pair.Value;
     }
 
-    public async Task LoadWelcomeNote()
+    public async Task AddWelcomeNote()
     {
         DateTime now = DateTime.Now;
 
@@ -662,7 +662,7 @@ public class ClientSideData(IDataAccess dataAccess, IClientSideRuntimeData runti
         await SetUserData(userData);
     }
 
-    public async Task LoadExamples()
+    public async Task AddExamples()
     {
         DateTime now = DateTime.Now;
 
