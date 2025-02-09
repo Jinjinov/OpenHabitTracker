@@ -32,6 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		DeveloperNotes.md = DeveloperNotes.md
 		README.md = README.md
 		TODO.md = TODO.md
+		VersionHistory.md = VersionHistory.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Flatpak", "Flatpak", "{8943E2D6-D7D6-4464-931F-597B31B88C2F}"
