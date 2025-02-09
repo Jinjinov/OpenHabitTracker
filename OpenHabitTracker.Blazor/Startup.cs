@@ -8,7 +8,7 @@ public static class Startup
     public static IServiceCollection AddBlazor(this IServiceCollection services)
     {
         services.AddScoped<JsInterop>();
-        services.AddScoped<IRuntimeData, RuntimeData>();
+        services.AddScoped<IClientSideRuntimeData, ClientSideRuntimeData>();
 
         return services;
     }
