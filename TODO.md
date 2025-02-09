@@ -40,14 +40,11 @@ server side:
 ---------------------------------------------------------------------------------------------------
 
 1.
-Flatpak: test on Raspberry Pi
-
+add REST API endpoints for online data sync to Blazor Server
+    - OpenHabitTracker.Blazor.Web: provide endpoint for every method in IDataAccess
 2.
-UserData -> UserModel - add Settings and Categories to UserModel
-
-AppData public Initialize() => local methods: InitializeUser, InitializeSettings, InitializePriorities
-
-make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
+use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
+    - OpenHabitTracker.Rest: public class RestDataAccess : IDataAccess
 
 3.
 refactor classes:
@@ -76,7 +73,9 @@ run Jetbrains Rider code analysis
 5.
 add comments to methods - 1. for any open source contributor - 2. for GitHub Copilot
 6.
-add REST API endpoints for online data sync to Blazor Server - use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
+UserData -> UserModel - add Settings and Categories to UserModel
+AppData public Initialize() => local methods: InitializeUser, InitializeSettings, InitializePriorities
+make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
 
 ---------------------------------------------------------------------------------------------------
 
@@ -106,6 +105,8 @@ Android: get permission to save SQLite DB in an external folder that can be part
 
 13.
 deploy Blazor Server Docker image to Raspberry Pi 5 / Synology NAS DS224+
+
+Flatpak: test on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
 
