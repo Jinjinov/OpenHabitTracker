@@ -18,7 +18,7 @@ public class PriorityService(AppData appData, IDataAccess dataAccess)
 
     public async Task Initialize()
     {
-        await _appData.InitializePriorities();
+        await _appData.LoadPriorities();
 
         NewPriority ??= new();
     }

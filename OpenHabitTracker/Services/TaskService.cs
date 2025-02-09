@@ -73,10 +73,10 @@ public class TaskService(AppData appData, IDataAccess dataAccess, SearchFilterSe
 
     public async Task Initialize()
     {
-        await _appData.InitializeCategories();
-        await _appData.InitializePriorities();
+        await _appData.LoadCategories();
+        await _appData.LoadPriorities();
 
-        await _appData.InitializeTasks();
+        await _appData.LoadTasks();
     }
 
     public void SetSelectedTask(long? id)

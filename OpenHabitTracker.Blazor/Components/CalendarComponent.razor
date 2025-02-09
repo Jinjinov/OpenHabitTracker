@@ -125,7 +125,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await AppData.InitializeSettings();
+        await AppData.LoadSettings();
     }
 
     protected override async Task OnParametersSetAsync()

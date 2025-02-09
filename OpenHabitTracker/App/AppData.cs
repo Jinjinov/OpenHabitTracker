@@ -65,7 +65,7 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         }
     }
 
-    public async Task InitializeUsers()
+    public async Task LoadUsers()
     {
         if (User.Id == 0)
         {
@@ -98,7 +98,7 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         }
     }
 
-    public async Task InitializeSettings(bool loadWelcomeNote = true)
+    public async Task LoadSettings(bool loadWelcomeNote = true)
     {
         if (Settings.Id == 0)
         {
@@ -135,7 +135,7 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
             }
             else
             {
-                await InitializeUsers();
+                await LoadUsers();
 
                 Settings = GetDefaultSettings();
 
@@ -195,14 +195,14 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         };
     }
 
-    public async Task InitializeHabits()
+    public async Task LoadHabits()
     {
         if (Habits is null)
         {
-            await InitializeCategories();
-            await InitializePriorities();
+            await LoadCategories();
+            await LoadPriorities();
 
-            await InitializeTimes(); // TODO:: remove temp fix
+            await LoadTimes(); // TODO:: remove temp fix
 
             IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
             Habits = habits.Select(x => new HabitModel
@@ -232,12 +232,12 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         }
     }
 
-    public async Task InitializeNotes()
+    public async Task LoadNotes()
     {
         if (Notes is null)
         {
-            await InitializeCategories();
-            await InitializePriorities();
+            await LoadCategories();
+            await LoadPriorities();
 
             IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
             Notes = notes.Select(x => new NoteModel
@@ -257,12 +257,12 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         }
     }
 
-    public async Task InitializeTasks()
+    public async Task LoadTasks()
     {
         if (Tasks is null)
         {
-            await InitializeCategories();
-            await InitializePriorities();
+            await LoadCategories();
+            await LoadPriorities();
 
             IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
             Tasks = tasks.Select(x => new TaskModel
@@ -284,7 +284,7 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         }
     }
 
-    public async Task InitializeTimes()
+    public async Task LoadTimes()
     {
         if (Times is null)
         {
@@ -299,7 +299,7 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         }
     }
 
-    public async Task InitializeItems()
+    public async Task LoadItems()
     {
         if (Items is null)
         {
@@ -314,7 +314,7 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         }
     }
 
-    public async Task InitializeCategories()
+    public async Task LoadCategories()
     {
         if (Categories is null)
         {
@@ -329,7 +329,7 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         }
     }
 
-    public async Task InitializePriorities()
+    public async Task LoadPriorities()
     {
         if (Priorities is null)
         {
@@ -361,25 +361,25 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         }
     }
 
-    public async Task InitializeTrash()
+    public async Task LoadTrash()
     {
         if (Trash is null)
         {
-            await InitializeContent();
+            await LoadContent();
 
             if (Habits is not null && Notes is not null && Tasks is not null)
                 Trash = [.. Habits.Values.Where(m => m.IsDeleted), .. Notes.Values.Where(m => m.IsDeleted), .. Tasks.Values.Where(m => m.IsDeleted)];
         }
     }
 
-    private async Task InitializeContent()
+    private async Task LoadContent()
     {
-        await InitializeCategories();
-        await InitializePriorities();
+        await LoadCategories();
+        await LoadPriorities();
 
-        await InitializeHabits();
-        await InitializeNotes();
-        await InitializeTasks();
+        await LoadHabits();
+        await LoadNotes();
+        await LoadTasks();
     }
 
     public async Task DeleteAllData()
@@ -388,7 +388,7 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
 
         Settings = new();
 
-        await InitializeSettings(loadWelcomeNote: false);
+        await LoadSettings(loadWelcomeNote: false);
 
         Habits = null;
         Notes = null;
@@ -399,14 +399,14 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
         Priorities = null;
         Trash = null;
 
-        await InitializeContent();
+        await LoadContent();
     }
 
     public async Task<UserImportExportData> GetUserData()
     {
-        await InitializeSettings();
+        await LoadSettings();
 
-        await InitializeContent();
+        await LoadContent();
 
         // this is the only place that calls InitializeItems
 
@@ -416,8 +416,8 @@ public class AppData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData,
 
         Times = null; // TODO:: remove temp fix
 
-        await InitializeTimes();
-        await InitializeItems();
+        await LoadTimes();
+        await LoadItems();
 
         if (Priorities is null || Categories is null || Notes is null || Tasks is null || Habits is null || Times is null || Items is null)
             throw new NullReferenceException();

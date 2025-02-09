@@ -18,7 +18,7 @@ public class CategoryService(AppData appData, IDataAccess dataAccess)
 
     public async Task Initialize()
     {
-        await _appData.InitializeCategories();
+        await _appData.LoadCategories();
 
         NewCategory ??= new() { UserId = _appData.User.Id };
     }

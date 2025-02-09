@@ -14,7 +14,7 @@ public class TrashService(AppData appData, IDataAccess dataAccess)
 
     public async Task Initialize()
     {
-        await _appData.InitializeTrash();
+        await _appData.LoadTrash();
     }
 
     public async Task Restore(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...

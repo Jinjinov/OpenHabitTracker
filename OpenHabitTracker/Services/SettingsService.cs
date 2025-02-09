@@ -14,7 +14,7 @@ public class SettingsService(AppData appData, IDataAccess dataAccess)
 
     public async Task Initialize()
     {
-        await _appData.InitializeSettings();
+        await _appData.LoadSettings();
     }
 
     public async Task UpdateSettings()

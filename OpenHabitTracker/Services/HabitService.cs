@@ -67,10 +67,10 @@ public class HabitService(AppData appData, IDataAccess dataAccess, SearchFilterS
 
     public async Task Initialize()
     {
-        await _appData.InitializeCategories();
-        await _appData.InitializePriorities();
+        await _appData.LoadCategories();
+        await _appData.LoadPriorities();
 
-        await _appData.InitializeHabits();
+        await _appData.LoadHabits();
     }
 
     public async Task SetSelectedHabit(long? id)

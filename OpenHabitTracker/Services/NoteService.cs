@@ -45,10 +45,10 @@ public class NoteService(AppData appData, IDataAccess dataAccess, SearchFilterSe
 
     public async Task Initialize()
     {
-        await _appData.InitializeCategories();
-        await _appData.InitializePriorities();
+        await _appData.LoadCategories();
+        await _appData.LoadPriorities();
 
-        await _appData.InitializeNotes();
+        await _appData.LoadNotes();
     }
 
     public void SetSelectedNote(long? id)
