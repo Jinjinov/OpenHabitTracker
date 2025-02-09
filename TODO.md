@@ -44,32 +44,32 @@ make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add 
 3.
 refactor classes:
 
-AppData, CalendarParams, IRuntimeData - not in Data(base) namespace
+    AppData, CalendarParams, IRuntimeData - not in Data(base) namespace
 
-UserData -> UserImportExportData
+    UserData -> UserImportExportData
 
-AppData -> ClientSideData
-    - hold state
-    - load state
-    - map to models
-    - interact with _dataAccess
-    - interact with _runtimeData
-    - interact with _markdownPipeline
-    - import, export / GetUserData, SetUserData
-    - LoadExamples
+    AppData -> ClientSideData
+        - hold state
+        - load state
+        - map to models
+        - interact with _dataAccess
+        - interact with _runtimeData
+        - interact with _markdownPipeline
+        - import, export / GetUserData, SetUserData
+        - LoadExamples
 
-IRuntimeData -> IClientSideRuntimeData
+    IRuntimeData -> IClientSideRuntimeData
 
-Initialize -> LoadSavedData
+    Initialize -> LoadSavedData
 
-ClientSideState:
-    public Dictionary<long, HabitModel>? Habits { get; set; }
-    public Dictionary<long, NoteModel>? Notes { get; set; }
-    public Dictionary<long, TaskModel>? Tasks { get; set; }
-    public Dictionary<long, TimeModel>? Times { get; set; }
-    public Dictionary<long, ItemModel>? Items { get; set; }
-    public Dictionary<long, CategoryModel>? Categories { get; set; }
-    public Dictionary<long, PriorityModel>? Priorities { get; set; }
+    ClientSideState:
+        public Dictionary<long, HabitModel>? Habits { get; set; }
+        public Dictionary<long, NoteModel>? Notes { get; set; }
+        public Dictionary<long, TaskModel>? Tasks { get; set; }
+        public Dictionary<long, TimeModel>? Times { get; set; }
+        public Dictionary<long, ItemModel>? Items { get; set; }
+        public Dictionary<long, CategoryModel>? Categories { get; set; }
+        public Dictionary<long, PriorityModel>? Priorities { get; set; }
 4.
 run Jetbrains Rider code analysis
 5.
@@ -95,7 +95,7 @@ add backup to
     Dropbox
 
 10.
-use DB in Blazor Server for multi user sync with add REST API endpoints
+use DB in Blazor Server for multi user sync with REST API endpoints
 
 11.
 write unit tests with Appium / bUnit
