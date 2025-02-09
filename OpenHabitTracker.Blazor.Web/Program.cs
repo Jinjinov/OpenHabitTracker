@@ -8,6 +8,7 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web;
 using OpenHabitTracker.Blazor.Web.Components;
 using OpenHabitTracker.Blazor.Web.Data;
+using Scalar.AspNetCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -85,6 +86,7 @@ await CreateDefaultUserAsync(app);
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(); // http://localhost:5260/scalar/v1
 }
 if (!app.Environment.IsDevelopment())
 {
