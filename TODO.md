@@ -25,7 +25,9 @@ InitializeItems and InitializeTimes have null checks and do not update data when
 remove these from class AppData:
     public Dictionary<long, TimeModel>? Times { get; set; }
     public Dictionary<long, ItemModel>? Items { get; set; }
-or make sure that other services update them
+
+!!! make sure that other services update them !!!
+
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
@@ -54,6 +56,12 @@ refactor classes:
 
     UserData -> UserImportExportData
 
+    IRuntimeData -> IClientSideRuntimeData
+
+    Initialize -> LoadSavedData
+
+only source of truth: (remove _dataAccess from all other services)
+
     AppData -> ClientSideData
         - hold state
         - load state
@@ -63,10 +71,6 @@ refactor classes:
         - interact with _markdownPipeline
         - import, export / GetUserData, SetUserData
         - LoadExamples
-
-    IRuntimeData -> IClientSideRuntimeData
-
-    Initialize -> LoadSavedData
 
     ClientSideState:
         public Dictionary<long, HabitModel>? Habits { get; set; }
