@@ -15,7 +15,7 @@ public class YamlImportExport(AppData appData)
 
     public async Task<string> GetDataExportFileString()
     {
-        UserData userData = await _appData.GetUserData();
+        UserImportExportData userData = await _appData.GetUserData();
 
         using StringWriter stringWriter = new();
 
@@ -30,7 +30,7 @@ public class YamlImportExport(AppData appData)
 
         string content = await streamReader.ReadToEndAsync();
 
-        UserData userData = _deserializer.Deserialize<UserData>(content);
+        UserImportExportData userData = _deserializer.Deserialize<UserImportExportData>(content);
 
         await _appData.SetUserData(userData);
     }

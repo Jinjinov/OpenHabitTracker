@@ -402,7 +402,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         await InitializeContent();
     }
 
-    public async Task<UserData> GetUserData()
+    public async Task<UserImportExportData> GetUserData()
     {
         await InitializeSettings();
 
@@ -428,7 +428,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         Dictionary<long, List<TimeModel>> timesByHabitId = Times.Values.GroupBy(x => x.HabitId).ToDictionary(g => g.Key, g => g.ToList());
         Dictionary<long, List<ItemModel>> itemsByParentId = Items.Values.GroupBy(x => x.ParentId).ToDictionary(g => g.Key, g => g.ToList());
 
-        UserData userData = new()
+        UserImportExportData userData = new()
         {
             Settings = Settings,
             Categories = Categories.Values.ToList()
@@ -479,7 +479,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
         return userData;
     }
 
-    public async Task SetUserData(UserData userData)
+    public async Task SetUserData(UserImportExportData userData)
     {
         userData.Settings.UserId = User.Id;
 
@@ -633,7 +633,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             *Feedback is welcome on [Reddit](https://www.reddit.com/r/OpenHabitTracker) and [GitHub](https://github.com/Jinjinov/OpenHabitTracker/discussions)*
             """;
 
-        UserData userData = new()
+        UserImportExportData userData = new()
         {
             Settings = GetDefaultSettings(),
             Categories =
@@ -708,7 +708,7 @@ public class AppData(IDataAccess dataAccess, IRuntimeData runtimeData, MarkdownP
             superscript: X^2^
             """;
 
-        UserData userData = new()
+        UserImportExportData userData = new()
         {
             Settings = GetDefaultSettings(),
             Categories =

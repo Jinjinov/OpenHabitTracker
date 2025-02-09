@@ -46,7 +46,7 @@ public class GoogleKeepImport(AppData appData)
     {
         List<GoogleKeepNote> googleKeepNotes = await GetGoogleKeepNotes(stream);
 
-        UserData userData = new();
+        UserImportExportData userData = new();
 
         CategoryModel? category = null;
         NoteModel? note = null;

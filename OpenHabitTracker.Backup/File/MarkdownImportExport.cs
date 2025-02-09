@@ -11,7 +11,7 @@ public class MarkdownImportExport(AppData appData)
 
     public async Task<string> GetDataExportFileString()
     {
-        UserData userData = await _appData.GetUserData();
+        UserImportExportData userData = await _appData.GetUserData();
 
         StringBuilder stringBuilder = new();
 
@@ -84,7 +84,7 @@ public class MarkdownImportExport(AppData appData)
 
         using StringReader stringReader = new(content);
 
-        UserData userData = new();
+        UserImportExportData userData = new();
 
         CategoryModel category = new();
         NoteModel? note = null;

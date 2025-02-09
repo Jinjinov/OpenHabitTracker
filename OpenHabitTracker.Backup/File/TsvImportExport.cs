@@ -20,7 +20,7 @@ public class TsvImportExport(AppData appData)
 
     public async Task<string> GetDataExportFileString()
     {
-        UserData userData = await _appData.GetUserData();
+        UserImportExportData userData = await _appData.GetUserData();
 
         List<Record> records = [];
 
@@ -129,7 +129,7 @@ public class TsvImportExport(AppData appData)
 
     public async Task ImportDataFile(Stream stream)
     {
-        UserData userData = new();
+        UserImportExportData userData = new();
 
         using StreamReader reader = new(stream);
 

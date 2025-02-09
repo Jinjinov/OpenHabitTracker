@@ -12,7 +12,7 @@ public class JsonImportExport(AppData appData)
 
     public async Task<string> GetDataExportFileString()
     {
-        UserData userData = await _appData.GetUserData();
+        UserImportExportData userData = await _appData.GetUserData();
 
         return JsonSerializer.Serialize(userData, _options);
     }
@@ -23,7 +23,7 @@ public class JsonImportExport(AppData appData)
 
         string content = await streamReader.ReadToEndAsync();
 
-        UserData userData = JsonSerializer.Deserialize<UserData>(content, _options) ?? throw new InvalidDataException("Can't deserialize JSON");
+        UserImportExportData userData = JsonSerializer.Deserialize<UserImportExportData>(content, _options) ?? throw new InvalidDataException("Can't deserialize JSON");
 
         await _appData.SetUserData(userData);
     }

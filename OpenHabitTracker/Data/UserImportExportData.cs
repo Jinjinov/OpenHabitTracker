@@ -1,8 +1,8 @@
-﻿using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Data;
 
-public class UserData
+public class UserImportExportData
 {
     public SettingsModel Settings { get; set; } = new();
 
