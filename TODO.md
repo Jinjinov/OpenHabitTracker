@@ -39,8 +39,6 @@ server side:
 
 ---------------------------------------------------------------------------------------------------
 
-!!! fix note,task,habit details vertical scroll - bottom margin / padding !!!
-
 1.
 add REST API endpoints for online data sync to Blazor Server
     - OpenHabitTracker.Blazor.Web: provide endpoint for every method in IDataAccess

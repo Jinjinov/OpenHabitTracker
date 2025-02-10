@@ -182,7 +182,7 @@
 
 @if (_showSecondColumn)
 {
-    <div class="col child-column px-0 px-md-1 my-1">
+    <div class="col child-column px-0 px-md-1 py-1">
         @if (Id is not null && HabitService.SelectedHabit is not null && HabitService.NewHabit is null)
         {
             <HabitComponent Habit="HabitService.SelectedHabit" HabitChanged="StateHasChanged" CloseSelected="CloseSelected" />
