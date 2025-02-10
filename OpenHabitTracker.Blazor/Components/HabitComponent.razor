@@ -1,4 +1,4 @@
-﻿@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
@@ -89,16 +89,17 @@
     <div class="p-1 border rounded-0">
         <div>@Loc["Total time spent"]: @ToReadableString(Habit.TotalTimeSpent)</div>
         <div>@Loc["Average time spent"]: @ToReadableString(Habit.AverageTimeSpent)</div>
+        <div>@Loc["Elapsed time"]: @ToReadableString(Habit.ElapsedTime)</div>
 
         <div>@Loc["Repeat interval"]: @ToReadableString(Habit.GetRepeatInterval())</div>
-        <div>@Loc["Repeat interval ratio"]: @Habit.ElapsedTimeToRepeatIntervalRatio.ToString("N0")%</div>
+        <div>@Loc["Elapsed time to repeat interval ratio"]: @Habit.ElapsedTimeToRepeatIntervalRatio.ToString("N0")%</div>
         @if (Habit.ElapsedTimeToRepeatIntervalRatio > 100.0)
         {
             <div>@Loc["Repeat interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.GetRepeatInterval())</div>
         }
 
         <div>@Loc["Average interval"]: @ToReadableString(Habit.AverageInterval)</div>
-        <div>@Loc["Average interval ratio"]: @Habit.ElapsedTimeToAverageIntervalRatio.ToString("N0")%</div>
+        <div>@Loc["Elapsed time to average interval ratio"]: @Habit.ElapsedTimeToAverageIntervalRatio.ToString("N0")%</div>
         @if (Habit.ElapsedTimeToAverageIntervalRatio > 100.0)
         {
             <div>@Loc["Average interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.AverageInterval)</div>

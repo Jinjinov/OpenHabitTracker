@@ -39,15 +39,7 @@ server side:
 
 ---------------------------------------------------------------------------------------------------
 
-website - rename: Docker -> Online sync
-
 !!! fix note,task,habit details vertical scroll - bottom margin / padding !!!
-
-remove text in habit: Repeat interval: 1 d
-
-explain:
-    Repeat interval ratio
-    Average interval ratio
 
 1.
 add REST API endpoints for online data sync to Blazor Server
