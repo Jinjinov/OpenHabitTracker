@@ -1,0 +1,23 @@
+{
+  "runtime": "Net90",
+  "documentGenerator": {
+    "fromDocument": {
+      "url": "../OpenHabitTracker.Blazor.Web/openapi.json",
+      "output": null,
+      "newLineBehavior": "LF"
+    }
+  },
+  "codeGenerators": {
+    "openApiToCSharpClient": {
+      "className": "RestApiDataAccess",
+      "output": "RestApiDataAccess.g.cs",
+      "namespace": "OpenHabitTracker.Blazor.Web.ApiClient",
+      "generateDtoTypes": false,
+      "additionalNamespaceUsages": [
+        "OpenHabitTracker.Data.Entities"
+      ],
+      "responseArrayType": "System.Collections.Generic.IReadOnlyList",
+      "jsonLibrary": "SystemTextJson"
+    }
+  }
+}

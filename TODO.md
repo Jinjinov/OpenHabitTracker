@@ -39,12 +39,20 @@ server side:
 
 ---------------------------------------------------------------------------------------------------
 
+[ ] Habits with interval ratio 100%
+
+[ ] Show only Habits with interval ratio over 100%
+
+default: 50%
+
+[ ] Rest items when habit is completed
+
 1.
 add REST API endpoints for online data sync to Blazor Server
     - OpenHabitTracker.Blazor.Web: provide endpoint for every method in IDataAccess
 2.
 use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
-    - OpenHabitTracker.Rest: public class RestDataAccess : IDataAccess
+    - OpenHabitTracker.Rest: public class RestApiDataAccess : IDataAccess
 
 3.
 refactor classes:
