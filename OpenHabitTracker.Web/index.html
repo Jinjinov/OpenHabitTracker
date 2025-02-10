@@ -31,7 +31,7 @@
 
     <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap">
@@ -205,7 +205,7 @@
         <a class="nav-link d-none d-lg-block" href="#why">Why I created it</a>
         <a class="nav-link" href="#webapp">Web app</a>
         <a class="nav-link d-none d-md-block" href="#stores">Stores</a>
-        <a class="nav-link d-none d-lg-block" href="#docker">Docker</a>
+        <a class="nav-link d-none d-lg-block" href="#sync">Online sync</a>
         <a class="nav-link d-none d-sm-block" href="#downloads">Downloads</a>
         <a class="nav-link" href="#features">Features</a>
         <a class="nav-link d-none d-lg-block" href="#formats">Formats</a>
@@ -250,21 +250,24 @@
           <p><i class="fab fa-apple"></i> macOS - Mac App Store:<br><a href="https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=mac" onclick="macosStoreVisit()" class="card-link"><img src="icons/MacAppStore.svg" style="height:64px;"></a></p>
           <p><i class="fab fa-android"></i> Android - APKPure:<br><a href="https://apkpure.com/openhabittracker/net.openhabittracker" onclick="apkpureStoreVisit()" class="card-link"><img src="icons/APKPure.svg" style="height:64px;"></a></p>
 
-          <h3 id="docker" class="card-title mt-5">Docker</h3>
+          <h3 id="sync" class="card-title mt-5">Online sync</h3>
 
-          <h4 class="card-subtitle my-3 text-muted">Docker image contains a Blazor Server app for one user</h4>
+          <h4 class="card-subtitle my-3 text-muted">Host a Docker image on your own server</h4>
           <p>Progressive web app:</p>
           <ul>
           <li>works offline</li>
           <li>all data is saved on your device</li>
+          <li>there is no online sync</li>
           <li><a href="https://pwa.openhabittracker.net" onclick="onlineAppUsage()">https://pwa.openhabittracker.net</a></li>
           </ul>
           <p>Docker image:</p>
           <ul>
-          <li>host on your own server</li>
+          <li>needs an internet connection</li>
           <li>all data is saved online</li>
           <li><a href="https://hub.docker.com/repository/docker/jinjinov/openhabittracker" onclick="dockerHubVisit()">Docker Hub</a></li>
           <li><a href="https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker" onclick="gitHubContainerRegistryVisit()">GitHub Container Registry</a></li>
+          <li>online sync is supported in the browser</li>
+          <li>COMING SOON: online sync for the desktop app and the mobile app</li>
           </ul>
 
           <h3 id="downloads" class="card-title mt-5">Downloads</h3>
@@ -344,7 +347,7 @@
             <li>Set the desired interval for your habits (repeating tasks)</li>
             <li>Compare the average interval with the desired interval</li>
             <li>See when you last completed a task and how that compares to the desired interval</li>
-          </ul> 
+          </ul>
 
           <h3 id="formats" class="card-title mt-5">Formats</h3>
 
@@ -475,7 +478,7 @@
                 <p class="card-text">Backup</p>
               </div>
             </div>
-            
+
           </div>
 
           <h4 class="card-subtitle my-3 text-muted">Phone:</h4>
@@ -553,7 +556,7 @@
                 <p class="card-text">Backup</p>
               </div>
             </div>
-            
+
           </div>
 
           <h3 id="themes" class="card-title mt-5">Themes</h3>
