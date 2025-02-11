@@ -39,13 +39,11 @@ server side:
 
 ---------------------------------------------------------------------------------------------------
 
-[ ] Habits with interval ratio 100%
+[ ] Habits with interval ratio 100% -> [ ] Show only Habits with interval ratio over 100%
+    default: 50%
 
-[ ] Show only Habits with interval ratio over 100%
-
-default: 50%
-
-[ ] Rest items when habit is completed
+[ ] Reset items when habit is completed
+    await UncheckAllItems(habit);
 
 1.
 add REST API endpoints for online data sync to Blazor Server
@@ -54,11 +52,36 @@ add REST API endpoints for online data sync to Blazor Server
 use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
     - OpenHabitTracker.Rest: public class RestApiDataAccess : IDataAccess
 
+services.AddHttpClient<TodoClient>(client =>
+{
+    client.BaseAddress = new Uri("https://api.yourdomain.com/");
+});
+
+add auth
+add login screen 
+
+add setting where to store data
+add ui radio button
+
+inject data access array
+only client side data uses data access
+ClientSideData -> ClientData
+IClientSideRuntimeData -> IRuntimeClientData
+add ClientState
+
+method to copy one db context to another
+
+help:
+- move to sidebar
+- separate help for each screen
+- guided tour per screen
+- list of guided tours
+
 3.
 refactor classes:
 only source of truth: (remove _dataAccess from all other services)
 
-    AppData
+    ClientData
         - hold state
         - load state
         - map to models
@@ -68,7 +91,7 @@ only source of truth: (remove _dataAccess from all other services)
         - import, export / GetUserData, SetUserData
         - LoadExamples
 
-    ClientSideState:
+    ClientState:
         public Dictionary<long, HabitModel>? Habits { get; set; }
         public Dictionary<long, NoteModel>? Notes { get; set; }
         public Dictionary<long, TaskModel>? Tasks { get; set; }
