@@ -39,27 +39,26 @@ server side:
 
 ---------------------------------------------------------------------------------------------------
 
+1.
+
 [ ] Habits with interval ratio 100% -> [ ] Show only Habits with interval ratio over 100%
     default: 50%
 
 [ ] Reset items when habit is completed
     await UncheckAllItems(habit);
 
-1.
-add REST API endpoints for online data sync to Blazor Server
-    - OpenHabitTracker.Blazor.Web: provide endpoint for every method in IDataAccess
+ClientSideData -> ClientData
+IClientSideRuntimeData -> IRuntimeClientData
+
+---------------------------------------------------------------------------------------------------
+
 2.
-use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
-    - OpenHabitTracker.Rest: public class RestApiDataAccess : IDataAccess
 
 add auth
-add login screen 
+add login screen
 
 add setting where to store data
 add ui radio button
-
-ClientSideData -> ClientData
-IClientSideRuntimeData -> IRuntimeClientData
 
 inject DataAccess array
 only ClientData uses DataAccess
