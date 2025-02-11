@@ -114,9 +114,24 @@ using (var sqlServerContext = new MyDbContext(sqlServerOptions))
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
+https://chatgpt.com/c/67ab3871-21d8-8011-abc7-94b900dbf961
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddCookie()  // For Blazor Server authentication
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://your-identity-provider.com"; // Identity Provider (e.g., IdentityServer, Azure AD)
+        options.Audience = "your-api";  // Audience for API authentication
+        options.RequireHttpsMetadata = false; // Set to true in production
+    });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -162,22 +177,6 @@ JWT_AUDIENCE=your-blazor-app
 JWT_SECRET=your-very-strong-secret-key
 
 ---------------------------------------------------------------------------------------------------
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-[Authorize]
-[ApiController]
-[Route("api/[controller]")]
-public class SecureDataController : ControllerBase
-{
-    [HttpGet("data")]
-    public IActionResult GetSecureData()
-    {
-        return Ok(new { Message = "This data is secured using JWT authentication." });
-    }
-}
-
 ---------------------------------------------------------------------------------------------------
 
 using Microsoft.AspNetCore.Mvc;
