@@ -120,7 +120,7 @@
 
                 <div class="position-relative mt-2">
                     <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowOnlyOverSelectedRatioMin" ValueExpression="() => _settings.ShowOnlyOverSelectedRatioMin" ValueChanged="SaveShowOnlyOverSelectedRatioMin" />
-                    <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Habits with interval ratio"] @_settings.SelectedRatioMin%</label>
+                    <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show only habits with interval ratio over"] @_settings.SelectedRatioMin%</label>
                 </div>
 
                 <input type="range" class="form-range d-block" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))">
