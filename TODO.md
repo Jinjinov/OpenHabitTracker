@@ -76,40 +76,7 @@ help:
     https://trevormare.github.io/STGTour/
 
 ---------------------------------------------------------------------------------------------------
-
-using (var sqliteContext = new MyDbContext(sqliteOptions))
-{
-    // Retrieve data from SQLite without tracking.
-    var entities = sqliteContext.YourEntities.AsNoTracking().ToList();
-
-    using (var sqlServerContext = new MyDbContext(sqlServerOptions))
-    {
-         // Add the entities to the SQL Server context.
-         sqlServerContext.YourEntities.AddRange(entities);
-         sqlServerContext.SaveChanges();
-    }
-}
-
 ---------------------------------------------------------------------------------------------------
-
-using (var sqliteContext = new MyDbContext(sqliteOptions))
-using (var sqlServerContext = new MyDbContext(sqlServerOptions))
-{
-    foreach (var entityType in sqliteContext.Model.GetEntityTypes())
-    {
-        // Dynamically get the DbSet for the entity type
-        var sqliteSet = sqliteContext.Set(entityType.ClrType);
-        var sqlServerSet = sqlServerContext.Set(entityType.ClrType);
-        
-        // Retrieve all records without tracking to improve performance
-        var data = sqliteSet.AsNoTracking().ToList();
-        
-        // Insert data into the SQL Server context
-        sqlServerSet.AddRange(data);
-    }
-    sqlServerContext.SaveChanges();
-}
-
 ---------------------------------------------------------------------------------------------------
 
 public void CopyData(DbContext source, DbContext destination)
