@@ -4,9 +4,9 @@ using System.Text.Json;
 
 namespace OpenHabitTracker.Backup.File;
 
-public class JsonImportExport(ClientSideData appData)
+public class JsonImportExport(ClientData appData)
 {
-    private readonly ClientSideData _appData = appData;
+    private readonly ClientData _appData = appData;
 
     private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
 

@@ -30,7 +30,7 @@ public static class Startup
 
     private static void AddDefaultServices(IServiceCollection services)
     {
-        services.AddScoped<ClientSideData>();
+        services.AddScoped<ClientData>();
 
         services.AddScoped<CalendarService>();
         services.AddScoped<CategoryService>();

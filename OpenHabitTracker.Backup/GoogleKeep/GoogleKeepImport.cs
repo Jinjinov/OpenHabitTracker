@@ -6,9 +6,9 @@ using System.Text.Json;
 
 namespace OpenHabitTracker.Backup.GoogleKeep;
 
-public class GoogleKeepImport(ClientSideData appData)
+public class GoogleKeepImport(ClientData appData)
 {
-    private readonly ClientSideData _appData = appData;
+    private readonly ClientData _appData = appData;
 
     //readonly Dictionary<string, string> _namedColors = new()
     //{

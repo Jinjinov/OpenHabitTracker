@@ -47,8 +47,6 @@ server side:
 [ ] Reset items when habit is completed
     await UncheckAllItems(habit);
 
-ClientSideData -> ClientData
-
 ---------------------------------------------------------------------------------------------------
 
 2.

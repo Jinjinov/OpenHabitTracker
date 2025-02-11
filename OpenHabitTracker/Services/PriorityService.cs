@@ -5,9 +5,9 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class PriorityService(ClientSideData appData, IDataAccess dataAccess)
+public class PriorityService(ClientData appData, IDataAccess dataAccess)
 {
-    private readonly ClientSideData _appData = appData;
+    private readonly ClientData _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
 
     public IReadOnlyCollection<PriorityModel>? Priorities => _appData.Priorities?.Values;
