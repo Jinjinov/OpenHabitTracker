@@ -36,7 +36,7 @@ public class SettingsModel
 
     public bool ShowOnlyOverSelectedRatioMin { get; set; }
 
-    public int SelectedRatioMin { get; set; }
+    public int SelectedRatioMin { get; set; } = 50;
 
     public int HorizontalMargin { get; set; } = 1;
 

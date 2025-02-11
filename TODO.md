@@ -42,7 +42,6 @@ server side:
 1.
 
 [ ] Habits with interval ratio 100% -> [ ] Show only Habits with interval ratio over 100%
-    default: 50%
 
 [ ] Reset items when habit is completed
     await UncheckAllItems(habit);

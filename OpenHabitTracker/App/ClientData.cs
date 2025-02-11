@@ -173,7 +173,7 @@ public class ClientData(IDataAccess dataAccess, IRuntimeClientData runtimeClient
             InsertTabsInNoteContent = true,
             DisplayNoteContentAsMarkdown = true,
             ShowOnlyOverSelectedRatioMin = false,
-            SelectedRatioMin = 0,
+            SelectedRatioMin = 50,
             HorizontalMargin = 1,
             VerticalMargin = 2,
             HiddenCategoryIds = [],
