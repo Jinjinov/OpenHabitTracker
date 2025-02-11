@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.Blazor.Web.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class DataAccessController(IDataAccess dataAccess) : ControllerBase

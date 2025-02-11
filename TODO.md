@@ -52,21 +52,17 @@ add REST API endpoints for online data sync to Blazor Server
 use them in Blazor Wasm, Photino, Wpf, WinForms, Maui
     - OpenHabitTracker.Rest: public class RestApiDataAccess : IDataAccess
 
-services.AddHttpClient<TodoClient>(client =>
-{
-    client.BaseAddress = new Uri("https://api.yourdomain.com/");
-});
-
 add auth
 add login screen 
 
 add setting where to store data
 add ui radio button
 
-inject data access array
-only client side data uses data access
 ClientSideData -> ClientData
 IClientSideRuntimeData -> IRuntimeClientData
+
+inject DataAccess array
+only ClientData uses DataAccess
 add ClientState
 
 method to copy one db context to another
@@ -78,6 +74,309 @@ help:
 - list of guided tours
     https://github.com/TrevorMare/STGTour/
     https://trevormare.github.io/STGTour/
+
+---------------------------------------------------------------------------------------------------
+
+using (var sqliteContext = new MyDbContext(sqliteOptions))
+{
+    // Retrieve data from SQLite without tracking.
+    var entities = sqliteContext.YourEntities.AsNoTracking().ToList();
+
+    using (var sqlServerContext = new MyDbContext(sqlServerOptions))
+    {
+         // Add the entities to the SQL Server context.
+         sqlServerContext.YourEntities.AddRange(entities);
+         sqlServerContext.SaveChanges();
+    }
+}
+
+---------------------------------------------------------------------------------------------------
+
+using (var sqliteContext = new MyDbContext(sqliteOptions))
+using (var sqlServerContext = new MyDbContext(sqlServerOptions))
+{
+    foreach (var entityType in sqliteContext.Model.GetEntityTypes())
+    {
+        // Dynamically get the DbSet for the entity type
+        var sqliteSet = sqliteContext.Set(entityType.ClrType);
+        var sqlServerSet = sqlServerContext.Set(entityType.ClrType);
+        
+        // Retrieve all records without tracking to improve performance
+        var data = sqliteSet.AsNoTracking().ToList();
+        
+        // Insert data into the SQL Server context
+        sqlServerSet.AddRange(data);
+    }
+    sqlServerContext.SaveChanges();
+}
+
+---------------------------------------------------------------------------------------------------
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        // Read values from environment variables
+        var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "defaultIssuer";
+        var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "defaultAudience";
+        var secret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? "your-very-strong-secret-key";
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+// Make sure authentication middleware is registered before authorization:
+app.UseAuthentication();
+app.UseAuthorization();
+
+---------------------------------------------------------------------------------------------------
+
+services:
+  your-blazor-app:
+    image: your-blazor-app:latest
+    environment:
+      - JWT_ISSUER=https://your-app.example.com
+      - JWT_AUDIENCE=your-blazor-app
+      - JWT_SECRET=your-very-strong-secret-key
+    ports:
+      - "80:80"
+
+---------------------------------------------------------------------------------------------------
+
+JWT_ISSUER=https://your-app.example.com
+JWT_AUDIENCE=your-blazor-app
+JWT_SECRET=your-very-strong-secret-key
+
+---------------------------------------------------------------------------------------------------
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+[Authorize]
+[ApiController]
+[Route("api/[controller]")]
+public class SecureDataController : ControllerBase
+{
+    [HttpGet("data")]
+    public IActionResult GetSecureData()
+    {
+        return Ok(new { Message = "This data is secured using JWT authentication." });
+    }
+}
+
+---------------------------------------------------------------------------------------------------
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
+{
+    [HttpPost("token")]
+    public IActionResult GetToken([FromBody] LoginModel model)
+    {
+        // Replace with your own user validation logic.
+        if (model.Username == "admin" && model.Password == "password")
+        {
+            var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "defaultIssuer";
+            var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "defaultAudience";
+            var secret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? "your-very-strong-secret-key";
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, model.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: creds);
+
+            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+        }
+        return Unauthorized();
+    }
+}
+
+public class LoginModel
+{
+    public string Username { get; set; }
+    public string Password { get; set; }
+}
+
+---------------------------------------------------------------------------------------------------
+
+using Microsoft.Extensions.DependencyInjection;
+
+public static class MauiProgram
+{
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            });
+        
+        // Register a named HttpClient for API calls
+        builder.Services.AddHttpClient("ApiClient", client =>
+        {
+            client.BaseAddress = new Uri("https://your-blazor-app.example.com/");
+        });
+        
+        // Register AuthService and ApiService
+        builder.Services.AddSingleton<AuthService>();
+        builder.Services.AddSingleton<ApiService>();
+
+        return builder.Build();
+    }
+}
+
+---------------------------------------------------------------------------------------------------
+
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+
+public class AuthService
+{
+    private readonly HttpClient _httpClient;
+
+    public AuthService(IHttpClientFactory httpClientFactory)
+    {
+        // Create an instance of HttpClient using the registered named client
+        _httpClient = httpClientFactory.CreateClient("ApiClient");
+    }
+
+    public async Task<string> GetTokenAsync(string username, string password)
+    {
+        // Replace with your actual login model or data structure
+        var loginData = new { Username = username, Password = password };
+
+        var response = await _httpClient.PostAsJsonAsync("api/auth/token", loginData);
+        if (response.IsSuccessStatusCode)
+        {
+            var tokenResponse = await response.Content.ReadFromJsonAsync<TokenResponse>();
+            return tokenResponse?.Token;
+        }
+        return null;
+    }
+}
+
+public class TokenResponse
+{
+    public string Token { get; set; }
+}
+
+---------------------------------------------------------------------------------------------------
+
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+
+public class ApiService
+{
+    private readonly HttpClient _httpClient;
+
+    public ApiService(IHttpClientFactory httpClientFactory)
+    {
+        _httpClient = httpClientFactory.CreateClient("ApiClient");
+    }
+
+    public async Task<string> GetSecureDataAsync(string token)
+    {
+        // Set the JWT token in the Authorization header for subsequent requests
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        
+        // Call your secured endpoint
+        var response = await _httpClient.GetAsync("api/securedata/data");
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadAsStringAsync();
+        }
+        return null;
+    }
+}
+
+---------------------------------------------------------------------------------------------------
+
+@page "/login"
+@inject AuthService AuthService
+@inject ApiService ApiService
+
+<h3>Login</h3>
+<input @bind="username" placeholder="Username" />
+<input @bind="password" placeholder="Password" type="password" />
+<button @onclick="Login">Login</button>
+
+@if (!string.IsNullOrEmpty(secureData))
+{
+    <p>Secure Data: @secureData</p>
+}
+
+@code {
+    private string username;
+    private string password;
+    private string secureData;
+
+    private async Task Login()
+    {
+        // Obtain token by calling your AuthService
+        var token = await AuthService.GetTokenAsync(username, password);
+        if (!string.IsNullOrEmpty(token))
+        {
+            // Use the token to call a secured API endpoint
+            secureData = await ApiService.GetSecureDataAsync(token);
+        }
+    }
+}
+
+---------------------------------------------------------------------------------------------------
+
+builder.Services.AddHttpClient<RestApiDataAccess>(client =>
+{
+    client.BaseAddress = new Uri("https://your-blazor-app.example.com/");
+});
+
+---------------------------------------------------------------------------------------------------
+
+// Assuming you have obtained the token as a string.
+var token = await AuthService.GetTokenAsync(username, password);
+if (!string.IsNullOrEmpty(token))
+{
+    // Set the Authorization header on the NSwag client
+    var client = serviceProvider.GetRequiredService<RestApiDataAccess>();
+    client.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    
+    // Now you can call secure endpoints.
+    var secureData = await client.GetSecureDataAsync();
+}
+
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 
 3.
 refactor classes:
