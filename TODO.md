@@ -48,7 +48,6 @@ server side:
     await UncheckAllItems(habit);
 
 ClientSideData -> ClientData
-IClientSideRuntimeData -> IRuntimeClientData
 
 ---------------------------------------------------------------------------------------------------
 

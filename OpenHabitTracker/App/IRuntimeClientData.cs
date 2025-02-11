@@ -1,6 +1,6 @@
 namespace OpenHabitTracker.App;
 
-public interface IClientSideRuntimeData
+public interface IRuntimeClientData
 {
     Task<int> GetWindowWidth();
 }

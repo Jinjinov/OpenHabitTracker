@@ -5,10 +5,10 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.App;
 
-public class ClientSideData(IDataAccess dataAccess, IClientSideRuntimeData runtimeData, MarkdownPipeline markdownPipeline)
+public class ClientSideData(IDataAccess dataAccess, IRuntimeClientData runtimeClientData, MarkdownPipeline markdownPipeline)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
-    private readonly IClientSideRuntimeData _runtimeData = runtimeData;
+    private readonly IRuntimeClientData _runtimeClientData = runtimeClientData;
     private readonly MarkdownPipeline _markdownPipeline = markdownPipeline;
 
     public UserModel User { get; set; } = new();

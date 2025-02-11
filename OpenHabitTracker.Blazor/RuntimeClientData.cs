@@ -2,7 +2,7 @@ using OpenHabitTracker.App;
 
 namespace OpenHabitTracker.Blazor;
 
-public class ClientSideRuntimeData(JsInterop jsInterop, IPreRenderService preRenderService) : IClientSideRuntimeData
+public class RuntimeClientData(JsInterop jsInterop, IPreRenderService preRenderService) : IRuntimeClientData
 {
     private readonly JsInterop _jsInterop = jsInterop;
     private readonly IPreRenderService _preRenderService = preRenderService;
