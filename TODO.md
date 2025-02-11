@@ -112,6 +112,41 @@ using (var sqlServerContext = new MyDbContext(sqlServerOptions))
 
 ---------------------------------------------------------------------------------------------------
 
+public void CopyData(DbContext source, DbContext destination)
+{
+    foreach (var entityType in source.Model.GetEntityTypes())
+    {
+        var sourceSet = source.Set(entityType.ClrType);
+        var destinationSet = destination.Set(entityType.ClrType);
+
+        // Retrieve all records without tracking.
+        var data = sourceSet.AsNoTracking().ToList();
+
+        // Add records to the destination context.
+        destinationSet.AddRange(data);
+    }
+    destination.SaveChanges();
+}
+
+using (var sqliteContext = new MyDbContext(sqliteOptions))
+using (var sqlServerContext = new MyDbContext(sqlServerOptions))
+{
+    // Copy data from SQLite to SQL Server.
+    CopyData(sqliteContext, sqlServerContext);
+}
+
+// Or to copy in the opposite direction:
+using (var sqliteContext = new MyDbContext(sqliteOptions))
+using (var sqlServerContext = new MyDbContext(sqlServerOptions))
+{
+    // Copy data from SQL Server to SQLite.
+    CopyData(sqlServerContext, sqliteContext);
+}
+
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
