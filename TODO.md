@@ -76,6 +76,8 @@ help:
 - separate help for each screen
 - guided tour per screen
 - list of guided tours
+    https://github.com/TrevorMare/STGTour/
+    https://trevormare.github.io/STGTour/
 
 3.
 refactor classes:
