@@ -138,16 +138,14 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
-        
-        // Register a named HttpClient for API calls
-        builder.Services.AddHttpClient("ApiClient", client =>
+
+        builder.Services.AddHttpClient<RestApiDataAccess>(client =>
         {
             client.BaseAddress = new Uri("https://your-blazor-app.example.com/");
         });
         
-        // Register AuthService and ApiService
+        // Register AuthService
         builder.Services.AddSingleton<AuthService>();
-        builder.Services.AddSingleton<ApiService>();
 
         return builder.Build();
     }
@@ -189,39 +187,11 @@ public class TokenResponse
 }
 
 ---------------------------------------------------------------------------------------------------
-
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-
-public class ApiService
-{
-    private readonly HttpClient _httpClient;
-
-    public ApiService(IHttpClientFactory httpClientFactory)
-    {
-        _httpClient = httpClientFactory.CreateClient("ApiClient");
-    }
-
-    public async Task<string> GetSecureDataAsync(string token)
-    {
-        // Set the JWT token in the Authorization header for subsequent requests
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        
-        // Call your secured endpoint
-        var response = await _httpClient.GetAsync("api/securedata/data");
-        if (response.IsSuccessStatusCode)
-        {
-            return await response.Content.ReadAsStringAsync();
-        }
-        return null;
-    }
-}
-
 ---------------------------------------------------------------------------------------------------
 
 @page "/login"
 @inject AuthService AuthService
-@inject ApiService ApiService
+@inject RestApiDataAccess RestApiDataAccess
 
 <h3>Login</h3>
 <input @bind="username" placeholder="Username" />
@@ -244,33 +214,17 @@ public class ApiService
         var token = await AuthService.GetTokenAsync(username, password);
         if (!string.IsNullOrEmpty(token))
         {
-            // Use the token to call a secured API endpoint
-            secureData = await ApiService.GetSecureDataAsync(token);
+            // Set the Authorization header on the NSwag client
+            RestApiDataAccess.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    
+            // Now you can call secure endpoints.
+            secureData = await RestApiDataAccess.GetSecureDataAsync();
         }
     }
 }
 
 ---------------------------------------------------------------------------------------------------
-
-builder.Services.AddHttpClient<RestApiDataAccess>(client =>
-{
-    client.BaseAddress = new Uri("https://your-blazor-app.example.com/");
-});
-
 ---------------------------------------------------------------------------------------------------
-
-// Assuming you have obtained the token as a string.
-var token = await AuthService.GetTokenAsync(username, password);
-if (!string.IsNullOrEmpty(token))
-{
-    // Set the Authorization header on the NSwag client
-    var client = serviceProvider.GetRequiredService<RestApiDataAccess>();
-    client.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-    
-    // Now you can call secure endpoints.
-    var secureData = await client.GetSecureDataAsync();
-}
-
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
