@@ -48,7 +48,7 @@ Android - APKPure:
 
 ## Docker image contains a Blazor Server app for one user
 
-https://hub.docker.com/repository/docker/jinjinov/openhabittracker
+https://hub.docker.com/r/jinjinov/openhabittracker
 
 https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker
 

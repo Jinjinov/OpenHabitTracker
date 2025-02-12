@@ -756,6 +756,8 @@ docker push jinjinov/openhabittracker:1.0.0
 
 https://hub.docker.com/repository/docker/jinjinov/openhabittracker
 
+https://hub.docker.com/r/jinjinov/openhabittracker
+
 GitHub Container Registry:
 
 echo <GitHubToken> | docker login ghcr.io -u Jinjinov --password-stdin
