@@ -48,6 +48,18 @@ server side:
 
 2.
 
+JWT_ISSUER=https://app.openhabittracker.net
+JWT_AUDIENCE=OpenHabitTracker
+JWT_SECRET=your-very-strong-secret-key
+
+Windows:
+
+    [System.Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+
+Linux / macOS:
+
+    openssl rand -base64 32
+
 add auth
 add login screen
 
@@ -150,6 +162,20 @@ builder.Services.AddAuthorization();
 // Make sure authentication middleware is registered before authorization:
 app.UseAuthentication();
 app.UseAuthorization();
+
+var issuer = "https://app.openhabittracker.net";
+var audience = "OpenHabitTracker";
+var secret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? throw new InvalidOperationException("JWT_SECRET is missing");
+
+options.TokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuer = true,
+    ValidateAudience = true,
+    ValidateIssuerSigningKey = true,
+    ValidIssuer = issuer,
+    ValidAudience = audience,
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+};
 
 ---------------------------------------------------------------------------------------------------
 
