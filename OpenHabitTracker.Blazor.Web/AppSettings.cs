@@ -7,4 +7,6 @@ public class AppSettings
     public string Email { get; set; } = "admin@admin.com";
 
     public string Password { get; set; } = "admin";
+
+    public string JwtSecret { get; set; } = "your-very-strong-secret-key";
 }

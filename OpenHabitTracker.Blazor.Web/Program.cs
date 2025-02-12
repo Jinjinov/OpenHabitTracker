@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using OpenHabitTracker;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor;
@@ -9,6 +12,7 @@ using OpenHabitTracker.Blazor.Web;
 using OpenHabitTracker.Blazor.Web.Components;
 using OpenHabitTracker.Blazor.Web.Data;
 using Scalar.AspNetCore;
+using System.Text;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +21,8 @@ builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
+
+AppSettings appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>() ?? throw new Exception("Missing AppSettings");
 
 // Bind AppSettings section to a strongly-typed class
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
@@ -51,12 +57,32 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication("Cookies")
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddCookie(options =>
     {
         options.LoginPath = "/login";
+    })
+    .AddJwtBearer(options =>
+    {
+        string issuer = "https://app.openhabittracker.net";
+        string audience = "OpenHabitTracker";
+        string secret = appSettings.JwtSecret;
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+        };
     });
-builder.Services.AddAuthorizationCore();
+builder.Services.AddAuthorization();
 
 builder.Services.AddBackup();
 builder.Services.AddBlazor();
