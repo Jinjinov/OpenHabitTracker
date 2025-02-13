@@ -48,8 +48,6 @@ server side:
 
 2.
 
-JWT_ISSUER=https://app.openhabittracker.net
-JWT_AUDIENCE=OpenHabitTracker
 JWT_SECRET=your-very-strong-secret-key
 
 Windows:
@@ -132,60 +130,17 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-        builder
-            .UseMauiApp<App>()
-            .ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-            });
 
         builder.Services.AddHttpClient<RestApiDataAccess>(client =>
         {
             client.BaseAddress = new Uri("https://your-blazor-app.example.com/");
         });
         
-        // Register AuthService
-        builder.Services.AddSingleton<AuthService>();
-
         return builder.Build();
     }
 }
 
 ---------------------------------------------------------------------------------------------------
-
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-
-public class AuthService
-{
-    private readonly HttpClient _httpClient;
-
-    public AuthService(IHttpClientFactory httpClientFactory)
-    {
-        // Create an instance of HttpClient using the registered named client
-        _httpClient = httpClientFactory.CreateClient("ApiClient");
-    }
-
-    public async Task<string> GetTokenAsync(string username, string password)
-    {
-        // Replace with your actual login model or data structure
-        var loginData = new { Username = username, Password = password };
-
-        var response = await _httpClient.PostAsJsonAsync("api/auth/token", loginData);
-        if (response.IsSuccessStatusCode)
-        {
-            var tokenResponse = await response.Content.ReadFromJsonAsync<TokenResponse>();
-            return tokenResponse?.Token;
-        }
-        return null;
-    }
-}
-
-public class TokenResponse
-{
-    public string Token { get; set; }
-}
-
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
@@ -223,8 +178,6 @@ public class TokenResponse
     }
 }
 
----------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
