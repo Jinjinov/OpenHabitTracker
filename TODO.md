@@ -66,11 +66,12 @@ add ui radio button
 add auth
 add login screen
 
-refactor classes:
+---------------------------------------------------------------------------------------------------
 
 ClientState:
-    inject DataAccess array
-    add 2x ClientData, enum, Dictionary
+    add 2x DataAccess
+    add 2x ClientData
+    add enum, Dictionary
 
     ClientState:
         - hold state
@@ -89,15 +90,15 @@ ClientState:
         public Dictionary<long, CategoryModel>? Categories { get; set; }
         public Dictionary<long, PriorityModel>? Priorities { get; set; }
 
-!!! NEW PLAN !!!
+removing `DataAccess` from all services would create one bloated class
 
-removing DataAccess from all services would create one bloated class
-instead, make sure that loading an Entity with DataAccess and creating a Model results storing the model in a Dictionary in ClientData
+instead, make sure that loading an `Entity` with `DataAccess` and creating a `Model` results storing the `Model` in a `Dictionary` in `ClientData`
+
 check for every `new.*Model`
 
 `ToEntity` already exist, add `ToModel` and use it for every `Model`
 
-!!!!!!!!!!!!!!!!
+---------------------------------------------------------------------------------------------------
 
 method to copy one db context to another
 
