@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpenHabitTracker.Blazor.Web.Data;
+using OpenHabitTracker.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -18,14 +19,14 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
     private readonly AppSettings _appSettings = options.Value;
 
     [HttpPost("token")]
-    public async Task<IActionResult> GetToken([FromBody] LoginModel model)
+    public async Task<IActionResult> GetToken([FromBody] LoginCredentials loginCredentials)
     {
         // Authenticate the user using SignInManager
-        Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: false, lockoutOnFailure: false);
+        Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(loginCredentials.Username, loginCredentials.Password, isPersistent: false, lockoutOnFailure: false);
 
         if (result.Succeeded)
         {
-            ApplicationUser? user = await _userManager.FindByNameAsync(model.Username);
+            ApplicationUser? user = await _userManager.FindByNameAsync(loginCredentials.Username);
 
             string issuer = "https://app.openhabittracker.net";
             string audience = "OpenHabitTracker";
@@ -33,7 +34,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
 
             Claim[] claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, model.Username),
+                new Claim(JwtRegisteredClaimNames.Sub, loginCredentials.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -52,10 +53,4 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
 
         return Unauthorized("Invalid credentials");
     }
-}
-
-public class LoginModel
-{
-    public string Username { get; set; } = "";
-    public string Password { get; set; } = "";
 }

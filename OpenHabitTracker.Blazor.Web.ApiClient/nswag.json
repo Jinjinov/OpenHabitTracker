@@ -9,11 +9,12 @@
   },
   "codeGenerators": {
     "openApiToCSharpClient": {
-      "className": "RestApiDataAccess",
-      "output": "RestApiDataAccess.g.cs",
+      "operationGenerationMode": "MultipleClientsFromFirstTagAndOperationId",
+      "output": "ApiClient.g.cs",
       "namespace": "OpenHabitTracker.Blazor.Web.ApiClient",
       "generateDtoTypes": false,
       "additionalNamespaceUsages": [
+        "OpenHabitTracker.Data",
         "OpenHabitTracker.Data.Entities"
       ],
       "responseArrayType": "System.Collections.Generic.IReadOnlyList",

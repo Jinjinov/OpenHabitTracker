@@ -3,7 +3,7 @@ using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.Blazor.Web.ApiClient;
 
-public partial class RestApiDataAccess : IDataAccess
+public partial class DataAccessClient : IDataAccess
 {
     async Task IDataAccess.Initialize()
     {
