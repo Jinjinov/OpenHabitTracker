@@ -14,6 +14,7 @@
 @inject SettingsService SettingsService
 @inject SearchFilterService SearchFilterService
 @inject IStringLocalizer Loc
+@inject PriorityService PriorityService
 
 <PageTitle>OpenHabitTracker - Tasks</PageTitle>
 
@@ -99,7 +100,7 @@
                 else
                 {
                     <div class="input-group flex-nowrap">
-                        <span class="input-group-text">@AppData.GetPriorityTitle(task.Priority)</span>
+                        <span class="input-group-text">@PriorityService.GetPriorityTitle(task.Priority)</span>
                         <button class="@($"input-group-text flex-grow-1 text-wrap {task.Color} highlightable")" @onclick="() => OpenSelected(task.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
                         @if (task.PlannedAt is not null)
                         {

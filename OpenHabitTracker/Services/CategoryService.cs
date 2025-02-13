@@ -16,6 +16,11 @@ public class CategoryService(ClientState appData, IDataAccess dataAccess)
 
     public CategoryModel? NewCategory { get; set; }
 
+    public string GetCategoryTitle(long category)
+    {
+        return _appData.Categories?.GetValueOrDefault(category)?.Title ?? category.ToString();
+    }
+
     public async Task Initialize()
     {
         await _appData.LoadCategories();

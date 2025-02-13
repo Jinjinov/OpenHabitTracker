@@ -22,19 +22,6 @@ public class ClientState(IDataAccess dataAccess, IRuntimeClientData runtimeClien
     public Dictionary<long, PriorityModel>? Priorities { get; set; }
     public List<ContentModel>? Trash { get; set; }
 
-    public string GetCategoryTitle(long category)
-    {
-        return Categories?.GetValueOrDefault(category)?.Title ?? category.ToString();
-    }
-
-    public string GetPriorityTitle(Priority priority)
-    {
-        if (priority == Priority.None)
-            return "⊘";
-
-        return Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
-    }
-
     public async Task UpdateModel(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
     {
         if (model is HabitModel habitModel && await _dataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)

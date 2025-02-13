@@ -1,4 +1,4 @@
-﻿using OpenHabitTracker.App;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
@@ -15,6 +15,14 @@ public class PriorityService(ClientState appData, IDataAccess dataAccess)
     public PriorityModel? SelectedPriority { get; set; }
 
     public PriorityModel? NewPriority { get; set; }
+
+    public string GetPriorityTitle(Priority priority)
+    {
+        if (priority == Priority.None)
+            return "⊘";
+
+        return _appData.Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
+    }
 
     public async Task Initialize()
     {
