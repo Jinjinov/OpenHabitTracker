@@ -1,5 +1,6 @@
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Blazor.Pages
+@using OpenHabitTracker.Services
 
 @inject ILogger<Main> Logger
 @inject ClientState AppData
@@ -7,6 +8,7 @@
 @inject NavigationManager NavigationManager
 @inject JsInterop JsInterop
 @inject IStringLocalizer Loc
+@inject SettingsService SettingsService
 
 @* Root <div> inside <html><body><app> *@
 
@@ -140,20 +142,20 @@
         await AppData.LoadUsers();
         await AppData.LoadSettings();
 
-        Localization.Loc.SetCulture(AppData.Settings.Culture);
+        Localization.Loc.SetCulture(SettingsService.Settings.Culture);
 
-        if (!AppData.Settings.IsDarkMode)
+        if (!SettingsService.Settings.IsDarkMode)
             await JsInterop.SetMode("light");
 
-        if (AppData.Settings.Theme != "default")
-            await JsInterop.SetTheme(AppData.Settings.Theme);
+        if (SettingsService.Settings.Theme != "default")
+            await JsInterop.SetTheme(SettingsService.Settings.Theme);
 
         _contentDeleted = EventCallback.Factory.Create(this, OnContentDeleted);
 
         SetDynamicComponentParameters();
 
-        if (!string.IsNullOrEmpty(AppData.Settings.StartSidebar))
-            SelectComponent(AppData.Settings.StartSidebar);
+        if (!string.IsNullOrEmpty(SettingsService.Settings.StartSidebar))
+            SelectComponent(SettingsService.Settings.StartSidebar);
 
         Logger.LogInformation("MainLayout.OnInitializedAsync end");
     }
@@ -203,11 +205,11 @@
 
             SetDynamicComponentParameters();
 
-            if (!string.IsNullOrEmpty(AppData.Settings.StartPage))
+            if (!string.IsNullOrEmpty(SettingsService.Settings.StartPage))
             {
-                if (!NavigationManager.Uri.Contains(AppData.Settings.StartPage)) // fix for ERR_TOO_MANY_REDIRECTS on Blazor Server which calls OnInitializedAsync twice
+                if (!NavigationManager.Uri.Contains(SettingsService.Settings.StartPage)) // fix for ERR_TOO_MANY_REDIRECTS on Blazor Server which calls OnInitializedAsync twice
                 {
-                    NavigationManager.NavigateTo(AppData.Settings.StartPage);
+                    NavigationManager.NavigateTo(SettingsService.Settings.StartPage);
                 }
             }
 

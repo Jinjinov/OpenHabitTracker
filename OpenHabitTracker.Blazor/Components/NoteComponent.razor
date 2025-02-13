@@ -4,7 +4,7 @@
 
 @inject NoteService NoteService
 @inject JsInterop JsInterop
-@inject ClientState AppData
+@inject SettingsService SettingsService
 @inject IStringLocalizer Loc
 @inject MarkdownToHtml MarkdownToHtml
 
@@ -22,7 +22,7 @@
     <CategoryComponent Model="Note" />
 </div>
 
-@if (AppData.Settings.ShowColor)
+@if (SettingsService.Settings.ShowColor)
 {
     <div class="input-group flex-nowrap">
         <span class="input-group-text col-4">@Loc["Color"]</span>
@@ -30,7 +30,7 @@
     </div>
 }
 
-@if (AppData.Settings.ShowCreatedUpdated)
+@if (SettingsService.Settings.ShowCreatedUpdated)
 {
     <div class="p-1 border rounded-0">
         <small class="d-inline-block mx-1">@Loc["Created"]: @Note.CreatedAt</small>
@@ -55,7 +55,7 @@
     {
         if (_inputTextAreaReference?.Element is not null)
         {
-            if (AppData.Settings.InsertTabsInNoteContent)
+            if (SettingsService.Settings.InsertTabsInNoteContent)
                 await JsInterop.HandleTabKey(_inputTextAreaReference.Element.Value);
 
             await JsInterop.SetCalculateAutoHeight(_inputTextAreaReference.Element.Value);

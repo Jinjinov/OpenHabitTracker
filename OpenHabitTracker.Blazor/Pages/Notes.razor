@@ -10,13 +10,14 @@
 @inject NavigationManager NavigationManager
 @inject NoteService NoteService
 @inject ClientState AppData
+@inject SettingsService SettingsService
 @inject JsInterop JsInterop
 @inject SearchFilterService SearchFilterService
 @inject IStringLocalizer Loc
 
 <PageTitle>OpenHabitTracker - Notes</PageTitle>
 
-<div class="@($"col child-column px-0 px-md-{AppData.Settings.HorizontalMargin}")">
+<div class="@($"col child-column px-0 px-md-{SettingsService.Settings.HorizontalMargin}")">
 
     @* <small class="m-1">@Loc["Add new note"]</small> *@
 
@@ -47,7 +48,7 @@
                 <CategoryComponent Model="NoteService.NewNote" />
             </div>
 
-            @if (AppData.Settings.ShowColor)
+            @if (SettingsService.Settings.ShowColor)
             {
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text col-4">@Loc["Color"]</span>
@@ -67,7 +68,7 @@
 
         foreach (NoteModel note in NoteService.GetNotes())
         {
-            <div class="@($"my-{AppData.Settings.VerticalMargin}")">
+            <div class="@($"my-{SettingsService.Settings.VerticalMargin}")">
                 @if (!_showSecondColumn && note.Id == Id && NoteService.NewNote is null)
                 {
                     <NoteComponent Note="note" CloseSelected="CloseSelected" />
@@ -79,7 +80,7 @@
                         <button class="@($"input-group-text flex-grow-1 text-wrap {note.Color} highlightable")" @onclick="() => OpenSelected(note.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
                     </div>
 
-                    if (AppData.Settings.DisplayNoteContentAsMarkdown)
+                    if (SettingsService.Settings.DisplayNoteContentAsMarkdown)
                     {
                         <div class="form-control markdown-block-margin" style="min-height: 38px;">@((MarkupString)SearchFilterService.MarkSearchResultsInHtml(note.ContentMarkdown))</div>
                     }
@@ -154,7 +155,7 @@
 
         if (_inputTextAreaReference?.Element is not null)
         {
-            if (AppData.Settings.InsertTabsInNoteContent)
+            if (SettingsService.Settings.InsertTabsInNoteContent)
                 await JsInterop.HandleTabKey(_inputTextAreaReference.Element.Value);
 
             await JsInterop.SetCalculateAutoHeight(_inputTextAreaReference.Element.Value);

@@ -5,7 +5,7 @@
 
 @inject CalendarService CalendarService
 @inject HabitService HabitService
-@inject ClientState AppData
+@inject SettingsService SettingsService
 @inject IStringLocalizer Loc
 
 @if (Habit is null || Habit.TimesDoneByDay is null)
@@ -18,16 +18,16 @@ else
     {
         <div class="input-group mb-1">
             <button class="btn btn-outline-primary" @onclick="_calendarParams.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
-            <button class="btn btn-outline-primary" @onclick="() => _calendarParams.SetCalendarStartToPreviousMonth(AppData.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-left"></i></button>
+            <button class="btn btn-outline-primary" @onclick="() => _calendarParams.SetCalendarStartToPreviousMonth(SettingsService.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-left"></i></button>
             <span class="input-group-text flex-grow-1" style="justify-content: center;">@_calendarParams.FirstDayOfMonth.ToString("MMMM")</span>
-            <button class="btn btn-outline-primary" @onclick="() => _calendarParams.SetCalendarStartToNextMonth(AppData.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-right"></i></button>
+            <button class="btn btn-outline-primary" @onclick="() => _calendarParams.SetCalendarStartToNextMonth(SettingsService.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-right"></i></button>
             <button class="btn btn-outline-primary" @onclick="_calendarParams.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
         </div>
 
         <div class="bg-body d-flex">
             @for (int i = 0; i < 7; i++)
             {
-                int dayIdx = CalendarService.GetDayOfWeek(AppData.Settings.FirstDayOfWeek, i);
+                int dayIdx = CalendarService.GetDayOfWeek(SettingsService.Settings.FirstDayOfWeek, i);
                 string day = Loc[_days[dayIdx]];
                 <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
             }
@@ -125,18 +125,18 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await AppData.LoadSettings();
+        await SettingsService.Initialize();
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (_calendarParams.CalendarStart == DateTime.MinValue || _calendarParams.CalendarStart.DayOfWeek != AppData.Settings.FirstDayOfWeek)
+        if (_calendarParams.CalendarStart == DateTime.MinValue || _calendarParams.CalendarStart.DayOfWeek != SettingsService.Settings.FirstDayOfWeek)
         {
             if (DisplayMonth)
             {
                 rowCount = 6;
                 daysInRow = 7;
-                _calendarParams.SetCalendarStartByFirstDayOfMonth(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+                _calendarParams.SetCalendarStartByFirstDayOfMonth(SettingsService.Settings.FirstDayOfWeek, DateTime.Today);
             }
         }
 
@@ -155,7 +155,7 @@ else
                 rowCount = 1;
                 daysInRow = ColumnWidth / 50;
                 _calendarParams.SetCalendarStartByDaysFromToday(-daysInRow + 1);
-                //_calendarParams.SetCalendarStartByFirstDayOfWeek(AppData.Settings.FirstDayOfWeek, DateTime.Today);
+                //_calendarParams.SetCalendarStartByFirstDayOfWeek(SettingsService.Settings.FirstDayOfWeek, DateTime.Today);
             }
         }
 

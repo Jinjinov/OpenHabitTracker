@@ -67,13 +67,15 @@ ClientState:
     for each DataAccess add ClientData to Dictionary
     add enum property to DataAccess
 
-    ClientState:
-        - hold state
-        - load data
-        - map to models
-        - interact with _dataAccess
-        - interact with _runtimeData
-        - import, export / GetUserData, SetUserData
+---------------------------------------------------------------------------------------------------
+
+ClientState:
+    - hold state
+    - load data
+    - map to models
+    - interact with _dataAccess
+    - interact with _runtimeData
+    - import, export / GetUserData, SetUserData
 
 removing `DataAccess` from all services would create one bloated class
 

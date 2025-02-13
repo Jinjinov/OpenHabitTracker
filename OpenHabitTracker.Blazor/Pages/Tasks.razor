@@ -91,7 +91,7 @@
 
         foreach (TaskModel task in TaskService.GetTasks())
         {
-            <div class="@($"my-{AppData.Settings.VerticalMargin}")">
+            <div class="@($"my-{SettingsService.Settings.VerticalMargin}")">
                 @if (!_showSecondColumn && task.Id == Id && TaskService.NewTask is null)
                 {
                     <TaskComponent Task="task" CloseSelected="CloseSelected" />
