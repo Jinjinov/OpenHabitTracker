@@ -69,9 +69,9 @@ add login screen
 ---------------------------------------------------------------------------------------------------
 
 ClientState:
-    add 2x DataAccess
-    add 2x ClientData
-    add enum, Dictionary
+    inject 2x DataAccess
+    for each DataAccess add ClientData to Dictionary
+    add enum property to DataAccess
 
     ClientState:
         - hold state
@@ -92,7 +92,7 @@ ClientState:
 
 removing `DataAccess` from all services would create one bloated class
 
-instead, make sure that loading an `Entity` with `DataAccess` and creating a `Model` results storing the `Model` in a `Dictionary` in `ClientData`
+instead, make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
 
 check for every `new.*Model`
 
