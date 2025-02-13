@@ -41,13 +41,6 @@ server side:
 
 1.
 
-[ ] Reset items when habit is completed
-    await UncheckAllItems(habit);
-
----------------------------------------------------------------------------------------------------
-
-2.
-
 JWT_SECRET=your-very-strong-secret-key
 
 Windows:
@@ -60,18 +53,23 @@ Linux / macOS:
 
 ---------------------------------------------------------------------------------------------------
 
-add Examples
-add 2x ClientData, enum, Dictionary
+2.
 
-add auth
-add login screen
+[ ] Reset items when habit is completed
+    await UncheckAllItems(habit);
 
 add setting where to store data
 add ui radio button
 
+---------------------------------------------------------------------------------------------------
+
+add auth
+add login screen
+
 inject DataAccess array
-only ClientData uses DataAccess
-add ClientState
+only ClientState uses DataAccess
+add ClientData
+add 2x ClientData, enum, Dictionary
 
 method to copy one db context to another
 
@@ -142,17 +140,15 @@ builder.Services.AddHttpClient<DataAccessClient>(client =>
 refactor classes:
 only source of truth: (remove _dataAccess from all other services)
 
-    ClientData
+    ClientState:
         - hold state
-        - load state
+        - load data
         - map to models
         - interact with _dataAccess
         - interact with _runtimeData
-        - interact with _markdownPipeline
         - import, export / GetUserData, SetUserData
-        - LoadExamples
 
-    ClientState:
+    ClientData:
         public Dictionary<long, HabitModel>? Habits { get; set; }
         public Dictionary<long, NoteModel>? Notes { get; set; }
         public Dictionary<long, TaskModel>? Tasks { get; set; }
