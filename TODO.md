@@ -81,15 +81,6 @@ ClientState:
         - interact with _runtimeData
         - import, export / GetUserData, SetUserData
 
-    ClientData:
-        public Dictionary<long, HabitModel>? Habits { get; set; }
-        public Dictionary<long, NoteModel>? Notes { get; set; }
-        public Dictionary<long, TaskModel>? Tasks { get; set; }
-        public Dictionary<long, TimeModel>? Times { get; set; }
-        public Dictionary<long, ItemModel>? Items { get; set; }
-        public Dictionary<long, CategoryModel>? Categories { get; set; }
-        public Dictionary<long, PriorityModel>? Priorities { get; set; }
-
 removing `DataAccess` from all services would create one bloated class
 
 instead, make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
