@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OpenHabitTracker.Backup\OpenHabitTracker.Backup.csproj" />
+    <ProjectReference Include="..\OpenHabitTracker.Blazor.Web.ApiClient\OpenHabitTracker.Blazor.Web.ApiClient.csproj" />
     <ProjectReference Include="..\OpenHabitTracker\OpenHabitTracker.csproj" />
   </ItemGroup>
 

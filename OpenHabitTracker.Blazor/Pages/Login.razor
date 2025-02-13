@@ -1,0 +1,42 @@
+@page "/login"
+
+@using OpenHabitTracker.Blazor.Web.ApiClient
+@using OpenHabitTracker.Data
+@using System.Net.Http.Headers
+
+@inject AuthClient AuthClient
+@inject DataAccessClient DataAccessClient
+
+<h3>Login</h3>
+
+<input @bind="username" placeholder="Username" />
+<input @bind="password" placeholder="Password" type="password" />
+
+<button @onclick="LoginAndGetToken">Login</button>
+
+@if (!string.IsNullOrEmpty(email))
+{
+    <p>Email: @email</p>
+}
+
+@code {
+    private string username;
+    private string password;
+    private string email;
+
+    private async Task LoginAndGetToken()
+    {
+        LoginCredentials credentials = new() { Username = username, Password = password };
+
+        TokenResponse tokenResponse = await AuthClient.GetTokenAsync(credentials);
+
+        if (!string.IsNullOrEmpty(tokenResponse.Token))
+        {
+            AuthClient.SetBearerToken(tokenResponse.Token);
+
+            DataAccessClient.SetBearerToken(tokenResponse.Token);
+
+            email = await AuthClient.GetEmailAsync();
+        }
+    }
+}

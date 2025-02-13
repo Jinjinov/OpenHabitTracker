@@ -117,66 +117,15 @@ using (var sqlServerContext = new MyDbContext(sqlServerOptions))
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
-https://chatgpt.com/c/67ab3871-21d8-8011-abc7-94b900dbf961
-
----------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
-
-using Microsoft.Extensions.DependencyInjection;
-
-public static class MauiProgram
+builder.Services.AddHttpClient<AuthClient>(client =>
 {
-    public static MauiApp CreateMauiApp()
-    {
-        var builder = MauiApp.CreateBuilder();
+    client.BaseAddress = new Uri("https://your-blazor-app.example.com/");
+});
 
-        builder.Services.AddHttpClient<RestApiDataAccess>(client =>
-        {
-            client.BaseAddress = new Uri("https://your-blazor-app.example.com/");
-        });
-        
-        return builder.Build();
-    }
-}
-
----------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
-
-@page "/login"
-@inject AuthService AuthService
-@inject RestApiDataAccess RestApiDataAccess
-
-<h3>Login</h3>
-<input @bind="username" placeholder="Username" />
-<input @bind="password" placeholder="Password" type="password" />
-<button @onclick="Login">Login</button>
-
-@if (!string.IsNullOrEmpty(secureData))
+builder.Services.AddHttpClient<DataAccessClient>(client =>
 {
-    <p>Secure Data: @secureData</p>
-}
-
-@code {
-    private string username;
-    private string password;
-    private string secureData;
-
-    private async Task Login()
-    {
-        // Obtain token by calling your AuthService
-        var token = await AuthService.GetTokenAsync(username, password);
-        if (!string.IsNullOrEmpty(token))
-        {
-            // Set the Authorization header on the NSwag client
-            RestApiDataAccess.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-    
-            // Now you can call secure endpoints.
-            secureData = await RestApiDataAccess.GetSecureDataAsync();
-        }
-    }
-}
+    client.BaseAddress = new Uri("https://your-blazor-app.example.com/");
+});
 
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------

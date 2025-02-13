@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -27,8 +28,6 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
 
         if (result.Succeeded)
         {
-            ApplicationUser? user = await _userManager.FindByNameAsync(loginCredentials.Username);
-
             string issuer = "https://app.openhabittracker.net";
             string audience = "OpenHabitTracker";
             string secret = _appSettings.JwtSecret;
@@ -55,5 +54,21 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         }
 
         return Unauthorized("Invalid credentials");
+    }
+
+    [Authorize]
+    [HttpGet("email")]
+    [EndpointName("GetEmail")]
+    public async Task<ActionResult<string>> GetEmail()
+    {
+        // Retrieves the current authenticated user based on the JWT token.
+        ApplicationUser? user = await _userManager.GetUserAsync(User);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        return Ok(user.Email);
     }
 }

@@ -55,6 +55,36 @@
         }
       }
     },
+    "/api/Auth/email": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "GetEmail",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/DataAccess/user": {
       "post": {
         "tags": [
