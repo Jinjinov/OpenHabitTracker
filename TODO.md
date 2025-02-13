@@ -31,12 +31,6 @@ or
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
-client side:
-    Dictionary, List from System.Collections.Generic
-
-server side:
-    MemoryCache from Microsoft.Extensions.Caching.Memory
-
 ---------------------------------------------------------------------------------------------------
 
 1.
@@ -93,8 +87,6 @@ check for every `new.*Model`
 
 method to copy one db context to another
 
----------------------------------------------------------------------------------------------------
-
 public void CopyData(DbContext source, DbContext destination)
 {
     foreach (var entityType in source.Model.GetEntityTypes())
@@ -126,8 +118,6 @@ using (var sqlServerContext = new MyDbContext(sqlServerOptions))
     CopyData(sqlServerContext, sqliteContext);
 }
 
----------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
 3.
