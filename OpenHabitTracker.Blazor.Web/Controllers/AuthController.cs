@@ -19,6 +19,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
     private readonly AppSettings _appSettings = options.Value;
 
     [HttpPost("token")]
+    [EndpointName("GetToken")]
     public async Task<IActionResult> GetToken([FromBody] LoginCredentials loginCredentials)
     {
         // Authenticate the user using SignInManager
