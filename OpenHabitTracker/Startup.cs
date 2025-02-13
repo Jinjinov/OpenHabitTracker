@@ -1,4 +1,4 @@
-﻿using Markdig;
+using Markdig;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using OpenHabitTracker.App;
@@ -31,6 +31,8 @@ public static class Startup
     private static void AddDefaultServices(IServiceCollection services)
     {
         services.AddScoped<ClientState>();
+        services.AddScoped<MarkdownToHtml>();
+        services.AddScoped<Examples>();
 
         services.AddScoped<CalendarService>();
         services.AddScoped<CategoryService>();

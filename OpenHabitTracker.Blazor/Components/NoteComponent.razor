@@ -6,6 +6,7 @@
 @inject JsInterop JsInterop
 @inject ClientState AppData
 @inject IStringLocalizer Loc
+@inject MarkdownToHtml MarkdownToHtml
 
 <div class="input-group flex-nowrap">
     <PriorityComponent Model="Note" />
@@ -71,7 +72,7 @@
     async Task SaveContent(NoteModel note, string content)
     {
         note.Content = content;
-        note.ContentMarkdown = AppData.GetMarkdown(content);
+        note.ContentMarkdown = MarkdownToHtml.GetMarkdown(content);
 
         await NoteService.UpdateNote();
     }

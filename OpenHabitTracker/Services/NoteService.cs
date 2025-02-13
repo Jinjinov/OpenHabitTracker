@@ -1,15 +1,16 @@
-﻿using OpenHabitTracker.App;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class NoteService(ClientState appData, IDataAccess dataAccess, SearchFilterService searchFilterService)
+public class NoteService(ClientState appData, IDataAccess dataAccess, SearchFilterService searchFilterService, MarkdownToHtml markdownToHtml)
 {
     private readonly ClientState _appData = appData;
     private readonly IDataAccess _dataAccess = dataAccess;
     private readonly SearchFilterService _searchFilterService = searchFilterService;
+    private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
 
     public IReadOnlyCollection<NoteModel>? Notes => _appData.Notes?.Values;
 
@@ -72,7 +73,7 @@ public class NoteService(ClientState appData, IDataAccess dataAccess, SearchFilt
         NewNote.CreatedAt = now;
         NewNote.UpdatedAt = now;
 
-        NewNote.ContentMarkdown = _appData.GetMarkdown(NewNote.Content);
+        NewNote.ContentMarkdown = _markdownToHtml.GetMarkdown(NewNote.Content);
 
         NoteEntity note = NewNote.ToEntity();
 
