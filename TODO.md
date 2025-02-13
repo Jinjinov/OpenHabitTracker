@@ -71,6 +71,34 @@ only ClientState uses DataAccess
 add ClientData
 add 2x ClientData, enum, Dictionary
 
+refactor classes:
+only source of truth: (remove _dataAccess from all other services)
+
+    ClientState:
+        - hold state
+        - load data
+        - map to models
+        - interact with _dataAccess
+        - interact with _runtimeData
+        - import, export / GetUserData, SetUserData
+
+    ClientData:
+        public Dictionary<long, HabitModel>? Habits { get; set; }
+        public Dictionary<long, NoteModel>? Notes { get; set; }
+        public Dictionary<long, TaskModel>? Tasks { get; set; }
+        public Dictionary<long, TimeModel>? Times { get; set; }
+        public Dictionary<long, ItemModel>? Items { get; set; }
+        public Dictionary<long, CategoryModel>? Categories { get; set; }
+        public Dictionary<long, PriorityModel>? Priorities { get; set; }
+
+!!! NEW PLAN !!!
+
+removing DataAccess from all services would create one bloated class
+instead, make sure that loading an Entity with DataAccess and creating a Model results storing the model in a Dictionary in ClientData
+check for every `new.*Model`
+
+!!!!!!!!!!!!!!!!
+
 method to copy one db context to another
 
 ---------------------------------------------------------------------------------------------------
@@ -137,25 +165,7 @@ builder.Services.AddHttpClient<DataAccessClient>(client =>
 ---------------------------------------------------------------------------------------------------
 
 3.
-refactor classes:
-only source of truth: (remove _dataAccess from all other services)
 
-    ClientState:
-        - hold state
-        - load data
-        - map to models
-        - interact with _dataAccess
-        - interact with _runtimeData
-        - import, export / GetUserData, SetUserData
-
-    ClientData:
-        public Dictionary<long, HabitModel>? Habits { get; set; }
-        public Dictionary<long, NoteModel>? Notes { get; set; }
-        public Dictionary<long, TaskModel>? Tasks { get; set; }
-        public Dictionary<long, TimeModel>? Times { get; set; }
-        public Dictionary<long, ItemModel>? Items { get; set; }
-        public Dictionary<long, CategoryModel>? Categories { get; set; }
-        public Dictionary<long, PriorityModel>? Priorities { get; set; }
 4.
 run Jetbrains Rider code analysis
 5.
