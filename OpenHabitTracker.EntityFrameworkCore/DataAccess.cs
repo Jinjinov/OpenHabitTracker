@@ -6,7 +6,7 @@ namespace OpenHabitTracker.EntityFrameworkCore;
 
 public class DataAccess : IDataAccess
 {
-    public DataLocation DataLocation { get; } = DataLocation.ClientDevice;
+    public DataLocation DataLocation { get; } = DataLocation.Local;
 
     protected readonly IApplicationDbContext _dataContext;
 

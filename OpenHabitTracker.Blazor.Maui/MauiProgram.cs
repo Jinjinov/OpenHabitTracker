@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
+using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
 
@@ -74,6 +75,7 @@ public static class MauiProgram
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>(); // different in Wasm, Web
         builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>(); // different in Photino
         builder.Services.AddScoped<IPreRenderService, PreRenderService>(); // different in Web
+        builder.Services.AddHttpClients();
 
         MauiApp mauiApp = builder.Build();
 
@@ -83,7 +85,7 @@ public static class MauiProgram
         ILogger<MauiApp> logger = mauiApp.Services.GetRequiredService<ILogger<MauiApp>>();
         logger.LogInformation("Initializing databese");
 
-        IDataAccess dataAccess = mauiApp.Services.GetRequiredService<IDataAccess>();
+        IDataAccess dataAccess = mauiApp.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
 
         logger.LogInformation("Running app");

@@ -1,16 +1,18 @@
-﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
+using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
 using Photino.Blazor;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace OpenHabitTracker.Blazor.Photino;
 
@@ -45,6 +47,7 @@ public class Program
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         builder.Services.AddScoped<IPreRenderService, PreRenderService>();
+        builder.Services.AddHttpClients();
 
         // register root component and selector
         builder.RootComponents.Add<Routes>("app");
@@ -58,7 +61,7 @@ public class Program
         ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
         logger.LogInformation("Initializing databese");
 
-        IDataAccess dataAccess = app.Services.GetRequiredService<IDataAccess>();
+        IDataAccess dataAccess = app.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
 
         // customize window

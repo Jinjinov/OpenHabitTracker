@@ -5,10 +5,12 @@ using Microsoft.Extensions.Logging;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
+using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace OpenHabitTracker.Blazor.WinForms;
@@ -42,6 +44,7 @@ public partial class MainForm : Form
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         services.AddScoped<IPreRenderService, PreRenderService>();
+        services.AddHttpClients();
 
         InitializeComponent();
 
@@ -61,7 +64,7 @@ public partial class MainForm : Form
         ILogger<MainForm> logger = serviceProvider.GetRequiredService<ILogger<MainForm>>();
         logger.LogInformation("Initializing databese");
 
-        IDataAccess dataAccess = serviceProvider.GetRequiredService<IDataAccess>();
+        IDataAccess dataAccess = serviceProvider.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
 
         logger.LogInformation("Running app");

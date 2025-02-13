@@ -7,6 +7,7 @@ using OpenHabitTracker.Blazor;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Wasm;
+using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.IndexedDB;
 
@@ -38,6 +39,7 @@ builder.Services.AddScoped<INavBarFragment, OpenHabitTracker.Blazor.Wasm.Layout.
 builder.Services.AddScoped<IAssemblyProvider, OpenHabitTracker.Blazor.Wasm.AssemblyProvider>();
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddScoped<IPreRenderService, PreRenderService>();
+builder.Services.AddHttpClients();
 
 WebAssemblyHost host = builder.Build();
 
@@ -47,7 +49,7 @@ WebAssemblyHost host = builder.Build();
 ILogger<Program> logger = host.Services.GetRequiredService<ILogger<Program>>();
 logger.LogInformation("Initializing databese");
 
-IDataAccess dataAccess = host.Services.GetRequiredService<IDataAccess>();
+IDataAccess dataAccess = host.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
 await dataAccess.Initialize();
 
 ClientState appData = host.Services.GetRequiredService<ClientState>();

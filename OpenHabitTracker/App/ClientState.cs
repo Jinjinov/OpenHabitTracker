@@ -4,13 +4,15 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.App;
 
-public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
+public class ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
 {
-    private readonly IDataAccess _dataAccess = dataAccess;
+    private readonly Dictionary<DataLocation, IDataAccess> _dataAccess = dataAccess.ToDictionary(x => x.DataLocation);
     private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
     private readonly Examples _examples = examples;
 
-    public IDataAccess DataAccess => _dataAccess;
+    private DataLocation _dataLocation = DataLocation.Local;
+
+    public IDataAccess DataAccess => _dataAccess[_dataLocation];
 
     public UserModel User { get; set; } = new();
     public SettingsModel Settings { get; set; } = new();
@@ -25,25 +27,25 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
 
     public async Task UpdateModel(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
     {
-        if (model is HabitModel habitModel && await _dataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)
+        if (model is HabitModel habitModel && await DataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)
         {
             habitModel.CopyToEntity(habitEntity);
 
-            await _dataAccess.UpdateHabit(habitEntity);
+            await DataAccess.UpdateHabit(habitEntity);
         }
 
-        if (model is NoteModel noteModel && await _dataAccess.GetNote(noteModel.Id) is NoteEntity noteEntity)
+        if (model is NoteModel noteModel && await DataAccess.GetNote(noteModel.Id) is NoteEntity noteEntity)
         {
             noteModel.CopyToEntity(noteEntity);
 
-            await _dataAccess.UpdateNote(noteEntity);
+            await DataAccess.UpdateNote(noteEntity);
         }
 
-        if (model is TaskModel taskModel && await _dataAccess.GetTask(taskModel.Id) is TaskEntity taskEntity)
+        if (model is TaskModel taskModel && await DataAccess.GetTask(taskModel.Id) is TaskEntity taskEntity)
         {
             taskModel.CopyToEntity(taskEntity);
 
-            await _dataAccess.UpdateTask(taskEntity);
+            await DataAccess.UpdateTask(taskEntity);
         }
     }
 
@@ -51,7 +53,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
     {
         if (User.Id == 0)
         {
-            IReadOnlyList<UserEntity> users = await _dataAccess.GetUsers();
+            IReadOnlyList<UserEntity> users = await DataAccess.GetUsers();
 
             if (users.Count > 0 && users[0] is UserEntity userEntity)
             {
@@ -73,7 +75,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
 
                 userEntity = User.ToEntity();
 
-                await _dataAccess.AddUser(userEntity);
+                await DataAccess.AddUser(userEntity);
 
                 User.Id = userEntity.Id;
             }
@@ -84,7 +86,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
     {
         if (Settings.Id == 0)
         {
-            IReadOnlyList<SettingsEntity> settings = await _dataAccess.GetSettings();
+            IReadOnlyList<SettingsEntity> settings = await DataAccess.GetSettings();
 
             if (settings.Count > 0 && settings[0] is SettingsEntity settingsEntity)
             {
@@ -123,7 +125,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
 
                 settingsEntity = Settings.ToEntity();
 
-                await _dataAccess.AddSettings(settingsEntity);
+                await DataAccess.AddSettings(settingsEntity);
 
                 Settings.Id = settingsEntity.Id;
 
@@ -186,7 +188,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
 
             await LoadTimes(); // TODO:: remove temp fix
 
-            IReadOnlyList<HabitEntity> habits = await _dataAccess.GetHabits();
+            IReadOnlyList<HabitEntity> habits = await DataAccess.GetHabits();
             Habits = habits.Select(x => new HabitModel
             {
                 Id = x.Id,
@@ -221,7 +223,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
             await LoadCategories();
             await LoadPriorities();
 
-            IReadOnlyList<NoteEntity> notes = await _dataAccess.GetNotes();
+            IReadOnlyList<NoteEntity> notes = await DataAccess.GetNotes();
             Notes = notes.Select(x => new NoteModel
             {
                 Id = x.Id,
@@ -246,7 +248,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
             await LoadCategories();
             await LoadPriorities();
 
-            IReadOnlyList<TaskEntity> tasks = await _dataAccess.GetTasks();
+            IReadOnlyList<TaskEntity> tasks = await DataAccess.GetTasks();
             Tasks = tasks.Select(x => new TaskModel
             {
                 Id = x.Id,
@@ -270,7 +272,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
     {
         if (Times is null)
         {
-            IReadOnlyList<TimeEntity> categories = await _dataAccess.GetTimes();
+            IReadOnlyList<TimeEntity> categories = await DataAccess.GetTimes();
             Times = categories.Select(c => new TimeModel
             {
                 Id = c.Id,
@@ -285,7 +287,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
     {
         if (Items is null)
         {
-            IReadOnlyList<ItemEntity> categories = await _dataAccess.GetItems();
+            IReadOnlyList<ItemEntity> categories = await DataAccess.GetItems();
             Items = categories.Select(c => new ItemModel
             {
                 Id = c.Id,
@@ -300,7 +302,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
     {
         if (Categories is null)
         {
-            IReadOnlyList<CategoryEntity> categories = await _dataAccess.GetCategories();
+            IReadOnlyList<CategoryEntity> categories = await DataAccess.GetCategories();
 
             Categories = categories.Select(c => new CategoryModel
             {
@@ -317,7 +319,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
         {
             Priorities = []; // TODO:: add bool _isInitializing, remove this line
 
-            IReadOnlyList<PriorityEntity> priorities = await _dataAccess.GetPriorities();
+            IReadOnlyList<PriorityEntity> priorities = await DataAccess.GetPriorities();
 
             if (priorities.Count == 0)
             {
@@ -330,7 +332,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
                     new() { Title = "︽" },
                 ];
 
-                await _dataAccess.AddPriorities(defaultPriorities);
+                await DataAccess.AddPriorities(defaultPriorities);
 
                 priorities = defaultPriorities;
             }
@@ -366,7 +368,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
 
     public async Task DeleteAllData()
     {
-        await _dataAccess.ClearAllTables();
+        await DataAccess.ClearAllTables();
 
         Settings = new();
 
@@ -469,19 +471,19 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
         {
             SettingsEntity settings = userData.Settings.ToEntity();
 
-            await _dataAccess.AddSettings(settings);
+            await DataAccess.AddSettings(settings);
 
             userData.Settings.Id = settings.Id;
 
             Settings = userData.Settings;
         }
-        else if (await _dataAccess.GetSettings(Settings.Id) is SettingsEntity settings)
+        else if (await DataAccess.GetSettings(Settings.Id) is SettingsEntity settings)
         {
             userData.Settings.Id = Settings.Id;
 
             userData.Settings.CopyToEntity(settings);
 
-            await _dataAccess.UpdateSettings(settings);
+            await DataAccess.UpdateSettings(settings);
 
             Settings = userData.Settings;
         }
@@ -503,7 +505,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
             .Select(x => (Model: x, Entity: x.ToEntity()))
             .ToList();
 
-        await _dataAccess.AddCategories(categories.Select(x => x.Entity).ToList());
+        await DataAccess.AddCategories(categories.Select(x => x.Entity).ToList());
 
         // each CategoryEntity now has the id, set it to CategoryModel and to all items
 
@@ -524,9 +526,9 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
         List<(TaskModel Model, TaskEntity Entity)> tasks = userData.Categories.Where(x => x.Tasks is not null).SelectMany(x => x.Tasks!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
         List<(HabitModel Model, HabitEntity Entity)> habits = userData.Categories.Where(x => x.Habits is not null).SelectMany(x => x.Habits!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
-        await _dataAccess.AddNotes(notes.Select(x => x.Entity).ToList());
-        await _dataAccess.AddTasks(tasks.Select(x => x.Entity).ToList());
-        await _dataAccess.AddHabits(habits.Select(x => x.Entity).ToList());
+        await DataAccess.AddNotes(notes.Select(x => x.Entity).ToList());
+        await DataAccess.AddTasks(tasks.Select(x => x.Entity).ToList());
+        await DataAccess.AddHabits(habits.Select(x => x.Entity).ToList());
 
         // NoteEntity TaskEntity HabitEntity have id now, set it to NoteModel TaskModel HabitModel
 
@@ -562,7 +564,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
                 .. habits.Where(x => x.Model.Items is not null).SelectMany(x => x.Model.Items!).Select(x => (Model: x, Entity: x.ToEntity()))
             ];
 
-        await _dataAccess.AddItems(items.Select(x => x.Entity).ToList());
+        await DataAccess.AddItems(items.Select(x => x.Entity).ToList());
 
         // each ItemEntity now has id, set it to ItemModel
 
@@ -572,7 +574,7 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
 
         List<(TimeModel Model, TimeEntity Entity)> times = habits.Where(x => x.Model.TimesDone is not null).SelectMany(x => x.Model.TimesDone!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
-        await _dataAccess.AddTimes(times.Select(x => x.Entity).ToList());
+        await DataAccess.AddTimes(times.Select(x => x.Entity).ToList());
 
         // each TimeEntity now has id, set it to TimeModel
 

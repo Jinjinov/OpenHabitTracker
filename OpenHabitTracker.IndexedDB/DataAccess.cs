@@ -5,7 +5,7 @@ namespace OpenHabitTracker.IndexedDB;
 
 public class DataAccess(IndexedDb indexedDb) : IDataAccess
 {
-    public DataLocation DataLocation { get; } = DataLocation.ClientDevice;
+    public DataLocation DataLocation { get; } = DataLocation.Local;
 
     private readonly IndexedDb _indexedDb = indexedDb;
 

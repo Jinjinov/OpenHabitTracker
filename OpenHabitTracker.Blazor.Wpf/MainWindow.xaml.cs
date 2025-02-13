@@ -1,11 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
+using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Windows;
 
 namespace OpenHabitTracker.Blazor.Wpf;
@@ -42,6 +44,7 @@ public partial class MainWindow : Window
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         services.AddScoped<IPreRenderService, PreRenderService>();
+        services.AddHttpClients();
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         Resources.Add("services", serviceProvider);
@@ -60,7 +63,7 @@ public partial class MainWindow : Window
         ILogger<MainWindow> logger = serviceProvider.GetRequiredService<ILogger<MainWindow>>();
         logger.LogInformation("Initializing databese");
 
-        IDataAccess dataAccess = serviceProvider.GetRequiredService<IDataAccess>();
+        IDataAccess dataAccess = serviceProvider.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
 
         logger.LogInformation("Running app");
