@@ -246,19 +246,6 @@ Flatpak: test on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
 
-add Google Drive
-    Blazor WASM -> Google Drive REST API
-    Blazor Desktop -> Google Drive API
-add Blazor Server - OAuth REST, CRUD REST, SignalR for instant UI refresh on multiple devices
-    Blazor Mobile -> Blazor Server
-    Blazor Server -> Google Drive API
-
-login will be with Google, Microsoft, Dropbox - requires scope with permission to get email
-email will be unique user id
-store the refresh token for each cloud provider
-
----------------------------------------------------------------------------------------------------
-
 Android:
     save SQLite DB in an external folder
     can be part of Google Drive, OneDrive, iCloud, Dropbox
@@ -299,6 +286,142 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Android))
 if (RuntimeInformation.IsOSPlatform(OSPlatform.iOS))
 {
     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+}
+
+---------------------------------------------------------------------------------------------------
+
+add Google Drive
+    Blazor WASM -> Google Drive REST API
+    Blazor Desktop -> Google Drive API
+add Blazor Server - OAuth REST, CRUD REST, SignalR for instant UI refresh on multiple devices
+    Blazor Mobile -> Blazor Server
+    Blazor Server -> Google Drive API
+
+login will be with Google, Microsoft, Dropbox - requires scope with permission to get email
+email will be unique user id
+store the refresh token for each cloud provider
+
+---------------------------------------------------------------------------------------------------
+
+    <PackageReference Include="AspNet.Security.OAuth.Dropbox" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.1" />
+
+---------------------------------------------------------------------------------------------------
+
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using System.Security.Claims;
+using System.Text.Json;
+
+namespace OpenHabitTracker.Blazor.Web;
+
+public static class AuthenticationSetup
+{
+    public static IServiceCollection AddAuthenticationProviders(this IServiceCollection services)
+    {
+        services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme; // Default for external providers
+        })
+        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+        {
+            options.LoginPath = "/login";
+            options.LogoutPath = "/logout";
+            options.ExpireTimeSpan = TimeSpan.FromDays(14); // Remember login for 14 days
+        })
+        .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+        {
+            options.ClientId = "Your-Google-Client-Id";
+            options.ClientSecret = "Your-Google-Client-Secret";
+            options.Scope.Add("email");
+            options.Scope.Add("profile");
+            options.SaveTokens = true;
+            options.Events.OnCreatingTicket = async context =>
+            {
+                var identity = context.Principal.Identity as ClaimsIdentity;
+                var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
+                var name = context.Principal.FindFirst(ClaimTypes.Name)?.Value;
+
+                identity.AddClaim(new Claim("email", email ?? string.Empty));
+                identity.AddClaim(new Claim("name", name ?? string.Empty));
+
+                // Save tokens for later API calls if needed
+                var tokens = JsonSerializer.Serialize(context.Properties.GetTokens());
+                identity.AddClaim(new Claim("tokens", tokens));
+            };
+        })
+        .AddMicrosoftAccount(options =>
+        {
+            options.ClientId = "Your-OneDrive-Client-Id";
+            options.ClientSecret = "Your-OneDrive-Client-Secret";
+            options.SaveTokens = true;
+            options.Scope.Add("email");
+            options.Scope.Add("openid");
+            options.Scope.Add("profile");
+            options.Events.OnCreatingTicket = async context =>
+            {
+                var identity = context.Principal.Identity as ClaimsIdentity;
+                var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
+                var name = context.Principal.FindFirst(ClaimTypes.Name)?.Value;
+
+                identity.AddClaim(new Claim("email", email ?? string.Empty));
+                identity.AddClaim(new Claim("name", name ?? string.Empty));
+
+                // Save tokens for later API calls
+                var tokens = JsonSerializer.Serialize(context.Properties.GetTokens());
+                identity.AddClaim(new Claim("tokens", tokens));
+            };
+        })
+        .AddDropbox(options =>
+        {
+            options.ClientId = "Your-Dropbox-Client-Id";
+            options.ClientSecret = "Your-Dropbox-Client-Secret";
+            options.SaveTokens = true;
+            options.Events.OnCreatingTicket = async context =>
+            {
+                var identity = context.Principal.Identity as ClaimsIdentity;
+
+                // Dropbox doesn't return email in default scopes, so fetch additional data if needed
+                var userInfoResponse = await context.Backchannel.GetAsync("https://api.dropboxapi.com/2/users/get_current_account");
+                if (userInfoResponse.IsSuccessStatusCode)
+                {
+                    var userInfo = JsonDocument.Parse(await userInfoResponse.Content.ReadAsStringAsync());
+                    var email = userInfo.RootElement.GetProperty("email").GetString();
+                    var name = userInfo.RootElement.GetProperty("name").GetProperty("display_name").GetString();
+
+                    identity.AddClaim(new Claim("email", email ?? string.Empty));
+                    identity.AddClaim(new Claim("name", name ?? string.Empty));
+                }
+            };
+        })
+        .AddOpenIdConnect("iCloud", options =>
+        {
+            options.Authority = "https://appleid.apple.com";
+            options.ClientId = "Your-Apple-Client-Id";
+            options.ClientSecret = "Your-Apple-Client-Secret"; // Use JWT-based client secret as per Apple guidelines
+            options.ResponseType = "code";
+            options.Scope.Add("email");
+            options.Scope.Add("name");
+            options.SaveTokens = true;
+            options.Events.OnTokenValidated = context =>
+            {
+                var identity = context.Principal.Identity as ClaimsIdentity;
+                var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
+                var name = context.Principal.FindFirst("name")?.Value;
+
+                identity.AddClaim(new Claim("email", email ?? string.Empty));
+                identity.AddClaim(new Claim("name", name ?? string.Empty));
+
+                return Task.CompletedTask;
+            };
+        });
+
+        return services;
+    }
 }
 
 ---------------------------------------------------------------------------------------------------
