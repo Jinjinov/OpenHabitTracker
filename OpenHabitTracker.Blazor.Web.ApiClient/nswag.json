@@ -10,7 +10,7 @@
   "codeGenerators": {
     "openApiToCSharpClient": {
       "operationGenerationMode": "MultipleClientsFromFirstTagAndOperationId",
-      "output": "ApiClient.g.cs",
+      "output": "ApiClients.g.cs",
       "namespace": "OpenHabitTracker.Blazor.Web.ApiClient",
       "generateDtoTypes": false,
       "additionalNamespaceUsages": [
