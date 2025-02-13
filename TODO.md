@@ -58,6 +58,11 @@ Linux / macOS:
 
     openssl rand -base64 32
 
+---------------------------------------------------------------------------------------------------
+
+add Examples
+add 2x ClientData, enum, Dictionary
+
 add auth
 add login screen
 
@@ -69,6 +74,8 @@ only ClientData uses DataAccess
 add ClientState
 
 method to copy one db context to another
+
+---------------------------------------------------------------------------------------------------
 
 help:
 - move to sidebar

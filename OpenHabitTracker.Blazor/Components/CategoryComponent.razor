@@ -3,7 +3,7 @@
 @using OpenHabitTracker.Services
 
 @inject CategoryService CategoryService
-@inject ClientData AppData
+@inject ClientState AppData
 @inject IStringLocalizer Loc
 
 @if (CategoryService.Categories is not null && Model is not null)

@@ -5,7 +5,7 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.App;
 
-public class ClientData(IDataAccess dataAccess, IRuntimeClientData runtimeClientData, MarkdownPipeline markdownPipeline)
+public class ClientState(IDataAccess dataAccess, IRuntimeClientData runtimeClientData, MarkdownPipeline markdownPipeline)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
     private readonly IRuntimeClientData _runtimeClientData = runtimeClientData;
