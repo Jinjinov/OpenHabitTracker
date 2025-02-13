@@ -10,6 +10,8 @@ public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, 
     private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
     private readonly Examples _examples = examples;
 
+    public IDataAccess DataAccess => _dataAccess;
+
     public UserModel User { get; set; } = new();
     public SettingsModel Settings { get; set; } = new();
     public Dictionary<long, HabitModel>? Habits { get; set; }

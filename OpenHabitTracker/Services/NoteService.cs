@@ -5,10 +5,9 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class NoteService(ClientState appData, IDataAccess dataAccess, SearchFilterService searchFilterService, MarkdownToHtml markdownToHtml)
+public class NoteService(ClientState appData, SearchFilterService searchFilterService, MarkdownToHtml markdownToHtml)
 {
     private readonly ClientState _appData = appData;
-    private readonly IDataAccess _dataAccess = dataAccess;
     private readonly SearchFilterService _searchFilterService = searchFilterService;
     private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
 
@@ -77,7 +76,7 @@ public class NoteService(ClientState appData, IDataAccess dataAccess, SearchFilt
 
         NoteEntity note = NewNote.ToEntity();
 
-        await _dataAccess.AddNote(note);
+        await _appData.DataAccess.AddNote(note);
 
         NewNote.Id = note.Id;
 
@@ -91,11 +90,11 @@ public class NoteService(ClientState appData, IDataAccess dataAccess, SearchFilt
         if (Notes is null || SelectedNote is null)
             return;
 
-        if (await _dataAccess.GetNote(SelectedNote.Id) is NoteEntity note)
+        if (await _appData.DataAccess.GetNote(SelectedNote.Id) is NoteEntity note)
         {
             SelectedNote.CopyToEntity(note);
 
-            await _dataAccess.UpdateNote(note);
+            await _appData.DataAccess.UpdateNote(note);
         }
     }
 
@@ -109,10 +108,10 @@ public class NoteService(ClientState appData, IDataAccess dataAccess, SearchFilt
         // add to Trash if it not null (if Trash is null, it will add this on Initialize)
         _appData.Trash?.Add(note);
 
-        if (await _dataAccess.GetNote(note.Id) is NoteEntity noteEntity)
+        if (await _appData.DataAccess.GetNote(note.Id) is NoteEntity noteEntity)
         {
             noteEntity.IsDeleted = true;
-            await _dataAccess.UpdateNote(noteEntity);
+            await _appData.DataAccess.UpdateNote(noteEntity);
         }
     }
 }

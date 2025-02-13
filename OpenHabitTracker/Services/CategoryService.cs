@@ -5,10 +5,9 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class CategoryService(ClientState appData, IDataAccess dataAccess)
+public class CategoryService(ClientState appData)
 {
     private readonly ClientState _appData = appData;
-    private readonly IDataAccess _dataAccess = dataAccess;
 
     public IReadOnlyCollection<CategoryModel>? Categories => _appData.Categories?.Values;
 
@@ -43,7 +42,7 @@ public class CategoryService(ClientState appData, IDataAccess dataAccess)
 
         CategoryEntity category = NewCategory.ToEntity();
 
-        await _dataAccess.AddCategory(category);
+        await _appData.DataAccess.AddCategory(category);
 
         NewCategory.Id = category.Id;
 
@@ -59,11 +58,11 @@ public class CategoryService(ClientState appData, IDataAccess dataAccess)
 
         SelectedCategory.Title = title;
 
-        if (await _dataAccess.GetCategory(SelectedCategory.Id) is CategoryEntity category)
+        if (await _appData.DataAccess.GetCategory(SelectedCategory.Id) is CategoryEntity category)
         {
             category.Title = SelectedCategory.Title;
 
-            await _dataAccess.UpdateCategory(category);
+            await _appData.DataAccess.UpdateCategory(category);
         }
 
         SelectedCategory = null;
@@ -80,7 +79,7 @@ public class CategoryService(ClientState appData, IDataAccess dataAccess)
 
         _appData.Categories.Remove(category.Id);
 
-        await _dataAccess.RemoveCategory(category.Id);
+        await _appData.DataAccess.RemoveCategory(category.Id);
 
         if (_appData.Settings.HiddenCategoryIds.Contains(category.Id))
         {
@@ -92,11 +91,11 @@ public class CategoryService(ClientState appData, IDataAccess dataAccess)
 
     private async Task UpdateSettings()
     {
-        if (await _dataAccess.GetSettings(_appData.Settings.Id) is SettingsEntity settings)
+        if (await _appData.DataAccess.GetSettings(_appData.Settings.Id) is SettingsEntity settings)
         {
             _appData.Settings.CopyToEntity(settings);
 
-            await _dataAccess.UpdateSettings(settings);
+            await _appData.DataAccess.UpdateSettings(settings);
         }
     }
 }

@@ -1,14 +1,13 @@
-﻿using OpenHabitTracker.App;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class TrashService(ClientState appData, IDataAccess dataAccess)
+public class TrashService(ClientState appData)
 {
     private readonly ClientState _appData = appData;
-    private readonly IDataAccess _dataAccess = dataAccess;
 
     public IReadOnlyList<ContentModel>? Models => _appData.Trash;
 
@@ -39,28 +38,28 @@ public class TrashService(ClientState appData, IDataAccess dataAccess)
 
     private async Task RestoreHabit(long id)
     {
-        if (await _dataAccess.GetHabit(id) is HabitEntity habit)
+        if (await _appData.DataAccess.GetHabit(id) is HabitEntity habit)
         {
             habit.IsDeleted = false;
-            await _dataAccess.UpdateHabit(habit);
+            await _appData.DataAccess.UpdateHabit(habit);
         }
     }
 
     private async Task RestoreNote(long id)
     {
-        if (await _dataAccess.GetNote(id) is NoteEntity note)
+        if (await _appData.DataAccess.GetNote(id) is NoteEntity note)
         {
             note.IsDeleted = false;
-            await _dataAccess.UpdateNote(note);
+            await _appData.DataAccess.UpdateNote(note);
         }
     }
 
     private async Task RestoreTask(long id)
     {
-        if (await _dataAccess.GetTask(id) is TaskEntity task)
+        if (await _appData.DataAccess.GetTask(id) is TaskEntity task)
         {
             task.IsDeleted = false;
-            await _dataAccess.UpdateTask(task);
+            await _appData.DataAccess.UpdateTask(task);
         }
     }
 
@@ -110,24 +109,24 @@ public class TrashService(ClientState appData, IDataAccess dataAccess)
 
     private async Task DeleteHabit(long id)
     {
-        await _dataAccess.RemoveHabit(id);
+        await _appData.DataAccess.RemoveHabit(id);
     }
 
     private async Task DeleteNote(long id)
     {
-        await _dataAccess.RemoveNote(id);
+        await _appData.DataAccess.RemoveNote(id);
     }
 
     private async Task DeleteTask(long id)
     {
-        await _dataAccess.RemoveTask(id);
+        await _appData.DataAccess.RemoveTask(id);
     }
 
     public async Task EmptyTrash()
     {
-        await _dataAccess.RemoveHabits();
-        await _dataAccess.RemoveNotes();
-        await _dataAccess.RemoveTasks();
+        await _appData.DataAccess.RemoveHabits();
+        await _appData.DataAccess.RemoveNotes();
+        await _appData.DataAccess.RemoveTasks();
 
         _appData.Trash?.Clear();
     }

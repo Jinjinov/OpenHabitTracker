@@ -5,10 +5,9 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class PriorityService(ClientState appData, IDataAccess dataAccess)
+public class PriorityService(ClientState appData)
 {
     private readonly ClientState _appData = appData;
-    private readonly IDataAccess _dataAccess = dataAccess;
 
     public IReadOnlyCollection<PriorityModel>? Priorities => _appData.Priorities?.Values;
 
@@ -46,7 +45,7 @@ public class PriorityService(ClientState appData, IDataAccess dataAccess)
 
         PriorityEntity priority = NewPriority.ToEntity();
 
-        await _dataAccess.AddPriority(priority);
+        await _appData.DataAccess.AddPriority(priority);
 
         NewPriority.Id = priority.Id;
 
@@ -62,11 +61,11 @@ public class PriorityService(ClientState appData, IDataAccess dataAccess)
 
         SelectedPriority.Title = title;
 
-        if (await _dataAccess.GetPriority(SelectedPriority.Id) is PriorityEntity priority)
+        if (await _appData.DataAccess.GetPriority(SelectedPriority.Id) is PriorityEntity priority)
         {
             priority.Title = SelectedPriority.Title;
 
-            await _dataAccess.UpdatePriority(priority);
+            await _appData.DataAccess.UpdatePriority(priority);
         }
 
         SelectedPriority = null;
@@ -79,6 +78,6 @@ public class PriorityService(ClientState appData, IDataAccess dataAccess)
 
         _appData.Priorities.Remove(priority.Id);
 
-        await _dataAccess.RemovePriority(priority.Id);
+        await _appData.DataAccess.RemovePriority(priority.Id);
     }
 }

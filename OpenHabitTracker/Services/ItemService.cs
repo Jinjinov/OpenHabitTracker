@@ -1,12 +1,13 @@
-﻿using OpenHabitTracker.Data;
+using OpenHabitTracker.App;
+using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class ItemService(IDataAccess dataAccess)
+public class ItemService(ClientState appData)
 {
-    private readonly IDataAccess _dataAccess = dataAccess;
+    private readonly ClientState _appData = appData;
 
     public ItemModel? SelectedItem { get; set; }
 
@@ -18,7 +19,7 @@ public class ItemService(IDataAccess dataAccess)
         {
             if (items.Items is null)
             {
-                IReadOnlyList<ItemEntity> itms = await _dataAccess.GetItems(items.Id);
+                IReadOnlyList<ItemEntity> itms = await _appData.DataAccess.GetItems(items.Id);
 
                 items.Items = itms.Select(i => new ItemModel
                 {
@@ -46,7 +47,7 @@ public class ItemService(IDataAccess dataAccess)
 
         ItemEntity item = NewItem.ToEntity();
 
-        await _dataAccess.AddItem(item);
+        await _appData.DataAccess.AddItem(item);
 
         NewItem.Id = item.Id;
 
@@ -60,11 +61,11 @@ public class ItemService(IDataAccess dataAccess)
 
         SelectedItem.Title = title;
 
-        if (await _dataAccess.GetItem(SelectedItem.Id) is ItemEntity item)
+        if (await _appData.DataAccess.GetItem(SelectedItem.Id) is ItemEntity item)
         {
             item.Title = SelectedItem.Title;
 
-            await _dataAccess.UpdateItem(item);
+            await _appData.DataAccess.UpdateItem(item);
         }
     }
 
@@ -74,11 +75,11 @@ public class ItemService(IDataAccess dataAccess)
 
         item.DoneAt = done ? now : null;
 
-        if (await _dataAccess.GetItem(item.Id) is ItemEntity itemEntity)
+        if (await _appData.DataAccess.GetItem(item.Id) is ItemEntity itemEntity)
         {
             itemEntity.DoneAt = item.DoneAt;
 
-            await _dataAccess.UpdateItem(itemEntity);
+            await _appData.DataAccess.UpdateItem(itemEntity);
         }
 
         // TODO:: when all habit items are done, habit is done
@@ -89,6 +90,6 @@ public class ItemService(IDataAccess dataAccess)
     {
         items?.Items?.Remove(item);
 
-        await _dataAccess.RemoveItem(item.Id);
+        await _appData.DataAccess.RemoveItem(item.Id);
     }
 }

@@ -1,14 +1,13 @@
-﻿using OpenHabitTracker.App;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class SettingsService(ClientState appData, IDataAccess dataAccess)
+public class SettingsService(ClientState appData)
 {
     private readonly ClientState _appData = appData;
-    private readonly IDataAccess _dataAccess = dataAccess;
 
     public SettingsModel Settings => _appData.Settings;
 
@@ -19,11 +18,11 @@ public class SettingsService(ClientState appData, IDataAccess dataAccess)
 
     public async Task UpdateSettings()
     {
-        if (await _dataAccess.GetSettings(Settings.Id) is SettingsEntity settings)
+        if (await _appData.DataAccess.GetSettings(Settings.Id) is SettingsEntity settings)
         {
             Settings.CopyToEntity(settings);
 
-            await _dataAccess.UpdateSettings(settings);
+            await _appData.DataAccess.UpdateSettings(settings);
         }
     }
 }

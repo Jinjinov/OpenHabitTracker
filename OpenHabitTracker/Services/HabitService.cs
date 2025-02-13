@@ -1,14 +1,13 @@
-﻿using OpenHabitTracker.App;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFilterService searchFilterService)
+public class HabitService(ClientState appData, SearchFilterService searchFilterService)
 {
     private readonly ClientState _appData = appData;
-    private readonly IDataAccess _dataAccess = dataAccess;
     private readonly SearchFilterService _searchFilterService = searchFilterService;
 
     public IReadOnlyCollection<HabitModel>? Habits => _appData.Habits?.Values;
@@ -90,7 +89,7 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
     {
         if (habit is not null && habit.TimesDone is null)
         {
-            IReadOnlyList<TimeEntity> timesDone = await _dataAccess.GetTimes(habit.Id);
+            IReadOnlyList<TimeEntity> timesDone = await _appData.DataAccess.GetTimes(habit.Id);
             habit.TimesDone = timesDone.Select(t => new TimeModel
             {
                 Id = t.Id,
@@ -115,7 +114,7 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
 
         HabitEntity habit = NewHabit.ToEntity();
 
-        await _dataAccess.AddHabit(habit);
+        await _appData.DataAccess.AddHabit(habit);
 
         NewHabit.Id = habit.Id;
 
@@ -129,11 +128,11 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
         if (Habits is null || SelectedHabit is null)
             return;
 
-        if (await _dataAccess.GetHabit(SelectedHabit.Id) is HabitEntity habit)
+        if (await _appData.DataAccess.GetHabit(SelectedHabit.Id) is HabitEntity habit)
         {
             SelectedHabit.CopyToEntity(habit);
 
-            await _dataAccess.UpdateHabit(habit);
+            await _appData.DataAccess.UpdateHabit(habit);
         }
     }
 
@@ -161,7 +160,7 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
 
         TimeEntity timeEntity = timeModel.ToEntity();
 
-        await _dataAccess.AddTime(timeEntity);
+        await _appData.DataAccess.AddTime(timeEntity);
 
         timeModel.Id = timeEntity.Id;
     }
@@ -182,10 +181,10 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
 
         time.StartedAt = startedAt;
 
-        if (await _dataAccess.GetTime(time.Id) is TimeEntity timeEntity)
+        if (await _appData.DataAccess.GetTime(time.Id) is TimeEntity timeEntity)
         {
             timeEntity.StartedAt = startedAt;
-            await _dataAccess.UpdateTime(timeEntity);
+            await _appData.DataAccess.UpdateTime(timeEntity);
         }
     }
 
@@ -202,10 +201,10 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
         {
             time.CompletedAt = now;
 
-            if (await _dataAccess.GetTime(time.Id) is TimeEntity timeEntity)
+            if (await _appData.DataAccess.GetTime(time.Id) is TimeEntity timeEntity)
             {
                 timeEntity.CompletedAt = now;
-                await _dataAccess.UpdateTime(timeEntity);
+                await _appData.DataAccess.UpdateTime(timeEntity);
             }
 
             if (habit.LastTimeDoneAt is null || habit.LastTimeDoneAt < now)
@@ -228,11 +227,11 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
         {
             item.DoneAt = null;
 
-            if (await _dataAccess.GetItem(item.Id) is ItemEntity itemEntity)
+            if (await _appData.DataAccess.GetItem(item.Id) is ItemEntity itemEntity)
             {
                 itemEntity.DoneAt = null;
 
-                await _dataAccess.UpdateItem(itemEntity);
+                await _appData.DataAccess.UpdateItem(itemEntity);
             }
         }
     }
@@ -244,10 +243,10 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
 
         habit.LastTimeDoneAt = dateTime;
 
-        if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
+        if (await _appData.DataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
         {
             habitEntity.LastTimeDoneAt = dateTime;
-            await _dataAccess.UpdateHabit(habitEntity);
+            await _appData.DataAccess.UpdateHabit(habitEntity);
         }
     }
 
@@ -268,7 +267,7 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
 
         TimeEntity timeEntity = timeModel.ToEntity();
 
-        await _dataAccess.AddTime(timeEntity);
+        await _appData.DataAccess.AddTime(timeEntity);
 
         timeModel.Id = timeEntity.Id;
 
@@ -287,7 +286,7 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
 
         habit.RemoveTimesDoneByDay(timeModel);
 
-        await _dataAccess.RemoveTime(timeModel.Id);
+        await _appData.DataAccess.RemoveTime(timeModel.Id);
 
         TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault();
 
@@ -301,11 +300,11 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
 
         habit.RefreshTimesDoneByDay();
 
-        if (await _dataAccess.GetTime(time.Id) is TimeEntity timeEntity)
+        if (await _appData.DataAccess.GetTime(time.Id) is TimeEntity timeEntity)
         {
             timeEntity.StartedAt = time.StartedAt;
             timeEntity.CompletedAt = time.CompletedAt;
-            await _dataAccess.UpdateTime(timeEntity);
+            await _appData.DataAccess.UpdateTime(timeEntity);
         }
 
         TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault();
@@ -323,10 +322,10 @@ public class HabitService(ClientState appData, IDataAccess dataAccess, SearchFil
         // add to Trash if it not null (if Trash is null, it will add this on Initialize)
         _appData.Trash?.Add(habit);
 
-        if (await _dataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
+        if (await _appData.DataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
         {
             habitEntity.IsDeleted = true;
-            await _dataAccess.UpdateHabit(habitEntity);
+            await _appData.DataAccess.UpdateHabit(habitEntity);
         }
     }
 }
