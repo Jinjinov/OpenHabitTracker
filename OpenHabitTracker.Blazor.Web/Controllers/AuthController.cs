@@ -20,7 +20,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
 
     [HttpPost("token")]
     [EndpointName("GetToken")]
-    public async Task<IActionResult> GetToken([FromBody] LoginCredentials loginCredentials)
+    public async Task<ActionResult<TokenResponse>> GetToken([FromBody] LoginCredentials loginCredentials)
     {
         // Authenticate the user using SignInManager
         Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(loginCredentials.Username, loginCredentials.Password, isPersistent: false, lockoutOnFailure: false);
@@ -49,7 +49,9 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds);
 
-            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+            TokenResponse tokenResponse = new TokenResponse { Token = new JwtSecurityTokenHandler().WriteToken(token) };
+
+            return Ok(tokenResponse);
         }
 
         return Unauthorized("Invalid credentials");
