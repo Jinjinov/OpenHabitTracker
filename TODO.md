@@ -66,13 +66,11 @@ add ui radio button
 add auth
 add login screen
 
-inject DataAccess array
-only ClientState uses DataAccess
-add ClientData
-add 2x ClientData, enum, Dictionary
-
 refactor classes:
-only source of truth: (remove _dataAccess from all other services)
+
+ClientState:
+    inject DataAccess array
+    add 2x ClientData, enum, Dictionary
 
     ClientState:
         - hold state
@@ -96,6 +94,8 @@ only source of truth: (remove _dataAccess from all other services)
 removing DataAccess from all services would create one bloated class
 instead, make sure that loading an Entity with DataAccess and creating a Model results storing the model in a Dictionary in ClientData
 check for every `new.*Model`
+
+`ToEntity` already exist, add `ToModel` and use it for every `Model`
 
 !!!!!!!!!!!!!!!!
 
