@@ -5,6 +5,8 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient;
 
 public partial class DataAccessClient : IDataAccess
 {
+    public DataLocation DataLocation { get; } = DataLocation.OnlineServer;
+
     private string? _token;
 
     public void SetBearerToken(string token) =>

@@ -52,7 +52,7 @@ Linux / macOS:
 [ ] Reset items when habit is completed
     await UncheckAllItems(habit);
 
-add setting where to store data
+add setting where to store data - enum DataLocation
 add ui radio button
 
 ---------------------------------------------------------------------------------------------------
@@ -64,8 +64,7 @@ add login screen
 
 ClientState:
     inject 2x DataAccess
-    for each DataAccess add ClientData to Dictionary
-    add enum property to DataAccess
+    each DataAccess to Dictionary - enum DataLocation
 
 ---------------------------------------------------------------------------------------------------
 

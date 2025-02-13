@@ -4,6 +4,8 @@ namespace OpenHabitTracker.Data;
 
 public interface IDataAccess
 {
+    DataLocation DataLocation { get; }
+
     Task Initialize();
 
     Task AddUser(UserEntity user);

@@ -1,11 +1,13 @@
+using Microsoft.EntityFrameworkCore;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace OpenHabitTracker.EntityFrameworkCore;
 
 public class DataAccess : IDataAccess
 {
+    public DataLocation DataLocation { get; } = DataLocation.ClientDevice;
+
     protected readonly IApplicationDbContext _dataContext;
 
     public DataAccess(IApplicationDbContext dataContext)
