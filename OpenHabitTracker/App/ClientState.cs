@@ -4,10 +4,9 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.App;
 
-public class ClientState(IDataAccess dataAccess, IRuntimeClientData runtimeClientData, MarkdownToHtml markdownToHtml, Examples examples)
+public class ClientState(IDataAccess dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
-    private readonly IRuntimeClientData _runtimeClientData = runtimeClientData;
     private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
     private readonly Examples _examples = examples;
 
