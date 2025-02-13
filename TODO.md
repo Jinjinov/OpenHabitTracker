@@ -95,18 +95,6 @@ method to copy one db context to another
 
 ---------------------------------------------------------------------------------------------------
 
-help:
-- move to sidebar
-- separate help for each screen
-- guided tour per screen
-- list of guided tours
-    https://github.com/TrevorMare/STGTour/
-    https://trevormare.github.io/STGTour/
-
----------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
-
 public void CopyData(DbContext source, DbContext destination)
 {
     foreach (var entityType in source.Model.GetEntityTypes())
@@ -143,6 +131,13 @@ using (var sqlServerContext = new MyDbContext(sqlServerOptions))
 ---------------------------------------------------------------------------------------------------
 
 3.
+help:
+- move to sidebar
+- separate help for each screen
+- guided tour per screen
+- list of guided tours
+    https://github.com/TrevorMare/STGTour/
+    https://trevormare.github.io/STGTour/
 
 4.
 run Jetbrains Rider code analysis
