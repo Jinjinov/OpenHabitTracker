@@ -94,7 +94,13 @@ builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPreRenderService, OpenHabitTracker.Blazor.Web.PreRenderService>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // This disables the camelCasing so that property names remain as defined in C# classes (PascalCase)
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

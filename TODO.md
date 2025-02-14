@@ -76,6 +76,8 @@ Linux / macOS:
 add setting where to store data - enum DataLocation
 add ui radio button
 
+add setting - remote url
+
 add login screen
 
 ---------------------------------------------------------------------------------------------------

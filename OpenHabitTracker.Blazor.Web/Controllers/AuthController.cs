@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpenHabitTracker.Blazor.Web.Data;
 using OpenHabitTracker.Data;
+using OpenHabitTracker.Data.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -57,9 +58,9 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
     }
 
     [Authorize]
-    [HttpGet("email")]
-    [EndpointName("GetEmail")]
-    public async Task<ActionResult<string>> GetEmail()
+    [HttpGet("user")]
+    [EndpointName("GetUser")]
+    public async Task<ActionResult<UserEntity>> GetUser()
     {
         // Retrieves the current authenticated user based on the JWT token.
         ApplicationUser? user = await _userManager.GetUserAsync(User);
@@ -69,6 +70,12 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
             return Unauthorized();
         }
 
-        return Ok(user.Email);
+        UserEntity userEntity = new()
+        {
+            UserName = user.UserName,
+            Email = user.Email,
+        };
+
+        return Ok(userEntity);
     }
 }

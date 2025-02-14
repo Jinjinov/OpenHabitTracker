@@ -9,10 +9,10 @@
 
 <h3>Login</h3>
 
-<input @bind="username" placeholder="Username" />
-<input @bind="password" placeholder="Password" type="password" />
+<input class="form-control my-1" @bind="username" placeholder="Username" />
+<input class="form-control my-1" @bind="password" placeholder="Password" type="password" />
 
-<button @onclick="LoginAndGetToken">Login</button>
+<button class="btn btn-primary w-100" @onclick="LoginAndGetToken">Login</button>
 
 @if (!string.IsNullOrEmpty(email))
 {
