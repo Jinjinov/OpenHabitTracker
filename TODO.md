@@ -51,7 +51,6 @@ check for every `new.*Model`
 
 ---------------------------------------------------------------------------------------------------
 
-1.
 Docker:
 
 APPSETTINGS_JWT_SECRET=your-extremely-strong-secret-key
@@ -66,7 +65,7 @@ Linux / macOS:
 
 ---------------------------------------------------------------------------------------------------
 
-2.
+1.
 
 [ ] Uncheck items when habit is completed
     bool UncheckAllItemsOnHabitDone
@@ -78,10 +77,9 @@ add ui radio button
 
 add setting - remote url
 
-add login screen
-
 ---------------------------------------------------------------------------------------------------
 
+2.
 method to copy one db context to another
 
 public void CopyData(DbContext source, DbContext destination)
