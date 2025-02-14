@@ -68,19 +68,154 @@ Linux / macOS:
 1.
 
 [ ] Uncheck items when habit is completed
+
     bool UncheckAllItemsOnHabitDone
+
     if (UncheckAllItemsOnHabitDone)
         await UncheckAllItems(habit);
 
 add setting where to store data - enum DataLocation
 add ui radio button
 
+add Local and Remote icons
+
 add setting - remote url
+
+add Log Out
+    set jwt to null
+    delete jwt
+    delete refresh token
+    DeleteAllData()
+    LoadContent();
 
 change _dataLocation after login
     DeleteAllData()
     LoadContent();
 
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController(
+    SignInManager<ApplicationUser> signInManager, 
+    UserManager<ApplicationUser> userManager, 
+    IOptions<AppSettings> options,
+    ApplicationDbContext dbContext) : ControllerBase
+{
+    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly AppSettings _appSettings = options.Value;
+    private readonly ApplicationDbContext _dbContext = dbContext;
+
+    [HttpPost("token")]
+    [EndpointName("GetToken")]
+    public async Task<ActionResult<TokenResponse>> GetToken([FromBody] LoginCredentials loginCredentials)
+    {
+        Microsoft.AspNetCore.Identity.SignInResult result = 
+            await _signInManager.PasswordSignInAsync(loginCredentials.Username, loginCredentials.Password, false, false);
+
+        if (!result.Succeeded)
+            return Unauthorized("Invalid credentials");
+
+        var user = await _userManager.FindByNameAsync(loginCredentials.Username);
+        if (user == null)
+            return Unauthorized();
+
+        string accessToken = GenerateJwtToken(user);
+        string refreshToken = GenerateRefreshToken();
+
+        // Store refresh token in database
+        var userRefreshToken = new UserRefreshToken
+        {
+            UserId = user.Id,
+            Token = refreshToken,
+            ExpiryDate = DateTime.UtcNow.AddDays(7) // Set refresh token expiry
+        };
+
+        _dbContext.UserRefreshTokens.Add(userRefreshToken);
+        await _dbContext.SaveChangesAsync();
+
+        return Ok(new TokenResponse { Token = accessToken, RefreshToken = refreshToken });
+    }
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult<TokenResponse>> RefreshToken([FromBody] RefreshTokenRequest request)
+    {
+        var storedToken = await _dbContext.UserRefreshTokens
+            .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken);
+
+        if (storedToken == null || storedToken.ExpiryDate < DateTime.UtcNow)
+            return Unauthorized("Invalid or expired refresh token");
+
+        var user = await _userManager.FindByIdAsync(storedToken.UserId);
+        if (user == null)
+            return Unauthorized();
+
+        // Generate new tokens
+        string newAccessToken = GenerateJwtToken(user);
+        string newRefreshToken = GenerateRefreshToken();
+
+        // Update refresh token in database
+        storedToken.Token = newRefreshToken;
+        storedToken.ExpiryDate = DateTime.UtcNow.AddDays(7);
+
+        await _dbContext.SaveChangesAsync();
+
+        return Ok(new TokenResponse { Token = newAccessToken, RefreshToken = newRefreshToken });
+    }
+
+    private string GenerateJwtToken(ApplicationUser user)
+    {
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JwtSecret));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: "https://app.openhabittracker.net",
+            audience: "OpenHabitTracker",
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(1),
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    private string GenerateRefreshToken()
+    {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+    }
+}
+
+public class TokenResponse
+{
+    public string Token { get; set; }
+    public string RefreshToken { get; set; }
+}
+
+public class RefreshTokenRequest
+{
+    public string RefreshToken { get; set; }
+}
+
+public class UserRefreshToken
+{
+    public int Id { get; set; }
+    public string UserId { get; set; }
+    public string Token { get; set; }
+    public DateTime ExpiryDate { get; set; }
+}
+
+public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
+
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
 2.
