@@ -33,6 +33,24 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+ClientState:
+    - hold state
+    - load data
+    - map to models
+    - interact with _dataAccess
+    - interact with _runtimeData
+    - import, export / GetUserData, SetUserData
+
+removing `DataAccess` from all services would create one bloated class
+
+instead, make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
+
+check for every `new.*Model`
+
+`ToEntity` already exist, add `ToModel` and use it for every `Model`
+
+---------------------------------------------------------------------------------------------------
+
 1.
 
 JWT_SECRET=your-extremely-strong-secret-key
@@ -49,33 +67,16 @@ Linux / macOS:
 
 2.
 
-[ ] Reset items when habit is completed
-    await UncheckAllItems(habit);
+[ ] Uncheck items when habit is completed
+    bool UncheckAllItemsOnHabitDone
+    if (UncheckAllItemsOnHabitDone)
+        await UncheckAllItems(habit);
 
 add setting where to store data - enum DataLocation
+
 add ui radio button
 
----------------------------------------------------------------------------------------------------
-
 add login screen
-
----------------------------------------------------------------------------------------------------
-
-ClientState:
-    - hold state
-    - load data
-    - map to models
-    - interact with _dataAccess
-    - interact with _runtimeData
-    - import, export / GetUserData, SetUserData
-
-removing `DataAccess` from all services would create one bloated class
-
-instead, make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
-
-check for every `new.*Model`
-
-`ToEntity` already exist, add `ToModel` and use it for every `Model`
 
 ---------------------------------------------------------------------------------------------------
 
