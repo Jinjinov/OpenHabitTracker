@@ -77,6 +77,10 @@ add ui radio button
 
 add setting - remote url
 
+change _dataLocation after login
+    DeleteAllData()
+    LoadContent();
+
 ---------------------------------------------------------------------------------------------------
 
 2.

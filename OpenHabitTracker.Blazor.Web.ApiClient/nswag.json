@@ -18,8 +18,7 @@
         "OpenHabitTracker.Data.Entities"
       ],
       "responseArrayType": "System.Collections.Generic.IReadOnlyList",
-      "jsonLibrary": "SystemTextJson",
-      "useBaseUrl": false
+      "jsonLibrary": "SystemTextJson"
     }
   }
 }

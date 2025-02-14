@@ -10,6 +10,7 @@
 
 <h3>Login</h3>
 
+<input class="form-control my-1" @bind="address" placeholder="Address" />
 <input class="form-control my-1" @bind="username" placeholder="Username" />
 <input class="form-control my-1" @bind="password" placeholder="Password" type="password" />
 
@@ -21,25 +22,36 @@
 }
 
 @code {
+    private string address = "https://app.openhabittracker.net";
     private string username;
     private string password;
     private string email;
 
     private async Task LoginAndGetToken()
     {
-        LoginCredentials credentials = new() { Username = username, Password = password };
+        AuthClient.BaseUrl = address;
+        DataAccessClient.BaseUrl = address;
 
-        TokenResponse tokenResponse = await AuthClient.GetTokenAsync(credentials);
-
-        if (!string.IsNullOrEmpty(tokenResponse.Token))
+        try
         {
-            AuthClient.SetBearerToken(tokenResponse.Token);
+            LoginCredentials credentials = new() { Username = username, Password = password };
 
-            DataAccessClient.SetBearerToken(tokenResponse.Token);
+            TokenResponse tokenResponse = await AuthClient.GetTokenAsync(credentials);
 
-            UserEntity user = await AuthClient.GetCurrentUserAsync();
+            if (!string.IsNullOrEmpty(tokenResponse.Token))
+            {
+                AuthClient.SetBearerToken(tokenResponse.Token);
 
-            email = user.Email;
+                DataAccessClient.SetBearerToken(tokenResponse.Token);
+
+                UserEntity user = await AuthClient.GetCurrentUserAsync();
+
+                email = user.Email;
+            }
+        }
+        catch (Exception ex)
+        {
+            email = ex.Message;
         }
     }
 }

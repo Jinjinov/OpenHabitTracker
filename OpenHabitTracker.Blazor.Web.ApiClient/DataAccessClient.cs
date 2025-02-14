@@ -1,7 +1,14 @@
+using Microsoft.Extensions.DependencyInjection;
+
 namespace OpenHabitTracker.Blazor.Web.ApiClient;
 
 public partial class DataAccessClient
 {
+    [ActivatorUtilitiesConstructor] // This ctor will be used by DI
+    public DataAccessClient(HttpClient httpClient) : this("", httpClient) // Call generated ctor
+    {
+    }
+
     private string? _token;
 
     public void SetBearerToken(string token) =>

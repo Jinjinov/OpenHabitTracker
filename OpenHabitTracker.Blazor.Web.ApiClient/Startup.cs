@@ -9,12 +9,12 @@ public static class Startup
     {
         services.AddHttpClient<AuthClient>(client =>
         {
-            client.BaseAddress = new Uri("https://app.openhabittracker.net");
+            //client.BaseAddress = new Uri("https://app.openhabittracker.net");
         }).AddHttpMessageHandler<DebugResponseHandler>();
 
         services.AddHttpClient<DataAccessClient>(client =>
         {
-            client.BaseAddress = new Uri("https://app.openhabittracker.net");
+            //client.BaseAddress = new Uri("https://app.openhabittracker.net");
         }).AddHttpMessageHandler<DebugResponseHandler>();
 
         services.AddScoped<IDataAccess, DataAccess>();

@@ -28,14 +28,19 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class AuthClient 
     {
+        #pragma warning disable 8618
+        private string _baseUrl;
+        #pragma warning restore 8618
+
         private System.Net.Http.HttpClient _httpClient;
         private static System.Lazy<System.Text.Json.JsonSerializerOptions> _settings = new System.Lazy<System.Text.Json.JsonSerializerOptions>(CreateSerializerSettings, true);
         private System.Text.Json.JsonSerializerOptions _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public AuthClient(System.Net.Http.HttpClient httpClient)
+        public AuthClient(string baseUrl, System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
+            BaseUrl = baseUrl;
             _httpClient = httpClient;
             Initialize();
         }
@@ -45,6 +50,17 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
             var settings = new System.Text.Json.JsonSerializerOptions();
             UpdateJsonSerializerSettings(settings);
             return settings;
+        }
+
+        public string BaseUrl
+        {
+            get { return _baseUrl; }
+            set
+            {
+                _baseUrl = value;
+                if (!string.IsNullOrEmpty(_baseUrl) && !_baseUrl.EndsWith("/"))
+                    _baseUrl += '/';
+            }
         }
 
         protected System.Text.Json.JsonSerializerOptions JsonSerializerSettings { get { return _instanceSettings ?? _settings.Value; } }
@@ -86,7 +102,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/Auth/token"
                     urlBuilder_.Append("api/Auth/token");
 
@@ -164,7 +180,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/Auth/current-user"
                     urlBuilder_.Append("api/Auth/current-user");
 
@@ -332,14 +348,19 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class DataAccessClient 
     {
+        #pragma warning disable 8618
+        private string _baseUrl;
+        #pragma warning restore 8618
+
         private System.Net.Http.HttpClient _httpClient;
         private static System.Lazy<System.Text.Json.JsonSerializerOptions> _settings = new System.Lazy<System.Text.Json.JsonSerializerOptions>(CreateSerializerSettings, true);
         private System.Text.Json.JsonSerializerOptions _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public DataAccessClient(System.Net.Http.HttpClient httpClient)
+        public DataAccessClient(string baseUrl, System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
+            BaseUrl = baseUrl;
             _httpClient = httpClient;
             Initialize();
         }
@@ -349,6 +370,17 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
             var settings = new System.Text.Json.JsonSerializerOptions();
             UpdateJsonSerializerSettings(settings);
             return settings;
+        }
+
+        public string BaseUrl
+        {
+            get { return _baseUrl; }
+            set
+            {
+                _baseUrl = value;
+                if (!string.IsNullOrEmpty(_baseUrl) && !_baseUrl.EndsWith("/"))
+                    _baseUrl += '/';
+            }
         }
 
         protected System.Text.Json.JsonSerializerOptions JsonSerializerSettings { get { return _instanceSettings ?? _settings.Value; } }
@@ -389,7 +421,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/user"
                     urlBuilder_.Append("api/DataAccess/user");
 
@@ -468,7 +500,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/habit"
                     urlBuilder_.Append("api/DataAccess/habit");
 
@@ -547,7 +579,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/note"
                     urlBuilder_.Append("api/DataAccess/note");
 
@@ -626,7 +658,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/task"
                     urlBuilder_.Append("api/DataAccess/task");
 
@@ -705,7 +737,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/time"
                     urlBuilder_.Append("api/DataAccess/time");
 
@@ -784,7 +816,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/item"
                     urlBuilder_.Append("api/DataAccess/item");
 
@@ -863,7 +895,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/category"
                     urlBuilder_.Append("api/DataAccess/category");
 
@@ -942,7 +974,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/priority"
                     urlBuilder_.Append("api/DataAccess/priority");
 
@@ -1021,7 +1053,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/setting"
                     urlBuilder_.Append("api/DataAccess/setting");
 
@@ -1100,7 +1132,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/users"
                     urlBuilder_.Append("api/DataAccess/users");
 
@@ -1173,7 +1205,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/users"
                     urlBuilder_.Append("api/DataAccess/users");
 
@@ -1257,7 +1289,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/users"
                     urlBuilder_.Append("api/DataAccess/users");
 
@@ -1329,7 +1361,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/users"
                     urlBuilder_.Append("api/DataAccess/users");
 
@@ -1408,7 +1440,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/habits"
                     urlBuilder_.Append("api/DataAccess/habits");
 
@@ -1481,7 +1513,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/habits"
                     urlBuilder_.Append("api/DataAccess/habits");
 
@@ -1565,7 +1597,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/habits"
                     urlBuilder_.Append("api/DataAccess/habits");
 
@@ -1637,7 +1669,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/habits"
                     urlBuilder_.Append("api/DataAccess/habits");
 
@@ -1716,7 +1748,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/notes"
                     urlBuilder_.Append("api/DataAccess/notes");
 
@@ -1789,7 +1821,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/notes"
                     urlBuilder_.Append("api/DataAccess/notes");
 
@@ -1873,7 +1905,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/notes"
                     urlBuilder_.Append("api/DataAccess/notes");
 
@@ -1945,7 +1977,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/notes"
                     urlBuilder_.Append("api/DataAccess/notes");
 
@@ -2024,7 +2056,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/tasks"
                     urlBuilder_.Append("api/DataAccess/tasks");
 
@@ -2097,7 +2129,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/tasks"
                     urlBuilder_.Append("api/DataAccess/tasks");
 
@@ -2181,7 +2213,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/tasks"
                     urlBuilder_.Append("api/DataAccess/tasks");
 
@@ -2253,7 +2285,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/tasks"
                     urlBuilder_.Append("api/DataAccess/tasks");
 
@@ -2332,7 +2364,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/times"
                     urlBuilder_.Append("api/DataAccess/times");
 
@@ -2405,7 +2437,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/times"
                     urlBuilder_.Append("api/DataAccess/times");
                     urlBuilder_.Append('?');
@@ -2495,7 +2527,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/times"
                     urlBuilder_.Append("api/DataAccess/times");
 
@@ -2567,7 +2599,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/times"
                     urlBuilder_.Append("api/DataAccess/times");
 
@@ -2646,7 +2678,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/items"
                     urlBuilder_.Append("api/DataAccess/items");
 
@@ -2719,7 +2751,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/items"
                     urlBuilder_.Append("api/DataAccess/items");
                     urlBuilder_.Append('?');
@@ -2809,7 +2841,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/items"
                     urlBuilder_.Append("api/DataAccess/items");
 
@@ -2881,7 +2913,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/items"
                     urlBuilder_.Append("api/DataAccess/items");
 
@@ -2960,7 +2992,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/categories"
                     urlBuilder_.Append("api/DataAccess/categories");
 
@@ -3033,7 +3065,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/categories"
                     urlBuilder_.Append("api/DataAccess/categories");
 
@@ -3117,7 +3149,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/categories"
                     urlBuilder_.Append("api/DataAccess/categories");
 
@@ -3189,7 +3221,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/categories"
                     urlBuilder_.Append("api/DataAccess/categories");
 
@@ -3268,7 +3300,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/priorities"
                     urlBuilder_.Append("api/DataAccess/priorities");
 
@@ -3341,7 +3373,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/priorities"
                     urlBuilder_.Append("api/DataAccess/priorities");
 
@@ -3425,7 +3457,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/priorities"
                     urlBuilder_.Append("api/DataAccess/priorities");
 
@@ -3497,7 +3529,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/priorities"
                     urlBuilder_.Append("api/DataAccess/priorities");
 
@@ -3576,7 +3608,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/settings"
                     urlBuilder_.Append("api/DataAccess/settings");
 
@@ -3649,7 +3681,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/settings"
                     urlBuilder_.Append("api/DataAccess/settings");
 
@@ -3733,7 +3765,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/settings"
                     urlBuilder_.Append("api/DataAccess/settings");
 
@@ -3805,7 +3837,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/settings"
                     urlBuilder_.Append("api/DataAccess/settings");
 
@@ -3881,7 +3913,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/users/{id}"
                     urlBuilder_.Append("api/DataAccess/users/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -3962,7 +3994,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/users/{id}"
                     urlBuilder_.Append("api/DataAccess/users/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4039,7 +4071,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/habits/{id}"
                     urlBuilder_.Append("api/DataAccess/habits/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4120,7 +4152,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/habits/{id}"
                     urlBuilder_.Append("api/DataAccess/habits/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4197,7 +4229,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/notes/{id}"
                     urlBuilder_.Append("api/DataAccess/notes/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4278,7 +4310,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/notes/{id}"
                     urlBuilder_.Append("api/DataAccess/notes/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4355,7 +4387,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/tasks/{id}"
                     urlBuilder_.Append("api/DataAccess/tasks/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4436,7 +4468,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/tasks/{id}"
                     urlBuilder_.Append("api/DataAccess/tasks/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4513,7 +4545,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/times/{id}"
                     urlBuilder_.Append("api/DataAccess/times/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4594,7 +4626,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/times/{id}"
                     urlBuilder_.Append("api/DataAccess/times/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4671,7 +4703,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/items/{id}"
                     urlBuilder_.Append("api/DataAccess/items/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4752,7 +4784,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/items/{id}"
                     urlBuilder_.Append("api/DataAccess/items/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4829,7 +4861,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/categories/{id}"
                     urlBuilder_.Append("api/DataAccess/categories/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4910,7 +4942,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/categories/{id}"
                     urlBuilder_.Append("api/DataAccess/categories/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -4987,7 +5019,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/priorities/{id}"
                     urlBuilder_.Append("api/DataAccess/priorities/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -5068,7 +5100,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/priorities/{id}"
                     urlBuilder_.Append("api/DataAccess/priorities/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -5145,7 +5177,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/settings/{id}"
                     urlBuilder_.Append("api/DataAccess/settings/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -5226,7 +5258,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/settings/{id}"
                     urlBuilder_.Append("api/DataAccess/settings/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
@@ -5299,7 +5331,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "api/DataAccess/clear-all"
                     urlBuilder_.Append("api/DataAccess/clear-all");
 
