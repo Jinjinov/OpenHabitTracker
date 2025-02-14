@@ -55,29 +55,29 @@
         }
       }
     },
-    "/api/Auth/email": {
+    "/api/Auth/current-user": {
       "get": {
         "tags": [
           "Auth"
         ],
-        "operationId": "GetEmail",
+        "operationId": "GetCurrentUser",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/UserEntity"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/UserEntity"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/UserEntity"
                 }
               }
             }

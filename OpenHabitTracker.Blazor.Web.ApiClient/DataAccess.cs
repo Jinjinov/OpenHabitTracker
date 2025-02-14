@@ -1,4 +1,4 @@
-﻿using OpenHabitTracker.Data;
+using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.Blazor.Web.ApiClient;

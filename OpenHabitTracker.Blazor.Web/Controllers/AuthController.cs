@@ -58,9 +58,9 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
     }
 
     [Authorize]
-    [HttpGet("user")]
-    [EndpointName("GetUser")]
-    public async Task<ActionResult<UserEntity>> GetUser()
+    [HttpGet("current-user")]
+    [EndpointName("GetCurrentUser")]
+    public async Task<ActionResult<UserEntity>> GetCurrentUser()
     {
         // Retrieves the current authenticated user based on the JWT token.
         ApplicationUser? user = await _userManager.GetUserAsync(User);

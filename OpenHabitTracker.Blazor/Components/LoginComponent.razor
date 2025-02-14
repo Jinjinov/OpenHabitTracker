@@ -2,6 +2,7 @@
 
 @using OpenHabitTracker.Blazor.Web.ApiClient
 @using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Entities
 @using System.Net.Http.Headers
 
 @inject AuthClient AuthClient
@@ -36,7 +37,9 @@
 
             DataAccessClient.SetBearerToken(tokenResponse.Token);
 
-            email = await AuthClient.GetEmailAsync();
+            UserEntity user = await AuthClient.GetCurrentUserAsync();
+
+            email = user.Email;
         }
     }
 }

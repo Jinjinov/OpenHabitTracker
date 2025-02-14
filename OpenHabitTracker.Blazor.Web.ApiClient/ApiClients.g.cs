@@ -144,15 +144,15 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<string> GetEmailAsync()
+        public virtual System.Threading.Tasks.Task<UserEntity> GetCurrentUserAsync()
         {
-            return GetEmailAsync(System.Threading.CancellationToken.None);
+            return GetCurrentUserAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<string> GetEmailAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UserEntity> GetCurrentUserAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -165,8 +165,8 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "api/Auth/email"
-                    urlBuilder_.Append("api/Auth/email");
+                    // Operation Path: "api/Auth/current-user"
+                    urlBuilder_.Append("api/Auth/current-user");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -193,7 +193,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<UserEntity>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
