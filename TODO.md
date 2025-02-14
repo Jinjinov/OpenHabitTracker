@@ -52,8 +52,9 @@ check for every `new.*Model`
 ---------------------------------------------------------------------------------------------------
 
 1.
+Docker:
 
-JWT_SECRET=your-extremely-strong-secret-key
+APPSETTINGS_JWT_SECRET=your-extremely-strong-secret-key
 
 Windows:
 
@@ -73,7 +74,6 @@ Linux / macOS:
         await UncheckAllItems(habit);
 
 add setting where to store data - enum DataLocation
-
 add ui radio button
 
 add login screen
