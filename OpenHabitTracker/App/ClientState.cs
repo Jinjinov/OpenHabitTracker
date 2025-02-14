@@ -25,6 +25,13 @@ public class ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml mar
     public Dictionary<long, PriorityModel>? Priorities { get; set; }
     public List<ContentModel>? Trash { get; set; }
 
+    public async Task SetDataLocation(DataLocation dataLocation)
+    {
+        _dataLocation = dataLocation;
+
+        await RefreshState();
+    }
+
     public async Task UpdateModel(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
     {
         if (model is HabitModel habitModel && await DataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)
@@ -370,7 +377,12 @@ public class ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml mar
     {
         await DataAccess.ClearAllTables();
 
-        Settings = new();
+        await RefreshState();
+    }
+
+    public async Task RefreshState()
+    {
+        Settings = new ();
 
         await LoadSettings(loadWelcomeNote: false);
 

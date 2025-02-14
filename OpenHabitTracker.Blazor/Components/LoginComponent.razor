@@ -1,5 +1,6 @@
 @* @page "/login" *@
 
+@using OpenHabitTracker.App
 @using OpenHabitTracker.Blazor.Web.ApiClient
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Entities
@@ -7,6 +8,7 @@
 
 @inject AuthClient AuthClient
 @inject DataAccessClient DataAccessClient
+@inject ClientState ClientState
 
 <h3>Login</h3>
 
@@ -47,6 +49,8 @@
                 UserEntity user = await AuthClient.GetCurrentUserAsync();
 
                 email = user.Email;
+
+                //ClientState.SetDataLocation(DataLocation.Remote);
             }
         }
         catch (Exception ex)

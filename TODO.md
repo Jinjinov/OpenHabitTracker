@@ -79,7 +79,7 @@ add ui radio button
 
 add Local and Remote icons
 
-add setting - remote url
+add setting - remote url, jwt, refresh token
 
 add Log Out
     set jwt to null
@@ -91,6 +91,23 @@ add Log Out
 change _dataLocation after login
     DeleteAllData()
     LoadContent();
+
+remote url, jwt, refresh token - must be stored in settings in local DB - if all data is completely switched, it will not work !!!
+    - cookies
+    - local storage
+    - indexeddb
+    - sqlite
+
+two copies of everything
+two copies of settings
+local storage
+cookies
+
+three copies of everything: local, remote, state
+
+remember login
+    save jwt
+    save refresh token
 
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
