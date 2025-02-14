@@ -8,5 +8,5 @@ public class AppSettings
 
     public string Password { get; set; } = "admin";
 
-    public string JwtSecret { get; set; } = "your-very-strong-secret-key";
+    public string JwtSecret { get; set; } = "your-extremely-strong-secret-key";
 }

@@ -35,7 +35,7 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 1.
 
-JWT_SECRET=your-very-strong-secret-key
+JWT_SECRET=your-extremely-strong-secret-key
 
 Windows:
 
@@ -57,14 +57,7 @@ add ui radio button
 
 ---------------------------------------------------------------------------------------------------
 
-add auth
 add login screen
-
----------------------------------------------------------------------------------------------------
-
-ClientState:
-    inject 2x DataAccess
-    each DataAccess to Dictionary - enum DataLocation
 
 ---------------------------------------------------------------------------------------------------
 
