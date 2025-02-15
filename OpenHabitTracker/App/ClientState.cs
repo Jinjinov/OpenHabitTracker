@@ -37,8 +37,6 @@ public class ClientState
 
     public IDataAccess DataAccess { get; set; }
 
-    public string BaseUrl { get; set; } = "";
-
     public UserModel User
     {
         get => _clientData.User;

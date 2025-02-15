@@ -21,6 +21,8 @@ public static class Startup
 
         services.AddTransient<DebugResponseHandler>();
 
+        services.AddScoped<ApiClientOptions>();
+
         return services;
     }
 }
