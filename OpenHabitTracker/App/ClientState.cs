@@ -4,30 +4,99 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.App;
 
-public class ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
+public class ClientState
 {
-    private readonly Dictionary<DataLocation, IDataAccess> _dataAccess = dataAccess.ToDictionary(x => x.DataLocation);
-    private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
-    private readonly Examples _examples = examples;
+    private readonly Dictionary<DataLocation, IDataAccess> _dataAccessByLocation;
+    private readonly MarkdownToHtml _markdownToHtml;
+    private readonly Examples _examples;
 
-    private DataLocation _dataLocation = DataLocation.Local;
+    private readonly Dictionary<DataLocation, ClientData> _clientDataByLocation;
+    private ClientData _clientData;
 
-    public IDataAccess DataAccess => _dataAccess[_dataLocation];
+    private DataLocation _dataLocation;
 
-    public UserModel User { get; set; } = new();
-    public SettingsModel Settings { get; set; } = new();
-    public Dictionary<long, HabitModel>? Habits { get; set; }
-    public Dictionary<long, NoteModel>? Notes { get; set; }
-    public Dictionary<long, TaskModel>? Tasks { get; set; }
-    public Dictionary<long, TimeModel>? Times { get; set; }
-    public Dictionary<long, ItemModel>? Items { get; set; }
-    public Dictionary<long, CategoryModel>? Categories { get; set; }
-    public Dictionary<long, PriorityModel>? Priorities { get; set; }
-    public List<ContentModel>? Trash { get; set; }
+    public ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
+    {
+        _dataAccessByLocation = dataAccess.ToDictionary(x => x.DataLocation);
+        _markdownToHtml = markdownToHtml;
+        _examples = examples;
+
+        _dataLocation = DataLocation.Local;
+
+        _clientDataByLocation = new();
+
+        foreach (DataLocation location in _dataAccessByLocation.Keys)
+        {
+            _clientDataByLocation[location] = new ClientData();
+        }
+
+        _clientData = _clientDataByLocation[_dataLocation];
+
+        DataAccess = _dataAccessByLocation[_dataLocation];
+    }
+
+    public IDataAccess DataAccess { get; set; }
+
+    public string BaseUrl { get; set; } = "";
+
+    public UserModel User
+    {
+        get => _clientData.User;
+        set => _clientData.User = value;
+    }
+    public SettingsModel Settings
+    {
+        get => _clientData.Settings;
+        set => _clientData.Settings = value;
+    }
+    public Dictionary<long, HabitModel>? Habits
+    {
+        get => _clientData.Habits;
+        set => _clientData.Habits = value;
+    }
+    public Dictionary<long, NoteModel>? Notes
+    {
+        get => _clientData.Notes;
+        set => _clientData.Notes = value;
+    }
+    public Dictionary<long, TaskModel>? Tasks
+    {
+        get => _clientData.Tasks;
+        set => _clientData.Tasks = value;
+    }
+    public Dictionary<long, TimeModel>? Times
+    {
+        get => _clientData.Times;
+        set => _clientData.Times = value;
+    }
+    public Dictionary<long, ItemModel>? Items
+    {
+        get => _clientData.Items;
+        set => _clientData.Items = value;
+    }
+    public Dictionary<long, CategoryModel>? Categories
+    {
+        get => _clientData.Categories;
+        set => _clientData.Categories = value;
+    }
+    public Dictionary<long, PriorityModel>? Priorities
+    {
+        get => _clientData.Priorities;
+        set => _clientData.Priorities = value;
+    }
+    public List<ContentModel>? Trash
+    {
+        get => _clientData.Trash;
+        set => _clientData.Trash = value;
+    }
 
     public async Task SetDataLocation(DataLocation dataLocation)
     {
         _dataLocation = dataLocation;
+
+        _clientData = _clientDataByLocation[_dataLocation];
+
+        DataAccess = _dataAccessByLocation[_dataLocation];
 
         await RefreshState();
     }
