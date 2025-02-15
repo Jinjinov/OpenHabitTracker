@@ -382,7 +382,7 @@ public class ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml mar
 
     public async Task RefreshState()
     {
-        Settings = new ();
+        Settings = new();
 
         await LoadSettings(loadWelcomeNote: false);
 

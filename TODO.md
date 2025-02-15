@@ -93,17 +93,8 @@ change _dataLocation after login
     LoadContent();
 
 remote url, jwt, refresh token - must be stored in settings in local DB - if all data is completely switched, it will not work !!!
-    - cookies
-    - local storage
-    - indexeddb
-    - sqlite
 
 two copies of everything
-two copies of settings
-local storage
-cookies
-
-three copies of everything: local, remote, state
 
 remember login
     save jwt
