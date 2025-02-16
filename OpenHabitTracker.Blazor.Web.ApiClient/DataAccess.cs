@@ -9,9 +9,9 @@ public class DataAccess(DataAccessClient client) : IDataAccess
 
     private readonly DataAccessClient _client = client;
 
-    public async Task Initialize()
+    public Task Initialize()
     {
-
+        return Task.CompletedTask;
     }
 
     // Add single entities

@@ -164,7 +164,7 @@ await CreateDefaultUserAsync(app);
 
 app.Run();
 
-async Task CreateDefaultUserAsync(WebApplication app)
+static async Task CreateDefaultUserAsync(WebApplication app)
 {
     using IServiceScope scope = app.Services.CreateScope();
 

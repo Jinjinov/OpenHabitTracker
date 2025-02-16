@@ -10,7 +10,7 @@ public class ApiClientOptions
         set
         {
             _baseUrl = value;
-            if (!string.IsNullOrEmpty(_baseUrl) && !_baseUrl.EndsWith("/"))
+            if (!string.IsNullOrEmpty(_baseUrl) && !_baseUrl.EndsWith('/'))
                 _baseUrl += '/';
         }
     }
