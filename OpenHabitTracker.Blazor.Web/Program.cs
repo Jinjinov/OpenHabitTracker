@@ -13,8 +13,18 @@ using OpenHabitTracker.Blazor.Web.Components;
 using OpenHabitTracker.Blazor.Web.Data;
 using Scalar.AspNetCore;
 using System.Text;
+using WatchDog;
+using WatchDog.src.Enums;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddWatchDogServices(opt =>
+{
+    opt.IsAutoClear = true;
+    opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Monthly;
+});
+
+builder.Logging.AddWatchDogLogger();
 
 // Load configuration from appsettings.json and environment variables
 builder.Configuration
@@ -106,7 +116,7 @@ builder.Services.AddOpenApi();
 
 WebApplication app = builder.Build();
 
-await CreateDefaultUserAsync(app);
+app.UseWatchDogExceptionLogger();
 
 //ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
 // Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider
@@ -129,6 +139,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -137,9 +149,17 @@ app.MapControllers();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.UseWatchDog(opt =>
+{
+    opt.WatchPageUsername = "admin";
+    opt.WatchPagePassword = "admin";
+});
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddAdditionalAssemblies(typeof(OpenHabitTracker.Blazor.Pages.Home).Assembly);
+
+await CreateDefaultUserAsync(app);
 
 app.Run();
 
