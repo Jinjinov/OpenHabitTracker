@@ -72,8 +72,8 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
 
         UserEntity userEntity = new()
         {
-            UserName = user.UserName,
-            Email = user.Email,
+            UserName = user.UserName ?? string.Empty,
+            Email = user.Email ?? string.Empty,
         };
 
         return Ok(userEntity);

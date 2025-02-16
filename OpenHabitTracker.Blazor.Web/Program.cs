@@ -44,7 +44,7 @@ builder.Services.AddRazorComponents()
 string databaseFile = "OpenHT.db";
 string databaseFolder = Path.Combine(AppContext.BaseDirectory, ".OpenHabitTracker");
 
-https://stackoverflow.com/questions/6041332/best-way-to-get-application-folder-path
+// https://stackoverflow.com/questions/6041332/best-way-to-get-application-folder-path
 // Environment.CurrentDirectory     D:\OpenHabitTracker\OpenHabitTracker.Blazor.Web
 // AppContext.BaseDirectory         D:\OpenHabitTracker\OpenHabitTracker.Blazor.Web\bin\Debug\net9.0\
 // All other methods are obsolete / use one of these two / work only in WinForms

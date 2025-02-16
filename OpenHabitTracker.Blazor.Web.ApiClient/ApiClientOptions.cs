@@ -2,7 +2,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient;
 
 public class ApiClientOptions
 {
-    private string _baseUrl = "";
+    private string _baseUrl = string.Empty;
 
     public string BaseUrl
     {
@@ -15,5 +15,5 @@ public class ApiClientOptions
         }
     }
 
-    public string BearerToken { get; set; } = "";
+    public string BearerToken { get; set; } = string.Empty;
 }
