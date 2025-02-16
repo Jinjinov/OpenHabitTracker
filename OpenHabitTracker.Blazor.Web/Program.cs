@@ -116,6 +116,8 @@ builder.Services.AddOpenApi();
 
 WebApplication app = builder.Build();
 
+// Configure the HTTP request pipeline.
+
 app.UseWatchDogExceptionLogger();
 
 //ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
@@ -124,12 +126,6 @@ app.UseWatchDogExceptionLogger();
 // Microsoft.Extensions.Logging.EventSource.EventSourceLoggerProvider
 // Microsoft.Extensions.Logging.EventLog.EventLogLoggerProvider
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference(); // http://localhost:5260/scalar/v1
-}
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
@@ -139,25 +135,30 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
+
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
-
-app.UseStaticFiles();
 app.UseAntiforgery();
 
-app.UseWatchDog(opt =>
+app.UseWatchDog(opt => // https://localhost:7042/watchdog
 {
     opt.WatchPageUsername = "admin";
     opt.WatchPagePassword = "admin";
 });
 
+app.MapControllers();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddAdditionalAssemblies(typeof(OpenHabitTracker.Blazor.Pages.Home).Assembly);
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference(); // http://localhost:5260/scalar/v1
+}
 
 await CreateDefaultUserAsync(app);
 
