@@ -10,3 +10,4 @@ GoogleDriveClientSecrets.Hidden.cs
 *.pfx
 Package.StoreAssociation.xml
 OpenHT.db*
+watchlogs*.db
