@@ -27,7 +27,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         : base(options)
     {
         //Database.EnsureCreated();
-        Database.Migrate();
+        //Database.Migrate();
     }
 
     // It is required to override this method when adding/removing migrations from class library
