@@ -79,7 +79,7 @@ add ui radio button
 
 add Local and Remote icons
 
-add setting - remote url, jwt, refresh token
+add setting - remote url, jwt, refresh token -> load to ApiClientOptions
 
 add Log Out
     set jwt to null
@@ -89,6 +89,7 @@ add Log Out
     LoadContent();
 
 remote url, jwt, refresh token <- all must be stored in settings in local DB - if all data is completely switched, it will not work !!!
+    load to ApiClientOptions
 
 remember login
     save jwt
