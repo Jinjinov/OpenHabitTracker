@@ -11,17 +11,24 @@
 @inject DataAccessClient DataAccessClient
 @inject ClientState ClientState
 
-<h3>Login</h3>
+<h3>Online sync</h3>
 
 <input class="form-control my-1" @bind="address" placeholder="Address" />
 <input class="form-control my-1" @bind="username" placeholder="Username" />
 <input class="form-control my-1" @bind="password" placeholder="Password" type="password" />
 
-<button class="btn btn-primary w-100" @onclick="LoginAndGetToken">Login</button>
+@if (ClientState.DataLocation == DataLocation.Local)
+{
+    <button class="btn btn-primary w-100" @onclick="LoginAndGetToken">Log in</button>
+}
+@if (ClientState.DataLocation == DataLocation.Remote)
+{
+    <button class="btn btn-primary w-100" @onclick="Logout">Log out</button>
+}
 
 @if (!string.IsNullOrEmpty(email))
 {
-    <p>Email: @email</p>
+    <p>User: @email</p>
 }
 
 @code {
@@ -69,5 +76,16 @@
         {
             email = ex.Message;
         }
+    }
+
+    private async Task Logout()
+    {
+        ApiClientOptions.BearerToken = "";
+
+        email = "";
+
+        await ClientState.SetDataLocation(DataLocation.Local);
+
+        await OnStateChanged();
     }
 }

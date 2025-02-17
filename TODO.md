@@ -74,13 +74,9 @@ Linux / macOS:
     if (UncheckAllItemsOnHabitDone)
         await UncheckAllItems(habit);
 
-add Log Out
-    set jwt to null in ApiClientOptions
+Log Out
     delete jwt
     delete refresh token
-    DataLocation = DataLocation.Local;
-        RefreshState();
-        LoadContent();
 
 remember login:
     - add setting: remote url, jwt, refresh token
