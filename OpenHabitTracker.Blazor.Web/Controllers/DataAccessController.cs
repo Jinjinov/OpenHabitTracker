@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenHabitTracker.Data;
@@ -5,7 +6,7 @@ using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.Blazor.Web.Controllers;
 
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
 public class DataAccessController(IDataAccess dataAccess) : ControllerBase
