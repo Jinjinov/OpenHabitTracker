@@ -75,11 +75,12 @@ Linux / macOS:
         await UncheckAllItems(habit);
 
 Log Out
-    delete jwt
     delete refresh token
 
 remember login:
-    - add setting: remote url, jwt, refresh token
+    - add setting:
+        remote url
+        refresh token
     - load to ApiClientOptions
     - all must be stored in settings in local DB - if all data is completely switched, it will not work !!!
 
