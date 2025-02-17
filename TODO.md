@@ -85,16 +85,10 @@ add Log Out
     set jwt to null
     delete jwt
     delete refresh token
-    DeleteAllData()
+    RefreshState();
     LoadContent();
 
-change _dataLocation after login
-    DeleteAllData()
-    LoadContent();
-
-remote url, jwt, refresh token - must be stored in settings in local DB - if all data is completely switched, it will not work !!!
-
-two copies of everything
+remote url, jwt, refresh token <- all must be stored in settings in local DB - if all data is completely switched, it will not work !!!
 
 remember login
     save jwt
