@@ -34,9 +34,9 @@
     <button class="btn btn-primary w-100 my-1" @onclick="Logout">@Loc["Log out"]</button>
 }
 
-@if (!string.IsNullOrEmpty(email))
+@if (!string.IsNullOrEmpty(login))
 {
-    <p>@Loc["User"]: @email</p>
+    <p>@login</p>
 }
 
 @code {
@@ -49,7 +49,7 @@
     private string address = "https://app.openhabittracker.net";
     private string username = "";
     private string password = "";
-    private string email = "";
+    private string login = "";
 
     async Task OnStateChanged()
     {
@@ -73,16 +73,16 @@
 
                 UserEntity user = await AuthClient.GetCurrentUserAsync();
 
-                email = user.Email;
+                login = $"{Loc["User"]}: {user.Email}";
 
                 await ClientState.SetDataLocation(DataLocation.Remote);
 
                 await OnStateChanged();
             }
         }
-        catch (Exception ex)
+        catch (ApiException ex) when (ex.StatusCode == 401)
         {
-            email = ex.Message;
+            login = Loc["Invalid credentials"];
         }
     }
 
@@ -90,7 +90,7 @@
     {
         ApiClientOptions.BearerToken = "";
 
-        email = "";
+        login = "";
 
         await ClientState.SetDataLocation(DataLocation.Local);
 
