@@ -13,15 +13,13 @@ public class ClientState
     private readonly Dictionary<DataLocation, ClientData> _clientDataByLocation;
     private ClientData _clientData;
 
-    private DataLocation _dataLocation;
-
     public ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
     {
         _dataAccessByLocation = dataAccess.ToDictionary(x => x.DataLocation);
         _markdownToHtml = markdownToHtml;
         _examples = examples;
 
-        _dataLocation = DataLocation.Local;
+        DataLocation = DataLocation.Local;
 
         _clientDataByLocation = new();
 
@@ -30,10 +28,12 @@ public class ClientState
             _clientDataByLocation[location] = new ClientData();
         }
 
-        _clientData = _clientDataByLocation[_dataLocation];
+        _clientData = _clientDataByLocation[DataLocation];
 
-        DataAccess = _dataAccessByLocation[_dataLocation];
+        DataAccess = _dataAccessByLocation[DataLocation];
     }
+
+    public DataLocation DataLocation { get; private set; }
 
     public IDataAccess DataAccess { get; set; }
 
@@ -90,11 +90,11 @@ public class ClientState
 
     public async Task SetDataLocation(DataLocation dataLocation)
     {
-        _dataLocation = dataLocation;
+        DataLocation = dataLocation;
 
-        _clientData = _clientDataByLocation[_dataLocation];
+        _clientData = _clientDataByLocation[DataLocation];
 
-        DataAccess = _dataAccessByLocation[_dataLocation];
+        DataAccess = _dataAccessByLocation[DataLocation];
 
         await RefreshState();
     }

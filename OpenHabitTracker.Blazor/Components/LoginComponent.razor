@@ -25,10 +25,22 @@
 }
 
 @code {
+    [Parameter]
+    public bool StateChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> StateChangedChanged { get; set; }
+
     private string address = "https://app.openhabittracker.net";
     private string username = "";
     private string password = "";
     private string email = "";
+
+    async Task OnStateChanged()
+    {
+        StateChanged = !StateChanged;
+        await StateChangedChanged.InvokeAsync(StateChanged);
+    }
 
     private async Task LoginAndGetToken()
     {
@@ -49,6 +61,8 @@
                 email = user.Email;
 
                 await ClientState.SetDataLocation(DataLocation.Remote);
+
+                await OnStateChanged();
             }
         }
         catch (Exception ex)
