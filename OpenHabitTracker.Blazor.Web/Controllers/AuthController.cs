@@ -46,7 +46,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
                 issuer: issuer,
                 audience: audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: creds);
 
             TokenResponse tokenResponse = new TokenResponse { Token = new JwtSecurityTokenHandler().WriteToken(token) };
