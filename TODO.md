@@ -81,6 +81,7 @@ remember login:
     - add setting:
         remote url
         refresh token
+        remember me
     - load to ApiClientOptions
     - all must be stored in settings in local DB - if all data is completely switched, it will not work !!!
 
