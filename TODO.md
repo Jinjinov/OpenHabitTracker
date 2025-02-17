@@ -77,11 +77,13 @@ Linux / macOS:
 Log Out
     delete refresh token
 
+GetToken -> GetJwtToken
+
 remember login:
     - add setting:
-        remote url
-        refresh token
-        remember me
+        remote url - BaseUrl
+        refresh token - RefreshToken
+        remember me - RememberMe
     - load to ApiClientOptions
 
 ---------------------------------------------------------------------------------------------------
@@ -100,8 +102,8 @@ public class AuthController(
     private readonly ApplicationDbContext _dbContext = dbContext;
 
     [HttpPost("token")]
-    [EndpointName("GetToken")]
-    public async Task<ActionResult<TokenResponse>> GetToken([FromBody] LoginCredentials loginCredentials)
+    [EndpointName("GetJwtToken")]
+    public async Task<ActionResult<TokenResponse>> GetJwtToken([FromBody] LoginCredentials loginCredentials)
     {
         Microsoft.AspNetCore.Identity.SignInResult result = 
             await _signInManager.PasswordSignInAsync(loginCredentials.Username, loginCredentials.Password, false, false);
@@ -131,6 +133,7 @@ public class AuthController(
     }
 
     [HttpPost("refresh")]
+    [EndpointName("GetRefreshToken")]
     public async Task<ActionResult<TokenResponse>> RefreshToken([FromBody] RefreshTokenRequest request)
     {
         var storedToken = await _dbContext.UserRefreshTokens
