@@ -14,11 +14,11 @@
 @inject SettingsService SettingsService
 @inject IStringLocalizer Loc
 
-<small class="m-1"><i class="bi bi-globe"></i> Online sync</small>
+<small class="m-1"><i class="bi bi-globe"></i> @Loc["Online sync"]</small>
 
-<input class="form-control my-1" @bind="address" placeholder="Address" />
-<input class="form-control my-1" @bind="username" placeholder="Username" />
-<input class="form-control my-1" @bind="password" placeholder="Password" type="password" />
+<input class="form-control my-1" @bind="address" placeholder="@Loc["Address"]" />
+<input class="form-control my-1" @bind="username" placeholder="@Loc["Username"]" />
+<input class="form-control my-1" @bind="password" placeholder="@Loc["Password"]" type="password" />
 
 <div class="form-check position-relative my-1">
     <InputCheckbox id="RememberMe" class="form-check-input me-1" Value="RememberMe" ValueExpression="() => RememberMe" ValueChanged="SaveRememberMe" />
@@ -27,16 +27,16 @@
 
 @if (ClientState.DataLocation == DataLocation.Local)
 {
-    <button class="btn btn-primary w-100 my-1" @onclick="LoginAndGetToken">Log in</button>
+    <button class="btn btn-primary w-100 my-1" @onclick="LoginAndGetToken">@Loc["Log in"]</button>
 }
 @if (ClientState.DataLocation == DataLocation.Remote)
 {
-    <button class="btn btn-primary w-100 my-1" @onclick="Logout">Log out</button>
+    <button class="btn btn-primary w-100 my-1" @onclick="Logout">@Loc["Log out"]</button>
 }
 
 @if (!string.IsNullOrEmpty(email))
 {
-    <p>User: @email</p>
+    <p>@Loc["User"]: @email</p>
 }
 
 @code {
