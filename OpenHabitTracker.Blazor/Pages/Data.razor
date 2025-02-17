@@ -5,6 +5,7 @@
 
 @inject ClientState AppData
 @inject IStringLocalizer Loc
+@inject IOnlineSyncAvailable OnlineSyncAvailable
 
 @* <PageTitle>OpenHabitTracker - Data</PageTitle> *@
 
@@ -21,7 +22,10 @@
 
 <Backup StateChanged=StateChanged StateChangedChanged=StateChangedChanged />
 
-<LoginComponent StateChanged=StateChanged StateChangedChanged=StateChangedChanged />
+@if (OnlineSyncAvailable.IsOnlineSyncAvailable)
+{
+    <LoginComponent StateChanged=StateChanged StateChangedChanged=StateChangedChanged />
+}
 
 @code {
     [Parameter]

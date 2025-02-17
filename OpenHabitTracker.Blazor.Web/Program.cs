@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpenHabitTracker;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor;
 using OpenHabitTracker.Blazor.Files;
@@ -103,6 +104,7 @@ builder.Services.AddScoped<IAssemblyProvider, OpenHabitTracker.Blazor.Web.Compon
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPreRenderService, OpenHabitTracker.Blazor.Web.PreRenderService>();
+builder.Services.AddScoped<IOnlineSyncAvailable, OnlineSyncUnavailable>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
@@ -44,6 +45,7 @@ public partial class MainForm : Form
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         services.AddScoped<IPreRenderService, PreRenderService>();
+        services.AddScoped<IOnlineSyncAvailable, OnlineSyncAvailable>();
         services.AddHttpClients();
 
         InitializeComponent();

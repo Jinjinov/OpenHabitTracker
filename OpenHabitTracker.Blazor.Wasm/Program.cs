@@ -39,6 +39,7 @@ builder.Services.AddScoped<INavBarFragment, OpenHabitTracker.Blazor.Wasm.Layout.
 builder.Services.AddScoped<IAssemblyProvider, OpenHabitTracker.Blazor.Wasm.AssemblyProvider>();
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddScoped<IPreRenderService, PreRenderService>();
+builder.Services.AddScoped<IOnlineSyncAvailable, OnlineSyncUnavailable>();
 builder.Services.AddHttpClients();
 
 WebAssemblyHost host = builder.Build();

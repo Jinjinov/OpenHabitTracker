@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
@@ -75,6 +76,7 @@ public static class MauiProgram
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>(); // different in Wasm, Web
         builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>(); // different in Photino
         builder.Services.AddScoped<IPreRenderService, PreRenderService>(); // different in Web
+        builder.Services.AddScoped<IOnlineSyncAvailable, OnlineSyncAvailable>();
         builder.Services.AddHttpClients();
 
         MauiApp mauiApp = builder.Build();

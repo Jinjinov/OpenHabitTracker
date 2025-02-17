@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
@@ -47,6 +48,7 @@ public class Program
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         builder.Services.AddScoped<IPreRenderService, PreRenderService>();
+        builder.Services.AddScoped<IOnlineSyncAvailable, OnlineSyncAvailable>();
         builder.Services.AddHttpClients();
 
         // register root component and selector
