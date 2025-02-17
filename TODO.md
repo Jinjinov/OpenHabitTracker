@@ -77,6 +77,10 @@ Linux / macOS:
 Log Out
     delete refresh token
 
+localize LoginComponent
+
+localize Backup
+
 remember login:
     - add setting:
         remote url
