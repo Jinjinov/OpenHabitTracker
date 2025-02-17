@@ -77,19 +77,16 @@ Linux / macOS:
 add Remote icon - when logged in
 
 add Log Out
-    set jwt to null
+    set jwt to null in ApiClientOptions
     delete jwt
     delete refresh token
     RefreshState();
     LoadContent();
 
-add setting - remote url, jwt, refresh token -> load to ApiClientOptions
-
-remote url, jwt, refresh token <- all must be stored in settings in local DB - if all data is completely switched, it will not work !!!
-
-remember login
-    save jwt
-    save refresh token
+remember login:
+    - add setting: remote url, jwt, refresh token
+    - load to ApiClientOptions
+    - all must be stored in settings in local DB - if all data is completely switched, it will not work !!!
 
 ---------------------------------------------------------------------------------------------------
 
