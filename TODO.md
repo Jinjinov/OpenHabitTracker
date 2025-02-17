@@ -74,12 +74,7 @@ Linux / macOS:
     if (UncheckAllItemsOnHabitDone)
         await UncheckAllItems(habit);
 
-add setting where to store data - enum DataLocation
-add ui radio button
-
-add Local and Remote icons
-
-add setting - remote url, jwt, refresh token -> load to ApiClientOptions
+add Remote icon - when logged in
 
 add Log Out
     set jwt to null
@@ -88,15 +83,14 @@ add Log Out
     RefreshState();
     LoadContent();
 
+add setting - remote url, jwt, refresh token -> load to ApiClientOptions
+
 remote url, jwt, refresh token <- all must be stored in settings in local DB - if all data is completely switched, it will not work !!!
-    load to ApiClientOptions
 
 remember login
     save jwt
     save refresh token
 
----------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
 [ApiController]
@@ -218,10 +212,19 @@ public class UserRefreshToken
 public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
 ---------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
 
 2.
+help:
+- move to sidebar
+- separate help for each screen
+- guided tour per screen
+- list of guided tours
+    https://github.com/TrevorMare/STGTour/
+    https://trevormare.github.io/STGTour/
+
+---------------------------------------------------------------------------------------------------
+
+3.
 method to copy one db context to another
 
 public void CopyData(DbContext source, DbContext destination)
@@ -256,15 +259,6 @@ using (var sqlServerContext = new MyDbContext(sqlServerOptions))
 }
 
 ---------------------------------------------------------------------------------------------------
-
-3.
-help:
-- move to sidebar
-- separate help for each screen
-- guided tour per screen
-- list of guided tours
-    https://github.com/TrevorMare/STGTour/
-    https://trevormare.github.io/STGTour/
 
 4.
 run Jetbrains Rider code analysis
@@ -304,6 +298,7 @@ Android: get permission to save SQLite DB in an external folder that can be part
 13.
 deploy Blazor Server Docker image to Raspberry Pi 5 / Synology NAS DS224+
 
+14.
 Flatpak: test on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
