@@ -4,12 +4,15 @@
 @using OpenHabitTracker.Blazor.Web.ApiClient
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Entities
+@using OpenHabitTracker.Services
 @using System.Net.Http.Headers
 
 @inject ApiClientOptions ApiClientOptions
 @inject AuthClient AuthClient
 @inject DataAccessClient DataAccessClient
 @inject ClientState ClientState
+@inject SettingsService SettingsService
+@inject IStringLocalizer Loc
 
 <small class="m-1"><i class="bi bi-globe"></i> Online sync</small>
 
@@ -17,13 +20,18 @@
 <input class="form-control my-1" @bind="username" placeholder="Username" />
 <input class="form-control my-1" @bind="password" placeholder="Password" type="password" />
 
+<div class="form-check position-relative my-1">
+    <InputCheckbox id="RememberMe" class="form-check-input me-1" Value="RememberMe" ValueExpression="() => RememberMe" ValueChanged="SaveRememberMe" />
+    <label for="RememberMe" class="form-check-label stretched-link">@Loc["Remember me"]</label>
+</div>
+
 @if (ClientState.DataLocation == DataLocation.Local)
 {
-    <button class="btn btn-primary w-100" @onclick="LoginAndGetToken">Log in</button>
+    <button class="btn btn-primary w-100 my-1" @onclick="LoginAndGetToken">Log in</button>
 }
 @if (ClientState.DataLocation == DataLocation.Remote)
 {
-    <button class="btn btn-primary w-100" @onclick="Logout">Log out</button>
+    <button class="btn btn-primary w-100 my-1" @onclick="Logout">Log out</button>
 }
 
 @if (!string.IsNullOrEmpty(email))
@@ -87,5 +95,14 @@
         await ClientState.SetDataLocation(DataLocation.Local);
 
         await OnStateChanged();
+    }
+
+    bool RememberMe;
+
+    async Task SaveRememberMe(bool rememberMe)
+    {
+        RememberMe = rememberMe;
+
+        await SettingsService.UpdateSettings();
     }
 }
