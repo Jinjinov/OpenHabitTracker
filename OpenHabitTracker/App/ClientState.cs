@@ -177,6 +177,11 @@ public class ClientState
                     Culture = settingsEntity.Culture,
                     FirstDayOfWeek = settingsEntity.FirstDayOfWeek,
                     SelectedRatio = settingsEntity.SelectedRatio,
+                    BaseUrl = settingsEntity.BaseUrl,
+                    RefreshToken = settingsEntity.RefreshToken,
+                    RememberMe = settingsEntity.RememberMe,
+                    ShowHelp = settingsEntity.ShowHelp,
+                    UncheckAllItemsOnHabitDone = settingsEntity.UncheckAllItemsOnHabitDone,
                     ShowItemList = settingsEntity.ShowItemList,
                     ShowSmallCalendar = settingsEntity.ShowSmallCalendar,
                     ShowLargeCalendar = settingsEntity.ShowLargeCalendar,
@@ -210,6 +215,8 @@ public class ClientState
                     await AddWelcomeNote();
                 }
             }
+
+            _apiClientOptions.BaseUrl = Settings.BaseUrl;
         }
     }
 
@@ -225,6 +232,11 @@ public class ClientState
             Culture = "en",
             FirstDayOfWeek = DayOfWeek.Monday,
             SelectedRatio = Ratio.ElapsedToDesired,
+            BaseUrl = "",
+            RefreshToken = "",
+            RememberMe = true,
+            ShowHelp = true,
+            UncheckAllItemsOnHabitDone = false,
             ShowItemList = true,
             ShowSmallCalendar = true,
             ShowLargeCalendar = true,

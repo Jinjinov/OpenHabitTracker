@@ -215,7 +215,10 @@ public class HabitService(ClientState appData, SearchFilterService searchFilterS
             await AddTimeDone(habit, now);
         }
 
-        await UncheckAllItems(habit);
+        if (_appData.Settings.UncheckAllItemsOnHabitDone)
+        {
+            await UncheckAllItems(habit);
+        }
     }
 
     private async Task UncheckAllItems(HabitModel habit)
@@ -274,7 +277,10 @@ public class HabitService(ClientState appData, SearchFilterService searchFilterS
         if (habit.LastTimeDoneAt is null || habit.LastTimeDoneAt < dateTime)
             await SetLastTimeDone(habit, dateTime);
 
-        await UncheckAllItems(habit);
+        if (_appData.Settings.UncheckAllItemsOnHabitDone)
+        {
+            await UncheckAllItems(habit);
+        }
     }
 
     public async Task RemoveTimeDone(HabitModel habit, TimeModel timeModel)

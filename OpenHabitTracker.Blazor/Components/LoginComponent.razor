@@ -4,6 +4,7 @@
 @using OpenHabitTracker.Blazor.Web.ApiClient
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Entities
+@using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Dto
 @using OpenHabitTracker.Services
 @using System.Net.Http.Headers
@@ -22,7 +23,7 @@
 <input class="form-control my-1" @bind="password" placeholder="@Loc["Password"]" type="password" />
 
 <div class="form-check position-relative my-1">
-    <InputCheckbox id="RememberMe" class="form-check-input me-1" Value="RememberMe" ValueExpression="() => RememberMe" ValueChanged="SaveRememberMe" />
+    <InputCheckbox id="RememberMe" class="form-check-input me-1" Value="_settings.RememberMe" ValueExpression="() => _settings.RememberMe" ValueChanged="SaveRememberMe" />
     <label for="RememberMe" class="form-check-label stretched-link">@Loc["Remember me"]</label>
 </div>
 
@@ -46,6 +47,8 @@
 
     [Parameter]
     public EventCallback<bool> StateChangedChanged { get; set; }
+
+    SettingsModel _settings => SettingsService.Settings;
 
     private string address = "https://app.openhabittracker.net";
     private string username = "";
@@ -71,6 +74,13 @@
             if (!string.IsNullOrEmpty(tokenResponse.JwtToken))
             {
                 ApiClientOptions.BearerToken = tokenResponse.JwtToken;
+
+                if (_settings.RememberMe)
+                {
+                    _settings.BaseUrl = ApiClientOptions.BaseUrl;
+                    _settings.RefreshToken = tokenResponse.RefreshToken;
+                    await SettingsService.UpdateSettings();
+                }
 
                 UserEntity user = await AuthClient.GetCurrentUserAsync();
 
@@ -102,11 +112,9 @@
         await OnStateChanged();
     }
 
-    bool RememberMe;
-
     async Task SaveRememberMe(bool rememberMe)
     {
-        RememberMe = rememberMe;
+        _settings.RememberMe = rememberMe;
 
         await SettingsService.UpdateSettings();
     }

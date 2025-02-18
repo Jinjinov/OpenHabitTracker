@@ -1,4 +1,4 @@
-﻿@page "/settings"
+@page "/settings"
 
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
@@ -80,6 +80,11 @@
         </div>
 
         <div class="list-group-item">
+            <InputCheckbox id="ShowHelp" class="form-check-input me-1" Value="_settings.ShowHelp" ValueExpression="() => _settings.ShowHelp" ValueChanged="SaveShowHelp" />
+            <label for="ShowHelp" class="form-check-label stretched-link d-inline">@Loc["Show help"]</label>
+        </div>
+
+        <div class="list-group-item">
             <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowItemList" ValueExpression="() => _settings.ShowItemList" ValueChanged="SaveShowItemList" />
             <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show item list"]</label>
         </div>
@@ -132,6 +137,11 @@
         <div class="list-group-item">
             <InputCheckbox id="DisplayNoteContentAsMarkdown" class="form-check-input me-1" Value="_settings.DisplayNoteContentAsMarkdown" ValueExpression="() => _settings.DisplayNoteContentAsMarkdown" ValueChanged="SaveDisplayNoteContentAsMarkdown" />
             <label for="DisplayNoteContentAsMarkdown" class="form-check-label stretched-link d-inline">@Loc["Display note content as Markdown"]</label>
+        </div>
+
+        <div class="list-group-item">
+            <InputCheckbox id="UncheckAllItemsOnHabitDone" class="form-check-input me-1" Value="_settings.UncheckAllItemsOnHabitDone" ValueExpression="() => _settings.UncheckAllItemsOnHabitDone" ValueChanged="SaveUncheckAllItemsOnHabitDone" />
+            <label for="UncheckAllItemsOnHabitDone" class="form-check-label stretched-link d-inline">@Loc["Uncheck items when habit is completed"]</label>
         </div>
 
         <div class="list-group-item">
@@ -221,6 +231,13 @@
         await SettingsService.UpdateSettings();
     }
 
+    async Task SaveShowHelp(bool show)
+    {
+        _settings.ShowHelp = show;
+
+        await UpdateAndRefresh();
+    }
+
     async Task SaveShowItemList(bool show)
     {
         _settings.ShowItemList = show;
@@ -282,6 +299,13 @@
     async Task SaveDisplayNoteContentAsMarkdown(bool val)
     {
         _settings.DisplayNoteContentAsMarkdown = val;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveUncheckAllItemsOnHabitDone(bool val)
+    {
+        _settings.UncheckAllItemsOnHabitDone = val;
 
         await UpdateAndRefresh();
     }

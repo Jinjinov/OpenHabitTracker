@@ -41,13 +41,17 @@
 
             @if (_windowDimensions?.Width >= 1280 || _windowDimensions?.Width < 768)
             {
-                    <NavLink class="nav-link px-2 py-1 ms-3" href="/" Match=NavLinkMatch.All data-form-secondStep><i class="bi bi-house"></i></NavLink>
+                <NavLink class="nav-link px-2 py-1 ms-3" href="/" Match=NavLinkMatch.All data-form-secondStep><i class="bi bi-house"></i></NavLink>
             }
             <NavLink class="nav-link px-2 py-1 ms-3" href="notes" data-form-thirdStep><i class="bi bi-sticky"></i></NavLink>
             <NavLink class="nav-link px-2 py-1 ms-3" href="tasks"><i class="bi bi-list-task"></i></NavLink>
             <NavLink class="nav-link px-2 py-1 ms-3" href="habits"><i class="bi bi-repeat"></i></NavLink>
             <NavLink class="nav-link px-2 py-1 ms-3" href="help"><i class="bi bi-question-circle"></i></NavLink>
-            @* <button class="nav-link px-2 py-1 ms-3" @onclick="StartTour"><i class="bi bi-question-circle"></i></button> *@
+
+            @if (SettingsService.Settings.ShowHelp)
+            {
+                <button class="nav-link px-2 py-1 ms-3" @onclick="StartTour"><i class="bi bi-question-circle"></i></button>
+            }
 
             @if (AppData.DataLocation == DataLocation.Remote)
             {

@@ -67,25 +67,8 @@ Linux / macOS:
 
 1.
 
-[ ] Uncheck items when habit is completed
-
-    bool UncheckAllItemsOnHabitDone
-
-    if (UncheckAllItemsOnHabitDone)
-        await UncheckAllItems(habit);
-
-bool ShowHelp
-
-Log Out
-    delete refresh token
-
-remember login:
-    - add setting:
-        string BaseUrl
-        string RefreshToken
-        bool RememberMe
-    - on LoadSettings()
-        load to ApiClientOptions
+- add setting string RefreshToken
+- use it ... when needed ... ?
 
 ---------------------------------------------------------------------------------------------------
 

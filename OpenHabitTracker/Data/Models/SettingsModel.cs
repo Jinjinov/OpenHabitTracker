@@ -20,6 +20,16 @@ public class SettingsModel
 
     public Ratio SelectedRatio { get; set; }
 
+    public string BaseUrl { get; set; } = string.Empty;
+
+    public string RefreshToken { get; set; } = string.Empty;
+
+    public bool RememberMe { get; set; } = true;
+
+    public bool ShowHelp { get; set; } = true;
+
+    public bool UncheckAllItemsOnHabitDone { get; set; } = false;
+
     public bool ShowItemList { get; set; } = true;
 
     public bool ShowSmallCalendar { get; set; } = true;

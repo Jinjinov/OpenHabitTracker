@@ -124,6 +124,11 @@ public static class DataExtensions
         entity.Culture = model.Culture;
         entity.FirstDayOfWeek = model.FirstDayOfWeek;
         entity.SelectedRatio = model.SelectedRatio;
+        entity.BaseUrl = model.BaseUrl;
+        entity.RefreshToken = model.RefreshToken;
+        entity.RememberMe = model.RememberMe;
+        entity.ShowHelp = model.ShowHelp;
+        entity.UncheckAllItemsOnHabitDone = model.UncheckAllItemsOnHabitDone;
         entity.ShowItemList = model.ShowItemList;
         entity.ShowSmallCalendar = model.ShowSmallCalendar;
         entity.ShowLargeCalendar = model.ShowLargeCalendar;
