@@ -87,11 +87,6 @@ remember login:
     - on LoadSettings()
         load to ApiClientOptions
 
-LoginCredentials, TokenResponse
-    OpenHabitTracker.Data -> OpenHabitTracker.Dto
-add
-    RefreshTokenRequest
-
 ---------------------------------------------------------------------------------------------------
 
 [ApiController]
