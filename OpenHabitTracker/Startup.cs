@@ -33,6 +33,7 @@ public static class Startup
         services.AddScoped<ClientState>();
         services.AddScoped<MarkdownToHtml>();
         services.AddScoped<Examples>();
+        services.AddScoped<ApiClientOptions>();
 
         services.AddScoped<CalendarService>();
         services.AddScoped<CategoryService>();

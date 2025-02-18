@@ -5,12 +5,12 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/Auth/token": {
+    "/api/Auth/jwt-token": {
       "post": {
         "tags": [
           "Auth"
         ],
-        "operationId": "GetToken",
+        "operationId": "GetJwtToken",
         "requestBody": {
           "content": {
             "application/json": {

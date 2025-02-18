@@ -65,11 +65,11 @@
         {
             LoginCredentials credentials = new() { Username = username, Password = password };
 
-            TokenResponse tokenResponse = await AuthClient.GetTokenAsync(credentials);
+            TokenResponse tokenResponse = await AuthClient.GetJwtTokenAsync(credentials);
 
-            if (!string.IsNullOrEmpty(tokenResponse.Token))
+            if (!string.IsNullOrEmpty(tokenResponse.JwtToken))
             {
-                ApiClientOptions.BearerToken = tokenResponse.Token;
+                ApiClientOptions.BearerToken = tokenResponse.JwtToken;
 
                 UserEntity user = await AuthClient.GetCurrentUserAsync();
 

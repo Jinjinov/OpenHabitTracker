@@ -77,10 +77,6 @@ Linux / macOS:
 Log Out
     delete refresh token
 
-GetToken -> GetJwtToken
-
-DbSet<UserRefreshToken> UserRefreshTokens
-
 DbSet<RefreshToken> RefreshTokens
 
 remember login:
@@ -90,8 +86,6 @@ remember login:
         remember me - RememberMe
     - on LoadSettings()
         load to ApiClientOptions
-    - ApiClientOptions
-        OpenHabitTracker.Blazor.Web.ApiClient -> OpenHabitTracker.App
 
 LoginCredentials, TokenResponse
     OpenHabitTracker.Data -> OpenHabitTracker.Dto
@@ -146,7 +140,7 @@ public class AuthController(
 
     [HttpPost("refresh")]
     [EndpointName("GetRefreshToken")]
-    public async Task<ActionResult<TokenResponse>> RefreshToken([FromBody] RefreshTokenRequest request)
+    public async Task<ActionResult<TokenResponse>> GetRefreshToken([FromBody] RefreshTokenRequest request)
     {
         var storedToken = await _dbContext.UserRefreshTokens
             .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken);

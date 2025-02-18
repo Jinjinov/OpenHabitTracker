@@ -8,6 +8,7 @@ using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace OpenHabitTracker.Blazor.Web.Controllers;
@@ -20,9 +21,9 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly AppSettings _appSettings = options.Value;
 
-    [HttpPost("token")]
-    [EndpointName("GetToken")]
-    public async Task<ActionResult<TokenResponse>> GetToken([FromBody] LoginCredentials loginCredentials)
+    [HttpPost("jwt-token")]
+    [EndpointName("GetJwtToken")]
+    public async Task<ActionResult<TokenResponse>> GetJwtToken([FromBody] LoginCredentials loginCredentials)
     {
         // Authenticate the user using SignInManager
         Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(loginCredentials.Username, loginCredentials.Password, isPersistent: false, lockoutOnFailure: false);
@@ -49,7 +50,11 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
                 expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: creds);
 
-            TokenResponse tokenResponse = new TokenResponse { Token = new JwtSecurityTokenHandler().WriteToken(token) };
+            TokenResponse tokenResponse = new TokenResponse
+            {
+                JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
+                RefreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64))
+            };
 
             return Ok(tokenResponse);
         }

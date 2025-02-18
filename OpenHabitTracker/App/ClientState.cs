@@ -7,15 +7,17 @@ namespace OpenHabitTracker.App;
 public class ClientState
 {
     private readonly Dictionary<DataLocation, IDataAccess> _dataAccessByLocation;
+    private readonly ApiClientOptions _apiClientOptions;
     private readonly MarkdownToHtml _markdownToHtml;
     private readonly Examples _examples;
 
     private readonly Dictionary<DataLocation, ClientData> _clientDataByLocation;
     private ClientData _clientData;
 
-    public ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
+    public ClientState(IEnumerable<IDataAccess> dataAccess, ApiClientOptions apiClientOptions, MarkdownToHtml markdownToHtml, Examples examples)
     {
         _dataAccessByLocation = dataAccess.ToDictionary(x => x.DataLocation);
+        _apiClientOptions = apiClientOptions;
         _markdownToHtml = markdownToHtml;
         _examples = examples;
 
