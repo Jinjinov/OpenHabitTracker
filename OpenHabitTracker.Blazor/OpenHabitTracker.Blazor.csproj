@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.1" />
+    <PackageReference Include="STGTour.GTour" Version="1.0.8" />
   </ItemGroup>
 
   <ItemGroup>
