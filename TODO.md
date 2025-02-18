@@ -74,22 +74,22 @@ Linux / macOS:
     if (UncheckAllItemsOnHabitDone)
         await UncheckAllItems(habit);
 
+bool ShowHelp
+
 Log Out
     delete refresh token
 
-DbSet<RefreshToken> RefreshTokens
-
 remember login:
     - add setting:
-        remote url - BaseUrl
-        refresh token - RefreshToken
-        remember me - RememberMe
+        string BaseUrl
+        string RefreshToken
+        bool RememberMe
     - on LoadSettings()
         load to ApiClientOptions
 
 ---------------------------------------------------------------------------------------------------
 
-public class UserRefreshToken
+public class RefreshToken
 {
     public int Id { get; set; }
     public string Username { get; set; }
@@ -97,7 +97,7 @@ public class UserRefreshToken
     public DateTime ExpiryDate { get; set; }
 }
 
-public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
+public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 ---------------------------------------------------------------------------------------------------
 
