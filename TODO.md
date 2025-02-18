@@ -67,7 +67,7 @@ Linux / macOS:
 
 1.
 
-- add setting string RefreshToken
+setting string RefreshToken
 - use it ... when needed ... ?
 
 ---------------------------------------------------------------------------------------------------
