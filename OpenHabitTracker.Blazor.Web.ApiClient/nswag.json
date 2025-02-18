@@ -14,8 +14,8 @@
       "namespace": "OpenHabitTracker.Blazor.Web.ApiClient",
       "generateDtoTypes": false,
       "additionalNamespaceUsages": [
-        "OpenHabitTracker.Data",
-        "OpenHabitTracker.Data.Entities"
+        "OpenHabitTracker.Data.Entities",
+        "OpenHabitTracker.Dto"
       ],
       "responseArrayType": "System.Collections.Generic.IReadOnlyList",
       "jsonLibrary": "SystemTextJson",

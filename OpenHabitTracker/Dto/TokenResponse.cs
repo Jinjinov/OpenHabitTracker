@@ -1,4 +1,4 @@
-namespace OpenHabitTracker.Data;
+namespace OpenHabitTracker.Dto;
 
 public class TokenResponse
 {

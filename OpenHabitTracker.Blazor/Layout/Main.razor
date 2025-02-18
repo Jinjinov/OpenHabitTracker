@@ -3,6 +3,7 @@
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Services
 @using GTour.Components
+@using GTour.Abstractions
 
 @inject ILogger<Main> Logger
 @inject ClientState AppData
@@ -11,6 +12,7 @@
 @inject JsInterop JsInterop
 @inject IStringLocalizer Loc
 @inject SettingsService SettingsService
+@inject IGTourService GTourService
 
 @* Root <div> inside <html><body><app> *@
 
@@ -119,9 +121,6 @@
 </GuidedTour>
 
 @code {
-    [Inject]
-    private GTour.Abstractions.IGTourService GTourService { get; set; }
-
     private async Task StartTour()
     {
         await GTourService.StartTour("FormGuidedTour");
