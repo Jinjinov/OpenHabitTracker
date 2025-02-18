@@ -79,12 +79,24 @@ Log Out
 
 GetToken -> GetJwtToken
 
+DbSet<UserRefreshToken> UserRefreshTokens
+
+DbSet<RefreshToken> RefreshTokens
+
 remember login:
     - add setting:
         remote url - BaseUrl
         refresh token - RefreshToken
         remember me - RememberMe
-    - load to ApiClientOptions
+    - on LoadSettings()
+        load to ApiClientOptions
+    - ApiClientOptions
+        OpenHabitTracker.Blazor.Web.ApiClient -> OpenHabitTracker.App
+
+LoginCredentials, TokenResponse
+    OpenHabitTracker.Data -> OpenHabitTracker.Dto
+add
+    RefreshTokenRequest
 
 ---------------------------------------------------------------------------------------------------
 
