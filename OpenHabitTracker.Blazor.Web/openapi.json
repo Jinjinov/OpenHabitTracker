@@ -55,6 +55,56 @@
         }
       }
     },
+    "/api/Auth/refresh-token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "GetRefreshToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Auth/current-user": {
       "get": {
         "tags": [
@@ -2242,6 +2292,17 @@
       "Ratio": {
         "type": "integer"
       },
+      "RefreshTokenRequest": {
+        "required": [
+          "refreshToken"
+        ],
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
       "SettingsEntity": {
         "type": "object",
         "properties": {
@@ -2273,6 +2334,21 @@
           },
           "selectedRatio": {
             "$ref": "#/components/schemas/Ratio"
+          },
+          "baseUrl": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "rememberMe": {
+            "type": "boolean"
+          },
+          "showHelp": {
+            "type": "boolean"
+          },
+          "uncheckAllItemsOnHabitDone": {
+            "type": "boolean"
           },
           "showItemList": {
             "type": "boolean"
@@ -2411,11 +2487,15 @@
       },
       "TokenResponse": {
         "required": [
-          "token"
+          "jwtToken",
+          "refreshToken"
         ],
         "type": "object",
         "properties": {
-          "token": {
+          "jwtToken": {
+            "type": "string"
+          },
+          "refreshToken": {
             "type": "string"
           }
         }

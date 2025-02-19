@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpenHabitTracker.Blazor.Web.Data;
@@ -15,17 +16,17 @@ namespace OpenHabitTracker.Blazor.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IOptions<AppSettings> options) : ControllerBase
+public class AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IOptions<AppSettings> options, ApplicationDbContext dbContext) : ControllerBase
 {
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly AppSettings _appSettings = options.Value;
+    private readonly ApplicationDbContext _dbContext = dbContext;
 
     [HttpPost("jwt-token")]
     [EndpointName("GetJwtToken")]
     public async Task<ActionResult<TokenResponse>> GetJwtToken([FromBody] LoginCredentials loginCredentials)
     {
-        // Authenticate the user using SignInManager
         Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(loginCredentials.Username, loginCredentials.Password, isPersistent: false, lockoutOnFailure: false);
 
         if (!result.Succeeded)
@@ -42,16 +43,16 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
 
         TokenResponse tokenResponse = GetTokenResponse(user.UserName);
 
-        //// Store refresh token in database
-        //RefreshToken refreshToken = new RefreshToken
-        //{
-        //    Username = user.UserName,
-        //    Token = tokenResponse.RefreshToken,
-        //    ExpiryDate = DateTime.UtcNow.AddDays(7) // Set refresh token expiry
-        //};
+        RefreshToken refreshToken = new RefreshToken
+        {
+            Username = user.UserName,
+            Token = tokenResponse.RefreshToken,
+            ExpiryDate = DateTime.UtcNow.AddDays(7)
+        };
 
-        //_dbContext.UserRefreshTokens.Add(userRefreshToken);
-        //await _dbContext.SaveChangesAsync();
+        _dbContext.RefreshTokens.Add(refreshToken);
+
+        await _dbContext.SaveChangesAsync();
 
         return Ok(tokenResponse);
     }
@@ -87,44 +88,42 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         return tokenResponse;
     }
 
-    //[HttpPost("refresh-token")]
-    //[EndpointName("GetRefreshToken")]
-    //public async Task<ActionResult<TokenResponse>> GetRefreshToken([FromBody] RefreshTokenRequest request)
-    //{
-    //    RefreshToken storedToken = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken);
+    [HttpPost("refresh-token")]
+    [EndpointName("GetRefreshToken")]
+    public async Task<ActionResult<TokenResponse>> GetRefreshToken([FromBody] RefreshTokenRequest request)
+    {
+        RefreshToken? storedToken = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken);
 
-    //    if (storedToken == null || storedToken.ExpiryDate < DateTime.UtcNow)
-    //    {
-    //        return Unauthorized("Invalid or expired refresh token");
-    //    }
+        if (storedToken is null || storedToken.ExpiryDate < DateTime.UtcNow)
+        {
+            return Unauthorized("Invalid or expired refresh token");
+        }
 
-    //    ApplicationUser? user = await _userManager.FindByNameAsync(storedToken.Username);
+        ApplicationUser? user = await _userManager.FindByNameAsync(storedToken.Username);
 
-    //    if (user is null || user.UserName is null)
-    //    {
-    //        return Unauthorized();
-    //    }
+        if (user is null || user.UserName is null)
+        {
+            return Unauthorized();
+        }
 
-    //    TokenResponse tokenResponse = GetTokenResponse(user.UserName);
+        TokenResponse tokenResponse = GetTokenResponse(user.UserName);
 
-    //    // Update refresh token in database
-    //    storedToken.Token = tokenResponse.RefreshToken;
-    //    storedToken.ExpiryDate = DateTime.UtcNow.AddDays(7);
+        storedToken.Token = tokenResponse.RefreshToken;
+        storedToken.ExpiryDate = DateTime.UtcNow.AddDays(7);
 
-    //    await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
 
-    //    return Ok(tokenResponse);
-    //}
+        return Ok(tokenResponse);
+    }
 
     [Authorize]
     [HttpGet("current-user")]
     [EndpointName("GetCurrentUser")]
     public async Task<ActionResult<UserEntity>> GetCurrentUser()
     {
-        // Retrieves the current authenticated user based on the JWT token.
         ApplicationUser? user = await _userManager.GetUserAsync(User);
 
-        if (user == null)
+        if (user is null)
         {
             return Unauthorized();
         }

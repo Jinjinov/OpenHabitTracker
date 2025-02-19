@@ -67,20 +67,9 @@ Linux / macOS:
 
 1.
 
-setting string RefreshToken
-- use it ... when needed ... ?
-
----------------------------------------------------------------------------------------------------
-
-public class RefreshToken
-{
-    public int Id { get; set; }
-    public string Username { get; set; }
-    public string Token { get; set; }
-    public DateTime ExpiryDate { get; set; }
-}
-
-public DbSet<RefreshToken> RefreshTokens { get; set; }
+RefreshToken
+    - use it as soon as it is possible to use it in code
+    - if it works, the initial load of all models should happen from DataLocation.Remote
 
 ---------------------------------------------------------------------------------------------------
 

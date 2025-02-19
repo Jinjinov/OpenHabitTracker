@@ -17,6 +17,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<PriorityEntity> Priorities { get; set; }
     public DbSet<SettingsEntity> Settings { get; set; }
 
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+
     IQueryable<IUserEntity> IApplicationDbContext.Users => Users;
 
     // Constructor with no argument is required and it is used when adding/removing migrations from class library
