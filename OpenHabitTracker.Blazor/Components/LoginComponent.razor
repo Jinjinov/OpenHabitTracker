@@ -15,7 +15,7 @@
 @inject ClientState ClientState
 @inject SettingsService SettingsService
 @inject IStringLocalizer Loc
-@inject AuthService AuthService
+@inject IAuthService AuthService
 
 <small class="m-1"><i class="bi bi-globe"></i> @Loc["Online sync"]</small>
 
@@ -59,8 +59,8 @@
     private string address = "https://app.openhabittracker.net";
     private string username = "";
     private string password = "";
-    private string login = "";
-    private string error = "";
+    private string? login = "";
+    private string? error = "";
 
     async Task OnStateChanged()
     {
@@ -72,14 +72,22 @@
     {
         (login, error) = await AuthService.Login(address, username, password);
 
-        await OnStateChanged();
+        if (login is not null && error is null)
+        {
+            await ClientState.SetDataLocation(DataLocation.Remote);
+
+            await OnStateChanged();
+        }
     }
 
     private async Task Logout()
     {
         login = "";
+        error = "";
 
-        await AuthService.Logout();
+        AuthService.Logout();
+
+        await ClientState.SetDataLocation(DataLocation.Local);
 
         await OnStateChanged();
     }

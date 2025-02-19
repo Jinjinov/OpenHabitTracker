@@ -1,16 +1,14 @@
 using Microsoft.Extensions.Localization;
 using OpenHabitTracker.App;
 using OpenHabitTracker.Blazor.Web.ApiClient;
-using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Dto;
 using OpenHabitTracker.Services;
 
 namespace OpenHabitTracker.Blazor;
 
-public class AuthService(ClientState clientState, SettingsService settingsService, AuthClient authClient, ApiClientOptions apiClientOptions, IStringLocalizer loc)
+public class AuthService(SettingsService settingsService, AuthClient authClient, ApiClientOptions apiClientOptions, IStringLocalizer loc) : IAuthService
 {
-    private readonly ClientState _clientState = clientState;
     private readonly SettingsService _settingsService = settingsService;
     private readonly AuthClient _authClient = authClient;
     private readonly ApiClientOptions _apiClientOptions = apiClientOptions;
@@ -45,7 +43,6 @@ public class AuthService(ClientState clientState, SettingsService settingsServic
 
                 login = $"{_loc["User"]}: {user.Email}";
 
-                await _clientState.SetDataLocation(DataLocation.Remote);
             }
         }
         catch (ApiException ex) when (ex.StatusCode == 401)
@@ -60,10 +57,50 @@ public class AuthService(ClientState clientState, SettingsService settingsServic
         return (login, error);
     }
 
-    public async Task Logout()
+    public async Task<(string? Login, string? Error)> Login(string address, string refreshToken)
+    {
+        string? login = null;
+        string? error = null;
+
+        _apiClientOptions.BaseUrl = address;
+
+        try
+        {
+            RefreshTokenRequest refreshTokenRequest = new() { RefreshToken = refreshToken };
+
+            TokenResponse tokenResponse = await _authClient.GetRefreshTokenAsync(refreshTokenRequest);
+
+            if (!string.IsNullOrEmpty(tokenResponse.JwtToken))
+            {
+                _apiClientOptions.BearerToken = tokenResponse.JwtToken;
+
+                if (_settingsService.Settings.RememberMe)
+                {
+                    _settingsService.Settings.BaseUrl = _apiClientOptions.BaseUrl;
+                    _settingsService.Settings.RefreshToken = tokenResponse.RefreshToken;
+
+                    await _settingsService.UpdateSettings();
+                }
+
+                UserEntity user = await _authClient.GetCurrentUserAsync();
+
+                login = $"{_loc["User"]}: {user.Email}";
+            }
+        }
+        catch (ApiException ex) when (ex.StatusCode == 401)
+        {
+            error = _loc["Invalid credentials"];
+        }
+        catch (InvalidOperationException)
+        {
+            error = _loc["Invalid address"];
+        }
+
+        return (login, error);
+    }
+
+    public void Logout()
     {
         _apiClientOptions.BearerToken = "";
-
-        await _clientState.SetDataLocation(DataLocation.Local);
     }
 }
