@@ -3,7 +3,6 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Dto;
-using OpenHabitTracker.Services;
 
 namespace OpenHabitTracker.Blazor;
 
