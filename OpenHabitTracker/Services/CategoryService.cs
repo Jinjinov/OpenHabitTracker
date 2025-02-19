@@ -91,11 +91,6 @@ public class CategoryService(ClientState appData)
 
     private async Task UpdateSettings()
     {
-        if (await _appData.DataAccess.GetSettings(_appData.Settings.Id) is SettingsEntity settings)
-        {
-            _appData.Settings.CopyToEntity(settings);
-
-            await _appData.DataAccess.UpdateSettings(settings);
-        }
+        await _appData.UpdateSettings();
     }
 }

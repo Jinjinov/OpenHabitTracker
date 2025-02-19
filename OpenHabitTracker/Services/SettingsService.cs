@@ -1,6 +1,4 @@
 using OpenHabitTracker.App;
-using OpenHabitTracker.Data;
-using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
@@ -18,11 +16,6 @@ public class SettingsService(ClientState appData)
 
     public async Task UpdateSettings()
     {
-        if (await _appData.DataAccess.GetSettings(Settings.Id) is SettingsEntity settings)
-        {
-            Settings.CopyToEntity(settings);
-
-            await _appData.DataAccess.UpdateSettings(settings);
-        }
+        await _appData.UpdateSettings();
     }
 }

@@ -218,13 +218,27 @@ public class ClientState
 
             if (DataLocation == DataLocation.Local && Settings.RememberMe && !string.IsNullOrEmpty(Settings.RefreshToken))
             {
-                bool ok = await _authService.RefreshTokenLogin(Settings.BaseUrl, Settings.RefreshToken);
+                string? refreshToken = await _authService.RefreshTokenLogin(Settings.BaseUrl, Settings.RefreshToken);
 
-                if (ok)
+                if (refreshToken is not null)
                 {
+                    Settings.RefreshToken = refreshToken;
+
+                    await UpdateSettings();
+
                     await SetDataLocation(DataLocation.Remote);
                 }
             }
+        }
+    }
+
+    public async Task UpdateSettings()
+    {
+        if (await DataAccess.GetSettings(Settings.Id) is SettingsEntity settings)
+        {
+            Settings.CopyToEntity(settings);
+
+            await DataAccess.UpdateSettings(settings);
         }
     }
 

@@ -6,9 +6,9 @@ public interface IAuthService
 
     string? Error { get; set; }
 
-    Task<bool> CredentialsLogin(string address, string username, string password);
+    Task<string?> CredentialsLogin(string address, string username, string password);
 
-    Task<bool> RefreshTokenLogin(string address, string refreshToken);
+    Task<string?> RefreshTokenLogin(string address, string refreshToken);
 
     void Logout();
 }

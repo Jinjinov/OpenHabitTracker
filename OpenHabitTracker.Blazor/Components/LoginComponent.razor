@@ -61,10 +61,18 @@
 
     private async Task Login()
     {
-        bool ok = await AuthService.CredentialsLogin(address, username, password);
+        string? refreshToken = await AuthService.CredentialsLogin(address, username, password);
 
-        if (ok)
+        if (refreshToken is not null)
         {
+            if (_settings.RememberMe)
+            {
+                _settings.BaseUrl = address;
+                _settings.RefreshToken = refreshToken;
+
+                await SettingsService.UpdateSettings();
+            }
+
             await ClientState.SetDataLocation(DataLocation.Remote);
 
             await OnStateChanged();
