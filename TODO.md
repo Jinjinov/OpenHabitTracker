@@ -51,6 +51,7 @@ check for every `new.*Model`
 
 ---------------------------------------------------------------------------------------------------
 
+1.
 Docker:
 
 APPSETTINGS_JWT_SECRET=your-extremely-strong-secret-key
@@ -62,14 +63,6 @@ Windows:
 Linux / macOS:
 
     openssl rand -base64 32
-
----------------------------------------------------------------------------------------------------
-
-1.
-
-RefreshToken
-    - use it as soon as it is possible to use it in code
-    - if it works, the initial load of all models should happen from DataLocation.Remote
 
 ---------------------------------------------------------------------------------------------------
 

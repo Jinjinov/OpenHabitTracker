@@ -2,9 +2,13 @@ namespace OpenHabitTracker.App;
 
 public interface IAuthService
 {
-    Task<(string? Login, string? Error)> Login(string address, string username, string password);
+    string? Login { get; set; }
 
-    Task<(string? Login, string? Error)> Login(string address, string refreshToken);
+    string? Error { get; set; }
+
+    Task<bool> CredentialsLogin(string address, string username, string password);
+
+    Task<bool> RefreshTokenLogin(string address, string refreshToken);
 
     void Logout();
 }

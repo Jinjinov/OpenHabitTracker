@@ -37,14 +37,14 @@
     <button class="btn btn-primary w-100 my-1" @onclick="Logout">@Loc["Log out"]</button>
 }
 
-@if (!string.IsNullOrEmpty(login))
+@if (!string.IsNullOrEmpty(AuthService.Login))
 {
-    <p>@login</p>
+    <p>@AuthService.Login</p>
 }
 
-@if (!string.IsNullOrEmpty(error))
+@if (!string.IsNullOrEmpty(AuthService.Error))
 {
-    <p>@error</p>
+    <p>@AuthService.Error</p>
 }
 
 @code {
@@ -59,8 +59,6 @@
     private string address = "https://app.openhabittracker.net";
     private string username = "";
     private string password = "";
-    private string? login = "";
-    private string? error = "";
 
     async Task OnStateChanged()
     {
@@ -70,9 +68,9 @@
 
     private async Task Login()
     {
-        (login, error) = await AuthService.Login(address, username, password);
+        bool ok = await AuthService.CredentialsLogin(address, username, password);
 
-        if (login is not null && error is null)
+        if (ok)
         {
             await ClientState.SetDataLocation(DataLocation.Remote);
 
@@ -82,9 +80,6 @@
 
     private async Task Logout()
     {
-        login = "";
-        error = "";
-
         AuthService.Logout();
 
         await ClientState.SetDataLocation(DataLocation.Local);

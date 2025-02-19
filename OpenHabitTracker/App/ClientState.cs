@@ -216,7 +216,15 @@ public class ClientState
                 }
             }
 
-            await _authService.Login(Settings.BaseUrl, Settings.RefreshToken);
+            if (DataLocation == DataLocation.Local && Settings.RememberMe && !string.IsNullOrEmpty(Settings.RefreshToken))
+            {
+                bool ok = await _authService.RefreshTokenLogin(Settings.BaseUrl, Settings.RefreshToken);
+
+                if (ok)
+                {
+                    await SetDataLocation(DataLocation.Remote);
+                }
+            }
         }
     }
 

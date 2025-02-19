@@ -14,11 +14,11 @@ public class AuthService(SettingsService settingsService, AuthClient authClient,
     private readonly ApiClientOptions _apiClientOptions = apiClientOptions;
     private readonly IStringLocalizer _loc = loc;
 
-    public async Task<(string? Login, string? Error)> Login(string address, string username, string password)
-    {
-        string? login = null;
-        string? error = null;
+    public string? Login { get; set; } = string.Empty;
+    public string? Error { get; set; } = string.Empty;
 
+    public async Task<bool> CredentialsLogin(string address, string username, string password)
+    {
         _apiClientOptions.BaseUrl = address;
 
         try
@@ -41,27 +41,25 @@ public class AuthService(SettingsService settingsService, AuthClient authClient,
 
                 UserEntity user = await _authClient.GetCurrentUserAsync();
 
-                login = $"{_loc["User"]}: {user.Email}";
+                Login = $"{_loc["User"]}: {user.Email}";
 
+                return true;
             }
         }
         catch (ApiException ex) when (ex.StatusCode == 401)
         {
-            error = _loc["Invalid credentials"];
+            Error = _loc["Invalid credentials"];
         }
         catch (InvalidOperationException)
         {
-            error = _loc["Invalid address"];
+            Error = _loc["Invalid address"];
         }
 
-        return (login, error);
+        return false;
     }
 
-    public async Task<(string? Login, string? Error)> Login(string address, string refreshToken)
+    public async Task<bool> RefreshTokenLogin(string address, string refreshToken)
     {
-        string? login = null;
-        string? error = null;
-
         _apiClientOptions.BaseUrl = address;
 
         try
@@ -84,23 +82,28 @@ public class AuthService(SettingsService settingsService, AuthClient authClient,
 
                 UserEntity user = await _authClient.GetCurrentUserAsync();
 
-                login = $"{_loc["User"]}: {user.Email}";
+                Login = $"{_loc["User"]}: {user.Email}";
+
+                return true;
             }
         }
         catch (ApiException ex) when (ex.StatusCode == 401)
         {
-            error = _loc["Invalid credentials"];
+            Error = _loc["Invalid credentials"];
         }
         catch (InvalidOperationException)
         {
-            error = _loc["Invalid address"];
+            Error = _loc["Invalid address"];
         }
 
-        return (login, error);
+        return false;
     }
 
     public void Logout()
     {
         _apiClientOptions.BearerToken = "";
+
+        Login = "";
+        Error = "";
     }
 }
