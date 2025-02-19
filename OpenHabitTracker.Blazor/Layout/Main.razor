@@ -112,6 +112,8 @@
     }
 </div>
 
+@if (SettingsService.Settings.ShowHelp)
+{
 <GuidedTour TourId="FormGuidedTour" OverlayEnabled="true" CloseClickOverlay="true" HighlightEnabled="false">
     <GuidedTourStep Title="My First Step" StepName="firstStep" TourStepSequence="1" ElementSelector="[data-form-firstStep]">
         <span>This is my first step</span>
@@ -123,6 +125,7 @@
         <span>This is my third step</span>
     </GuidedTourStep>
 </GuidedTour>
+}
 
 @code {
     private async Task StartTour()

@@ -68,6 +68,10 @@ Linux / macOS:
 
 2.
 help:
+
+- localize buttons
+- Cancel Tour -> X
+
 - move to sidebar
 - separate help for each screen
 - guided tour per screen
