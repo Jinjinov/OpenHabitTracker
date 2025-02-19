@@ -15,6 +15,7 @@
 @inject ClientState ClientState
 @inject SettingsService SettingsService
 @inject IStringLocalizer Loc
+@inject AuthService AuthService
 
 <small class="m-1"><i class="bi bi-globe"></i> @Loc["Online sync"]</small>
 
@@ -29,7 +30,7 @@
 
 @if (ClientState.DataLocation == DataLocation.Local)
 {
-    <button class="btn btn-primary w-100 my-1" @onclick="LoginAndGetToken">@Loc["Log in"]</button>
+    <button class="btn btn-primary w-100 my-1" @onclick="Login">@Loc["Log in"]</button>
 }
 @if (ClientState.DataLocation == DataLocation.Remote)
 {
@@ -39,6 +40,11 @@
 @if (!string.IsNullOrEmpty(login))
 {
     <p>@login</p>
+}
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <p>@error</p>
 }
 
 @code {
@@ -54,6 +60,7 @@
     private string username = "";
     private string password = "";
     private string login = "";
+    private string error = "";
 
     async Task OnStateChanged()
     {
@@ -61,53 +68,18 @@
         await StateChangedChanged.InvokeAsync(StateChanged);
     }
 
-    private async Task LoginAndGetToken()
+    private async Task Login()
     {
-        ApiClientOptions.BaseUrl = address;
+        (login, error) = await AuthService.Login(address, username, password);
 
-        try
-        {
-            LoginCredentials credentials = new() { Username = username, Password = password };
-
-            TokenResponse tokenResponse = await AuthClient.GetJwtTokenAsync(credentials);
-
-            if (!string.IsNullOrEmpty(tokenResponse.JwtToken))
-            {
-                ApiClientOptions.BearerToken = tokenResponse.JwtToken;
-
-                if (_settings.RememberMe)
-                {
-                    _settings.BaseUrl = ApiClientOptions.BaseUrl;
-                    _settings.RefreshToken = tokenResponse.RefreshToken;
-                    await SettingsService.UpdateSettings();
-                }
-
-                UserEntity user = await AuthClient.GetCurrentUserAsync();
-
-                login = $"{Loc["User"]}: {user.Email}";
-
-                await ClientState.SetDataLocation(DataLocation.Remote);
-
-                await OnStateChanged();
-            }
-        }
-        catch (ApiException ex) when (ex.StatusCode == 401)
-        {
-            login = Loc["Invalid credentials"];
-        }
-        catch (InvalidOperationException)
-        {
-            login = Loc["Invalid address"];
-        }
+        await OnStateChanged();
     }
 
     private async Task Logout()
     {
-        ApiClientOptions.BearerToken = "";
-
         login = "";
 
-        await ClientState.SetDataLocation(DataLocation.Local);
+        await AuthService.Logout();
 
         await OnStateChanged();
     }
