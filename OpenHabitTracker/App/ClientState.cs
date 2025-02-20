@@ -213,11 +213,6 @@ public class ClientState
                     await AddWelcomeNote();
                 }
             }
-
-            //if (DataLocation == DataLocation.Local && Settings.RememberMe && !string.IsNullOrEmpty(Settings.RefreshToken))
-            //{
-            //    await _authService.RefreshTokenLogin(Settings.BaseUrl, Settings.RefreshToken);
-            //}
         }
     }
 

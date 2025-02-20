@@ -60,6 +60,16 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
         return false;
     }
 
+    public async Task<bool> TryRefreshTokenLogin()
+    {
+        if (_clientState.DataLocation == DataLocation.Local && _clientState.Settings.RememberMe && !string.IsNullOrEmpty(_clientState.Settings.RefreshToken))
+        {
+            return await RefreshTokenLogin(_clientState.Settings.BaseUrl, _clientState.Settings.RefreshToken);
+        }
+
+        return false;
+    }
+
     public async Task<bool> RefreshTokenLogin(string address, string refreshToken)
     {
         _apiClientOptions.BaseUrl = address;
