@@ -285,7 +285,7 @@ public class ClientState
             await LoadCategories();
             await LoadPriorities();
 
-            await LoadTimes(); // TODO:: remove temp fix
+            await LoadTimes(); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
 
             IReadOnlyList<HabitEntity> habits = await DataAccess.GetHabits();
             Habits = habits.Select(x => new HabitModel
@@ -305,12 +305,12 @@ public class ClientState
                 Duration = x.Duration,
                 LastTimeDoneAt = x.LastTimeDoneAt,
 
-                TimesDone = Times!.Values.Where(y => y.HabitId == x.Id).ToList() // TODO:: remove temp fix
+                TimesDone = Times!.Values.Where(y => y.HabitId == x.Id).ToList() // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
             }).ToDictionary(x => x.Id);
 
-            foreach (HabitModel habit in Habits.Values) // TODO:: remove temp fix
+            foreach (HabitModel habit in Habits.Values) // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
             {
-                habit.RefreshTimesDoneByDay(); // TODO:: remove temp fix
+                habit.RefreshTimesDoneByDay(); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
             }
         }
     }
@@ -502,7 +502,7 @@ public class ClientState
 
         // Times, Items inside every task/habit could be more up to date
 
-        Times = null; // TODO:: remove temp fix
+        Times = null; // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
 
         await LoadTimes();
         await LoadItems();
