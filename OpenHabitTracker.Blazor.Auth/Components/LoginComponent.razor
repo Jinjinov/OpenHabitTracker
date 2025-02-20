@@ -1,5 +1,7 @@
 @* @page "/login" *@
 
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
@@ -61,29 +63,17 @@
 
     private async Task Login()
     {
-        string? refreshToken = await AuthService.CredentialsLogin(address, username, password);
+        bool ok = await AuthService.CredentialsLogin(address, username, password);
 
-        if (refreshToken is not null)
+        if (ok)
         {
-            if (_settings.RememberMe)
-            {
-                _settings.BaseUrl = address;
-                _settings.RefreshToken = refreshToken;
-
-                await SettingsService.UpdateSettings();
-            }
-
-            await ClientState.SetDataLocation(DataLocation.Remote);
-
             await OnStateChanged();
         }
     }
 
     private async Task Logout()
     {
-        AuthService.Logout();
-
-        await ClientState.SetDataLocation(DataLocation.Local);
+        await AuthService.Logout();
 
         await OnStateChanged();
     }

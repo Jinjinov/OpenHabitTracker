@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
+using OpenHabitTracker.Blazor.Auth;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web.ApiClient;
@@ -45,7 +45,8 @@ public partial class MainForm : Form
         services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         services.AddScoped<IPreRenderService, PreRenderService>();
-        services.AddScoped<IOnlineSyncAvailable, OnlineSyncAvailable>();
+        services.AddScoped<IAuthFragment, OpenHabitTracker.Blazor.Auth.AuthFragment>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddHttpClients();
 
         InitializeComponent();

@@ -11,8 +11,6 @@ public static class Startup
         services.AddScoped<JsInterop>();
         services.AddScoped<IRuntimeClientData, RuntimeClientData>();
 
-        services.AddScoped<IAuthService, AuthService>();
-
         services.UseGTour();
         GTourService.Theme = new GTour.Themes.Bootstrap();
 

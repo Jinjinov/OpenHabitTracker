@@ -104,7 +104,7 @@ builder.Services.AddScoped<IAssemblyProvider, OpenHabitTracker.Blazor.Web.Compon
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPreRenderService, OpenHabitTracker.Blazor.Web.PreRenderService>();
-builder.Services.AddScoped<IOnlineSyncAvailable, OnlineSyncUnavailable>();
+builder.Services.AddScoped<IAuthFragment, AuthFragment>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

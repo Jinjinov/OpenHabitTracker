@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
+using OpenHabitTracker.Blazor.Auth;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web.ApiClient;
@@ -48,7 +49,8 @@ public class Program
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>();
         builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
         builder.Services.AddScoped<IPreRenderService, PreRenderService>();
-        builder.Services.AddScoped<IOnlineSyncAvailable, OnlineSyncAvailable>();
+        builder.Services.AddScoped<IAuthFragment, OpenHabitTracker.Blazor.Auth.AuthFragment>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddHttpClients();
 
         // register root component and selector

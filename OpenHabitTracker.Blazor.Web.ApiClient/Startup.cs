@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 
 namespace OpenHabitTracker.Blazor.Web.ApiClient;
@@ -17,6 +16,8 @@ public static class Startup
         {
             //client.BaseAddress = new Uri("https://app.openhabittracker.net");
         }).AddHttpMessageHandler<DebugResponseHandler>();
+
+        services.AddScoped<ApiClientOptions>();
 
         services.AddScoped<IDataAccess, DataAccess>();
 

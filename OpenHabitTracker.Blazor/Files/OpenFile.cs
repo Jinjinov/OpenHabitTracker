@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace OpenHabitTracker.Blazor.Files;
@@ -19,7 +19,7 @@ public class OpenFile : IOpenFile
             builder.AddContent(4, " ");
             builder.AddContent(5, content);
 
-            builder.OpenComponent(6, typeof(InputFile));
+            builder.OpenComponent<InputFile>(6);
             builder.AddAttribute(7, "class", "d-none");
             builder.AddAttribute(8, "OnChange", EventCallback.Factory.Create(this, async (InputFileChangeEventArgs args) =>
             {

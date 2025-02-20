@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OpenHabitTracker.Blazor\OpenHabitTracker.Blazor.csproj" />
+    <ProjectReference Include="..\OpenHabitTracker.Blazor.Auth\OpenHabitTracker.Blazor.Auth.csproj" />
     <ProjectReference Include="..\OpenHabitTracker.EntityFrameworkCore\OpenHabitTracker.EntityFrameworkCore.csproj" />
   </ItemGroup>
 

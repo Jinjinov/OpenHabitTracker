@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFrameworks>net9.0;net9.0-windows</TargetFrameworks>
@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OpenHabitTracker.Backup\OpenHabitTracker.Backup.csproj" />
-    <ProjectReference Include="..\OpenHabitTracker.Blazor.Web.ApiClient\OpenHabitTracker.Blazor.Web.ApiClient.csproj" />
     <ProjectReference Include="..\OpenHabitTracker\OpenHabitTracker.csproj" />
   </ItemGroup>
 

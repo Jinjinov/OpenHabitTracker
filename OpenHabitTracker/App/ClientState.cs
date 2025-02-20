@@ -7,17 +7,15 @@ namespace OpenHabitTracker.App;
 public class ClientState
 {
     private readonly Dictionary<DataLocation, IDataAccess> _dataAccessByLocation;
-    private readonly IAuthService _authService;
     private readonly MarkdownToHtml _markdownToHtml;
     private readonly Examples _examples;
 
     private readonly Dictionary<DataLocation, ClientData> _clientDataByLocation;
     private ClientData _clientData;
 
-    public ClientState(IEnumerable<IDataAccess> dataAccess, IAuthService authService, MarkdownToHtml markdownToHtml, Examples examples)
+    public ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
     {
         _dataAccessByLocation = dataAccess.ToDictionary(x => x.DataLocation);
-        _authService = authService;
         _markdownToHtml = markdownToHtml;
         _examples = examples;
 
@@ -216,19 +214,10 @@ public class ClientState
                 }
             }
 
-            if (DataLocation == DataLocation.Local && Settings.RememberMe && !string.IsNullOrEmpty(Settings.RefreshToken))
-            {
-                string? refreshToken = await _authService.RefreshTokenLogin(Settings.BaseUrl, Settings.RefreshToken);
-
-                if (refreshToken is not null)
-                {
-                    Settings.RefreshToken = refreshToken;
-
-                    await UpdateSettings();
-
-                    await SetDataLocation(DataLocation.Remote);
-                }
-            }
+            //if (DataLocation == DataLocation.Local && Settings.RememberMe && !string.IsNullOrEmpty(Settings.RefreshToken))
+            //{
+            //    await _authService.RefreshTokenLogin(Settings.BaseUrl, Settings.RefreshToken);
+            //}
         }
     }
 

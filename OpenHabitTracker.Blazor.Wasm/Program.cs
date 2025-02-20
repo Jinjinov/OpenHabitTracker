@@ -7,7 +7,6 @@ using OpenHabitTracker.Blazor;
 using OpenHabitTracker.Blazor.Files;
 using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Wasm;
-using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.IndexedDB;
 
@@ -39,8 +38,7 @@ builder.Services.AddScoped<INavBarFragment, OpenHabitTracker.Blazor.Wasm.Layout.
 builder.Services.AddScoped<IAssemblyProvider, OpenHabitTracker.Blazor.Wasm.AssemblyProvider>();
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddScoped<IPreRenderService, PreRenderService>();
-builder.Services.AddScoped<IOnlineSyncAvailable, OnlineSyncUnavailable>();
-builder.Services.AddHttpClients();
+builder.Services.AddScoped<IAuthFragment, AuthFragment>();
 
 WebAssemblyHost host = builder.Build();
 

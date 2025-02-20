@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using OpenHabitTracker.App;
 using System.Text;
 
 namespace OpenHabitTracker.Blazor.Web.ApiClient;

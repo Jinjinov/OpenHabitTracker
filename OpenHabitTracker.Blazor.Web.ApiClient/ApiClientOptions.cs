@@ -1,4 +1,4 @@
-namespace OpenHabitTracker.App;
+namespace OpenHabitTracker.Blazor.Web.ApiClient;
 
 public class ApiClientOptions
 {
