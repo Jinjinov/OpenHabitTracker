@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpenHabitTracker;
-using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor;
 using OpenHabitTracker.Blazor.Files;
@@ -12,6 +11,7 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web;
 using OpenHabitTracker.Blazor.Web.Components;
 using OpenHabitTracker.Blazor.Web.Data;
+using OpenHabitTracker.Data;
 using Scalar.AspNetCore;
 using System.Text;
 using WatchDog;
@@ -169,6 +169,14 @@ app.Run();
 static async Task CreateDefaultUserAsync(WebApplication app)
 {
     using IServiceScope scope = app.Services.CreateScope();
+
+    ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("Initializing databese");
+
+    IDataAccess dataAccess = scope.ServiceProvider.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
+    await dataAccess.Initialize();
+
+    logger.LogInformation("Running app");
 
     UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
     IOptions<AppSettings> options = scope.ServiceProvider.GetRequiredService<IOptions<AppSettings>>();
