@@ -1,10 +1,11 @@
-﻿@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
 @implements IDisposable
 
 @inject TaskService TaskService
-@inject SettingsService SettingsService
+@inject ClientState ClientState
 @inject IStringLocalizer Loc
 
 <div class="input-group flex-nowrap">
@@ -92,7 +93,7 @@
     <CategoryComponent Model="Task" />
 </div>
 
-@if (SettingsService.Settings.ShowColor)
+@if (ClientState.Settings.ShowColor)
 {
     <div class="input-group flex-nowrap">
         <span class="input-group-text col-4">@Loc["Color"]</span>
@@ -100,7 +101,7 @@
     </div>
 }
 
-@if (SettingsService.Settings.ShowCreatedUpdated)
+@if (ClientState.Settings.ShowCreatedUpdated)
 {
     <div class="p-1 border rounded-0">
         <small class="d-inline-block mx-1">@Loc["Created"]: @Task.CreatedAt</small>

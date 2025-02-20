@@ -6,12 +6,11 @@
 @using GTour.Abstractions
 
 @inject ILogger<Main> Logger
-@inject ClientState AppData
+@inject ClientState ClientState
 @inject INavBarFragment NavBarFragment
 @inject NavigationManager NavigationManager
 @inject JsInterop JsInterop
 @inject IStringLocalizer Loc
-@inject SettingsService SettingsService
 @inject IGTourService GTourService
 
 @* Root <div> inside <html><body><app> *@
@@ -48,12 +47,12 @@
             <NavLink class="nav-link px-2 py-1 ms-3" href="habits"><i class="bi bi-repeat"></i></NavLink>
             <NavLink class="nav-link px-2 py-1 ms-3" href="help"><i class="bi bi-question-circle"></i></NavLink>
 
-            @if (SettingsService.Settings.ShowHelp)
+            @if (ClientState.Settings.ShowHelp)
             {
                 <button class="nav-link px-2 py-1 ms-3" @onclick="StartTour"><i class="bi bi-question-circle"></i></button>
             }
 
-            @if (AppData.DataLocation == DataLocation.Remote)
+            @if (ClientState.DataLocation == DataLocation.Remote)
             {
                 <i class="bi bi-globe ms-auto"></i>
             }
@@ -112,7 +111,7 @@
     }
 </div>
 
-@if (SettingsService.Settings.ShowHelp)
+@if (ClientState.Settings.ShowHelp)
 {
 <GuidedTour TourId="FormGuidedTour" OverlayEnabled="true" CloseClickOverlay="true" HighlightEnabled="false">
     <GuidedTourStep Title="My First Step" StepName="firstStep" TourStepSequence="1" ElementSelector="[data-form-firstStep]">
@@ -173,23 +172,23 @@
     {
         Logger.LogInformation("MainLayout.OnInitializedAsync start");
 
-        await AppData.LoadUsers();
-        await AppData.LoadSettings();
+        await ClientState.LoadUsers();
+        await ClientState.LoadSettings();
 
-        Localization.Loc.SetCulture(SettingsService.Settings.Culture);
+        Localization.Loc.SetCulture(ClientState.Settings.Culture);
 
-        if (!SettingsService.Settings.IsDarkMode)
+        if (!ClientState.Settings.IsDarkMode)
             await JsInterop.SetMode("light");
 
-        if (SettingsService.Settings.Theme != "default")
-            await JsInterop.SetTheme(SettingsService.Settings.Theme);
+        if (ClientState.Settings.Theme != "default")
+            await JsInterop.SetTheme(ClientState.Settings.Theme);
 
         _contentDeleted = EventCallback.Factory.Create(this, OnContentDeleted);
 
         SetDynamicComponentParameters();
 
-        if (!string.IsNullOrEmpty(SettingsService.Settings.StartSidebar))
-            SelectComponent(SettingsService.Settings.StartSidebar);
+        if (!string.IsNullOrEmpty(ClientState.Settings.StartSidebar))
+            SelectComponent(ClientState.Settings.StartSidebar);
 
         Logger.LogInformation("MainLayout.OnInitializedAsync end");
     }
@@ -239,11 +238,11 @@
 
             SetDynamicComponentParameters();
 
-            if (!string.IsNullOrEmpty(SettingsService.Settings.StartPage))
+            if (!string.IsNullOrEmpty(ClientState.Settings.StartPage))
             {
-                if (!NavigationManager.Uri.Contains(SettingsService.Settings.StartPage)) // fix for ERR_TOO_MANY_REDIRECTS on Blazor Server which calls OnInitializedAsync twice
+                if (!NavigationManager.Uri.Contains(ClientState.Settings.StartPage)) // fix for ERR_TOO_MANY_REDIRECTS on Blazor Server which calls OnInitializedAsync twice
                 {
-                    NavigationManager.NavigateTo(SettingsService.Settings.StartPage);
+                    NavigationManager.NavigateTo(ClientState.Settings.StartPage);
                 }
             }
 

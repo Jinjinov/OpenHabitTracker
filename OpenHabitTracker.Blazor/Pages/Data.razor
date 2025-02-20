@@ -4,7 +4,7 @@
 @using OpenHabitTracker.Blazor
 @using OpenHabitTracker.Services
 
-@inject ClientState AppData
+@inject ClientState ClientState
 @inject IStringLocalizer Loc
 @inject IAuthFragment AuthFragment
 
@@ -40,14 +40,14 @@
 
     async Task LoadExamples()
     {
-        await AppData.AddExamples();
+        await ClientState.AddExamples();
 
         await OnStateChanged();
     }
 
     async Task DeleteAllData()
     {
-        await AppData.DeleteAllData();
+        await ClientState.DeleteAllData();
 
         await OnStateChanged();
     }

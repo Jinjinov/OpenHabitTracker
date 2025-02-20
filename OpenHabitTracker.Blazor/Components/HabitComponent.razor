@@ -1,16 +1,17 @@
+@using OpenHabitTracker.App
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
 @inject HabitService HabitService
-@inject SettingsService SettingsService
+@inject ClientState ClientState
 @inject IStringLocalizer Loc
 
 <div>
     <div class="input-group flex-nowrap">
         <PriorityComponent Model="Habit" />
         <InputText class="form-control" Value="@Habit.Title" ValueExpression="() => Habit.Title" ValueChanged="(string title) => SaveTitle(Habit, title)" />
-        @if (!SettingsService.Settings.ShowLargeCalendar)
+        @if (!ClientState.Settings.ShowLargeCalendar)
         {
             <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(Habit)"><i class="bi bi-check-square"></i></button>
         }
@@ -20,7 +21,7 @@
 
     <ItemsComponent Items=Habit />
 
-    @if (SettingsService.Settings.ShowLargeCalendar)
+    @if (ClientState.Settings.ShowLargeCalendar)
     {
         <div class="input-group-text p-0 border-0 rounded-0">
             <div class="mx-auto">
@@ -125,7 +126,7 @@
         <CategoryComponent Model="Habit" />
     </div>
 
-    @if (SettingsService.Settings.ShowColor)
+    @if (ClientState.Settings.ShowColor)
     {
         <div class="input-group flex-nowrap">
             <span class="input-group-text col-4">@Loc["Color"]</span>
@@ -133,7 +134,7 @@
         </div>
     }
 
-    @if (SettingsService.Settings.ShowCreatedUpdated)
+    @if (ClientState.Settings.ShowCreatedUpdated)
     {
         <div class="p-1 border rounded-0">
             <small class="d-inline-block mx-1">@Loc["Created"]: @Habit.CreatedAt</small>

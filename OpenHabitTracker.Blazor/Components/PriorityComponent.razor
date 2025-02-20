@@ -4,7 +4,7 @@
 @using OpenHabitTracker.Services
 
 @inject PriorityService PriorityService
-@inject ClientState AppData
+@inject ClientState ClientState
 
 @if (PriorityService.Priorities is not null && Model is not null)
 {
@@ -33,6 +33,6 @@
 
         Model.Priority = priority;
 
-        await AppData.UpdateModel(Model);
+        await ClientState.UpdateModel(Model);
     }
 }

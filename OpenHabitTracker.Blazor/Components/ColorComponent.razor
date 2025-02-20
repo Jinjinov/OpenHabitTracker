@@ -2,7 +2,7 @@
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
-@inject ClientState AppData
+@inject ClientState ClientState
 @inject IStringLocalizer Loc
 
 @if (Model is not null)
@@ -37,6 +37,6 @@
 
         Model.Color = color;
 
-        await AppData.UpdateModel(Model);
+        await ClientState.UpdateModel(Model);
     }
 }

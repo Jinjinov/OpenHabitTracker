@@ -10,8 +10,7 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @inject HabitService HabitService
-@inject ClientState AppData
-@inject SettingsService SettingsService
+@inject ClientState ClientState
 @inject JsInterop JsInterop
 @inject SearchFilterService SearchFilterService
 @inject IStringLocalizer Loc
@@ -19,7 +18,7 @@
 
 <PageTitle>OpenHabitTracker - Habits</PageTitle>
 
-<div @ref="columnRef" class="@($"col child-column px-0 px-md-{SettingsService.Settings.HorizontalMargin}")">
+<div @ref="columnRef" class="@($"col child-column px-0 px-md-{ClientState.Settings.HorizontalMargin}")">
 
     @* <small class="m-1">@Loc["Add new habit"]</small> *@
 
@@ -83,7 +82,7 @@
                 <CategoryComponent Model="HabitService.NewHabit" />
             </div>
 
-            @if (SettingsService.Settings.ShowColor)
+            @if (ClientState.Settings.ShowColor)
             {
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text col-4">@Loc["Color"]</span>
@@ -103,7 +102,7 @@
 
         foreach (HabitModel habit in HabitService.GetHabits())
         {
-            <div class="@($"my-{SettingsService.Settings.VerticalMargin} d-flex")">
+            <div class="@($"my-{ClientState.Settings.VerticalMargin} d-flex")">
                 @if (!_showSecondColumn && habit.Id == Id && HabitService.NewHabit is null)
                 {
                     <HabitComponent Habit="habit" CloseSelected="CloseSelected" />
@@ -121,7 +120,7 @@
                             <button class="@($"input-group-text flex-grow-1 text-wrap {habit.Color} highlightable")" @onclick="() => OpenSelected(habit.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
 
                             @{
-                                string color = habit.GetRatio(SettingsService.Settings.SelectedRatio) switch
+                                string color = habit.GetRatio(ClientState.Settings.SelectedRatio) switch
                                 {
                                     >= 100 => "bg-danger-subtle",
                                     >= 80 => "bg-warning-subtle",
@@ -130,21 +129,21 @@
                             }
                             <small class="@($"input-group-text {color}")">
                                 @(habit.LastTimeDoneAt is not null ? ToHighestValueString(habit.ElapsedTime) : "⊘")
-                                (@habit.GetRatio(SettingsService.Settings.SelectedRatio).ToString("N0")%)
+                                (@habit.GetRatio(ClientState.Settings.SelectedRatio).ToString("N0")%)
                             </small>
 
-                            @if (!SettingsService.Settings.ShowSmallCalendar)
+                            @if (!ClientState.Settings.ShowSmallCalendar)
                             {
                                 <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
                             }
                         </div>
 
-                        @if (SettingsService.Settings.ShowItemList)
+                        @if (ClientState.Settings.ShowItemList)
                         {
                             <ItemsComponent Items=habit IsReadOnly=true />
                         }
 
-                        @if (IsEmbedded && SettingsService.Settings.ShowSmallCalendar)
+                        @if (IsEmbedded && ClientState.Settings.ShowSmallCalendar)
                         {
                             <div class="input-group-text p-0 border-0 rounded-0">
                                 <div class="mx-auto">
@@ -154,7 +153,7 @@
                         }
 
                     </div>
-                    if (!IsEmbedded && SettingsService.Settings.ShowSmallCalendar)
+                    if (!IsEmbedded && ClientState.Settings.ShowSmallCalendar)
                     {
                         <div class="d-flex">
                             <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" DisplayBasedOnWidth />

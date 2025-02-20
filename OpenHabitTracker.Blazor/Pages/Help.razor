@@ -1,15 +1,16 @@
-﻿@page "/help"
+@page "/help"
 
+@using OpenHabitTracker.App
 @using OpenHabitTracker.Services
 
 @inject IStringLocalizer Loc
 @inject IStringLocalizer<OpenHabitTracker.Localization.Loc> HelpLoc
 @inject ILinkAttributeService LinkAttributeService
-@inject SettingsService SettingsService
+@inject ClientState ClientState
 
 <PageTitle>OpenHabitTracker - Help</PageTitle>
 
-<div @ref="WrapperElement" class="@($"col child-column px-0 px-md-{SettingsService.Settings.HorizontalMargin}")">
+<div @ref="WrapperElement" class="@($"col child-column px-0 px-md-{ClientState.Settings.HorizontalMargin}")">
     <div class="m-2">
 
         <h5>@HelpLoc["Header"]:</h5>
