@@ -10,5 +10,7 @@ public interface IAuthService
 
     Task<bool> RefreshTokenLogin(string address, string refreshToken);
 
+    Task<bool> TryRefreshTokenLogin();
+
     Task Logout();
 }

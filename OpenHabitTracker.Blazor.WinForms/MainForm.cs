@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Auth;
 using OpenHabitTracker.Blazor.Files;
@@ -69,6 +70,13 @@ public partial class MainForm : Form
 
         IDataAccess dataAccess = serviceProvider.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
+
+        ClientState appData = serviceProvider.GetRequiredService<ClientState>();
+        appData.LoadUsers();
+        appData.LoadSettings();
+
+        IAuthService authService = serviceProvider.GetRequiredService<IAuthService>();
+        authService.TryRefreshTokenLogin();
 
         logger.LogInformation("Running app");
     }

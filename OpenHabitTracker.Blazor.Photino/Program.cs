@@ -68,6 +68,13 @@ public class Program
         IDataAccess dataAccess = app.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
 
+        ClientState appData = app.Services.GetRequiredService<ClientState>();
+        appData.LoadUsers();
+        appData.LoadSettings();
+
+        IAuthService authService = app.Services.GetRequiredService<IAuthService>();
+        authService.TryRefreshTokenLogin();
+
         // customize window
         if (!OperatingSystem.IsLinux()) // TODO:: find out why this works in Photino sample
             app.MainWindow.SetIconFile("favicon.ico");

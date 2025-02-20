@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Auth;
 using OpenHabitTracker.Blazor.Files;
@@ -90,6 +91,13 @@ public static class MauiProgram
 
         IDataAccess dataAccess = mauiApp.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
+
+        ClientState appData = mauiApp.Services.GetRequiredService<ClientState>();
+        appData.LoadUsers();
+        appData.LoadSettings();
+
+        IAuthService authService = mauiApp.Services.GetRequiredService<IAuthService>();
+        authService.TryRefreshTokenLogin();
 
         logger.LogInformation("Running app");
 
