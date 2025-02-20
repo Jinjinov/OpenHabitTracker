@@ -47,7 +47,7 @@ instead, make sure that loading an `Entity` with `DataAccess` and creating a `Mo
 
 check for every `new.*Model`
 
-`ToEntity` already exist, add `ToModel` and use it for every `Model`
+`ToEntity` already exist, add `ToModel` and use it for every `Model` - NO!!! - models need other models to initialize any List<>
 
 ---------------------------------------------------------------------------------------------------
 
