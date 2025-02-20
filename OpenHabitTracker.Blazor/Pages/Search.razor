@@ -1,10 +1,11 @@
 @page "/search"
 
+@using OpenHabitTracker.App
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
-@inject SettingsService SettingsService
+@inject ClientState ClientState
 @inject CategoryService CategoryService
 @inject SearchFilterService SearchFilterService
 @inject IStringLocalizer Loc
@@ -177,7 +178,7 @@
     [Parameter]
     public EventCallback<bool> StateChangedChanged { get; set; }
 
-    SettingsModel _settings => SettingsService.Settings;
+    SettingsModel _settings => ClientState.Settings;
 
     bool? ShowAllCategories => GetShowAllCategories();
 
@@ -207,8 +208,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await SettingsService.Initialize();
-
         await CategoryService.Initialize();
     }
 
@@ -220,7 +219,7 @@
 
     async Task UpdateSettings()
     {
-        await SettingsService.UpdateSettings();
+        await ClientState.UpdateSettings();
 
         await UpdateStateChanged();
     }

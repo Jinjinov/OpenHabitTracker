@@ -9,7 +9,6 @@
 @using OpenHabitTracker.Services
 
 @inject ClientState ClientState
-@inject SettingsService SettingsService
 @inject IStringLocalizer Loc
 @inject IAuthService AuthService
 
@@ -50,7 +49,7 @@
     [Parameter]
     public EventCallback<bool> StateChangedChanged { get; set; }
 
-    SettingsModel _settings => SettingsService.Settings;
+    SettingsModel _settings => ClientState.Settings;
 
     private string address = "https://app.openhabittracker.net";
     private string username = "";
@@ -83,6 +82,6 @@
     {
         _settings.RememberMe = rememberMe;
 
-        await SettingsService.UpdateSettings();
+        await ClientState.UpdateSettings();
     }
 }

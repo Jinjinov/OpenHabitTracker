@@ -1,9 +1,10 @@
 @page "/settings"
 
+@using OpenHabitTracker.App
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
-@inject SettingsService SettingsService
+@inject ClientState ClientState
 @inject JsInterop JsInterop
 @inject IStringLocalizer Loc
 
@@ -177,16 +178,11 @@
     [Parameter]
     public Dimensions? WindowDimensions { get; set; }
 
-    SettingsModel _settings => SettingsService.Settings;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await SettingsService.Initialize();
-    }
+    SettingsModel _settings => ClientState.Settings;
 
     async Task UpdateAndRefresh()
     {
-        await SettingsService.UpdateSettings();
+        await ClientState.UpdateSettings();
 
         StateChanged = !StateChanged;
         await StateChangedChanged.InvokeAsync(StateChanged);
@@ -202,7 +198,7 @@
 
         _settings.IsDarkMode = isDarkMode;
 
-        await SettingsService.UpdateSettings();
+        await ClientState.UpdateSettings();
     }
 
     async Task SaveTheme(string theme)
@@ -214,21 +210,21 @@
 
         _settings.Theme = theme;
 
-        await SettingsService.UpdateSettings();
+        await ClientState.UpdateSettings();
     }
 
     async Task SaveStartPage(string startPage)
     {
         _settings.StartPage = startPage;
 
-        await SettingsService.UpdateSettings();
+        await ClientState.UpdateSettings();
     }
 
     async Task SaveStartSidebar(string startSidebar)
     {
         _settings.StartSidebar = startSidebar;
 
-        await SettingsService.UpdateSettings();
+        await ClientState.UpdateSettings();
     }
 
     async Task SaveShowHelp(bool show)

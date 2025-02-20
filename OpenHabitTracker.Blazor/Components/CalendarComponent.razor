@@ -123,11 +123,6 @@ else
 
     private readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
 
-    protected override async Task OnInitializedAsync()
-    {
-        await SettingsService.Initialize();
-    }
-
     protected override async Task OnParametersSetAsync()
     {
         if (_calendarParams.CalendarStart == DateTime.MinValue || _calendarParams.CalendarStart.DayOfWeek != SettingsService.Settings.FirstDayOfWeek)
