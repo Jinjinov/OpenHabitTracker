@@ -1,4 +1,4 @@
-﻿namespace OpenHabitTracker.Data.Models;
+namespace OpenHabitTracker.Data.Models;
 
 public class HabitModel : ItemsModel
 {
@@ -14,11 +14,11 @@ public class HabitModel : ItemsModel
 
     public List<TimeModel>? TimesDone { get; set; }
 
-    internal TimeSpan TotalTimeSpent { get; set; } // TODO:: save it ?
+    internal TimeSpan TotalTimeSpent { get; set; } // TODO:: save it ? (so LoadHabits doesn't need to call RefreshTimesDoneByDay)
 
     internal TimeSpan AverageTimeSpent { get; set; } // TODO:: could be computed every time - AverageTimeSpent => TotalTimeSpent / TimesDone.Count;
 
-    internal TimeSpan AverageInterval { get; set; } // TODO:: save it ?
+    internal TimeSpan AverageInterval { get; set; } // TODO:: save it ? (so LoadHabits doesn't need to call RefreshTimesDoneByDay)
 
     internal int NonZeroRepeatCount => Math.Max(1, RepeatCount);
 
