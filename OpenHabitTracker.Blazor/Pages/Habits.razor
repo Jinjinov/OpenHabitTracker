@@ -247,7 +247,10 @@
 
         if (firstRender || dynamicComponentVisibilityChanged)
         {
+            // use JsInterop to get the dimensions of the main div in this razor component
             Dimensions columnDimensions = await JsInterop.GetElementDimensions(columnRef);
+
+            // columnWidth is needed for the CalendarComponent
             columnWidth = columnDimensions.Width;
 
             // TODO:: try to make it work without this
@@ -256,7 +259,7 @@
             StateHasChanged();
             // TODO:: make it work without JsInterop and use @media for each day
             // even better: get <body> dimensions once at startup, calculate everything else from that
-            // first render can be empty in MainLayout, with everything else rendersing only if body dimensions are set
+            // first render can be empty in MainLayout, with everything else rendering only if body dimensions are set
         }
 
         if (shouldFocus && inputElement?.Element is not null)
