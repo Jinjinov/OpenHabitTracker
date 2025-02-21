@@ -113,11 +113,11 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
     {
         _apiClientOptions.BearerToken = "";
 
+        await _clientState.SetDataLocation(DataLocation.Local);
+
         _clientState.Settings.RefreshToken = "";
 
         await _clientState.UpdateSettings();
-
-        await _clientState.SetDataLocation(DataLocation.Local);
 
         Login = "";
         Error = "";
