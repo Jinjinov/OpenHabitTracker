@@ -15,6 +15,7 @@ using System.Text;
 
 namespace OpenHabitTracker.Blazor.Web.Controllers;
 
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IOptions<AppSettings> options, ApplicationDbContext dbContext) : ControllerBase
@@ -24,6 +25,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
     private readonly AppSettings _appSettings = options.Value;
     private readonly ApplicationDbContext _dbContext = dbContext;
 
+    [AllowAnonymous]
     [HttpPost("jwt-token")]
     [EndpointName("GetJwtToken")]
     public async Task<ActionResult<TokenResponse>> GetJwtToken([FromBody] LoginCredentials loginCredentials)
@@ -89,6 +91,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         return tokenResponse;
     }
 
+    [AllowAnonymous]
     [HttpPost("refresh-token")]
     [EndpointName("GetRefreshToken")]
     public async Task<ActionResult<TokenResponse>> GetRefreshToken([FromBody] RefreshTokenRequest request)
@@ -117,7 +120,6 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         return Ok(tokenResponse);
     }
 
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("current-user")]
     [EndpointName("GetCurrentUser")]
     public async Task<ActionResult<UserEntity>> GetCurrentUser()
