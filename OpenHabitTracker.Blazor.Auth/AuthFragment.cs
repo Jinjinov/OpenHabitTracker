@@ -3,8 +3,10 @@ using OpenHabitTracker.Blazor.Auth.Components;
 
 namespace OpenHabitTracker.Blazor.Auth;
 
-public class AuthFragment : IAuthFragment
+public class AuthFragment(IAuthService authService) : IAuthFragment
 {
+    public Task<bool> TryRefreshTokenLogin() => authService.TryRefreshTokenLogin();
+
     public RenderFragment GetAuthFragment(bool stateChanged, EventCallback<bool> stateChangedChanged)
     {
         return builder =>

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -116,7 +117,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         return Ok(tokenResponse);
     }
 
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("current-user")]
     [EndpointName("GetCurrentUser")]
     public async Task<ActionResult<UserEntity>> GetCurrentUser()

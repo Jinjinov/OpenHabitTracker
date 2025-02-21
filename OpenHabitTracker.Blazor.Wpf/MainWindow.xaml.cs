@@ -70,12 +70,12 @@ public partial class MainWindow : Window
         IDataAccess dataAccess = serviceProvider.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
 
-        ClientState appData = serviceProvider.GetRequiredService<ClientState>();
-        appData.LoadUsers();
-        appData.LoadSettings();
+        //ClientState appData = serviceProvider.GetRequiredService<ClientState>();
+        //appData.LoadUsers();
+        //appData.LoadSettings();
 
-        IAuthService authService = serviceProvider.GetRequiredService<IAuthService>();
-        authService.TryRefreshTokenLogin();
+        //IAuthService authService = serviceProvider.GetRequiredService<IAuthService>();
+        //authService.TryRefreshTokenLogin();
 
         logger.LogInformation("Running app");
     }

@@ -12,6 +12,7 @@
 @inject JsInterop JsInterop
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
+@inject IAuthFragment AuthFragment
 
 @* Root <div> inside <html><body><app> *@
 
@@ -113,17 +114,17 @@
 
 @if (ClientState.Settings.ShowHelp)
 {
-<GuidedTour TourId="FormGuidedTour" OverlayEnabled="true" CloseClickOverlay="true" HighlightEnabled="false">
-    <GuidedTourStep Title="My First Step" StepName="firstStep" TourStepSequence="1" ElementSelector="[data-form-firstStep]">
-        <span>This is my first step</span>
-    </GuidedTourStep>
-    <GuidedTourStep Title="My Second Step" StepName="secondStep" TourStepSequence="2" ElementSelector="[data-form-secondStep]">
-        <span>This is my second step</span>
-    </GuidedTourStep>
-    <GuidedTourStep Title="My Third Step" StepName="thirdStep" TourStepSequence="3" ElementSelector="[data-form-thirdStep]">
-        <span>This is my third step</span>
-    </GuidedTourStep>
-</GuidedTour>
+    <GuidedTour TourId="FormGuidedTour" OverlayEnabled="true" CloseClickOverlay="true" HighlightEnabled="false">
+        <GuidedTourStep Title="My First Step" StepName="firstStep" TourStepSequence="1" ElementSelector="[data-form-firstStep]">
+            <span>This is my first step</span>
+        </GuidedTourStep>
+        <GuidedTourStep Title="My Second Step" StepName="secondStep" TourStepSequence="2" ElementSelector="[data-form-secondStep]">
+            <span>This is my second step</span>
+        </GuidedTourStep>
+        <GuidedTourStep Title="My Third Step" StepName="thirdStep" TourStepSequence="3" ElementSelector="[data-form-thirdStep]">
+            <span>This is my third step</span>
+        </GuidedTourStep>
+    </GuidedTour>
 }
 
 @code {
@@ -174,6 +175,8 @@
 
         await ClientState.LoadUsers();
         await ClientState.LoadSettings();
+
+        AuthFragment.TryRefreshTokenLogin();
 
         Localization.Loc.SetCulture(ClientState.Settings.Culture);
 
