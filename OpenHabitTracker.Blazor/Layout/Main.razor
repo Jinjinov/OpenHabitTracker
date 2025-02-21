@@ -114,7 +114,7 @@
 
 @if (ClientState.Settings.ShowHelp)
 {
-    <GuidedTour TourId="FormGuidedTour" OverlayEnabled="true" CloseClickOverlay="true" HighlightEnabled="false">
+    <GuidedTour TourId="FormGuidedTour" OverlayEnabled="true" HighlightEnabled="false">
         @for (int i = 0; i < tourSteps.Length; i++)
         {
             int step = i + 1;
