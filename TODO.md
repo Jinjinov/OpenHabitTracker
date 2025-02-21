@@ -69,6 +69,11 @@ Linux / macOS:
 2.
 help:
 
+foreach(step in steps)
+{
+    <GuidedTourStep>
+}
+
 - localize buttons
 - Cancel Tour -> X
 
