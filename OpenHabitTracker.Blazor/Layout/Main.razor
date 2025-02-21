@@ -176,7 +176,7 @@
         await ClientState.LoadUsers();
         await ClientState.LoadSettings();
 
-        AuthFragment.TryRefreshTokenLogin();
+        await AuthFragment.TryRefreshTokenLogin();
 
         Localization.Loc.SetCulture(ClientState.Settings.Culture);
 
