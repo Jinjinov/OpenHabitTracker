@@ -74,6 +74,8 @@ foreach(step in steps)
     <GuidedTourStep>
 }
 
+- no rounded corners
+
 - localize buttons
 - Cancel Tour -> X
 
