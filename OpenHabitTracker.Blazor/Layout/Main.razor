@@ -122,18 +122,18 @@
             <GuidedTourStep Title="" StepName="@($"Step{step}")" TourStepSequence="@step" ElementSelector="@($"[data-step-{step}]")">
                 <HeaderContent>
                     <div class="d-flex align-items-center w-100">
-                        <span>Step @step / @tourSteps.Length</span>
-                        <button class="btn btn-outline-secondary ms-auto" disabled="@((context as GTour.GTourStepComponent).IsLastStep)" @onclick="@(() => context.CancelTour())"><i class="bi bi-x-lg"></i></button>
+                        <small>Step @step / @tourSteps.Length</small>
+                        <button class="btn btn-outline-secondary p-1 lh-1 ms-auto" disabled="@((context as GTour.GTourStepComponent).IsLastStep)" @onclick="@(() => context.CancelTour())"><small><i class="bi bi-x-lg"></i></small></button>
                     </div>
                 </HeaderContent>
                 <ChildContent>
-                    <span>@tourSteps[step-1]</span>
+                    <div style="min-width:100px">@tourSteps[step-1]</div>
                 </ChildContent>
                 <FooterContent>
                     <div>
-                        <button class="btn btn-outline-secondary" disabled="@((context as GTour.GTourStepComponent).IsFirstStep)" @onclick="@(() => context.PreviousStep())"><i class="bi bi-chevron-double-left"></i></button>
-                        <button class="btn btn-outline-secondary" hidden="@((context as GTour.GTourStepComponent).IsLastStep)" @onclick="@(() => context.NextStep())"><i class="bi bi-chevron-double-right"></i></button>
-                        <button class="btn btn-outline-secondary" hidden="@(!(context as GTour.GTourStepComponent).IsLastStep)" @onclick="@(() => context.CompleteTour())"><i class="bi bi-check-lg"></i></button>
+                        <button class="btn btn-outline-secondary" disabled="@((context as GTour.GTourStepComponent).IsFirstStep)" @onclick="@(() => context.PreviousStep())"><small><i class="bi bi-chevron-double-left"></i></small></button>
+                        <button class="btn btn-outline-secondary" hidden="@((context as GTour.GTourStepComponent).IsLastStep)" @onclick="@(() => context.NextStep())"><small><i class="bi bi-chevron-double-right"></i></small></button>
+                        <button class="btn btn-outline-secondary" hidden="@(!(context as GTour.GTourStepComponent).IsLastStep)" @onclick="@(() => context.CompleteTour())"><small><i class="bi bi-check-lg"></i></small></button>
                     </div>
                 </FooterContent>
             </GuidedTourStep>
