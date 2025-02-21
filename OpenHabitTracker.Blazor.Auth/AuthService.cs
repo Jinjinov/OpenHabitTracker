@@ -115,11 +115,11 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
 
         await _clientState.SetDataLocation(DataLocation.Local);
 
+        Login = "";
+        Error = "";
+
         _clientState.Settings.RefreshToken = "";
 
         await _clientState.UpdateSettings();
-
-        Login = "";
-        Error = "";
     }
 }
