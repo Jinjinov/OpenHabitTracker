@@ -114,31 +114,7 @@
 
 @if (ClientState.Settings.ShowHelp)
 {
-    <GuidedTour TourId="FormGuidedTour" OverlayEnabled="true" HighlightEnabled="false">
-        @for (int i = 0; i < tourSteps.Length; i++)
-        {
-            int step = i + 1;
-
-            <GuidedTourStep Title="" StepName="@($"Step{step}")" TourStepSequence="@step" ElementSelector="@($"[data-step-{step}]")">
-                <HeaderContent>
-                    <div class="d-flex align-items-center w-100">
-                        <small>Step @step / @tourSteps.Length</small>
-                        <button class="btn btn-outline-secondary p-1 lh-1 ms-auto" disabled="@((context as GTour.GTourStepComponent).IsLastStep)" @onclick="@(() => context.CancelTour())"><small><i class="bi bi-x-lg"></i></small></button>
-                    </div>
-                </HeaderContent>
-                <ChildContent>
-                    <div style="min-width:100px">@tourSteps[step-1]</div>
-                </ChildContent>
-                <FooterContent>
-                    <div>
-                        <button class="btn btn-outline-secondary" disabled="@((context as GTour.GTourStepComponent).IsFirstStep)" @onclick="@(() => context.PreviousStep())"><small><i class="bi bi-chevron-double-left"></i></small></button>
-                        <button class="btn btn-outline-secondary" hidden="@((context as GTour.GTourStepComponent).IsLastStep)" @onclick="@(() => context.NextStep())"><small><i class="bi bi-chevron-double-right"></i></small></button>
-                        <button class="btn btn-outline-secondary" hidden="@(!(context as GTour.GTourStepComponent).IsLastStep)" @onclick="@(() => context.CompleteTour())"><small><i class="bi bi-check-lg"></i></small></button>
-                    </div>
-                </FooterContent>
-            </GuidedTourStep>
-        }
-    </GuidedTour>
+    <GuidedTourComponent TourId="MainTour" TourSteps="tourSteps" />
 }
 
 @code {
@@ -154,7 +130,7 @@
 
     private async Task StartTour()
     {
-        await GTourService.StartTour("FormGuidedTour");
+        await GTourService.StartTour("MainTour");
     }
 
     [Parameter]

@@ -1,0 +1,37 @@
+@using GTour
+@using GTour.Components
+@using GTour.Abstractions
+
+<GuidedTour TourId="@TourId" OverlayEnabled="true" HighlightEnabled="false">
+    @for (int i = 0; i < TourSteps.Length; i++)
+    {
+        int step = i + 1;
+
+        <GuidedTourStep Title="" StepName="@($"Step{step}")" TourStepSequence="@step" ElementSelector="@($"[data-step-{step}]")">
+            <HeaderContent>
+                <div class="d-flex align-items-center w-100">
+                    <small>Step @step / @TourSteps.Length</small>
+                    <button class="btn btn-outline-secondary p-1 lh-1 ms-auto" disabled="@((context as GTourStepComponent).IsLastStep)" @onclick="@(() => context.CancelTour())"><small><i class="bi bi-x-lg"></i></small></button>
+                </div>
+            </HeaderContent>
+            <ChildContent>
+                <div style="min-width:100px">@TourSteps[step - 1]</div>
+            </ChildContent>
+            <FooterContent>
+                <div>
+                    <button class="btn btn-outline-secondary" disabled="@((context as GTourStepComponent).IsFirstStep)" @onclick="@(() => context.PreviousStep())"><small><i class="bi bi-chevron-double-left"></i></small></button>
+                    <button class="btn btn-outline-secondary" hidden="@((context as GTourStepComponent).IsLastStep)" @onclick="@(() => context.NextStep())"><small><i class="bi bi-chevron-double-right"></i></small></button>
+                    <button class="btn btn-outline-secondary" hidden="@(!(context as GTourStepComponent).IsLastStep)" @onclick="@(() => context.CompleteTour())"><small><i class="bi bi-check-lg"></i></small></button>
+                </div>
+            </FooterContent>
+        </GuidedTourStep>
+    }
+</GuidedTour>
+
+@code {
+    [Parameter]
+    public string TourId { get; set; }
+
+    [Parameter]
+    public string[] TourSteps { get; set; }
+}
