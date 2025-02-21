@@ -15,7 +15,6 @@ using System.Text;
 
 namespace OpenHabitTracker.Blazor.Web.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IOptions<AppSettings> options, ApplicationDbContext dbContext) : ControllerBase
@@ -120,6 +119,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         return Ok(tokenResponse);
     }
 
+    [Authorize]
     [HttpGet("current-user")]
     [EndpointName("GetCurrentUser")]
     public async Task<ActionResult<UserEntity>> GetCurrentUser()

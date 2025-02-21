@@ -90,9 +90,9 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
 
                 await _clientState.SetDataLocation(DataLocation.Remote);
 
-                UserEntity user = await _authClient.GetCurrentUserAsync();
+                //UserEntity user = await _authClient.GetCurrentUserAsync();
 
-                Login = $"{_loc["User"]}: {user.Email}";
+                //Login = $"{_loc["User"]}: {user.Email}";
 
                 return true;
             }
