@@ -84,7 +84,7 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
             {
                 _apiClientOptions.BearerToken = tokenResponse.JwtToken;
 
-                _clientState.Settings.RefreshToken = refreshToken;
+                _clientState.Settings.RefreshToken = tokenResponse.RefreshToken;
 
                 await _clientState.UpdateSettings();
 
