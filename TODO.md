@@ -68,12 +68,6 @@ Linux / macOS:
 
 2.
 help:
-
-foreach(step in steps)
-{
-    <GuidedTourStep>
-}
-
 - move to sidebar
 - separate help for each screen
 - guided tour per screen
