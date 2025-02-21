@@ -74,11 +74,6 @@ foreach(step in steps)
     <GuidedTourStep>
 }
 
-- no rounded corners
-
-- localize buttons
-- Cancel Tour -> X
-
 - move to sidebar
 - separate help for each screen
 - guided tour per screen

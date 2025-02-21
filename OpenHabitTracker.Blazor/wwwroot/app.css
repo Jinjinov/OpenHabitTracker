@@ -25,18 +25,18 @@
 :root {
     --bs-modal-zindex: 1055;
     --bs-modal-width: 500px;
-    --bs-modal-padding: 1rem;
+    --bs-modal-padding: 0.5rem;
     --bs-modal-margin: 0.5rem;
     --bs-modal-color:;
     --bs-modal-bg: var(--bs-body-bg);
     --bs-modal-border-color: var(--bs-border-color-translucent);
     --bs-modal-border-width: var(--bs-border-width);
-    --bs-modal-border-radius: var(--bs-border-radius-lg);
+    --bs-modal-border-radius: 0;
     --bs-modal-box-shadow: var(--bs-box-shadow-sm);
-    --bs-modal-inner-border-radius: calc(var(--bs-border-radius-lg) - (var(--bs-border-width)));
-    --bs-modal-header-padding-x: 1rem;
-    --bs-modal-header-padding-y: 1rem;
-    --bs-modal-header-padding: 1rem 1rem;
+    --bs-modal-inner-border-radius: 0;
+    --bs-modal-header-padding-x: 0.5rem;
+    --bs-modal-header-padding-y: 0.5rem;
+    --bs-modal-header-padding: 0.5rem 0.5rem;
     --bs-modal-header-border-color: var(--bs-border-color);
     --bs-modal-header-border-width: var(--bs-border-width);
     --bs-modal-title-line-height: 1.5;
@@ -48,6 +48,10 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.btn {
+    border-radius: 0 !important;
 }
 
 .form-control {
