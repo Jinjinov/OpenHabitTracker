@@ -66,7 +66,14 @@
     }
     else
     {
-        <small class="m-1"><i class="bi bi-sticky"></i> @Loc["Notes"]</small>
+        <div class="d-flex">
+            <small class="m-1"><i class="bi bi-sticky"></i> @Loc["Notes"]</small>
+
+            @if (ClientState.Settings.ShowHelp)
+            {
+                <small class="m-1 ms-auto" @onclick="StartTour"><i class="bi bi-question-circle"></i></small>
+            }
+        </div>
 
         foreach (NoteModel note in NoteService.GetNotes())
         {
@@ -118,7 +125,7 @@
 
 @if (ClientState.Settings.ShowHelp)
 {
-    <GuidedTourComponent TourId="Tour" TourSteps="tourSteps" />
+    <GuidedTourComponent TourId="notes" TourSteps="tourSteps" />
 }
 
 @code {
@@ -130,7 +137,7 @@
 
     private async Task StartTour()
     {
-        await GTourService.StartTour("Tour");
+        await GTourService.StartTour("notes");
     }
 
     [Parameter]

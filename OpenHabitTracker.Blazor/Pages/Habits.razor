@@ -100,7 +100,14 @@
     }
     else if (columnWidth != 0)
     {
-        <small class="m-1"><i class="bi bi-repeat"></i> @Loc["Habits"]</small>
+        <div class="d-flex">
+            <small class="m-1"><i class="bi bi-repeat"></i> @Loc["Habits"]</small>
+
+            @if (ClientState.Settings.ShowHelp)
+            {
+                <small class="m-1 ms-auto" @onclick="StartTour"><i class="bi bi-question-circle"></i></small>
+            }
+        </div>
 
         foreach (HabitModel habit in HabitService.GetHabits())
         {
@@ -189,7 +196,7 @@
 
 @if (ClientState.Settings.ShowHelp)
 {
-    <GuidedTourComponent TourId="Tour" TourSteps="tourSteps" />
+    <GuidedTourComponent TourId="habits" TourSteps="tourSteps" />
 }
 
 @code {
@@ -201,7 +208,7 @@
 
     private async Task StartTour()
     {
-        await GTourService.StartTour("Tour");
+        await GTourService.StartTour("habits");
     }
 
     [Parameter]

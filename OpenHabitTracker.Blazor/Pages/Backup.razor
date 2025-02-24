@@ -51,7 +51,7 @@
 
 @if (ClientState.Settings.ShowHelp)
 {
-    <GuidedTourComponent TourId="Tour" TourSteps="tourSteps" />
+    <GuidedTourComponent TourId="backup" TourSteps="tourSteps" />
 }
 
 @code {
@@ -63,7 +63,7 @@
 
     private async Task StartTour()
     {
-        await GTourService.StartTour("Tour");
+        await GTourService.StartTour("backup");
     }
 
     [Parameter]

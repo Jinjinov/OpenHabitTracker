@@ -89,7 +89,14 @@
     }
     else
     {
-        <small class="m-1"><i class="bi bi-list-task"></i> @Loc["Tasks"]</small>
+        <div class="d-flex">
+            <small class="m-1"><i class="bi bi-list-task"></i> @Loc["Tasks"]</small>
+
+            @if (ClientState.Settings.ShowHelp)
+            {
+                <small class="m-1 ms-auto" @onclick="StartTour"><i class="bi bi-question-circle"></i></small>
+            }
+        </div>
 
         foreach (TaskModel task in TaskService.GetTasks())
         {
@@ -142,7 +149,7 @@
 
 @if (ClientState.Settings.ShowHelp)
 {
-    <GuidedTourComponent TourId="Tour" TourSteps="tourSteps" />
+    <GuidedTourComponent TourId="tasks" TourSteps="tourSteps" />
 }
 
 @code {
@@ -154,7 +161,7 @@
 
     private async Task StartTour()
     {
-        await GTourService.StartTour("Tour");
+        await GTourService.StartTour("tasks");
     }
 
     [Parameter]
