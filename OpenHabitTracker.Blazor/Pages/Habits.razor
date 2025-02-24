@@ -1,6 +1,7 @@
 @page "/habits"
 @page "/habits/{Id:long}"
 
+@using GTour.Abstractions
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
@@ -15,6 +16,7 @@
 @inject SearchFilterService SearchFilterService
 @inject IStringLocalizer Loc
 @inject PriorityService PriorityService
+@inject IGTourService GTourService
 
 <PageTitle>OpenHabitTracker - Habits</PageTitle>
 
@@ -193,6 +195,7 @@
 @code {
     string[] tourSteps =
     {
+        "Step 1",
         "Step 1",
     };
 

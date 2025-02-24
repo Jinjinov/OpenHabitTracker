@@ -1,3 +1,4 @@
+@using GTour.Abstractions
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
@@ -7,6 +8,7 @@
 @inject TaskService TaskService
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
+@inject IGTourService GTourService
 
 <div class="input-group flex-nowrap">
     <PriorityComponent Model="Task" />
@@ -117,6 +119,7 @@
 @code {
     string[] tourSteps =
     {
+        "Step 1",
         "Step 1",
     };
 

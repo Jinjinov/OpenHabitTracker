@@ -1,13 +1,17 @@
 @* @page "/backup" *@
 
+@using GTour.Abstractions
+@using OpenHabitTracker.App
 @using OpenHabitTracker.Backup
 @using OpenHabitTracker.Blazor.Files
 
 @inject ImportExportService ImportExportService
+@inject ClientState ClientState
 @inject IOpenFile OpenFile
 @inject ISaveFile SaveFile
 @inject IStringLocalizer Loc
 @inject ILinkAttributeService LinkAttributeService
+@inject IGTourService GTourService
 
 @* <PageTitle>OpenHabitTracker - Backup</PageTitle> *@
 
@@ -53,6 +57,7 @@
 @code {
     string[] tourSteps =
     {
+        "Step 1",
         "Step 1",
     };
 

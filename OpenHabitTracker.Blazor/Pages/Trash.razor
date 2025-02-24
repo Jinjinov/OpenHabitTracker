@@ -1,10 +1,14 @@
 @page "/trash"
 
+@using GTour.Abstractions
+@using OpenHabitTracker.App
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
+@inject ClientState ClientState
 @inject TrashService TrashService
 @inject IStringLocalizer Loc
+@inject IGTourService GTourService
 
 @* <PageTitle>OpenHabitTracker - Trash</PageTitle> *@
 
@@ -45,6 +49,7 @@
 @code {
     string[] tourSteps =
     {
+        "Step 1",
         "Step 1",
     };
 

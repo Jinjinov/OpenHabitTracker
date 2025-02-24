@@ -1,5 +1,6 @@
 @page "/data"
 
+@using GTour.Abstractions
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Blazor
 @using OpenHabitTracker.Services
@@ -7,6 +8,7 @@
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
 @inject IAuthFragment AuthFragment
+@inject IGTourService GTourService
 
 @* <PageTitle>OpenHabitTracker - Data</PageTitle> *@
 
@@ -33,6 +35,7 @@
 @code {
     string[] tourSteps =
     {
+        "Step 1",
         "Step 1",
     };
 

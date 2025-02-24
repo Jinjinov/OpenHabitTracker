@@ -1,6 +1,7 @@
 @page "/tasks"
 @page "/tasks/{Id:long}"
 
+@using GTour.Abstractions
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Blazor.Components
 @using OpenHabitTracker.Data.Models
@@ -14,6 +15,7 @@
 @inject SearchFilterService SearchFilterService
 @inject IStringLocalizer Loc
 @inject PriorityService PriorityService
+@inject IGTourService GTourService
 
 <PageTitle>OpenHabitTracker - Tasks</PageTitle>
 
@@ -146,6 +148,7 @@
 @code {
     string[] tourSteps =
     {
+        "Step 1",
         "Step 1",
     };
 

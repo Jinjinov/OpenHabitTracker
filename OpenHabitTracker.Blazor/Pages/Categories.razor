@@ -1,11 +1,15 @@
 @page "/categories"
 @page "/categories/{Id:long}"
 
+@using GTour.Abstractions
+@using OpenHabitTracker.App
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
 @inject CategoryService CategoryService
+@inject ClientState ClientState
 @inject IStringLocalizer Loc
+@inject IGTourService GTourService
 
 @* <PageTitle>OpenHabitTracker - Categories</PageTitle> *@
 
@@ -56,6 +60,7 @@
 @code {
     string[] tourSteps =
     {
+        "Step 1",
         "Step 1",
     };
 
