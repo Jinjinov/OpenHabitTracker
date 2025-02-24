@@ -105,7 +105,7 @@
 
             @if (ClientState.Settings.ShowHelp)
             {
-                <small class="m-1 ms-auto" @onclick="StartTour"><i class="bi bi-question-circle"></i></small>
+                <small class="m-1 ms-auto" @onclick="@(() => StartTour("habits"))"><i class="bi bi-question-circle"></i></small>
             }
         </div>
 
@@ -206,9 +206,9 @@
         "Step 1",
     };
 
-    private async Task StartTour()
+    private async Task StartTour(string tourId)
     {
-        await GTourService.StartTour("habits");
+        await GTourService.StartTour(tourId);
     }
 
     [Parameter]

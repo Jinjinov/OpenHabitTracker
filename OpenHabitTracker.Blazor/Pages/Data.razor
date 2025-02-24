@@ -16,8 +16,8 @@
     <div class="my-1">
 
         <div class="list-group">
-            <button class="list-group-item list-group-item-action" @onclick="LoadExamples"><i class="bi bi-download"></i> @Loc["Load examples"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="DeleteAllData"><i class="bi bi-trash"></i> @Loc["Delete all data"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="LoadExamples" data-data-step-1><i class="bi bi-download"></i> @Loc["Load examples"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="DeleteAllData" data-data-step-2><i class="bi bi-trash"></i> @Loc["Delete all data"]</button>
         </div>
 
     </div>
@@ -35,13 +35,13 @@
 @code {
     string[] tourSteps =
     {
-        "Step 1",
-        "Step 1",
+        "Load examples",
+        "Delete all data",
     };
 
-    private async Task StartTour()
+    private async Task StartTour(string tourId)
     {
-        await GTourService.StartTour("data");
+        await GTourService.StartTour(tourId);
     }
 
     [Parameter]

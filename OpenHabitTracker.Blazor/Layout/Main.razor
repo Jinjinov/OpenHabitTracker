@@ -50,7 +50,7 @@
 
             @if (ClientState.Settings.ShowHelp)
             {
-                <button class="nav-link px-2 py-1 ms-3" @onclick="StartTour" data-main-step-6><i class="bi bi-question-circle"></i></button>
+                <button class="nav-link px-2 py-1 ms-3" @onclick="@(() => StartTour("main"))" data-main-step-6><i class="bi bi-question-circle"></i></button>
             }
 
             @if (ClientState.DataLocation == DataLocation.Remote)
@@ -84,7 +84,7 @@
                         <div class="input-group flex-nowrap my-1">
                             @if (ClientState.Settings.ShowHelp)
                             {
-                                <small class="input-group-text" @onclick="StartTour"><i class="bi bi-question-circle"></i></small>
+                                <small class="input-group-text" @onclick="@(() => StartTour(_guidedTourByTypeName[_dynamicComponentType.Name]))"><i class="bi bi-question-circle"></i></small>
                             }
                             <span class="input-group-text fw-bold text-primary flex-grow-1">@Loc[_titleByTypeName[_dynamicComponentType.Name]]</span>
                             <button class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
@@ -132,9 +132,9 @@
         "Help",
     };
 
-    private async Task StartTour()
+    private async Task StartTour(string tourId)
     {
-        await GTourService.StartTour("main");
+        await GTourService.StartTour(tourId);
     }
 
     [Parameter]
@@ -171,6 +171,19 @@
         //{ "Priorities", "Priorities" },
         { "Trash", "Trash" },
         { "About", "About" }
+    };
+
+    private readonly Dictionary<string, string> _guidedTourByTypeName = new()
+    {
+        { "Menu", "menu" },
+        { "Search", "search" },
+        { "Settings", "settings" },
+        //{ "Backup", "backup" },
+        { "Categories", "categories" },
+        { "Data", "data" },
+        //{ "Priorities", "priorities" },
+        { "Trash", "trash" },
+        { "About", "about" }
     };
 
     protected override async Task OnInitializedAsync()

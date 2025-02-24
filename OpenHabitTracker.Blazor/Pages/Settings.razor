@@ -182,9 +182,9 @@
         "Step 1",
     };
 
-    private async Task StartTour()
+    private async Task StartTour(string tourId)
     {
-        await GTourService.StartTour("settings");
+        await GTourService.StartTour(tourId);
     }
 
     [Parameter]

@@ -52,9 +52,9 @@
         "Step 1",
     };
 
-    private async Task StartTour()
+    private async Task StartTour(string tourId)
     {
-        await GTourService.StartTour("note");
+        await GTourService.StartTour(tourId);
     }
 
     [EditorRequired]
