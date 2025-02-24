@@ -22,10 +22,10 @@
     <div class="my-1">
 
         <div class="list-group">
-            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Json)"><i class="bi bi-box-arrow-right"></i> @Loc["Export JSON"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Tsv)"><i class="bi bi-box-arrow-right"></i> @Loc["Export TSV"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Yaml)"><i class="bi bi-box-arrow-right"></i> @Loc["Export YAML"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Md)"><i class="bi bi-box-arrow-right"></i> @Loc["Export Markdown"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Json)" data-data-step-3><i class="bi bi-box-arrow-right"></i> @Loc["Export JSON"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Tsv)" data-data-step-4><i class="bi bi-box-arrow-right"></i> @Loc["Export TSV"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Yaml)" data-data-step-5><i class="bi bi-box-arrow-right"></i> @Loc["Export YAML"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="() => ExportFile(FileFormat.Md)" data-data-step-6><i class="bi bi-box-arrow-right"></i> @Loc["Export Markdown"]</button>
 
             @OpenFile.OpenFileDialog("list-group-item list-group-item-action", Loc["Import"], OnFileOpened)
         </div>
@@ -35,11 +35,11 @@
     <div class="m-1">
         @Loc["Import"]:
         <ul>
-            <li>JSON (.json)</li>
-            <li>TSV (.tsv)</li>
-            <li>YAML (.yaml)</li>
-            <li>Markdown (.md)</li>
-            <li><a href="https://takeout.google.com/">Google Keep (.zip)</a></li>
+            <li data-data-step-7>JSON (.json)</li>
+            <li data-data-step-8>TSV (.tsv)</li>
+            <li data-data-step-9>YAML (.yaml)</li>
+            <li data-data-step-10>Markdown (.md)</li>
+            <li data-data-step-11><a href="https://takeout.google.com/">Google Keep (.zip)</a></li>
         </ul>
     </div>
 

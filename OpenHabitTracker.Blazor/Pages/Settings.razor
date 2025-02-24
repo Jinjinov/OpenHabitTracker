@@ -15,12 +15,12 @@
 <div>
     <div class="my-1 list-group">
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-1>
             <InputCheckbox id="IsDarkMode" class="form-check-input me-1" Value="_settings.IsDarkMode" ValueExpression="() => _settings.IsDarkMode" ValueChanged="SaveIsDarkMode" />
             <label for="IsDarkMode" class="form-check-label stretched-link">@Loc["Dark mode"]</label>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-2>
             <small class="">@Loc["Theme"]:</small>
             <InputSelect class="form-select" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
                 <option value="default">default</option>
@@ -52,7 +52,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-3>
             <small class="">@Loc["Start page"]:</small>
             <InputSelect class="form-select" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
                 @if (WindowDimensions?.Width >= 1280 || WindowDimensions?.Width < 768)
@@ -66,7 +66,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-4>
             <small class="">@Loc["Start sidebar"]:</small>
             <InputSelect class="form-select" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
                 <option value="">@Loc["None"]</option>
@@ -82,37 +82,37 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-5>
             <InputCheckbox id="ShowHelp" class="form-check-input me-1" Value="_settings.ShowHelp" ValueExpression="() => _settings.ShowHelp" ValueChanged="SaveShowHelp" />
             <label for="ShowHelp" class="form-check-label stretched-link d-inline">@Loc["Show help"]</label>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-6>
             <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowItemList" ValueExpression="() => _settings.ShowItemList" ValueChanged="SaveShowItemList" />
             <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show item list"]</label>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-7>
             <InputCheckbox id="ShowSmallCalendar" class="form-check-input me-1" Value="_settings.ShowSmallCalendar" ValueExpression="() => _settings.ShowSmallCalendar" ValueChanged="SaveShowSmallCalendar" />
             <label for="ShowSmallCalendar" class="form-check-label stretched-link d-inline">@Loc["Show small calendar"]</label>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-8>
             <InputCheckbox id="ShowLargeCalendar" class="form-check-input me-1" Value="_settings.ShowLargeCalendar" ValueExpression="() => _settings.ShowLargeCalendar" ValueChanged="SaveShowLargeCalendar" />
             <label for="ShowLargeCalendar" class="form-check-label stretched-link d-inline">@Loc["Show large calendar"]</label>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-9>
             <InputCheckbox id="ShowColor" class="form-check-input me-1" Value="_settings.ShowColor" ValueExpression="() => _settings.ShowColor" ValueChanged="SaveShowColor" />
             <label for="ShowColor" class="form-check-label stretched-link d-inline">@Loc["Show color"]</label>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-10>
             <InputCheckbox id="ShowCreatedUpdated" class="form-check-input me-1" Value="_settings.ShowCreatedUpdated" ValueExpression="() => _settings.ShowCreatedUpdated" ValueChanged="SaveShowCreatedUpdated" />
             <label for="ShowCreatedUpdated" class="form-check-label stretched-link d-inline">@Loc["Show created & updated"]</label>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-11>
             <small class="">@Loc["Language"]:</small>
             <InputSelect class="form-select" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
                 @foreach ((string key, Localization.Loc loc) in Localization.Loc.Cultures)
@@ -122,7 +122,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-12>
             <small class="">@Loc["Week start"]:</small>
             <InputSelect class="form-select" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
@@ -132,22 +132,22 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-13>
             <InputCheckbox id="InsertTabsInNoteContent" class="form-check-input me-1" Value="_settings.InsertTabsInNoteContent" ValueExpression="() => _settings.InsertTabsInNoteContent" ValueChanged="SaveInsertTabsInNoteContent" />
             <label for="InsertTabsInNoteContent" class="form-check-label stretched-link d-inline">@Loc["Insert tabs in note content"]</label>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-14>
             <InputCheckbox id="DisplayNoteContentAsMarkdown" class="form-check-input me-1" Value="_settings.DisplayNoteContentAsMarkdown" ValueExpression="() => _settings.DisplayNoteContentAsMarkdown" ValueChanged="SaveDisplayNoteContentAsMarkdown" />
             <label for="DisplayNoteContentAsMarkdown" class="form-check-label stretched-link d-inline">@Loc["Display note content as Markdown"]</label>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-15>
             <InputCheckbox id="UncheckAllItemsOnHabitDone" class="form-check-input me-1" Value="_settings.UncheckAllItemsOnHabitDone" ValueExpression="() => _settings.UncheckAllItemsOnHabitDone" ValueChanged="SaveUncheckAllItemsOnHabitDone" />
             <label for="UncheckAllItemsOnHabitDone" class="form-check-label stretched-link d-inline">@Loc["Reset habit when it is completed"]</label>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-16>
             <small class="">@Loc["Horizontal space"]:</small>
             <InputSelect class="form-select" Value="_settings.HorizontalMargin" ValueExpression="() => _settings.HorizontalMargin" TValue="int" ValueChanged="SaveHorizontalMargin">
                 @for (int i = 0; i <= 5; i++)
@@ -157,7 +157,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item">
+        <div class="list-group-item" data-settings-step-17>
             <small class="">@Loc["Vertical space"]:</small>
             <InputSelect class="form-select" Value="_settings.VerticalMargin" ValueExpression="() => _settings.VerticalMargin" TValue="int" ValueChanged="SaveVerticalMargin">
                 @for (int i = 0; i <= 5; i++)
@@ -179,7 +179,22 @@
     string[] tourSteps =
     {
         "Step 1",
-        "Step 1",
+        "Step 2",
+        "Step 3",
+        "Step 4",
+        "Step 5",
+        "Step 6",
+        "Step 7",
+        "Step 8",
+        "Step 9",
+        "Step 10",
+        "Step 11",
+        "Step 12",
+        "Step 13",
+        "Step 14",
+        "Step 15",
+        "Step 16",
+        "Step 17",
     };
 
     private async Task StartTour(string tourId)

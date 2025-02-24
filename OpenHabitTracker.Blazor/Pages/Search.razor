@@ -25,7 +25,7 @@
 
             <small class="m-1"><i class="bi bi-search"></i> @Loc["Search"]</small>
 
-            <div class="input-group flex-nowrap">
+            <div class="input-group flex-nowrap" data-search-step-1>
                 <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search..."]" />
                 @if (SearchFilterService.MatchCase)
                 {
@@ -40,7 +40,7 @@
 
             <small class="m-1"><i class="bi bi-filter"></i> @Loc["Filter"]</small>
 
-            <div class="input-group flex-nowrap">
+            <div class="input-group flex-nowrap" data-search-step-2>
                 <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)">@Loc["Planned"]</button>
                 <InputSelect class="form-control w-auto flex-grow-0" Value="SearchFilterService.PlannedAtCompare" ValueExpression="() => SearchFilterService.PlannedAtCompare" TValue="DateCompare" ValueChanged="UpdatePlannedAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
@@ -52,7 +52,7 @@
                 <button class="btn btn-outline-primary" @onclick="() => UpdatePlannedAtFilter(null)"><i class="bi bi-x-square"></i></button>
             </div>
 
-            <div class="input-group flex-nowrap">
+            <div class="input-group flex-nowrap" data-search-step-3>
                 <button class="input-group-text col-4" @onclick="() => UpdateDoneAtFilter(DateTime.Today)">@Loc["Done"]</button>
                 <InputSelect class="form-control w-auto flex-grow-0" Value="SearchFilterService.DoneAtCompare" ValueExpression="() => SearchFilterService.DoneAtCompare" TValue="DateCompare" ValueChanged="UpdateDoneAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
@@ -64,7 +64,7 @@
                 <button class="btn btn-outline-primary" @onclick="() => UpdateDoneAtFilter(null)"><i class="bi bi-x-square"></i></button>
             </div>
 
-            <div class="list-group-item">
+            <div class="list-group-item" data-search-step-4>
                 <CheckBox IsTriState="true" Checked="ShowAllCategories" CheckedChanged="(bool? show) => SetShowAllCategories()">
                     <span>@Loc["Categories"]:</span>
                 </CheckBox>
@@ -82,7 +82,7 @@
                 }
             </div>
 
-            <div class="list-group-item">
+            <div class="list-group-item" data-search-step-5>
                 <CheckBox IsTriState="true" Checked="ShowAllPriorities" CheckedChanged="(bool? show) => SetShowAllPriorities()">
                     <span>@Loc["Priorities"]:</span>
                 </CheckBox>
@@ -113,7 +113,7 @@
                 </div>
             </div>
 
-            <div class="list-group-item">
+            <div class="list-group-item" data-search-step-6>
                 <small class="">@Loc["Habit interval ratio"]:</small>
                 <InputSelect class="form-select" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
                     <option value="@Ratio.ElapsedToAverage">@Loc["Elapsed time to average interval"]</option>
@@ -131,7 +131,7 @@
 
             <small class="m-1"><i class="bi bi-arrow-down-up"></i> @Loc["Sort"]</small>
 
-            <div class="list-group-item">
+            <div class="list-group-item" data-search-step-7>
                 <small class=""><i class="bi bi-sticky"></i> @Loc["Notes"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
@@ -140,7 +140,7 @@
                 </InputSelect>
             </div>
 
-            <div class="list-group-item">
+            <div class="list-group-item" data-search-step-8>
                 <small class=""><i class="bi bi-list-task"></i> @Loc["Tasks"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
@@ -153,7 +153,7 @@
                 </InputSelect>
             </div>
 
-            <div class="list-group-item">
+            <div class="list-group-item" data-search-step-9>
                 <small class=""><i class="bi bi-repeat"></i> @Loc["Habits"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
@@ -182,7 +182,14 @@
     string[] tourSteps =
     {
         "Step 1",
-        "Step 1",
+        "Step 2",
+        "Step 3",
+        "Step 4",
+        "Step 5",
+        "Step 6",
+        "Step 7",
+        "Step 8",
+        "Step 9",
     };
 
     private async Task StartTour(string tourId)
