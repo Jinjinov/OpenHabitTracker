@@ -86,7 +86,7 @@ public static class MauiProgram
         // Microsoft.Extensions.Logging.Debug.DebugLoggerProvider
 
         ILogger<MauiApp> logger = mauiApp.Services.GetRequiredService<ILogger<MauiApp>>();
-        logger.LogInformation("Initializing databese");
+        logger.LogInformation("Initializing database");
 
         IDataAccess dataAccess = mauiApp.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();

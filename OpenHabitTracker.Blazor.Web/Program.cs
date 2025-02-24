@@ -171,7 +171,7 @@ static async Task CreateDefaultUserAsync(WebApplication app)
     using IServiceScope scope = app.Services.CreateScope();
 
     ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    logger.LogInformation("Initializing databese");
+    logger.LogInformation("Initializing database");
 
     IDataAccess dataAccess = scope.ServiceProvider.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
     await dataAccess.Initialize();

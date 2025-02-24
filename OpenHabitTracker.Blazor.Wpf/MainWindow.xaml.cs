@@ -64,7 +64,7 @@ public partial class MainWindow : Window
         // 0
 
         ILogger<MainWindow> logger = serviceProvider.GetRequiredService<ILogger<MainWindow>>();
-        logger.LogInformation("Initializing databese");
+        logger.LogInformation("Initializing database");
 
         IDataAccess dataAccess = serviceProvider.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();

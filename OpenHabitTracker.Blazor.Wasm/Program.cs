@@ -46,7 +46,7 @@ WebAssemblyHost host = builder.Build();
 // Microsoft.AspNetCore.Components.WebAssembly.Services.WebAssemblyConsoleLoggerProvider
 
 ILogger<Program> logger = host.Services.GetRequiredService<ILogger<Program>>();
-logger.LogInformation("Initializing databese");
+logger.LogInformation("Initializing database");
 
 IDataAccess dataAccess = host.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
 await dataAccess.Initialize();

@@ -62,7 +62,7 @@ public class Program
         // 0
 
         ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
-        logger.LogInformation("Initializing databese");
+        logger.LogInformation("Initializing database");
 
         IDataAccess dataAccess = app.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
