@@ -143,7 +143,22 @@
     }
 </div>
 
+@if (ClientState.Settings.ShowHelp)
+{
+    <GuidedTourComponent TourId="Tour" TourSteps="tourSteps" />
+}
+
 @code {
+    string[] tourSteps =
+    {
+        "Step 1",
+    };
+
+    private async Task StartTour()
+    {
+        await GTourService.StartTour("Tour");
+    }
+
     [EditorRequired]
     [Parameter]
     public HabitModel Habit { get; set; } = null!;

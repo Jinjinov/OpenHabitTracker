@@ -25,7 +25,22 @@
 
 @AuthFragment.GetAuthFragment(StateChanged, StateChangedChanged)
 
+@if (ClientState.Settings.ShowHelp)
+{
+    <GuidedTourComponent TourId="Tour" TourSteps="tourSteps" />
+}
+
 @code {
+    string[] tourSteps =
+    {
+        "Step 1",
+    };
+
+    private async Task StartTour()
+    {
+        await GTourService.StartTour("Tour");
+    }
+
     [Parameter]
     public bool StateChanged { get; set; }
 
