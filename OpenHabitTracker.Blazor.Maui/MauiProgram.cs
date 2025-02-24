@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Auth;
 using OpenHabitTracker.Blazor.Files;
@@ -42,8 +41,8 @@ public static class MauiProgram
         builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG
-		builder.Services.AddBlazorWebViewDeveloperTools();
-		builder.Logging.AddDebug();
+        builder.Services.AddBlazorWebViewDeveloperTools();
+        builder.Logging.AddDebug();
         //builder.Logging.SetMinimumLevel(LogLevel.Debug);
 #endif
         builder.Logging.AddConsole();

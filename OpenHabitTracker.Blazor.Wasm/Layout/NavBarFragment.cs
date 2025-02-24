@@ -1,5 +1,5 @@
-using OpenHabitTracker.Blazor.Layout;
 using Microsoft.AspNetCore.Components;
+using OpenHabitTracker.Blazor.Layout;
 
 namespace OpenHabitTracker.Blazor.Wasm.Layout;
 

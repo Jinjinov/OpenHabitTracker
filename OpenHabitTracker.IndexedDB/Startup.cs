@@ -1,6 +1,6 @@
-﻿using DnetIndexedDb;
-using OpenHabitTracker.Data;
+using DnetIndexedDb;
 using Microsoft.Extensions.DependencyInjection;
+using OpenHabitTracker.Data;
 
 namespace OpenHabitTracker.IndexedDB;
 

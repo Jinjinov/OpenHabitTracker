@@ -1,8 +1,8 @@
 using DnetIndexedDb;
 using DnetIndexedDb.Fluent;
 using DnetIndexedDb.Models;
-using OpenHabitTracker.Data.Entities;
 using Microsoft.JSInterop;
+using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.IndexedDB;
 

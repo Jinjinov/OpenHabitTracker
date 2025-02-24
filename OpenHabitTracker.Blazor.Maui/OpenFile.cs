@@ -1,5 +1,5 @@
-﻿using OpenHabitTracker.Blazor.Files;
 using Microsoft.AspNetCore.Components;
+using OpenHabitTracker.Blazor.Files;
 
 namespace OpenHabitTracker.Blazor.Maui;
 

@@ -1,6 +1,6 @@
-﻿using OpenHabitTracker.Backup.File;
-using OpenHabitTracker.Backup.GoogleKeep;
 using Microsoft.Extensions.DependencyInjection;
+using OpenHabitTracker.Backup.File;
+using OpenHabitTracker.Backup.GoogleKeep;
 
 namespace OpenHabitTracker.Backup;
 
