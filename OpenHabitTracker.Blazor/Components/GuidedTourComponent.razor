@@ -11,7 +11,7 @@
             <HeaderContent>
                 <div class="d-flex align-items-center w-100">
                     <small>@step / @TourSteps.Length</small>
-                    <button class="btn btn-outline-secondary p-1 lh-1 ms-auto" disabled="@((context as GTourStepComponent).IsLastStep)" @onclick="@(() => context.CancelTour())"><small><i class="bi bi-x-lg"></i></small></button>
+                    <button class="btn btn-outline-secondary p-1 lh-1 ms-auto" disabled="@((context as GTourStepComponent)!.IsLastStep)" @onclick="@(() => context.CancelTour())"><small><i class="bi bi-x-lg"></i></small></button>
                 </div>
             </HeaderContent>
             <ChildContent>
@@ -19,9 +19,9 @@
             </ChildContent>
             <FooterContent>
                 <div>
-                    <button class="btn btn-outline-secondary" disabled="@((context as GTourStepComponent).IsFirstStep)" @onclick="@(() => context.PreviousStep())"><small><i class="bi bi-chevron-double-left"></i></small></button>
-                    <button class="btn btn-outline-secondary" hidden="@((context as GTourStepComponent).IsLastStep)" @onclick="@(() => context.NextStep())"><small><i class="bi bi-chevron-double-right"></i></small></button>
-                    <button class="btn btn-outline-secondary" hidden="@(!(context as GTourStepComponent).IsLastStep)" @onclick="@(() => context.CompleteTour())"><small><i class="bi bi-check-lg"></i></small></button>
+                    <button class="btn btn-outline-secondary" disabled="@((context as GTourStepComponent)!.IsFirstStep)" @onclick="@(() => context.PreviousStep())"><small><i class="bi bi-chevron-double-left"></i></small></button>
+                    <button class="btn btn-outline-secondary" hidden="@((context as GTourStepComponent)!.IsLastStep)" @onclick="@(() => context.NextStep())"><small><i class="bi bi-chevron-double-right"></i></small></button>
+                    <button class="btn btn-outline-secondary" hidden="@(!(context as GTourStepComponent)!.IsLastStep)" @onclick="@(() => context.CompleteTour())"><small><i class="bi bi-check-lg"></i></small></button>
                 </div>
             </FooterContent>
         </GuidedTourStep>
@@ -30,8 +30,8 @@
 
 @code {
     [Parameter]
-    public string TourId { get; set; }
+    public string TourId { get; set; } = null!;
 
     [Parameter]
-    public string[] TourSteps { get; set; }
+    public string[] TourSteps { get; set; } = null!;
 }
