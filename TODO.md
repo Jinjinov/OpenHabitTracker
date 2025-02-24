@@ -111,10 +111,8 @@ public void CopyData(DbContext source, DbContext destination)
     {
         var sourceSet = source.Set(entityType.ClrType);
         var destinationSet = destination.Set(entityType.ClrType);
-
         // Retrieve all records without tracking.
         var data = sourceSet.AsNoTracking().ToList();
-
         // Add records to the destination context.
         destinationSet.AddRange(data);
     }
@@ -238,10 +236,10 @@ store the refresh token for each cloud provider
 
 ---------------------------------------------------------------------------------------------------
 
-    <PackageReference Include="AspNet.Security.OAuth.Dropbox" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.1" />
+<PackageReference Include="AspNet.Security.OAuth.Dropbox" Version="9.0.0" />
+<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.1" />
+<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.1" />
+<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.1" />
 
 ---------------------------------------------------------------------------------------------------
 
@@ -280,10 +278,8 @@ public static class AuthenticationSetup
                 var identity = context.Principal.Identity as ClaimsIdentity;
                 var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
                 var name = context.Principal.FindFirst(ClaimTypes.Name)?.Value;
-
                 identity.AddClaim(new Claim("email", email ?? string.Empty));
                 identity.AddClaim(new Claim("name", name ?? string.Empty));
-
                 // Save tokens for later API calls if needed
                 var tokens = JsonSerializer.Serialize(context.Properties.GetTokens());
                 identity.AddClaim(new Claim("tokens", tokens));
@@ -302,10 +298,8 @@ public static class AuthenticationSetup
                 var identity = context.Principal.Identity as ClaimsIdentity;
                 var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
                 var name = context.Principal.FindFirst(ClaimTypes.Name)?.Value;
-
                 identity.AddClaim(new Claim("email", email ?? string.Empty));
                 identity.AddClaim(new Claim("name", name ?? string.Empty));
-
                 // Save tokens for later API calls
                 var tokens = JsonSerializer.Serialize(context.Properties.GetTokens());
                 identity.AddClaim(new Claim("tokens", tokens));
@@ -319,7 +313,6 @@ public static class AuthenticationSetup
             options.Events.OnCreatingTicket = async context =>
             {
                 var identity = context.Principal.Identity as ClaimsIdentity;
-
                 // Dropbox doesn't return email in default scopes, so fetch additional data if needed
                 var userInfoResponse = await context.Backchannel.GetAsync("https://api.dropboxapi.com/2/users/get_current_account");
                 if (userInfoResponse.IsSuccessStatusCode)
@@ -327,7 +320,6 @@ public static class AuthenticationSetup
                     var userInfo = JsonDocument.Parse(await userInfoResponse.Content.ReadAsStringAsync());
                     var email = userInfo.RootElement.GetProperty("email").GetString();
                     var name = userInfo.RootElement.GetProperty("name").GetProperty("display_name").GetString();
-
                     identity.AddClaim(new Claim("email", email ?? string.Empty));
                     identity.AddClaim(new Claim("name", name ?? string.Empty));
                 }
@@ -347,14 +339,11 @@ public static class AuthenticationSetup
                 var identity = context.Principal.Identity as ClaimsIdentity;
                 var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
                 var name = context.Principal.FindFirst("name")?.Value;
-
                 identity.AddClaim(new Claim("email", email ?? string.Empty));
                 identity.AddClaim(new Claim("name", name ?? string.Empty));
-
                 return Task.CompletedTask;
             };
         });
-
         return services;
     }
 }
@@ -438,7 +427,7 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 
 benchmark method time & render time
 
-read Settings from DB before Run() - !!! Transient / Scoped / Singleton !!!
+read Settings from DB before Run() - !!! Transient / Scoped / Singleton !!! - Scoped instances before and after Run() are not the same
 
 ??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
 
