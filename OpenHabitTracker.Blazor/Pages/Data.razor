@@ -33,19 +33,19 @@
 }
 
 @code {
-    string[] tourSteps =
+    TourStep[] tourSteps =
     {
-        "Load examples",
-        "Delete all data",
-        "Export JSON",
-        "Export TSV",
-        "Export YAML",
-        "Export Markdown",
-        "JSON (.json)",
-        "TSV (.tsv)",
-        "YAML (.yaml)",
-        "Markdown (.md)",
-        "Google Keep (.zip)",
+        new() { Text = "Load examples" },
+        new() { Text = "Delete all data" },
+        new() { Text = "Export JSON" },
+        new() { Text = "Export TSV" },
+        new() { Text = "Export YAML" },
+        new() { Text = "Export Markdown" },
+        new() { Text = "JSON (.json)" },
+        new() { Text = "TSV (.tsv)" },
+        new() { Text = "YAML (.yaml)" },
+        new() { Text = "Markdown (.md)" },
+        new() { Text = "Google Keep (.zip)" },
     };
 
     private async Task StartTour(string tourId)

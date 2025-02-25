@@ -129,12 +129,12 @@
 }
 
 @code {
-    string[] tourSteps =
+    TourStep[] tourSteps =
     {
-        "Title",
-        "Content",
-        "Title",
-        "Content",
+        new() { Text = "Title" },
+        new() { Text = "Content" },
+        new() { Text = "Title" },
+        new() { Text = "Content" },
     };
 
     private async Task StartTour(string tourId)

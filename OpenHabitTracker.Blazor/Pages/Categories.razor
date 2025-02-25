@@ -58,9 +58,9 @@
 }
 
 @code {
-    string[] tourSteps =
+    TourStep[] tourSteps =
     {
-        "Add new category",
+        new() { Text = "Add new category" },
     };
 
     private async Task StartTour(string tourId)

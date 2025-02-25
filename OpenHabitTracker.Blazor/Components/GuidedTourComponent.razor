@@ -7,7 +7,7 @@
     {
         int step = i + 1;
 
-        <GuidedTourStep Title="" StepName="@($"{TourId}-step-{step}")" TourStepSequence="@step" ElementSelector="@($"[data-{TourId}-step-{step}]")">
+        <GuidedTourStep Title="" SkipStep="@(!TourSteps[step - 1].Show())" StepName="@($"{TourId}-step-{step}")" TourStepSequence="@step" ElementSelector="@($"[data-{TourId}-step-{step}]")">
             <HeaderContent>
                 <div class="d-flex align-items-center w-100">
                     <small>@step / @TourSteps.Length</small>
@@ -15,7 +15,7 @@
                 </div>
             </HeaderContent>
             <ChildContent>
-                <div style="min-width:100px">@TourSteps[step - 1]</div>
+                <div style="min-width:100px">@TourSteps[step - 1].Text</div>
             </ChildContent>
             <FooterContent>
                 <div>
@@ -33,5 +33,5 @@
     public string TourId { get; set; } = null!;
 
     [Parameter]
-    public string[] TourSteps { get; set; } = null!;
+    public TourStep[] TourSteps { get; set; } = null!;
 }

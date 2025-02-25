@@ -47,10 +47,10 @@
 }
 
 @code {
-    string[] tourSteps =
+    TourStep[] tourSteps =
     {
-        "Restore all",
-        "Empty trash",
+        new() { Text = "Restore all" },
+        new() { Text = "Empty trash" },
     };
 
     private async Task StartTour(string tourId)

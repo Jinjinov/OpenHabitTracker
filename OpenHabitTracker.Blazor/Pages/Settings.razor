@@ -176,25 +176,25 @@
 }
 
 @code {
-    string[] tourSteps =
+    TourStep[] tourSteps =
     {
-        "Dark mode",
-        "Theme",
-        "Start page",
-        "Start sidebar",
-        "Show help",
-        "Show item list",
-        "Show small calendar",
-        "Show large calendar",
-        "Show color",
-        "Show created & updated",
-        "Language",
-        "Week start",
-        "Insert tabs in note content",
-        "Display note content as Markdown",
-        "Reset habit when it is completed",
-        "Horizontal space",
-        "Vertical space",
+        new() { Text = "Dark mode" },
+        new() { Text = "Theme" },
+        new() { Text = "Start page" },
+        new() { Text = "Start sidebar" },
+        new() { Text = "Show help" },
+        new() { Text = "Show item list" },
+        new() { Text = "Show small calendar" },
+        new() { Text = "Show large calendar" },
+        new() { Text = "Show color" },
+        new() { Text = "Show created & updated" },
+        new() { Text = "Language" },
+        new() { Text = "Week start" },
+        new() { Text = "Insert tabs in note content" },
+        new() { Text = "Display note content as Markdown" },
+        new() { Text = "Reset habit when it is completed" },
+        new() { Text = "Horizontal space" },
+        new() { Text = "Vertical space" },
     };
 
     private async Task StartTour(string tourId)
