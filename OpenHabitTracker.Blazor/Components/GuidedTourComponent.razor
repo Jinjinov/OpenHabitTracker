@@ -10,7 +10,7 @@
         <GuidedTourStep Title="" SkipStep="@(!TourSteps[step - 1].Show())" StepName="@($"{TourId}-step-{step}")" TourStepSequence="@step" ElementSelector="@($"[data-{TourId}-step-{step}]")">
             <HeaderContent>
                 <div class="d-flex align-items-center w-100">
-                    <small>@step.</small>
+                    <small>@step / @TourSteps.Length</small>
                     <button class="btn btn-outline-secondary p-1 lh-1 ms-auto" disabled="@((context as GTourStepComponent)!.IsLastStep)" @onclick="@(() => context.CancelTour())"><small><i class="bi bi-x-lg"></i></small></button>
                 </div>
             </HeaderContent>
