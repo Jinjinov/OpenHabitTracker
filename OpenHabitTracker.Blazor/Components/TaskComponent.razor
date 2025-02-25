@@ -10,7 +10,7 @@
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
 
-<div class="input-group flex-nowrap">
+<div class="input-group flex-nowrap" data-tasks-step-3>
     <PriorityComponent Model="Task" />
     <InputText class="form-control" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
     <button class="@($"btn {(Task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(Task)"><i class="bi bi-check-square"></i></button>
@@ -18,7 +18,9 @@
     <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()"><i class="bi bi-x-square"></i></button>
 </div>
 
-<ItemsComponent Items=Task />
+<div data-tasks-step-4>
+    <ItemsComponent Items=Task />
+</div>
 
 <div class="input-group">
     <span class="input-group-text col-4">@Loc["Planned at"]</span>

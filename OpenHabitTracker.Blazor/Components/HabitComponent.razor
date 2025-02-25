@@ -10,7 +10,7 @@
 @inject IGTourService GTourService
 
 <div>
-    <div class="input-group flex-nowrap">
+    <div class="input-group flex-nowrap" data-habits-step-4>
         <PriorityComponent Model="Habit" />
         <InputText class="form-control" Value="@Habit.Title" ValueExpression="() => Habit.Title" ValueChanged="(string title) => SaveTitle(Habit, title)" />
         @if (!ClientState.Settings.ShowLargeCalendar)
@@ -21,11 +21,13 @@
         <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()"><i class="bi bi-x-square"></i></button>
     </div>
 
-    <ItemsComponent Items=Habit />
+    <div data-habits-step-5>
+        <ItemsComponent Items=Habit />
+    </div>
 
     @if (ClientState.Settings.ShowLargeCalendar)
     {
-        <div class="input-group-text p-0 border-0 rounded-0">
+        <div class="input-group-text p-0 border-0 rounded-0" data-habits-step-6>
             <div class="mx-auto">
                 <CalendarComponent Habit="Habit" HabitChanged="OnHabitChanged" DisplayMonth DisplayTimeList="_timer is null" />
             </div>
