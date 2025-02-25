@@ -25,7 +25,7 @@
 :root {
     --bs-modal-zindex: 1055;
     --bs-modal-width: 500px;
-    --bs-modal-padding: 0.375rem;
+    --bs-modal-padding: 0.5rem;
     --bs-modal-margin: 0.5rem;
     --bs-modal-color:;
     --bs-modal-bg: var(--bs-body-bg);
@@ -34,9 +34,9 @@
     --bs-modal-border-radius: 0;
     --bs-modal-box-shadow: var(--bs-box-shadow-sm);
     --bs-modal-inner-border-radius: 0;
-    --bs-modal-header-padding-x: 0.375rem;
-    --bs-modal-header-padding-y: 0.375rem;
-    --bs-modal-header-padding: 0.375rem 0.375rem;
+    --bs-modal-header-padding-x: 0.5rem;
+    --bs-modal-header-padding-y: 0.5rem;
+    --bs-modal-header-padding: 0.5rem 0.5rem;
     --bs-modal-header-border-color: var(--bs-border-color);
     --bs-modal-header-border-width: var(--bs-border-width);
     --bs-modal-title-line-height: 1.5;

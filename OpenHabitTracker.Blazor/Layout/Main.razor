@@ -82,7 +82,7 @@
                     @if (_dynamicComponentType != typeof(Menu))
                     {
                         <div class="input-group flex-nowrap my-1">
-                            @if (ClientState.Settings.ShowHelp)
+                            @if (ClientState.Settings.ShowHelp && _dynamicComponentType != typeof(About))
                             {
                                 <small class="input-group-text" @onclick="@(() => StartTour(_guidedTourByTypeName[_dynamicComponentType.Name]))"><i class="bi bi-question-circle"></i></small>
                             }
