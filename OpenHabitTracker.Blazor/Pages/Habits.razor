@@ -124,7 +124,7 @@
                         style = "height: 50px;";
                     }
                     <div class="w-100">
-                        <div class="input-group flex-nowrap" style="@style">
+                        <div class="input-group flex-nowrap" style="@style" data-habits-step-1>
                             <span class="input-group-text">@PriorityService.GetPriorityTitle(habit.Priority)</span>
                             <button class="@($"input-group-text flex-grow-1 text-wrap {habit.Color} highlightable")" @onclick="() => OpenSelected(habit.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
 
@@ -149,12 +149,14 @@
 
                         @if (ClientState.Settings.ShowItemList)
                         {
-                            <ItemsComponent Items=habit IsReadOnly=true />
+                            <div data-habits-step-2>
+                                <ItemsComponent Items=habit IsReadOnly=true />
+                            </div>
                         }
 
                         @if (IsEmbedded && ClientState.Settings.ShowSmallCalendar)
                         {
-                            <div class="input-group-text p-0 border-0 rounded-0">
+                            <div class="input-group-text p-0 border-0 rounded-0" data-habits-step-3>
                                 <div class="mx-auto">
                                     <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" />
                                  </div>
@@ -164,13 +166,18 @@
                     </div>
                     if (!IsEmbedded && ClientState.Settings.ShowSmallCalendar)
                     {
-                        <div class="d-flex">
+                        <div class="d-flex" data-habits-step-3>
                             <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" DisplayBasedOnWidth />
                         </div>
                     }
                 }
             </div>
         }
+    }
+
+    @if (ClientState.Settings.ShowHelp)
+    {
+        <GuidedTourComponent TourId="habits" TourSteps="tourSteps" />
     }
 
 </div>
@@ -194,16 +201,12 @@
     </div>
 }
 
-@if (ClientState.Settings.ShowHelp)
-{
-    <GuidedTourComponent TourId="habits" TourSteps="tourSteps" />
-}
-
 @code {
     string[] tourSteps =
     {
-        "Step 1",
-        "Step 1",
+        "Title",
+        "Items",
+        "Calendar",
     };
 
     private async Task StartTour(string tourId)

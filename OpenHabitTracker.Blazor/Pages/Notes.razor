@@ -84,22 +84,27 @@
                 }
                 else
                 {
-                    <div class="input-group flex-nowrap">
+                    <div class="input-group flex-nowrap" data-notes-step-1>
                         <span class="input-group-text">@PriorityService.GetPriorityTitle(note.Priority)</span>
                         <button class="@($"input-group-text flex-grow-1 text-wrap {note.Color} highlightable")" @onclick="() => OpenSelected(note.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
                     </div>
 
                     if (ClientState.Settings.DisplayNoteContentAsMarkdown)
                     {
-                        <div class="form-control markdown-block-margin" style="min-height: 38px;">@((MarkupString)SearchFilterService.MarkSearchResultsInHtml(note.ContentMarkdown))</div>
+                        <div class="form-control markdown-block-margin" style="min-height: 38px;" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResultsInHtml(note.ContentMarkdown))</div>
                     }
                     else
                     {
-                        <div class="form-control" style="white-space: pre-wrap; min-height: 38px;">@((MarkupString)SearchFilterService.MarkSearchResults(note.Content))</div>
+                        <div class="form-control" style="white-space: pre-wrap; min-height: 38px;" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Content))</div>
                     }
                 }
             </div>
         }
+    }
+
+    @if (ClientState.Settings.ShowHelp)
+    {
+        <GuidedTourComponent TourId="notes" TourSteps="tourSteps" />
     }
 
 </div>
@@ -123,16 +128,11 @@
     </div>
 }
 
-@if (ClientState.Settings.ShowHelp)
-{
-    <GuidedTourComponent TourId="notes" TourSteps="tourSteps" />
-}
-
 @code {
     string[] tourSteps =
     {
-        "Step 1",
-        "Step 1",
+        "Title",
+        "Content",
     };
 
     private async Task StartTour(string tourId)

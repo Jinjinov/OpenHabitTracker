@@ -107,7 +107,7 @@
                 }
                 else
                 {
-                    <div class="input-group flex-nowrap">
+                    <div class="input-group flex-nowrap" data-tasks-step-1>
                         <span class="input-group-text">@PriorityService.GetPriorityTitle(task.Priority)</span>
                         <button class="@($"input-group-text flex-grow-1 text-wrap {task.Color} highlightable")" @onclick="() => OpenSelected(task.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
                         @if (task.PlannedAt is not null)
@@ -119,11 +119,18 @@
 
                     if (ClientState.Settings.ShowItemList)
                     {
-                        <ItemsComponent Items=task IsReadOnly=true />
+                        <div data-tasks-step-2>
+                            <ItemsComponent Items=task IsReadOnly=true />
+                        </div>
                     }
                 }
             </div>
         }
+    }
+
+    @if (ClientState.Settings.ShowHelp)
+    {
+        <GuidedTourComponent TourId="tasks" TourSteps="tourSteps" />
     }
 
 </div>
@@ -147,16 +154,11 @@
     </div>
 }
 
-@if (ClientState.Settings.ShowHelp)
-{
-    <GuidedTourComponent TourId="tasks" TourSteps="tourSteps" />
-}
-
 @code {
     string[] tourSteps =
     {
-        "Step 1",
-        "Step 1",
+        "Title",
+        "Items",
     };
 
     private async Task StartTour(string tourId)
