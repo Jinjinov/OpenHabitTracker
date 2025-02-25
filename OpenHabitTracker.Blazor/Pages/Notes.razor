@@ -84,18 +84,18 @@
                 }
                 else
                 {
-                    <div class="input-group flex-nowrap" data-notes-step-1>
-                        <span class="input-group-text">@PriorityService.GetPriorityTitle(note.Priority)</span>
-                        <button class="@($"input-group-text flex-grow-1 text-wrap {note.Color} highlightable")" @onclick="() => OpenSelected(note.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" data-notes-step-1>@PriorityService.GetPriorityTitle(note.Priority)</span>
+                        <button class="@($"input-group-text flex-grow-1 text-wrap {note.Color} highlightable")" @onclick="() => OpenSelected(note.Id)" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
                     </div>
 
                     if (ClientState.Settings.DisplayNoteContentAsMarkdown)
                     {
-                        <div class="form-control markdown-block-margin" style="min-height: 38px;" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResultsInHtml(note.ContentMarkdown))</div>
+                        <div class="form-control markdown-block-margin" style="min-height: 38px;" data-notes-step-3>@((MarkupString)SearchFilterService.MarkSearchResultsInHtml(note.ContentMarkdown))</div>
                     }
                     else
                     {
-                        <div class="form-control" style="white-space: pre-wrap; min-height: 38px;" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Content))</div>
+                        <div class="form-control" style="white-space: pre-wrap; min-height: 38px;" data-notes-step-3>@((MarkupString)SearchFilterService.MarkSearchResults(note.Content))</div>
                     }
                 }
             </div>
@@ -135,10 +135,15 @@
     {
         tourSteps = new TourStep[]
         {
+            new() { Text = "Priority" },
             new() { Text = "Title" },
             new() { Text = "Content" },
+            new() { Text = "Priority", Show = () => _showNoteComponent },
             new() { Text = "Title", Show = () => _showNoteComponent },
+            new() { Text = "Delete", Show = () => _showNoteComponent },
+            new() { Text = "Close", Show = () => _showNoteComponent },
             new() { Text = "Content", Show = () => _showNoteComponent },
+            new() { Text = "Category", Show = () => _showNoteComponent },
         };
     }
 
