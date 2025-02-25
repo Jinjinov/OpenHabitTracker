@@ -138,7 +138,7 @@
 @if (_showSecondColumn)
 {
     <div class="col child-column px-0 px-md-1 py-1">
-        @if (Id is not null && TaskService.SelectedTask is not null && TaskService.NewTask is null)
+        @if (_showTaskComponent)
         {
             <TaskComponent Task="TaskService.SelectedTask" CloseSelected="CloseSelected" />
         }
@@ -155,13 +155,18 @@
 }
 
 @code {
-    TourStep[] tourSteps =
+    TourStep[] tourSteps;
+
+    public Tasks()
     {
-        new() { Text = "Title" },
-        new() { Text = "Items" },
-        new() { Text = "Title" },
-        new() { Text = "Items" },
-    };
+        tourSteps = new TourStep[]
+        {
+            new() { Text = "Title" },
+            new() { Text = "Items" },
+            new() { Text = "Title", Show = () => _showTaskComponent },
+            new() { Text = "Items", Show = () => _showTaskComponent },
+        };
+    }
 
     private async Task StartTour(string tourId)
     {
@@ -181,6 +186,8 @@
     public Dimensions? WindowDimensions { get; set; }
 
     bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width >= 1280;
+
+    bool _showTaskComponent => Id is not null && TaskService.SelectedTask is not null && TaskService.NewTask is null;
 
     InputTextImmediate? inputElement;
 

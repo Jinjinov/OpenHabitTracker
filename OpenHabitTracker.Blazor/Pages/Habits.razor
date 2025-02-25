@@ -159,7 +159,7 @@
                             <div class="input-group-text p-0 border-0 rounded-0" data-habits-step-3>
                                 <div class="mx-auto">
                                     <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" />
-                                 </div>
+                                </div>
                             </div>
                         }
 
@@ -185,7 +185,7 @@
 @if (_showSecondColumn)
 {
     <div class="col child-column px-0 px-md-1 py-1">
-        @if (Id is not null && HabitService.SelectedHabit is not null && HabitService.NewHabit is null)
+        @if (_showHabitComponent)
         {
             <HabitComponent Habit="HabitService.SelectedHabit" HabitChanged="StateHasChanged" CloseSelected="CloseSelected" />
         }
@@ -202,15 +202,20 @@
 }
 
 @code {
-    TourStep[] tourSteps =
+    TourStep[] tourSteps;
+
+    public Habits()
     {
-        new() { Text = "Title" },
-        new() { Text = "Items" },
-        new() { Text = "Calendar" },
-        new() { Text = "Title" },
-        new() { Text = "Items" },
-        new() { Text = "Calendar" },
-    };
+        tourSteps = new TourStep[]
+        {
+            new() { Text = "Title" },
+            new() { Text = "Items" },
+            new() { Text = "Calendar" },
+            new() { Text = "Title", Show = () => _showHabitComponent },
+            new() { Text = "Items", Show = () => _showHabitComponent },
+            new() { Text = "Calendar", Show = () => _showHabitComponent },
+        };
+    }
 
     private async Task StartTour(string tourId)
     {
@@ -235,6 +240,8 @@
     string? _dynamicComponentTypeName;
 
     bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width >= 1280;
+
+    bool _showHabitComponent => Id is not null && HabitService.SelectedHabit is not null && HabitService.NewHabit is null;
 
     InputTextImmediate? inputElement;
 

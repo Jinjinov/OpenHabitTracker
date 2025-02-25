@@ -112,7 +112,7 @@
 @if (_showSecondColumn)
 {
     <div class="col child-column px-0 px-md-1 py-1">
-        @if (Id is not null && NoteService.SelectedNote is not null && NoteService.NewNote is null)
+        @if (_showNoteComponent)
         {
             <NoteComponent Note="NoteService.SelectedNote" CloseSelected="CloseSelected" />
         }
@@ -129,13 +129,18 @@
 }
 
 @code {
-    TourStep[] tourSteps =
+    TourStep[] tourSteps;
+
+    public Notes()
     {
-        new() { Text = "Title" },
-        new() { Text = "Content" },
-        new() { Text = "Title" },
-        new() { Text = "Content" },
-    };
+        tourSteps = new TourStep[]
+        {
+            new() { Text = "Title" },
+            new() { Text = "Content" },
+            new() { Text = "Title", Show = () => _showNoteComponent },
+            new() { Text = "Content", Show = () => _showNoteComponent },
+        };
+    }
 
     private async Task StartTour(string tourId)
     {
@@ -155,6 +160,8 @@
     public Dimensions? WindowDimensions { get; set; }
 
     bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width >= 1280;
+
+    bool _showNoteComponent => Id is not null && NoteService.SelectedNote is not null && NoteService.NewNote is null;
 
     InputTextImmediate? inputElement;
 
