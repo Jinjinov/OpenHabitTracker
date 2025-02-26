@@ -107,19 +107,19 @@
                 }
                 else
                 {
-                    <div class="input-group flex-nowrap" data-tasks-step-1>
-                        <span class="input-group-text">@PriorityService.GetPriorityTitle(task.Priority)</span>
-                        <button class="@($"input-group-text flex-grow-1 text-wrap {task.Color} highlightable")" @onclick="() => OpenSelected(task.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" data-tasks-step-1>@PriorityService.GetPriorityTitle(task.Priority)</span>
+                        <button class="@($"input-group-text flex-grow-1 text-wrap {task.Color} highlightable")" @onclick="() => OpenSelected(task.Id)" data-tasks-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
                         @if (task.PlannedAt is not null)
                         {
-                            <small class="input-group-text">@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
+                            <small class="input-group-text" data-tasks-step-3>@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
                         }
-                        <button class="@($"btn {(task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(task)"><i class="bi bi-check-square"></i></button>
+                        <button class="@($"btn {(task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(task)" data-tasks-step-4><i class="bi bi-check-square"></i></button>
                     </div>
 
                     if (ClientState.Settings.ShowItemList)
                     {
-                        <div data-tasks-step-2>
+                        <div data-tasks-step-5>
                             <ItemsComponent Items=task IsReadOnly=true />
                         </div>
                     }
@@ -161,10 +161,21 @@
     {
         tourSteps = new TourStep[]
         {
+            new() { Text = "Priority" },
             new() { Text = "Title" },
+            new() { Text = "Planned at" },
+            new() { Text = "Mark as done" },
             new() { Text = "Items" },
+            new() { Text = "Priority", Show = () => _showTaskComponent },
             new() { Text = "Title", Show = () => _showTaskComponent },
+            new() { Text = "Mark as done", Show = () => _showTaskComponent },
+            new() { Text = "Delete", Show = () => _showTaskComponent },
+            new() { Text = "Close", Show = () => _showTaskComponent },
             new() { Text = "Items", Show = () => _showTaskComponent },
+            new() { Text = "Planned at", Show = () => _showTaskComponent },
+            new() { Text = "Duration", Show = () => _showTaskComponent },
+            new() { Text = "Timer", Show = () => _showTaskComponent },
+            new() { Text = "Category", Show = () => _showTaskComponent },
         };
     }
 
