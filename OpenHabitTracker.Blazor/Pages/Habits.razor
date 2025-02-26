@@ -216,8 +216,22 @@
             new() { Text = "Calendar", Show = () => ClientState.Settings.ShowSmallCalendar },
             new() { Text = "Priority", Show = () => _showHabitComponent },
             new() { Text = "Title", Show = () => _showHabitComponent },
+            new() { Text = "Mark as done", Show = () => _showHabitComponent && !ClientState.Settings.ShowSmallCalendar },
+            new() { Text = "Delete", Show = () => _showHabitComponent },
+            new() { Text = "Close", Show = () => _showHabitComponent },
             new() { Text = "Items", Show = () => _showHabitComponent },
-            new() { Text = "Calendar", Show = () => _showHabitComponent },
+            new() { Text = "Calendar", Show = () => _showHabitComponent && ClientState.Settings.ShowLargeCalendar },
+            new() { Text = "Repeat", Show = () => _showHabitComponent },
+            new() { Text = "Duration", Show = () => _showHabitComponent },
+            new() { Text = "Timer", Show = () => _showHabitComponent },
+            new() { Text = "Time spent", Show = () => _showHabitComponent },
+            new() { Text = "Elapsed time", Show = () => _showHabitComponent },
+            new() { Text = "Repeat interval", Show = () => _showHabitComponent },
+            new() { Text = "Average interval", Show = () => _showHabitComponent },
+            new() { Text = "Average interval to repeat interval ratio", Show = () => _showHabitComponent },
+            new() { Text = "Category", Show = () => _showHabitComponent },
+            new() { Text = "Color", Show = () => _showHabitComponent && ClientState.Settings.ShowColor },
+            new() { Text = "Created, Updated", Show = () => _showHabitComponent && ClientState.Settings.ShowCreatedUpdated },
         };
     }
 
