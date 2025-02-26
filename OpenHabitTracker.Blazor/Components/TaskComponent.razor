@@ -101,7 +101,7 @@
 
 @if (ClientState.Settings.ShowColor)
 {
-    <div class="input-group flex-nowrap">
+    <div class="input-group flex-nowrap" data-tasks-step-16>
         <span class="input-group-text col-4">@Loc["Color"]</span>
         <ColorComponent Model="Task" />
     </div>
@@ -109,7 +109,7 @@
 
 @if (ClientState.Settings.ShowCreatedUpdated)
 {
-    <div class="p-1 border rounded-0">
+    <div class="p-1 border rounded-0" data-tasks-step-17>
         <small class="d-inline-block mx-1">@Loc["Created"]: @Task.CreatedAt</small>
         <small class="d-inline-block mx-1">@Loc["Updated"]: @Task.UpdatedAt</small>
     </div>

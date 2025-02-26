@@ -144,6 +144,8 @@
             new() { Text = "Close", Show = () => _showNoteComponent },
             new() { Text = "Content", Show = () => _showNoteComponent },
             new() { Text = "Category", Show = () => _showNoteComponent },
+            new() { Text = "Color", Show = () => _showNoteComponent && ClientState.Settings.ShowColor },
+            new() { Text = "Created, Updated", Show = () => _showNoteComponent && ClientState.Settings.ShowCreatedUpdated },
         };
     }
 

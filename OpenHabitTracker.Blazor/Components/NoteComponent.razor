@@ -30,7 +30,7 @@
 
 @if (ClientState.Settings.ShowColor)
 {
-    <div class="input-group flex-nowrap">
+    <div class="input-group flex-nowrap" data-notes-step-10>
         <span class="input-group-text col-4">@Loc["Color"]</span>
         <ColorComponent Model="Note" />
     </div>
@@ -38,7 +38,7 @@
 
 @if (ClientState.Settings.ShowCreatedUpdated)
 {
-    <div class="p-1 border rounded-0">
+    <div class="p-1 border rounded-0" data-notes-step-11>
         <small class="d-inline-block mx-1">@Loc["Created"]: @Note.CreatedAt</small>
         <small class="d-inline-block mx-1">@Loc["Updated"]: @Note.UpdatedAt</small>
     </div>

@@ -124,9 +124,9 @@
                         style = "height: 50px;";
                     }
                     <div class="w-100">
-                        <div class="input-group flex-nowrap" style="@style" data-habits-step-1>
-                            <span class="input-group-text">@PriorityService.GetPriorityTitle(habit.Priority)</span>
-                            <button class="@($"input-group-text flex-grow-1 text-wrap {habit.Color} highlightable")" @onclick="() => OpenSelected(habit.Id)">@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
+                        <div class="input-group flex-nowrap" style="@style">
+                            <span class="input-group-text" data-habits-step-1>@PriorityService.GetPriorityTitle(habit.Priority)</span>
+                            <button class="@($"input-group-text flex-grow-1 text-wrap {habit.Color} highlightable")" @onclick="() => OpenSelected(habit.Id)" data-habits-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
 
                             @{
                                 string color = habit.GetRatio(ClientState.Settings.SelectedRatio) switch
@@ -136,27 +136,27 @@
                                     _ => "bg-success-subtle"
                                 };
                             }
-                            <small class="@($"input-group-text {color}")">
+                            <small class="@($"input-group-text {color}")" data-habits-step-3>
                                 @(habit.LastTimeDoneAt is not null ? ToHighestValueString(habit.ElapsedTime) : "⊘")
                                 (@habit.GetRatio(ClientState.Settings.SelectedRatio).ToString("N0")%)
                             </small>
 
                             @if (!ClientState.Settings.ShowSmallCalendar)
                             {
-                                <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)"><i class="bi bi-check-square"></i></button>
+                                <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)" data-habits-step-4><i class="bi bi-check-square"></i></button>
                             }
                         </div>
 
                         @if (ClientState.Settings.ShowItemList)
                         {
-                            <div data-habits-step-2>
+                            <div data-habits-step-5>
                                 <ItemsComponent Items=habit IsReadOnly=true />
                             </div>
                         }
 
                         @if (IsEmbedded && ClientState.Settings.ShowSmallCalendar)
                         {
-                            <div class="input-group-text p-0 border-0 rounded-0" data-habits-step-3>
+                            <div class="input-group-text p-0 border-0 rounded-0" data-habits-step-6>
                                 <div class="mx-auto">
                                     <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" />
                                 </div>
@@ -166,7 +166,7 @@
                     </div>
                     if (!IsEmbedded && ClientState.Settings.ShowSmallCalendar)
                     {
-                        <div class="d-flex" data-habits-step-3>
+                        <div class="d-flex" data-habits-step-6>
                             <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" DisplayBasedOnWidth />
                         </div>
                     }
@@ -208,9 +208,13 @@
     {
         tourSteps = new TourStep[]
         {
+            new() { Text = "Priority" },
             new() { Text = "Title" },
-            new() { Text = "Items" },
-            new() { Text = "Calendar" },
+            new() { Text = "Ratio" },
+            new() { Text = "Mark as done", Show = () => !ClientState.Settings.ShowSmallCalendar },
+            new() { Text = "Items", Show = () => ClientState.Settings.ShowItemList },
+            new() { Text = "Calendar", Show = () => ClientState.Settings.ShowSmallCalendar },
+            new() { Text = "Priority", Show = () => _showHabitComponent },
             new() { Text = "Title", Show = () => _showHabitComponent },
             new() { Text = "Items", Show = () => _showHabitComponent },
             new() { Text = "Calendar", Show = () => _showHabitComponent },

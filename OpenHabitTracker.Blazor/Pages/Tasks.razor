@@ -165,7 +165,7 @@
             new() { Text = "Title" },
             new() { Text = "Planned at" },
             new() { Text = "Mark as done" },
-            new() { Text = "Items" },
+            new() { Text = "Items", Show = () => ClientState.Settings.ShowItemList },
             new() { Text = "Priority", Show = () => _showTaskComponent },
             new() { Text = "Title", Show = () => _showTaskComponent },
             new() { Text = "Mark as done", Show = () => _showTaskComponent },
@@ -176,6 +176,8 @@
             new() { Text = "Duration", Show = () => _showTaskComponent },
             new() { Text = "Timer", Show = () => _showTaskComponent },
             new() { Text = "Category", Show = () => _showTaskComponent },
+            new() { Text = "Color", Show = () => _showTaskComponent && ClientState.Settings.ShowColor },
+            new() { Text = "Created, Updated", Show = () => _showTaskComponent && ClientState.Settings.ShowCreatedUpdated },
         };
     }
 
