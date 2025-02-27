@@ -122,19 +122,19 @@
 
     @if (Habit.TimesDone is not null && Habit.LastTimeDoneAt is not null)
     {
-        <div class="p-1 border rounded-0">
+        <div class="p-1 border rounded-0" data-habits-step-22>
             <small>@Loc["Completed"] @Habit.TimesDone.Count @Loc["times, last time on"] @Habit.LastTimeDoneAt</small>
         </div>
     }
 
-    <div class="input-group flex-nowrap" data-habits-step-22>
+    <div class="input-group flex-nowrap" data-habits-step-23>
         <span class="input-group-text col-4">@Loc["Category"]</span>
         <CategoryComponent Model="Habit" />
     </div>
 
     @if (ClientState.Settings.ShowColor)
     {
-        <div class="input-group flex-nowrap" data-habits-step-23>
+        <div class="input-group flex-nowrap" data-habits-step-24>
             <span class="input-group-text col-4">@Loc["Color"]</span>
             <ColorComponent Model="Habit" />
         </div>
@@ -142,7 +142,7 @@
 
     @if (ClientState.Settings.ShowCreatedUpdated)
     {
-        <div class="p-1 border rounded-0" data-habits-step-24>
+        <div class="p-1 border rounded-0" data-habits-step-25>
             <small class="d-inline-block mx-1">@Loc["Created"]: @Habit.CreatedAt</small>
             <small class="d-inline-block mx-1">@Loc["Updated"]: @Habit.UpdatedAt</small>
         </div>

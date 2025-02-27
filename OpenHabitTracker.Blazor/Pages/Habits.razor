@@ -229,6 +229,7 @@
             new() { Text = "Habit's desired repeat interval.", Show = () => _showHabitComponent },
             new() { Text = "Habit's average repeat interval.", Show = () => _showHabitComponent },
             new() { Text = "The ratio of habit's average repeat interval to the habit's desired repeat interval.", Show = () => _showHabitComponent },
+            new() { Text = "How many times was the habit completed and when was the habit last completed.", Show = () => _showHabitCompletedTimes },
             new() { Text = "Set the habit's category.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's color.", Show = () => _showHabitComponent && ClientState.Settings.ShowColor },
             new() { Text = "The date when the habit was created and the date when the habit was last updated.", Show = () => _showHabitComponent && ClientState.Settings.ShowCreatedUpdated },
@@ -260,6 +261,8 @@
     bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width >= 1280;
 
     bool _showHabitComponent => Id is not null && HabitService.SelectedHabit is not null && HabitService.NewHabit is null;
+
+    bool _showHabitCompletedTimes => _showHabitComponent && HabitService.SelectedHabit.TimesDone is not null && HabitService.SelectedHabit.LastTimeDoneAt is not null;
 
     InputTextImmediate? inputElement;
 
