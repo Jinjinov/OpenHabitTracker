@@ -35,17 +35,17 @@
 @code {
     TourStep[] tourSteps =
     {
-        new() { Text = "Load examples" },
-        new() { Text = "Delete all data" },
-        new() { Text = "Export JSON" },
-        new() { Text = "Export TSV" },
-        new() { Text = "Export YAML" },
-        new() { Text = "Export Markdown" },
-        new() { Text = "JSON (.json)" },
-        new() { Text = "TSV (.tsv)" },
-        new() { Text = "YAML (.yaml)" },
-        new() { Text = "Markdown (.md)" },
-        new() { Text = "Google Keep (.zip)" },
+        new() { Text = "Load example Categories, Notes, Tasks, and Habits." },
+        new() { Text = "Delete all Categories, Notes, Tasks, Habits, and Settings." },
+        new() { Text = "Export Categories, Notes, Tasks, Habits, and Settings to a JSON file." },
+        new() { Text = "Export Categories, Notes, Tasks, and Habits to a TSV file." },
+        new() { Text = "Export Categories, Notes, Tasks, Habits, and Settings to a YAML file." },
+        new() { Text = "Export Categories, Notes, Tasks, and Habits to a Markdown file." },
+        new() { Text = "Import Categories, Notes, Tasks, Habits, and Settings from a JSON file." },
+        new() { Text = "Import Categories, Notes, Tasks, and Habits from a TSV file." },
+        new() { Text = "Import Categories, Notes, Tasks, Habits, and Settings from a YAML file." },
+        new() { Text = "Import Categories, Notes, Tasks, and Habits from a Markdown file." },
+        new() { Text = "Import Google Keep notes from a ZIP file exported from Google Takeout." },
     };
 
     private async Task StartTour(string tourId)
