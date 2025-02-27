@@ -69,36 +69,9 @@ Linux / macOS:
 2.
 help:
 - move to sidebar
-- separate help for each screen
-- guided tour per screen
 - list of guided tours
     https://github.com/TrevorMare/STGTour/
     https://trevormare.github.io/STGTour/
-
-NO    Components\CalendarComponent.razor
-NO    Components\CategoryComponent.razor
-NO    Components\ColorComponent.razor
-NO    Components\GuidedTourComponent.razor
-    Components\HabitComponent.razor
-NO    Components\ItemsComponent.razor
-    Components\NoteComponent.razor
-NO    Components\PriorityComponent.razor
-    Components\TaskComponent.razor
-OK    Layout\Main.razor
-NO    Pages\About.razor
-    Pages\Backup.razor
-    Pages\Categories.razor
-    Pages\Data.razor
-    Pages\Habits.razor
-NO    Pages\Help.razor
-NO    Pages\Home.razor
-NO    Pages\Menu.razor
-    Pages\Notes.razor
-NO    Pages\Priorities.razor
-    Pages\Search.razor
-    Pages\Settings.razor
-    Pages\Tasks.razor
-    Pages\Trash.razor
 
 ---------------------------------------------------------------------------------------------------
 
