@@ -174,7 +174,10 @@
             new() { Text = "Task's items.", Show = () => _showTaskComponent },
             new() { Text = "Set the date the task is planned at.", Show = () => _showTaskComponent },
             new() { Text = "Set the task's duration.", Show = () => _showTaskComponent },
-            new() { Text = "Start the timer to start timing the task's duration. Stopping the timer completes the task.", Show = () => _showTaskComponent },
+            new() { Text = "Start the timer to start timing the task's duration. Stopping the timer completes the task.", Show = () => _showTaskComponent && TaskService.SelectedTask.CompletedAt is null },
+            new() { Text = "Time spent on the task.", Show = () => _showTaskTimeSpent },
+            new() { Text = "When the task was started.", Show = () => _showTaskTimes },
+            new() { Text = "When the task was completed.", Show = () => _showTaskTimes },
             new() { Text = "Set the task's category.", Show = () => _showTaskComponent },
             new() { Text = "Set the task's color.", Show = () => _showTaskComponent && ClientState.Settings.ShowColor },
             new() { Text = "The date when the task was created and the date when the task was last updated.", Show = () => _showTaskComponent && ClientState.Settings.ShowCreatedUpdated },
@@ -201,6 +204,10 @@
     bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width >= 1280;
 
     bool _showTaskComponent => Id is not null && TaskService.SelectedTask is not null && TaskService.NewTask is null;
+
+    bool _showTaskTimes => _showTaskComponent && TaskService.SelectedTask.StartedAt is not null && TaskService.SelectedTask.CompletedAt is not null;
+
+    bool _showTaskTimeSpent => _showTaskTimes && TaskService.SelectedTask.StartedAt != TaskService.SelectedTask.CompletedAt && TaskService.SelectedTask.TimeSpent is not null;
 
     InputTextImmediate? inputElement;
 

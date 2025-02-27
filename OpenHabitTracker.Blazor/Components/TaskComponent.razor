@@ -78,30 +78,30 @@
 {
     @if (Task.StartedAt != Task.CompletedAt && Task.TimeSpent is TimeSpan timeSpent)
     {
-        <div class="p-1 border rounded-0">
+        <div class="p-1 border rounded-0" data-tasks-step-15>
             <div>@Loc["Time spent"]: @(timeSpent.Days > 0 ? $"{timeSpent.Days}.{timeSpent:hh\\:mm\\:ss}" : timeSpent.ToString(@"hh\:mm\:ss"))</div>
         </div>
     }
 
-    <div class="input-group">
+    <div class="input-group" data-tasks-step-16>
         <span class="input-group-text col-4">@Loc["Started"]</span>
         <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.StartedAt" ValueExpression="() => Task.StartedAt" ValueChanged="(DateTime? startedAt) => SaveStartedAt(Task, startedAt)" />
     </div>
 
-    <div class="input-group">
+    <div class="input-group" data-tasks-step-17>
         <span class="input-group-text col-4">@Loc["Completed"]</span>
         <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.CompletedAt" ValueExpression="() => Task.CompletedAt" ValueChanged="(DateTime? completedAt) => SaveCompletedAt(Task, completedAt)" />
     </div>
 }
 
-<div class="input-group flex-nowrap" data-tasks-step-15>
+<div class="input-group flex-nowrap" data-tasks-step-18>
     <span class="input-group-text col-4">@Loc["Category"]</span>
     <CategoryComponent Model="Task" />
 </div>
 
 @if (ClientState.Settings.ShowColor)
 {
-    <div class="input-group flex-nowrap" data-tasks-step-16>
+    <div class="input-group flex-nowrap" data-tasks-step-19>
         <span class="input-group-text col-4">@Loc["Color"]</span>
         <ColorComponent Model="Task" />
     </div>
@@ -109,7 +109,7 @@
 
 @if (ClientState.Settings.ShowCreatedUpdated)
 {
-    <div class="p-1 border rounded-0" data-tasks-step-17>
+    <div class="p-1 border rounded-0" data-tasks-step-20>
         <small class="d-inline-block mx-1">@Loc["Created"]: @Task.CreatedAt</small>
         <small class="d-inline-block mx-1">@Loc["Updated"]: @Task.UpdatedAt</small>
     </div>
