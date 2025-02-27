@@ -135,17 +135,17 @@
     {
         tourSteps = new TourStep[]
         {
-            new() { Text = "Priority" },
-            new() { Text = "Title" },
-            new() { Text = "Content" },
-            new() { Text = "Priority", Show = () => _showNoteComponent },
-            new() { Text = "Title", Show = () => _showNoteComponent },
-            new() { Text = "Delete", Show = () => _showNoteComponent },
-            new() { Text = "Close", Show = () => _showNoteComponent },
-            new() { Text = "Content", Show = () => _showNoteComponent },
-            new() { Text = "Category", Show = () => _showNoteComponent },
-            new() { Text = "Color", Show = () => _showNoteComponent && ClientState.Settings.ShowColor },
-            new() { Text = "Created, Updated", Show = () => _showNoteComponent && ClientState.Settings.ShowCreatedUpdated },
+            new() { Text = "Note's priority." },
+            new() { Text = "Note's title." },
+            new() { Text = "Note's content." },
+            new() { Text = "Set the note's priority.", Show = () => _showNoteComponent },
+            new() { Text = "Change the note's title.", Show = () => _showNoteComponent },
+            new() { Text = "Delete the note.", Show = () => _showNoteComponent },
+            new() { Text = "Close the note.", Show = () => _showNoteComponent },
+            new() { Text = "Change the note's content.", Show = () => _showNoteComponent },
+            new() { Text = "Set the note's category.", Show = () => _showNoteComponent },
+            new() { Text = "Set the note's color.", Show = () => _showNoteComponent && ClientState.Settings.ShowColor },
+            new() { Text = "The date when the note was created and the date when the note was last updated.", Show = () => _showNoteComponent && ClientState.Settings.ShowCreatedUpdated },
         };
     }
 
