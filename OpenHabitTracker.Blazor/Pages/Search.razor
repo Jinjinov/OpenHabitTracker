@@ -25,8 +25,8 @@
 
             <small class="m-1"><i class="bi bi-search"></i> @Loc["Search"]</small>
 
-            <div class="input-group flex-nowrap" data-search-step-1>
-                <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search..."]" />
+            <div class="input-group flex-nowrap">
+                <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search..."]" @attributes="dataSearchStep1" />
                 @if (SearchFilterService.MatchCase)
                 {
                     <button class="btn btn-primary" @onclick="() => UpdateMatchCase(false)" data-search-step-2><i class="bi bi-type"></i></button>
@@ -40,26 +40,30 @@
 
             <small class="m-1"><i class="bi bi-filter"></i> @Loc["Filter"]</small>
 
-            <div class="input-group flex-nowrap" data-search-step-4>
-                <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)" data-search-step-5>@Loc["Planned"]</button>
+            <div class="input-group flex-nowrap">
+                <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)" data-search-step-4>@Loc["Planned"]</button>
+                <div data-search-step-5>
                 <InputSelect class="form-control w-auto flex-grow-0" Value="SearchFilterService.PlannedAtCompare" ValueExpression="() => SearchFilterService.PlannedAtCompare" TValue="DateCompare" ValueChanged="UpdatePlannedAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
                     <option value="@DateCompare.After">@(">")</option>
                     <option value="@DateCompare.NotOn">@("≠")</option>
                 </InputSelect>
+                </div>
                 <InputDate class="form-control" Value="SearchFilterService.PlannedAtFilter" ValueExpression="() => SearchFilterService.PlannedAtFilter" TValue="DateTime?" ValueChanged="UpdatePlannedAtFilter" Type="InputDateType.Date" />
                 <button class="btn btn-outline-primary" @onclick="() => UpdatePlannedAtFilter(null)" data-search-step-6><i class="bi bi-x-square"></i></button>
             </div>
 
-            <div class="input-group flex-nowrap" data-search-step-7>
-                <button class="input-group-text col-4" @onclick="() => UpdateDoneAtFilter(DateTime.Today)" data-search-step-8>@Loc["Done"]</button>
+            <div class="input-group flex-nowrap">
+                <button class="input-group-text col-4" @onclick="() => UpdateDoneAtFilter(DateTime.Today)" data-search-step-7>@Loc["Done"]</button>
+                <div data-search-step-8>
                 <InputSelect class="form-control w-auto flex-grow-0" Value="SearchFilterService.DoneAtCompare" ValueExpression="() => SearchFilterService.DoneAtCompare" TValue="DateCompare" ValueChanged="UpdateDoneAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
                     <option value="@DateCompare.After">@(">")</option>
                     <option value="@DateCompare.NotOn">@("≠")</option>
                 </InputSelect>
+                </div>
                 <InputDate class="form-control" Value="SearchFilterService.DoneAtFilter" ValueExpression="() => SearchFilterService.DoneAtFilter" TValue="DateTime?" ValueChanged="UpdateDoneAtFilter" Type="InputDateType.Date" />
                 <button class="btn btn-outline-primary" @onclick="() => UpdateDoneAtFilter(null)" data-search-step-9><i class="bi bi-x-square"></i></button>
             </div>
@@ -114,13 +118,14 @@
             </div>
 
             <div class="list-group-item">
-                <small class="" data-search-step-12>@Loc["Habit interval ratio"]:</small>
+                <small class="">@Loc["Habit interval ratio"]:</small>
+                <div data-search-step-12>
                 <InputSelect class="form-select" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
                     <option value="@Ratio.ElapsedToAverage">@Loc["Elapsed time to average interval"]</option>
                     <option value="@Ratio.ElapsedToDesired">@Loc["Elapsed time to repeat interval"]</option>
                     <option value="@Ratio.AverageToDesired">@Loc["Average interval to repeat interval"]</option>
                 </InputSelect>
-
+                </div>
                 <div class="position-relative mt-2" data-search-step-13>
                     <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowOnlyOverSelectedRatioMin" ValueExpression="() => _settings.ShowOnlyOverSelectedRatioMin" ValueChanged="SaveShowOnlyOverSelectedRatioMin" />
                     <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show only habits with interval ratio over"] @_settings.SelectedRatioMin%</label>
@@ -199,6 +204,8 @@
         new() { Text = "Tasks" },
         new() { Text = "Habits" },
     };
+
+    private readonly Dictionary<string, object> dataSearchStep1 = new() { ["data-search-step-1"] = "true" };
 
     private async Task StartTour(string tourId)
     {
