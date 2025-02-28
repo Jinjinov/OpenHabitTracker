@@ -7,6 +7,7 @@
 
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
+@inject ILinkAttributeService LinkAttributeService
 @inject IAuthFragment AuthFragment
 @inject IGTourService GTourService
 
@@ -25,7 +26,16 @@
 
 <Backup StateChanged=StateChanged StateChangedChanged=StateChangedChanged />
 
-@AuthFragment.GetAuthFragment(StateChanged, StateChangedChanged)
+@if (AuthFragment.IsAuthAvailable)
+{
+    <div data-data-step-12>
+        @AuthFragment.GetAuthFragment(StateChanged, StateChangedChanged)
+    </div>
+
+    <div class="m-1" @ref="WrapperElement" data-data-step-13>
+        @Loc["To enable online sync, run OpenHabitTracker on your server using"] <a href="https://hub.docker.com/r/jinjinov/openhabittracker">Docker</a>
+    </div>
+}
 
 @if (ClientState.Settings.ShowHelp)
 {
@@ -33,24 +43,41 @@
 }
 
 @code {
-    TourStep[] tourSteps =
+    TourStep[] tourSteps;
+
+    public Data()
     {
-        new() { Text = "Load example Categories, Notes, Tasks, and Habits." },
-        new() { Text = "Delete all Categories, Notes, Tasks, Habits, and Settings." },
-        new() { Text = "Export Categories, Notes, Tasks, Habits, and Settings to a JSON file." },
-        new() { Text = "Export Categories, Notes, Tasks, and Habits to a TSV file." },
-        new() { Text = "Export Categories, Notes, Tasks, Habits, and Settings to a YAML file." },
-        new() { Text = "Export Categories, Notes, Tasks, and Habits to a Markdown file." },
-        new() { Text = "Import Categories, Notes, Tasks, Habits, and Settings from a JSON file." },
-        new() { Text = "Import Categories, Notes, Tasks, and Habits from a TSV file." },
-        new() { Text = "Import Categories, Notes, Tasks, Habits, and Settings from a YAML file." },
-        new() { Text = "Import Categories, Notes, Tasks, and Habits from a Markdown file." },
-        new() { Text = "Import Google Keep notes from a ZIP file exported from Google Takeout." },
-    };
+        tourSteps = new TourStep[]
+        {
+            new() { Text = "Load example Categories, Notes, Tasks, and Habits." },
+            new() { Text = "Delete all Categories, Notes, Tasks, Habits, and Settings." },
+            new() { Text = "Export Categories, Notes, Tasks, Habits, and Settings to a JSON file." },
+            new() { Text = "Export Categories, Notes, Tasks, and Habits to a TSV file." },
+            new() { Text = "Export Categories, Notes, Tasks, Habits, and Settings to a YAML file." },
+            new() { Text = "Export Categories, Notes, Tasks, and Habits to a Markdown file." },
+            new() { Text = "Import Categories, Notes, Tasks, Habits, and Settings from a JSON file." },
+            new() { Text = "Import Categories, Notes, Tasks, and Habits from a TSV file." },
+            new() { Text = "Import Categories, Notes, Tasks, Habits, and Settings from a YAML file." },
+            new() { Text = "Import Categories, Notes, Tasks, and Habits from a Markdown file." },
+            new() { Text = "Import Google Keep notes from a ZIP file exported from Google Takeout." },
+            new() { Text = "Online sync", Show = () => AuthFragment.IsAuthAvailable },
+            new() { Text = "Docker", Show = () => AuthFragment.IsAuthAvailable },
+        };
+    }
 
     private async Task StartTour(string tourId)
     {
         await GTourService.StartTour(tourId);
+    }
+
+    private ElementReference WrapperElement;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LinkAttributeService.AddAttributesToLinks(WrapperElement);
+        }
     }
 
     [Parameter]

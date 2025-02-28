@@ -5,6 +5,8 @@ namespace OpenHabitTracker.Blazor.Auth;
 
 public class AuthFragment(IAuthService authService) : IAuthFragment
 {
+    public bool IsAuthAvailable => true;
+
     public Task<bool> TryRefreshTokenLogin() => authService.TryRefreshTokenLogin();
 
     public RenderFragment GetAuthFragment(bool stateChanged, EventCallback<bool> stateChangedChanged)
