@@ -60,8 +60,8 @@
             new() { Text = "Import Categories, Notes, Tasks, Habits, and Settings from a YAML file." },
             new() { Text = "Import Categories, Notes, Tasks, and Habits from a Markdown file." },
             new() { Text = "Import Google Keep notes from a ZIP file exported from Google Takeout." },
-            new() { Text = "Online sync", Show = () => AuthFragment.IsAuthAvailable },
-            new() { Text = "Docker", Show = () => AuthFragment.IsAuthAvailable },
+            new() { Text = "Use the address, username and password of your OpenHabitTracker Docker container to log in.", Show = () => AuthFragment.IsAuthAvailable },
+            new() { Text = "Download OpenHabitTracker Docker image and run it on your server to enable online sync.", Show = () => AuthFragment.IsAuthAvailable },
         };
     }
 
