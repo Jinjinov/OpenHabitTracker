@@ -96,6 +96,8 @@
   "Export Markdown": "Exportar Markdown",
   "Import": "Importar",
   "Online sync": "Sincronización en línea",
+  "To enable online sync, run": "Para habilitar la sincronización en línea, ejecute la imagen de",
+  "image on your server": "en su servidor",
   "Address": "Dirección",
   "Username": "Nombre de usuario",
   "Password": "Contraseña",

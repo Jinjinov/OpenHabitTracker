@@ -96,6 +96,8 @@
   "Export Markdown": "Izvozi Markdown",
   "Import": "Uvozi",
   "Online sync": "Spletna sinhronizacija",
+  "To enable online sync, run": "Če želite omogočiti spletno sinhronizacijo, zaženite",
+  "image on your server": "sliko na vašem strežniku",
   "Address": "Naslov",
   "Username": "Uporabniško ime",
   "Password": "Geslo",
