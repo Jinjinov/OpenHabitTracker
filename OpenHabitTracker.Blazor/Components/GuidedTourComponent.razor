@@ -2,6 +2,8 @@
 @using GTour.Components
 @using GTour.Abstractions
 
+@inject IStringLocalizer<GuidedTourComponent> Loc
+
 <GuidedTour TourId="@TourId" OverlayEnabled="true" HighlightEnabled="false">
     @for (int i = 0; i < TourSteps.Length; i++)
     {
@@ -15,7 +17,7 @@
                 </div>
             </HeaderContent>
             <ChildContent>
-                <div style="min-width:100px; max-width:400px;">@TourSteps[step - 1].Text</div>
+                <div style="min-width:100px; max-width:400px;">@Loc[TourSteps[step - 1].Text]</div>
             </ChildContent>
             <FooterContent>
                 <div>

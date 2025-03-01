@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
@@ -17,7 +17,11 @@ public class JsonStringLocalizerFactory(IOptions<LocalizationOptions> options) :
         if (_localizerCache.GetValueOrDefault(resourceSource.Name) is JsonStringLocalizer jsonStringLocalizer)
             return jsonStringLocalizer;
 
-        EmbeddedFileProvider resources = new(resourceSource.Assembly);
+        // every Type has localization in their own Assembly:
+        //EmbeddedFileProvider resources = new(resourceSource.Assembly);
+
+        // every Type has localization in this Assembly:
+        EmbeddedFileProvider resources = new(typeof(JsonStringLocalizer).Assembly);
 
         jsonStringLocalizer = new JsonStringLocalizer(resources, _resourcesPath, resourceSource.Name);
 
