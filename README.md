@@ -59,6 +59,19 @@ Set your username and password with environment variables:
 APPSETTINGS_USERNAME=admin
 APPSETTINGS_EMAIL=admin@admin.com
 APPSETTINGS_PASSWORD=admin
+APPSETTINGS_JWT_SECRET=your-extremely-strong-secret-key
+```
+
+Replace `your-extremely-strong-secret-key` in Windows terminal:
+
+```
+[System.Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+```
+
+Replace `your-extremely-strong-secret-key` in Linux / macOS terminal:
+
+```
+openssl rand -base64 32
 ```
 
 docker-compose.yml
@@ -72,6 +85,7 @@ services:
       - AppSettings__UserName=${APPSETTINGS_USERNAME}
       - AppSettings__Email=${APPSETTINGS_EMAIL}
       - AppSettings__Password=${APPSETTINGS_PASSWORD}
+      - AppSettings__JwtSecret=${APPSETTINGS_JWT_SECRET}
     volumes:
       - ./.OpenHabitTracker:/app/.OpenHabitTracker
 ```
