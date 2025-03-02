@@ -172,7 +172,7 @@
   "Privacy": "Datenschutz",
   "saves your data (notes, tasks and habits) on your device, offering you complete privacy.": "speichert Ihre Daten (Notizen, Aufgaben und Gewohnheiten) auf Ihrem Gerät und bietet Ihnen vollständige Privatsphäre.",
   "It allows you to delete the data stored on your device at any time.": "Es ermöglicht Ihnen, die auf Ihrem Gerät gespeicherten Daten jederzeit zu löschen.",
-  "It doesn't use an online database and because of that automatic backup and automatic sync with your other devices are not possible.": "Es verwendet keine Online-Datenbank, daher sind automatische Sicherungen und automatische Synchronisierungen mit Ihren anderen Geräten nicht möglich.",
+  "If you use the Docker image to enable online sync, all data is stored in your Docker container and is completely under your control.": "Wenn Sie das Docker-Image verwenden, um die Online-Synchronisierung zu aktivieren, werden alle Daten in Ihrem Docker-Container gespeichert und unterliegen vollständig Ihrer Kontrolle.",
   "It is available on 6 platforms and on some platforms it can backup your data to your Google Drive.": "Es ist auf 6 Plattformen verfügbar und auf einigen Plattformen kann es Ihre Daten in Ihrem Google Drive sichern.",
   "If you allow it to backup your data to your Google Drive, it will receive your email and display your name only on your device.": "Wenn Sie ihm erlauben, Ihre Daten in Ihrem Google Drive zu sichern, erhält es Ihre E-Mail und zeigt Ihren Namen nur auf Ihrem Gerät an.",
   "You can read the privacy policy at": "Sie können die Datenschutzrichtlinie unter"

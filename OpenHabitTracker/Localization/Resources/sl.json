@@ -172,7 +172,7 @@
   "Privacy": "Zasebnost",
   "saves your data (notes, tasks and habits) on your device, offering you complete privacy.": "shrani vaše podatke (zapiske, naloge in navade) na vaši napravi, vam ponuja popolno zasebnost.",
   "It allows you to delete the data stored on your device at any time.": "Omogoča vam brisanje podatkov, shranjenih na vaši napravi, kadar koli želite.",
-  "It doesn't use an online database and because of that automatic backup and automatic sync with your other devices are not possible.": "Ne uporablja spletnega zbiralnika podatkov in zato samodejna varnostna kopija in samodejna sinhronizacija z drugimi napravami nista mogoči.",
+  "If you use the Docker image to enable online sync, all data is stored in your Docker container and is completely under your control.": "Če za omogočanje spletne sinhronizacije uporabljate sliko Docker, so vsi podatki shranjeni v vašem vsebniku Docker in so popolnoma pod vašim nadzorom.",
   "It is available on 6 platforms and on some platforms it can backup your data to your Google Drive.": "Na voljo je na 6 platformah in na nekaterih platformah lahko varnostno kopira vaše podatke v vaš Google Drive.",
   "If you allow it to backup your data to your Google Drive, it will receive your email and display your name only on your device.": "Če mu dovolite, da varnostno kopira vaše podatke v vaš Google Drive, bo prejel vaš e-poštni naslov in prikazal vaše ime le na vaši napravi.",
   "You can read the privacy policy at": "Pravilnik o zasebnosti lahko preberete na"
