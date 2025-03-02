@@ -10,11 +10,14 @@
 **/docker-compose*
 **/Dockerfile*
 **/obj
+**/OpenHabitTracker.Blazor.Auth
 **/OpenHabitTracker.Blazor.Maui
 **/OpenHabitTracker.Blazor.Photino
 **/OpenHabitTracker.Blazor.Wasm
+**/OpenHabitTracker.Blazor.Web.ApiClient
 **/OpenHabitTracker.Blazor.WinForms
 **/OpenHabitTracker.Blazor.Wpf
+**/OpenHabitTracker.CloudStorage
 **/OpenHabitTracker.IndexedDB
 **/OpenHabitTracker.Web
 .editorconfig
