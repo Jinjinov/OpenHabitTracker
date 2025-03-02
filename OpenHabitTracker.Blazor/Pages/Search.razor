@@ -118,7 +118,7 @@
             </div>
 
             <div class="list-group-item">
-                <small class="">@Loc["Habit interval ratio"]:</small>
+                <small>@Loc["Habit interval ratio"]:</small>
                 <div data-search-step-14>
                 <InputSelect class="form-select" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
                     <option value="@Ratio.ElapsedToAverage">@Loc["Elapsed time to average interval"]</option>
@@ -137,7 +137,7 @@
             <small class="m-1"><i class="bi bi-arrow-down-up"></i> @Loc["Sort"]</small>
 
             <div class="list-group-item" data-search-step-17>
-                <small class=""><i class="bi bi-sticky"></i> @Loc["Notes"]:</small>
+                <small><i class="bi bi-sticky"></i> @Loc["Notes"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>
@@ -146,7 +146,7 @@
             </div>
 
             <div class="list-group-item" data-search-step-18>
-                <small class=""><i class="bi bi-list-task"></i> @Loc["Tasks"]:</small>
+                <small><i class="bi bi-list-task"></i> @Loc["Tasks"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>
@@ -159,7 +159,7 @@
             </div>
 
             <div class="list-group-item" data-search-step-19>
-                <small class=""><i class="bi bi-repeat"></i> @Loc["Habits"]:</small>
+                <small><i class="bi bi-repeat"></i> @Loc["Habits"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>

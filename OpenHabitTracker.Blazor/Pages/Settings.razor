@@ -21,7 +21,7 @@
         </div>
 
         <div class="list-group-item" data-settings-step-2>
-            <small class="">@Loc["Theme"]:</small>
+            <small>@Loc["Theme"]:</small>
             <InputSelect class="form-select" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
                 <option value="default">default</option>
                 <option value="cerulean">cerulean</option>
@@ -53,7 +53,7 @@
         </div>
 
         <div class="list-group-item" data-settings-step-3>
-            <small class="">@Loc["Start page"]:</small>
+            <small>@Loc["Start page"]:</small>
             <InputSelect class="form-select" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
                 @if (WindowDimensions?.Width >= 1280 || WindowDimensions?.Width < 768)
                 {
@@ -67,7 +67,7 @@
         </div>
 
         <div class="list-group-item" data-settings-step-4>
-            <small class="">@Loc["Start sidebar"]:</small>
+            <small>@Loc["Start sidebar"]:</small>
             <InputSelect class="form-select" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
                 <option value="">@Loc["None"]</option>
                 <option value="Menu">@Loc["Menu"]</option>
@@ -113,7 +113,7 @@
         </div>
 
         <div class="list-group-item" data-settings-step-11>
-            <small class="">@Loc["Language"]:</small>
+            <small>@Loc["Language"]:</small>
             <InputSelect class="form-select" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
                 @foreach ((string key, Localization.Loc loc) in Localization.Loc.Cultures)
                 {
@@ -123,7 +123,7 @@
         </div>
 
         <div class="list-group-item" data-settings-step-12>
-            <small class="">@Loc["Week start"]:</small>
+            <small>@Loc["Week start"]:</small>
             <InputSelect class="form-select" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
                 {
@@ -148,7 +148,7 @@
         </div>
 
         <div class="list-group-item" data-settings-step-16>
-            <small class="">@Loc["Horizontal space"]:</small>
+            <small>@Loc["Horizontal space"]:</small>
             <InputSelect class="form-select" Value="_settings.HorizontalMargin" ValueExpression="() => _settings.HorizontalMargin" TValue="int" ValueChanged="SaveHorizontalMargin">
                 @for (int i = 0; i <= 5; i++)
                 {
@@ -158,7 +158,7 @@
         </div>
 
         <div class="list-group-item" data-settings-step-17>
-            <small class="">@Loc["Vertical space"]:</small>
+            <small>@Loc["Vertical space"]:</small>
             <InputSelect class="form-select" Value="_settings.VerticalMargin" ValueExpression="() => _settings.VerticalMargin" TValue="int" ValueChanged="SaveVerticalMargin">
                 @for (int i = 0; i <= 5; i++)
                 {
