@@ -9,10 +9,10 @@
   "Help": "Pomoč",
 
   "Habits": "Navade",
-  "Notes": "Opombe",
+  "Notes": "Zapiski",
   "Tasks": "Naloge",
 
-  "Add new note": "Dodaj novo opombo",
+  "Add new note": "Dodaj nov zapisek",
   "Add new habit": "Dodaj novo navado",
   "Add new task": "Dodaj novo nalogo",
 
@@ -22,7 +22,7 @@
   "Sort": "Razvrščanje",
   "Home": "Doma",
   "About": "O programu",
-  "Add note text": "Dodaj besedilo opombe",
+  "Add note text": "Dodaj besedilo zapiska",
   "Color": "Barva",
   "Category": "Kategorija",
   "transparent": "prozorno",
@@ -84,8 +84,8 @@
   "Week start": "Začetek tedna",
   "Horizontal space": "Horizontalni prostor",
   "Vertical space": "Vertikalni prostor",
-  "Insert tabs in note content": "Vstavi zavihke v vsebino opombe",
-  "Display note content as Markdown": "Prikaži vsebino opombe kot Markdown",
+  "Insert tabs in note content": "Vstavi tabulator v vsebino zapiska",
+  "Display note content as Markdown": "Prikaži vsebino zapiska kot Markdown",
   "Reset habit when it is completed": "Ponastavite navado, ko je končana",
   "Load examples": "Naloži primere",
   "Delete all data": "Izbriši vse podatke",
@@ -170,7 +170,7 @@
   "Available in 26 themes with Dark and Light modes": "Na voljo v 26 temah s temnim in svetlim načinom",
 
   "Privacy": "Zasebnost",
-  "saves your data (notes, tasks and habits) on your device, offering you complete privacy.": "shrani vaše podatke (opombe, naloge in navade) na vaši napravi, vam ponuja popolno zasebnost.",
+  "saves your data (notes, tasks and habits) on your device, offering you complete privacy.": "shrani vaše podatke (zapiske, naloge in navade) na vaši napravi, vam ponuja popolno zasebnost.",
   "It allows you to delete the data stored on your device at any time.": "Omogoča vam brisanje podatkov, shranjenih na vaši napravi, kadar koli želite.",
   "It doesn't use an online database and because of that automatic backup and automatic sync with your other devices are not possible.": "Ne uporablja spletnega zbiralnika podatkov in zato samodejna varnostna kopija in samodejna sinhronizacija z drugimi napravami nista mogoči.",
   "It is available on 6 platforms and on some platforms it can backup your data to your Google Drive.": "Na voljo je na 6 platformah in na nekaterih platformah lahko varnostno kopira vaše podatke v vaš Google Drive.",
