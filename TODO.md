@@ -56,13 +56,17 @@ Docker:
 
 APPSETTINGS_JWT_SECRET=your-extremely-strong-secret-key
 
-Windows:
+Replace `your-extremely-strong-secret-key` in Windows:
 
-    [System.Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+```
+[System.Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+```
 
-Linux / macOS:
+Replace `your-extremely-strong-secret-key` in Linux / macOS:
 
-    openssl rand -base64 32
+```
+openssl rand -base64 32
+```
 
 ---------------------------------------------------------------------------------------------------
 
@@ -70,8 +74,6 @@ Linux / macOS:
 help:
 - move to sidebar
 - list of guided tours
-    https://github.com/TrevorMare/STGTour/
-    https://trevormare.github.io/STGTour/
 
 ---------------------------------------------------------------------------------------------------
 
