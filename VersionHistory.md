@@ -1,3 +1,8 @@
+# 1.1.2 - Mar 3, 2025
+
+- replaced help with a guided tour
+- added a Docker image for online sync
+
 # 1.1.1 - Feb 4, 2025
 
 - fixed export of items with no category

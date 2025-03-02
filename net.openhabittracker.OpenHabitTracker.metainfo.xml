@@ -78,6 +78,12 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.1.2" date="2025-03-03">
+      <description>
+        <p>Replaced help with a guided tour</p>
+        <p>Added a Docker image for online sync</p>
+      </description>
+    </release>
     <release version="1.1.1" date="2025-02-02">
       <description>
         <p>Fixed export of items with no category</p>
