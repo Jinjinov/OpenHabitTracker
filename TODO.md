@@ -31,8 +31,6 @@ or
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
----------------------------------------------------------------------------------------------------
-
 ClientState:
     - hold state
     - load data
@@ -43,30 +41,14 @@ ClientState:
 
 removing `DataAccess` from all services would create one bloated class
 
-instead, make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
-
-check for every `new.*Model`
-
-`ToEntity` already exist, add `ToModel` and use it for every `Model` - NO!!! - models need other models to initialize any List<>
+`ToEntity` already exist, add `ToModel` and use it for every `Model` - NO!!! - models need other models to initialize their List<> properties
 
 ---------------------------------------------------------------------------------------------------
 
 1.
-Docker:
+make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
 
-APPSETTINGS_JWT_SECRET=your-extremely-strong-secret-key
-
-Replace `your-extremely-strong-secret-key` in Windows:
-
-```
-[System.Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
-```
-
-Replace `your-extremely-strong-secret-key` in Linux / macOS:
-
-```
-openssl rand -base64 32
-```
+check for every `new.*Model`
 
 ---------------------------------------------------------------------------------------------------
 
