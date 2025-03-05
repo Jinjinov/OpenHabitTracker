@@ -31,31 +31,30 @@ or
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
-ClientState:
-    - hold state
-    - load data
-    - map to models
-    - interact with _dataAccess
-    - interact with _runtimeData
-    - import, export / GetUserData, SetUserData
-
-removing `DataAccess` from all services would create one bloated class
-
 `ToEntity` already exist, add `ToModel` and use it for every `Model` - NO!!! - models need other models to initialize their List<> properties
 
 ---------------------------------------------------------------------------------------------------
 
-1.
+0.
 make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
 
 check for every `new.*Model`
 
 ---------------------------------------------------------------------------------------------------
 
+1.
+move Online sync text
+
+---------------------------------------------------------------------------------------------------
+
 2.
-help:
-- move to sidebar
-- list of guided tours
+set last change date time on db write
+
+get last change endpoint
+
+call it on timer
+
+last refresh date time
 
 ---------------------------------------------------------------------------------------------------
 
