@@ -45,6 +45,12 @@ check for every `new.*Model`
 1.
 move Online sync text
 
+You can deploy a Docker image for free, with persistent storage, without hourly limits to: 
+Fly.io, Koyeb, Oracle Cloud Free Tier, Qovery, Zeet
+
+Avoid deploying to these platforms because they don't meet the requirements:
+GitHub Codespaces, Google Cloud Run, Heroku, Railway, Render
+
 ---------------------------------------------------------------------------------------------------
 
 2.
