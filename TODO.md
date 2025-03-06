@@ -314,15 +314,17 @@ https://github.com/aspnet-contrib/AspNet.Security.OAuth.Providers
 Backup
     Google Drive https://www.nuget.org/packages/Google.Apis.Drive.v3
     OneDrive https://www.nuget.org/packages/Microsoft.Graph
-    iCloud --- https://github.com/gachris/iCloud.Dav ---
+    NO! --- iCloud --- https://github.com/gachris/iCloud.Dav --- NO! --- only official support is for Swift and Objective-C
     Dropbox https://www.nuget.org/packages/Dropbox.Api
         WASM authorisation - REST
         desktop authorisation - OpenHabitTracker.Google.Apis - using Google.Apis.Auth.OAuth2;
         mobile authorisation - `ASP.NET Core`
 
+Box
+    https://www.nuget.org/packages/Box.Sdk.Gen
 Nextcloud
     https://www.nuget.org/packages/NextcloudApi
-ownCloud
+NO! --- ownCloud --- NO! --- proprietary features in enterprise version
     https://www.nuget.org/packages/bnoffer.owncloudsharp
 
 Blazor Server / Web
