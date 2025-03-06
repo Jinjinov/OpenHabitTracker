@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata;
+//using Microsoft.EntityFrameworkCore.ChangeTracking;
+//using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace OpenHabitTracker.EntityFrameworkCore;
 
@@ -8,6 +8,20 @@ public static class DbContextEx
 {
     public static void ClearAllTables(this IApplicationDbContext dbContext)
     {
+        //dbContext.Users.ExecuteDelete();
+        dbContext.Contents.ExecuteDelete();
+        dbContext.Habits.ExecuteDelete();
+        dbContext.Notes.ExecuteDelete();
+        dbContext.Tasks.ExecuteDelete();
+        dbContext.Times.ExecuteDelete();
+        dbContext.Items.ExecuteDelete();
+        dbContext.Categories.ExecuteDelete();
+        dbContext.Priorities.ExecuteDelete();
+        dbContext.Settings.ExecuteDelete();
+
+        dbContext.ChangeTracker.Clear();
+
+        /*
         foreach (IEntityType entityType in dbContext.Model.GetEntityTypes())
         {
             string? tableName = entityType.GetTableName();
@@ -22,7 +36,12 @@ public static class DbContextEx
 
         foreach (EntityEntry entry in dbContext.ChangeTracker.Entries().ToList())
         {
-            entry.State = EntityState.Detached;
+            string? tableName = entry.Metadata.GetTableName();
+            if (!string.IsNullOrEmpty(tableName))
+            {
+                entry.State = EntityState.Detached;
+            }
         }
+        */
     }
 }

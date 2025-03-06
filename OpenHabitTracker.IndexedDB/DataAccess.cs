@@ -381,7 +381,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
 
     public async Task ClearAllTables()
     {
-        await _indexedDb.DeleteAll<UserEntity>();
+        //await _indexedDb.DeleteAll<UserEntity>();
         await _indexedDb.DeleteAll<HabitEntity>();
         await _indexedDb.DeleteAll<NoteEntity>();
         await _indexedDb.DeleteAll<TaskEntity>();
