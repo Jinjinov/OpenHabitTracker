@@ -44,6 +44,7 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
                 UserEntity user = await _authClient.GetCurrentUserAsync();
 
                 Login = $"{_loc["User"]}: {user.Email}";
+                Error = "";
 
                 return true;
             }
@@ -93,6 +94,7 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
                 //UserEntity user = await _authClient.GetCurrentUserAsync();
 
                 //Login = $"{_loc["User"]}: {user.Email}";
+                Error = "";
 
                 return true;
             }

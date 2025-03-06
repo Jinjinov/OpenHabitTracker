@@ -28,12 +28,15 @@
 
 @if (AuthFragment.IsAuthAvailable)
 {
-    <div data-data-step-12>
-        @AuthFragment.GetAuthFragment(StateChanged, StateChangedChanged)
+    <hr />
+    <small class="m-1"><i class="bi bi-globe"></i> @Loc["Online sync"]</small>
+
+    <div class="mx-1 my-2" @ref="WrapperElement" data-data-step-13>
+        <small>@Loc["To enable online sync, run"] <a href="https://hub.docker.com/r/jinjinov/openhabittracker">OpenHabitTracker Docker</a> @Loc["image on your server"]</small>
     </div>
 
-    <div @ref="WrapperElement" data-data-step-13>
-        @Loc["To enable online sync, run"] <a href="https://hub.docker.com/r/jinjinov/openhabittracker">OpenHabitTracker Docker</a> @Loc["image on your server"]
+    <div data-data-step-12>
+        @AuthFragment.GetAuthFragment(StateChanged, StateChangedChanged)
     </div>
 }
 
