@@ -101,6 +101,8 @@ add OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
     Google Drive
     Microsoft OneDrive
     Dropbox
+    Box
+    Nextcloud
 
 8.
 use Google, Microsoft, Dropbox OAuth for unique user id and login
@@ -110,6 +112,8 @@ add backup to
     Google Drive
     Microsoft OneDrive
     Dropbox
+    Box
+    Nextcloud
 
 10.
 use DB in Blazor Server for multi user sync with REST API endpoints
