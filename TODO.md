@@ -35,15 +35,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-0.
+1.
 make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
 
 check for every `new.*Model`
-
----------------------------------------------------------------------------------------------------
-
-1.
-move Online sync text
 
 ---------------------------------------------------------------------------------------------------
 
