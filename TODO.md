@@ -35,10 +35,15 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-1.
+0.
 make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
 
 check for every `new.*Model`
+
+---------------------------------------------------------------------------------------------------
+
+1.
+change ClearAllTables to DeleteAllUserData, remove `DeleteAll<UserEntity>();`
 
 ---------------------------------------------------------------------------------------------------
 
