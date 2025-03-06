@@ -43,13 +43,11 @@ check for every `new.*Model`
 ---------------------------------------------------------------------------------------------------
 
 2.
-set last change date time on db write
-
-get last change endpoint
-
-call it on timer
-
-last refresh date time
+refresh local if remote has changed:
+    set last change date time on db write
+    get last change endpoint
+    call it on timer
+    if (last refresh date time < last change date time) Refresh();
 
 ---------------------------------------------------------------------------------------------------
 
