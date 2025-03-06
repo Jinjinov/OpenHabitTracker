@@ -45,6 +45,12 @@ check for every `new.*Model`
 1.
 change ClearAllTables to DeleteAllUserData, remove `DeleteAll<UserEntity>();`
 
+!!! SHOWSTOPPER !!!
+
+the whole app relies on the assumption that DataAccess.Add* will set Entity.Id, but DataAccess in OpenHabitTracker.Blazor.Web.ApiClient doesn't do that
+
+!!! SHOWSTOPPER !!!
+
 ---------------------------------------------------------------------------------------------------
 
 2.
