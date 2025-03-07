@@ -15,26 +15,80 @@ public class DataAccess(DataAccessClient client) : IDataAccess
     }
 
     // Add single entities
-    public Task AddUser(UserEntity user) => _client.AddUserAsync(user);
-    public Task AddHabit(HabitEntity habit) => _client.AddHabitAsync(habit);
-    public Task AddNote(NoteEntity note) => _client.AddNoteAsync(note);
-    public Task AddTask(TaskEntity task) => _client.AddTaskAsync(task);
-    public Task AddTime(TimeEntity time) => _client.AddTimeAsync(time);
-    public Task AddItem(ItemEntity item) => _client.AddItemAsync(item);
-    public Task AddCategory(CategoryEntity category) => _client.AddCategoryAsync(category);
-    public Task AddPriority(PriorityEntity priority) => _client.AddPriorityAsync(priority);
-    public Task AddSettings(SettingsEntity settings) => _client.AddSettingAsync(settings);
+    public Task AddUser(UserEntity user)
+    {
+        return _client.AddUserAsync(user);
+    }
+    public Task AddHabit(HabitEntity habit)
+    {
+        return _client.AddHabitAsync(habit);
+    }
+    public Task AddNote(NoteEntity note)
+    {
+        return _client.AddNoteAsync(note);
+    }
+    public Task AddTask(TaskEntity task)
+    {
+        return _client.AddTaskAsync(task);
+    }
+    public Task AddTime(TimeEntity time)
+    {
+        return _client.AddTimeAsync(time);
+    }
+    public Task AddItem(ItemEntity item)
+    {
+        return _client.AddItemAsync(item);
+    }
+    public Task AddCategory(CategoryEntity category)
+    {
+        return _client.AddCategoryAsync(category);
+    }
+    public Task AddPriority(PriorityEntity priority)
+    {
+        return _client.AddPriorityAsync(priority);
+    }
+    public Task AddSettings(SettingsEntity settings)
+    {
+        return _client.AddSettingAsync(settings);
+    }
 
     // Add collections
-    public Task AddUsers(IReadOnlyCollection<UserEntity> users) => _client.AddUsersAsync(users);
-    public Task AddHabits(IReadOnlyCollection<HabitEntity> habits) => _client.AddHabitsAsync(habits);
-    public Task AddNotes(IReadOnlyCollection<NoteEntity> notes) => _client.AddNotesAsync(notes);
-    public Task AddTasks(IReadOnlyCollection<TaskEntity> tasks) => _client.AddTasksAsync(tasks);
-    public Task AddTimes(IReadOnlyCollection<TimeEntity> times) => _client.AddTimesAsync(times);
-    public Task AddItems(IReadOnlyCollection<ItemEntity> items) => _client.AddItemsAsync(items);
-    public Task AddCategories(IReadOnlyCollection<CategoryEntity> categories) => _client.AddCategoriesAsync(categories);
-    public Task AddPriorities(IReadOnlyCollection<PriorityEntity> priorities) => _client.AddPrioritiesAsync(priorities);
-    public Task AddSettings(IReadOnlyCollection<SettingsEntity> settings) => _client.AddSettingsAsync(settings);
+    public Task AddUsers(IReadOnlyList<UserEntity> users)
+    {
+        return _client.AddUsersAsync(users);
+    }
+    public Task AddHabits(IReadOnlyList<HabitEntity> habits)
+    {
+        return _client.AddHabitsAsync(habits);
+    }
+    public Task AddNotes(IReadOnlyList<NoteEntity> notes)
+    {
+        return _client.AddNotesAsync(notes);
+    }
+    public Task AddTasks(IReadOnlyList<TaskEntity> tasks)
+    {
+        return _client.AddTasksAsync(tasks);
+    }
+    public Task AddTimes(IReadOnlyList<TimeEntity> times)
+    {
+        return _client.AddTimesAsync(times);
+    }
+    public Task AddItems(IReadOnlyList<ItemEntity> items)
+    {
+        return _client.AddItemsAsync(items);
+    }
+    public Task AddCategories(IReadOnlyList<CategoryEntity> categories)
+    {
+        return _client.AddCategoriesAsync(categories);
+    }
+    public Task AddPriorities(IReadOnlyList<PriorityEntity> priorities)
+    {
+        return _client.AddPrioritiesAsync(priorities);
+    }
+    public Task AddSettings(IReadOnlyList<SettingsEntity> settings)
+    {
+        return _client.AddSettingsAsync(settings);
+    }
 
     // Get collections
     public Task<IReadOnlyList<UserEntity>> GetUsers() => _client.GetUsersAsync();

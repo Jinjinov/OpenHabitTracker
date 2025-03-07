@@ -103,7 +103,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         await _indexedDb.AddItems(new List<SettingsEntity> { settings });
     }
 
-    public async Task AddUsers(IReadOnlyCollection<UserEntity> users)
+    public async Task AddUsers(IReadOnlyList<UserEntity> users)
     {
         long maxKey = await _indexedDb.GetMaxKey<long, UserEntity>();
         foreach (UserEntity user in users)
@@ -112,7 +112,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         }
         await _indexedDb.AddItems(users.ToList());
     }
-    public async Task AddHabits(IReadOnlyCollection<HabitEntity> habits)
+    public async Task AddHabits(IReadOnlyList<HabitEntity> habits)
     {
         long maxKey = await GetMaxContentKey();
         foreach (HabitEntity habit in habits)
@@ -121,7 +121,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         }
         await _indexedDb.AddItems(habits.ToList());
     }
-    public async Task AddNotes(IReadOnlyCollection<NoteEntity> notes)
+    public async Task AddNotes(IReadOnlyList<NoteEntity> notes)
     {
         long maxKey = await GetMaxContentKey();
         foreach (NoteEntity note in notes)
@@ -130,7 +130,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         }
         await _indexedDb.AddItems(notes.ToList());
     }
-    public async Task AddTasks(IReadOnlyCollection<TaskEntity> tasks)
+    public async Task AddTasks(IReadOnlyList<TaskEntity> tasks)
     {
         long maxKey = await GetMaxContentKey();
         foreach (TaskEntity task in tasks)
@@ -139,7 +139,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         }
         await _indexedDb.AddItems(tasks.ToList());
     }
-    public async Task AddTimes(IReadOnlyCollection<TimeEntity> times)
+    public async Task AddTimes(IReadOnlyList<TimeEntity> times)
     {
         long maxKey = await _indexedDb.GetMaxKey<long, TimeEntity>();
         foreach (TimeEntity time in times)
@@ -148,7 +148,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         }
         await _indexedDb.AddItems(times.ToList());
     }
-    public async Task AddItems(IReadOnlyCollection<ItemEntity> items)
+    public async Task AddItems(IReadOnlyList<ItemEntity> items)
     {
         long maxKey = await _indexedDb.GetMaxKey<long, ItemEntity>();
         foreach (ItemEntity item in items)
@@ -157,7 +157,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         }
         await _indexedDb.AddItems(items.ToList());
     }
-    public async Task AddCategories(IReadOnlyCollection<CategoryEntity> categories)
+    public async Task AddCategories(IReadOnlyList<CategoryEntity> categories)
     {
         long maxKey = await _indexedDb.GetMaxKey<long, CategoryEntity>();
         foreach (CategoryEntity category in categories)
@@ -166,7 +166,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         }
         await _indexedDb.AddItems(categories.ToList());
     }
-    public async Task AddPriorities(IReadOnlyCollection<PriorityEntity> priorities)
+    public async Task AddPriorities(IReadOnlyList<PriorityEntity> priorities)
     {
         long maxKey = await _indexedDb.GetMaxKey<long, PriorityEntity>();
         foreach (PriorityEntity priority in priorities)
@@ -175,7 +175,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         }
         await _indexedDb.AddItems(priorities.ToList());
     }
-    public async Task AddSettings(IReadOnlyCollection<SettingsEntity> settings)
+    public async Task AddSettings(IReadOnlyList<SettingsEntity> settings)
     {
         long maxKey = await _indexedDb.GetMaxKey<long, SettingsEntity>();
         foreach (SettingsEntity setting in settings)

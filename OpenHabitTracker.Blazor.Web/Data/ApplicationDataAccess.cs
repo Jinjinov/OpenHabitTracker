@@ -20,7 +20,7 @@ public class ApplicationDataAccess(IApplicationDbContext dataContext, UserManage
         await _userManager.CreateAsync(applicationUser, user.PasswordHash);
     }
 
-    public override async Task AddUsers(IReadOnlyCollection<UserEntity> users)
+    public override async Task AddUsers(IReadOnlyList<UserEntity> users)
     {
         foreach (UserEntity user in users)
         {

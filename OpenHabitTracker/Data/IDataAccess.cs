@@ -18,15 +18,15 @@ public interface IDataAccess
     Task AddPriority(PriorityEntity priority);
     Task AddSettings(SettingsEntity settings);
 
-    Task AddUsers(IReadOnlyCollection<UserEntity> users);
-    Task AddHabits(IReadOnlyCollection<HabitEntity> habits);
-    Task AddNotes(IReadOnlyCollection<NoteEntity> notes);
-    Task AddTasks(IReadOnlyCollection<TaskEntity> tasks);
-    Task AddTimes(IReadOnlyCollection<TimeEntity> times);
-    Task AddItems(IReadOnlyCollection<ItemEntity> items);
-    Task AddCategories(IReadOnlyCollection<CategoryEntity> categories);
-    Task AddPriorities(IReadOnlyCollection<PriorityEntity> priorities);
-    Task AddSettings(IReadOnlyCollection<SettingsEntity> settings);
+    Task AddUsers(IReadOnlyList<UserEntity> users);
+    Task AddHabits(IReadOnlyList<HabitEntity> habits);
+    Task AddNotes(IReadOnlyList<NoteEntity> notes);
+    Task AddTasks(IReadOnlyList<TaskEntity> tasks);
+    Task AddTimes(IReadOnlyList<TimeEntity> times);
+    Task AddItems(IReadOnlyList<ItemEntity> items);
+    Task AddCategories(IReadOnlyList<CategoryEntity> categories);
+    Task AddPriorities(IReadOnlyList<PriorityEntity> priorities);
+    Task AddSettings(IReadOnlyList<SettingsEntity> settings);
 
     Task<IReadOnlyList<UserEntity>> GetUsers();
     Task<IReadOnlyList<HabitEntity>> GetHabits();

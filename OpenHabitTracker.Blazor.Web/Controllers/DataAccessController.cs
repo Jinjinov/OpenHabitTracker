@@ -15,130 +15,130 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
 
     [HttpPost("user")]
     [EndpointName("AddUser")]
-    public async Task<IActionResult> AddUser([FromBody] UserEntity user)
+    public async Task<ActionResult<long>> AddUser([FromBody] UserEntity user)
     {
         await _dataAccess.AddUser(user);
-        return Ok();
+        return Ok(user.Id);
     }
     [HttpPost("habit")]
     [EndpointName("AddHabit")]
-    public async Task<IActionResult> AddHabit([FromBody] HabitEntity habit)
+    public async Task<ActionResult<long>> AddHabit([FromBody] HabitEntity habit)
     {
         await _dataAccess.AddHabit(habit);
-        return Ok();
+        return Ok(habit.Id);
     }
     [HttpPost("note")]
     [EndpointName("AddNote")]
-    public async Task<IActionResult> AddNote([FromBody] NoteEntity note)
+    public async Task<ActionResult<long>> AddNote([FromBody] NoteEntity note)
     {
         await _dataAccess.AddNote(note);
-        return Ok();
+        return Ok(note.Id);
     }
     [HttpPost("task")]
     [EndpointName("AddTask")]
-    public async Task<IActionResult> AddTask([FromBody] TaskEntity task)
+    public async Task<ActionResult<long>> AddTask([FromBody] TaskEntity task)
     {
         await _dataAccess.AddTask(task);
-        return Ok();
+        return Ok(task.Id);
     }
     [HttpPost("time")]
     [EndpointName("AddTime")]
-    public async Task<IActionResult> AddTime([FromBody] TimeEntity time)
+    public async Task<ActionResult<long>> AddTime([FromBody] TimeEntity time)
     {
         await _dataAccess.AddTime(time);
-        return Ok();
+        return Ok(time.Id);
     }
     [HttpPost("item")]
     [EndpointName("AddItem")]
-    public async Task<IActionResult> AddItem([FromBody] ItemEntity item)
+    public async Task<ActionResult<long>> AddItem([FromBody] ItemEntity item)
     {
         await _dataAccess.AddItem(item);
-        return Ok();
+        return Ok(item.Id);
     }
     [HttpPost("category")]
     [EndpointName("AddCategory")]
-    public async Task<IActionResult> AddCategory([FromBody] CategoryEntity category)
+    public async Task<ActionResult<long>> AddCategory([FromBody] CategoryEntity category)
     {
         await _dataAccess.AddCategory(category);
-        return Ok();
+        return Ok(category.Id);
     }
     [HttpPost("priority")]
     [EndpointName("AddPriority")]
-    public async Task<IActionResult> AddPriority([FromBody] PriorityEntity priority)
+    public async Task<ActionResult<long>> AddPriority([FromBody] PriorityEntity priority)
     {
         await _dataAccess.AddPriority(priority);
-        return Ok();
+        return Ok(priority.Id);
     }
     [HttpPost("setting")]
     [EndpointName("AddSetting")]
-    public async Task<IActionResult> AddSettings([FromBody] SettingsEntity settings)
+    public async Task<ActionResult<long>> AddSettings([FromBody] SettingsEntity settings)
     {
         await _dataAccess.AddSettings(settings);
-        return Ok();
+        return Ok(settings.Id);
     }
 
     [HttpPost("users")]
     [EndpointName("AddUsers")]
-    public async Task<IActionResult> AddUsers([FromBody] IReadOnlyCollection<UserEntity> users)
+    public async Task<ActionResult<IReadOnlyList<long>>> AddUsers([FromBody] IReadOnlyList<UserEntity> users)
     {
         await _dataAccess.AddUsers(users);
-        return Ok();
+        return Ok(users.Select(x => x.Id).ToList());
     }
     [HttpPost("habits")]
     [EndpointName("AddHabits")]
-    public async Task<IActionResult> AddHabits([FromBody] IReadOnlyCollection<HabitEntity> habits)
+    public async Task<ActionResult<IReadOnlyList<long>>> AddHabits([FromBody] IReadOnlyList<HabitEntity> habits)
     {
         await _dataAccess.AddHabits(habits);
-        return Ok();
+        return Ok(habits.Select(x => x.Id).ToList());
     }
     [HttpPost("notes")]
     [EndpointName("AddNotes")]
-    public async Task<IActionResult> AddNotes([FromBody] IReadOnlyCollection<NoteEntity> notes)
+    public async Task<ActionResult<IReadOnlyList<long>>> AddNotes([FromBody] IReadOnlyList<NoteEntity> notes)
     {
         await _dataAccess.AddNotes(notes);
-        return Ok();
+        return Ok(notes.Select(x => x.Id).ToList());
     }
     [HttpPost("tasks")]
     [EndpointName("AddTasks")]
-    public async Task<IActionResult> AddTasks([FromBody] IReadOnlyCollection<TaskEntity> tasks)
+    public async Task<ActionResult<IReadOnlyList<long>>> AddTasks([FromBody] IReadOnlyList<TaskEntity> tasks)
     {
         await _dataAccess.AddTasks(tasks);
-        return Ok();
+        return Ok(tasks.Select(x => x.Id).ToList());
     }
     [HttpPost("times")]
     [EndpointName("AddTimes")]
-    public async Task<IActionResult> AddTimes([FromBody] IReadOnlyCollection<TimeEntity> times)
+    public async Task<ActionResult<IReadOnlyList<long>>> AddTimes([FromBody] IReadOnlyList<TimeEntity> times)
     {
         await _dataAccess.AddTimes(times);
-        return Ok();
+        return Ok(times.Select(x => x.Id).ToList());
     }
     [HttpPost("items")]
     [EndpointName("AddItems")]
-    public async Task<IActionResult> AddItems([FromBody] IReadOnlyCollection<ItemEntity> items)
+    public async Task<ActionResult<IReadOnlyList<long>>> AddItems([FromBody] IReadOnlyList<ItemEntity> items)
     {
         await _dataAccess.AddItems(items);
-        return Ok();
+        return Ok(items.Select(x => x.Id).ToList());
     }
     [HttpPost("categories")]
     [EndpointName("AddCategories")]
-    public async Task<IActionResult> AddCategories([FromBody] IReadOnlyCollection<CategoryEntity> categories)
+    public async Task<ActionResult<IReadOnlyList<long>>> AddCategories([FromBody] IReadOnlyList<CategoryEntity> categories)
     {
         await _dataAccess.AddCategories(categories);
-        return Ok();
+        return Ok(categories.Select(x => x.Id).ToList());
     }
     [HttpPost("priorities")]
     [EndpointName("AddPriorities")]
-    public async Task<IActionResult> AddPriorities([FromBody] IReadOnlyCollection<PriorityEntity> priorities)
+    public async Task<ActionResult<IReadOnlyList<long>>> AddPriorities([FromBody] IReadOnlyList<PriorityEntity> priorities)
     {
         await _dataAccess.AddPriorities(priorities);
-        return Ok();
+        return Ok(priorities.Select(x => x.Id).ToList());
     }
     [HttpPost("settings")]
     [EndpointName("AddSettings")]
-    public async Task<IActionResult> AddSettings([FromBody] IReadOnlyCollection<SettingsEntity> settings)
+    public async Task<ActionResult<IReadOnlyList<long>>> AddSettings([FromBody] IReadOnlyList<SettingsEntity> settings)
     {
         await _dataAccess.AddSettings(settings);
-        return Ok();
+        return Ok(settings.Select(x => x.Id).ToList());
     }
 
     [HttpGet("users")]

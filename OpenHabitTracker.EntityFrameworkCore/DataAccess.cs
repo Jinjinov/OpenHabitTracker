@@ -67,47 +67,47 @@ public class DataAccess : IDataAccess
         await _dataContext.SaveChangesAsync();
     }
 
-    public virtual async Task AddUsers(IReadOnlyCollection<UserEntity> users)
+    public virtual async Task AddUsers(IReadOnlyList<UserEntity> users)
     {
         _dataContext.AddRange(users);
         await _dataContext.SaveChangesAsync();
     }
-    public async Task AddHabits(IReadOnlyCollection<HabitEntity> habits)
+    public async Task AddHabits(IReadOnlyList<HabitEntity> habits)
     {
         _dataContext.AddRange(habits);
         await _dataContext.SaveChangesAsync();
     }
-    public async Task AddNotes(IReadOnlyCollection<NoteEntity> notes)
+    public async Task AddNotes(IReadOnlyList<NoteEntity> notes)
     {
         _dataContext.AddRange(notes);
         await _dataContext.SaveChangesAsync();
     }
-    public async Task AddTasks(IReadOnlyCollection<TaskEntity> tasks)
+    public async Task AddTasks(IReadOnlyList<TaskEntity> tasks)
     {
         _dataContext.AddRange(tasks);
         await _dataContext.SaveChangesAsync();
     }
-    public async Task AddTimes(IReadOnlyCollection<TimeEntity> times)
+    public async Task AddTimes(IReadOnlyList<TimeEntity> times)
     {
         _dataContext.AddRange(times);
         await _dataContext.SaveChangesAsync();
     }
-    public async Task AddItems(IReadOnlyCollection<ItemEntity> items)
+    public async Task AddItems(IReadOnlyList<ItemEntity> items)
     {
         _dataContext.AddRange(items);
         await _dataContext.SaveChangesAsync();
     }
-    public async Task AddCategories(IReadOnlyCollection<CategoryEntity> categories)
+    public async Task AddCategories(IReadOnlyList<CategoryEntity> categories)
     {
         _dataContext.AddRange(categories);
         await _dataContext.SaveChangesAsync();
     }
-    public async Task AddPriorities(IReadOnlyCollection<PriorityEntity> priorities)
+    public async Task AddPriorities(IReadOnlyList<PriorityEntity> priorities)
     {
         _dataContext.AddRange(priorities);
         await _dataContext.SaveChangesAsync();
     }
-    public async Task AddSettings(IReadOnlyCollection<SettingsEntity> settings)
+    public async Task AddSettings(IReadOnlyList<SettingsEntity> settings)
     {
         _dataContext.AddRange(settings);
         await _dataContext.SaveChangesAsync();
