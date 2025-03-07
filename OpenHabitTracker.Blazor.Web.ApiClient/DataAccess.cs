@@ -91,5 +91,5 @@ public class DataAccess(DataAccessClient client) : IDataAccess
     public Task RemovePriorities() => _client.RemovePrioritiesAsync();
     public Task RemoveSettings() => _client.RemoveSettingsAsync();
 
-    public Task ClearAllTables() => _client.ClearAllTablesAsync();
+    public Task DeleteAllUserData() => _client.ClearAllTablesAsync();
 }

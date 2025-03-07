@@ -6,7 +6,7 @@ namespace OpenHabitTracker.EntityFrameworkCore;
 
 public static class DbContextEx
 {
-    public static void ClearAllTables(this IApplicationDbContext dbContext)
+    public static void DeleteAllUserData(this IApplicationDbContext dbContext)
     {
         //dbContext.Users.ExecuteDelete();
         dbContext.Contents.ExecuteDelete();

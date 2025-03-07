@@ -78,5 +78,5 @@ public interface IDataAccess
     Task RemovePriorities();
     Task RemoveSettings();
 
-    Task ClearAllTables();
+    Task DeleteAllUserData();
 }

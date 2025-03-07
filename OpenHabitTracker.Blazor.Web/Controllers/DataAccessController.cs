@@ -461,11 +461,11 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("clear-all")]
-    [EndpointName("ClearAllTables")]
-    public async Task<IActionResult> ClearAllTables()
+    [HttpDelete("delete-user-data")]
+    [EndpointName("DeleteAllUserData")]
+    public async Task<IActionResult> DeleteAllUserData()
     {
-        await _dataAccess.ClearAllTables();
+        await _dataAccess.DeleteAllUserData();
         return Ok();
     }
 }

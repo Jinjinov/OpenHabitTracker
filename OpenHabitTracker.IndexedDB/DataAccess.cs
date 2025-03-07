@@ -379,7 +379,7 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         await _indexedDb.DeleteAll<SettingsEntity>();
     }
 
-    public async Task ClearAllTables()
+    public async Task DeleteAllUserData()
     {
         //await _indexedDb.DeleteAll<UserEntity>();
         await _indexedDb.DeleteAll<HabitEntity>();

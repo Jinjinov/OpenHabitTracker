@@ -343,9 +343,9 @@ public class DataAccess : IDataAccess
         await _dataContext.Settings.ExecuteDeleteAsync();
     }
 
-    public Task ClearAllTables()
+    public Task DeleteAllUserData()
     {
-        _dataContext.ClearAllTables();
+        _dataContext.DeleteAllUserData();
 
         return Task.CompletedTask;
     }

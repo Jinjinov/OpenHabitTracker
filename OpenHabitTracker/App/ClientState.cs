@@ -462,7 +462,7 @@ public class ClientState
 
     public async Task DeleteAllData()
     {
-        await DataAccess.ClearAllTables();
+        await DataAccess.DeleteAllUserData();
 
         await RefreshState();
     }
