@@ -44,10 +44,12 @@ check for every `new.*Model`
 
 2.
 refresh local if remote has changed:
-    set last change date time on db write
-    get last change endpoint
-    call it on timer
-    if (last refresh date time < last change date time) Refresh();
+    IDataAccess: DateTime LastChangeAt
+    IDataAccess: set LastChangeAt on every DB write
+    DataAccessController: GetLastChange endpoint
+    ClientState: call GetLastChange on 10 sec timer
+    ClientState: DateTime LastRefreshAt
+    ClientState: if (LastRefreshAt < LastChangeAt) ClientState.RefreshState();
 
 ---------------------------------------------------------------------------------------------------
 
