@@ -15,79 +15,124 @@ public class DataAccess(DataAccessClient client) : IDataAccess
     }
 
     // Add single entities
-    public Task AddUser(UserEntity user)
+    public async Task AddUser(UserEntity user)
     {
-        return _client.AddUserAsync(user);
+        user.Id = await _client.AddUserAsync(user);
     }
-    public Task AddHabit(HabitEntity habit)
+    public async Task AddHabit(HabitEntity habit)
     {
-        return _client.AddHabitAsync(habit);
+        habit.Id = await _client.AddHabitAsync(habit);
     }
-    public Task AddNote(NoteEntity note)
+    public async Task AddNote(NoteEntity note)
     {
-        return _client.AddNoteAsync(note);
+        note.Id = await _client.AddNoteAsync(note);
     }
-    public Task AddTask(TaskEntity task)
+    public async Task AddTask(TaskEntity task)
     {
-        return _client.AddTaskAsync(task);
+        task.Id = await _client.AddTaskAsync(task);
     }
-    public Task AddTime(TimeEntity time)
+    public async Task AddTime(TimeEntity time)
     {
-        return _client.AddTimeAsync(time);
+        time.Id = await _client.AddTimeAsync(time);
     }
-    public Task AddItem(ItemEntity item)
+    public async Task AddItem(ItemEntity item)
     {
-        return _client.AddItemAsync(item);
+        item.Id = await _client.AddItemAsync(item);
     }
-    public Task AddCategory(CategoryEntity category)
+    public async Task AddCategory(CategoryEntity category)
     {
-        return _client.AddCategoryAsync(category);
+        category.Id = await _client.AddCategoryAsync(category);
     }
-    public Task AddPriority(PriorityEntity priority)
+    public async Task AddPriority(PriorityEntity priority)
     {
-        return _client.AddPriorityAsync(priority);
+        priority.Id = await _client.AddPriorityAsync(priority);
     }
-    public Task AddSettings(SettingsEntity settings)
+    public async Task AddSettings(SettingsEntity settings)
     {
-        return _client.AddSettingAsync(settings);
+        settings.Id = await _client.AddSettingAsync(settings);
     }
 
     // Add collections
-    public Task AddUsers(IReadOnlyList<UserEntity> users)
+    public async Task AddUsers(IReadOnlyList<UserEntity> users)
     {
-        return _client.AddUsersAsync(users);
+        IReadOnlyList<long> ids = await _client.AddUsersAsync(users);
+
+        for (int i = 0; i < users.Count; i++)
+        {
+            users[i].Id = ids[i];
+        }
     }
-    public Task AddHabits(IReadOnlyList<HabitEntity> habits)
+    public async Task AddHabits(IReadOnlyList<HabitEntity> habits)
     {
-        return _client.AddHabitsAsync(habits);
+        IReadOnlyList<long> ids = await _client.AddHabitsAsync(habits);
+
+        for (int i = 0; i < habits.Count; i++)
+        {
+            habits[i].Id = ids[i];
+        }
     }
-    public Task AddNotes(IReadOnlyList<NoteEntity> notes)
+    public async Task AddNotes(IReadOnlyList<NoteEntity> notes)
     {
-        return _client.AddNotesAsync(notes);
+        IReadOnlyList<long> ids = await _client.AddNotesAsync(notes);
+
+        for (int i = 0; i < notes.Count; i++)
+        {
+            notes[i].Id = ids[i];
+        }
     }
-    public Task AddTasks(IReadOnlyList<TaskEntity> tasks)
+    public async Task AddTasks(IReadOnlyList<TaskEntity> tasks)
     {
-        return _client.AddTasksAsync(tasks);
+        IReadOnlyList<long> ids = await _client.AddTasksAsync(tasks);
+
+        for (int i = 0; i < tasks.Count; i++)
+        {
+            tasks[i].Id = ids[i];
+        }
     }
-    public Task AddTimes(IReadOnlyList<TimeEntity> times)
+    public async Task AddTimes(IReadOnlyList<TimeEntity> times)
     {
-        return _client.AddTimesAsync(times);
+        IReadOnlyList<long> ids = await _client.AddTimesAsync(times);
+
+        for (int i = 0; i < times.Count; i++)
+        {
+            times[i].Id = ids[i];
+        }
     }
-    public Task AddItems(IReadOnlyList<ItemEntity> items)
+    public async Task AddItems(IReadOnlyList<ItemEntity> items)
     {
-        return _client.AddItemsAsync(items);
+        IReadOnlyList<long> ids = await _client.AddItemsAsync(items);
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            items[i].Id = ids[i];
+        }
     }
-    public Task AddCategories(IReadOnlyList<CategoryEntity> categories)
+    public async Task AddCategories(IReadOnlyList<CategoryEntity> categories)
     {
-        return _client.AddCategoriesAsync(categories);
+        IReadOnlyList<long> ids = await _client.AddCategoriesAsync(categories);
+
+        for (int i = 0; i < categories.Count; i++)
+        {
+            categories[i].Id = ids[i];
+        }
     }
-    public Task AddPriorities(IReadOnlyList<PriorityEntity> priorities)
+    public async Task AddPriorities(IReadOnlyList<PriorityEntity> priorities)
     {
-        return _client.AddPrioritiesAsync(priorities);
+        IReadOnlyList<long> ids = await _client.AddPrioritiesAsync(priorities);
+
+        for (int i = 0; i < priorities.Count; i++)
+        {
+            priorities[i].Id = ids[i];
+        }
     }
-    public Task AddSettings(IReadOnlyList<SettingsEntity> settings)
+    public async Task AddSettings(IReadOnlyList<SettingsEntity> settings)
     {
-        return _client.AddSettingsAsync(settings);
+        IReadOnlyList<long> ids = await _client.AddSettingsAsync(settings);
+
+        for (int i = 0; i < settings.Count; i++)
+        {
+            settings[i].Id = ids[i];
+        }
     }
 
     // Get collections
@@ -145,5 +190,5 @@ public class DataAccess(DataAccessClient client) : IDataAccess
     public Task RemovePriorities() => _client.RemovePrioritiesAsync();
     public Task RemoveSettings() => _client.RemoveSettingsAsync();
 
-    public Task DeleteAllUserData() => _client.ClearAllTablesAsync();
+    public Task DeleteAllUserData() => _client.DeleteAllUserDataAsync();
 }
