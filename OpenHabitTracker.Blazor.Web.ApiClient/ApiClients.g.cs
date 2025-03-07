@@ -448,7 +448,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddUserAsync(UserEntity body)
+        public virtual System.Threading.Tasks.Task<long> AddUserAsync(UserEntity body)
         {
             return AddUserAsync(body, System.Threading.CancellationToken.None);
         }
@@ -456,7 +456,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddUserAsync(UserEntity body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<long> AddUserAsync(UserEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -472,6 +472,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -503,7 +504,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<long>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -527,7 +533,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddHabitAsync(HabitEntity body)
+        public virtual System.Threading.Tasks.Task<long> AddHabitAsync(HabitEntity body)
         {
             return AddHabitAsync(body, System.Threading.CancellationToken.None);
         }
@@ -535,7 +541,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddHabitAsync(HabitEntity body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<long> AddHabitAsync(HabitEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -551,6 +557,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -582,7 +589,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<long>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -606,7 +618,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddNoteAsync(NoteEntity body)
+        public virtual System.Threading.Tasks.Task<long> AddNoteAsync(NoteEntity body)
         {
             return AddNoteAsync(body, System.Threading.CancellationToken.None);
         }
@@ -614,7 +626,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddNoteAsync(NoteEntity body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<long> AddNoteAsync(NoteEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -630,6 +642,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -661,7 +674,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<long>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -685,7 +703,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddTaskAsync(TaskEntity body)
+        public virtual System.Threading.Tasks.Task<long> AddTaskAsync(TaskEntity body)
         {
             return AddTaskAsync(body, System.Threading.CancellationToken.None);
         }
@@ -693,7 +711,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddTaskAsync(TaskEntity body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<long> AddTaskAsync(TaskEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -709,6 +727,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -740,7 +759,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<long>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -764,7 +788,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddTimeAsync(TimeEntity body)
+        public virtual System.Threading.Tasks.Task<long> AddTimeAsync(TimeEntity body)
         {
             return AddTimeAsync(body, System.Threading.CancellationToken.None);
         }
@@ -772,7 +796,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddTimeAsync(TimeEntity body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<long> AddTimeAsync(TimeEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -788,6 +812,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -819,7 +844,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<long>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -843,7 +873,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddItemAsync(ItemEntity body)
+        public virtual System.Threading.Tasks.Task<long> AddItemAsync(ItemEntity body)
         {
             return AddItemAsync(body, System.Threading.CancellationToken.None);
         }
@@ -851,7 +881,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddItemAsync(ItemEntity body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<long> AddItemAsync(ItemEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -867,6 +897,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -898,7 +929,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<long>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -922,7 +958,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddCategoryAsync(CategoryEntity body)
+        public virtual System.Threading.Tasks.Task<long> AddCategoryAsync(CategoryEntity body)
         {
             return AddCategoryAsync(body, System.Threading.CancellationToken.None);
         }
@@ -930,7 +966,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddCategoryAsync(CategoryEntity body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<long> AddCategoryAsync(CategoryEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -946,6 +982,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -977,7 +1014,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<long>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -1001,7 +1043,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddPriorityAsync(PriorityEntity body)
+        public virtual System.Threading.Tasks.Task<long> AddPriorityAsync(PriorityEntity body)
         {
             return AddPriorityAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1009,7 +1051,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddPriorityAsync(PriorityEntity body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<long> AddPriorityAsync(PriorityEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -1025,6 +1067,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -1056,7 +1099,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<long>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -1080,7 +1128,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddSettingAsync(SettingsEntity body)
+        public virtual System.Threading.Tasks.Task<long> AddSettingAsync(SettingsEntity body)
         {
             return AddSettingAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1088,7 +1136,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddSettingAsync(SettingsEntity body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<long> AddSettingAsync(SettingsEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -1104,6 +1152,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -1135,7 +1184,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<long>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -1159,7 +1213,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddUsersAsync(System.Collections.Generic.IEnumerable<UserEntity> body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddUsersAsync(System.Collections.Generic.IEnumerable<UserEntity> body)
         {
             return AddUsersAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1167,7 +1221,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddUsersAsync(System.Collections.Generic.IEnumerable<UserEntity> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddUsersAsync(System.Collections.Generic.IEnumerable<UserEntity> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -1183,6 +1237,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -1214,7 +1269,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<long>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -1467,7 +1527,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddHabitsAsync(System.Collections.Generic.IEnumerable<HabitEntity> body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddHabitsAsync(System.Collections.Generic.IEnumerable<HabitEntity> body)
         {
             return AddHabitsAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1475,7 +1535,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddHabitsAsync(System.Collections.Generic.IEnumerable<HabitEntity> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddHabitsAsync(System.Collections.Generic.IEnumerable<HabitEntity> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -1491,6 +1551,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -1522,7 +1583,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<long>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -1775,7 +1841,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddNotesAsync(System.Collections.Generic.IEnumerable<NoteEntity> body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddNotesAsync(System.Collections.Generic.IEnumerable<NoteEntity> body)
         {
             return AddNotesAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1783,7 +1849,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddNotesAsync(System.Collections.Generic.IEnumerable<NoteEntity> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddNotesAsync(System.Collections.Generic.IEnumerable<NoteEntity> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -1799,6 +1865,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -1830,7 +1897,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<long>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -2083,7 +2155,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddTasksAsync(System.Collections.Generic.IEnumerable<TaskEntity> body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddTasksAsync(System.Collections.Generic.IEnumerable<TaskEntity> body)
         {
             return AddTasksAsync(body, System.Threading.CancellationToken.None);
         }
@@ -2091,7 +2163,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddTasksAsync(System.Collections.Generic.IEnumerable<TaskEntity> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddTasksAsync(System.Collections.Generic.IEnumerable<TaskEntity> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -2107,6 +2179,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -2138,7 +2211,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<long>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -2391,7 +2469,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddTimesAsync(System.Collections.Generic.IEnumerable<TimeEntity> body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddTimesAsync(System.Collections.Generic.IEnumerable<TimeEntity> body)
         {
             return AddTimesAsync(body, System.Threading.CancellationToken.None);
         }
@@ -2399,7 +2477,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddTimesAsync(System.Collections.Generic.IEnumerable<TimeEntity> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddTimesAsync(System.Collections.Generic.IEnumerable<TimeEntity> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -2415,6 +2493,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -2446,7 +2525,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<long>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -2705,7 +2789,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddItemsAsync(System.Collections.Generic.IEnumerable<ItemEntity> body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddItemsAsync(System.Collections.Generic.IEnumerable<ItemEntity> body)
         {
             return AddItemsAsync(body, System.Threading.CancellationToken.None);
         }
@@ -2713,7 +2797,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddItemsAsync(System.Collections.Generic.IEnumerable<ItemEntity> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddItemsAsync(System.Collections.Generic.IEnumerable<ItemEntity> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -2729,6 +2813,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -2760,7 +2845,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<long>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -3019,7 +3109,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddCategoriesAsync(System.Collections.Generic.IEnumerable<CategoryEntity> body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddCategoriesAsync(System.Collections.Generic.IEnumerable<CategoryEntity> body)
         {
             return AddCategoriesAsync(body, System.Threading.CancellationToken.None);
         }
@@ -3027,7 +3117,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddCategoriesAsync(System.Collections.Generic.IEnumerable<CategoryEntity> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddCategoriesAsync(System.Collections.Generic.IEnumerable<CategoryEntity> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -3043,6 +3133,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -3074,7 +3165,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<long>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -3327,7 +3423,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddPrioritiesAsync(System.Collections.Generic.IEnumerable<PriorityEntity> body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddPrioritiesAsync(System.Collections.Generic.IEnumerable<PriorityEntity> body)
         {
             return AddPrioritiesAsync(body, System.Threading.CancellationToken.None);
         }
@@ -3335,7 +3431,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddPrioritiesAsync(System.Collections.Generic.IEnumerable<PriorityEntity> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddPrioritiesAsync(System.Collections.Generic.IEnumerable<PriorityEntity> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -3351,6 +3447,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -3382,7 +3479,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<long>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -3635,7 +3737,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddSettingsAsync(System.Collections.Generic.IEnumerable<SettingsEntity> body)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddSettingsAsync(System.Collections.Generic.IEnumerable<SettingsEntity> body)
         {
             return AddSettingsAsync(body, System.Threading.CancellationToken.None);
         }
@@ -3643,7 +3745,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddSettingsAsync(System.Collections.Generic.IEnumerable<SettingsEntity> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<long>> AddSettingsAsync(System.Collections.Generic.IEnumerable<SettingsEntity> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -3659,6 +3761,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -3690,7 +3793,12 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<long>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -5365,15 +5473,15 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ClearAllTablesAsync()
+        public virtual System.Threading.Tasks.Task DeleteAllUserDataAsync()
         {
-            return ClearAllTablesAsync(System.Threading.CancellationToken.None);
+            return DeleteAllUserDataAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ClearAllTablesAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteAllUserDataAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -5385,8 +5493,8 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "api/DataAccess/clear-all"
-                    urlBuilder_.Append("api/DataAccess/clear-all");
+                    // Operation Path: "api/DataAccess/delete-user-data"
+                    urlBuilder_.Append("api/DataAccess/delete-user-data");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
