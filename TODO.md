@@ -35,21 +35,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-0.
+1.
 make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
 
 check for every `new.*Model`
-
----------------------------------------------------------------------------------------------------
-
-1.
-change ClearAllTables to DeleteAllUserData, remove `DeleteAll<UserEntity>();`
-
-!!! SHOWSTOPPER !!!
-
-the whole app relies on the assumption that DataAccess.Add* will set Entity.Id, but DataAccess in OpenHabitTracker.Blazor.Web.ApiClient doesn't do that
-
-!!! SHOWSTOPPER !!!
 
 ---------------------------------------------------------------------------------------------------
 
