@@ -19,6 +19,8 @@
       ],
       "responseArrayType": "System.Collections.Generic.IReadOnlyList",
       "jsonLibrary": "SystemTextJson",
+      "dateType": "System.DateTime",
+      "dateTimeType": "System.DateTime",
       "useBaseUrl": false
     }
   }
