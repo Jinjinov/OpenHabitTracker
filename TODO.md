@@ -51,6 +51,18 @@ refresh local if remote has changed:
     ClientState: DateTime LastRefreshAt
     ClientState: if (LastRefreshAt < LastChangeAt) ClientState.RefreshState();
 
+services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
+
+services.AddDbContextFactory<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
+
+services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
+
+SaveChanges(); // force write from .db-wal to .db with:
+context.Database.ExecuteSqlRaw("PRAGMA wal_checkpoint(TRUNCATE);");
+
+// disable wal:
+context.Database.ExecuteSqlRaw("PRAGMA journal_mode=DELETE;");
+
 ---------------------------------------------------------------------------------------------------
 
 3.
