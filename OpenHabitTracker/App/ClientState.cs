@@ -92,17 +92,18 @@ public class ClientState
 
     private async Task StartPolling()
     {
-        DateTime lastChangeAt;
-
         using PeriodicTimer timer = new(TimeSpan.FromSeconds(10));
 
         while (DataLocation == DataLocation.Remote && await timer.WaitForNextTickAsync())
         {
-            lastChangeAt = await DataAccess.GetLastChangeTime();
+            IReadOnlyList<UserEntity> users = await DataAccess.GetUsers();
 
-            if (_lastRefreshAt < lastChangeAt)
+            if (users.Count > 0 && users[0] is UserEntity user)
             {
-                await RefreshState();
+                if (_lastRefreshAt < user.LastChangeAt)
+                {
+                    await RefreshState();
+                }
             }
         }
     }
@@ -160,7 +161,8 @@ public class ClientState
                     Id = userEntity.Id,
                     UserName = userEntity.UserName,
                     Email = userEntity.Email,
-                    PasswordHash = userEntity.PasswordHash
+                    PasswordHash = userEntity.PasswordHash,
+                    LastChangeAt = userEntity.LastChangeAt
                 };
             }
             else

@@ -13,14 +13,6 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
 {
     private readonly IDataAccess _dataAccess = dataAccess;
 
-    [HttpGet("last-change-time")]
-    [EndpointName("GetLastChangeTime")]
-    public async Task<ActionResult<DateTime>> GetLastChangeTime()
-    {
-        DateTime lastChange = await _dataAccess.GetLastChangeTime();
-        return Ok(lastChange);
-    }
-
     [HttpPost("user")]
     [EndpointName("AddUser")]
     public async Task<ActionResult<long>> AddUser([FromBody] UserEntity user)

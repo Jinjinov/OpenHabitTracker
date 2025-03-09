@@ -104,6 +104,7 @@ public static class DataExtensions
         entity.UserName = model.UserName;
         entity.Email = model.Email;
         entity.PasswordHash = model.PasswordHash;
+        entity.LastChangeAt = model.LastChangeAt;
     }
 
     public static SettingsEntity ToEntity(this SettingsModel model)

@@ -14,8 +14,6 @@ public class DataAccess(DataAccessClient client) : IDataAccess
         return Task.CompletedTask;
     }
 
-    public async Task<DateTime> GetLastChangeTime() => await _client.GetLastChangeTimeAsync();
-
     // Add single entities
     public async Task AddUser(UserEntity user)
     {

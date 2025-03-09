@@ -22,4 +22,6 @@ public class ApplicationUser : IdentityUser<long>, IUserEntity
         get => base.PasswordHash!;
         set => base.PasswordHash = value;
     }
+
+    public DateTime LastChangeAt { get; set; }
 }

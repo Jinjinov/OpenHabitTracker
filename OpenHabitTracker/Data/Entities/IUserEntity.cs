@@ -9,4 +9,6 @@ public interface IUserEntity
     string Email { get; set; }
 
     string PasswordHash { get; set; }
+
+    DateTime LastChangeAt { get; set; }
 }

@@ -57,8 +57,6 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         _dbModelId ??= await _indexedDb.OpenIndexedDb();
     }
 
-    public Task<DateTime> GetLastChangeTime() => Task.FromResult(default(DateTime));
-
     public async Task AddUser(UserEntity user)
     {
         user.Id = 1 + await _indexedDb.GetMaxKey<long, UserEntity>();
