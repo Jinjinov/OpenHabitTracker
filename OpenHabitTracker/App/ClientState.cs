@@ -14,7 +14,6 @@ public class ClientState
     private ClientData _clientData;
 
     private DateTime _lastRefreshAt;
-    private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(10));
 
     public ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
     {
@@ -91,20 +90,19 @@ public class ClientState
         set => _clientData.Trash = value;
     }
 
-    public async Task StartPolling()
+    private async Task StartPolling()
     {
         DateTime lastChangeAt;
 
-        while (await _timer.WaitForNextTickAsync())
-        {
-            if (DataLocation == DataLocation.Remote)
-            {
-                lastChangeAt = await DataAccess.GetLastChangeTime();
+        using PeriodicTimer timer = new(TimeSpan.FromSeconds(10));
 
-                if (_lastRefreshAt < lastChangeAt)
-                {
-                    await RefreshState();
-                }
+        while (DataLocation == DataLocation.Remote && await timer.WaitForNextTickAsync())
+        {
+            lastChangeAt = await DataAccess.GetLastChangeTime();
+
+            if (_lastRefreshAt < lastChangeAt)
+            {
+                await RefreshState();
             }
         }
     }
@@ -118,6 +116,11 @@ public class ClientState
         DataAccess = _dataAccessByLocation[DataLocation];
 
         await RefreshState();
+
+        if (DataLocation == DataLocation.Remote)
+        {
+            await StartPolling();
+        }
     }
 
     public async Task UpdateModel(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
