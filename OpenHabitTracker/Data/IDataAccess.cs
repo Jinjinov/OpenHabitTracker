@@ -8,6 +8,8 @@ public interface IDataAccess
 
     Task Initialize();
 
+    Task<DateTime> GetLastChangeTime();
+
     Task AddUser(UserEntity user);
     Task AddHabit(HabitEntity habit);
     Task AddNote(NoteEntity note);

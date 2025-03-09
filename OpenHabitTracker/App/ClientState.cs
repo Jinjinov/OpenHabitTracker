@@ -13,6 +13,9 @@ public class ClientState
     private readonly Dictionary<DataLocation, ClientData> _clientDataByLocation;
     private ClientData _clientData;
 
+    private DateTime _lastRefreshAt;
+    private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(10));
+
     public ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
     {
         _dataAccessByLocation = dataAccess.ToDictionary(x => x.DataLocation);
@@ -86,6 +89,24 @@ public class ClientState
     {
         get => _clientData.Trash;
         set => _clientData.Trash = value;
+    }
+
+    public async Task StartPolling()
+    {
+        DateTime lastChangeAt;
+
+        while (await _timer.WaitForNextTickAsync())
+        {
+            if (DataLocation == DataLocation.Remote)
+            {
+                lastChangeAt = await DataAccess.GetLastChangeTime();
+
+                if (_lastRefreshAt < lastChangeAt)
+                {
+                    await RefreshState();
+                }
+            }
+        }
     }
 
     public async Task SetDataLocation(DataLocation dataLocation)
@@ -483,6 +504,8 @@ public class ClientState
         Trash = null;
 
         await LoadContent();
+
+        _lastRefreshAt = DateTime.UtcNow;
     }
 
     public async Task<UserImportExportData> GetUserData()

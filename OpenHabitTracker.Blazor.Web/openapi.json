@@ -135,6 +135,39 @@
         }
       }
     },
+    "/api/DataAccess/last-change-time": {
+      "get": {
+        "tags": [
+          "DataAccess"
+        ],
+        "operationId": "GetLastChangeTime",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/DataAccess/user": {
       "post": {
         "tags": [

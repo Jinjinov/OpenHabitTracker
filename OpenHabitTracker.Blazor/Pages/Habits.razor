@@ -262,7 +262,7 @@
 
     bool _showHabitComponent => Id is not null && HabitService.SelectedHabit is not null && HabitService.NewHabit is null;
 
-    bool _showHabitCompletedTimes => _showHabitComponent && HabitService.SelectedHabit.TimesDone is not null && HabitService.SelectedHabit.LastTimeDoneAt is not null;
+    bool _showHabitCompletedTimes => Id is not null && HabitService.SelectedHabit is not null && HabitService.NewHabit is null && HabitService.SelectedHabit.TimesDone is not null && HabitService.SelectedHabit.LastTimeDoneAt is not null;
 
     InputTextImmediate? inputElement;
 

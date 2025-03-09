@@ -8,6 +8,8 @@ public class DataAccess : IDataAccess
 {
     public DataLocation DataLocation { get; } = DataLocation.Local;
 
+    private DateTime _lastChangeAt;
+
     protected readonly IApplicationDbContext _dataContext;
 
     public DataAccess(IApplicationDbContext dataContext)
@@ -21,96 +23,116 @@ public class DataAccess : IDataAccess
         await _dataContext.Database.MigrateAsync();
     }
 
+    public Task<DateTime> GetLastChangeTime() => Task.FromResult(_lastChangeAt);
+
     public virtual async Task AddUser(UserEntity user)
     {
         _dataContext.Add(user);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddHabit(HabitEntity habit)
     {
         _dataContext.Add(habit);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddNote(NoteEntity note)
     {
         _dataContext.Add(note);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddTask(TaskEntity task)
     {
         _dataContext.Add(task);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddTime(TimeEntity time)
     {
         _dataContext.Add(time);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddItem(ItemEntity item)
     {
         _dataContext.Add(item);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddCategory(CategoryEntity category)
     {
         _dataContext.Add(category);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddPriority(PriorityEntity priority)
     {
         _dataContext.Add(priority);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddSettings(SettingsEntity settings)
     {
         _dataContext.Add(settings);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
 
     public virtual async Task AddUsers(IReadOnlyList<UserEntity> users)
     {
         _dataContext.AddRange(users);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddHabits(IReadOnlyList<HabitEntity> habits)
     {
         _dataContext.AddRange(habits);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddNotes(IReadOnlyList<NoteEntity> notes)
     {
         _dataContext.AddRange(notes);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddTasks(IReadOnlyList<TaskEntity> tasks)
     {
         _dataContext.AddRange(tasks);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddTimes(IReadOnlyList<TimeEntity> times)
     {
         _dataContext.AddRange(times);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddItems(IReadOnlyList<ItemEntity> items)
     {
         _dataContext.AddRange(items);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddCategories(IReadOnlyList<CategoryEntity> categories)
     {
         _dataContext.AddRange(categories);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddPriorities(IReadOnlyList<PriorityEntity> priorities)
     {
         _dataContext.AddRange(priorities);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task AddSettings(IReadOnlyList<SettingsEntity> settings)
     {
         _dataContext.AddRange(settings);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
 
     public virtual async Task<IReadOnlyList<UserEntity>> GetUsers()
@@ -197,49 +219,58 @@ public class DataAccess : IDataAccess
     {
         _dataContext.Update(user);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task UpdateHabit(HabitEntity habit)
     {
         habit.UpdatedAt = DateTime.Now;
         _dataContext.Update(habit);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task UpdateNote(NoteEntity note)
     {
         note.UpdatedAt = DateTime.Now;
         _dataContext.Update(note);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task UpdateTask(TaskEntity task)
     {
         task.UpdatedAt = DateTime.Now;
         _dataContext.Update(task);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task UpdateTime(TimeEntity time)
     {
         _dataContext.Update(time);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task UpdateItem(ItemEntity item)
     {
         _dataContext.Update(item);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task UpdateCategory(CategoryEntity category)
     {
         _dataContext.Update(category);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task UpdatePriority(PriorityEntity priority)
     {
         _dataContext.Update(priority);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task UpdateSettings(SettingsEntity settings)
     {
         _dataContext.Update(settings);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
 
     public virtual async Task RemoveUser(long id)
@@ -248,6 +279,7 @@ public class DataAccess : IDataAccess
         if (entity is not null)
             _dataContext.Set<UserEntity>().Remove(entity);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveHabit(long id)
     {
@@ -255,6 +287,7 @@ public class DataAccess : IDataAccess
         if (entity is not null)
             _dataContext.Habits.Remove(entity);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveNote(long id)
     {
@@ -262,6 +295,7 @@ public class DataAccess : IDataAccess
         if (entity is not null)
             _dataContext.Notes.Remove(entity);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveTask(long id)
     {
@@ -269,6 +303,7 @@ public class DataAccess : IDataAccess
         if (entity is not null)
             _dataContext.Tasks.Remove(entity);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveTime(long id)
     {
@@ -276,6 +311,7 @@ public class DataAccess : IDataAccess
         if (entity is not null)
             _dataContext.Times.Remove(entity);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveItem(long id)
     {
@@ -283,6 +319,7 @@ public class DataAccess : IDataAccess
         if (entity is not null)
             _dataContext.Items.Remove(entity);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveCategory(long id)
     {
@@ -290,6 +327,7 @@ public class DataAccess : IDataAccess
         if (entity is not null)
             _dataContext.Categories.Remove(entity);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemovePriority(long id)
     {
@@ -297,6 +335,7 @@ public class DataAccess : IDataAccess
         if (entity is not null)
             _dataContext.Priorities.Remove(entity);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveSettings(long id)
     {
@@ -304,48 +343,59 @@ public class DataAccess : IDataAccess
         if (entity is not null)
             _dataContext.Settings.Remove(entity);
         await _dataContext.SaveChangesAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
 
     public virtual async Task RemoveUsers()
     {
         await _dataContext.Users.ExecuteDeleteAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveHabits()
     {
         await _dataContext.Habits.ExecuteDeleteAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveNotes()
     {
         await _dataContext.Notes.ExecuteDeleteAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveTasks()
     {
         await _dataContext.Tasks.ExecuteDeleteAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveTimes()
     {
         await _dataContext.Times.ExecuteDeleteAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveItems()
     {
         await _dataContext.Items.ExecuteDeleteAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveCategories()
     {
         await _dataContext.Categories.ExecuteDeleteAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemovePriorities()
     {
         await _dataContext.Priorities.ExecuteDeleteAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
     public async Task RemoveSettings()
     {
         await _dataContext.Settings.ExecuteDeleteAsync();
+        _lastChangeAt = DateTime.UtcNow;
     }
 
     public Task DeleteAllUserData()
     {
         _dataContext.DeleteAllUserData();
+        _lastChangeAt = DateTime.UtcNow;
 
         return Task.CompletedTask;
     }
