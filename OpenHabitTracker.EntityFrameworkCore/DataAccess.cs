@@ -18,7 +18,7 @@ public class DataAccess : IDataAccess
 
     private async Task SaveChanges()
     {
-        if (_dataContext.Users.FirstOrDefault() is UserEntity user)
+        if (_dataContext.Users.FirstOrDefault() is IUserEntity user)
         {
             user.LastChangeAt = DateTime.UtcNow;
         }

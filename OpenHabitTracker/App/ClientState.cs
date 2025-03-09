@@ -98,7 +98,7 @@ public class ClientState
         {
             IReadOnlyList<UserEntity> users = await DataAccess.GetUsers();
 
-            if (users.Count > 0 && users[0] is UserEntity user)
+            if (users.Count > 0 && users[0] is IUserEntity user)
             {
                 if (_lastRefreshAt < user.LastChangeAt)
                 {
@@ -154,15 +154,15 @@ public class ClientState
         {
             IReadOnlyList<UserEntity> users = await DataAccess.GetUsers();
 
-            if (users.Count > 0 && users[0] is UserEntity userEntity)
+            if (users.Count > 0 && users[0] is IUserEntity user)
             {
                 User = new UserModel
                 {
-                    Id = userEntity.Id,
-                    UserName = userEntity.UserName,
-                    Email = userEntity.Email,
-                    PasswordHash = userEntity.PasswordHash,
-                    LastChangeAt = userEntity.LastChangeAt
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    PasswordHash = user.PasswordHash,
+                    LastChangeAt = user.LastChangeAt
                 };
             }
             else
@@ -173,7 +173,7 @@ public class ClientState
                     Email = "admin@admin.com"
                 };
 
-                userEntity = User.ToEntity();
+                UserEntity userEntity = User.ToEntity();
 
                 await DataAccess.AddUser(userEntity);
 
