@@ -58,17 +58,10 @@ refresh local if remote has changed:
 remove:
     services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
 
-DataAccess -> DataAccessBase, no constructor
-no need to register AddScoped<IApplicationDbContext>
-no constructors with IApplicationDbContext parameter
-
 construcotrs with DbContextFactory<ApplicationDbContext>
 
 add:
     services.AddDbContextFactory<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
-
-only for high performance, short lived DbContext:
-    services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
 
 SaveChanges(); // force write from .db-wal to .db with:
 context.Database.ExecuteSqlRaw("PRAGMA wal_checkpoint(TRUNCATE);");
