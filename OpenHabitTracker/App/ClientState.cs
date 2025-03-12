@@ -90,21 +90,68 @@ public class ClientState
         set => _clientData.Trash = value;
     }
 
-    private async Task StartPolling()
+    private PeriodicTimer? _timer;
+    private Task? _timerTask;
+    private CancellationTokenSource? _cts;
+    private readonly TimeSpan _interval = TimeSpan.FromSeconds(10);
+
+    public void StartPolling()
     {
-        using PeriodicTimer timer = new(TimeSpan.FromSeconds(10));
+        // Don't start if already running
+        if (_timerTask is not null && !_timerTask.IsCompleted)
+            return;
 
-        while (DataLocation == DataLocation.Remote && await timer.WaitForNextTickAsync())
+        // Create new instances for each start
+        _cts = new CancellationTokenSource();
+        _timer = new PeriodicTimer(_interval);
+
+        // Start the timer task
+        _timerTask = ShortPolling();
+    }
+
+    public async Task StopPolling()
+    {
+        if (_timerTask is null || _cts is null)
+            return;
+
+        // Signal cancellation and wait for the task to complete
+        _cts.Cancel();
+        await _timerTask;
+
+        // Dispose resources
+        _cts.Dispose();
+        _timer?.Dispose();
+
+        // Clear references to allow garbage collection
+        _cts = null;
+        _timer = null;
+        _timerTask = null;
+    }
+
+    private async Task ShortPolling()
+    {
+        try
         {
-            IReadOnlyList<UserEntity> users = await DataAccess.GetUsers();
+            if (_timer == null || _cts == null)
+                return;
 
-            if (users.Count > 0 && users[0] is IUserEntity user)
+            // Continue running until cancellation is requested
+            while (DataLocation == DataLocation.Remote && await _timer.WaitForNextTickAsync(_cts.Token))
             {
-                if (_lastRefreshAt < user.LastChangeAt)
+                IReadOnlyList<UserEntity> users = await DataAccess.GetUsers();
+
+                if (users.Count > 0 && users[0] is IUserEntity user)
                 {
-                    await RefreshState();
+                    if (_lastRefreshAt < user.LastChangeAt)
+                    {
+                        await RefreshState();
+                    }
                 }
             }
+        }
+        catch (OperationCanceledException)
+        {
+            // Task was canceled, clean up if necessary
         }
     }
 
@@ -120,7 +167,11 @@ public class ClientState
 
         if (DataLocation == DataLocation.Remote)
         {
-            await StartPolling();
+            StartPolling();
+        }
+        else
+        {
+            await StopPolling();
         }
     }
 
