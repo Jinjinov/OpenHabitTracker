@@ -17,7 +17,7 @@ public static class Startup
             options.UseSqlite(connection);
         });
 
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>());
+        //services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>());
 
         services.AddScoped<IDataAccess, OpenHabitTracker.Blazor.Web.Data.ApplicationDataAccess>();
 

@@ -54,18 +54,21 @@ API for the backend
 
 2.
 refresh local if remote has changed:
-    IDataAccess: DateTime LastChangeAt
-    IDataAccess: set LastChangeAt on every DB write - Add, Update, Remove (not Get)
-    DataAccessController: GetLastChange endpoint, return LastChangeAt
-    ClientState: call GetLastChange on 10 sec timer
-    ClientState: DateTime LastRefreshAt
-    ClientState: if (LastRefreshAt < LastChangeAt) ClientState.RefreshState();
 
-services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
+remove:
+    services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
 
-services.AddDbContextFactory<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
+DataAccess -> DataAccessBase, no constructor
+no need to register AddScoped<IApplicationDbContext>
+no constructors with IApplicationDbContext parameter
 
-services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
+construcotrs with DbContextFactory<ApplicationDbContext>
+
+add:
+    services.AddDbContextFactory<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
+
+only for high performance, short lived DbContext:
+    services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
 
 SaveChanges(); // force write from .db-wal to .db with:
 context.Database.ExecuteSqlRaw("PRAGMA wal_checkpoint(TRUNCATE);");

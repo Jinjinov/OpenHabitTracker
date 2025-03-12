@@ -1,15 +1,26 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.EntityFrameworkCore;
 
 namespace OpenHabitTracker.Blazor.Web.Data;
 
-public class ApplicationDataAccess(IApplicationDbContext dataContext, UserManager<ApplicationUser> userManager) : DataAccess(dataContext)
+public class ApplicationDataAccess : DataAccessBase, IDataAccess
 {
-    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public override async Task AddUser(UserEntity user)
+    public DataLocation DataLocation { get; } = DataLocation.Local;
+
+    public ApplicationDataAccess(ApplicationDbContext dataContext, UserManager<ApplicationUser> userManager)
+    {
+        _dataContext = dataContext;
+        _dataContext.Database.Migrate();
+
+        _userManager = userManager;
+    }
+
+    public async Task AddUser(UserEntity user)
     {
         ApplicationUser applicationUser = new()
         {
@@ -20,7 +31,7 @@ public class ApplicationDataAccess(IApplicationDbContext dataContext, UserManage
         await _userManager.CreateAsync(applicationUser, user.PasswordHash);
     }
 
-    public override async Task AddUsers(IReadOnlyList<UserEntity> users)
+    public async Task AddUsers(IReadOnlyList<UserEntity> users)
     {
         foreach (UserEntity user in users)
         {
@@ -28,7 +39,7 @@ public class ApplicationDataAccess(IApplicationDbContext dataContext, UserManage
         }
     }
 
-    public override async Task<IReadOnlyList<UserEntity>> GetUsers()
+    public async Task<IReadOnlyList<UserEntity>> GetUsers()
     {
         List<ApplicationUser> users = await _userManager.Users.ToListAsync();
 
@@ -41,7 +52,7 @@ public class ApplicationDataAccess(IApplicationDbContext dataContext, UserManage
         }).ToList();
     }
 
-    public override async Task<UserEntity?> GetUser(long id)
+    public async Task<UserEntity?> GetUser(long id)
     {
         ApplicationUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
 
@@ -57,7 +68,7 @@ public class ApplicationDataAccess(IApplicationDbContext dataContext, UserManage
         };
     }
 
-    public override async Task UpdateUser(UserEntity user)
+    public async Task UpdateUser(UserEntity user)
     {
         ApplicationUser? applicationUser = _userManager.Users.FirstOrDefault(u => u.Id == user.Id);
 
@@ -70,7 +81,7 @@ public class ApplicationDataAccess(IApplicationDbContext dataContext, UserManage
         }
     }
 
-    public override async Task RemoveUser(long id)
+    public async Task RemoveUser(long id)
     {
         ApplicationUser? applicationUser = _userManager.Users.FirstOrDefault(u => u.Id == id);
 
@@ -80,7 +91,7 @@ public class ApplicationDataAccess(IApplicationDbContext dataContext, UserManage
         }
     }
 
-    public override async Task RemoveUsers()
+    public async Task RemoveUsers()
     {
         foreach (ApplicationUser applicationUser in _userManager.Users)
         {
