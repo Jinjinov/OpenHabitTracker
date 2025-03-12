@@ -11,7 +11,7 @@ public static class Startup
     {
         //services.AddDbContext<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
 
-        services.AddDbContext<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>((serviceProvider, options) =>
+        services.AddDbContextFactory<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>((serviceProvider, options) =>
         {
             SqliteConnection connection = serviceProvider.GetRequiredService<SqliteConnection>();
             options.UseSqlite(connection);

@@ -1,327 +1,328 @@
 using Microsoft.EntityFrameworkCore;
-using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.EntityFrameworkCore;
 
 public abstract class DataAccessBase
 {
-    protected IApplicationDbContext _dataContext;
+    protected abstract Task ExecuteWithDbContext(Func<IApplicationDbContext, Task> action);
 
-    protected async Task SaveChanges()
+    protected abstract Task<T> ExecuteWithDbContext<T>(Func<IApplicationDbContext, Task<T>> action);
+
+    protected async Task SaveChanges(IApplicationDbContext dataContext)
     {
-        if (_dataContext.Users.FirstOrDefault() is IUserEntity user)
+        if (dataContext.Users.FirstOrDefault() is IUserEntity user)
         {
             user.LastChangeAt = DateTime.UtcNow;
         }
 
-        await _dataContext.SaveChangesAsync();
+        await dataContext.SaveChangesAsync();
     }
 
-    public async Task Initialize()
+    public async Task Initialize() => await ExecuteWithDbContext(async dataContext =>
     {
-        await _dataContext.Database.MigrateAsync();
-    }
+        await dataContext.Database.MigrateAsync();
+    });
 
-    public async Task AddHabit(HabitEntity habit)
+    public async Task AddHabit(HabitEntity habit) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Add(habit);
-        await SaveChanges();
-    }
-    public async Task AddNote(NoteEntity note)
+        dataContext.Add(habit);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddNote(NoteEntity note) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Add(note);
-        await SaveChanges();
-    }
-    public async Task AddTask(TaskEntity task)
+        dataContext.Add(note);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddTask(TaskEntity task) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Add(task);
-        await SaveChanges();
-    }
-    public async Task AddTime(TimeEntity time)
+        dataContext.Add(task);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddTime(TimeEntity time) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Add(time);
-        await SaveChanges();
-    }
-    public async Task AddItem(ItemEntity item)
+        dataContext.Add(time);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddItem(ItemEntity item) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Add(item);
-        await SaveChanges();
-    }
-    public async Task AddCategory(CategoryEntity category)
+        dataContext.Add(item);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddCategory(CategoryEntity category) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Add(category);
-        await SaveChanges();
-    }
-    public async Task AddPriority(PriorityEntity priority)
+        dataContext.Add(category);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddPriority(PriorityEntity priority) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Add(priority);
-        await SaveChanges();
-    }
-    public async Task AddSettings(SettingsEntity settings)
+        dataContext.Add(priority);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddSettings(SettingsEntity settings) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Add(settings);
-        await SaveChanges();
-    }
+        dataContext.Add(settings);
+        await SaveChanges(dataContext);
+    });
 
-    public async Task AddHabits(IReadOnlyList<HabitEntity> habits)
+    public async Task AddHabits(IReadOnlyList<HabitEntity> habits) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.AddRange(habits);
-        await SaveChanges();
-    }
-    public async Task AddNotes(IReadOnlyList<NoteEntity> notes)
+        dataContext.AddRange(habits);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddNotes(IReadOnlyList<NoteEntity> notes) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.AddRange(notes);
-        await SaveChanges();
-    }
-    public async Task AddTasks(IReadOnlyList<TaskEntity> tasks)
+        dataContext.AddRange(notes);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddTasks(IReadOnlyList<TaskEntity> tasks) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.AddRange(tasks);
-        await SaveChanges();
-    }
-    public async Task AddTimes(IReadOnlyList<TimeEntity> times)
+        dataContext.AddRange(tasks);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddTimes(IReadOnlyList<TimeEntity> times) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.AddRange(times);
-        await SaveChanges();
-    }
-    public async Task AddItems(IReadOnlyList<ItemEntity> items)
+        dataContext.AddRange(times);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddItems(IReadOnlyList<ItemEntity> items) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.AddRange(items);
-        await SaveChanges();
-    }
-    public async Task AddCategories(IReadOnlyList<CategoryEntity> categories)
+        dataContext.AddRange(items);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddCategories(IReadOnlyList<CategoryEntity> categories) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.AddRange(categories);
-        await SaveChanges();
-    }
-    public async Task AddPriorities(IReadOnlyList<PriorityEntity> priorities)
+        dataContext.AddRange(categories);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddPriorities(IReadOnlyList<PriorityEntity> priorities) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.AddRange(priorities);
-        await SaveChanges();
-    }
-    public async Task AddSettings(IReadOnlyList<SettingsEntity> settings)
+        dataContext.AddRange(priorities);
+        await SaveChanges(dataContext);
+    });
+    public async Task AddSettings(IReadOnlyList<SettingsEntity> settings) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.AddRange(settings);
-        await SaveChanges();
-    }
+        dataContext.AddRange(settings);
+        await SaveChanges(dataContext);
+    });
 
-    public async Task<IReadOnlyList<HabitEntity>> GetHabits()
+    public async Task<IReadOnlyList<HabitEntity>> GetHabits() => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Habits.ToListAsync();
-    }
-    public async Task<IReadOnlyList<NoteEntity>> GetNotes()
+        return await dataContext.Habits.ToListAsync();
+    });
+    public async Task<IReadOnlyList<NoteEntity>> GetNotes() => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Notes.ToListAsync();
-    }
-    public async Task<IReadOnlyList<TaskEntity>> GetTasks()
+        return await dataContext.Notes.ToListAsync();
+    });
+    public async Task<IReadOnlyList<TaskEntity>> GetTasks() => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Tasks.ToListAsync();
-    }
-    public async Task<IReadOnlyList<TimeEntity>> GetTimes(long? habitId = null)
+        return await dataContext.Tasks.ToListAsync();
+    });
+    public async Task<IReadOnlyList<TimeEntity>> GetTimes(long? habitId = null) => await ExecuteWithDbContext(async dataContext =>
     {
         if (habitId is null)
-            return await _dataContext.Times.ToListAsync();
+            return await dataContext.Times.ToListAsync();
         else
-            return await _dataContext.Times.Where(t => t.HabitId == habitId).ToListAsync();
-    }
-    public async Task<IReadOnlyList<ItemEntity>> GetItems(long? parentId = null)
+            return await dataContext.Times.Where(t => t.HabitId == habitId).ToListAsync();
+    });
+    public async Task<IReadOnlyList<ItemEntity>> GetItems(long? parentId = null) => await ExecuteWithDbContext(async dataContext =>
     {
         if (parentId is null)
-            return await _dataContext.Items.ToListAsync();
+            return await dataContext.Items.ToListAsync();
         else
-            return await _dataContext.Items.Where(i => i.ParentId == parentId).ToListAsync();
-    }
-    public async Task<IReadOnlyList<CategoryEntity>> GetCategories()
+            return await dataContext.Items.Where(i => i.ParentId == parentId).ToListAsync();
+    });
+    public async Task<IReadOnlyList<CategoryEntity>> GetCategories() => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Categories.ToListAsync();
-    }
-    public async Task<IReadOnlyList<PriorityEntity>> GetPriorities()
+        return await dataContext.Categories.ToListAsync();
+    });
+    public async Task<IReadOnlyList<PriorityEntity>> GetPriorities() => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Priorities.ToListAsync();
-    }
-    public async Task<IReadOnlyList<SettingsEntity>> GetSettings()
+        return await dataContext.Priorities.ToListAsync();
+    });
+    public async Task<IReadOnlyList<SettingsEntity>> GetSettings() => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Settings.ToListAsync();
-    }
+        return await dataContext.Settings.ToListAsync();
+    });
 
-    public async Task<HabitEntity?> GetHabit(long id)
+    public async Task<HabitEntity?> GetHabit(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Habits.FindAsync(id);
-    }
-    public async Task<NoteEntity?> GetNote(long id)
+        return await dataContext.Habits.FindAsync(id);
+    });
+    public async Task<NoteEntity?> GetNote(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Notes.FindAsync(id);
-    }
-    public async Task<TaskEntity?> GetTask(long id)
+        return await dataContext.Notes.FindAsync(id);
+    });
+    public async Task<TaskEntity?> GetTask(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Tasks.FindAsync(id);
-    }
-    public async Task<TimeEntity?> GetTime(long id)
+        return await dataContext.Tasks.FindAsync(id);
+    });
+    public async Task<TimeEntity?> GetTime(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Times.FindAsync(id);
-    }
-    public async Task<ItemEntity?> GetItem(long id)
+        return await dataContext.Times.FindAsync(id);
+    });
+    public async Task<ItemEntity?> GetItem(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Items.FindAsync(id);
-    }
-    public async Task<CategoryEntity?> GetCategory(long id)
+        return await dataContext.Items.FindAsync(id);
+    });
+    public async Task<CategoryEntity?> GetCategory(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Categories.FindAsync(id);
-    }
-    public async Task<PriorityEntity?> GetPriority(long id)
+        return await dataContext.Categories.FindAsync(id);
+    });
+    public async Task<PriorityEntity?> GetPriority(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Priorities.FindAsync(id);
-    }
-    public async Task<SettingsEntity?> GetSettings(long id)
+        return await dataContext.Priorities.FindAsync(id);
+    });
+    public async Task<SettingsEntity?> GetSettings(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Settings.FindAsync(id);
-    }
+        return await dataContext.Settings.FindAsync(id);
+    });
 
-    public async Task UpdateHabit(HabitEntity habit)
+    public async Task UpdateHabit(HabitEntity habit) => await ExecuteWithDbContext(async dataContext =>
     {
         habit.UpdatedAt = DateTime.Now;
-        _dataContext.Update(habit);
-        await SaveChanges();
-    }
-    public async Task UpdateNote(NoteEntity note)
+        dataContext.Update(habit);
+        await SaveChanges(dataContext);
+    });
+    public async Task UpdateNote(NoteEntity note) => await ExecuteWithDbContext(async dataContext =>
     {
         note.UpdatedAt = DateTime.Now;
-        _dataContext.Update(note);
-        await SaveChanges();
-    }
-    public async Task UpdateTask(TaskEntity task)
+        dataContext.Update(note);
+        await SaveChanges(dataContext);
+    });
+    public async Task UpdateTask(TaskEntity task) => await ExecuteWithDbContext(async dataContext =>
     {
         task.UpdatedAt = DateTime.Now;
-        _dataContext.Update(task);
-        await SaveChanges();
-    }
-    public async Task UpdateTime(TimeEntity time)
+        dataContext.Update(task);
+        await SaveChanges(dataContext);
+    });
+    public async Task UpdateTime(TimeEntity time) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Update(time);
-        await SaveChanges();
-    }
-    public async Task UpdateItem(ItemEntity item)
+        dataContext.Update(time);
+        await SaveChanges(dataContext);
+    });
+    public async Task UpdateItem(ItemEntity item) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Update(item);
-        await SaveChanges();
-    }
-    public async Task UpdateCategory(CategoryEntity category)
+        dataContext.Update(item);
+        await SaveChanges(dataContext);
+    });
+    public async Task UpdateCategory(CategoryEntity category) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Update(category);
-        await SaveChanges();
-    }
-    public async Task UpdatePriority(PriorityEntity priority)
+        dataContext.Update(category);
+        await SaveChanges(dataContext);
+    });
+    public async Task UpdatePriority(PriorityEntity priority) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Update(priority);
-        await SaveChanges();
-    }
-    public async Task UpdateSettings(SettingsEntity settings)
+        dataContext.Update(priority);
+        await SaveChanges(dataContext);
+    });
+    public async Task UpdateSettings(SettingsEntity settings) => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Update(settings);
-        await SaveChanges();
-    }
+        dataContext.Update(settings);
+        await SaveChanges(dataContext);
+    });
 
-    public async Task RemoveHabit(long id)
+    public async Task RemoveHabit(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        var entity = _dataContext.Habits.Find(id);
+        var entity = dataContext.Habits.Find(id);
         if (entity is not null)
-            _dataContext.Habits.Remove(entity);
-        await SaveChanges();
-    }
-    public async Task RemoveNote(long id)
+            dataContext.Habits.Remove(entity);
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveNote(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        var entity = _dataContext.Notes.Find(id);
+        var entity = dataContext.Notes.Find(id);
         if (entity is not null)
-            _dataContext.Notes.Remove(entity);
-        await SaveChanges();
-    }
-    public async Task RemoveTask(long id)
+            dataContext.Notes.Remove(entity);
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveTask(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        var entity = _dataContext.Tasks.Find(id);
+        var entity = dataContext.Tasks.Find(id);
         if (entity is not null)
-            _dataContext.Tasks.Remove(entity);
-        await SaveChanges();
-    }
-    public async Task RemoveTime(long id)
+            dataContext.Tasks.Remove(entity);
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveTime(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        var entity = _dataContext.Times.Find(id);
+        var entity = dataContext.Times.Find(id);
         if (entity is not null)
-            _dataContext.Times.Remove(entity);
-        await SaveChanges();
-    }
-    public async Task RemoveItem(long id)
+            dataContext.Times.Remove(entity);
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveItem(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        var entity = _dataContext.Items.Find(id);
+        var entity = dataContext.Items.Find(id);
         if (entity is not null)
-            _dataContext.Items.Remove(entity);
-        await SaveChanges();
-    }
-    public async Task RemoveCategory(long id)
+            dataContext.Items.Remove(entity);
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveCategory(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        var entity = _dataContext.Categories.Find(id);
+        var entity = dataContext.Categories.Find(id);
         if (entity is not null)
-            _dataContext.Categories.Remove(entity);
-        await SaveChanges();
-    }
-    public async Task RemovePriority(long id)
+            dataContext.Categories.Remove(entity);
+        await SaveChanges(dataContext);
+    });
+    public async Task RemovePriority(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        var entity = _dataContext.Priorities.Find(id);
+        var entity = dataContext.Priorities.Find(id);
         if (entity is not null)
-            _dataContext.Priorities.Remove(entity);
-        await SaveChanges();
-    }
-    public async Task RemoveSettings(long id)
+            dataContext.Priorities.Remove(entity);
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveSettings(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        var entity = _dataContext.Settings.Find(id);
+        var entity = dataContext.Settings.Find(id);
         if (entity is not null)
-            _dataContext.Settings.Remove(entity);
-        await SaveChanges();
-    }
+            dataContext.Settings.Remove(entity);
+        await SaveChanges(dataContext);
+    });
 
-    public async Task RemoveHabits()
+    public async Task RemoveHabits() => await ExecuteWithDbContext(async dataContext =>
     {
-        await _dataContext.Habits.ExecuteDeleteAsync();
-        await SaveChanges();
-    }
-    public async Task RemoveNotes()
+        await dataContext.Habits.ExecuteDeleteAsync();
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveNotes() => await ExecuteWithDbContext(async dataContext =>
     {
-        await _dataContext.Notes.ExecuteDeleteAsync();
-        await SaveChanges();
-    }
-    public async Task RemoveTasks()
+        await dataContext.Notes.ExecuteDeleteAsync();
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveTasks() => await ExecuteWithDbContext(async dataContext =>
     {
-        await _dataContext.Tasks.ExecuteDeleteAsync();
-        await SaveChanges();
-    }
-    public async Task RemoveTimes()
+        await dataContext.Tasks.ExecuteDeleteAsync();
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveTimes() => await ExecuteWithDbContext(async dataContext =>
     {
-        await _dataContext.Times.ExecuteDeleteAsync();
-        await SaveChanges();
-    }
-    public async Task RemoveItems()
+        await dataContext.Times.ExecuteDeleteAsync();
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveItems() => await ExecuteWithDbContext(async dataContext =>
     {
-        await _dataContext.Items.ExecuteDeleteAsync();
-        await SaveChanges();
-    }
-    public async Task RemoveCategories()
+        await dataContext.Items.ExecuteDeleteAsync();
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveCategories() => await ExecuteWithDbContext(async dataContext =>
     {
-        await _dataContext.Categories.ExecuteDeleteAsync();
-        await SaveChanges();
-    }
-    public async Task RemovePriorities()
+        await dataContext.Categories.ExecuteDeleteAsync();
+        await SaveChanges(dataContext);
+    });
+    public async Task RemovePriorities() => await ExecuteWithDbContext(async dataContext =>
     {
-        await _dataContext.Priorities.ExecuteDeleteAsync();
-        await SaveChanges();
-    }
-    public async Task RemoveSettings()
+        await dataContext.Priorities.ExecuteDeleteAsync();
+        await SaveChanges(dataContext);
+    });
+    public async Task RemoveSettings() => await ExecuteWithDbContext(async dataContext =>
     {
-        await _dataContext.Settings.ExecuteDeleteAsync();
-        await SaveChanges();
-    }
+        await dataContext.Settings.ExecuteDeleteAsync();
+        await SaveChanges(dataContext);
+    });
 
-    public async Task DeleteAllUserData()
+    public async Task DeleteAllUserData() => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.DeleteAllUserData();
-        await SaveChanges();
-    }
+        dataContext.DeleteAllUserData();
+        await SaveChanges(dataContext);
+    });
 }

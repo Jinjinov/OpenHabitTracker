@@ -8,51 +8,67 @@ public class DataAccess : DataAccessBase, IDataAccess
 {
     public DataLocation DataLocation { get; } = DataLocation.Local;
 
-    public DataAccess(ApplicationDbContext dataContext)
+    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
+
+    public DataAccess(IDbContextFactory<ApplicationDbContext> dbContextFactory)
     {
-        _dataContext = dataContext;
-        _dataContext.Database.Migrate();
+        _dbContextFactory = dbContextFactory;
+
+        using ApplicationDbContext context = _dbContextFactory.CreateDbContext();
+        context.Database.Migrate();
     }
 
-    public async Task AddUser(UserEntity user)
+    protected override async Task ExecuteWithDbContext(Func<IApplicationDbContext, Task> action)
     {
-        _dataContext.Add(user);
-        await SaveChanges();
+        using ApplicationDbContext context = _dbContextFactory.CreateDbContext();
+        await action(context);
     }
 
-    public async Task AddUsers(IReadOnlyList<UserEntity> users)
+    protected override async Task<T> ExecuteWithDbContext<T>(Func<IApplicationDbContext, Task<T>> action)
     {
-        _dataContext.AddRange(users);
-        await SaveChanges();
+        using ApplicationDbContext context = _dbContextFactory.CreateDbContext();
+        return await action(context);
     }
 
-    public async Task<IReadOnlyList<UserEntity>> GetUsers()
+    public async Task AddUser(UserEntity user) => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Set<UserEntity>().ToListAsync();
-    }
+        dataContext.Add(user);
+        await SaveChanges(dataContext);
+    });
 
-    public async Task<UserEntity?> GetUser(long id)
+    public async Task AddUsers(IReadOnlyList<UserEntity> users) => await ExecuteWithDbContext(async dataContext =>
     {
-        return await _dataContext.Set<UserEntity>().FindAsync(id);
-    }
+        dataContext.AddRange(users);
+        await SaveChanges(dataContext);
+    });
 
-    public async Task UpdateUser(UserEntity user)
+    public async Task<IReadOnlyList<UserEntity>> GetUsers() => await ExecuteWithDbContext(async dataContext =>
     {
-        _dataContext.Update(user);
-        await SaveChanges();
-    }
+        return await dataContext.Set<UserEntity>().ToListAsync();
+    });
 
-    public async Task RemoveUser(long id)
+    public async Task<UserEntity?> GetUser(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        var entity = _dataContext.Set<UserEntity>().Find(id);
+        return await dataContext.Set<UserEntity>().FindAsync(id);
+    });
+
+    public async Task UpdateUser(UserEntity user) => await ExecuteWithDbContext(async dataContext =>
+    {
+        dataContext.Update(user);
+        await SaveChanges(dataContext);
+    });
+
+    public async Task RemoveUser(long id) => await ExecuteWithDbContext(async dataContext =>
+    {
+        var entity = dataContext.Set<UserEntity>().Find(id);
         if (entity is not null)
-            _dataContext.Set<UserEntity>().Remove(entity);
-        await SaveChanges();
-    }
+            dataContext.Set<UserEntity>().Remove(entity);
+        await SaveChanges(dataContext);
+    });
 
-    public async Task RemoveUsers()
+    public async Task RemoveUsers() => await ExecuteWithDbContext(async dataContext =>
     {
-        await _dataContext.Users.ExecuteDeleteAsync();
-        await SaveChanges();
-    }
+        await dataContext.Users.ExecuteDeleteAsync();
+        await SaveChanges(dataContext);
+    });
 }

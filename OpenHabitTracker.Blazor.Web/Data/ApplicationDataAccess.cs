@@ -12,12 +12,28 @@ public class ApplicationDataAccess : DataAccessBase, IDataAccess
 
     public DataLocation DataLocation { get; } = DataLocation.Local;
 
-    public ApplicationDataAccess(ApplicationDbContext dataContext, UserManager<ApplicationUser> userManager)
+    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
+
+    public ApplicationDataAccess(IDbContextFactory<ApplicationDbContext> dbContextFactory, UserManager<ApplicationUser> userManager)
     {
-        _dataContext = dataContext;
-        _dataContext.Database.Migrate();
+        _dbContextFactory = dbContextFactory;
+
+        using ApplicationDbContext context = _dbContextFactory.CreateDbContext();
+        context.Database.Migrate();
 
         _userManager = userManager;
+    }
+
+    protected override async Task ExecuteWithDbContext(Func<IApplicationDbContext, Task> action)
+    {
+        using ApplicationDbContext context = _dbContextFactory.CreateDbContext();
+        await action(context);
+    }
+
+    protected override async Task<T> ExecuteWithDbContext<T>(Func<IApplicationDbContext, Task<T>> action)
+    {
+        using ApplicationDbContext context = _dbContextFactory.CreateDbContext();
+        return await action(context);
     }
 
     public async Task AddUser(UserEntity user)
