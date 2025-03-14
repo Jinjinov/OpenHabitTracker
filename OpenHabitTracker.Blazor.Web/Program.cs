@@ -159,7 +159,11 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseAntiforgery();
+
+app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+{
+    appBuilder.UseAntiforgery();
+});
 
 app.UseWatchDog(opt => // https://localhost:7042/watchdog
 {
@@ -167,7 +171,9 @@ app.UseWatchDog(opt => // https://localhost:7042/watchdog
     opt.WatchPagePassword = "admin";
 });
 
+// API routes (typically under /api/*) should be handled first
 app.MapControllers();
+// Blazor Server uses a fallback route (handled internally by MapRazorComponents) to catch all unmatched routes
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddAdditionalAssemblies(typeof(OpenHabitTracker.Blazor.Pages.Home).Assembly);
