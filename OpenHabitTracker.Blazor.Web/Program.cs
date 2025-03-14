@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
@@ -126,7 +127,10 @@ WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseWatchDogExceptionLogger();
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+{
+    appBuilder.UseWatchDogExceptionLogger();
+});
 
 //ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
 // Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider
@@ -136,9 +140,15 @@ app.UseWatchDogExceptionLogger();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+    {
+        appBuilder.UseExceptionHandler("/Error", createScopeForErrors: true);
+
+        // Add the HTTP Strict Transport Security (HSTS) header to your responses.
+        // This header tells browsers that they should only interact with your site over HTTPS and never over HTTP
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        appBuilder.UseHsts();
+    });
 }
 
 app.UseHttpsRedirection();
