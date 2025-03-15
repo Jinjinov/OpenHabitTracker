@@ -7,21 +7,19 @@ public static class Startup
 {
     public static IServiceCollection AddHttpClients(this IServiceCollection services)
     {
-        services.AddHttpClient<AuthClient>(client =>
-        {
-            //client.BaseAddress = new Uri("https://app.openhabittracker.net");
-        }).AddHttpMessageHandler<DebugResponseHandler>();
+        IHttpClientBuilder authClientBuilder = services.AddHttpClient<AuthClient>();
+        IHttpClientBuilder dataAccessClientBuilder = services.AddHttpClient<DataAccessClient>();
 
-        services.AddHttpClient<DataAccessClient>(client =>
-        {
-            //client.BaseAddress = new Uri("https://app.openhabittracker.net");
-        }).AddHttpMessageHandler<DebugResponseHandler>();
+#if DEBUG
+        authClientBuilder.AddHttpMessageHandler<DebugResponseHandler>();
+        dataAccessClientBuilder.AddHttpMessageHandler<DebugResponseHandler>();
+
+        services.AddTransient<DebugResponseHandler>();
+#endif
 
         services.AddScoped<ApiClientOptions>();
 
         services.AddScoped<IDataAccess, DataAccess>();
-
-        services.AddTransient<DebugResponseHandler>();
 
         return services;
     }
