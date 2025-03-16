@@ -1,7 +1,5 @@
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using OpenHabitTracker.Data;
-using OpenHabitTracker.EntityFrameworkCore;
 
 namespace OpenHabitTracker.Blazor.Web;
 
@@ -11,11 +9,7 @@ public static class Startup
     {
         //services.AddDbContext<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
 
-        services.AddDbContextFactory<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>((serviceProvider, options) =>
-        {
-            SqliteConnection connection = serviceProvider.GetRequiredService<SqliteConnection>();
-            options.UseSqlite(connection);
-        });
+        services.AddDbContextFactory<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
 
         //services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>());
 

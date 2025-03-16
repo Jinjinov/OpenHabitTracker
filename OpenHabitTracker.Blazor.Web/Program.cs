@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpenHabitTracker;
@@ -56,10 +55,6 @@ Directory.CreateDirectory(databaseFolder);
 string databasePath = Path.Combine(databaseFolder, databaseFile);
 
 builder.Services.AddServices();
-
-SqliteConnection sqliteConnection = new($"Data Source={databasePath}");
-sqliteConnection.Open();
-builder.Services.AddSingleton(sqliteConnection);
 
 builder.Services.AddDataAccess(databasePath);
 
