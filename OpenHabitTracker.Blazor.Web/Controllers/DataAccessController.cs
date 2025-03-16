@@ -8,6 +8,7 @@ namespace OpenHabitTracker.Blazor.Web.Controllers;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
+[IgnoreAntiforgeryToken]
 [Route("api/[controller]")]
 public class DataAccessController(IDataAccess dataAccess) : ControllerBase
 {

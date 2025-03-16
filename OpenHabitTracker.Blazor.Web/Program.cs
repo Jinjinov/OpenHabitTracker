@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
@@ -127,10 +127,7 @@ WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder =>
-{
-    appBuilder.UseWatchDogExceptionLogger();
-});
+app.UseWatchDogExceptionLogger();
 
 //ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
 // Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider
@@ -140,30 +137,59 @@ app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuild
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+    app.UseExceptionHandler(errorApp =>
     {
-        appBuilder.UseExceptionHandler("/Error", createScopeForErrors: true);
+        errorApp.Run(async context =>
+        {
+            // Get the exception details from the context
+            var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+            var exception = exceptionHandlerFeature?.Error;
 
-        // Add the HTTP Strict Transport Security (HSTS) header to your responses.
-        // This header tells browsers that they should only interact with your site over HTTPS and never over HTTP
-        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-        appBuilder.UseHsts();
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                // Handle API exceptions with detailed JSON response
+                context.Response.StatusCode = 500;
+                context.Response.ContentType = "application/json";
+
+                var errorDetails = new
+                {
+                    error = "An error occurred in the API",
+                    message = exception?.Message,
+                    stackTrace = exception?.StackTrace,
+                    type = exception?.GetType().FullName
+                };
+
+                await context.Response.WriteAsJsonAsync(errorDetails);
+            }
+            else
+            {
+                // Redirect non-API (Blazor) requests to /Error
+                context.Response.Redirect("/Error");
+            }
+        });
     });
+
+    //app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+    //{
+    //    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    //});
+
+    // Add the HTTP Strict Transport Security (HSTS) header to your responses.
+    // This header tells browsers that they should only interact with your site over HTTPS and never over HTTP
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseRouting();
+app.UseRouting(); // UseRouting must come before any path-based middleware like UseWhen
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"), appBuilder =>
-{
-    appBuilder.UseAntiforgery();
-});
+app.UseAntiforgery();
 
 app.UseWatchDog(opt => // https://localhost:7042/watchdog
 {

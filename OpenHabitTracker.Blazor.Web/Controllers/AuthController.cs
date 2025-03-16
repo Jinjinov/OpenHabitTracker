@@ -15,6 +15,7 @@ using System.Text;
 namespace OpenHabitTracker.Blazor.Web.Controllers;
 
 [ApiController]
+[IgnoreAntiforgeryToken]
 [Route("api/[controller]")]
 public class AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IOptions<AppSettings> options, ApplicationDbContext dbContext) : ControllerBase
 {
