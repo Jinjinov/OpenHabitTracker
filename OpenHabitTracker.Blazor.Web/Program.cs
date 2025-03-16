@@ -141,12 +141,12 @@ if (!app.Environment.IsDevelopment())
     {
         errorApp.Run(async context =>
         {
-            // Get the exception details from the context
-            var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
-            var exception = exceptionHandlerFeature?.Error;
-
             if (context.Request.Path.StartsWithSegments("/api"))
             {
+            // Get the exception details from the context
+                IExceptionHandlerFeature? exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+                Exception? exception = exceptionHandlerFeature?.Error;
+
                 // Handle API exceptions with detailed JSON response
                 context.Response.StatusCode = 500;
                 context.Response.ContentType = "application/json";
@@ -168,11 +168,6 @@ if (!app.Environment.IsDevelopment())
             }
         });
     });
-
-    //app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"), appBuilder =>
-    //{
-    //    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    //});
 
     // Add the HTTP Strict Transport Security (HSTS) header to your responses.
     // This header tells browsers that they should only interact with your site over HTTPS and never over HTTP
