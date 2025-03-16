@@ -44,24 +44,16 @@ check for every `new.*Model`
 
 1.
 
-hide completed tasks!!!
+[X] hide completed tasks !!!
 
-query in the URL 
+search/filter/sort query parameters in the URL - Blazor
 
-API for the backend
+search/filter/sort query parameters in the URL - Web API
 
 ---------------------------------------------------------------------------------------------------
 
 2.
 refresh local if remote has changed:
-
-remove:
-    services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
-
-construcotrs with DbContextFactory<ApplicationDbContext>
-
-add:
-    services.AddDbContextFactory<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
 
 SaveChanges(); // force write from .db-wal to .db with:
 context.Database.ExecuteSqlRaw("PRAGMA wal_checkpoint(TRUNCATE);");
