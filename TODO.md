@@ -59,13 +59,11 @@ local blazor dbcontext also has to periodically check if local web api dbcontext
 
 Disable connection pooling:
 Add Pooling=False to your connection string to ensure connections are fully closed and disposed between operations.
-
 Disabling pooling (i.e. setting Pooling=False) forces EF Core to create a new physical SQLite connection every time a DbContext is instantiated rather than reusing one from the pool.
 This means that when a new connection is opened, it starts a new transaction and takes a fresh snapshot of the database—so it will immediately see all changes committed by other contexts.
 It can also help release locks faster since the connection is truly closed when the context is disposed.
 
 "Data Source=mydb.db;Cache=Shared"
-
 "Cache=Shared" only affects how SQLite caches pages in memory—it allows multiple connections to share a common page cache—
 but it does not change the fact that in WAL mode each connection’s transaction sees a snapshot of the database from when its transaction began.
 
@@ -74,7 +72,6 @@ context.Database.ExecuteSqlRaw("PRAGMA wal_checkpoint(TRUNCATE);");
 
 Disable WAL mode: Switch to the default DELETE journal mode (e.g. by adding ?journal_mode=delete to your connection string or executing PRAGMA journal_mode=DELETE once).
 options.UseSqlite("Data Source=mydb.db;Mode=ReadWriteCreate;Journal Mode=Delete");
-
 // disable wal:
 context.Database.ExecuteSqlRaw("PRAGMA journal_mode=DELETE;");
 
