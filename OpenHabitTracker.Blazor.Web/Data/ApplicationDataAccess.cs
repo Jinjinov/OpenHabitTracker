@@ -94,6 +94,7 @@ public class ApplicationDataAccess : DataAccessBase, IDataAccess
         {
             applicationUser.UserName = user.UserName;
             applicationUser.Email = user.Email;
+            applicationUser.LastChangeAt = user.LastChangeAt;
 
             await _userManager.UpdateAsync(applicationUser);
         }
