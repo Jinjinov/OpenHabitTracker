@@ -55,6 +55,16 @@ search/filter/sort query parameters in the URL - Web API
 2.
 refresh local if remote has changed:
 
+local blazor dbcontext also has to periodically check if local web api dbcontext made a change
+
+Disable connection pooling:
+Add Pooling=False to your connection string to ensure connections are fully closed and disposed between operations.
+
+Disable WAL mode: Switch to the default DELETE journal mode (e.g. by adding ?journal_mode=delete to your connection string or executing PRAGMA journal_mode=DELETE once).
+options.UseSqlite("Data Source=mydb.db;Mode=ReadWriteCreate;Journal Mode=Delete");
+
+"Data Source=mydb.db;Cache=Shared"
+
 SaveChanges(); // force write from .db-wal to .db with:
 context.Database.ExecuteSqlRaw("PRAGMA wal_checkpoint(TRUNCATE);");
 
