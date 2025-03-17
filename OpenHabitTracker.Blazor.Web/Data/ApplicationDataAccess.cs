@@ -64,7 +64,8 @@ public class ApplicationDataAccess : DataAccessBase, IDataAccess
             Id = u.Id,
             UserName = u.UserName ?? string.Empty,
             Email = u.Email ?? string.Empty,
-            PasswordHash = u.PasswordHash ?? string.Empty
+            PasswordHash = u.PasswordHash ?? string.Empty,
+            LastChangeAt = u.LastChangeAt
         }).ToList();
     }
 
@@ -80,7 +81,8 @@ public class ApplicationDataAccess : DataAccessBase, IDataAccess
             Id = user.Id,
             UserName = user.UserName ?? string.Empty,
             Email = user.Email ?? string.Empty,
-            PasswordHash = user.PasswordHash ?? string.Empty
+            PasswordHash = user.PasswordHash ?? string.Empty,
+            LastChangeAt = user.LastChangeAt
         };
     }
 
