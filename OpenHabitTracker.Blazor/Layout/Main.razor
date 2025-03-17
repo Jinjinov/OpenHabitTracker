@@ -200,6 +200,8 @@
         await ClientState.LoadUsers();
         await ClientState.LoadSettings();
 
+        ClientState.SetRefreshAction(() => StateHasChanged());
+
         await AuthFragment.TryRefreshTokenLogin();
 
         Localization.Loc.SetCulture(ClientState.Settings.Culture);

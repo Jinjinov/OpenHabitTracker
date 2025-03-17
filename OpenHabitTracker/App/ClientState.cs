@@ -95,6 +95,13 @@ public class ClientState
     private CancellationTokenSource? _cts;
     private readonly TimeSpan _interval = TimeSpan.FromSeconds(10);
 
+    private Action? _refresh;
+
+    public void SetRefreshAction(Action refresh)
+    {
+        _refresh = refresh;
+    }
+
     public void StartPolling()
     {
         // Don't start if already running
@@ -145,6 +152,8 @@ public class ClientState
                     if (_lastRefreshAt < user.LastChangeAt)
                     {
                         await RefreshState();
+
+                        _refresh?.Invoke();
                     }
                 }
             }
