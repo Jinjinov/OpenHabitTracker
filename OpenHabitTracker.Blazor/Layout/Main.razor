@@ -202,7 +202,12 @@
 
         ClientState.SetRefreshAction(() => StateHasChanged());
 
-        await AuthFragment.TryRefreshTokenLogin();
+        bool loginSuccessful = await AuthFragment.TryRefreshTokenLogin();
+
+        if (!loginSuccessful && ClientState.DataAccess.MultipleServicesCanModifyData)
+        {
+            ClientState.StartPolling();
+        }
 
         Localization.Loc.SetCulture(ClientState.Settings.Culture);
 

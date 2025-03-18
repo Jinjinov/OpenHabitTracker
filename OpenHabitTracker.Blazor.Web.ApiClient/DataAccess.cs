@@ -5,6 +5,8 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient;
 
 public class DataAccess(DataAccessClient client) : IDataAccess
 {
+    public bool MultipleServicesCanModifyData { get; } = false;
+
     public DataLocation DataLocation { get; } = DataLocation.Remote;
 
     private readonly DataAccessClient _client = client;

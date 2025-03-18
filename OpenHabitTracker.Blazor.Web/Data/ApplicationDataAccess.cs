@@ -10,6 +10,8 @@ public class ApplicationDataAccess : DataAccessBase, IDataAccess
 {
     private readonly UserManager<ApplicationUser> _userManager;
 
+    public bool MultipleServicesCanModifyData { get; } = true;
+
     public DataLocation DataLocation { get; } = DataLocation.Local;
 
     private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
@@ -55,9 +57,10 @@ public class ApplicationDataAccess : DataAccessBase, IDataAccess
         }
     }
 
-    public async Task<IReadOnlyList<UserEntity>> GetUsers()
+    public async Task<IReadOnlyList<UserEntity>> GetUsers() => await ExecuteWithDbContext(async dataContext =>
     {
-        List<ApplicationUser> users = await _userManager.Users.ToListAsync();
+        //List<ApplicationUser> users = await _userManager.Users.ToListAsync();
+        List<IUserEntity> users = await dataContext.Users.ToListAsync();
 
         return users.Select(u => new UserEntity
         {
@@ -67,11 +70,12 @@ public class ApplicationDataAccess : DataAccessBase, IDataAccess
             PasswordHash = u.PasswordHash ?? string.Empty,
             LastChangeAt = u.LastChangeAt
         }).ToList();
-    }
+    });
 
-    public async Task<UserEntity?> GetUser(long id)
+    public async Task<UserEntity?> GetUser(long id) => await ExecuteWithDbContext(async dataContext =>
     {
-        ApplicationUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
+        //ApplicationUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
+        IUserEntity? user = await dataContext.Users.FirstOrDefaultAsync(u => u.Id == id);
 
         if (user is null)
             return null;
@@ -84,7 +88,7 @@ public class ApplicationDataAccess : DataAccessBase, IDataAccess
             PasswordHash = user.PasswordHash ?? string.Empty,
             LastChangeAt = user.LastChangeAt
         };
-    }
+    });
 
     public async Task UpdateUser(UserEntity user)
     {

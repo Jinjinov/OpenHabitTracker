@@ -143,7 +143,7 @@ public class ClientState
                 return;
 
             // Continue running until cancellation is requested
-            while (DataLocation == DataLocation.Remote && await _timer.WaitForNextTickAsync(_cts.Token))
+            while (await _timer.WaitForNextTickAsync(_cts.Token))
             {
                 IReadOnlyList<UserEntity> users = await DataAccess.GetUsers();
 

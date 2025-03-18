@@ -55,6 +55,8 @@ search/filter/sort query parameters in the URL - Web API
 2.
 refresh local if remote has changed:
 
+set `_lastRefreshAt = DateTime.UtcNow;` on local changes, so a local change won't trigger an update of the local UI
+
 local blazor dbcontext also has to periodically check if local web api dbcontext made a change
 
 Disable connection pooling:

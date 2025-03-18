@@ -6,6 +6,8 @@ namespace OpenHabitTracker.EntityFrameworkCore;
 
 public class DataAccess : DataAccessBase, IDataAccess
 {
+    public bool MultipleServicesCanModifyData { get; } = false;
+
     public DataLocation DataLocation { get; } = DataLocation.Local;
 
     private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;

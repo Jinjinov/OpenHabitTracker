@@ -4,6 +4,8 @@ namespace OpenHabitTracker.Data;
 
 public interface IDataAccess
 {
+    bool MultipleServicesCanModifyData { get; }
+
     DataLocation DataLocation { get; }
 
     Task Initialize();
