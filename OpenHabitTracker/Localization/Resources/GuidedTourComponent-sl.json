@@ -70,6 +70,7 @@
   "Clear the done date filter.": "Počisti filter datuma opravljene naloge.",
   "Filter by categories.": "Filtriraj po kategorijah.",
   "Filter by priorities.": "Filtriraj po prioritetah.",
+  "Hide completed tasks.": "Skrij opravljene naloge.",
   "Choose which Habit interval ratio to display next to the Habit title.": "Izberi, katero razmerje intervala Navade prikazati ob naslovu Navade.",
   "Show only habits with interval ratio over the chosen limit.": "Prikaži samo navade z razmerjem intervala nad izbrano mejo.",
   "Choose the limit.": "Izberi mejo.",

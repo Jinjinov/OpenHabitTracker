@@ -137,6 +137,7 @@ public static class DataExtensions
         entity.ShowCreatedUpdated = model.ShowCreatedUpdated;
         entity.InsertTabsInNoteContent = model.InsertTabsInNoteContent;
         entity.DisplayNoteContentAsMarkdown = model.DisplayNoteContentAsMarkdown;
+        entity.HideCompletedTasks = model.HideCompletedTasks;
         entity.ShowOnlyOverSelectedRatioMin = model.ShowOnlyOverSelectedRatioMin;
         entity.SelectedRatioMin = model.SelectedRatioMin;
         entity.HorizontalMargin = model.HorizontalMargin;

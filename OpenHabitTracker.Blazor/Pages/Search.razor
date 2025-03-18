@@ -118,25 +118,32 @@
             </div>
 
             <div class="list-group-item">
+                <div class="position-relative" data-search-step-14>
+                    <InputCheckbox id="HideCompletedTasks" class="form-check-input me-1" Value="_settings.HideCompletedTasks" ValueExpression="() => _settings.HideCompletedTasks" ValueChanged="SaveHideCompletedTasks" />
+                    <label for="HideCompletedTasks" class="form-check-label stretched-link d-inline">@Loc["Hide completed tasks"]</label>
+                </div>
+            </div>
+
+            <div class="list-group-item">
                 <small>@Loc["Habit interval ratio"]:</small>
-                <div data-search-step-14>
+                <div data-search-step-15>
                 <InputSelect class="form-select" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
                     <option value="@Ratio.ElapsedToAverage">@Loc["Elapsed time to average interval"]</option>
                     <option value="@Ratio.ElapsedToDesired">@Loc["Elapsed time to repeat interval"]</option>
                     <option value="@Ratio.AverageToDesired">@Loc["Average interval to repeat interval"]</option>
                 </InputSelect>
                 </div>
-                <div class="position-relative mt-2" data-search-step-15>
+                <div class="position-relative mt-2" data-search-step-16>
                     <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowOnlyOverSelectedRatioMin" ValueExpression="() => _settings.ShowOnlyOverSelectedRatioMin" ValueChanged="SaveShowOnlyOverSelectedRatioMin" />
                     <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show only habits with interval ratio over"] @_settings.SelectedRatioMin%</label>
                 </div>
 
-                <input type="range" class="form-range d-block" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-16 />
+                <input type="range" class="form-range d-block" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-17 />
             </div>
 
             <small class="m-1"><i class="bi bi-arrow-down-up"></i> @Loc["Sort"]</small>
 
-            <div class="list-group-item" data-search-step-17>
+            <div class="list-group-item" data-search-step-18>
                 <small><i class="bi bi-sticky"></i> @Loc["Notes"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
@@ -145,7 +152,7 @@
                 </InputSelect>
             </div>
 
-            <div class="list-group-item" data-search-step-18>
+            <div class="list-group-item" data-search-step-19>
                 <small><i class="bi bi-list-task"></i> @Loc["Tasks"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
@@ -158,7 +165,7 @@
                 </InputSelect>
             </div>
 
-            <div class="list-group-item" data-search-step-19>
+            <div class="list-group-item" data-search-step-20>
                 <small><i class="bi bi-repeat"></i> @Loc["Habits"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
@@ -199,6 +206,7 @@
         new() { Text = "Clear the done date filter." },
         new() { Text = "Filter by categories." },
         new() { Text = "Filter by priorities." },
+        new() { Text = "Hide completed tasks." },
         new() { Text = "Choose which Habit interval ratio to display next to the Habit title." },
         new() { Text = "Show only habits with interval ratio over the chosen limit." },
         new() { Text = "Choose the limit." },
@@ -351,6 +359,13 @@
     async Task SaveSelectedRatio(Ratio ratio)
     {
         _settings.SelectedRatio = ratio;
+
+        await UpdateSettings();
+    }
+
+    async Task SaveHideCompletedTasks(bool show)
+    {
+        _settings.HideCompletedTasks = show;
 
         await UpdateSettings();
     }

@@ -44,6 +44,8 @@ public class SettingsEntity
 
     public bool DisplayNoteContentAsMarkdown { get; set; } = true;
 
+    public bool HideCompletedTasks { get; set; }
+
     public bool ShowOnlyOverSelectedRatioMin { get; set; }
 
     public int SelectedRatioMin { get; set; } = 50;

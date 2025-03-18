@@ -70,6 +70,7 @@
   "Clear the done date filter.": "Borrar el filtro de fecha de finalización.",
   "Filter by categories.": "Filtrar por categorías.",
   "Filter by priorities.": "Filtrar por prioridades.",
+  "Hide completed tasks.": "Ocultar tareas completadas.",
   "Choose which Habit interval ratio to display next to the Habit title.": "Elige qué proporción de intervalo de Hábito mostrar junto al título del Hábito.",
   "Show only habits with interval ratio over the chosen limit.": "Mostrar solo hábitos con proporción de intervalo por encima del límite elegido.",
   "Choose the limit.": "Elegir el límite.",

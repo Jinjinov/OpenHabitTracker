@@ -57,6 +57,9 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
 
         tasks = tasks.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
 
+        if (settings.HideCompletedTasks)
+            tasks = tasks.Where(x => x.CompletedAt is null);
+
         return settings.SortBy[ContentType.Task] switch
         {
             Sort.Category => tasks.OrderBy(x => x.CategoryId),
