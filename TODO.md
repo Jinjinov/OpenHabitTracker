@@ -46,6 +46,12 @@ check for every `new.*Model`
 
 [X] hide completed tasks !!!
 
+expose scalar and watchdog
+
+move Search, Filter, Sort to top bar
+
+make Search, Filter, Sort foldable, add settings, add margin
+
 search/filter/sort query parameters in the URL - Blazor
 
 search/filter/sort query parameters in the URL - Web API
