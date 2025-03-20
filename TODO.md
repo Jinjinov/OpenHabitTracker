@@ -50,7 +50,28 @@ expose scalar and watchdog
 
 move Search, Filter, Sort to top bar
 
-make Search, Filter, Sort foldable, add settings, add margin
+make Search, Filter, Sort foldable, add settings (IsFolded), add margin
+
+split filters
+    Filter by date
+    Filter by category 
+    Filter by priority 
+    Filter by completed status
+
+Category, Priority in Settings 
+
+Display category filter as:
+Check boxes
+Radio buttons
+Select options
+
+Display priority filter as:
+Check boxes
+Radio buttons
+Select options
+
+add SelectedCategory
+add SelectedPriority
 
 search/filter/sort query parameters in the URL - Blazor
 
