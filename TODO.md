@@ -46,6 +46,10 @@ check for every `new.*Model`
 
 [X] hide completed tasks !!!
 
+default sort:
+    tasks - planned at
+    habits - selected interval ratio
+
 expose scalar and watchdog
 
 move Search, Filter, Sort to top bar
