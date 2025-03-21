@@ -95,7 +95,17 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
         };
     });
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    // Only authenticated users can access Scalar UI
+    options.AddPolicy("OpenApiPolicy", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        // Optionally, require a specific role:
+        // policy.RequireRole("ApiDocsViewer");
+    });
+});
 
 builder.Services.AddBackup();
 builder.Services.AddBlazor();
@@ -138,7 +148,7 @@ if (!app.Environment.IsDevelopment())
         {
             if (context.Request.Path.StartsWithSegments("/api"))
             {
-            // Get the exception details from the context
+                // Get the exception details from the context
                 IExceptionHandlerFeature? exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
                 Exception? exception = exceptionHandlerFeature?.Error;
 
@@ -183,8 +193,8 @@ app.UseAntiforgery();
 
 app.UseWatchDog(opt => // https://localhost:7042/watchdog
 {
-    opt.WatchPageUsername = "admin";
-    opt.WatchPagePassword = "admin";
+    opt.WatchPageUsername = appSettings.UserName;
+    opt.WatchPagePassword = appSettings.Password;
 });
 
 // API routes (typically under /api/*) should be handled first
@@ -194,11 +204,11 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddAdditionalAssemblies(typeof(OpenHabitTracker.Blazor.Pages.Home).Assembly);
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference(); // http://localhost:5260/scalar/v1
-}
+//if (app.Environment.IsDevelopment())
+//{
+    app.MapOpenApi().RequireAuthorization("OpenApiPolicy");
+    app.MapScalarApiReference().RequireAuthorization("OpenApiPolicy"); // http://localhost:5260/scalar/v1
+//}
 
 await CreateDefaultUserAsync(app);
 

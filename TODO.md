@@ -50,7 +50,7 @@ default sort:
     tasks - planned at
     habits - selected interval ratio
 
-expose scalar and watchdog
+expose Scalar and Watchdog
 
 move Search, Filter, Sort to top bar
 
@@ -58,8 +58,8 @@ make Search, Filter, Sort foldable, add settings (IsFolded), add margin
 
 split filters
     Filter by date
-    Filter by category 
-    Filter by priority 
+    Filter by category
+    Filter by priority
     Filter by completed status
 
 Category, Priority in Settings 
