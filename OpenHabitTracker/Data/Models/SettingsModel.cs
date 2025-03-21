@@ -69,7 +69,7 @@ public class SettingsModel
     public Dictionary<ContentType, Sort> SortBy { get; set; } = new()
     {
         { ContentType.Note, Sort.Priority },
-        { ContentType.Task, Sort.Priority },
-        { ContentType.Habit, Sort.Priority }
+        { ContentType.Task, Sort.PlannedAt },
+        { ContentType.Habit, Sort.SelectedRatio }
     };
 }

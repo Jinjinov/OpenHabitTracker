@@ -355,8 +355,8 @@ public class ClientState
             SortBy = new()
             {
                 { ContentType.Note, Sort.Priority },
-                { ContentType.Task, Sort.Priority },
-                { ContentType.Habit, Sort.Priority }
+                { ContentType.Task, Sort.PlannedAt },
+                { ContentType.Habit, Sort.SelectedRatio }
             }
         };
     }
