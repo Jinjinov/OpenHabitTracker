@@ -23,7 +23,7 @@
     {
         <div class="my-1 list-group">
 
-            <small class="m-1"><i class="bi bi-search"></i> @Loc["Search"]</small>
+            <small class="mx-1 my-2"><i class="bi bi-search"></i> @Loc["Search"]</small>
 
             <div class="input-group flex-nowrap">
                 <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search..."]" @attributes="dataSearchStep1" />
@@ -38,7 +38,7 @@
                 <button class="btn btn-outline-primary" @onclick="() => UpdateSearchTerm(null)" data-search-step-3><i class="bi bi-x-square"></i></button>
             </div>
 
-            <small class="m-1"><i class="bi bi-filter"></i> @Loc["Filter"]</small>
+            <small class="mx-1 my-2"><i class="bi bi-filter"></i> @Loc["Filter by date"]</small>
 
             <div class="input-group flex-nowrap">
                 <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)" data-search-step-4>@Loc["Planned"]</button>
@@ -68,6 +68,8 @@
                 <button class="btn btn-outline-primary" @onclick="() => UpdateDoneAtFilter(null)" data-search-step-11><i class="bi bi-x-square"></i></button>
             </div>
 
+            <small class="mx-1 my-2"><i class="bi bi-filter"></i> @Loc["Filter by category"]</small>
+
             <div class="list-group-item" data-search-step-12>
                 <CheckBox IsTriState="true" Checked="ShowAllCategories" CheckedChanged="(bool? show) => SetShowAllCategories()">
                     <span>@Loc["Categories"]:</span>
@@ -85,6 +87,8 @@
                     </div>
                 }
             </div>
+
+            <small class="mx-1 my-2"><i class="bi bi-filter"></i> @Loc["Filter by priority"]</small>
 
             <div class="list-group-item" data-search-step-13>
                 <CheckBox IsTriState="true" Checked="ShowAllPriorities" CheckedChanged="(bool? show) => SetShowAllPriorities()">
@@ -117,6 +121,8 @@
                 </div>
             </div>
 
+            <small class="mx-1 my-2"><i class="bi bi-filter"></i> @Loc["Filter by status"]</small>
+
             <div class="list-group-item">
                 <div class="position-relative" data-search-step-14>
                     <InputCheckbox id="HideCompletedTasks" class="form-check-input me-1" Value="_settings.HideCompletedTasks" ValueExpression="() => _settings.HideCompletedTasks" ValueChanged="SaveHideCompletedTasks" />
@@ -141,7 +147,7 @@
                 <input type="range" class="form-range d-block" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-17 />
             </div>
 
-            <small class="m-1"><i class="bi bi-arrow-down-up"></i> @Loc["Sort"]</small>
+            <small class="mx-1 my-2"><i class="bi bi-arrow-down-up"></i> @Loc["Sort"]</small>
 
             <div class="list-group-item" data-search-step-18>
                 <small><i class="bi bi-sticky"></i> @Loc["Notes"]:</small>
