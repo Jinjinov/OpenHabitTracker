@@ -23,8 +23,10 @@
     {
         <div class="my-1 list-group">
 
-            <small class="mx-1 my-2"><i class="bi bi-search"></i> @Loc["Search"]</small>
+            <small class="mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.Search)"><i class="bi bi-search"></i> @Loc["Search"]<i class="@($"bi {GetFoldIcon(QuerySection.Search)} mx-1")"></i></small>
 
+            @if (!_settings.FoldSection[QuerySection.Search])
+            {
             <div class="input-group flex-nowrap">
                 <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search..."]" @attributes="dataSearchStep1" />
                 @if (SearchFilterService.MatchCase)
@@ -37,9 +39,12 @@
                 }
                 <button class="btn btn-outline-primary" @onclick="() => UpdateSearchTerm(null)" data-search-step-3><i class="bi bi-x-square"></i></button>
             </div>
+            }
 
-            <small class="mx-1 my-2"><i class="bi bi-filter"></i> @Loc["Filter by date"]</small>
+            <small class="mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByDate)"><i class="bi bi-filter"></i> @Loc["Filter by date"]<i class="@($"bi {GetFoldIcon(QuerySection.FilterByDate)} mx-1")"></i></small>
 
+            @if (!_settings.FoldSection[QuerySection.FilterByDate])
+            {
             <div class="input-group flex-nowrap">
                 <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)" data-search-step-4>@Loc["Planned"]</button>
                 <div data-search-step-5>
@@ -67,9 +72,12 @@
                 <InputDate class="form-control" Value="SearchFilterService.DoneAtFilter" ValueExpression="() => SearchFilterService.DoneAtFilter" TValue="DateTime?" ValueChanged="UpdateDoneAtFilter" Type="InputDateType.Date" @attributes="dataSearchStep10" />
                 <button class="btn btn-outline-primary" @onclick="() => UpdateDoneAtFilter(null)" data-search-step-11><i class="bi bi-x-square"></i></button>
             </div>
+            }
 
-            <small class="mx-1 my-2"><i class="bi bi-filter"></i> @Loc["Filter by category"]</small>
+            <small class="mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByCategory)"><i class="bi bi-filter"></i> @Loc["Filter by category"]<i class="@($"bi {GetFoldIcon(QuerySection.FilterByCategory)} mx-1")"></i></small>
 
+            @if (!_settings.FoldSection[QuerySection.FilterByCategory])
+            {
             <div class="list-group-item" data-search-step-12>
                 <CheckBox IsTriState="true" Checked="ShowAllCategories" CheckedChanged="(bool? show) => SetShowAllCategories()">
                     <span>@Loc["Categories"]:</span>
@@ -87,9 +95,12 @@
                     </div>
                 }
             </div>
+            }
 
-            <small class="mx-1 my-2"><i class="bi bi-filter"></i> @Loc["Filter by priority"]</small>
+            <small class="mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByPriority)"><i class="bi bi-filter"></i> @Loc["Filter by priority"]<i class="@($"bi {GetFoldIcon(QuerySection.FilterByPriority)} mx-1")"></i></small>
 
+            @if (!_settings.FoldSection[QuerySection.FilterByPriority])
+            {
             <div class="list-group-item" data-search-step-13>
                 <CheckBox IsTriState="true" Checked="ShowAllPriorities" CheckedChanged="(bool? show) => SetShowAllPriorities()">
                     <span>@Loc["Priorities"]:</span>
@@ -120,9 +131,12 @@
                     <label for="Priority.VeryHigh" class="form-check-label stretched-link d-inline">︽ @Loc["Very high"]</label>
                 </div>
             </div>
+            }
 
-            <small class="mx-1 my-2"><i class="bi bi-filter"></i> @Loc["Filter by status"]</small>
+            <small class="mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByStatus)"><i class="bi bi-filter"></i> @Loc["Filter by status"]<i class="@($"bi {GetFoldIcon(QuerySection.FilterByStatus)} mx-1")"></i></small>
 
+            @if (!_settings.FoldSection[QuerySection.FilterByStatus])
+            {
             <div class="list-group-item">
                 <div class="position-relative" data-search-step-14>
                     <InputCheckbox id="HideCompletedTasks" class="form-check-input me-1" Value="_settings.HideCompletedTasks" ValueExpression="() => _settings.HideCompletedTasks" ValueChanged="SaveHideCompletedTasks" />
@@ -146,9 +160,12 @@
 
                 <input type="range" class="form-range d-block" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-17 />
             </div>
+            }
 
-            <small class="mx-1 my-2"><i class="bi bi-arrow-down-up"></i> @Loc["Sort"]</small>
+            <small class="mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.Sort)"><i class="bi bi-arrow-down-up"></i> @Loc["Sort"]<i class="@($"bi {GetFoldIcon(QuerySection.Sort)} mx-1")"></i></small>
 
+            @if (!_settings.FoldSection[QuerySection.Sort])
+            {
             <div class="list-group-item" data-search-step-18>
                 <small><i class="bi bi-sticky"></i> @Loc["Notes"]:</small>
                 <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
@@ -186,7 +203,7 @@
                     <option value="@Sort.SelectedRatio">@Loc["Selected interval ratio"]</option>
                 </InputSelect>
             </div>
-
+            }
         </div>
     }
 </div>
@@ -393,6 +410,18 @@
     async Task SaveShowPriority(Priority priority, bool show)
     {
         _settings.ShowPriority[priority] = show;
+
+        await UpdateSettings();
+    }
+
+    string GetFoldIcon(QuerySection querySection)
+    {
+        return _settings.FoldSection[querySection] ? "bi-chevron-right" : "bi-chevron-down";
+    }
+
+    async Task ToggleFoldSection(QuerySection querySection)
+    {
+        _settings.FoldSection[querySection] = !_settings.FoldSection[querySection];
 
         await UpdateSettings();
     }
