@@ -148,7 +148,7 @@
             <label for="UncheckAllItemsOnHabitDone" class="form-check-label stretched-link d-inline">@Loc["Reset habit when it is completed"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-4>
+        <div class="list-group-item" data-settings-step-16>
             <small>@Loc["Display category filter as"]:</small>
             <InputSelect class="form-select" Value="_settings.CategoryFilterDisplay" ValueExpression="() => _settings.CategoryFilterDisplay" TValue="FilterDisplay" ValueChanged="SaveCategoryFilterDisplay">
                 <option value="@FilterDisplay.CheckBoxes">@Loc["Check boxes"]</option>
@@ -157,7 +157,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-4>
+        <div class="list-group-item" data-settings-step-17>
             <small>@Loc["Display priority filter as"]:</small>
             <InputSelect class="form-select" Value="_settings.PriorityFilterDisplay" ValueExpression="() => _settings.PriorityFilterDisplay" TValue="FilterDisplay" ValueChanged="SavePriorityFilterDisplay">
                 <option value="@FilterDisplay.CheckBoxes">@Loc["Check boxes"]</option>
@@ -166,7 +166,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-16>
+        <div class="list-group-item" data-settings-step-18>
             <small>@Loc["Horizontal space"]:</small>
             <InputSelect class="form-select" Value="_settings.HorizontalMargin" ValueExpression="() => _settings.HorizontalMargin" TValue="int" ValueChanged="SaveHorizontalMargin">
                 @for (int i = 0; i <= 5; i++)
@@ -176,12 +176,12 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-17>
+        <div class="list-group-item" data-settings-step-19>
             <small>@Loc["Vertical space"]:</small>
             <InputSelect class="form-select" Value="_settings.VerticalMargin" ValueExpression="() => _settings.VerticalMargin" TValue="int" ValueChanged="SaveVerticalMargin">
                 @for (int i = 0; i <= 5; i++)
                 {
-                        <option value="@i">@i</option>
+                    <option value="@i">@i</option>
                 }
             </InputSelect>
         </div>
@@ -212,6 +212,8 @@
         new() { Text = "Pressing the TAB key inserts a tab in the content when writing the text in Notes." },
         new() { Text = "You can use Markdown to format the content in Notes." },
         new() { Text = "Resetting the habit when it is completed will uncheck all items." },
+        new() { Text = "Choose how to display the category filter." },
+        new() { Text = "Choose how to display the priority filter." },
         new() { Text = "Choose the horizontal space between items in the list." },
         new() { Text = "Choose the vertical space between items in the list." },
     };
