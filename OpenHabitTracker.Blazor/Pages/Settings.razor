@@ -2,6 +2,7 @@
 
 @using GTour.Abstractions
 @using OpenHabitTracker.App
+@using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
@@ -145,6 +146,24 @@
         <div class="list-group-item" data-settings-step-15>
             <InputCheckbox id="UncheckAllItemsOnHabitDone" class="form-check-input me-1" Value="_settings.UncheckAllItemsOnHabitDone" ValueExpression="() => _settings.UncheckAllItemsOnHabitDone" ValueChanged="SaveUncheckAllItemsOnHabitDone" />
             <label for="UncheckAllItemsOnHabitDone" class="form-check-label stretched-link d-inline">@Loc["Reset habit when it is completed"]</label>
+        </div>
+
+        <div class="list-group-item" data-settings-step-4>
+            <small>@Loc["Display category filter as"]:</small>
+            <InputSelect class="form-select" Value="_settings.CategoryFilterDisplay" ValueExpression="() => _settings.CategoryFilterDisplay" TValue="FilterDisplay" ValueChanged="SaveCategoryFilterDisplay">
+                <option value="@FilterDisplay.CheckBoxes">@Loc["Check boxes"]</option>
+                <option value="@FilterDisplay.RadioButtons">@Loc["Radio buttons"]</option>
+                <option value="@FilterDisplay.SelectOptions">@Loc["Drop down list"]</option>
+            </InputSelect>
+        </div>
+
+        <div class="list-group-item" data-settings-step-4>
+            <small>@Loc["Display priority filter as"]:</small>
+            <InputSelect class="form-select" Value="_settings.PriorityFilterDisplay" ValueExpression="() => _settings.PriorityFilterDisplay" TValue="FilterDisplay" ValueChanged="SavePriorityFilterDisplay">
+                <option value="@FilterDisplay.CheckBoxes">@Loc["Check boxes"]</option>
+                <option value="@FilterDisplay.RadioButtons">@Loc["Radio buttons"]</option>
+                <option value="@FilterDisplay.SelectOptions">@Loc["Drop down list"]</option>
+            </InputSelect>
         </div>
 
         <div class="list-group-item" data-settings-step-16>
@@ -335,6 +354,20 @@
     async Task SaveUncheckAllItemsOnHabitDone(bool val)
     {
         _settings.UncheckAllItemsOnHabitDone = val;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveCategoryFilterDisplay(FilterDisplay filterDisplay)
+    {
+        _settings.CategoryFilterDisplay = filterDisplay;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SavePriorityFilterDisplay(FilterDisplay filterDisplay)
+    {
+        _settings.PriorityFilterDisplay = filterDisplay;
 
         await UpdateAndRefresh();
     }

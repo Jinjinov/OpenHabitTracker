@@ -78,59 +78,77 @@
 
             @if (!_settings.FoldSection[QuerySection.FilterByCategory])
             {
-            <div class="list-group-item" data-search-step-12>
-                <CheckBox IsTriState="true" Checked="ShowAllCategories" CheckedChanged="(bool? show) => SetShowAllCategories()">
-                    <span>@Loc["Categories"]:</span>
-                </CheckBox>
-
-                <div class="mt-3" />
-
-                @foreach (CategoryModel category in CategoryService.Categories)
+                @if (_settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes)
                 {
-                    bool isSelected = !_settings.HiddenCategoryIds.Contains(category.Id);
+                    <div class="list-group-item" data-search-step-12>
+                        <CheckBox IsTriState="true" Checked="ShowAllCategories" CheckedChanged="(bool? show) => SetShowAllCategories()">
+                            <span>@Loc["Categories"]:</span>
+                        </CheckBox>
 
-                    <div class="form-check position-relative">
-                        <InputCheckbox id="@($"category-{category.Id}")" class="form-check-input me-1" Value="isSelected" ValueExpression="() => isSelected" ValueChanged="(bool show) => SaveCategoryIds(category.Id, show)" />
-                        <label for="@($"category-{category.Id}")" class="form-check-label stretched-link d-inline">@category.Title</label>
+                        <div class="mt-3" />
+
+                        @foreach (CategoryModel category in CategoryService.Categories)
+                        {
+                            bool isSelected = !_settings.HiddenCategoryIds.Contains(category.Id);
+
+                            <div class="form-check position-relative">
+                                <InputCheckbox id="@($"category-{category.Id}")" class="form-check-input me-1" Value="isSelected" ValueExpression="() => isSelected" ValueChanged="(bool show) => SaveCategoryIds(category.Id, show)" />
+                                <label for="@($"category-{category.Id}")" class="form-check-label stretched-link d-inline">@category.Title</label>
+                            </div>
+                        }
                     </div>
                 }
-            </div>
+                else if (_settings.CategoryFilterDisplay == FilterDisplay.RadioButtons)
+                {
+                }
+                else if (_settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
+                {
+                }
             }
 
             <small class="mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByPriority)"><i class="bi bi-filter"></i> @Loc["Filter by priority"]<i class="@($"bi {GetFoldIcon(QuerySection.FilterByPriority)} mx-1")"></i></small>
 
             @if (!_settings.FoldSection[QuerySection.FilterByPriority])
             {
-            <div class="list-group-item" data-search-step-13>
-                <CheckBox IsTriState="true" Checked="ShowAllPriorities" CheckedChanged="(bool? show) => SetShowAllPriorities()">
-                    <span>@Loc["Priorities"]:</span>
-                </CheckBox>
+                @if (_settings.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
+                {
+                    <div class="list-group-item" data-search-step-13>
+                        <CheckBox IsTriState="true" Checked="ShowAllPriorities" CheckedChanged="(bool? show) => SetShowAllPriorities()">
+                            <span>@Loc["Priorities"]:</span>
+                        </CheckBox>
 
-                <div class="form-check position-relative mt-3">
-                    <InputCheckbox id="Priority.None" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.None]" ValueExpression="() => _settings.ShowPriority[Priority.None]" ValueChanged="(bool show) => SaveShowPriority(Priority.None, show)" />
-                    <label for="Priority.None" class="form-check-label stretched-link d-inline">⊘ @Loc["None"]</label>
-                </div>
-                <div class="form-check position-relative">
-                    <InputCheckbox id="Priority.VeryLow" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.VeryLow]" ValueExpression="() => _settings.ShowPriority[Priority.VeryLow]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryLow, show)" />
-                    <label for="Priority.VeryLow" class="form-check-label stretched-link d-inline">︾ @Loc["Very low"]</label>
-                </div>
-                <div class="form-check position-relative">
-                    <InputCheckbox id="Priority.Low" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.Low]" ValueExpression="() => _settings.ShowPriority[Priority.Low]" ValueChanged="(bool show) => SaveShowPriority(Priority.Low, show)" />
-                    <label for="Priority.Low" class="form-check-label stretched-link d-inline">﹀ @Loc["Low"]</label>
-                </div>
-                <div class="form-check position-relative">
-                    <InputCheckbox id="Priority.Medium" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.Medium]" ValueExpression="() => _settings.ShowPriority[Priority.Medium]" ValueChanged="(bool show) => SaveShowPriority(Priority.Medium, show)" />
-                    <label for="Priority.Medium" class="form-check-label stretched-link d-inline">— @Loc["Medium"]</label>
-                </div>
-                <div class="form-check position-relative">
-                    <InputCheckbox id="Priority.High" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.High]" ValueExpression="() => _settings.ShowPriority[Priority.High]" ValueChanged="(bool show) => SaveShowPriority(Priority.High, show)" />
-                    <label for="Priority.High" class="form-check-label stretched-link d-inline">︿ @Loc["High"]</label>
-                </div>
-                <div class="form-check position-relative">
-                    <InputCheckbox id="Priority.VeryHigh" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.VeryHigh]" ValueExpression="() => _settings.ShowPriority[Priority.VeryHigh]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryHigh, show)" />
-                    <label for="Priority.VeryHigh" class="form-check-label stretched-link d-inline">︽ @Loc["Very high"]</label>
-                </div>
-            </div>
+                        <div class="form-check position-relative mt-3">
+                            <InputCheckbox id="Priority.None" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.None]" ValueExpression="() => _settings.ShowPriority[Priority.None]" ValueChanged="(bool show) => SaveShowPriority(Priority.None, show)" />
+                            <label for="Priority.None" class="form-check-label stretched-link d-inline">⊘ @Loc["None"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <InputCheckbox id="Priority.VeryLow" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.VeryLow]" ValueExpression="() => _settings.ShowPriority[Priority.VeryLow]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryLow, show)" />
+                            <label for="Priority.VeryLow" class="form-check-label stretched-link d-inline">︾ @Loc["Very low"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <InputCheckbox id="Priority.Low" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.Low]" ValueExpression="() => _settings.ShowPriority[Priority.Low]" ValueChanged="(bool show) => SaveShowPriority(Priority.Low, show)" />
+                            <label for="Priority.Low" class="form-check-label stretched-link d-inline">﹀ @Loc["Low"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <InputCheckbox id="Priority.Medium" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.Medium]" ValueExpression="() => _settings.ShowPriority[Priority.Medium]" ValueChanged="(bool show) => SaveShowPriority(Priority.Medium, show)" />
+                            <label for="Priority.Medium" class="form-check-label stretched-link d-inline">— @Loc["Medium"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <InputCheckbox id="Priority.High" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.High]" ValueExpression="() => _settings.ShowPriority[Priority.High]" ValueChanged="(bool show) => SaveShowPriority(Priority.High, show)" />
+                            <label for="Priority.High" class="form-check-label stretched-link d-inline">︿ @Loc["High"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <InputCheckbox id="Priority.VeryHigh" class="form-check-input me-1" Value="_settings.ShowPriority[Priority.VeryHigh]" ValueExpression="() => _settings.ShowPriority[Priority.VeryHigh]" ValueChanged="(bool show) => SaveShowPriority(Priority.VeryHigh, show)" />
+                            <label for="Priority.VeryHigh" class="form-check-label stretched-link d-inline">︽ @Loc["Very high"]</label>
+                        </div>
+                    </div>
+                }
+                else if (_settings.PriorityFilterDisplay == FilterDisplay.RadioButtons)
+                {
+                }
+                else if (_settings.PriorityFilterDisplay == FilterDisplay.SelectOptions)
+                {
+                }
             }
 
             <small class="mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByStatus)"><i class="bi bi-filter"></i> @Loc["Filter by status"]<i class="@($"bi {GetFoldIcon(QuerySection.FilterByStatus)} mx-1")"></i></small>
