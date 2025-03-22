@@ -59,15 +59,22 @@ move Search, Filter, Sort to top bar
 make Search, Filter, Sort foldable = add settings (IsFolded)
 add margin
 
-split filters
-    Filter by date
-    Filter by category
-    Filter by priority
-    Filter by status
+enum QuerySection
+    Search
+    FilterByDate
+    FilterByCategory
+    FilterByPriority
+    FilterByStatus
+    Sort
 
 ---------------------------------------------------------------------------------------------------
 
 Category, Priority in Settings
+
+enum FilterDisplay
+    CheckBoxes
+    RadioButtons
+    SelectOptions
 
 Display category filter as:
 Check boxes
