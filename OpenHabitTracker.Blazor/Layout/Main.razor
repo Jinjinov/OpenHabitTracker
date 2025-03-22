@@ -48,14 +48,16 @@
             <NavLink class="nav-link px-2 py-1 ms-3" href="habits" data-main-step-5><i class="bi bi-repeat"></i></NavLink>
             @* <NavLink class="nav-link px-2 py-1 ms-3" href="help"><i class="bi bi-question-circle"></i></NavLink> *@
 
+            <button class="nav-link px-2 py-1 ms-3" @onclick="@(() => _dynamicComponentType = typeof(Search))" data-main-step-6><i class="bi bi-search"></i></button>
+
             @if (ClientState.Settings.ShowHelp)
             {
-                <button class="nav-link px-2 py-1 ms-3" @onclick="@(() => StartTour("main"))" data-main-step-6><i class="bi bi-question-circle"></i></button>
+                <button class="nav-link px-2 py-1 ms-3" @onclick="@(() => StartTour("main"))" data-main-step-7><i class="bi bi-question-circle"></i></button>
             }
 
             @if (ClientState.DataLocation == DataLocation.Remote)
             {
-                <i class="bi bi-globe ms-auto"></i>
+                <i class="bi bi-globe ms-auto" data-main-step-8></i>
             }
 
             @* <span class="ms-3">
@@ -133,7 +135,9 @@
             new() { Text = "Open Notes." },
             new() { Text = "Open Tasks." },
             new() { Text = "Open Habits." },
+            new() { Text = "Open Search, Filter, Sort." },
             new() { Text = "Show this Help. You can hide all help icons in the settings." },
+            new() { Text = "Online sync is enabled." },
         };
     }
 
