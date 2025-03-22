@@ -22,7 +22,14 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
 
         IEnumerable<TaskModel> tasks = Tasks!.Where(x => !x.IsDeleted);
 
-        tasks = tasks.Where(x => settings.ShowPriority[x.Priority]);
+        if (settings.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
+        {
+            tasks = tasks.Where(x => settings.ShowPriority[x.Priority]);
+        }
+        else if (settings.SelectedPriority is not null)
+        {
+            tasks = tasks.Where(x => x.Priority == settings.SelectedPriority);
+        }
 
         if (_searchFilterService.SearchTerm is not null)
         {
@@ -55,7 +62,14 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
             };
         }
 
-        tasks = tasks.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
+        if (settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes)
+        {
+            tasks = tasks.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
+        }
+        else if (settings.SelectedCategoryId is not null)
+        {
+            tasks = tasks.Where(x => x.CategoryId == settings.SelectedCategoryId);
+        }
 
         if (settings.HideCompletedTasks)
             tasks = tasks.Where(x => x.CompletedAt is null);

@@ -23,7 +23,14 @@ public class NoteService(ClientState appData, SearchFilterService searchFilterSe
 
         IEnumerable<NoteModel> notes = Notes!.Where(x => !x.IsDeleted);
 
-        notes = notes.Where(x => settings.ShowPriority[x.Priority]);
+        if (settings.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
+        {
+            notes = notes.Where(x => settings.ShowPriority[x.Priority]);
+        }
+        else if (settings.SelectedPriority is not null)
+        {
+            notes = notes.Where(x => x.Priority == settings.SelectedPriority);
+        }
 
         if (_searchFilterService.SearchTerm is not null)
         {
@@ -32,7 +39,14 @@ public class NoteService(ClientState appData, SearchFilterService searchFilterSe
             notes = notes.Where(x => x.Title.Contains(_searchFilterService.SearchTerm, comparisonType) || x.Content.Contains(_searchFilterService.SearchTerm, comparisonType));
         }
 
-        notes = notes.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
+        if (settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes)
+        {
+            notes = notes.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
+        }
+        else if (settings.SelectedCategoryId is not null)
+        {
+            notes = notes.Where(x => x.CategoryId == settings.SelectedCategoryId);
+        }
 
         return settings.SortBy[ContentType.Note] switch
         {

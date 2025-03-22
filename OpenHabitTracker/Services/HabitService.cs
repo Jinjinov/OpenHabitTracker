@@ -22,7 +22,14 @@ public class HabitService(ClientState appData, SearchFilterService searchFilterS
 
         IEnumerable<HabitModel> habits = Habits!.Where(x => !x.IsDeleted);
 
-        habits = habits.Where(x => settings.ShowPriority[x.Priority]);
+        if (settings.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
+        {
+            habits = habits.Where(x => settings.ShowPriority[x.Priority]);
+        }
+        else if (settings.SelectedPriority is not null)
+        {
+            habits = habits.Where(x => x.Priority == settings.SelectedPriority);
+        }
 
         if (_searchFilterService.SearchTerm is not null)
         {
@@ -43,7 +50,14 @@ public class HabitService(ClientState appData, SearchFilterService searchFilterS
             };
         }
 
-        habits = habits.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
+        if (settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes)
+        {
+            habits = habits.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
+        }
+        else if (settings.SelectedCategoryId is not null)
+        {
+            habits = habits.Where(x => x.CategoryId == settings.SelectedCategoryId);
+        }
 
         if (settings.ShowOnlyOverSelectedRatioMin)
             habits = habits.Where(x => x.GetRatio(settings.SelectedRatio) > settings.SelectedRatioMin);
