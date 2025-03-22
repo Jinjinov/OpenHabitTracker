@@ -142,8 +142,13 @@ public static class DataExtensions
         entity.SelectedRatioMin = model.SelectedRatioMin;
         entity.HorizontalMargin = model.HorizontalMargin;
         entity.VerticalMargin = model.VerticalMargin;
+        entity.CategoryFilterDisplay = model.CategoryFilterDisplay;
+        entity.PriorityFilterDisplay = model.PriorityFilterDisplay;
+        entity.SelectedCategoryId = model.SelectedCategoryId;
+        entity.SelectedPriority = model.SelectedPriority;
         entity.HiddenCategoryIds = model.HiddenCategoryIds;
         entity.ShowPriority = model.ShowPriority;
+        entity.FoldSection = model.FoldSection;
         entity.SortBy = model.SortBy;
     }
 

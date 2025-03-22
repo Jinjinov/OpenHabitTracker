@@ -278,8 +278,13 @@ public class ClientState
                     SelectedRatioMin = settingsEntity.SelectedRatioMin,
                     HorizontalMargin = settingsEntity.HorizontalMargin,
                     VerticalMargin = settingsEntity.VerticalMargin,
+                    CategoryFilterDisplay = settingsEntity.CategoryFilterDisplay,
+                    PriorityFilterDisplay = settingsEntity.PriorityFilterDisplay,
+                    SelectedCategoryId = settingsEntity.SelectedCategoryId,
+                    SelectedPriority = settingsEntity.SelectedPriority,
                     HiddenCategoryIds = settingsEntity.HiddenCategoryIds,
                     ShowPriority = settingsEntity.ShowPriority,
+                    FoldSection = settingsEntity.FoldSection,
                     SortBy = settingsEntity.SortBy
                 };
             }
@@ -342,6 +347,10 @@ public class ClientState
             SelectedRatioMin = 50,
             HorizontalMargin = 1,
             VerticalMargin = 2,
+            CategoryFilterDisplay = FilterDisplay.CheckBoxes,
+            PriorityFilterDisplay = FilterDisplay.CheckBoxes,
+            SelectedCategoryId = null,
+            SelectedPriority = null,
             HiddenCategoryIds = [],
             ShowPriority = new()
             {
@@ -351,6 +360,15 @@ public class ClientState
                 { Priority.Medium, true },
                 { Priority.High, true },
                 { Priority.VeryHigh, true }
+            },
+            FoldSection = new()
+            {
+                { QuerySection.Search, false },
+                { QuerySection.FilterByDate, false },
+                { QuerySection.FilterByCategory, false },
+                { QuerySection.FilterByPriority, false },
+                { QuerySection.FilterByStatus, false },
+                { QuerySection.Sort, false }
             },
             SortBy = new()
             {

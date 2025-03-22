@@ -54,6 +54,14 @@ public class SettingsModel
 
     public int VerticalMargin { get; set; } = 1;
 
+    public FilterDisplay CategoryFilterDisplay { get; set; } = FilterDisplay.CheckBoxes;
+
+    public FilterDisplay PriorityFilterDisplay { get; set; } = FilterDisplay.CheckBoxes;
+
+    public long? SelectedCategoryId { get; set; }
+
+    public Priority? SelectedPriority { get; set; }
+
     public List<long> HiddenCategoryIds { get; set; } = [];
 
     public Dictionary<Priority, bool> ShowPriority { get; set; } = new()
@@ -64,6 +72,16 @@ public class SettingsModel
         { Priority.Medium, true },
         { Priority.High, true },
         { Priority.VeryHigh, true }
+    };
+
+    public Dictionary<QuerySection, bool> FoldSection { get; set; } = new()
+    {
+        { QuerySection.Search, false },
+        { QuerySection.FilterByDate, false },
+        { QuerySection.FilterByCategory, false },
+        { QuerySection.FilterByPriority, false },
+        { QuerySection.FilterByStatus, false },
+        { QuerySection.Sort, false }
     };
 
     public Dictionary<ContentType, Sort> SortBy { get; set; } = new()
