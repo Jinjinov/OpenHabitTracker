@@ -100,9 +100,33 @@
                 }
                 else if (_settings.CategoryFilterDisplay == FilterDisplay.RadioButtons)
                 {
+                    <div class="list-group-item" data-search-step-12>
+                        <span>@Loc["Categories"]:</span>
+                        <div class="form-check position-relative">
+                            <input type="radio" id="category-all" class="form-check-input me-1" checked="@(_settings.SelectedCategoryId == null)" @onchange="@(() => SaveSelectedCategoryId(null))" />
+                            <label for="category-all" class="form-check-label stretched-link d-inline">@Loc["All"]</label>
+                        </div>
+                        @foreach (CategoryModel category in CategoryService.Categories)
+                        {
+                            <div class="form-check position-relative">
+                                <input type="radio" id="@($"category-{category.Id}")" class="form-check-input me-1" checked="@(_settings.SelectedCategoryId == category.Id)" @onchange="@(() => SaveSelectedCategoryId(category.Id))" />
+                                <label for="@($"category-{category.Id}")" class="form-check-label stretched-link d-inline">@category.Title</label>
+                            </div>
+                        }
+                    </div>
                 }
                 else if (_settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
                 {
+                    <div class="list-group-item" data-search-step-12>
+                        <span>@Loc["Categories"]:</span>
+                        <InputSelect class="form-select" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long?" ValueChanged="SaveSelectedCategoryId">
+                            <option value="">@Loc["All"]</option>
+                            @foreach (CategoryModel category in CategoryService.Categories)
+                            {
+                                <option value="@category.Id">@category.Title</option>
+                            }
+                        </InputSelect>
+                    </div>
                 }
             }
 
@@ -145,9 +169,13 @@
                 }
                 else if (_settings.PriorityFilterDisplay == FilterDisplay.RadioButtons)
                 {
+                    <div class="list-group-item" data-search-step-13>
+                    </div>
                 }
                 else if (_settings.PriorityFilterDisplay == FilterDisplay.SelectOptions)
                 {
+                    <div class="list-group-item" data-search-step-13>
+                    </div>
                 }
             }
 
@@ -366,6 +394,13 @@
             _settings.HiddenCategoryIds.Remove(categoryId);
             await UpdateSettings();
         }
+    }
+
+    async Task SaveSelectedCategoryId(long? selectedCategoryId)
+    {
+        _settings.SelectedCategoryId = selectedCategoryId;
+
+        await UpdateSettings();
     }
 
     async Task SetShowAllCategories()
