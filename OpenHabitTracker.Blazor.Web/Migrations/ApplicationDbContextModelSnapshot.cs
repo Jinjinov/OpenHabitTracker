@@ -344,6 +344,9 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("CategoryFilterDisplay")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Culture")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -354,9 +357,17 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.Property<int>("FirstDayOfWeek")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("FoldSection")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("FoldSection");
+
                     b.PrimitiveCollection<string>("HiddenCategoryIds")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("HideCompletedTasks")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("HorizontalMargin")
                         .HasColumnType("INTEGER");
@@ -367,11 +378,20 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.Property<bool>("IsDarkMode")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("PriorityFilterDisplay")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("RememberMe")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("SelectedCategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("SelectedPriority")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("SelectedRatio")
