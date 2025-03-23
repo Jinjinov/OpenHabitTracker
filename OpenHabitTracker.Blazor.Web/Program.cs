@@ -216,8 +216,8 @@ app.MapRazorComponents<App>()
 
 //if (app.Environment.IsDevelopment())
 //{
-    app.MapOpenApi().RequireAuthorization("OpenApiPolicy");
-    app.MapScalarApiReference().RequireAuthorization("OpenApiPolicy"); // http://localhost:5260/scalar/v1
+    app.MapOpenApi().RequireAuthorization("OpenApiPolicy"); // https://localhost:7042/openapi/v1.json
+    app.MapScalarApiReference().RequireAuthorization("OpenApiPolicy"); // http://localhost:5260/scalar/v1 https://localhost:7042/scalar/v1
 //}
 
 await CreateDefaultUserAsync(app);
