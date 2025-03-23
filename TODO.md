@@ -44,53 +44,6 @@ check for every `new.*Model`
 
 1.
 
-[X] hide completed tasks !!!
-
-default sort:
-    tasks - planned at
-    habits - selected interval ratio
-
-expose Scalar and Watchdog
-
----------------------------------------------------------------------------------------------------
-
-move Search, Filter, Sort to top bar
-
-make Search, Filter, Sort foldable = add settings (IsFolded)
-add margin
-
-enum QuerySection
-    Search
-    FilterByDate
-    FilterByCategory
-    FilterByPriority
-    FilterByStatus
-    Sort
-
----------------------------------------------------------------------------------------------------
-
-Category, Priority in Settings
-
-enum FilterDisplay
-    CheckBoxes
-    RadioButtons
-    SelectOptions
-
-Display category filter as:
-Check boxes
-Radio buttons
-Select options
-
-Display priority filter as:
-Check boxes
-Radio buttons
-Select options
-
-add SelectedCategory
-add SelectedPriority
-
----------------------------------------------------------------------------------------------------
-
 search/filter/sort query parameters in the URL - Blazor
 
 search/filter/sort query parameters in the URL - Web API
