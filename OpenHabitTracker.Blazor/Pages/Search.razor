@@ -206,6 +206,16 @@
                 else if (_settings.PriorityFilterDisplay == FilterDisplay.SelectOptions)
                 {
                     <div class="list-group-item" data-search-step-13>
+                        <small>@Loc["Priorities"]:</small>
+                        <InputSelect class="form-select" Value="_settings.SelectedPriority" ValueExpression="() => _settings.SelectedPriority" TValue="Priority?" ValueChanged="SaveSelectedPriority">
+                            <option value="">@Loc["All"]</option>
+                            <option value="@Priority.None">⊘ @Loc["None"]</option>
+                            <option value="@Priority.VeryLow">︾ @Loc["Very low"]</option>
+                            <option value="@Priority.Low">﹀ @Loc["Low"]</option>
+                            <option value="@Priority.Medium">— @Loc["Medium"]</option>
+                            <option value="@Priority.High">︿ @Loc["High"]</option>
+                            <option value="@Priority.VeryHigh">︽ @Loc["Very high"]</option>
+                        </InputSelect>
                     </div>
                 }
             }
