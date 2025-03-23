@@ -1,3 +1,7 @@
+# 1.1.3 - Apr 4, 2025
+
+- improved filters
+
 # 1.1.2 - Mar 3, 2025
 
 - replaced help with a guided tour

@@ -36,10 +36,10 @@
         Assets file 'project.assets.json' doesn't have a target for 'net9.0-windows10.0.19041.0'. 
         Ensure that restore has run and that you have included 'net9.0-windows10.0.19041.0' in the TargetFrameworks for your project.
         -->
-        <ApplicationDisplayVersion>1.1.2</ApplicationDisplayVersion>
+        <ApplicationDisplayVersion>1.1.3</ApplicationDisplayVersion>
       
         <!-- AndroidManifest.xml : error XA0003: VersionCode 1.0.1 is invalid. It must be an integer value. (Parameter 'VersionCode') -->
-        <ApplicationVersion>12</ApplicationVersion>
+        <ApplicationVersion>13</ApplicationVersion>
 
         <!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
         <!--<WindowsPackageType>None</WindowsPackageType>-->
