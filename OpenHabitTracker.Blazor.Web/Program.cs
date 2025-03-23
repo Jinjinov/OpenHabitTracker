@@ -15,6 +15,7 @@ using OpenHabitTracker.Blazor.Web.Data;
 using OpenHabitTracker.Data;
 using Scalar.AspNetCore;
 using System.Text;
+using System.Text.Json.Serialization;
 using WatchDog;
 using WatchDog.src.Enums;
 
@@ -124,6 +125,15 @@ builder.Services.AddControllers()
         // This disables the camelCasing so that property names remain as defined in C# classes (PascalCase)
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    // Ensure property names remain in PascalCase.
+    //options.SerializerOptions.PropertyNamingPolicy = null;
+
+    // Add the converter for enum strings so OpenAPI reflects enums as strings.
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

@@ -135,39 +135,6 @@
         }
       }
     },
-    "/api/DataAccess/last-change-time": {
-      "get": {
-        "tags": [
-          "DataAccess"
-        ],
-        "operationId": "GetLastChangeTime",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string",
-                  "format": "date-time"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "date-time"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "date-time"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/DataAccess/user": {
       "post": {
         "tags": [
@@ -2617,7 +2584,22 @@
         }
       },
       "DayOfWeek": {
-        "type": "integer"
+        "enum": [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ]
+      },
+      "FilterDisplay": {
+        "enum": [
+          "CheckBoxes",
+          "RadioButtons",
+          "SelectOptions"
+        ]
       },
       "HabitEntity": {
         "type": "object",
@@ -2745,11 +2727,35 @@
           }
         }
       },
+      "NullableOfPriority": {
+        "enum": [
+          "None",
+          "VeryLow",
+          "Low",
+          "Medium",
+          "High",
+          "VeryHigh",
+          null
+        ],
+        "nullable": true
+      },
       "Period": {
-        "type": "integer"
+        "enum": [
+          "Day",
+          "Week",
+          "Month",
+          "Year"
+        ]
       },
       "Priority": {
-        "type": "integer"
+        "enum": [
+          "None",
+          "VeryLow",
+          "Low",
+          "Medium",
+          "High",
+          "VeryHigh"
+        ]
       },
       "PriorityEntity": {
         "type": "object",
@@ -2764,7 +2770,11 @@
         }
       },
       "Ratio": {
-        "type": "integer"
+        "enum": [
+          "ElapsedToAverage",
+          "ElapsedToDesired",
+          "AverageToDesired"
+        ]
       },
       "RefreshTokenRequest": {
         "required": [
@@ -2845,6 +2855,9 @@
           "displayNoteContentAsMarkdown": {
             "type": "boolean"
           },
+          "hideCompletedTasks": {
+            "type": "boolean"
+          },
           "showOnlyOverSelectedRatioMin": {
             "type": "boolean"
           },
@@ -2860,6 +2873,20 @@
             "type": "integer",
             "format": "int32"
           },
+          "categoryFilterDisplay": {
+            "$ref": "#/components/schemas/FilterDisplay"
+          },
+          "priorityFilterDisplay": {
+            "$ref": "#/components/schemas/FilterDisplay"
+          },
+          "selectedCategoryId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "selectedPriority": {
+            "$ref": "#/components/schemas/NullableOfPriority"
+          },
           "hiddenCategoryIds": {
             "type": "array",
             "items": {
@@ -2868,6 +2895,12 @@
             }
           },
           "showPriority": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean"
+            }
+          },
+          "foldSection": {
             "type": "object",
             "additionalProperties": {
               "type": "boolean"
@@ -2882,7 +2915,19 @@
         }
       },
       "Sort": {
-        "type": "integer"
+        "enum": [
+          "Category",
+          "Priority",
+          "Title",
+          "PlannedAt",
+          "Duration",
+          "RepeatInterval",
+          "AverageInterval",
+          "TimeSpent",
+          "AverageTimeSpent",
+          "ElapsedTime",
+          "SelectedRatio"
+        ]
       },
       "TaskEntity": {
         "type": "object",
@@ -2989,6 +3034,10 @@
           },
           "passwordHash": {
             "type": "string"
+          },
+          "lastChangeAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       }
