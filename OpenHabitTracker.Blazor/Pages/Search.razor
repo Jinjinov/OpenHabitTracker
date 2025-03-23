@@ -102,6 +102,7 @@
                 {
                     <div class="list-group-item" data-search-step-12>
                         <span>@Loc["Categories"]:</span>
+                        <div class="mt-3" />
                         <div class="form-check position-relative">
                             <input type="radio" id="category-all" class="form-check-input me-1" checked="@(_settings.SelectedCategoryId == null)" @onchange="@(() => SaveSelectedCategoryId(null))" />
                             <label for="category-all" class="form-check-label stretched-link d-inline">@Loc["All"]</label>
@@ -118,7 +119,7 @@
                 else if (_settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
                 {
                     <div class="list-group-item" data-search-step-12>
-                        <span>@Loc["Categories"]:</span>
+                        <small>@Loc["Categories"]:</small>
                         <InputSelect class="form-select" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long?" ValueChanged="SaveSelectedCategoryId">
                             <option value="">@Loc["All"]</option>
                             @foreach (CategoryModel category in CategoryService.Categories)
@@ -170,6 +171,36 @@
                 else if (_settings.PriorityFilterDisplay == FilterDisplay.RadioButtons)
                 {
                     <div class="list-group-item" data-search-step-13>
+                        <span>@Loc["Priorities"]:</span>
+
+                        <div class="form-check position-relative mt-3">
+                            <input type="radio" id="Priority.All" class="form-check-input me-1" checked="@(_settings.SelectedPriority == null)" @onchange="() => SaveSelectedPriority(null)" />
+                            <label for="Priority.All" class="form-check-label stretched-link d-inline">@Loc["All"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <input type="radio" id="Priority.None" class="form-check-input me-1" checked="@(_settings.SelectedPriority == Priority.None)" @onchange="() => SaveSelectedPriority(Priority.None)" />
+                            <label for="Priority.None" class="form-check-label stretched-link d-inline">⊘ @Loc["None"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <input type="radio" id="Priority.VeryLow" class="form-check-input me-1" checked="@(_settings.SelectedPriority == Priority.VeryLow)" @onchange="() => SaveSelectedPriority(Priority.VeryLow)" />
+                            <label for="Priority.VeryLow" class="form-check-label stretched-link d-inline">︾ @Loc["Very low"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <input type="radio" id="Priority.Low" class="form-check-input me-1" checked="@(_settings.SelectedPriority == Priority.Low)" @onchange="() => SaveSelectedPriority(Priority.Low)" />
+                            <label for="Priority.Low" class="form-check-label stretched-link d-inline">﹀ @Loc["Low"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <input type="radio" id="Priority.Medium" class="form-check-input me-1" checked="@(_settings.SelectedPriority == Priority.Medium)" @onchange="() => SaveSelectedPriority(Priority.Medium)" />
+                            <label for="Priority.Medium" class="form-check-label stretched-link d-inline">— @Loc["Medium"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <input type="radio" id="Priority.High" class="form-check-input me-1" checked="@(_settings.SelectedPriority == Priority.High)" @onchange="() => SaveSelectedPriority(Priority.High)" />
+                            <label for="Priority.High" class="form-check-label stretched-link d-inline">︿ @Loc["High"]</label>
+                        </div>
+                        <div class="form-check position-relative">
+                            <input type="radio" id="Priority.VeryHigh" class="form-check-input me-1" checked="@(_settings.SelectedPriority == Priority.VeryHigh)" @onchange="() => SaveSelectedPriority(Priority.VeryHigh)" />
+                            <label for="Priority.VeryHigh" class="form-check-label stretched-link d-inline">︽ @Loc["Very high"]</label>
+                        </div>
                     </div>
                 }
                 else if (_settings.PriorityFilterDisplay == FilterDisplay.SelectOptions)
@@ -463,6 +494,13 @@
     async Task SaveShowPriority(Priority priority, bool show)
     {
         _settings.ShowPriority[priority] = show;
+
+        await UpdateSettings();
+    }
+
+    async Task SaveSelectedPriority(Priority? priority)
+    {
+        _settings.SelectedPriority = priority;
 
         await UpdateSettings();
     }
