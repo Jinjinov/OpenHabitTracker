@@ -4,7 +4,9 @@
   "Open Notes.": "Open Notes.",
   "Open Tasks.": "Open Tasks.",
   "Open Habits.": "Open Habits.",
+  "Open Search, Filter, Sort.": "Open Search, Filter, Sort.",
   "Show this Help. You can hide all help icons in the settings.": "Show this Help. You can hide all help icons in the settings.",
+  "Online sync is enabled.": "Online sync is enabled.",
 
   "Add a new category.": "Add a new category.",
 
@@ -93,6 +95,8 @@
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "Pressing the TAB key inserts a tab in the content when writing the text in Notes.",
   "You can use Markdown to format the content in Notes.": "You can use Markdown to format the content in Notes.",
   "Resetting the habit when it is completed will uncheck all items.": "Resetting the habit when it is completed will uncheck all items.",
+  "Choose how to display the category filter.": "Choose how to display the category filter.",
+  "Choose how to display the priority filter.": "Choose how to display the priority filter.",
   "Choose the horizontal space between items in the list.": "Choose the horizontal space between items in the list.",
   "Choose the vertical space between items in the list.": "Choose the vertical space between items in the list.",
 

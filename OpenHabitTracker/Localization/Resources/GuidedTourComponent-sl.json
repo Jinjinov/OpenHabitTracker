@@ -4,7 +4,9 @@
   "Open Notes.": "Odpri Zapiske.",
   "Open Tasks.": "Odpri Naloge.",
   "Open Habits.": "Odpri Navade.",
+  "Open Search, Filter, Sort.": "Odpri Išči, Filtriraj, Razvrsti.",
   "Show this Help. You can hide all help icons in the settings.": "Prikaži to Pomoč. Vse ikone za pomoč lahko skriješ v nastavitvah.",
+  "Online sync is enabled.": "Spletna sinhronizacija je omogočena.",
 
   "Add a new category.": "Dodaj novo kategorijo.",
 
@@ -93,6 +95,8 @@
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "Pritisk tipke TAB vstavi tabulator v vsebino pri pisanju besedila v Zapiskih.",
   "You can use Markdown to format the content in Notes.": "Za oblikovanje vsebine v Zapiskih lahko uporabiš Markdown.",
   "Resetting the habit when it is completed will uncheck all items.": "Ponastavitev navade, ko je zaključena, bo odznačila vse elemente.",
+  "Choose how to display the category filter.": "Izberite način prikaza filtra kategorij.",
+  "Choose how to display the priority filter.": "Izberite način prikaza filtra prioritet.",
   "Choose the horizontal space between items in the list.": "Izberi vodoravni prostor med elementi na seznamu.",
   "Choose the vertical space between items in the list.": "Izberi navpični prostor med elementi na seznamu.",
 

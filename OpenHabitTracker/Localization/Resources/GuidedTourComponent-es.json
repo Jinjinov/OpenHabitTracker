@@ -4,7 +4,9 @@
   "Open Notes.": "Abrir Notas.",
   "Open Tasks.": "Abrir Tareas.",
   "Open Habits.": "Abrir Hábitos.",
+  "Open Search, Filter, Sort.": "Abrir Buscar, Filtrar, Ordenar.",
   "Show this Help. You can hide all help icons in the settings.": "Mostrar esta Ayuda. Puedes ocultar todos los iconos de ayuda en la configuración.",
+  "Online sync is enabled.": "La sincronización en línea está habilitada.",
 
   "Add a new category.": "Añadir una nueva categoría.",
 
@@ -93,6 +95,8 @@
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "Presionar la tecla TAB inserta una tabulación en el contenido al escribir el texto en Notas.",
   "You can use Markdown to format the content in Notes.": "Puedes usar Markdown para formatear el contenido en Notas.",
   "Resetting the habit when it is completed will uncheck all items.": "Restablecer el hábito cuando se completa desmarcará todos los elementos.",
+  "Choose how to display the category filter.": "Seleccione cómo mostrar el filtro de categorías.",
+  "Choose how to display the priority filter.": "Seleccione cómo mostrar el filtro de prioridades.",
   "Choose the horizontal space between items in the list.": "Elegir el espacio horizontal entre elementos en la lista.",
   "Choose the vertical space between items in the list.": "Elegir el espacio vertical entre elementos en la lista.",
 
