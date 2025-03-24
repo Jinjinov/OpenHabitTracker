@@ -116,6 +116,7 @@
   "User": "User",
   "Invalid address": "Invalid address",
   "Invalid credentials": "Invalid credentials",
+  "Connection error": "Connection error",
   "Planned": "Planned",
   "Done": "Done",
   "None": "None",

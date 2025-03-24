@@ -116,6 +116,7 @@
   "User": "Usuario",
   "Invalid address": "Dirección no válida",
   "Invalid credentials": "Credenciales no válidas",
+  "Connection error": "Error de conexión",
   "Planned": "Planificado",
   "Done": "Hecho",
   "None": "Ninguna",

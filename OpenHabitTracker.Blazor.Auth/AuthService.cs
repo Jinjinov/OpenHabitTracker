@@ -57,6 +57,10 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
         {
             Error = _loc["Invalid address"];
         }
+        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.ConnectionError)
+        {
+            Error = _loc["Connection error"];
+        }
 
         return false;
     }
@@ -106,6 +110,10 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
         catch (InvalidOperationException)
         {
             Error = _loc["Invalid address"];
+        }
+        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.ConnectionError)
+        {
+            Error = _loc["Connection error"];
         }
 
         return false;
