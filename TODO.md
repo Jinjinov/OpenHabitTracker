@@ -35,14 +35,14 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-0.
+1.
 make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
 
 check for every `new.*Model`
 
 ---------------------------------------------------------------------------------------------------
 
-1.
+2.
 
 search/filter/sort query parameters in the URL - Blazor
 
@@ -50,14 +50,14 @@ search/filter/sort query parameters in the URL - Web API
 
 ---------------------------------------------------------------------------------------------------
 
-2.
+3.
 refresh local if remote has changed:
 
 set `_lastRefreshAt = DateTime.UtcNow;` on local changes, so a local change won't trigger an update of the local UI
 
 ---------------------------------------------------------------------------------------------------
 
-3.
+4.
 method to copy one db context to another
 
 public void CopyData(DbContext source, DbContext destination)
@@ -91,13 +91,10 @@ using (var sqlServerContext = new MyDbContext(sqlServerOptions))
 
 ---------------------------------------------------------------------------------------------------
 
-4.
-run Jetbrains Rider code analysis
 5.
 add comments to methods - 1. for any open source contributor - 2. for GitHub Copilot
+
 6.
-UserData -> UserModel - add Settings and Categories to UserModel
-AppData public Initialize() => local methods: InitializeUser, InitializeSettings, InitializePriorities
 make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
 
 ---------------------------------------------------------------------------------------------------
