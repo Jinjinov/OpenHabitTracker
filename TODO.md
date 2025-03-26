@@ -99,6 +99,26 @@ make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add 
 
 ---------------------------------------------------------------------------------------------------
 
+now:
+- 1. Google
+- 2. Microsoft
+- 3. Apple
+
+later:
+- 1. Nextcloud
+- 2. Dropbox
+- 3. Box
+
+3 ways to login to google drive:
+- HTTP REST (wasm, web)
+- NuGet packages: google drive api, ... (windows, macos, linux)
+- MAUI WebAuthenticator + server backend https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/communication/authentication
+
+CloudStorage - interface
+CloudStorage.Web
+CloudStorage.Desktop
+CloudStorage.Mobile
+
 7.
 add OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
     Google Drive
