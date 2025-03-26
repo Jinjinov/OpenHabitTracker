@@ -137,7 +137,7 @@
             new() { Text = "Open Habits." },
             new() { Text = "Open Search, Filter, Sort." },
             new() { Text = "Show this Help. You can hide all help icons in the settings." },
-            new() { Text = "Online sync is enabled." },
+            new() { Text = "Online sync is enabled.", Show = () => ClientState.DataLocation == DataLocation.Remote },
         };
     }
 
