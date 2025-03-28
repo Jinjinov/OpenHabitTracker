@@ -114,10 +114,10 @@ later:
 - NuGet packages: google drive api, ... (windows, macos, linux)
 - MAUI WebAuthenticator + server backend https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/communication/authentication
 
-CloudStorage - interface
-CloudStorage.Web
-CloudStorage.Desktop
-CloudStorage.Mobile
+OpenHabitTracker.CloudStorage - interface
+OpenHabitTracker.CloudStorage.Web
+OpenHabitTracker.CloudStorage.Desktop
+OpenHabitTracker.CloudStorage.Mobile
 
 7.
 add OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
@@ -140,6 +140,8 @@ add backup to
 
 10.
 use DB in Blazor Server for multi user sync with REST API endpoints
+
+---------------------------------------------------------------------------------------------------
 
 11.
 write unit tests with Appium / bUnit
