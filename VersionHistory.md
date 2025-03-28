@@ -1,5 +1,6 @@
 # 1.1.3 - Apr 4, 2025
 
+- setting to hide completed tasks
 - improved filters
 
 # 1.1.2 - Mar 3, 2025
