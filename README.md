@@ -90,6 +90,11 @@ services:
       - ./.OpenHabitTracker:/app/.OpenHabitTracker
 ```
 
+After you login at http://localhost:5000/login you can use the same browser tab to access:
+- logs: http://localhost:5000/watchdog
+- OpenAPI json: http://localhost:5000/openapi/v1.json
+- OpenAPI UI: http://localhost:5000/scalar/v1
+
 ## Made with:
 
 *   [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor)
