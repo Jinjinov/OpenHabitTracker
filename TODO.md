@@ -16,37 +16,56 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 
 fix AppData GetUserData() which calls InitializeContent()
 search for `// TODO:: remove temp fix`
-InitializeItems and InitializeTimes have null checks and do not update data when called in GetUserData()
-    both load data directly from DB with _dataAccess.GetTimes() and _dataAccess.GetItems()
-    but HabitService.LoadTimesDone also loads data with _dataAccess.GetTimes(habit.Id) - these are not the same objects as in InitializeTimes
-    and ItemService.Initialize also loads data with _dataAccess.GetItems(items.Id) - these are not the same objects as in InitializeItems
-    user can add or remove Items and Times list but the code does not update Items and Times in the AppData
+    `InitializeItems` and `InitializeTimes` have null checks and do not update data when called in GetUserData()
+        both load data directly from DB with `_dataAccess.GetTimes()` and `_dataAccess.GetItems()`
+        but HabitService.LoadTimesDone also loads data with `_dataAccess.GetTimes(habit.Id)` - these are not the same objects as in `InitializeTimes`
+        and ItemService.Initialize also loads data with `_dataAccess.GetItems(items.Id)` - these are not the same objects as in `InitializeItems`
+    user can add or remove Items and Times list
+        `DataAccess.AddItem(item);` / `DataAccess.UpdateItem(item);`
+        `DataAccess.AddTime(timeEntity);` / `DataAccess.UpdateTime(timeEntity);`
+        the code does not update Items and Times in the AppData
     so without temp fix, GetUserData() would return Items and Times that were loaded with Initialize()
-either remove these from class AppData:
+NO!!! - either remove these from class AppData: - NO!!!
     public Dictionary<long, TimeModel>? Times { get; set; }
     public Dictionary<long, ItemModel>? Items { get; set; }
 or
-!!! make sure that other services update them !!!
+    make sure that other services update them !!!
+    1.
+        `ToEntity` already exist
+        add `ToModel` and use it for every `Model`
+            models need other models to initialize their `List<>` properties
+                List<CategoryModel> Categories
+                    List<NoteModel>? Notes
+                    List<TaskModel>? Tasks
+                        List<ItemModel>? Items
+                    List<HabitModel>? Habits
+                        List<ItemModel>? Items
+                        List<TimeModel>? TimesDone
+            provide `ClientData` as imput
+                - if `Model` is not found in the `Dictionary` then use `_dataAccess`
+                - add it to `Dictionary` in `ClientData`
+    2.
+        make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
+        check for every `new.*Model`
 
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
-
-`ToEntity` already exist, add `ToModel` and use it for every `Model` - NO!!! - models need other models to initialize their List<> properties
-
----------------------------------------------------------------------------------------------------
-
-1.
-make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
-
-check for every `new.*Model`
 
 ---------------------------------------------------------------------------------------------------
 
 2.
 
-search/filter/sort query parameters in the URL - Blazor
+class QueryParameters = ContentType + Settings + SearchFilterService
 
-search/filter/sort query parameters in the URL - Web API
+IEnumerable<Model> GetNotes(QueryParameters queryParameters)
+IEnumerable<Model> GetTasks(QueryParameters queryParameters)
+IEnumerable<Model> GetHabits(QueryParameters queryParameters)
+
+IDataAccess -> Entity -> Model -> ClientData -> IEnumerable<Model>
+
+search/filter/sort query parameters in the URL - Blazor -> IEnumerable<Model> - used with existing ClientState.ClientData
+
+search/filter/sort query parameters in the URL - Web API -> IEnumerable<Model> - using full ClientState.ClientData doesn't make sense for a short lived endpoint query - `_dataAccess` + `ToModel` is required for this
 
 ---------------------------------------------------------------------------------------------------
 
