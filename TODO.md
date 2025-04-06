@@ -60,8 +60,8 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 private `DataAccess` in `ClientData`
 
 1.
-Model Entity.ToModel()
-Model Entity.ToModel(DataAccess, ClientData)
+Model DataExtensions Entity.ToModel()
+Model DataExtensions Entity.ToModel(DataAccess, ClientData)
 
 2.
 IReadOnlyCollection<Model> ClientData.GetModels(QueryParameters, DataAccess)
