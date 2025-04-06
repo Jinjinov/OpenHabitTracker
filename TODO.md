@@ -47,6 +47,8 @@ or
     2.
         make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
         check for every `new.*Model`
+    3.
+        because `DataAccess` and `ClientData` are needed for `ToModel` the best class for it is `ClientState`
 
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
@@ -57,9 +59,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 class QueryParameters = ContentType + Settings + SearchFilterService
 
-IEnumerable<Model> GetNotes(QueryParameters queryParameters)
-IEnumerable<Model> GetTasks(QueryParameters queryParameters)
-IEnumerable<Model> GetHabits(QueryParameters queryParameters)
+ClientState
+    IEnumerable<Model> GetNotes(QueryParameters queryParameters)
+    IEnumerable<Model> GetTasks(QueryParameters queryParameters)
+    IEnumerable<Model> GetHabits(QueryParameters queryParameters)
 
 IDataAccess -> Entity -> Model -> ClientData -> IEnumerable<Model>
 
