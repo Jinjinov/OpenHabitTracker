@@ -48,31 +48,36 @@ or
         make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
         check for every `new.*Model`
     3.
-        because `DataAccess` and `ClientData` are needed for `ToModel` the best class for it is `ClientState`
+        make sure that every `DataAccess.Add` and `DataAccess.Update` and `DataAccess.Remove` also updates `Dictionary<long, Model>` in `ClientData`
+        private `DataAccess` in `ClientData`
 
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
 ---------------------------------------------------------------------------------------------------
 
+0.
+private `DataAccess` in `ClientData`
+
 1.
-Model ClientData.ToModel(Entity, DataAccess)
+Model Entity.ToModel()
+Model Entity.ToModel(DataAccess, ClientData)
 
 2.
-Model ClientData.GetModel(QueryParameters, DataAccess)
+IReadOnlyCollection<Model> ClientData.GetModels(QueryParameters, DataAccess)
 
 class QueryParameters = ContentType + Settings + SearchFilterService
 
 ClientState
-    IEnumerable<Model> GetNotes(QueryParameters queryParameters)
-    IEnumerable<Model> GetTasks(QueryParameters queryParameters)
-    IEnumerable<Model> GetHabits(QueryParameters queryParameters)
+    IReadOnlyCollection<Model> GetNotes(QueryParameters queryParameters)
+    IReadOnlyCollection<Model> GetTasks(QueryParameters queryParameters)
+    IReadOnlyCollection<Model> GetHabits(QueryParameters queryParameters)
 
-IDataAccess -> Entity -> Model -> ClientData -> IEnumerable<Model>
+IDataAccess -> Entity -> Model -> ClientData -> IReadOnlyCollection<Model>
 
-search/filter/sort query parameters in the URL - Blazor -> IEnumerable<Model> - used with existing ClientState.ClientData
+search/filter/sort query parameters in the URL - Blazor -> IReadOnlyCollection<Model> - used with existing ClientState.ClientData
 
-search/filter/sort query parameters in the URL - Web API -> IEnumerable<Model> - using full ClientState.ClientData doesn't make sense for a short lived endpoint query - `_dataAccess` + `ToModel` is required for this
+search/filter/sort query parameters in the URL - Web API -> IReadOnlyCollection<Model> - using full ClientState.ClientData doesn't make sense for a short lived endpoint query - `_dataAccess` + `ToModel` is required for this
 
 ---------------------------------------------------------------------------------------------------
 
