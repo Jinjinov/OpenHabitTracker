@@ -56,10 +56,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 ---------------------------------------------------------------------------------------------------
 
 1.
-static ClientState.ToModel(Entity, DataAccess, ClientData)
+ClientData.ToModel(Entity, DataAccess)
 
 2.
-static ClientState.Get(QueryParameters, DataAccess, ClientData)
+ClientData.GetModel(QueryParameters, DataAccess)
 
 class QueryParameters = ContentType + Settings + SearchFilterService
 
