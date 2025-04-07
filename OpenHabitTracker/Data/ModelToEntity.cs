@@ -3,7 +3,7 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Data;
 
-public static class DataExtensions
+public static class ModelToEntity
 {
     public static CategoryEntity ToEntity(this CategoryModel model)
     {

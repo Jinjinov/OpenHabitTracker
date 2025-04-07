@@ -18,8 +18,13 @@ public class ClientData(IDataAccess dataAccess)
     public Dictionary<long, PriorityModel>? Priorities { get; set; }
     public List<ContentModel>? Trash { get; set; }
 
-    public IEnumerable<NoteModel> GetNotes(QueryParameters queryParameters)
+    public async Task<IEnumerable<NoteModel>> GetNotes(QueryParameters queryParameters)
     {
+        if (Notes is null)
+        {
+            Notes = (await _dataAccess.GetNotes()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
+        }
+
         IEnumerable<NoteModel> notes = Notes.Values.Where(x => !x.IsDeleted);
 
         if (queryParameters.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
@@ -56,8 +61,13 @@ public class ClientData(IDataAccess dataAccess)
         };
     }
 
-    public IEnumerable<TaskModel> GetTasks(QueryParameters queryParameters)
+    public async Task<IEnumerable<TaskModel>> GetTasks(QueryParameters queryParameters)
     {
+        if (Tasks is null)
+        {
+            Tasks = (await _dataAccess.GetTasks()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
+        }
+
         IEnumerable<TaskModel> tasks = Tasks.Values.Where(x => !x.IsDeleted);
 
         if (queryParameters.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
@@ -127,8 +137,13 @@ public class ClientData(IDataAccess dataAccess)
         };
     }
 
-    public IEnumerable<HabitModel> GetHabits(QueryParameters queryParameters)
+    public async Task<IEnumerable<HabitModel>> GetHabits(QueryParameters queryParameters)
     {
+        if (Habits is null)
+        {
+            Habits = (await _dataAccess.GetHabits()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
+        }
+
         IEnumerable<HabitModel> habits = Habits.Values.Where(x => !x.IsDeleted);
 
         if (queryParameters.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
