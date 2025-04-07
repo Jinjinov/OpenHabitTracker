@@ -3,9 +3,10 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.App;
 
-public class ClientData(IDataAccess dataAccess)
+public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
 {
     private readonly IDataAccess _dataAccess = dataAccess;
+    private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
 
     public UserModel User { get; set; } = new();
     public SettingsModel Settings { get; set; } = new();
@@ -22,6 +23,8 @@ public class ClientData(IDataAccess dataAccess)
     {
         if (Notes is null)
         {
+            // ContentMarkdown = _markdownToHtml.GetMarkdown(x.Content)
+
             Notes = (await _dataAccess.GetNotes()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
         }
 
@@ -65,6 +68,8 @@ public class ClientData(IDataAccess dataAccess)
     {
         if (Tasks is null)
         {
+            // DataAccess.GetItems();
+
             Tasks = (await _dataAccess.GetTasks()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
         }
 
@@ -141,6 +146,10 @@ public class ClientData(IDataAccess dataAccess)
     {
         if (Habits is null)
         {
+            // DataAccess.GetItems();
+
+            // DataAccess.GetTimes();
+
             Habits = (await _dataAccess.GetHabits()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
         }
 

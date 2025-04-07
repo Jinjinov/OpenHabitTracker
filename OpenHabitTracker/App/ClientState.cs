@@ -27,7 +27,7 @@ public class ClientState
 
         foreach (var pair in _dataAccessByLocation)
         {
-            _clientDataByLocation[pair.Key] = new ClientData(pair.Value);
+            _clientDataByLocation[pair.Key] = new ClientData(pair.Value, _markdownToHtml);
         }
 
         _clientData = _clientDataByLocation[DataLocation];
