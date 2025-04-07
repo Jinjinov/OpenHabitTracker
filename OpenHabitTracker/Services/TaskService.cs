@@ -72,7 +72,9 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
         }
 
         if (settings.HideCompletedTasks)
+        {
             tasks = tasks.Where(x => x.CompletedAt is null);
+        }
 
         return settings.SortBy[ContentType.Task] switch
         {

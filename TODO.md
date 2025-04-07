@@ -56,24 +56,15 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-0.
-private `DataAccess` in `ClientData`
-
 1.
 Model DataExtensions Entity.ToModel()
 Model DataExtensions Entity.ToModel(DataAccess, ClientData)
 
 2.
-IReadOnlyCollection<Model> ClientData.GetModels(QueryParameters, DataAccess)
-
-class QueryParameters = ContentType + Settings + SearchFilterService
-
 ClientState
     IReadOnlyCollection<Model> GetNotes(QueryParameters queryParameters)
     IReadOnlyCollection<Model> GetTasks(QueryParameters queryParameters)
     IReadOnlyCollection<Model> GetHabits(QueryParameters queryParameters)
-
-IDataAccess -> Entity -> Model -> ClientData -> IReadOnlyCollection<Model>
 
 search/filter/sort query parameters in the URL - Blazor -> IReadOnlyCollection<Model> - used with existing ClientState.ClientData
 

@@ -60,7 +60,9 @@ public class HabitService(ClientState appData, SearchFilterService searchFilterS
         }
 
         if (settings.ShowOnlyOverSelectedRatioMin)
+        {
             habits = habits.Where(x => x.GetRatio(settings.SelectedRatio) > settings.SelectedRatioMin);
+        }
 
         return settings.SortBy[ContentType.Habit] switch
         {
