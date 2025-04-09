@@ -21,6 +21,7 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
 
     public async Task<IEnumerable<NoteModel>> GetNotes(QueryParameters queryParameters)
     {
+        // TODO:: first filter with queryParameters, then use _dataAccess
         if (Notes is null)
         {
             Notes = (await _dataAccess.GetNotes()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
@@ -69,6 +70,7 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
 
     public async Task<IEnumerable<TaskModel>> GetTasks(QueryParameters queryParameters)
     {
+        // TODO:: first filter with queryParameters, then use _dataAccess
         if (Tasks is null)
         {
             Tasks = (await _dataAccess.GetTasks()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
@@ -155,6 +157,7 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
 
     public async Task<IEnumerable<HabitModel>> GetHabits(QueryParameters queryParameters)
     {
+        // TODO:: first filter with queryParameters, then use _dataAccess
         if (Habits is null)
         {
             Habits = (await _dataAccess.GetHabits()).Select(x => x.ToModel()).ToDictionary(x => x.Id);

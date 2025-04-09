@@ -57,14 +57,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 ---------------------------------------------------------------------------------------------------
 
 1.
-
-Model DataExtensions Entity.ToModel(ClientData)
+search/filter/sort query parameters in the URL - Web API -> IReadOnlyCollection<Model> - using full ClientState.ClientData doesn't make sense for a short lived endpoint query - `_dataAccess` + `ToModel` is required for this
 
 2.
-
-search/filter/sort query parameters in the URL - Blazor -> IReadOnlyCollection<Model> - used with existing ClientState.ClientData
-
-search/filter/sort query parameters in the URL - Web API -> IReadOnlyCollection<Model> - using full ClientState.ClientData doesn't make sense for a short lived endpoint query - `_dataAccess` + `ToModel` is required for this
+search/filter/sort query parameters in the URL - Blazor
 
 ---------------------------------------------------------------------------------------------------
 
