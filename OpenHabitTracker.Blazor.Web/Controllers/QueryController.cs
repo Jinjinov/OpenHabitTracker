@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Dto;
 
 namespace OpenHabitTracker.Blazor.Web.Controllers;
 

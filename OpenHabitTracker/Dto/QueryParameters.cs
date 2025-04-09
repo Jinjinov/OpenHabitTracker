@@ -1,6 +1,6 @@
 using OpenHabitTracker.Data;
 
-namespace OpenHabitTracker.App;
+namespace OpenHabitTracker.Dto;
 
 public class QueryParameters
 {

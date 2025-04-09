@@ -1,5 +1,6 @@
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Dto;
 
 namespace OpenHabitTracker.App;
 
