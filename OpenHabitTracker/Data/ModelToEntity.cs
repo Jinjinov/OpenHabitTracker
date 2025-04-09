@@ -28,6 +28,7 @@ public static class ModelToEntity
 
     public static void CopyToEntity(this HabitModel model, HabitEntity entity)
     {
+        entity.Id = model.Id;
         entity.CategoryId = model.CategoryId;
         entity.Priority = model.Priority;
         entity.IsDeleted = model.IsDeleted;
@@ -67,6 +68,7 @@ public static class ModelToEntity
 
     public static void CopyToEntity(this NoteModel model, NoteEntity entity)
     {
+        entity.Id = model.Id;
         entity.CategoryId = model.CategoryId;
         entity.Priority = model.Priority;
         entity.IsDeleted = model.IsDeleted;
@@ -161,6 +163,7 @@ public static class ModelToEntity
 
     public static void CopyToEntity(this TaskModel model, TaskEntity entity)
     {
+        entity.Id = model.Id;
         entity.CategoryId = model.CategoryId;
         entity.Priority = model.Priority;
         entity.IsDeleted = model.IsDeleted;
