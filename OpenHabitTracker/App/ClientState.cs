@@ -472,8 +472,8 @@ public class ClientState
     {
         if (Times is null)
         {
-            IReadOnlyList<TimeEntity> categories = await DataAccess.GetTimes();
-            Times = categories.Select(c => new TimeModel
+            IReadOnlyList<TimeEntity> times = await DataAccess.GetTimes();
+            Times = times.Select(c => new TimeModel
             {
                 Id = c.Id,
                 HabitId = c.HabitId,
@@ -487,8 +487,8 @@ public class ClientState
     {
         if (Items is null)
         {
-            IReadOnlyList<ItemEntity> categories = await DataAccess.GetItems();
-            Items = categories.Select(c => new ItemModel
+            IReadOnlyList<ItemEntity> items = await DataAccess.GetItems();
+            Items = items.Select(c => new ItemModel
             {
                 Id = c.Id,
                 ParentId = c.ParentId,

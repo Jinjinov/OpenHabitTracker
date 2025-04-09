@@ -23,9 +23,12 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
     {
         if (Notes is null)
         {
-            // ContentMarkdown = _markdownToHtml.GetMarkdown(x.Content)
-
             Notes = (await _dataAccess.GetNotes()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
+
+            foreach (NoteModel note in Notes.Values)
+            {
+                note.ContentMarkdown = _markdownToHtml.GetMarkdown(note.Content);
+            }
         }
 
         IEnumerable<NoteModel> notes = Notes.Values.Where(x => !x.IsDeleted);
@@ -68,9 +71,17 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
     {
         if (Tasks is null)
         {
-            // DataAccess.GetItems();
-
             Tasks = (await _dataAccess.GetTasks()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
+
+            if (Items is null)
+            {
+                Items = (await _dataAccess.GetItems()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
+            }
+
+            foreach (TaskModel task in Tasks.Values)
+            {
+                task.Items = Items.Values.Where(x => x.ParentId == task.Id).ToList();
+            }
         }
 
         IEnumerable<TaskModel> tasks = Tasks.Values.Where(x => !x.IsDeleted);
@@ -146,11 +157,29 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
     {
         if (Habits is null)
         {
-            // DataAccess.GetItems();
-
-            // DataAccess.GetTimes();
-
             Habits = (await _dataAccess.GetHabits()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
+
+            if (Items is null)
+            {
+                Items = (await _dataAccess.GetItems()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
+            }
+
+            if (Times is null)
+            {
+                Times = (await _dataAccess.GetTimes()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
+            }
+
+            foreach (HabitModel habit in Habits.Values)
+            {
+                habit.Items = Items.Values.Where(x => x.ParentId == habit.Id).ToList();
+
+                habit.TimesDone = Times.Values.Where(x => x.HabitId == habit.Id).ToList();
+            }
+
+            foreach (HabitModel habit in Habits.Values)
+            {
+                habit.RefreshTimesDoneByDay();
+            }
         }
 
         IEnumerable<HabitModel> habits = Habits.Values.Where(x => !x.IsDeleted);
