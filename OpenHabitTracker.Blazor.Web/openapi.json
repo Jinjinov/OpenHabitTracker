@@ -2563,6 +2563,183 @@
           }
         }
       }
+    },
+    "/api/Query/habits": {
+      "post": {
+        "tags": [
+          "Query"
+        ],
+        "operationId": "Habits",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HabitModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HabitModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HabitModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Query/notes": {
+      "post": {
+        "tags": [
+          "Query"
+        ],
+        "operationId": "Notes",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NoteModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NoteModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NoteModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Query/tasks": {
+      "post": {
+        "tags": [
+          "Query"
+        ],
+        "operationId": "Tasks",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2582,6 +2759,14 @@
             "type": "string"
           }
         }
+      },
+      "DateCompare": {
+        "enum": [
+          "Before",
+          "On",
+          "After",
+          "NotOn"
+        ]
       },
       "DayOfWeek": {
         "enum": [
@@ -2655,6 +2840,66 @@
           }
         }
       },
+      "HabitModel": {
+        "type": "object",
+        "properties": {
+          "repeatCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repeatInterval": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repeatPeriod": {
+            "$ref": "#/components/schemas/Period"
+          },
+          "duration": {
+            "type": "string",
+            "format": "time",
+            "nullable": true
+          },
+          "lastTimeDoneAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "timesDone": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeModel"
+            },
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemModel"
+            },
+            "nullable": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/Priority"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "ItemEntity": {
         "type": "object",
         "properties": {
@@ -2666,6 +2911,19 @@
             "type": "integer",
             "format": "int64"
           },
+          "title": {
+            "type": "string"
+          },
+          "doneAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "ItemModel": {
+        "type": "object",
+        "properties": {
           "title": {
             "type": "string"
           },
@@ -2704,6 +2962,34 @@
           "categoryId": {
             "type": "integer",
             "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/Priority"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "NoteModel": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
           },
           "title": {
             "type": "string"
@@ -2766,6 +3052,80 @@
           },
           "title": {
             "type": "string"
+          }
+        }
+      },
+      "QueryParameters": {
+        "type": "object",
+        "properties": {
+          "searchTerm": {
+            "type": "string",
+            "nullable": true
+          },
+          "matchCase": {
+            "type": "boolean"
+          },
+          "doneAtFilter": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "doneAtCompare": {
+            "$ref": "#/components/schemas/DateCompare"
+          },
+          "plannedAtFilter": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "plannedAtCompare": {
+            "$ref": "#/components/schemas/DateCompare"
+          },
+          "hideCompletedTasks": {
+            "type": "boolean"
+          },
+          "showOnlyOverSelectedRatioMin": {
+            "type": "boolean"
+          },
+          "selectedRatioMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "selectedRatio": {
+            "$ref": "#/components/schemas/Ratio"
+          },
+          "categoryFilterDisplay": {
+            "$ref": "#/components/schemas/FilterDisplay"
+          },
+          "priorityFilterDisplay": {
+            "$ref": "#/components/schemas/FilterDisplay"
+          },
+          "selectedCategoryId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "selectedPriority": {
+            "$ref": "#/components/schemas/NullableOfPriority"
+          },
+          "hiddenCategoryIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "showPriority": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean"
+            }
+          },
+          "sortBy": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Sort"
+            }
           }
         }
       },
@@ -2982,6 +3342,58 @@
           }
         }
       },
+      "TaskModel": {
+        "type": "object",
+        "properties": {
+          "plannedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "duration": {
+            "type": "string",
+            "format": "time",
+            "nullable": true
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemModel"
+            },
+            "nullable": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/Priority"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "TimeEntity": {
         "type": "object",
         "properties": {
@@ -2993,6 +3405,20 @@
             "type": "integer",
             "format": "int64"
           },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "TimeModel": {
+        "type": "object",
+        "properties": {
           "startedAt": {
             "type": "string",
             "format": "date-time"
@@ -3049,6 +3475,9 @@
     },
     {
       "name": "DataAccess"
+    },
+    {
+      "name": "Query"
     }
   ]
 }

@@ -15,6 +15,7 @@
       "generateDtoTypes": false,
       "additionalNamespaceUsages": [
         "OpenHabitTracker.Data.Entities",
+        "OpenHabitTracker.Data.Models",
         "OpenHabitTracker.Dto"
       ],
       "responseArrayType": "System.Collections.Generic.IReadOnlyList",
