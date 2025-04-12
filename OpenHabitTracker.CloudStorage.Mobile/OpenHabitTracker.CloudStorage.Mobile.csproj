@@ -14,4 +14,8 @@
     <PackageReference Include="NextcloudApi" Version="1.0.18" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OpenHabitTracker.CloudStorage\OpenHabitTracker.CloudStorage.csproj" />
+  </ItemGroup>
+
 </Project>
