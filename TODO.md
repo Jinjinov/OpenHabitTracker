@@ -128,10 +128,13 @@ later:
 - NuGet packages: google drive api, ... (windows, macos, linux)
 - MAUI WebAuthenticator + server backend https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/communication/authentication
 
-OpenHabitTracker.CloudStorage - interface
-OpenHabitTracker.CloudStorage.Web
-OpenHabitTracker.CloudStorage.Desktop
-OpenHabitTracker.CloudStorage.Mobile
+https://learn.microsoft.com/en-us/aspnet/core/security/authentication/?view=aspnetcore-9.0
+
+https://learn.microsoft.com/en-us/aspnet/core/security/authentication/social/?view=aspnetcore-9.0
+
+https://github.com/dotnet/maui-samples/tree/main/9.0/PlatformIntegration/PlatformIntegrationDemos
+
+https://github.com/dotnet/maui/blob/main/src/Essentials/samples/Sample.Server.WebAuthenticator/Controllers/MobileAuthController.cs
 
 7.
 add OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
