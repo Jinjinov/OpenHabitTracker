@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Box.Sdk.Gen" Version="1.9.0" />
-    <PackageReference Include="Dropbox.Api" Version="7.0.0" />
-    <PackageReference Include="Google.Apis.Drive.v3" Version="1.69.0.3703" />
-    <PackageReference Include="Microsoft.Graph" Version="5.75.0" />
-    <PackageReference Include="NextcloudApi" Version="1.0.18" />
+    <PackageReference Include="Microsoft.Maui.Essentials" Version="9.0.60" />
   </ItemGroup>
 
   <ItemGroup>
