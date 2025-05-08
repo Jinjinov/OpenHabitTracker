@@ -34,7 +34,7 @@ public class Program
 
         });
 
-        string databaseDirectory = Environment.GetEnvironmentVariable("SNAP_USER_COMMON") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".OpenHabitTracker");
+        string databaseDirectory = Environment.GetEnvironmentVariable("SNAP_USER_COMMON") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ".OpenHabitTracker");
         Directory.CreateDirectory(databaseDirectory);
         string databasePath = Path.Combine(databaseDirectory, "OpenHT.db");
 
