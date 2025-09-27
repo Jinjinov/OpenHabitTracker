@@ -73,11 +73,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommunityToolkit.Maui.Core" Version="11.2.0" />
+        <PackageReference Include="CommunityToolkit.Maui.Core" Version="12.2.0" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
     </ItemGroup>
 
     <ItemGroup>

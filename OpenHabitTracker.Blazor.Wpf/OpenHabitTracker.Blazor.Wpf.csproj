@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="9.0.50" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="9.0.110" />
   </ItemGroup>
 
   <ItemGroup>

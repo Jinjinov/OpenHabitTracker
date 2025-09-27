@@ -13,10 +13,10 @@
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.12.3" />
     <PackageReference Include="Markdig" Version="0.42.0" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.3" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="9.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>
