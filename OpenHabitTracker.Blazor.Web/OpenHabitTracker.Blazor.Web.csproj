@@ -26,7 +26,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Scalar.AspNetCore" Version="2.1.6" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.8.7" />
     <PackageReference Include="WatchDog.NET" Version="1.4.12" />
   </ItemGroup>
 
