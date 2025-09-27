@@ -237,9 +237,9 @@ else
 
     async Task UpdateStartedAt(TimeModel time, DateTime startedAt)
     {
-        if (startedAt <= time.CompletedAt)
+        if (startedAt.TimeOfDay <= time.CompletedAt?.TimeOfDay)
         {
-            time.StartedAt = startedAt;
+            time.StartedAt = time.StartedAt.Date + startedAt.TimeOfDay;
 
             await HabitService.UpdateTimeDone(Habit!, time);
 
@@ -249,9 +249,9 @@ else
 
     async Task UpdateCompletedAt(TimeModel time, DateTime? completedAt)
     {
-        if (completedAt >= time.StartedAt)
+        if (completedAt?.TimeOfDay >= time.StartedAt.TimeOfDay)
         {
-            time.CompletedAt = completedAt;
+            time.CompletedAt = time.CompletedAt?.Date + completedAt?.TimeOfDay;
 
             await HabitService.UpdateTimeDone(Habit!, time);
 
