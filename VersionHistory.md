@@ -1,3 +1,8 @@
+# 1.1.4 - Oct 27, 2025
+
+- fixed Flatpak and Snapcraft folder permissions
+- fixed updating From and To time in Habit
+
 # 1.1.3 - Apr 4, 2025
 
 - setting to hide completed tasks
