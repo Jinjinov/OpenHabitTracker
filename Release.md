@@ -1,11 +1,11 @@
 OpenHabitTracker.Blazor.Maui
-- Windows Store
-- Google Play Store + apk download
-- Apple App Store
-- Apple Mac App Store + pkg download
+- publish and upload to Windows Store
+- publish and upload to Google Play Store + apk FTP upload to server
+- publish and upload to Apple App Store
+- publish and upload to Apple Mac App Store + pkg FTP upload to server
 
 OpenHabitTracker.Blazor.Photino
-- Publish to Folder -> zip download
+- Publish to Folder -> zip FTP upload to server
 - Flatpak
     - flatpak-builder --download-only
     - python3 flatpak-dotnet-generator.py `nuget-sources.json`
@@ -19,14 +19,14 @@ OpenHabitTracker.Blazor.Photino
     - upload
 
 OpenHabitTracker.Blazor.Wasm
-- Publish to Folder -> FTP copy to server
+- Publish to Folder -> FTP upload to server
 
 OpenHabitTracker.Blazor.Web
-- Publish to Folder -> FTP copy to server
+- Publish to Folder -> FTP upload to server
 - Docker
     - docker compose build
     - push to Docker Hub
     - push to GitHub Container Registry
 
 OpenHabitTracker.Blazor.Wpf
-- Publich ClickOnce -> zip download
+- Publich ClickOnce -> zip FTP upload to server
