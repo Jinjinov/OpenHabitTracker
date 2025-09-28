@@ -7,7 +7,12 @@ OpenHabitTracker.Blazor.Maui
 OpenHabitTracker.Blazor.Photino
 - Publish to Folder -> zip download
 - Flatpak
-    - update repo
+    - flatpak-builder --download-only
+    - python3 flatpak-dotnet-generator.py `nuget-sources.json`
+    - flatpak-builder
+    - update https://github.com/Jinjinov/net.openhabittracker.OpenHabitTracker : net.openhabittracker.OpenHabitTracker.yaml
+    - update https://github.com/Jinjinov/net.openhabittracker.OpenHabitTracker : `nuget-sources.json`
+    - pull request: https://github.com/flathub/net.openhabittracker.OpenHabitTracker
     - trigger bot build
 - Snapcraft
     - build

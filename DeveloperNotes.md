@@ -604,6 +604,7 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
     lxd init --auto
 
+    To build snapcraft.yaml run:
     snapcraft --debug
 
     sudo snap install openhabittracker_1.0.0_amd64.snap --dangerous --devmode
