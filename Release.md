@@ -22,8 +22,10 @@ OpenHabitTracker.Blazor.Wasm
 - Publish to Folder -> FTP upload to server
 
 OpenHabitTracker.Blazor.Web
+- set username, password, JWT in `appsettings.json`
 - Publish to Folder -> FTP upload to server
 - Docker
+    - set username, password, JWT in `.env`
     - docker compose build
     - push to Docker Hub
     - push to GitHub Container Registry
