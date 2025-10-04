@@ -710,8 +710,22 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
         https://docs.flathub.org/docs/for-app-authors/submission/#submission-pr
 
-        Comment in the GitHub pull request:
+        update: https://github.com/Jinjinov/net.openhabittracker.OpenHabitTracker
+            net.openhabittracker.OpenHabitTracker.yaml
+            nuget-sources.json
+
+        pull request: https://github.com/flathub/net.openhabittracker.OpenHabitTracker
+
+        🚧 Test build enqueued.
+        🚧 Started test build.
+        ✅ Test build succeeded.
+
+        if the test fails, push a fix and comment in the GitHub pull request:
             bot, build net.openhabittracker.OpenHabitTracker
+
+        Merge pull request
+
+        update https://github.com/Jinjinov/net.openhabittracker.OpenHabitTracker from https://github.com/flathub/net.openhabittracker.OpenHabitTracker
 
     https://flathub.org/
     https://github.com/flathub/flathub
