@@ -604,6 +604,10 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
     sudo lxd init --auto
 
+    sudo usermod -aG lxd $USER
+
+    newgrp lxd
+
     To build snapcraft.yaml run:
     snapcraft pack --debug
 
