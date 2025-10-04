@@ -30,15 +30,20 @@ confinement: strict #devmode
 
 parts:
   openhabittracker:
+    source: .
     plugin: dotnet
     # dotnet-build-configuration: Release
     # dotnet-self-contained-runtime-identifier: linux-x64
-    source: .
+    dotnet-version: "9.0"
+    dotnet-configuration: "Release"
+    dotnet-self-contained: true
+    dotnet-build-framework: "net9.0"
+    dotnet-verbosity: "normal"
     override-build: |
      dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net9.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true -o $SNAPCRAFT_PART_INSTALL
      chmod 0755 $SNAPCRAFT_PART_INSTALL/OpenHT
-    build-packages:
-      - dotnet-sdk-9.0
+    # build-packages:
+    #   - dotnet-sdk-9.0
 
 apps:
   openhabittracker:
