@@ -31,8 +31,8 @@ confinement: strict #devmode
 parts:
   openhabittracker:
     plugin: dotnet
-    dotnet-build-configuration: Release
-    dotnet-self-contained-runtime-identifier: linux-x64
+    # dotnet-build-configuration: Release
+    # dotnet-self-contained-runtime-identifier: linux-x64
     source: .
     override-build: |
      dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net9.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true -o $SNAPCRAFT_PART_INSTALL
