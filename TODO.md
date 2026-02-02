@@ -56,6 +56,39 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+Make UI much more intuitive!!!
+- X is "close" and "save changes"
+- there is no "discard changes"
+- search icon should toggle, on, ALSO OFF
+- more default vertiacal space
+- background color for the whole note, task, habit
+- BUG: priority is displayed with enum instead of unicode character
+
+1.
+add group "and / or" toggle:
+- all habits/items done -> green
+- one habit/item done -> green
+
+2.
+LastDone date: for a group, for the items
+A) add date to habit item
+B) add date to category
+C) all of the above
+add settings to show, hide this extra info
+
+3.
+manual sort - 1000000 sort index
+- sort categories?
+- sort items?
+
+exact repeating reminders, like Google Keep
+
+This week (xx.xx - yy.yy) statistics 
+- x out of y habits done
+- x out of y groups are green
+
+---------------------------------------------------------------------------------------------------
+
 1.
 search/filter/sort query parameters in the URL - Web API
 
