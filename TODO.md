@@ -64,6 +64,14 @@ Make UI much more intuitive!!!
 - background color for the whole note, task, habit
 - BUG: priority is displayed with enum instead of unicode character
 
+.NET 10
+
+edit - top row: delete, save, discard
+
+settings: show habit statistics 
+
+mobile / single column: add visual divider between menu / search / settings and notes / tasks / habits - space or logo
+
 1.
 add group "and / or" toggle:
 - all habits/items done -> green
