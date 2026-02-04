@@ -56,21 +56,25 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-Make UI much more intuitive!!!
-- X is "close" and "save changes"
-- there is no "discard changes"
-- search icon should toggle, on, ALSO OFF
-- more default vertiacal space
-- background color for the whole note, task, habit
+Make UI much more intuitive:
+
+1. - X is "close" and "save changes" - there is no "discard changes" - edit - top row: delete, save, discard
+  
+0. - search icon should toggle, on, ALSO OFF
+  
+0. - more default vertiacal space
+  
+1. - background color for the whole note, task, habit
+  
 - BUG: priority is displayed with enum instead of unicode character
 
-.NET 10
+1. - upgrade to .NET 10
 
-edit - top row: delete, save, discard
+1. - add setting: [X] show habit statistics 
 
-settings: show habit statistics 
+0. - mobile / single column: add visual divider between menu / search / settings and notes / tasks / habits: huge font for notes / tasks / habits
 
-mobile / single column: add visual divider between menu / search / settings and notes / tasks / habits - space or logo
+0. - BUG: if there is not enough room for a small calendar, show a checkbox - same as if "show small calendar" is not checked
 
 1.
 add group "and / or" toggle:
