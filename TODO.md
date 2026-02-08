@@ -62,15 +62,13 @@ Make UI much more intuitive:
   
 0. - search icon should toggle, on, ALSO OFF
   
-0. - more default vertiacal space
-  
 1. - background color for the whole note, task, habit
   
 - BUG: priority is displayed with enum instead of unicode character
 
 1. - upgrade to .NET 10
 
-1. - add setting: [X] show habit statistics 
+1. - add setting: [X] show habit statistics
 
 0. - BUG: if there is not enough room for a small calendar, show a checkbox - same as if "show small calendar" is not checked
 

@@ -346,7 +346,7 @@ public class ClientState
             ShowOnlyOverSelectedRatioMin = false,
             SelectedRatioMin = 50,
             HorizontalMargin = 1,
-            VerticalMargin = 2,
+            VerticalMargin = 3,
             CategoryFilterDisplay = FilterDisplay.CheckBoxes,
             PriorityFilterDisplay = FilterDisplay.CheckBoxes,
             SelectedCategoryId = null,
