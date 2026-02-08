@@ -58,16 +58,24 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 Make UI much more intuitive:
 
-1. - add setting: [X] show habit statistics
-   - add Settings migration `OpenHabitTracker.EntityFrameworkCore.Migrations`
-   - add Settings migration `OpenHabitTracker.Blazor.Web.Migrations`
-
-2. - X is "close" and "save changes" - there is no "discard changes" - edit - top row: delete, save, discard
-
-3. - background color for the whole note, task, habit
+1. - background color for the whole note, task, habit
    - class="@($"  {note.Color}  ")"
    - class="@($"  {task.Color}  ")"
    - class="@($"  {habit.Color}  ")"
+
+2. - add setting: [X] show habit statistics
+   - add Settings migration `OpenHabitTracker.EntityFrameworkCore.Migrations`
+   - add Settings migration `OpenHabitTracker.Blazor.Web.Migrations`
+
+3. - X is "close" and "save changes" - there is no "discard changes"
+   - edit - top row: delete, save, discard
+   - there is no discard, everything is updated on "ValueChanged", which is not immediately, but after focus moves to another element
+        - Default - "onchange" (blur / Enter) @bind-Value:event="onchange"
+        - With "oninput" - every keystroke @bind-Value:event="oninput"
+   - content is not updated immediately in the main list
+        - A: update content in the main list immediately
+        - B: implement Discard and Save
+   - Google Keep has "<-", not "X", no discard, content is updated immediately, but it has version history and undo / redo
 
 4. - upgrade to .NET 10
    - upgrade NuGet versions
