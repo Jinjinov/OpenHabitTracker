@@ -1,6 +1,6 @@
 id: net.openhabittracker.OpenHabitTracker
 runtime: org.gnome.Platform
-runtime-version: '47'
+runtime-version: '49'
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.dotnet9

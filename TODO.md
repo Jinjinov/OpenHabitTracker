@@ -66,8 +66,6 @@ Make UI much more intuitive:
 
 4. - upgrade to .NET 10, upgrade NuGet versions
 
-5. - upgrade GNOME version
-
 - BUG: priority is displayed with enum instead of unicode character
 
 1.
