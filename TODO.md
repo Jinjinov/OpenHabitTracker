@@ -72,8 +72,6 @@ Make UI much more intuitive:
 
 1. - add setting: [X] show habit statistics 
 
-0. - mobile / single column: add visual divider between menu / search / settings and notes / tasks / habits: huge font for notes / tasks / habits
-
 0. - BUG: if there is not enough room for a small calendar, show a checkbox - same as if "show small calendar" is not checked
 
 1.

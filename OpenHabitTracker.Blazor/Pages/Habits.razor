@@ -100,12 +100,14 @@
     }
     else if (columnWidth != 0)
     {
-        <div class="d-flex">
-            <small class="m-1"><i class="bi bi-repeat"></i> @Loc["Habits"]</small>
+        <div class="d-grid align-items-center" style="grid-template-columns: 1fr auto 1fr;">
+            <div></div>
+
+            <div class="m-2 fs-4"><i class="bi bi-repeat"></i> @Loc["Habits"]</div>
 
             @if (ClientState.Settings.ShowHelp)
             {
-                <small class="m-1 ms-auto" @onclick="@(() => StartTour("habits"))"><i class="bi bi-question-circle"></i></small>
+                <small class="m-1 text-end" @onclick="@(() => StartTour("habits"))"><i class="bi bi-question-circle"></i></small>
             }
         </div>
 
