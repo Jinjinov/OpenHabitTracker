@@ -17,10 +17,25 @@ public class PriorityService(ClientState appData)
 
     public string GetPriorityTitle(Priority priority)
     {
+        return priority switch
+        {
+            Priority.None => "⊘",
+            Priority.VeryLow => "︾",
+            Priority.Low => "﹀",
+            Priority.Medium => "—",
+            Priority.High => "︿",
+            Priority.VeryHigh => "︽",
+            _ => throw new ArgumentOutOfRangeException(nameof(priority)),
+        };
+
+        // after we delete and re-load all data, "(long)priority" does not work anymore, because database Id are not 0,1,2,3,4,5 anymore
+
+        /*
         if (priority == Priority.None)
             return "⊘";
 
         return _appData.Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
+        */
     }
 
     public async Task Initialize()
@@ -37,7 +52,7 @@ public class PriorityService(ClientState appData)
 
         SelectedPriority = id.HasValue && _appData.Priorities.TryGetValue(id.Value, out PriorityModel? priority) ? priority : null;
     }
-
+    /*
     public async Task AddPriority()
     {
         if (_appData.Priorities is null || NewPriority is null)
@@ -53,7 +68,7 @@ public class PriorityService(ClientState appData)
 
         NewPriority = new();
     }
-
+    */
     public async Task UpdatePriority(string title)
     {
         if (Priorities is null || SelectedPriority is null)
@@ -70,7 +85,7 @@ public class PriorityService(ClientState appData)
 
         SelectedPriority = null;
     }
-
+    /*
     public async Task DeletePriority(PriorityModel priority)
     {
         if (_appData.Priorities is null)
@@ -80,4 +95,5 @@ public class PriorityService(ClientState appData)
 
         await _appData.DataAccess.RemovePriority(priority.Id);
     }
+    */
 }
