@@ -80,6 +80,8 @@ Make UI much more intuitive:
 4. - upgrade to .NET 10
    - upgrade NuGet versions
 
+---------------------------------------------------------------------------------------------------
+
 1.
 add group "and / or" toggle:
 - all habits/items done -> green
