@@ -156,7 +156,7 @@
                             </div>
                         }
 
-                        @if (IsEmbedded && ClientState.Settings.ShowSmallCalendar)
+                        @if (!_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar)
                         {
                             <div class="input-group-text p-0 border-0 rounded-0" data-habits-step-6>
                                 <div class="mx-auto">
@@ -166,7 +166,7 @@
                         }
 
                     </div>
-                    if (!IsEmbedded && ClientState.Settings.ShowSmallCalendar)
+                    if (_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar)
                     {
                         <div class="d-flex" data-habits-step-6>
                             <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" DisplayBasedOnWidth />
@@ -261,6 +261,8 @@
     string? _dynamicComponentTypeName;
 
     bool _showSecondColumn => !IsEmbedded && WindowDimensions?.Width >= 1280;
+
+    bool _displayBasedOnWidth => !IsEmbedded && columnWidth >= 400;
 
     bool _showHabitComponent => Id is not null && HabitService.SelectedHabit is not null && HabitService.NewHabit is null;
 
