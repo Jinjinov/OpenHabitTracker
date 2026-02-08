@@ -48,7 +48,7 @@
             <NavLink class="nav-link px-2 py-1 ms-3" href="habits" data-main-step-5><i class="bi bi-repeat"></i></NavLink>
             @* <NavLink class="nav-link px-2 py-1 ms-3" href="help"><i class="bi bi-question-circle"></i></NavLink> *@
 
-            <button class="nav-link px-2 py-1 ms-3" @onclick="@(() => _dynamicComponentType = typeof(Search))" data-main-step-6><i class="bi bi-search"></i></button>
+            <button class="nav-link px-2 py-1 ms-3 @(_dynamicComponentType == typeof(Search) ? "active" : "")" @onclick="ToggleSearch" data-main-step-6><i class="bi bi-search"></i></button>
 
             @if (ClientState.Settings.ShowHelp)
             {
@@ -300,6 +300,18 @@
         else
         {
             _dynamicComponentType = _previousDynamicComponentType;
+        }
+    }
+
+    private void ToggleSearch()
+    {
+        if (_dynamicComponentType != typeof(Search))
+        {
+            SelectComponent<Search>();
+        }
+        else
+        {
+            _dynamicComponentType = null;
         }
     }
 
