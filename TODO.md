@@ -58,13 +58,13 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 Make UI much more intuitive:
 
+1. - add setting: [X] show habit statistics, add Settings migration
+
 2. - X is "close" and "save changes" - there is no "discard changes" - edit - top row: delete, save, discard
   
 2. - background color for the whole note, task, habit
 
-1. - upgrade to .NET 10
-
-1. - add setting: [X] show habit statistics
+3. - upgrade to .NET 10, upgrade NuGet versions
 
 - BUG: priority is displayed with enum instead of unicode character
 
