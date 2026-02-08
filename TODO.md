@@ -58,13 +58,19 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 Make UI much more intuitive:
 
-1. - add setting: [X] show habit statistics, add Settings migration
+1. - add setting: [X] show habit statistics
+   - add Settings migration `OpenHabitTracker.EntityFrameworkCore.Migrations`
+   - add Settings migration `OpenHabitTracker.Blazor.Web.Migrations`
 
 2. - X is "close" and "save changes" - there is no "discard changes" - edit - top row: delete, save, discard
 
 3. - background color for the whole note, task, habit
+   - class="@($"  {note.Color}  ")"
+   - class="@($"  {task.Color}  ")"
+   - class="@($"  {habit.Color}  ")"
 
-4. - upgrade to .NET 10, upgrade NuGet versions
+4. - upgrade to .NET 10
+   - upgrade NuGet versions
 
 1.
 add group "and / or" toggle:
