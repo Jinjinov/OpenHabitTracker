@@ -1,56 +1,58 @@
-﻿@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
 @inject ItemService ItemService
 @inject SearchFilterService SearchFilterService
 @inject IStringLocalizer Loc
 
-@if (Items?.Items is not null)
-{
-    foreach (ItemModel item in Items.Items)
+<div class="@Items.Color">
+    @if (Items?.Items is not null)
     {
-        <div class="input-group flex-nowrap">
-            @if (IsReadOnly)
-            {
-                <div class="input-group-text">
-                    <InputCheckbox id="@($"item-{item.Id}")" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
-                </div>
-                <label for="@($"item-{item.Id}")" class="input-group-text flex-grow-1 text-wrap highlightable">@((MarkupString)SearchFilterService.MarkSearchResults(item.Title))</label>
-            }
-            else
-            {
-                <div class="input-group-text">
-                    <InputCheckbox class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
-                </div>
-                if (item == ItemService.SelectedItem)
+        foreach (ItemModel item in Items.Items)
+        {
+            <div class="input-group flex-nowrap">
+                @if (IsReadOnly)
                 {
-                    <InputText class="form-control" @ref="inputElement" Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="ItemService.UpdateItem" @onfocusout="(args) => ItemService.SelectedItem = null" />
+                    <div class="input-group-text bg-transparent">
+                        <InputCheckbox id="@($"item-{item.Id}")" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
+                    </div>
+                    <label for="@($"item-{item.Id}")" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable">@((MarkupString)SearchFilterService.MarkSearchResults(item.Title))</label>
                 }
                 else
                 {
-                    <button class="input-group-text flex-grow-1 text-wrap highlightable" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@((MarkupString)SearchFilterService.MarkSearchResults(item.Title))</button>
+                    <div class="input-group-text bg-transparent">
+                        <InputCheckbox class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
+                    </div>
+                    if (item == ItemService.SelectedItem)
+                    {
+                        <InputText class="form-control bg-transparent" @ref="inputElement" Value="@item.Title" ValueExpression="() => item.Title" ValueChanged="ItemService.UpdateItem" @onfocusout="(args) => ItemService.SelectedItem = null" />
+                    }
+                    else
+                    {
+                        <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@((MarkupString)SearchFilterService.MarkSearchResults(item.Title))</button>
+                    }
+                    <button class="btn btn-outline-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
                 }
-                <button class="btn btn-outline-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
-            }
-        </div>
+            </div>
+        }
     }
-}
 
-@if (!IsReadOnly && ItemService.NewItem is not null)
-{
-    <form @onsubmit=AddNewItem>
-        <div class="input-group">
-            <InputTextImmediate class="form-control" @bind-Value="ItemService.NewItem.Title" placeholder="@Loc["Add new item"]" />
+    @if (!IsReadOnly && ItemService.NewItem is not null)
+    {
+        <form @onsubmit=AddNewItem>
+            <div class="input-group">
+                <InputTextImmediate class="form-control bg-transparent" @bind-Value="ItemService.NewItem.Title" placeholder="@Loc["Add new item"]" />
 
-            <button class="btn btn-outline-primary" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
-        </div>
-    </form>
-}
+                <button class="btn btn-outline-primary" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
+            </div>
+        </form>
+    }
+</div>
 
 @code {
     [EditorRequired]
     [Parameter]
-    public ItemsModel? Items { get; set; }
+    public ItemsModel Items { get; set; }
 
     [Parameter]
     public bool IsReadOnly { get; set; }

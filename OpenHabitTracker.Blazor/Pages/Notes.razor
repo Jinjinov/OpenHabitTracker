@@ -33,7 +33,7 @@
     }
     @if (NoteService.NewNote is not null)
     {
-        <div class="my-1">
+        <div class="@($"my-1 {NoteService.NewNote.Color}")">
             <div class="input-group">
                 <PriorityComponent Model="NoteService.NewNote" />
 
@@ -46,14 +46,14 @@
             <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.NewNote.Content" placeholder="@Loc["Add note text"]" />
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">@Loc["Category"]</span>
+                <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
                 <CategoryComponent Model="NoteService.NewNote" />
             </div>
 
             @if (ClientState.Settings.ShowColor)
             {
                 <div class="input-group flex-nowrap">
-                    <span class="input-group-text col-4">@Loc["Color"]</span>
+                    <span class="input-group-text bg-transparent col-4">@Loc["Color"]</span>
                     <ColorComponent Model="NoteService.NewNote" />
                 </div>
             }
@@ -79,7 +79,7 @@
 
         foreach (NoteModel note in NoteService.GetNotes())
         {
-            <div class="@($"my-{ClientState.Settings.VerticalMargin}")">
+            <div class="@($"my-{ClientState.Settings.VerticalMargin} {note.Color}")">
                 @if (!_showSecondColumn && note.Id == Id && NoteService.NewNote is null)
                 {
                     <NoteComponent Note="note" CloseSelected="CloseSelected" />
@@ -87,17 +87,17 @@
                 else
                 {
                     <div class="input-group flex-nowrap">
-                        <span class="input-group-text" data-notes-step-1>@PriorityService.GetPriorityTitle(note.Priority)</span>
-                        <button class="@($"input-group-text flex-grow-1 text-wrap {note.Color} highlightable")" @onclick="() => OpenSelected(note.Id)" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
+                        <span class="input-group-text bg-transparent" data-notes-step-1>@PriorityService.GetPriorityTitle(note.Priority)</span>
+                        <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(note.Id)" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
                     </div>
 
                     if (ClientState.Settings.DisplayNoteContentAsMarkdown)
                     {
-                        <div class="form-control markdown-block-margin" style="min-height: 38px;" data-notes-step-3>@((MarkupString)SearchFilterService.MarkSearchResultsInHtml(note.ContentMarkdown))</div>
+                        <div class="form-control bg-transparent markdown-block-margin" style="min-height: 38px;" data-notes-step-3>@((MarkupString)SearchFilterService.MarkSearchResultsInHtml(note.ContentMarkdown))</div>
                     }
                     else
                     {
-                        <div class="form-control" style="white-space: pre-wrap; min-height: 38px;" data-notes-step-3>@((MarkupString)SearchFilterService.MarkSearchResults(note.Content))</div>
+                        <div class="form-control bg-transparent" style="white-space: pre-wrap; min-height: 38px;" data-notes-step-3>@((MarkupString)SearchFilterService.MarkSearchResults(note.Content))</div>
                     }
                 }
             </div>

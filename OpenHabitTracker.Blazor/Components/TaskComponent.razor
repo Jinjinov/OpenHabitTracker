@@ -10,110 +10,112 @@
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
 
-<div class="input-group flex-nowrap" data-tasks-step-7>
-    <div data-tasks-step-6>
-        <PriorityComponent Model="Task" />
+<div class="@Task.Color">
+    <div class="input-group flex-nowrap" data-tasks-step-7>
+        <div data-tasks-step-6>
+            <PriorityComponent Model="Task" />
+        </div>
+        <InputText class="form-control bg-transparent" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
+        <button class="@($"btn {(Task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(Task)" data-tasks-step-8><i class="bi bi-check-square"></i></button>
+        <button class="btn btn-outline-primary" @onclick="async () => { await TaskService.DeleteTask(Task); await CloseSelected.InvokeAsync(); await ContentDeleted.InvokeAsync(); }" data-tasks-step-9><i class="bi bi-trash"></i></button>
+        <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()"><i class="bi bi-x-square" data-tasks-step-10></i></button>
     </div>
-    <InputText class="form-control" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
-    <button class="@($"btn {(Task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(Task)" data-tasks-step-8><i class="bi bi-check-square"></i></button>
-    <button class="btn btn-outline-primary" @onclick="async () => { await TaskService.DeleteTask(Task); await CloseSelected.InvokeAsync(); await ContentDeleted.InvokeAsync(); }" data-tasks-step-9><i class="bi bi-trash"></i></button>
-    <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()"><i class="bi bi-x-square" data-tasks-step-10></i></button>
-</div>
 
-<div data-tasks-step-11>
-    <ItemsComponent Items=Task />
-</div>
+    <div data-tasks-step-11>
+        <ItemsComponent Items=Task />
+    </div>
 
-<div class="input-group" data-tasks-step-12>
-    <span class="input-group-text col-4">@Loc["Planned at"]</span>
-    <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.PlannedAt" ValueExpression="() => Task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(Task, plannedAt)" />
-</div>
+    <div class="input-group" data-tasks-step-12>
+        <span class="input-group-text bg-transparent col-4">@Loc["Planned at"]</span>
+        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.PlannedAt" ValueExpression="() => Task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(Task, plannedAt)" />
+    </div>
 
-<div class="input-group" data-tasks-step-13>
-    <span class="input-group-text">@Loc["Duration"]</span>
+    <div class="input-group" data-tasks-step-13>
+        <span class="input-group-text bg-transparent">@Loc["Duration"]</span>
 
-    <InputSelect class="form-select" Value="Task.DurationHour" ValueExpression="() => Task.DurationHour" TValue="int" ValueChanged="(int hour) => SaveDuration(Task, hour, Task.DurationMinute)">
-        @for (int i = 0; i <= 23; i++)
-        {
-            <option value="@i">@i</option>
-        }
-    </InputSelect>
-    <span class="input-group-text">h</span>
+        <InputSelect class="form-select" Value="Task.DurationHour" ValueExpression="() => Task.DurationHour" TValue="int" ValueChanged="(int hour) => SaveDuration(Task, hour, Task.DurationMinute)">
+            @for (int i = 0; i <= 23; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </InputSelect>
+        <span class="input-group-text bg-transparent">h</span>
 
-    <InputSelect class="form-select" Value="Task.DurationMinute" ValueExpression="() => Task.DurationMinute" TValue="int" ValueChanged="(int minute) => SaveDuration(Task, Task.DurationHour, minute)">
-        @for (int i = 0; i <= 59; i++)
-        {
-            <option value="@i">@i</option>
-        }
-    </InputSelect>
-    <span class="input-group-text">min</span>
-</div>
+        <InputSelect class="form-select" Value="Task.DurationMinute" ValueExpression="() => Task.DurationMinute" TValue="int" ValueChanged="(int minute) => SaveDuration(Task, Task.DurationHour, minute)">
+            @for (int i = 0; i <= 59; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </InputSelect>
+        <span class="input-group-text bg-transparent">min</span>
+    </div>
 
-@if (Task.CompletedAt is null)
-{
-<div class="input-group flex-nowrap" data-tasks-step-14>
-    @if (_timer is null)
+    @if (Task.CompletedAt is null)
     {
-        <span class="input-group-text flex-grow-1">@Loc["Start timer"]</span>
-        <button class="btn btn-outline-primary" @onclick="StartTimer"><i class="bi bi-play"></i></button>
-    }
-    else
-    {
-        <span class="input-group-text flex-grow-1">@_elapsedTime.ToString(@"hh\:mm\:ss")</span>
-        <button class="btn btn-outline-primary" @onclick="ResetTimer"><i class="bi bi-arrow-counterclockwise"></i></button>
-        if (_isPaused)
-        {
-            <button class="btn btn-outline-primary" @onclick="ResumeTimer"><i class="bi bi-play"></i></button>
-        }
-        else
-        {
-            <button class="btn btn-outline-primary" @onclick="PauseTimer"><i class="bi bi-pause"></i></button>
-        }
-        <button class="btn btn-outline-primary" @onclick="StopTimer"><i class="bi bi-stop"></i></button>
-    }
-</div>
-}
-
-@if (_timer is null && Task.StartedAt is not null && Task.CompletedAt is not null)
-{
-    @if (Task.StartedAt != Task.CompletedAt && Task.TimeSpent is TimeSpan timeSpent)
-    {
-        <div class="p-1 border rounded-0" data-tasks-step-15>
-            <div>@Loc["Time spent"]: @(timeSpent.Days > 0 ? $"{timeSpent.Days}.{timeSpent:hh\\:mm\\:ss}" : timeSpent.ToString(@"hh\:mm\:ss"))</div>
+        <div class="input-group flex-nowrap" data-tasks-step-14>
+            @if (_timer is null)
+            {
+                <span class="input-group-text bg-transparent flex-grow-1">@Loc["Start timer"]</span>
+                <button class="btn btn-outline-primary" @onclick="StartTimer"><i class="bi bi-play"></i></button>
+            }
+            else
+            {
+                <span class="input-group-text bg-transparent flex-grow-1">@_elapsedTime.ToString(@"hh\:mm\:ss")</span>
+                <button class="btn btn-outline-primary" @onclick="ResetTimer"><i class="bi bi-arrow-counterclockwise"></i></button>
+                if (_isPaused)
+                {
+                    <button class="btn btn-outline-primary" @onclick="ResumeTimer"><i class="bi bi-play"></i></button>
+                }
+                else
+                {
+                    <button class="btn btn-outline-primary" @onclick="PauseTimer"><i class="bi bi-pause"></i></button>
+                }
+                <button class="btn btn-outline-primary" @onclick="StopTimer"><i class="bi bi-stop"></i></button>
+            }
         </div>
     }
 
-    <div class="input-group" data-tasks-step-16>
-        <span class="input-group-text col-4">@Loc["Started"]</span>
-        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.StartedAt" ValueExpression="() => Task.StartedAt" ValueChanged="(DateTime? startedAt) => SaveStartedAt(Task, startedAt)" />
+    @if (_timer is null && Task.StartedAt is not null && Task.CompletedAt is not null)
+    {
+        @if (Task.StartedAt != Task.CompletedAt && Task.TimeSpent is TimeSpan timeSpent)
+        {
+            <div class="p-1 border rounded-0" data-tasks-step-15>
+                <div>@Loc["Time spent"]: @(timeSpent.Days > 0 ? $"{timeSpent.Days}.{timeSpent:hh\\:mm\\:ss}" : timeSpent.ToString(@"hh\:mm\:ss"))</div>
+            </div>
+        }
+
+        <div class="input-group" data-tasks-step-16>
+            <span class="input-group-text bg-transparent col-4">@Loc["Started"]</span>
+            <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.StartedAt" ValueExpression="() => Task.StartedAt" ValueChanged="(DateTime? startedAt) => SaveStartedAt(Task, startedAt)" />
+        </div>
+
+        <div class="input-group" data-tasks-step-17>
+            <span class="input-group-text bg-transparent col-4">@Loc["Completed"]</span>
+            <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.CompletedAt" ValueExpression="() => Task.CompletedAt" ValueChanged="(DateTime? completedAt) => SaveCompletedAt(Task, completedAt)" />
+        </div>
+    }
+
+    <div class="input-group flex-nowrap" data-tasks-step-18>
+        <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
+        <CategoryComponent Model="Task" />
     </div>
 
-    <div class="input-group" data-tasks-step-17>
-        <span class="input-group-text col-4">@Loc["Completed"]</span>
-        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.CompletedAt" ValueExpression="() => Task.CompletedAt" ValueChanged="(DateTime? completedAt) => SaveCompletedAt(Task, completedAt)" />
-    </div>
-}
+    @if (ClientState.Settings.ShowColor)
+    {
+        <div class="input-group flex-nowrap" data-tasks-step-19>
+            <span class="input-group-text bg-transparent col-4">@Loc["Color"]</span>
+            <ColorComponent Model="Task" />
+        </div>
+    }
 
-<div class="input-group flex-nowrap" data-tasks-step-18>
-    <span class="input-group-text col-4">@Loc["Category"]</span>
-    <CategoryComponent Model="Task" />
+    @if (ClientState.Settings.ShowCreatedUpdated)
+    {
+        <div class="p-1 border rounded-0" data-tasks-step-20>
+            <small class="d-inline-block mx-1">@Loc["Created"]: @Task.CreatedAt</small>
+            <small class="d-inline-block mx-1">@Loc["Updated"]: @Task.UpdatedAt</small>
+        </div>
+    }
 </div>
-
-@if (ClientState.Settings.ShowColor)
-{
-    <div class="input-group flex-nowrap" data-tasks-step-19>
-        <span class="input-group-text col-4">@Loc["Color"]</span>
-        <ColorComponent Model="Task" />
-    </div>
-}
-
-@if (ClientState.Settings.ShowCreatedUpdated)
-{
-    <div class="p-1 border rounded-0" data-tasks-step-20>
-        <small class="d-inline-block mx-1">@Loc["Created"]: @Task.CreatedAt</small>
-        <small class="d-inline-block mx-1">@Loc["Updated"]: @Task.UpdatedAt</small>
-    </div>
-}
 
 @if (ClientState.Settings.ShowHelp)
 {

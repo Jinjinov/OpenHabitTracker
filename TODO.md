@@ -58,10 +58,7 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 Make UI much more intuitive:
 
-1. - background color for the whole note, task, habit
-   - class="@($"  {note.Color}  ")"
-   - class="@($"  {task.Color}  ")"
-   - class="@($"  {habit.Color}  ")"
+BUG: "time spent" disappears from Task if you toggle Done
 
 2. - add setting: [X] show habit statistics
    - add Settings migration `OpenHabitTracker.EntityFrameworkCore.Migrations`

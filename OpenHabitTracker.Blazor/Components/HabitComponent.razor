@@ -9,12 +9,12 @@
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
 
-<div>
+<div class="@Habit.Color">
     <div class="input-group flex-nowrap" data-habits-step-8>
         <div data-habits-step-7>
             <PriorityComponent Model="Habit" />
         </div>
-        <InputText class="form-control" Value="@Habit.Title" ValueExpression="() => Habit.Title" ValueChanged="(string title) => SaveTitle(Habit, title)" />
+        <InputText class="form-control bg-transparent" Value="@Habit.Title" ValueExpression="() => Habit.Title" ValueChanged="(string title) => SaveTitle(Habit, title)" />
         @if (!ClientState.Settings.ShowLargeCalendar)
         {
             <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(Habit)" data-habits-step-9><i class="bi bi-check-square"></i></button>
@@ -29,7 +29,7 @@
 
     @if (ClientState.Settings.ShowLargeCalendar)
     {
-        <div class="input-group-text p-0 border-0 rounded-0" data-habits-step-13>
+        <div class="input-group-text bg-transparent p-0 border-0 rounded-0" data-habits-step-13>
             <div class="mx-auto">
                 <CalendarComponent Habit="Habit" HabitChanged="OnHabitChanged" DisplayMonth DisplayTimeList="_timer is null" />
             </div>
@@ -37,10 +37,10 @@
     }
 
     <div class="input-group" data-habits-step-14>
-        <label class="input-group-text" for="@($"countInput-{Habit.Id}")">@Loc["Repeat"]</label>
+        <label class="input-group-text bg-transparent" for="@($"countInput-{Habit.Id}")">@Loc["Repeat"]</label>
         <InputNumber class="form-control" id="@($"countInput-{Habit.Id}")" Value="Habit.RepeatCount" ValueExpression="() => Habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(Habit, repeatCount)" />
 
-        <label class="input-group-text" for="@($"intervalInput-{Habit.Id}")">@Loc["every"]</label>
+        <label class="input-group-text bg-transparent" for="@($"intervalInput-{Habit.Id}")">@Loc["every"]</label>
         <InputNumber class="form-control" id="@($"intervalInput-{Habit.Id}")" Value="Habit.RepeatInterval" ValueExpression="() => Habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(Habit, repeatInterval)" />
 
         <InputSelect class="form-select" Value="Habit.RepeatPeriod" ValueExpression="() => Habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(Habit, repeatPeriod)">
@@ -52,7 +52,7 @@
     </div>
 
     <div class="input-group" data-habits-step-15>
-        <span class="input-group-text">@Loc["Duration"]</span>
+        <span class="input-group-text bg-transparent">@Loc["Duration"]</span>
 
         <InputSelect class="form-select" Value="Habit.DurationHour" ValueExpression="() => Habit.DurationHour" TValue="int" ValueChanged="(int hour) => SaveDuration(Habit, hour, Habit.DurationMinute)">
             @for (int i = 0; i <= 23; i++)
@@ -60,7 +60,7 @@
                 <option value="@i">@i</option>
             }
         </InputSelect>
-        <span class="input-group-text">h</span>
+        <span class="input-group-text bg-transparent">h</span>
 
         <InputSelect class="form-select" Value="Habit.DurationMinute" ValueExpression="() => Habit.DurationMinute" TValue="int" ValueChanged="(int minute) => SaveDuration(Habit, Habit.DurationHour, minute)">
             @for (int i = 0; i <= 59; i++)
@@ -68,18 +68,18 @@
                 <option value="@i">@i</option>
             }
         </InputSelect>
-        <span class="input-group-text">min</span>
+        <span class="input-group-text bg-transparent">min</span>
     </div>
 
     <div class="input-group flex-nowrap" data-habits-step-16>
         @if (_timer is null)
         {
-            <span class="input-group-text flex-grow-1">@Loc["Start timer"]</span>
+            <span class="input-group-text bg-transparent flex-grow-1">@Loc["Start timer"]</span>
             <button class="btn btn-outline-primary" @onclick="StartTimer"><i class="bi bi-play"></i></button>
         }
         else
         {
-            <span class="input-group-text flex-grow-1">@_elapsedTime.ToString(@"hh\:mm\:ss")</span>
+            <span class="input-group-text bg-transparent flex-grow-1">@_elapsedTime.ToString(@"hh\:mm\:ss")</span>
             <button class="btn btn-outline-primary" @onclick="ResetTimer"><i class="bi bi-arrow-counterclockwise"></i></button>
             if (_isPaused)
             {
@@ -128,14 +128,14 @@
     }
 
     <div class="input-group flex-nowrap" data-habits-step-23>
-        <span class="input-group-text col-4">@Loc["Category"]</span>
+        <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
         <CategoryComponent Model="Habit" />
     </div>
 
     @if (ClientState.Settings.ShowColor)
     {
         <div class="input-group flex-nowrap" data-habits-step-24>
-            <span class="input-group-text col-4">@Loc["Color"]</span>
+            <span class="input-group-text bg-transparent col-4">@Loc["Color"]</span>
             <ColorComponent Model="Habit" />
         </div>
     }

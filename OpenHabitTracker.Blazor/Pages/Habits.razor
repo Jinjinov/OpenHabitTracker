@@ -34,7 +34,7 @@
     }
     @if (HabitService.NewHabit is not null)
     {
-        <div class="my-1">
+        <div class="@($"my-1 {HabitService.NewHabit.Color}")">
             <div class="input-group">
                 <PriorityComponent Model="HabitService.NewHabit" />
 
@@ -45,10 +45,10 @@
             </div>
 
             <div class="input-group">
-                <label class="input-group-text" for="countInput">@Loc["Repeat"]</label>
+                <label class="input-group-text bg-transparent" for="countInput">@Loc["Repeat"]</label>
                 <InputNumber class="form-control" id="countInput" @bind-Value="HabitService.NewHabit.RepeatCount" />
 
-                <label class="input-group-text" for="intervalInput">@Loc["every"]</label>
+                <label class="input-group-text bg-transparent" for="intervalInput">@Loc["every"]</label>
                 <InputNumber class="form-control" id="intervalInput" @bind-Value="HabitService.NewHabit.RepeatInterval" />
 
                 <InputSelect class="form-select" @bind-Value="HabitService.NewHabit.RepeatPeriod">
@@ -60,7 +60,7 @@
             </div>
 
             <div class="input-group">
-                <span class="input-group-text">@Loc["Duration"]</span>
+                <span class="input-group-text bg-transparent">@Loc["Duration"]</span>
 
                 <InputSelect class="form-select" @bind-Value="HabitService.NewHabit.DurationHour" TValue="int">
                     @for (int i = 0; i <= 23; i++)
@@ -68,7 +68,7 @@
                         <option value="@i">@i</option>
                     }
                 </InputSelect>
-                <span class="input-group-text">h</span>
+                <span class="input-group-text bg-transparent">h</span>
 
                 <InputSelect class="form-select" @bind-Value="HabitService.NewHabit.DurationMinute" TValue="int">
                     @for (int i = 0; i <= 59; i++)
@@ -76,18 +76,18 @@
                         <option value="@i">@i</option>
                     }
                 </InputSelect>
-                <span class="input-group-text">min</span>
+                <span class="input-group-text bg-transparent">min</span>
             </div>
 
             <div class="input-group flex-nowrap">
-                <span class="input-group-text col-4">@Loc["Category"]</span>
+                <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
                 <CategoryComponent Model="HabitService.NewHabit" />
             </div>
 
             @if (ClientState.Settings.ShowColor)
             {
                 <div class="input-group flex-nowrap">
-                    <span class="input-group-text col-4">@Loc["Color"]</span>
+                    <span class="input-group-text bg-transparent col-4">@Loc["Color"]</span>
                     <ColorComponent Model="HabitService.NewHabit" />
                 </div>
             }
@@ -113,7 +113,7 @@
 
         foreach (HabitModel habit in HabitService.GetHabits())
         {
-            <div class="@($"my-{ClientState.Settings.VerticalMargin} d-flex")">
+            <div class="@($"my-{ClientState.Settings.VerticalMargin} {habit.Color} d-flex")">
                 @if (!_showSecondColumn && habit.Id == Id && HabitService.NewHabit is null)
                 {
                     <HabitComponent Habit="habit" CloseSelected="CloseSelected" />
@@ -127,8 +127,8 @@
                     }
                     <div class="w-100">
                         <div class="input-group flex-nowrap" style="@style">
-                            <span class="input-group-text" data-habits-step-1>@PriorityService.GetPriorityTitle(habit.Priority)</span>
-                            <button class="@($"input-group-text flex-grow-1 text-wrap {habit.Color} highlightable")" @onclick="() => OpenSelected(habit.Id)" data-habits-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
+                            <span class="input-group-text bg-transparent" data-habits-step-1>@PriorityService.GetPriorityTitle(habit.Priority)</span>
+                            <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(habit.Id)" data-habits-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
 
                             @{
                                 string color = habit.GetRatio(ClientState.Settings.SelectedRatio) switch
@@ -158,7 +158,7 @@
 
                         @if (!_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar)
                         {
-                            <div class="input-group-text p-0 border-0 rounded-0" data-habits-step-6>
+                            <div class="input-group-text bg-transparent p-0 border-0 rounded-0" data-habits-step-6>
                                 <div class="mx-auto">
                                     <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" />
                                 </div>
