@@ -58,13 +58,7 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 Make UI much more intuitive:
 
-BUG: "time spent" disappears from Task if you toggle Done
-
-2. - add setting: [X] show habit statistics
-   - add Settings migration `OpenHabitTracker.EntityFrameworkCore.Migrations`
-   - add Settings migration `OpenHabitTracker.Blazor.Web.Migrations`
-
-3. - "X" is "close" and "save changes" - there is no "discard changes"
+1. - "X" is "close" and "save changes" - there is no "discard changes"
    - "X" is confusing because users expect "Save" on changes, but we also can't have only "Save" becaue we need an option to close without changes
    - edit - top row: delete, save, discard
    - there is no discard, everything is updated on "ValueChanged", which is not immediately, but after focus moves to another element
@@ -75,8 +69,15 @@ BUG: "time spent" disappears from Task if you toggle Done
         - B: implement Discard button and Save button - YES!
    - Google Keep has "<-", not "X", no discard, content is updated immediately, but it has version history and undo / redo
 
-4. - upgrade to .NET 10
+2. - add setting:  [X] Show habit statistics
+   - add localization "Show habit statistics"
+   - add Settings migration `OpenHabitTracker.EntityFrameworkCore.Migrations`
+   - add Settings migration `OpenHabitTracker.Blazor.Web.Migrations`
+
+3. - upgrade to .NET 10
    - upgrade NuGet versions
+
+4. - add "Save" help step to Note, Task, Habit
 
 ---------------------------------------------------------------------------------------------------
 

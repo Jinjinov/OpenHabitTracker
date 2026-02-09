@@ -10,6 +10,11 @@
 @inject IGTourService GTourService
 
 <div class="@Habit.Color">
+    <div class="input-group flex-nowrap">
+        <button class="btn btn-outline-primary flex-grow-1" @onclick="async () => await CloseSelected.InvokeAsync()"><i class="bi bi-floppy"></i></button>
+        <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()" data-habits-step-11><i class="bi bi-x-square"></i></button>
+    </div>
+
     <div class="input-group flex-nowrap" data-habits-step-8>
         <div data-habits-step-7>
             <PriorityComponent Model="Habit" />
@@ -20,7 +25,6 @@
             <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(Habit)" data-habits-step-9><i class="bi bi-check-square"></i></button>
         }
         <button class="btn btn-outline-primary" @onclick="async () => { await HabitService.DeleteHabit(Habit); await CloseSelected.InvokeAsync(); await ContentDeleted.InvokeAsync(); }" data-habits-step-10><i class="bi bi-trash"></i></button>
-        <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()" data-habits-step-11><i class="bi bi-x-square"></i></button>
     </div>
 
     <div data-habits-step-12>
