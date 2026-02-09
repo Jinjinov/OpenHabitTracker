@@ -58,16 +58,13 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 Make UI much more intuitive:
 
-1. - "X" is "close" and "save changes" - there is no "discard changes"
-   - "X" is confusing because users expect "Save" on changes, but we also can't have only "Save" becaue we need an option to close without changes
-   - edit - top row: delete, save, discard
+1. - "X" is confusing because users expect "Save" on changes, but we also can't have only "Save" becaue we need an option to close without changes
    - there is no discard, everything is updated on "ValueChanged", which is not immediately, but after focus moves to another element
         - Default - "onchange" (blur / Enter) @bind-Value:event="onchange"
         - With "oninput" - every keystroke @bind-Value:event="oninput"
    - content is not updated immediately in the main list
-        - A: update content in the main list immediately - NO! - we would need "<-" instad of "X"
-        - B: implement Discard button and Save button - YES!
-   - Google Keep has "<-", not "X", no discard, content is updated immediately, but it has version history and undo / redo
+        - implement Discard button and Save button
+        - add _modifiedNote
 
 2. - add setting:  [X] Show habit statistics
    - add localization "Show habit statistics"
