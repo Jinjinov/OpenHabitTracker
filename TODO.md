@@ -64,7 +64,7 @@ Make UI much more intuitive:
         - With "oninput" - every keystroke @bind-Value:event="oninput"
    - content is not updated immediately in the main list
         - implement Discard button and Save button
-        - add _modifiedNote
+        - add _modifiedNote, copy Note to _modifiedNote on initialize / first render, copy _modifiedNote to Note on Save
 
 2. - add setting:  [X] Show habit statistics
    - add localization "Show habit statistics"
