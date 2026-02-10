@@ -58,11 +58,11 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 Make UI much more intuitive:
 
-2. - upgrade to .NET 10
-   - upgrade NuGet versions
+1. - upgrade to .NET 10
 
-3. - add Help steps:
-   - add "Show habit statistics" help step to Settings
+2. - upgrade NuGet versions
+
+3. - add "Show habit statistics" help step to Settings
 
 ---------------------------------------------------------------------------------------------------
 
