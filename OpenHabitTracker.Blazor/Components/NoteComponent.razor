@@ -11,11 +11,6 @@
 @inject IGTourService GTourService
 
 <div class="@Note.Color">
-    <div class="input-group flex-nowrap">
-        <button class="btn btn-outline-primary flex-grow-1" @onclick="async () => await CloseSelected.InvokeAsync()"><i class="bi bi-floppy"></i></button>
-        <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()" data-notes-step-7><i class="bi bi-x-square"></i></button>
-    </div>
-
     <div class="input-group flex-nowrap" data-notes-step-5>
         <div data-notes-step-4>
             <PriorityComponent Model="Note" />
@@ -48,6 +43,9 @@
             <small class="d-inline-block mx-1">@Loc["Updated"]: @Note.UpdatedAt</small>
         </div>
     }
+</div>
+<div class="input-group">
+    <button class="btn btn-primary flex-grow-1" @onclick="async () => await CloseSelected.InvokeAsync()" data-notes-step-7>@Loc["Done"]</button>
 </div>
 
 @if (ClientState.Settings.ShowHelp)

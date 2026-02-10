@@ -10,11 +10,6 @@
 @inject IGTourService GTourService
 
 <div class="@Habit.Color">
-    <div class="input-group flex-nowrap">
-        <button class="btn btn-outline-primary flex-grow-1" @onclick="async () => await CloseSelected.InvokeAsync()"><i class="bi bi-floppy"></i></button>
-        <button class="btn btn-outline-primary" @onclick="async () => await CloseSelected.InvokeAsync()" data-habits-step-11><i class="bi bi-x-square"></i></button>
-    </div>
-
     <div class="input-group flex-nowrap" data-habits-step-8>
         <div data-habits-step-7>
             <PriorityComponent Model="Habit" />
@@ -154,6 +149,9 @@
             <small class="d-inline-block mx-1">@Loc["Updated"]: @Habit.UpdatedAt</small>
         </div>
     }
+</div>
+<div class="input-group">
+    <button class="btn btn-primary flex-grow-1" @onclick="async () => await CloseSelected.InvokeAsync()" data-habits-step-11>@Loc["Done"]</button>
 </div>
 
 @if (ClientState.Settings.ShowHelp)
