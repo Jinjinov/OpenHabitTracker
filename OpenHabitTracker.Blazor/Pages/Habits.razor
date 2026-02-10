@@ -113,7 +113,7 @@
 
         foreach (HabitModel habit in HabitService.GetHabits())
         {
-            <div class="@($"my-{ClientState.Settings.VerticalMargin} {habit.Color} d-flex")">
+            <div class="@($"my-{ClientState.Settings.VerticalMargin} d-flex")">
                 @if (!_showSecondColumn && habit.Id == Id && HabitService.NewHabit is null)
                 {
                     <HabitComponent Habit="habit" CloseSelected="CloseSelected" />
@@ -125,7 +125,7 @@
                     {
                         style = "height: 50px;";
                     }
-                    <div class="w-100">
+                    <div class="@($"w-100 {habit.Color}")">
                         <div class="input-group flex-nowrap" style="@style">
                             <span class="input-group-text bg-transparent" data-habits-step-1>@PriorityService.GetPriorityTitle(habit.Priority)</span>
                             <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(habit.Id)" data-habits-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>

@@ -59,12 +59,12 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 Make UI much more intuitive:
 
 1. - "X" is confusing because users expect "Save" on changes, but we also can't have only "Save" becaue we need an option to close without changes
-   - there is no discard, everything is updated on "ValueChanged", which is not immediately, but after focus moves to another element
-        - Default - "onchange" (blur / Enter) @bind-Value:event="onchange"
-        - With "oninput" - every keystroke @bind-Value:event="oninput"
-   - content is not updated immediately in the main list
-        - implement Discard button and Save button
-        - add _modifiedNote, copy Note to _modifiedNote on initialize / first render, copy _modifiedNote to Note on Save
+   - implement Discard button and Save button
+        - deep Clone() - add _modifiedNote, copy Note to _modifiedNote on initialize / first render, copy _modifiedNote to Note on Save
+        - reload from Entity
+   - problem is `List<TimeModel>? TimesDone` in both cases
+   - also `List<ItemModel>? Items` in Task and in Habit
+   - keep logic as is, add bool isChanged, show Save icon if true
 
 2. - upgrade to .NET 10
    - upgrade NuGet versions

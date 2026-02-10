@@ -102,29 +102,31 @@
 
         foreach (TaskModel task in TaskService.GetTasks())
         {
-            <div class="@($"my-{ClientState.Settings.VerticalMargin} {task.Color}")">
+            <div class="@($"my-{ClientState.Settings.VerticalMargin}")">
                 @if (!_showSecondColumn && task.Id == Id && TaskService.NewTask is null)
                 {
                     <TaskComponent Task="task" CloseSelected="CloseSelected" />
                 }
                 else
                 {
-                    <div class="input-group flex-nowrap">
-                        <span class="input-group-text bg-transparent" data-tasks-step-1>@PriorityService.GetPriorityTitle(task.Priority)</span>
-                        <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(task.Id)" data-tasks-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
-                        @if (task.PlannedAt is not null)
-                        {
-                            <small class="input-group-text bg-transparent" data-tasks-step-3>@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
-                        }
-                        <button class="@($"btn {(task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(task)" data-tasks-step-4><i class="bi bi-check-square"></i></button>
-                    </div>
-
-                    if (ClientState.Settings.ShowItemList)
-                    {
-                        <div data-tasks-step-5>
-                            <ItemsComponent Items=task IsReadOnly=true />
+                    <div class="@task.Color">
+                        <div class="input-group flex-nowrap">
+                            <span class="input-group-text bg-transparent" data-tasks-step-1>@PriorityService.GetPriorityTitle(task.Priority)</span>
+                            <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(task.Id)" data-tasks-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
+                            @if (task.PlannedAt is not null)
+                            {
+                                <small class="input-group-text bg-transparent" data-tasks-step-3>@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
+                            }
+                            <button class="@($"btn {(task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(task)" data-tasks-step-4><i class="bi bi-check-square"></i></button>
                         </div>
-                    }
+
+                        @if (ClientState.Settings.ShowItemList)
+                        {
+                            <div data-tasks-step-5>
+                                <ItemsComponent Items=task IsReadOnly=true />
+                            </div>
+                        }
+                    </div>
                 }
             </div>
         }
