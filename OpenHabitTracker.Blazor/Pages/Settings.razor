@@ -103,6 +103,11 @@
             <label for="ShowLargeCalendar" class="form-check-label stretched-link d-inline">@Loc["Show large calendar"]</label>
         </div>
 
+        <div class="list-group-item">
+            <InputCheckbox id="ShowHabitStatistics" class="form-check-input me-1" Value="_settings.ShowHabitStatistics" ValueExpression="() => _settings.ShowHabitStatistics" ValueChanged="SaveShowHabitStatistics" />
+            <label for="ShowHabitStatistics" class="form-check-label stretched-link d-inline">@Loc["Show habit statistics"]</label>
+        </div>
+
         <div class="list-group-item" data-settings-step-9>
             <InputCheckbox id="ShowColor" class="form-check-input me-1" Value="_settings.ShowColor" ValueExpression="() => _settings.ShowColor" ValueChanged="SaveShowColor" />
             <label for="ShowColor" class="form-check-label stretched-link d-inline">@Loc["Show color"]</label>
@@ -305,6 +310,13 @@
     async Task SaveShowLargeCalendar(bool show)
     {
         _settings.ShowLargeCalendar = show;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveShowHabitStatistics(bool show)
+    {
+        _settings.ShowHabitStatistics = show;
 
         await UpdateAndRefresh();
     }

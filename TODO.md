@@ -66,15 +66,18 @@ Make UI much more intuitive:
         - implement Discard button and Save button
         - add _modifiedNote, copy Note to _modifiedNote on initialize / first render, copy _modifiedNote to Note on Save
 
-2. - add setting:  [X] Show habit statistics
+2. - add setting:  [X] Show habit statistics ShowHabitStatistics
    - add localization "Show habit statistics"
    - add Settings migration `OpenHabitTracker.EntityFrameworkCore.Migrations`
    - add Settings migration `OpenHabitTracker.Blazor.Web.Migrations`
+   - update openapi.json in `OpenHabitTracker.Blazor.Web`
 
 3. - upgrade to .NET 10
    - upgrade NuGet versions
 
 4. - add "Save" help step to Note, Task, Habit
+
+5. - add "Show habit statistics" help step to Settings
 
 ---------------------------------------------------------------------------------------------------
 
