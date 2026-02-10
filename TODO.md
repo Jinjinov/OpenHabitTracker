@@ -58,19 +58,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 Make UI much more intuitive:
 
-1. - "X" is confusing because users expect "Save" on changes, but we also can't have only "Save" becaue we need an option to close without changes
-   - implement Discard button and Save button
-        - deep Clone() - add _modifiedNote, copy Note to _modifiedNote on initialize / first render, copy _modifiedNote to Note on Save
-        - reload from Entity
-   - problem is `List<TimeModel>? TimesDone` in both cases
-   - also `List<ItemModel>? Items` in Task and in Habit
-   - keep logic as is, add bool isChanged, show Save icon if true
-
 2. - upgrade to .NET 10
    - upgrade NuGet versions
 
 3. - add Help steps:
-   - add "Save" help step to Note, Task, Habit
    - add "Show habit statistics" help step to Settings
 
 ---------------------------------------------------------------------------------------------------
