@@ -97,38 +97,41 @@
         }
     </div>
 
-    <div class="p-1 border rounded-0" data-habits-step-17>
-        <div>@Loc["Total time spent"]: @ToReadableString(Habit.TotalTimeSpent)</div>
-        <div>@Loc["Average time spent"]: @ToReadableString(Habit.AverageTimeSpent)</div>
-    </div>
-    <div class="p-1 border rounded-0" data-habits-step-18>
-        <div>@Loc["Elapsed time"]: @ToReadableString(Habit.ElapsedTime)</div>
-    </div>
-    <div class="p-1 border rounded-0" data-habits-step-19>
-        <div>@Loc["Repeat interval"]: @ToReadableString(Habit.GetRepeatInterval())</div>
-        <div>@Loc["Elapsed time to repeat interval ratio"]: @Habit.ElapsedTimeToRepeatIntervalRatio.ToString("N0")%</div>
-        @if (Habit.ElapsedTimeToRepeatIntervalRatio > 100.0)
-        {
-            <div>@Loc["Repeat interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.GetRepeatInterval())</div>
-        }
-    </div>
-    <div class="p-1 border rounded-0" data-habits-step-20>
-        <div>@Loc["Average interval"]: @ToReadableString(Habit.AverageInterval)</div>
-        <div>@Loc["Elapsed time to average interval ratio"]: @Habit.ElapsedTimeToAverageIntervalRatio.ToString("N0")%</div>
-        @if (Habit.ElapsedTimeToAverageIntervalRatio > 100.0)
-        {
-            <div>@Loc["Average interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.AverageInterval)</div>
-        }
-    </div>
-    <div class="p-1 border rounded-0" data-habits-step-21>
-        <div>@Loc["Average interval to repeat interval ratio"]: @Habit.AverageIntervalToRepeatIntervalRatio.ToString("N0")%</div>
-    </div>
-
-    @if (Habit.TimesDone is not null && Habit.LastTimeDoneAt is not null)
+    @if (ClientState.Settings.ShowHabitStatistics)
     {
-        <div class="p-1 border rounded-0" data-habits-step-22>
-            <small>@Loc["Completed"] @Habit.TimesDone.Count @Loc["times, last time on"] @Habit.LastTimeDoneAt</small>
+        <div class="p-1 border rounded-0" data-habits-step-17>
+            <div>@Loc["Total time spent"]: @ToReadableString(Habit.TotalTimeSpent)</div>
+            <div>@Loc["Average time spent"]: @ToReadableString(Habit.AverageTimeSpent)</div>
         </div>
+        <div class="p-1 border rounded-0" data-habits-step-18>
+            <div>@Loc["Elapsed time"]: @ToReadableString(Habit.ElapsedTime)</div>
+        </div>
+        <div class="p-1 border rounded-0" data-habits-step-19>
+            <div>@Loc["Repeat interval"]: @ToReadableString(Habit.GetRepeatInterval())</div>
+            <div>@Loc["Elapsed time to repeat interval ratio"]: @Habit.ElapsedTimeToRepeatIntervalRatio.ToString("N0")%</div>
+            @if (Habit.ElapsedTimeToRepeatIntervalRatio > 100.0)
+            {
+                <div>@Loc["Repeat interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.GetRepeatInterval())</div>
+            }
+        </div>
+        <div class="p-1 border rounded-0" data-habits-step-20>
+            <div>@Loc["Average interval"]: @ToReadableString(Habit.AverageInterval)</div>
+            <div>@Loc["Elapsed time to average interval ratio"]: @Habit.ElapsedTimeToAverageIntervalRatio.ToString("N0")%</div>
+            @if (Habit.ElapsedTimeToAverageIntervalRatio > 100.0)
+            {
+                <div>@Loc["Average interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.AverageInterval)</div>
+            }
+        </div>
+        <div class="p-1 border rounded-0" data-habits-step-21>
+            <div>@Loc["Average interval to repeat interval ratio"]: @Habit.AverageIntervalToRepeatIntervalRatio.ToString("N0")%</div>
+        </div>
+
+        @if (Habit.TimesDone is not null && Habit.LastTimeDoneAt is not null)
+        {
+            <div class="p-1 border rounded-0" data-habits-step-22>
+                <small>@Loc["Completed"] @Habit.TimesDone.Count @Loc["times, last time on"] @Habit.LastTimeDoneAt</small>
+            </div>
+        }
     }
 
     <div class="input-group flex-nowrap" data-habits-step-23>
