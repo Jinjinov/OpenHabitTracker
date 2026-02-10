@@ -1,3 +1,15 @@
+# 1.1.5 - Feb 27, 2025
+
+- replaced "X" with "Done"
+- search icon is now a toggle
+- increased default vertical margin
+- use background color for the whole note / task / habit
+- added "Show habit statistics" setting
+- increased Notes / Tasks / Habits font size
+- fixed a bug where priority was not displayed properly
+- fixed a bug where there was not enough room for the small calendar
+- use Gnome 49 in Flatpack
+
 # 1.1.4 - Oct 27, 2025
 
 - fixed Flatpak and Snapcraft folder permissions
