@@ -3203,6 +3203,9 @@
           "showLargeCalendar": {
             "type": "boolean"
           },
+          "showHabitStatistics": {
+            "type": "boolean"
+          },
           "showColor": {
             "type": "boolean"
           },
