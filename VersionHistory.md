@@ -1,6 +1,6 @@
 # 1.1.5 - Feb 14, 2025
 
-- replaced "X" with "Done"
+- replaced "X" with "Close"
 - search icon is now a toggle
 - increased default vertical margin
 - use background color for the whole note / task / habit

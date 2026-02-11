@@ -80,7 +80,7 @@
   <releases>
     <release version="1.1.5" date="2026-02-14">
       <description>
-        <p>Replaced "X" with "Done"</p>
+        <p>Replaced "X" with "Close"</p>
         <p>Search icon is now a toggle</p>
         <p>Increased default vertical margin</p>
         <p>Use background color for the whole note / task / habit</p>
