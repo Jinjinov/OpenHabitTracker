@@ -16,7 +16,7 @@ public class Examples(MarkdownToHtml markdownToHtml)
             **A few tips:**
             - click on the title of this note to enter edit mode where you can also change the priority (`⊘`,`︾`,`﹀`,`—`,`︿`,`︽`)
             - to exit edit mode click on `Close`
-            - in `Settings` you can set which screen opens every time you start OpenHT
+            - in `Settings` you can customize the look and feel of OpenHT and set which screen opens every time you start OpenHT
             - load examples in the `Data` → `Load examples` submenu
             - use `Search, Filter, Sort` to display only what you want to focus on
 
