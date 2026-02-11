@@ -90,6 +90,7 @@
         <p>Increased Notes / Tasks / Habits font size</p>
         <p>Fixed a bug where priority was not displayed properly</p>
         <p>Fixed a bug where there was not enough room for the small calendar</p>
+        <p>Fixed a bug where the keyboard covered text input on Android</p>
         <p>Use Gnome 49 in Flatpack</p>
       </description>
     </release>

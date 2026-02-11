@@ -10,6 +10,7 @@
 - increased Notes / Tasks / Habits font size
 - fixed a bug where priority was not displayed properly
 - fixed a bug where there was not enough room for the small calendar
+- fixed a bug where the keyboard covered text input on Android
 - use Gnome 49 in Flatpack
 
 # 1.1.4 - Oct 27, 2025
