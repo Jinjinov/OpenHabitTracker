@@ -35,7 +35,10 @@
     {
         <div class="@($"my-1 {NoteService.NewNote.Color}")">
             <div class="input-group">
-                <PriorityComponent Model="NoteService.NewNote" />
+                @if (ClientState.Settings.ShowPriorityDropdown)
+                {
+                    <PriorityComponent Model="NoteService.NewNote" />
+                }
 
                 <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="NoteService.NewNote.Title" placeholder="@Loc["Add new note"]" />
 
@@ -91,7 +94,12 @@
                 {
                     <div class="@note.Color">
                         <div class="input-group flex-nowrap">
-                            <span class="input-group-text bg-transparent" data-notes-step-1>@PriorityService.GetPriorityTitle(note.Priority)</span>
+
+                            @if (ClientState.Settings.ShowPriorityDropdown)
+                            {
+                                <span class="input-group-text bg-transparent" data-notes-step-1>@PriorityService.GetPriorityTitle(note.Priority)</span>
+                            }
+
                             <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(note.Id)" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
                         </div>
 

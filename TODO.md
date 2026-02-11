@@ -62,7 +62,10 @@ Make UI much more intuitive:
 
 2. - upgrade NuGet versions
 
-3. - add "Show habit statistics" help step to Settings
+3. - add help steps to Settings
+   - "Show priority"
+   - "Show category"
+   - "Show habit statistics"
 
 ---------------------------------------------------------------------------------------------------
 

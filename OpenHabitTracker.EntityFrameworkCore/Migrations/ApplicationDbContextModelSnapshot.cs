@@ -213,6 +213,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("ShowPriority");
 
+                    b.Property<bool>("ShowPriorityDropdown")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("ShowSmallCalendar")
                         .HasColumnType("INTEGER");
 

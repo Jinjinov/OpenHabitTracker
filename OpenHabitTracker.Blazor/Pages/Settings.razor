@@ -88,6 +88,11 @@
             <label for="ShowHelp" class="form-check-label stretched-link d-inline">@Loc["Show help"]</label>
         </div>
 
+        <div class="list-group-item">
+            <InputCheckbox id="ShowPriorityDropdown" class="form-check-input me-1" Value="_settings.ShowPriorityDropdown" ValueExpression="() => _settings.ShowPriorityDropdown" ValueChanged="SaveShowPriorityDropdown" />
+            <label for="ShowPriorityDropdown" class="form-check-label stretched-link d-inline">@Loc["Show priority"]</label>
+        </div>
+
         <div class="list-group-item" data-settings-step-6>
             <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowItemList" ValueExpression="() => _settings.ShowItemList" ValueChanged="SaveShowItemList" />
             <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show item list"]</label>
@@ -294,6 +299,13 @@
     async Task SaveShowHelp(bool show)
     {
         _settings.ShowHelp = show;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveShowPriorityDropdown(bool show)
+    {
+        _settings.ShowPriorityDropdown = show;
 
         await UpdateAndRefresh();
     }

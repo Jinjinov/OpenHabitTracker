@@ -11,9 +11,12 @@
 
 <div class="@Habit.Color">
     <div class="input-group flex-nowrap" data-habits-step-8>
-        <div data-habits-step-7>
-            <PriorityComponent Model="Habit" />
-        </div>
+        @if (ClientState.Settings.ShowPriorityDropdown)
+        {
+            <div data-habits-step-7>
+                <PriorityComponent Model="Habit" />
+            </div>
+        }
         <InputText class="form-control bg-transparent" Value="@Habit.Title" ValueExpression="() => Habit.Title" ValueChanged="(string title) => SaveTitle(Habit, title)" />
         @if (!ClientState.Settings.ShowLargeCalendar)
         {

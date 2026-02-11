@@ -12,9 +12,12 @@
 
 <div class="@Task.Color">
     <div class="input-group flex-nowrap" data-tasks-step-7>
-        <div data-tasks-step-6>
-            <PriorityComponent Model="Task" />
-        </div>
+        @if (ClientState.Settings.ShowPriorityDropdown)
+        {
+            <div data-tasks-step-6>
+                <PriorityComponent Model="Task" />
+            </div>
+        }
         <InputText class="form-control bg-transparent" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
         <button class="@($"btn {(Task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(Task)" data-tasks-step-8><i class="bi bi-check-square"></i></button>
         <button class="btn btn-outline-primary" @onclick="async () => { await TaskService.DeleteTask(Task); await CloseSelected.InvokeAsync(); await ContentDeleted.InvokeAsync(); }" data-tasks-step-9><i class="bi bi-trash"></i></button>

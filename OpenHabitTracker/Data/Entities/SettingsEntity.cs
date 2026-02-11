@@ -30,6 +30,8 @@ public class SettingsEntity
 
     public bool UncheckAllItemsOnHabitDone { get; set; } = false;
 
+    public bool ShowPriorityDropdown { get; set; } = true;
+
     public bool ShowItemList { get; set; } = true;
 
     public bool ShowSmallCalendar { get; set; } = true;

@@ -36,7 +36,10 @@
     {
         <div class="@($"my-1 {HabitService.NewHabit.Color}")">
             <div class="input-group">
-                <PriorityComponent Model="HabitService.NewHabit" />
+                @if (ClientState.Settings.ShowPriorityDropdown)
+                {
+                    <PriorityComponent Model="HabitService.NewHabit" />
+                }
 
                 <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.NewHabit.Title" placeholder="@Loc["Add new habit"]" />
 
@@ -127,7 +130,12 @@
                 {
                     <div class="@($"w-100 {habit.Color}")">
                         <div class="input-group flex-nowrap" style="@($"{(_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar ? "height: 50px;" : "")}")">
-                            <span class="input-group-text bg-transparent" data-habits-step-1>@PriorityService.GetPriorityTitle(habit.Priority)</span>
+
+                            @if (ClientState.Settings.ShowPriorityDropdown)
+                            {
+                                <span class="input-group-text bg-transparent" data-habits-step-1>@PriorityService.GetPriorityTitle(habit.Priority)</span>
+                            }
+
                             <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(habit.Id)" data-habits-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
 
                             @{

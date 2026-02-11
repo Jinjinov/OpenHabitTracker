@@ -35,7 +35,10 @@
     {
         <div class="@($"my-1 {TaskService.NewTask.Color}")">
             <div class="input-group">
-                <PriorityComponent Model="TaskService.NewTask" />
+                @if (ClientState.Settings.ShowPriorityDropdown)
+                {
+                    <PriorityComponent Model="TaskService.NewTask" />
+                }
 
                 <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="TaskService.NewTask.Title" placeholder="@Loc["Add new task"]" />
 
@@ -114,7 +117,12 @@
                 {
                     <div class="@task.Color">
                         <div class="input-group flex-nowrap">
-                            <span class="input-group-text bg-transparent" data-tasks-step-1>@PriorityService.GetPriorityTitle(task.Priority)</span>
+
+                            @if (ClientState.Settings.ShowPriorityDropdown)
+                            {
+                                <span class="input-group-text bg-transparent" data-tasks-step-1>@PriorityService.GetPriorityTitle(task.Priority)</span>
+                            }
+
                             <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(task.Id)" data-tasks-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
                             @if (task.PlannedAt is not null)
                             {

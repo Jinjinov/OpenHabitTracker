@@ -132,6 +132,7 @@ public static class ModelToEntity
         entity.RememberMe = model.RememberMe;
         entity.ShowHelp = model.ShowHelp;
         entity.UncheckAllItemsOnHabitDone = model.UncheckAllItemsOnHabitDone;
+        entity.ShowPriorityDropdown = model.ShowPriorityDropdown;
         entity.ShowItemList = model.ShowItemList;
         entity.ShowSmallCalendar = model.ShowSmallCalendar;
         entity.ShowLargeCalendar = model.ShowLargeCalendar;

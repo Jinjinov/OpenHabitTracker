@@ -23,6 +23,13 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                 type: "INTEGER",
                 nullable: false,
                 defaultValue: false);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "ShowPriorityDropdown",
+                table: "Settings",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: false);
         }
 
         /// <inheritdoc />
@@ -34,6 +41,10 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
 
             migrationBuilder.DropColumn(
                 name: "ShowHabitStatistics",
+                table: "Settings");
+
+            migrationBuilder.DropColumn(
+                name: "ShowPriorityDropdown",
                 table: "Settings");
         }
     }

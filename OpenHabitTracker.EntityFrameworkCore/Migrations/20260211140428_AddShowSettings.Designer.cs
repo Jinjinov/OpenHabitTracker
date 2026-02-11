@@ -11,7 +11,7 @@ using OpenHabitTracker.EntityFrameworkCore;
 namespace OpenHabitTracker.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260211125509_AddShowSettings")]
+    [Migration("20260211140428_AddShowSettings")]
     partial class AddShowSettings
     {
         /// <inheritdoc />
@@ -215,6 +215,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("ShowPriority");
+
+                    b.Property<bool>("ShowPriorityDropdown")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowSmallCalendar")
                         .HasColumnType("INTEGER");
