@@ -136,6 +136,7 @@ public static class EntityToModel
         model.ShowSmallCalendar = entity.ShowSmallCalendar;
         model.ShowLargeCalendar = entity.ShowLargeCalendar;
         model.ShowHabitStatistics = entity.ShowHabitStatistics;
+        model.ShowCategory = entity.ShowCategory;
         model.ShowColor = entity.ShowColor;
         model.ShowCreatedUpdated = entity.ShowCreatedUpdated;
         model.InsertTabsInNoteContent = entity.InsertTabsInNoteContent;

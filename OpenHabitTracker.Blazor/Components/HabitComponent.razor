@@ -129,10 +129,13 @@
         }
     }
 
-    <div class="input-group flex-nowrap" data-habits-step-23>
-        <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
-        <CategoryComponent Model="Habit" />
-    </div>
+    @if (ClientState.Settings.ShowCategory)
+    {
+        <div class="input-group flex-nowrap" data-habits-step-23>
+            <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
+            <CategoryComponent Model="Habit" />
+        </div>
+    }
 
     @if (ClientState.Settings.ShowColor)
     {

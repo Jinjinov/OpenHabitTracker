@@ -23,10 +23,13 @@
         <InputTextArea @ref="_inputTextAreaReference" class="form-control bg-transparent" style="resize:none" Value="@Note.Content" ValueExpression="() => Note.Content" ValueChanged="(string content) => SaveContent(Note, content)" rows="@(Note.Content.Count(c => c == '\n') + 1)" placeholder="Add note text" />
     </div>
 
-    <div class="input-group flex-nowrap" data-notes-step-9>
-        <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
-        <CategoryComponent Model="Note" />
-    </div>
+    @if (ClientState.Settings.ShowCategory)
+    {
+        <div class="input-group flex-nowrap" data-notes-step-9>
+            <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
+            <CategoryComponent Model="Note" />
+        </div>
+    }
 
     @if (ClientState.Settings.ShowColor)
     {

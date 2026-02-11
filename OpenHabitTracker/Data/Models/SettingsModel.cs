@@ -36,9 +36,11 @@ public class SettingsModel
 
     public bool ShowLargeCalendar { get; set; } = true;
 
-    public bool ShowHabitStatistics { get; set; } = true;
+    public bool ShowHabitStatistics { get; set; } = false;
 
-    public bool ShowColor { get; set; } = false;
+    public bool ShowCategory { get; set; } = true;
+
+    public bool ShowColor { get; set; } = true;
 
     public bool ShowCreatedUpdated { get; set; } = false;
 
@@ -46,9 +48,9 @@ public class SettingsModel
 
     public bool DisplayNoteContentAsMarkdown { get; set; } = true;
 
-    public bool HideCompletedTasks { get; set; }
+    public bool HideCompletedTasks { get; set; } = true;
 
-    public bool ShowOnlyOverSelectedRatioMin { get; set; }
+    public bool ShowOnlyOverSelectedRatioMin { get; set; } = false;
 
     public int SelectedRatioMin { get; set; } = 50;
 

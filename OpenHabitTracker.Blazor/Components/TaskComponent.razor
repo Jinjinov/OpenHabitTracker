@@ -94,10 +94,13 @@
         </div>
     }
 
-    <div class="input-group flex-nowrap" data-tasks-step-18>
-        <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
-        <CategoryComponent Model="Task" />
-    </div>
+    @if (ClientState.Settings.ShowCategory)
+    {
+        <div class="input-group flex-nowrap" data-tasks-step-18>
+            <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
+            <CategoryComponent Model="Task" />
+        </div>
+    }
 
     @if (ClientState.Settings.ShowColor)
     {

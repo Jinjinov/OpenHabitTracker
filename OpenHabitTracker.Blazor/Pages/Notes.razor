@@ -45,10 +45,13 @@
 
             <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.NewNote.Content" placeholder="@Loc["Add note text"]" />
 
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
-                <CategoryComponent Model="NoteService.NewNote" />
-            </div>
+            @if (ClientState.Settings.ShowCategory)
+            {
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
+                    <CategoryComponent Model="NoteService.NewNote" />
+                </div>
+            }
 
             @if (ClientState.Settings.ShowColor)
             {

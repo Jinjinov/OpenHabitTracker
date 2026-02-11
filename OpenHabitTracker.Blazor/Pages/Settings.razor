@@ -108,6 +108,11 @@
             <label for="ShowHabitStatistics" class="form-check-label stretched-link d-inline">@Loc["Show habit statistics"]</label>
         </div>
 
+        <div class="list-group-item">
+            <InputCheckbox id="ShowCategory" class="form-check-input me-1" Value="_settings.ShowCategory" ValueExpression="() => _settings.ShowCategory" ValueChanged="SaveShowCategory" />
+            <label for="ShowCategory" class="form-check-label stretched-link d-inline">@Loc["Show category"]</label>
+        </div>
+
         <div class="list-group-item" data-settings-step-9>
             <InputCheckbox id="ShowColor" class="form-check-input me-1" Value="_settings.ShowColor" ValueExpression="() => _settings.ShowColor" ValueChanged="SaveShowColor" />
             <label for="ShowColor" class="form-check-label stretched-link d-inline">@Loc["Show color"]</label>
@@ -317,6 +322,13 @@
     async Task SaveShowHabitStatistics(bool show)
     {
         _settings.ShowHabitStatistics = show;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveShowCategory(bool show)
+    {
+        _settings.ShowCategory = show;
 
         await UpdateAndRefresh();
     }

@@ -79,10 +79,13 @@
                 <span class="input-group-text bg-transparent">min</span>
             </div>
 
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
-                <CategoryComponent Model="HabitService.NewHabit" />
-            </div>
+            @if (ClientState.Settings.ShowCategory)
+            {
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
+                    <CategoryComponent Model="HabitService.NewHabit" />
+                </div>
+            }
 
             @if (ClientState.Settings.ShowColor)
             {
