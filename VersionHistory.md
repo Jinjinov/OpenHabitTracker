@@ -1,4 +1,4 @@
-# 1.1.5 - Feb 27, 2025
+# 1.1.5 - Feb 14, 2025
 
 - replaced "X" with "Done"
 - search icon is now a toggle
