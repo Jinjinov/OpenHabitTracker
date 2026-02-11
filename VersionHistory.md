@@ -4,6 +4,7 @@
 - search icon is now a toggle
 - increased default vertical margin
 - use background color for the whole note / task / habit
+- added "Show priority" setting
 - added "Show habit statistics" setting
 - added "Show category" setting
 - increased Notes / Tasks / Habits font size
