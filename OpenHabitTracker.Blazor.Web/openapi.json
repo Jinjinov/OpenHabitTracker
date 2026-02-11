@@ -3194,6 +3194,9 @@
           "uncheckAllItemsOnHabitDone": {
             "type": "boolean"
           },
+          "showPriorityDropdown": {
+            "type": "boolean"
+          },
           "showItemList": {
             "type": "boolean"
           },
@@ -3204,6 +3207,9 @@
             "type": "boolean"
           },
           "showHabitStatistics": {
+            "type": "boolean"
+          },
+          "showCategory": {
             "type": "boolean"
           },
           "showColor": {
