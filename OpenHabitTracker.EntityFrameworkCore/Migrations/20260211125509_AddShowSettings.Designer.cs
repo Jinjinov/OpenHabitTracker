@@ -11,8 +11,8 @@ using OpenHabitTracker.EntityFrameworkCore;
 namespace OpenHabitTracker.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260210090414_AddShowHabitStatistics")]
-    partial class AddShowHabitStatistics
+    [Migration("20260211125509_AddShowSettings")]
+    partial class AddShowSettings
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -185,6 +185,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("SelectedRatioMin")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowCategory")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowColor")

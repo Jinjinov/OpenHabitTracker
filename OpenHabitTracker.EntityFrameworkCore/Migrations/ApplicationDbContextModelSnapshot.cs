@@ -184,6 +184,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                     b.Property<int>("SelectedRatioMin")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("ShowCategory")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("ShowColor")
                         .HasColumnType("INTEGER");
 
