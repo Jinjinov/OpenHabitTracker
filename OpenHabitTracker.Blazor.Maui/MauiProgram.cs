@@ -61,7 +61,7 @@ public static class MauiProgram
         //    Directory.CreateDirectory(databaseFolder);
         //}
 
-        databaseFolder = FileSystem.Current.AppDataDirectory;
+        databaseFolder = FileSystem.Current.AppDataDirectory; // /data/user/0/net.openhabittracker/files
         Directory.CreateDirectory(databaseFolder);
 
         string databasePath = Path.Combine(databaseFolder, databaseFile);
