@@ -5,6 +5,7 @@
 - increased default vertical margin
 - use background color for the whole note / task / habit
 - added "Show habit statistics" setting
+- added "Show category" setting
 - increased Notes / Tasks / Habits font size
 - fixed a bug where priority was not displayed properly
 - fixed a bug where there was not enough room for the small calendar
