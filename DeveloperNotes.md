@@ -611,7 +611,7 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
     To build snapcraft.yaml run:
     snapcraft pack --debug
 
-    sudo snap install openhabittracker_1.0.0_amd64.snap --dangerous --devmode
+    sudo snap install openhabittracker_1.1.5_amd64.snap --dangerous --devmode
 
     snap list
 
@@ -619,7 +619,7 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
     snapcraft login
 
-    snapcraft upload --release=stable openhabittracker_1.0.0_amd64.snap
+    snapcraft upload --release=stable openhabittracker_1.1.5_amd64.snap
 
     snapcraft status openhabittracker
 
@@ -684,7 +684,11 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
 
-    python3 flatpak-dotnet-generator.py --dotnet 9 --freedesktop 24.08 nuget-sources.json OpenHabitTracker/OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
+    ??? flatpak install flathub org.freedesktop.Sdk/x86_64/25.08 ???
+
+from parent of OpenHabitTracker:
+
+    python3 flatpak-dotnet-generator.py --dotnet 9 --freedesktop 25.08 nuget-sources.json OpenHabitTracker/OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
 
     desktop-file-validate net.openhabittracker.OpenHabitTracker.desktop
 
@@ -696,10 +700,17 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
 
     flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream net.openhabittracker.OpenHabitTracker.metainfo.xml
 
+from parent of OpenHabitTracker:
+
     flatpak-builder build-dir --user --force-clean --install --repo=repo net.openhabittracker.OpenHabitTracker.yaml
 
-    flatpak run net.openhabittracker.OpenHabitTracker
+    Error: Failure spawning rofiles-fuse, exit_status: 1024
 
+    flatpak-builder build-dir --user --force-clean --install --repo=repo net.openhabittracker.OpenHabitTracker.yaml --disable-rofiles-fuse
+
+    flatpak run net.openhabittracker.OpenHabitTracker
+        
+        ----------------------------------------------------------------------------------------------------------------
         https://docs.flathub.org/docs/for-app-authors/linter/
 
         https://github.com/flathub-infra/flatpak-builder-lint
@@ -711,13 +722,16 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
         flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest net.openhabittracker.OpenHabitTracker.yaml
         flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo
                                                                         ^	^	the second "repo" is the folder named "repo" created by flatpak-builder in the same folder as the manifest yaml file
+        ----------------------------------------------------------------------------------------------------------------
 
         https://docs.flathub.org/docs/for-app-authors/submission/#submission-pr
 
+        1.
         update: https://github.com/Jinjinov/net.openhabittracker.OpenHabitTracker
             net.openhabittracker.OpenHabitTracker.yaml
             nuget-sources.json
 
+        2.
         pull request: https://github.com/flathub/net.openhabittracker.OpenHabitTracker
 
         🚧 Test build enqueued.
@@ -727,8 +741,10 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
         if the test fails, push a fix and comment in the GitHub pull request:
             bot, build net.openhabittracker.OpenHabitTracker
 
+        3.
         Merge pull request
 
+        4.
         update https://github.com/Jinjinov/net.openhabittracker.OpenHabitTracker from https://github.com/flathub/net.openhabittracker.OpenHabitTracker
 
     https://flathub.org/
