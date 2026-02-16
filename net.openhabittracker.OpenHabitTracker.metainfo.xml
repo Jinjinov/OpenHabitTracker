@@ -42,6 +42,7 @@
   <content_rating type="oars-1.1" />
   <url type="homepage">https://openhabittracker.net</url>
   <url type="help">https://github.com/Jinjinov/OpenHabitTracker</url>
+  <url type="vcs-browser">https://github.com/Jinjinov/OpenHabitTracker</url>
   <url type="bugtracker">https://github.com/Jinjinov/OpenHabitTracker/issues</url>
   <screenshots>
     <screenshot type="default">

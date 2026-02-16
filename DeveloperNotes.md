@@ -681,6 +681,10 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
     org.kde.Platform, org.kde.Sdk
     io.elementary.Platform, io.elementary.Sdk
 
+git rev-parse 1.1.5
+
+git ls-remote https://github.com/Jinjinov/OpenHabitTracker.git refs/tags/1.1.5
+
     flatpak-builder build-dir --user --install-deps-from=flathub --download-only net.openhabittracker.OpenHabitTracker.yaml --force-clean
 
     <Configuration>Release</Configuration>
