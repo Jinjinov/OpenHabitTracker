@@ -773,21 +773,23 @@ docker compose run: Runs a one-off command in a container.
 
 old Python tool:
     docker-compose build
-    docker-compose up
+    docker-compose up -d
 
 new Go tool:
     docker compose build
-    docker compose up
+    docker compose up -d
+
+DO NOT RUN DOCKER IMAGE FROM THE UI, BECAUSE docker-compose.yml IS NOT USED!!!
 
 Docker Hub:
 
 docker login
 
+docker tag openhabittracker jinjinov/openhabittracker:1.1.5
+docker push jinjinov/openhabittracker:1.1.5
+
 docker tag openhabittracker jinjinov/openhabittracker:latest
 docker push jinjinov/openhabittracker:latest
-
-docker tag openhabittracker jinjinov/openhabittracker:1.0.0
-docker push jinjinov/openhabittracker:1.0.0
 
 https://hub.docker.com/repository/docker/jinjinov/openhabittracker
 
@@ -797,11 +799,11 @@ GitHub Container Registry:
 
 echo <GitHubToken> | docker login ghcr.io -u Jinjinov --password-stdin
 
+docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:1.1.5
+docker push ghcr.io/jinjinov/openhabittracker:1.1.5
+
 docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:latest
 docker push ghcr.io/jinjinov/openhabittracker:latest
-
-docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:1.0.0
-docker push ghcr.io/jinjinov/openhabittracker:1.0.0
 
 https://github.com/users/Jinjinov/packages/container/package/openhabittracker
 
