@@ -115,12 +115,16 @@ run on iOS simulator:
 
 dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-ios -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64 -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
 
+OpenHabitTracker/OpenHabitTracker.Blazor.Maui/bin/Release/net9.0-ios/ios-arm64/publish/OpenHT.ipa
+
 Publish macOS:
 
 run on macOS:
     dotnet build OpenHabitTracker.Blazor.Maui.csproj -t:Run -c:Release -f:net9.0-maccatalyst
 
 dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-maccatalyst -p:MtouchLink=SdkOnly -p:CreatePackage=true -p:EnableCodeSigning=true -p:EnablePackageSigning=true -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.macos" -p:CodesignEntitlements="Platforms\MacCatalyst\Entitlements.plist" -p:PackageSigningKey="3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)"
+
+OpenHabitTracker/OpenHabitTracker.Blazor.Maui/bin/Release/net9.0-maccatalyst/publish/OpenHT-1.1.5.pkg
 
 ---------------------------------------------------------------------------------------------------
 
