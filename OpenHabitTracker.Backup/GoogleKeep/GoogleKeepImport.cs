@@ -134,7 +134,7 @@ public class GoogleKeepImport(ClientState appData)
 
     private static async Task<List<GoogleKeepNote>> GetGoogleKeepNotes(Stream stream)
     {
-        MemoryStream memoryStream = new();
+        using MemoryStream memoryStream = new();
 
         await stream.CopyToAsync(memoryStream);
 

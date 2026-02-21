@@ -32,7 +32,7 @@ public class GoogleDriveBackup : GoogleDriveBase, IGoogleDriveBackup
 
         FilesResource.GetRequest request = service.Files.Get(fileId);
 
-        MemoryStream stream = new();
+        using MemoryStream stream = new();
 
         IDownloadProgress downloadProgress = request.DownloadWithStatus(stream);
 
