@@ -11,3 +11,4 @@ GoogleDriveClientSecrets.Hidden.cs
 Package.StoreAssociation.xml
 OpenHT.db*
 watchlogs*.db
+*.snap
