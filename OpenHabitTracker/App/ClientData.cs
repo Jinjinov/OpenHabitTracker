@@ -211,7 +211,7 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
                 DateCompare.Before => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date < queryParameters.DoneAtFilter.Value.Date) == true),
                 DateCompare.On => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date == queryParameters.DoneAtFilter.Value.Date) == true),
                 DateCompare.After => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date > queryParameters.DoneAtFilter.Value.Date) == true),
-                DateCompare.NotOn => habits.Where(x => !x.TimesDone?.Any(t => t.CompletedAt?.Date == queryParameters.DoneAtFilter.Value.Date) == true),
+                DateCompare.NotOn => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date == queryParameters.DoneAtFilter.Value.Date) != true),
                 _ => throw new ArgumentOutOfRangeException(nameof(queryParameters.DoneAtCompare))
             };
         }
