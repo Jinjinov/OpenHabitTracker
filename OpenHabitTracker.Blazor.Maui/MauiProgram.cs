@@ -21,7 +21,9 @@ public static class MauiProgram
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker", "Error.log");
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker");
+                Directory.CreateDirectory(path);
+                path = Path.Combine(path, "Error.log");
                 File.WriteAllText(path, message);
 
                 Application.Current?.Dispatcher.Dispatch(async () =>

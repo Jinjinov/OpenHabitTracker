@@ -90,10 +90,12 @@ public class Program
             {
                 string? message = error.ExceptionObject.ToString();
 
-                System.Diagnostics.Debug.WriteLine(message);
+                Debug.WriteLine(message);
 
-                string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker", "Error.log");
-                System.IO.File.WriteAllText(path, message);
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker");
+                Directory.CreateDirectory(path);
+                path = Path.Combine(path, "Error.log");
+                File.WriteAllText(path, message);
 
                 app.MainWindow.ShowMessage("Error", message);
             }

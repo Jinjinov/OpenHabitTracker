@@ -19,8 +19,10 @@ static class Program
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker", "Error.log");
-                System.IO.File.WriteAllText(path, message);
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker");
+                Directory.CreateDirectory(path);
+                path = Path.Combine(path, "Error.log");
+                File.WriteAllText(path, message);
 
                 MessageBox.Show(text: message, caption: "Error");
             }

@@ -55,6 +55,9 @@ public class SearchFilterService
 
         HtmlNodeCollection coll = htmlDoc.DocumentNode.SelectNodes("//text()");
 
+        if (coll is null)
+            return text;
+
         if (MatchCase)
         {
             foreach (HtmlTextNode node in coll.Cast<HtmlTextNode>())
