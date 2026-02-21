@@ -73,9 +73,29 @@ public class CategoryService(ClientState appData)
         if (_appData.Categories is null)
             return;
 
-        category.Notes?.ForEach(async x => { x.CategoryId = 0; x.IsDeleted = true; await _appData.UpdateModel(x); });
-        category.Tasks?.ForEach(async x => { x.CategoryId = 0; x.IsDeleted = true; await _appData.UpdateModel(x); });
-        category.Habits?.ForEach(async x => { x.CategoryId = 0; x.IsDeleted = true; await _appData.UpdateModel(x); });
+        if (category.Notes is not null)
+            foreach (NoteModel note in category.Notes)
+            {
+                note.CategoryId = 0;
+                note.IsDeleted = true;
+                await _appData.UpdateModel(note);
+            }
+
+        if (category.Tasks is not null)
+            foreach (TaskModel task in category.Tasks)
+            {
+                task.CategoryId = 0;
+                task.IsDeleted = true;
+                await _appData.UpdateModel(task);
+            }
+
+        if (category.Habits is not null)
+            foreach(HabitModel habit in category.Habits)
+            {
+                habit.CategoryId = 0;
+                habit.IsDeleted = true;
+                await _appData.UpdateModel(habit);
+            }
 
         _appData.Categories.Remove(category.Id);
 
