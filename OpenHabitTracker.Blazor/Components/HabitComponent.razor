@@ -4,6 +4,8 @@
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
+@implements IDisposable
+
 @inject HabitService HabitService
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
