@@ -56,6 +56,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+AppDomain.CurrentDomain.UnhandledException - Directory.CreateDirectory(Path.GetDirectoryName(path)!)
+
+DateCompare.NotOn => habits.Where(x => !x.TimesDone?.Any(t => t.CompletedAt?.Date == _searchFilterService.DoneAtFilter.Value.Date) == true),
+
 - upgrade to .NET 10
 
 - upgrade NuGet versions
