@@ -100,10 +100,11 @@ public class GoogleDriveBackup : GoogleDriveBase, IGoogleDriveBackup
             Parents = new List<string> { folderId }
         };
 
-        MemoryStream stream = new();
-        StreamWriter writer = new(stream);
-        writer.Write(content);
-        writer.Flush();
+        using MemoryStream stream = new();
+        using (StreamWriter writer = new(stream, leaveOpen: true))
+        {
+            writer.Write(content);
+        }
         stream.Position = 0;
 
         FilesResource.CreateMediaUpload request = service.Files.Create(fileMetadata, stream, _fileMimeType);
@@ -127,10 +128,11 @@ public class GoogleDriveBackup : GoogleDriveBase, IGoogleDriveBackup
 
         Google.Apis.Drive.v3.Data.File file = service.Files.Get(fileId).Execute();
 
-        MemoryStream stream = new();
-        StreamWriter writer = new(stream);
-        writer.Write(content);
-        writer.Flush();
+        using MemoryStream stream = new();
+        using (StreamWriter writer = new(stream, leaveOpen: true))
+        {
+            writer.Write(content);
+        }
         stream.Position = 0;
 
         file.Id = null; // The service drive has thrown an exception. HttpStatusCode is Forbidden. The resource body includes fields which are not directly writable.

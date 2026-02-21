@@ -92,8 +92,8 @@ public class GoogleKeepImport(ClientState appData)
                     Content = googleKeepNote.TextContent,
                     IsDeleted = googleKeepNote.IsTrashed,
                     Color = _bootstrapClass[googleKeepNote.Color],
-                    CreatedAt = new DateTime(googleKeepNote.CreatedTimestampUsec),
-                    UpdatedAt = new DateTime(googleKeepNote.UserEditedTimestampUsec)
+                    CreatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.CreatedTimestampUsec * 10).ToLocalTime(),
+                    UpdatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.UserEditedTimestampUsec * 10).ToLocalTime()
                 };
 
                 category.Notes.Add(note);
@@ -105,8 +105,8 @@ public class GoogleKeepImport(ClientState appData)
                     Title = googleKeepNote.Title,
                     IsDeleted = googleKeepNote.IsTrashed,
                     Color = _bootstrapClass[googleKeepNote.Color],
-                    CreatedAt = new DateTime(googleKeepNote.CreatedTimestampUsec),
-                    UpdatedAt = new DateTime(googleKeepNote.UserEditedTimestampUsec)
+                    CreatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.CreatedTimestampUsec * 10).ToLocalTime(),
+                    UpdatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.UserEditedTimestampUsec * 10).ToLocalTime()
                 };
 
                 if (googleKeepNote.ListContent.Count > 0)
@@ -138,7 +138,7 @@ public class GoogleKeepImport(ClientState appData)
 
         await stream.CopyToAsync(memoryStream);
 
-        ZipArchive archive = new(memoryStream);
+        using ZipArchive archive = new(memoryStream);
 
         List<GoogleKeepNote> googleKeepNotes = [];
 
