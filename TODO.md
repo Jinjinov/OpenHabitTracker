@@ -56,13 +56,11 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-Make UI much more intuitive:
+- upgrade to .NET 10
 
-1. - upgrade to .NET 10
+- upgrade NuGet versions
 
-2. - upgrade NuGet versions
-
-3. - add help steps to Settings
+- add help steps to Settings
    - "Show priority"
    - "Show category"
    - "Show habit statistics"
@@ -82,7 +80,7 @@ C) all of the above
 add settings to show, hide this extra info
 
 3.
-manual sort - 1000000 sort index
+drag & drop reorder - manual sort - 1000000 sort index
 - sort categories?
 - sort items?
 
@@ -422,21 +420,11 @@ Blazor Server / Web
     EF Core: use `DbContextFactory`
 
 ---------------------------------------------------------------------------------------------------
-
-Host 24/7 on
-    Raspberry Pi 5
-    Synology NAS DS224+
-
----------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
 when all habit items are done, habit is done
 when all task items are done, task is done
-
-content background:
-    list all possible colors
-    whole <div>, not just Title
 
 repeat:
     add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
@@ -462,11 +450,9 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
     on Habit Initialize - load only last week (last X days, displayed in small calendar)
     call LoadTimesDone for large calendar
 
-benchmark method time & render time
-
 read Settings from DB before Run() - !!! Transient / Scoped / Singleton !!! - Scoped instances before and after Run() are not the same
 
-??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
+unify into one property ??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
 
 common `Router`
     OpenHabitTracker.Blazor - Routes.razor
@@ -523,10 +509,6 @@ Google Keep
         - clear (\) text (T) formatting
 
 ---------------------------------------------------------------------------------------------------
-
-- filters are query parameters
-
----------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
@@ -538,21 +520,16 @@ copy Loop Habit Tracker
 
 ---------------------------------------------------------------------------------------------------
 
-- drag & drop reorder
-- keyboard navigation
-- benchmark: method time & render time
+keyboard navigation
 
-- ASAP tasks: when, where, contact/company name, address, phone number, working hours, website, email
-
-- don't use `event` to refresh everything on every change
-- don't use `StateHasChanged()`
-- don't do this: current screen changed -> save current screen to settings -> data changed -> refresh all
+ASAP tasks: when, where, contact/company name, address, phone number, working hours, website, email
 
 email: copy task list as HTML with checkboxes to clipboard
 sms, message: copy task list with Unicode checkboxes
 
 virtualized container
 
+benchmark: method time & render time
 method trace logging - benchmark method performance
 https://learn.microsoft.com/en-us/aspnet/core/blazor/performance
 
