@@ -14,42 +14,42 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
 
 ---------------------------------------------------------------------------------------------------
 
-fix AppData GetUserData() which calls InitializeContent()
-search for `// TODO:: remove temp fix`
-    `InitializeItems` and `InitializeTimes` have null checks and do not update data when called in GetUserData()
-        both load data directly from DB with `_dataAccess.GetTimes()` and `_dataAccess.GetItems()`
-        but HabitService.LoadTimesDone also loads data with `_dataAccess.GetTimes(habit.Id)` - these are not the same objects as in `InitializeTimes`
-        and ItemService.Initialize also loads data with `_dataAccess.GetItems(items.Id)` - these are not the same objects as in `InitializeItems`
-    user can add or remove Items and Times list
-        `DataAccess.AddItem(item);` / `DataAccess.UpdateItem(item);`
-        `DataAccess.AddTime(timeEntity);` / `DataAccess.UpdateTime(timeEntity);`
-        the code does not update Items and Times in the AppData
-    so without temp fix, GetUserData() would return Items and Times that were loaded with Initialize()
-NO!!! - either remove these from class AppData: - NO!!!
-    public Dictionary<long, TimeModel>? Times { get; set; }
-    public Dictionary<long, ItemModel>? Items { get; set; }
-or
-    make sure that other services update them !!!
-    1.
-        `ToEntity` already exist
-        add `ToModel` and use it for every `Model`
-            models need other models to initialize their `List<>` properties
-                List<CategoryModel> Categories
-                    List<NoteModel>? Notes
-                    List<TaskModel>? Tasks
-                        List<ItemModel>? Items
-                    List<HabitModel>? Habits
-                        List<ItemModel>? Items
-                        List<TimeModel>? TimesDone
-            provide `ClientData` as imput
-                - if `Model` is not found in the `Dictionary` then use `_dataAccess`
-                - add it to `Dictionary` in `ClientData`
-    2.
-        make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
-        check for every `new.*Model`
-    3.
-        make sure that every `DataAccess.Add` and `DataAccess.Update` and `DataAccess.Remove` also updates `Dictionary<long, Model>` in `ClientData`
-        private `DataAccess` in `ClientData`
+    fix AppData GetUserData() which calls InitializeContent()
+    search for `// TODO:: remove temp fix`
+        `InitializeItems` and `InitializeTimes` have null checks and do not update data when called in GetUserData()
+            both load data directly from DB with `_dataAccess.GetTimes()` and `_dataAccess.GetItems()`
+            but HabitService.LoadTimesDone also loads data with `_dataAccess.GetTimes(habit.Id)` - these are not the same objects as in `InitializeTimes`
+            and ItemService.Initialize also loads data with `_dataAccess.GetItems(items.Id)` - these are not the same objects as in `InitializeItems`
+        user can add or remove Items and Times list
+            `DataAccess.AddItem(item);` / `DataAccess.UpdateItem(item);`
+            `DataAccess.AddTime(timeEntity);` / `DataAccess.UpdateTime(timeEntity);`
+            the code does not update Items and Times in the AppData
+        so without temp fix, GetUserData() would return Items and Times that were loaded with Initialize()
+    NO!!! - either remove these from class AppData: - NO!!!
+        public Dictionary<long, TimeModel>? Times { get; set; }
+        public Dictionary<long, ItemModel>? Items { get; set; }
+    or
+        make sure that other services update them !!!
+        1.
+            `ToEntity` already exist
+            add `ToModel` and use it for every `Model`
+                models need other models to initialize their `List<>` properties
+                    List<CategoryModel> Categories
+                        List<NoteModel>? Notes
+                        List<TaskModel>? Tasks
+                            List<ItemModel>? Items
+                        List<HabitModel>? Habits
+                            List<ItemModel>? Items
+                            List<TimeModel>? TimesDone
+                provide `ClientData` as imput
+                    - if `Model` is not found in the `Dictionary` then use `_dataAccess`
+                    - add it to `Dictionary` in `ClientData`
+        2.
+            make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
+            check for every `new.*Model`
+        3.
+            make sure that every `DataAccess.Add` and `DataAccess.Update` and `DataAccess.Remove` also updates `Dictionary<long, Model>` in `ClientData`
+            private `DataAccess` in `ClientData`
 
 this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
@@ -74,9 +74,9 @@ add group "and / or" toggle:
 
 2.
 LastDone date: for a group, for the items
-A) add date to habit item
-B) add date to category
-C) all of the above
+- add date to habit item
+- add date to category
+- all of the above
 add settings to show, hide this extra info
 
 3.
@@ -110,34 +110,34 @@ set `_lastRefreshAt = DateTime.UtcNow;` on local changes, so a local change won'
 4.
 method to copy one db context to another
 
-public void CopyData(DbContext source, DbContext destination)
-{
-    foreach (var entityType in source.Model.GetEntityTypes())
+    public void CopyData(DbContext source, DbContext destination)
     {
-        var sourceSet = source.Set(entityType.ClrType);
-        var destinationSet = destination.Set(entityType.ClrType);
-        // Retrieve all records without tracking.
-        var data = sourceSet.AsNoTracking().ToList();
-        // Add records to the destination context.
-        destinationSet.AddRange(data);
+        foreach (var entityType in source.Model.GetEntityTypes())
+        {
+            var sourceSet = source.Set(entityType.ClrType);
+            var destinationSet = destination.Set(entityType.ClrType);
+            // Retrieve all records without tracking.
+            var data = sourceSet.AsNoTracking().ToList();
+            // Add records to the destination context.
+            destinationSet.AddRange(data);
+        }
+        destination.SaveChanges();
     }
-    destination.SaveChanges();
-}
 
-using (var sqliteContext = new MyDbContext(sqliteOptions))
-using (var sqlServerContext = new MyDbContext(sqlServerOptions))
-{
-    // Copy data from SQLite to SQL Server.
-    CopyData(sqliteContext, sqlServerContext);
-}
+    using (var sqliteContext = new MyDbContext(sqliteOptions))
+    using (var sqlServerContext = new MyDbContext(sqlServerOptions))
+    {
+        // Copy data from SQLite to SQL Server.
+        CopyData(sqliteContext, sqlServerContext);
+    }
 
-// Or to copy in the opposite direction:
-using (var sqliteContext = new MyDbContext(sqliteOptions))
-using (var sqlServerContext = new MyDbContext(sqlServerOptions))
-{
-    // Copy data from SQL Server to SQLite.
-    CopyData(sqlServerContext, sqliteContext);
-}
+    // Or to copy in the opposite direction:
+    using (var sqliteContext = new MyDbContext(sqliteOptions))
+    using (var sqlServerContext = new MyDbContext(sqlServerOptions))
+    {
+        // Copy data from SQL Server to SQLite.
+        CopyData(sqlServerContext, sqliteContext);
+    }
 
 ---------------------------------------------------------------------------------------------------
 
@@ -218,41 +218,44 @@ Android:
 
 AndroidManifest.xml
 MANAGE_EXTERNAL_STORAGE
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using Android.Content.PM;
-using Android.OS;
-using Xamarin.Essentials;
-using Android;
-using Android.Content.PM;
-using Android.Support.V4.App;
-using Android.Support.V4.Content;
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) // LocalApplicationData, ApplicationData, UserProfile, Personal, MyDocuments, Desktop, DesktopDirectory
-{
-    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-}
-if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) // LocalApplicationData, ApplicationData, UserProfile, Personal, MyDocuments, Desktop, DesktopDirectory
-{
-    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-}
-if (RuntimeInformation.IsOSPlatform(OSPlatform.Android))
-{
-    if (ContextCompat.CheckSelfPermission(Android.App.Application.Context, Manifest.Permission.WriteExternalStorage) != (int)Permission.Granted)
+---------------------------------------------------------------------------------------------------
+
+    using System;
+    using System.IO;
+    using System.Runtime.InteropServices;
+    using Android.Content.PM;
+    using Android.OS;
+    using Xamarin.Essentials;
+    using Android;
+    using Android.Content.PM;
+    using Android.Support.V4.App;
+    using Android.Support.V4.Content;
+
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) // LocalApplicationData, ApplicationData, UserProfile, Personal, MyDocuments, Desktop, DesktopDirectory
     {
-        ActivityCompat.RequestPermissions(MainActivity.Instance, new string[] { Manifest.Permission.WriteExternalStorage }, 1);
+        return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     }
-    path = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "MyAppFolder");
-    return Path.Combine(Android.OS.Environment.ExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath, "MyAppFolder");
-}
-if (RuntimeInformation.IsOSPlatform(OSPlatform.iOS))
-{
-    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-}
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) // LocalApplicationData, ApplicationData, UserProfile, Personal, MyDocuments, Desktop, DesktopDirectory
+    {
+        return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    }
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Android))
+    {
+        if (ContextCompat.CheckSelfPermission(Android.App.Application.Context, Manifest.Permission.WriteExternalStorage) != (int)Permission.Granted)
+        {
+            ActivityCompat.RequestPermissions(MainActivity.Instance, new string[] { Manifest.Permission.WriteExternalStorage }, 1);
+        }
+        path = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "MyAppFolder");
+        return Path.Combine(Android.OS.Environment.ExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath, "MyAppFolder");
+    }
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.iOS))
+    {
+        return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    }
 
 ---------------------------------------------------------------------------------------------------
 
@@ -269,121 +272,122 @@ store the refresh token for each cloud provider
 
 ---------------------------------------------------------------------------------------------------
 
-<PackageReference Include="AspNet.Security.OAuth.Dropbox" Version="9.0.0" />
-<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.1" />
-<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.1" />
-<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.1" />
+    <PackageReference Include="AspNet.Security.OAuth.Dropbox" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.1" />
 
 ---------------------------------------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using System.Security.Claims;
-using System.Text.Json;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authentication.Google;
+    using System.Security.Claims;
+    using System.Text.Json;
 
-namespace OpenHabitTracker.Blazor.Web;
+    namespace OpenHabitTracker.Blazor.Web;
 
-public static class AuthenticationSetup
-{
-    public static IServiceCollection AddAuthenticationProviders(this IServiceCollection services)
+    public static class AuthenticationSetup
     {
-        services.AddAuthentication(options =>
+        public static IServiceCollection AddAuthenticationProviders(this IServiceCollection services)
         {
-            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme; // Default for external providers
-        })
-        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-        {
-            options.LoginPath = "/login";
-            options.LogoutPath = "/logout";
-            options.ExpireTimeSpan = TimeSpan.FromDays(14); // Remember login for 14 days
-        })
-        .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-        {
-            options.ClientId = "Your-Google-Client-Id";
-            options.ClientSecret = "Your-Google-Client-Secret";
-            options.Scope.Add("email");
-            options.Scope.Add("profile");
-            options.SaveTokens = true;
-            options.Events.OnCreatingTicket = async context =>
+            services.AddAuthentication(options =>
             {
-                var identity = context.Principal.Identity as ClaimsIdentity;
-                var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
-                var name = context.Principal.FindFirst(ClaimTypes.Name)?.Value;
-                identity.AddClaim(new Claim("email", email ?? string.Empty));
-                identity.AddClaim(new Claim("name", name ?? string.Empty));
-                // Save tokens for later API calls if needed
-                var tokens = JsonSerializer.Serialize(context.Properties.GetTokens());
-                identity.AddClaim(new Claim("tokens", tokens));
-            };
-        })
-        .AddMicrosoftAccount(options =>
-        {
-            options.ClientId = "Your-OneDrive-Client-Id";
-            options.ClientSecret = "Your-OneDrive-Client-Secret";
-            options.SaveTokens = true;
-            options.Scope.Add("email");
-            options.Scope.Add("openid");
-            options.Scope.Add("profile");
-            options.Events.OnCreatingTicket = async context =>
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme; // Default for external providers
+            })
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                var identity = context.Principal.Identity as ClaimsIdentity;
-                var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
-                var name = context.Principal.FindFirst(ClaimTypes.Name)?.Value;
-                identity.AddClaim(new Claim("email", email ?? string.Empty));
-                identity.AddClaim(new Claim("name", name ?? string.Empty));
-                // Save tokens for later API calls
-                var tokens = JsonSerializer.Serialize(context.Properties.GetTokens());
-                identity.AddClaim(new Claim("tokens", tokens));
-            };
-        })
-        .AddDropbox(options =>
-        {
-            options.ClientId = "Your-Dropbox-Client-Id";
-            options.ClientSecret = "Your-Dropbox-Client-Secret";
-            options.SaveTokens = true;
-            options.Events.OnCreatingTicket = async context =>
+                options.LoginPath = "/login";
+                options.LogoutPath = "/logout";
+                options.ExpireTimeSpan = TimeSpan.FromDays(14); // Remember login for 14 days
+            })
+            .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
             {
-                var identity = context.Principal.Identity as ClaimsIdentity;
-                // Dropbox doesn't return email in default scopes, so fetch additional data if needed
-                var userInfoResponse = await context.Backchannel.GetAsync("https://api.dropboxapi.com/2/users/get_current_account");
-                if (userInfoResponse.IsSuccessStatusCode)
+                options.ClientId = "Your-Google-Client-Id";
+                options.ClientSecret = "Your-Google-Client-Secret";
+                options.Scope.Add("email");
+                options.Scope.Add("profile");
+                options.SaveTokens = true;
+                options.Events.OnCreatingTicket = async context =>
                 {
-                    var userInfo = JsonDocument.Parse(await userInfoResponse.Content.ReadAsStringAsync());
-                    var email = userInfo.RootElement.GetProperty("email").GetString();
-                    var name = userInfo.RootElement.GetProperty("name").GetProperty("display_name").GetString();
+                    var identity = context.Principal.Identity as ClaimsIdentity;
+                    var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
+                    var name = context.Principal.FindFirst(ClaimTypes.Name)?.Value;
                     identity.AddClaim(new Claim("email", email ?? string.Empty));
                     identity.AddClaim(new Claim("name", name ?? string.Empty));
-                }
-            };
-        })
-        .AddOpenIdConnect("iCloud", options =>
-        {
-            options.Authority = "https://appleid.apple.com";
-            options.ClientId = "Your-Apple-Client-Id";
-            options.ClientSecret = "Your-Apple-Client-Secret"; // Use JWT-based client secret as per Apple guidelines
-            options.ResponseType = "code";
-            options.Scope.Add("email");
-            options.Scope.Add("name");
-            options.SaveTokens = true;
-            options.Events.OnTokenValidated = context =>
+                    // Save tokens for later API calls if needed
+                    var tokens = JsonSerializer.Serialize(context.Properties.GetTokens());
+                    identity.AddClaim(new Claim("tokens", tokens));
+                };
+            })
+            .AddMicrosoftAccount(options =>
             {
-                var identity = context.Principal.Identity as ClaimsIdentity;
-                var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
-                var name = context.Principal.FindFirst("name")?.Value;
-                identity.AddClaim(new Claim("email", email ?? string.Empty));
-                identity.AddClaim(new Claim("name", name ?? string.Empty));
-                return Task.CompletedTask;
-            };
-        });
-        return services;
+                options.ClientId = "Your-OneDrive-Client-Id";
+                options.ClientSecret = "Your-OneDrive-Client-Secret";
+                options.SaveTokens = true;
+                options.Scope.Add("email");
+                options.Scope.Add("openid");
+                options.Scope.Add("profile");
+                options.Events.OnCreatingTicket = async context =>
+                {
+                    var identity = context.Principal.Identity as ClaimsIdentity;
+                    var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
+                    var name = context.Principal.FindFirst(ClaimTypes.Name)?.Value;
+                    identity.AddClaim(new Claim("email", email ?? string.Empty));
+                    identity.AddClaim(new Claim("name", name ?? string.Empty));
+                    // Save tokens for later API calls
+                    var tokens = JsonSerializer.Serialize(context.Properties.GetTokens());
+                    identity.AddClaim(new Claim("tokens", tokens));
+                };
+            })
+            .AddDropbox(options =>
+            {
+                options.ClientId = "Your-Dropbox-Client-Id";
+                options.ClientSecret = "Your-Dropbox-Client-Secret";
+                options.SaveTokens = true;
+                options.Events.OnCreatingTicket = async context =>
+                {
+                    var identity = context.Principal.Identity as ClaimsIdentity;
+                    // Dropbox doesn't return email in default scopes, so fetch additional data if needed
+                    var userInfoResponse = await context.Backchannel.GetAsync("https://api.dropboxapi.com/2/users/get_current_account");
+                    if (userInfoResponse.IsSuccessStatusCode)
+                    {
+                        var userInfo = JsonDocument.Parse(await userInfoResponse.Content.ReadAsStringAsync());
+                        var email = userInfo.RootElement.GetProperty("email").GetString();
+                        var name = userInfo.RootElement.GetProperty("name").GetProperty("display_name").GetString();
+                        identity.AddClaim(new Claim("email", email ?? string.Empty));
+                        identity.AddClaim(new Claim("name", name ?? string.Empty));
+                    }
+                };
+            })
+            .AddOpenIdConnect("iCloud", options =>
+            {
+                options.Authority = "https://appleid.apple.com";
+                options.ClientId = "Your-Apple-Client-Id";
+                options.ClientSecret = "Your-Apple-Client-Secret"; // Use JWT-based client secret as per Apple guidelines
+                options.ResponseType = "code";
+                options.Scope.Add("email");
+                options.Scope.Add("name");
+                options.SaveTokens = true;
+                options.Events.OnTokenValidated = context =>
+                {
+                    var identity = context.Principal.Identity as ClaimsIdentity;
+                    var email = context.Principal.FindFirst(ClaimTypes.Email)?.Value;
+                    var name = context.Principal.FindFirst("name")?.Value;
+                    identity.AddClaim(new Claim("email", email ?? string.Empty));
+                    identity.AddClaim(new Claim("name", name ?? string.Empty));
+                    return Task.CompletedTask;
+                };
+            });
+            return services;
+        }
     }
-}
 
 ---------------------------------------------------------------------------------------------------
 
 setup Authentication
+
     <!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
     @* <CascadingAuthenticationState> *@
     @* </CascadingAuthenticationState> *@
@@ -464,49 +468,49 @@ OpenHabitTracker.Blazor.Server:
 
 ---------------------------------------------------------------------------------------------------
 
-Google Keep
-    - title
-    - pin
-    - note
-    - reminder
-        - date
-        - time
-        - place
-        - repeat
-            - Does not repeat
-            - Daily
-            - Weekly
-            - Monthly
-            - Yearly
-            - Custom:
-                - Forever
-                - Until a date
-                - For a number of events
-    - collaborator
-    - background
-    - (app) take photo
-    - add image
-    - archive
-    - delete
-    - add label
-    - add drawing
-    - (app) recording
-    - make copy
-    - show checkboxes
-    - (app) send (share)
-    - copy to Google Docs
-    - version history
-    - undo
-    - redo
-    - close
-    - (app):
-        - h1
-        - h2
-        - normal text
-        - bold
-        - italic
-        - underline
-        - clear (\) text (T) formatting
+    Google Keep
+        - title
+        - pin
+        - note
+        - reminder
+            - date
+            - time
+            - place
+            - repeat
+                - Does not repeat
+                - Daily
+                - Weekly
+                - Monthly
+                - Yearly
+                - Custom:
+                    - Forever
+                    - Until a date
+                    - For a number of events
+        - collaborator
+        - background
+        - (app) take photo
+        - add image
+        - archive
+        - delete
+        - add label
+        - add drawing
+        - (app) recording
+        - make copy
+        - show checkboxes
+        - (app) send (share)
+        - copy to Google Docs
+        - version history
+        - undo
+        - redo
+        - close
+        - (app):
+            - h1
+            - h2
+            - normal text
+            - bold
+            - italic
+            - underline
+            - clear (\) text (T) formatting
 
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
