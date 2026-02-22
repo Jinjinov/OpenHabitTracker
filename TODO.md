@@ -60,9 +60,9 @@ ASAP:
 
 fix persistent cookie login in OpenHabitTracker.Blazor.Web
 
-break up ClientState
+break up class ClientState
 
-check DateTime.Now vs DateTime.UtcNow
+check using DateTime.Now vs DateTime.UtcNow in DB
 
 Timer loop continues after stop (HabitComponent.razor, TaskComponent.razor)
 PeriodicTimer loop has no CancellationToken — timer keeps running after component is disposed (memory leak)
@@ -126,6 +126,8 @@ set `_lastRefreshAt = DateTime.UtcNow;` on local changes, so a local change won'
 ---------------------------------------------------------------------------------------------------
 
 4.
+Data.razor -> "Online sync" -> "Log in"
+Sync between `DataLocation.Local` and `DataLocation.Remote` in `ClientState.SetDataLocation()`
 method to copy one db context to another
 
     public void CopyData(DbContext source, DbContext destination)
