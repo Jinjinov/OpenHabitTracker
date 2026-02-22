@@ -58,6 +58,11 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ASAP:
 
+check DateTime.Now vs DateTime.UtcNow
+
+Timer loop continues after stop (HabitComponent.razor, TaskComponent.razor)
+PeriodicTimer loop has no CancellationToken — timer keeps running after component is disposed (memory leak)
+
 1.
 add help steps to Settings
    - "Show priority"
