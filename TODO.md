@@ -41,7 +41,7 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
                         List<HabitModel>? Habits
                             List<ItemModel>? Items
                             List<TimeModel>? TimesDone
-                provide `ClientData` as imput
+                provide `ClientData` as input
                     - if `Model` is not found in the `Dictionary` then use `_dataAccess`
                     - add it to `Dictionary` in `ClientData`
         2.
@@ -51,7 +51,7 @@ find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-l
             make sure that every `DataAccess.Add` and `DataAccess.Update` and `DataAccess.Remove` also updates `Dictionary<long, Model>` in `ClientData`
             private `DataAccess` in `ClientData`
 
-this is a big problem - services use _dataAccess on their own, but AppData is supposed to represent the current state - as the only source of truth
+this is a big problem - services use `_dataAccess` on their own, but `AppData` is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
 ---------------------------------------------------------------------------------------------------
