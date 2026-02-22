@@ -58,41 +58,45 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ASAP:
 
-0.
+1.
 add help steps to Settings
    - "Show priority"
    - "Show category"
    - "Show habit statistics"
 
-1.
-add group "and / or" toggle:
-- all habits/items done -> green
-- one habit/item done -> green
-
 2.
-LastDone date: for a group, for the items
-- add date to habit item
-- add date to category
-- all of the above
-add settings to show, hide this extra info
+exact repeating reminders, like Google Keep
 
 3.
 drag & drop reorder - manual sort - 1000000 sort index
 - sort categories?
 - sort items?
 
+---------------------------------------------------------------------------------------------------
+
 4.
-exact repeating reminders, like Google Keep
+add group "and / or" toggle:
+- all habits/items done -> green
+- one habit/item done -> green
 
 5.
+LastDone date: for a group, for the items
+- add date to habit item
+- add date to category
+- all of the above
+add settings to show, hide this extra info
+
+6.
 This week (xx.xx - yy.yy) statistics 
 - x out of y habits done
 - x out of y groups are green
 
-6.
-upgrade to .NET 10
+---------------------------------------------------------------------------------------------------
 
 7.
+upgrade to .NET 10
+
+8.
 upgrade NuGet versions
 
 ---------------------------------------------------------------------------------------------------
