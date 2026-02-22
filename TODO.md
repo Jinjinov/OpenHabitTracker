@@ -56,16 +56,13 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-- upgrade to .NET 10
+ASAP:
 
-- upgrade NuGet versions
-
-- add help steps to Settings
+0.
+add help steps to Settings
    - "Show priority"
    - "Show category"
    - "Show habit statistics"
-
----------------------------------------------------------------------------------------------------
 
 1.
 add group "and / or" toggle:
@@ -84,11 +81,19 @@ drag & drop reorder - manual sort - 1000000 sort index
 - sort categories?
 - sort items?
 
+4.
 exact repeating reminders, like Google Keep
 
+5.
 This week (xx.xx - yy.yy) statistics 
 - x out of y habits done
 - x out of y groups are green
+
+6.
+upgrade to .NET 10
+
+7.
+upgrade NuGet versions
 
 ---------------------------------------------------------------------------------------------------
 
