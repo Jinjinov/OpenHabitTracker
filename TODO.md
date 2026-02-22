@@ -58,7 +58,7 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ASAP:
 
-fix persistent login
+fix persistent cookie login in OpenHabitTracker.Blazor.Web
 
 break up ClientState
 
