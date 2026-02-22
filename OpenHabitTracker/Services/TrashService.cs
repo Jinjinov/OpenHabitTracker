@@ -15,6 +15,13 @@ public class TrashService(ClientState appData)
         await _appData.LoadTrash();
     }
 
+    // Fix with the visitor pattern. It's the standard solution for "I have a closed set of types and need to dispatch operations on them without type switching."
+    // The idea: instead of the caller switching on the type, each model "accepts" a visitor and calls the right overload automatically (double dispatch).
+
+    // another fix is to separate List<ContentModel>? Trash into 
+    // List<HabitModel>? TrashedHabits
+    // List<NoteModel>?  TrashedNotes
+    // List<TaskModel>?  TrashedTasks
     public async Task Restore(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
     {
         model.IsDeleted = false;

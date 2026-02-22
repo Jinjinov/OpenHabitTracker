@@ -58,6 +58,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ASAP:
 
+fix persistent login
+
+break up ClientState
+
 check DateTime.Now vs DateTime.UtcNow
 
 Timer loop continues after stop (HabitComponent.razor, TaskComponent.razor)

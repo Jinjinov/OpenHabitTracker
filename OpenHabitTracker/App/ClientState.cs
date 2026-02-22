@@ -184,6 +184,9 @@ public class ClientState
         }
     }
 
+    // UpdateModel() used in CategoryService is secondary, the primary use of UpdateModel() is in CategoryComponent.razor, ColorComponent.razor, PriorityComponent.razor
+    // TODO:: replace call to UpdateModel in CategoryComponent.razor, ColorComponent.razor, PriorityComponent.razor with EventCallback
+    // Habits, Notes, Tasks, HabitComponent, NoteComponent, TaskComponent handle the EventCallback
     public async Task UpdateModel(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
     {
         if (model is HabitModel habitModel && await DataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)
