@@ -79,6 +79,8 @@ builder.Services.AddAuthentication(options =>
     .AddCookie(options =>
     {
         options.LoginPath = "/login";
+        options.ExpireTimeSpan = TimeSpan.FromDays(30);
+        options.SlidingExpiration = true;
     })
     .AddJwtBearer(options =>
     {
