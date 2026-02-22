@@ -9,7 +9,7 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
+        Current?.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
