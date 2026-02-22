@@ -298,7 +298,7 @@ public class ClientState
             {
                 await LoadUsers();
 
-                Settings = GetDefaultSettings();
+                Settings = SettingsModel.GetDefaultSettings(User.Id);
 
                 settingsEntity = Settings.ToEntity();
 
@@ -322,70 +322,6 @@ public class ClientState
 
             await DataAccess.UpdateSettings(settings);
         }
-    }
-
-    private SettingsModel GetDefaultSettings()
-    {
-        return new SettingsModel
-        {
-            UserId = User.Id,
-            IsDarkMode = true,
-            Theme = "default",
-            StartPage = "/notes",
-            StartSidebar = "Menu",
-            Culture = "en",
-            FirstDayOfWeek = DayOfWeek.Monday,
-            SelectedRatio = Ratio.ElapsedToDesired,
-            BaseUrl = "",
-            RefreshToken = "",
-            RememberMe = true,
-            ShowHelp = true,
-            UncheckAllItemsOnHabitDone = false,
-            ShowPriorityDropdown = true,
-            ShowItemList = true,
-            ShowSmallCalendar = true,
-            ShowLargeCalendar = true,
-            ShowHabitStatistics = false,
-            ShowCategory = true,
-            ShowColor = true,
-            ShowCreatedUpdated = false,
-            InsertTabsInNoteContent = true,
-            DisplayNoteContentAsMarkdown = true,
-            HideCompletedTasks = true,
-            ShowOnlyOverSelectedRatioMin = false,
-            SelectedRatioMin = 50,
-            HorizontalMargin = 1,
-            VerticalMargin = 3,
-            CategoryFilterDisplay = FilterDisplay.CheckBoxes,
-            PriorityFilterDisplay = FilterDisplay.CheckBoxes,
-            SelectedCategoryId = null,
-            SelectedPriority = null,
-            HiddenCategoryIds = [],
-            ShowPriority = new()
-            {
-                { Priority.None, true },
-                { Priority.VeryLow, true },
-                { Priority.Low, true },
-                { Priority.Medium, true },
-                { Priority.High, true },
-                { Priority.VeryHigh, true }
-            },
-            FoldSection = new()
-            {
-                { QuerySection.Search, false },
-                { QuerySection.FilterByDate, false },
-                { QuerySection.FilterByCategory, false },
-                { QuerySection.FilterByPriority, false },
-                { QuerySection.FilterByStatus, false },
-                { QuerySection.Sort, false }
-            },
-            SortBy = new()
-            {
-                { ContentType.Note, Sort.Priority },
-                { ContentType.Task, Sort.PlannedAt },
-                { ContentType.Habit, Sort.SelectedRatio }
-            }
-        };
     }
 
     public async Task LoadHabits()
@@ -819,7 +755,7 @@ public class ClientState
 
     public async Task AddWelcomeNote()
     {
-        SettingsModel settings = GetDefaultSettings();
+        SettingsModel settings = SettingsModel.GetDefaultSettings(User.Id);
 
         UserImportExportData userData = _examples.GetWelcomeNote(User, settings);
 
@@ -828,7 +764,7 @@ public class ClientState
 
     public async Task AddExamples()
     {
-        SettingsModel settings = GetDefaultSettings();
+        SettingsModel settings = SettingsModel.GetDefaultSettings(User.Id);
 
         UserImportExportData userData = _examples.GetExamples(User, settings);
 

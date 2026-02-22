@@ -62,9 +62,12 @@ check for code duplication, pay extra attention if any code could be replaced wi
 
 break up class ClientState
 
-Step 1 — Polling engine (lines 93–165): Extract the 5 private fields (_timer, _timerTask, _cts, _interval, _refresh) and the methods StartPolling(), StopPolling(), ShortPolling(), SetRefreshAction() into a new RemoteSyncService class in OpenHabitTracker/App/. It needs IDataAccess injected (to call GetUsers()), and two callbacks: Func<Task> for RefreshState and Action for UI refresh. ClientState injects RemoteSyncService and delegates to it. Register it in DI. Search all files that call StartPolling, StopPolling, SetRefreshAction directly on ClientState and update them.
-
-Step 2 — GetDefaultSettings() (line 324): Pure factory method, no async, no DB. Its only external dependency is User.Id, which becomes a long userId parameter. Extract as a static method — either a DefaultSettingsFactory static class or a static factory method on SettingsModel. Update the 3 callers inside ClientState that call GetDefaultSettings().
+Step 1 — Polling engine (lines 93–165): 
+    Extract the 5 private fields (_timer, _timerTask, _cts, _interval, _refresh) and the methods StartPolling(), StopPolling(), ShortPolling(), SetRefreshAction() into a new RemoteSyncService class in OpenHabitTracker/App/. 
+    It needs IDataAccess injected (to call GetUsers()), and two callbacks: Func<Task> for RefreshState and Action for UI refresh. 
+    ClientState injects RemoteSyncService and delegates to it. 
+    Register it in DI. 
+    Search all files that call StartPolling, StopPolling, SetRefreshAction directly on ClientState and update them.
 
 fix persistent cookie login in OpenHabitTracker.Blazor.Web
 
