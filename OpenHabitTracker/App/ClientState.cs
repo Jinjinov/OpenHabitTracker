@@ -253,46 +253,7 @@ public class ClientState
 
             if (settings.Count > 0 && settings[0] is SettingsEntity settingsEntity)
             {
-                Settings = new SettingsModel
-                {
-                    Id = settingsEntity.Id,
-                    UserId = settingsEntity.UserId,
-                    IsDarkMode = settingsEntity.IsDarkMode,
-                    Theme = settingsEntity.Theme,
-                    StartPage = settingsEntity.StartPage,
-                    StartSidebar = settingsEntity.StartSidebar,
-                    Culture = settingsEntity.Culture,
-                    FirstDayOfWeek = settingsEntity.FirstDayOfWeek,
-                    SelectedRatio = settingsEntity.SelectedRatio,
-                    BaseUrl = settingsEntity.BaseUrl,
-                    RefreshToken = settingsEntity.RefreshToken,
-                    RememberMe = settingsEntity.RememberMe,
-                    ShowHelp = settingsEntity.ShowHelp,
-                    UncheckAllItemsOnHabitDone = settingsEntity.UncheckAllItemsOnHabitDone,
-                    ShowPriorityDropdown = settingsEntity.ShowPriorityDropdown,
-                    ShowItemList = settingsEntity.ShowItemList,
-                    ShowSmallCalendar = settingsEntity.ShowSmallCalendar,
-                    ShowLargeCalendar = settingsEntity.ShowLargeCalendar,
-                    ShowHabitStatistics = settingsEntity.ShowHabitStatistics,
-                    ShowCategory = settingsEntity.ShowCategory,
-                    ShowColor = settingsEntity.ShowColor,
-                    ShowCreatedUpdated = settingsEntity.ShowCreatedUpdated,
-                    InsertTabsInNoteContent = settingsEntity.InsertTabsInNoteContent,
-                    DisplayNoteContentAsMarkdown = settingsEntity.DisplayNoteContentAsMarkdown,
-                    HideCompletedTasks = settingsEntity.HideCompletedTasks,
-                    ShowOnlyOverSelectedRatioMin = settingsEntity.ShowOnlyOverSelectedRatioMin,
-                    SelectedRatioMin = settingsEntity.SelectedRatioMin,
-                    HorizontalMargin = settingsEntity.HorizontalMargin,
-                    VerticalMargin = settingsEntity.VerticalMargin,
-                    CategoryFilterDisplay = settingsEntity.CategoryFilterDisplay,
-                    PriorityFilterDisplay = settingsEntity.PriorityFilterDisplay,
-                    SelectedCategoryId = settingsEntity.SelectedCategoryId,
-                    SelectedPriority = settingsEntity.SelectedPriority,
-                    HiddenCategoryIds = settingsEntity.HiddenCategoryIds,
-                    ShowPriority = settingsEntity.ShowPriority,
-                    FoldSection = settingsEntity.FoldSection,
-                    SortBy = settingsEntity.SortBy
-                };
+                Settings = settingsEntity.ToModel();
             }
             else
             {
