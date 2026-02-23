@@ -63,13 +63,13 @@ break up class ClientState
 Polling engine: 
     Extract the 5 private fields (_timer, _timerTask, _cts, _interval, _refresh) 
     and the methods StartPolling(), StopPolling(), ShortPolling(), SetRefreshAction() 
-    into a new RemoteSync class in OpenHabitTracker/App/. 
+    into a new RemoteDataSync class in OpenHabitTracker/App/. 
 
-1. Create class RemoteSync(ClientState)
+1. Create class RemoteDataSync(ClientState)
 
 
 
-2. Move to RemoteSync
+2. Move to RemoteDataSync
 
 Fields: _timer, _timerTask, _cts, _interval, _refresh, _lastRefreshAt
 
