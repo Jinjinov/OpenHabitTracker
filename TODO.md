@@ -75,28 +75,20 @@ Fields: _timer, _timerTask, _cts, _interval, _refresh, _lastRefreshAt
 
 Methods: SetRefreshAction, StartPolling, StopPolling, ShortPolling, SetDataLocation
 
-3. Update ClientState
-
-Remove _lastRefreshAt and its assignment from RefreshState
-
 ---------------------------------------------------------------------------------------------------
 
-1. Change LoadSettings to return bool
-
-OK
-
-2. Extract GetUserData + SetUserData into UserDataAccessor(ClientState)
+1. Extract GetUserData + SetUserData into UserDataAccessor(ClientState)
 
 New class, depends only on ClientState (for model data, Load* methods, DataAccess, MarkdownToHtml)
 ClientState loses both methods
 
-3. Move AddWelcomeNote + AddExamples into Examples
+2. Move AddWelcomeNote + AddExamples into Examples
 
 Examples gains UserDataAccessor as a constructor dependency
 Methods become AddWelcomeNote(UserModel user) and AddExamples(UserModel user)
 ClientState loses both methods, _examples field, and Examples constructor parameter
 
-4. Update DI registration
+3. Update DI registration
 
 ClientState      — no longer needs Examples
 UserDataAccessor — depends on ClientState
