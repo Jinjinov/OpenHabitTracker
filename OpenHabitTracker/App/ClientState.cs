@@ -219,14 +219,7 @@ public class ClientState
 
             if (users.Count > 0 && users[0] is IUserEntity user)
             {
-                User = new UserModel
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    PasswordHash = user.PasswordHash,
-                    LastChangeAt = user.LastChangeAt
-                };
+                User = user.ToModel();
             }
             else
             {
