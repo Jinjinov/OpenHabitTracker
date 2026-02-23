@@ -152,6 +152,7 @@ public class ClientState
                     if (_lastRefreshAt < users[0].LastChangeAt)
                     {
                         await RefreshState();
+                        _lastRefreshAt = DateTime.UtcNow;
 
                         _refresh?.Invoke();
                     }
@@ -166,13 +167,8 @@ public class ClientState
 
     public async Task SetDataLocation(DataLocation dataLocation)
     {
-        DataLocation = dataLocation;
-
-        _clientData = _clientDataByLocation[DataLocation];
-
-        DataAccess = _dataAccessByLocation[DataLocation];
-
-        await RefreshState();
+        await SetDataLocationAndRefresh(dataLocation);
+        _lastRefreshAt = DateTime.UtcNow;
 
         if (DataLocation == DataLocation.Remote)
         {
@@ -182,6 +178,17 @@ public class ClientState
         {
             await StopPolling();
         }
+    }
+
+    public async Task SetDataLocationAndRefresh(DataLocation dataLocation)
+    {
+        DataLocation = dataLocation;
+
+        _clientData = _clientDataByLocation[DataLocation];
+
+        DataAccess = _dataAccessByLocation[DataLocation];
+
+        await RefreshState();
     }
 
     // UpdateModel() used in CategoryService is secondary, the primary use of UpdateModel() is in CategoryComponent.razor, ColorComponent.razor, PriorityComponent.razor
@@ -415,6 +422,7 @@ public class ClientState
         await DataAccess.DeleteAllUserData();
 
         await RefreshState();
+        //_lastRefreshAt = DateTime.UtcNow;
     }
 
     public async Task RefreshState()
@@ -438,7 +446,7 @@ public class ClientState
 
         await LoadContent();
 
-        _lastRefreshAt = DateTime.UtcNow;
+        //_lastRefreshAt = DateTime.UtcNow;
     }
 
     public async Task<UserImportExportData> GetUserData()

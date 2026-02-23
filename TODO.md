@@ -61,35 +61,23 @@ ASAP:
 break up class ClientState
 
 Polling engine: 
-    Extract the 5 private fields (_timer, _timerTask, _cts, _interval, _refresh) and the methods StartPolling(), StopPolling(), ShortPolling(), SetRefreshAction() into a new RemoteSyncService class in OpenHabitTracker/App/. 
-    It needs IDataAccess injected (to call GetUsers()), and two callbacks: Func<Task> for RefreshState and Action for UI refresh. 
-    ClientState injects RemoteSyncService and delegates to it. 
-    Register it in DI. 
-    Search all files that call StartPolling, StopPolling, SetRefreshAction directly on ClientState and update them.
+    Extract the 5 private fields (_timer, _timerTask, _cts, _interval, _refresh) 
+    and the methods StartPolling(), StopPolling(), ShortPolling(), SetRefreshAction() 
+    into a new RemoteSyncService class in OpenHabitTracker/App/. 
 
-1. Create SyncService class
+1. Create class SyncService(ClientState)
 
-Constructor takes two delegates to avoid circular DI dependency:
 
-public class SyncService(Func<IDataAccess> getDataAccess, Func<Task> refreshState)
-
-ClientState instantiates it directly (not via DI):
-
-_syncService = new SyncService(() => DataAccess, RefreshState);
 
 2. Move to SyncService
 
 Fields: _timer, _timerTask, _cts, _interval, _refresh, _lastRefreshAt
 
-Methods: SetRefreshAction, StartPolling, StopPolling, ShortPolling
+Methods: SetRefreshAction, StartPolling, StopPolling, ShortPolling, SetDataLocation
 
 3. Update ClientState
 
-Remove all moved fields and methods
-Remove _lastRefreshAt and its assignment from RefreshState - NO!!! - RefreshState is called 3 times, make LastRefreshAt public
-Add private readonly SyncService _syncService
-SetRefreshAction becomes a one-line pass-through: _syncService.SetRefreshAction(refresh)
-SetDataLocation delegates: _syncService.StartPolling() / await _syncService.StopPolling()
+Remove _lastRefreshAt and its assignment from RefreshState
 
 ---------------------------------------------------------------------------------------------------
 
