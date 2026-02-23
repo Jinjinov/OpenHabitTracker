@@ -83,19 +83,13 @@ Fields: _timer, _timerTask, _cts, _interval, _refresh, _lastRefreshAt
 
 Methods: SetRefreshAction, StartPolling, StopPolling, ShortPolling
 
-In ShortPolling, after calling await refreshState(), set _lastRefreshAt = DateTime.UtcNow
-
 3. Update ClientState
 
 Remove all moved fields and methods
-Remove _lastRefreshAt and its assignment from RefreshState - NO!!! - RefreshState is called 3 times
+Remove _lastRefreshAt and its assignment from RefreshState - NO!!! - RefreshState is called 3 times, make LastRefreshAt public
 Add private readonly SyncService _syncService
 SetRefreshAction becomes a one-line pass-through: _syncService.SetRefreshAction(refresh)
 SetDataLocation delegates: _syncService.StartPolling() / await _syncService.StopPolling()
-
-4. No DI changes needed
-
-SyncService is not registered — ClientState owns it. The UI still calls clientState.SetRefreshAction(...) unchanged.
 
 ---------------------------------------------------------------------------------------------------
 
@@ -104,7 +98,6 @@ SyncService is not registered — ClientState owns it. The UI still calls client
 Replace bool loadWelcomeNote = true parameter with a bool return value
 Return true when settings were created for the first time, false otherwise
 Remove the AddWelcomeNote() call from inside LoadSettings
-RefreshState already passes loadWelcomeNote: false — it just ignores the return value after the change
 
 2. Extract GetUserData + SetUserData into ImportExportService(ClientState)
 
