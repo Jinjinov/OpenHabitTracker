@@ -288,24 +288,11 @@ public class ClientState
             await LoadTimes(); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
 
             IReadOnlyList<HabitEntity> habits = await DataAccess.GetHabits();
-            Habits = habits.Select(x => new HabitModel
+            Habits = habits.Select(x =>
             {
-                Id = x.Id,
-                CategoryId = x.CategoryId,
-                Priority = x.Priority,
-                IsDeleted = x.IsDeleted,
-                Title = x.Title,
-                Color = x.Color,
-                CreatedAt = x.CreatedAt,
-                UpdatedAt = x.UpdatedAt,
-
-                RepeatCount = x.RepeatCount,
-                RepeatInterval = x.RepeatInterval,
-                RepeatPeriod = x.RepeatPeriod,
-                Duration = x.Duration,
-                LastTimeDoneAt = x.LastTimeDoneAt,
-
-                TimesDone = Times!.Values.Where(y => y.HabitId == x.Id).ToList() // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
+                HabitModel m = x.ToModel();
+                m.TimesDone = Times!.Values.Where(y => y.HabitId == x.Id).ToList(); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
+                return m;
             }).ToDictionary(x => x.Id);
 
             foreach (HabitModel habit in Habits.Values) // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
@@ -323,19 +310,11 @@ public class ClientState
             await LoadPriorities();
 
             IReadOnlyList<NoteEntity> notes = await DataAccess.GetNotes();
-            Notes = notes.Select(x => new NoteModel
+            Notes = notes.Select(x =>
             {
-                Id = x.Id,
-                CategoryId = x.CategoryId,
-                Priority = x.Priority,
-                IsDeleted = x.IsDeleted,
-                Title = x.Title,
-                Color = x.Color,
-                CreatedAt = x.CreatedAt,
-                UpdatedAt = x.UpdatedAt,
-
-                Content = x.Content,
-                ContentMarkdown = _markdownToHtml.GetMarkdown(x.Content)
+                NoteModel m = x.ToModel();
+                m.ContentMarkdown = _markdownToHtml.GetMarkdown(x.Content);
+                return m;
             }).ToDictionary(x => x.Id);
         }
     }
