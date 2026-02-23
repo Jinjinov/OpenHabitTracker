@@ -237,10 +237,12 @@ public class ClientState
     }
 
     // TODO:: instead of bool loadWelcomeNote param:
-    // bool isFirstRun = await LoadSettings();
-    // if (isFirstRun) await AddWelcomeNote();
-    public async Task LoadSettings(bool loadWelcomeNote = true)
+    // bool loadWelcomeNote = await LoadSettings();
+    // if (loadWelcomeNote) await AddWelcomeNote();
+    public async Task<bool> LoadSettings()
     {
+        bool loadWelcomeNote = false;
+
         if (Settings.Id == 0)
         {
             IReadOnlyList<SettingsEntity> settings = await DataAccess.GetSettings();
@@ -261,12 +263,11 @@ public class ClientState
 
                 Settings.Id = settingsEntity.Id;
 
-                if (loadWelcomeNote)
-                {
-                    await AddWelcomeNote();
-                }
+                loadWelcomeNote = true;
             }
         }
+
+        return loadWelcomeNote;
     }
 
     public async Task UpdateSettings()
@@ -420,7 +421,11 @@ public class ClientState
     {
         Settings = new();
 
-        await LoadSettings(loadWelcomeNote: false);
+        bool loadWelcomeNote = await LoadSettings();
+        // RefreshState() is called from DeleteAllData(), SetDataLocation(), ShortPolling()
+        // don't add welcome note in any case
+        //if (loadWelcomeNote)
+        //    await AddWelcomeNote();
 
         Habits = null;
         Notes = null;
@@ -438,7 +443,12 @@ public class ClientState
 
     public async Task<UserImportExportData> GetUserData()
     {
-        await LoadSettings();
+        bool loadWelcomeNote = await LoadSettings();
+        // AddWelcomeNote() must be called on the first app run
+        // there is no way to get to the import/export menu before UI is initialized
+        // so, don't add welcome note
+        //if (loadWelcomeNote)
+        //    await AddWelcomeNote();
 
         await LoadContent();
 

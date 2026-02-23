@@ -53,7 +53,9 @@ await dataAccess.Initialize();
 
 ClientState appData = host.Services.GetRequiredService<ClientState>();
 await appData.LoadUsers();
-await appData.LoadSettings();
+bool loadWelcomeNote = await appData.LoadSettings();
+if (loadWelcomeNote)
+    await appData.AddWelcomeNote();
 
 logger.LogInformation("Running app");
 

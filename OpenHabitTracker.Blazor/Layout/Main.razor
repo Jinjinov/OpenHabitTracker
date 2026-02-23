@@ -202,7 +202,9 @@
         Logger.LogInformation("MainLayout.OnInitializedAsync start");
 
         await ClientState.LoadUsers();
-        await ClientState.LoadSettings();
+        bool loadWelcomeNote = await ClientState.LoadSettings();
+        if (loadWelcomeNote)
+            await ClientState.AddWelcomeNote();
 
         ClientState.SetRefreshAction(() => StateHasChanged());
 
