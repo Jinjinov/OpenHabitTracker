@@ -355,22 +355,7 @@ public class ClientState
             await LoadPriorities();
 
             IReadOnlyList<TaskEntity> tasks = await DataAccess.GetTasks();
-            Tasks = tasks.Select(x => new TaskModel
-            {
-                Id = x.Id,
-                CategoryId = x.CategoryId,
-                Priority = x.Priority,
-                IsDeleted = x.IsDeleted,
-                Title = x.Title,
-                Color = x.Color,
-                CreatedAt = x.CreatedAt,
-                UpdatedAt = x.UpdatedAt,
-
-                StartedAt = x.StartedAt,
-                CompletedAt = x.CompletedAt,
-                PlannedAt = x.PlannedAt,
-                Duration = x.Duration
-            }).ToDictionary(x => x.Id);
+            Tasks = tasks.Select(x => x.ToModel()).ToDictionary(x => x.Id);
         }
     }
 
@@ -379,13 +364,7 @@ public class ClientState
         if (Times is null)
         {
             IReadOnlyList<TimeEntity> times = await DataAccess.GetTimes();
-            Times = times.Select(c => new TimeModel
-            {
-                Id = c.Id,
-                HabitId = c.HabitId,
-                StartedAt = c.StartedAt,
-                CompletedAt = c.CompletedAt,
-            }).ToDictionary(x => x.Id);
+            Times = times.Select(c => c.ToModel()).ToDictionary(x => x.Id);
         }
     }
 
@@ -394,13 +373,7 @@ public class ClientState
         if (Items is null)
         {
             IReadOnlyList<ItemEntity> items = await DataAccess.GetItems();
-            Items = items.Select(c => new ItemModel
-            {
-                Id = c.Id,
-                ParentId = c.ParentId,
-                Title = c.Title,
-                DoneAt = c.DoneAt,
-            }).ToDictionary(x => x.Id);
+            Items = items.Select(c => c.ToModel()).ToDictionary(x => x.Id);
         }
     }
 
@@ -410,12 +383,7 @@ public class ClientState
         {
             IReadOnlyList<CategoryEntity> categories = await DataAccess.GetCategories();
 
-            Categories = categories.Select(c => new CategoryModel
-            {
-                Id = c.Id,
-                UserId = c.UserId,
-                Title = c.Title,
-            }).ToDictionary(x => x.Id);
+            Categories = categories.Select(c => c.ToModel()).ToDictionary(x => x.Id);
         }
     }
 
@@ -443,11 +411,7 @@ public class ClientState
                 priorities = defaultPriorities;
             }
 
-            Priorities = priorities.Select(c => new PriorityModel
-            {
-                Id = c.Id,
-                Title = c.Title,
-            }).ToDictionary(x => x.Id);
+            Priorities = priorities.Select(c => c.ToModel()).ToDictionary(x => x.Id);
         }
     }
 
