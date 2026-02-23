@@ -63,13 +63,13 @@ break up class ClientState
 Polling engine: 
     Extract the 5 private fields (_timer, _timerTask, _cts, _interval, _refresh) 
     and the methods StartPolling(), StopPolling(), ShortPolling(), SetRefreshAction() 
-    into a new RemoteSyncService class in OpenHabitTracker/App/. 
+    into a new RemoteSync class in OpenHabitTracker/App/. 
 
-1. Create class SyncService(ClientState)
+1. Create class RemoteSync(ClientState)
 
 
 
-2. Move to SyncService
+2. Move to RemoteSync
 
 Fields: _timer, _timerTask, _cts, _interval, _refresh, _lastRefreshAt
 
@@ -85,22 +85,22 @@ Remove _lastRefreshAt and its assignment from RefreshState
 
 OK
 
-2. Extract GetUserData + SetUserData into ImportExportService(ClientState)
+2. Extract GetUserData + SetUserData into UserDataAccessor(ClientState)
 
 New class, depends only on ClientState (for model data, Load* methods, DataAccess, MarkdownToHtml)
 ClientState loses both methods
 
 3. Move AddWelcomeNote + AddExamples into Examples
 
-Examples gains ImportExportService as a constructor dependency
+Examples gains UserDataAccessor as a constructor dependency
 Methods become AddWelcomeNote(UserModel user) and AddExamples(UserModel user)
 ClientState loses both methods, _examples field, and Examples constructor parameter
 
 4. Update DI registration
 
-ClientState         — no longer needs Examples
-ImportExportService — depends on ClientState
-Examples            — depends on MarkdownToHtml + ImportExportService
+ClientState      — no longer needs Examples
+UserDataAccessor — depends on ClientState
+Examples         — depends on MarkdownToHtml + UserDataAccessor
 
 ---------------------------------------------------------------------------------------------------
 
