@@ -58,16 +58,78 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ASAP:
 
-check for code duplication, pay extra attention if any code could be replaced with any of the methods in EntityToModel or ModelToEntity
-
 break up class ClientState
 
-Step 1 — Polling engine (lines 93–165): 
+Polling engine: 
     Extract the 5 private fields (_timer, _timerTask, _cts, _interval, _refresh) and the methods StartPolling(), StopPolling(), ShortPolling(), SetRefreshAction() into a new RemoteSyncService class in OpenHabitTracker/App/. 
     It needs IDataAccess injected (to call GetUsers()), and two callbacks: Func<Task> for RefreshState and Action for UI refresh. 
     ClientState injects RemoteSyncService and delegates to it. 
     Register it in DI. 
     Search all files that call StartPolling, StopPolling, SetRefreshAction directly on ClientState and update them.
+
+1. Create SyncService class
+
+Constructor takes two delegates to avoid circular DI dependency:
+
+public class SyncService(Func<IDataAccess> getDataAccess, Func<Task> refreshState)
+
+ClientState instantiates it directly (not via DI):
+
+_syncService = new SyncService(() => DataAccess, RefreshState);
+
+2. Move to SyncService
+
+Fields: _timer, _timerTask, _cts, _interval, _refresh, _lastRefreshAt
+
+Methods: SetRefreshAction, StartPolling, StopPolling, ShortPolling
+
+In ShortPolling, after calling await refreshState(), set _lastRefreshAt = DateTime.UtcNow
+
+3. Update ClientState
+
+Remove all moved fields and methods
+Remove _lastRefreshAt and its assignment from RefreshState - NO!!! - RefreshState is called 3 times
+Add private readonly SyncService _syncService
+SetRefreshAction becomes a one-line pass-through: _syncService.SetRefreshAction(refresh)
+SetDataLocation delegates: _syncService.StartPolling() / await _syncService.StopPolling()
+
+4. No DI changes needed
+
+SyncService is not registered — ClientState owns it. The UI still calls clientState.SetRefreshAction(...) unchanged.
+
+---------------------------------------------------------------------------------------------------
+
+1. Change LoadSettings to return bool
+
+Replace bool loadWelcomeNote = true parameter with a bool return value
+Return true when settings were created for the first time, false otherwise
+Remove the AddWelcomeNote() call from inside LoadSettings
+RefreshState already passes loadWelcomeNote: false — it just ignores the return value after the change
+
+2. Extract GetUserData + SetUserData into ImportExportService(ClientState)
+
+New class, depends only on ClientState (for model data, Load* methods, DataAccess, MarkdownToHtml)
+ClientState loses both methods
+
+3. Move AddWelcomeNote + AddExamples into Examples
+
+Examples gains ImportExportService as a constructor dependency
+Methods become AddWelcomeNote(UserModel user) and AddExamples(UserModel user)
+ClientState loses both methods, _examples field, and Examples constructor parameter
+
+4. Update DI registration
+
+ClientState         — no longer needs Examples
+ImportExportService — depends on ClientState
+Examples            — depends on MarkdownToHtml + ImportExportService
+
+5. Update call sites (UI layer)
+
+First run: if (await clientState.LoadSettings()) await examples.AddWelcomeNote(clientState.User);
+Delete all data: same check after DeleteAllData()
+Load examples button: await examples.AddExamples(clientState.User)
+
+---------------------------------------------------------------------------------------------------
 
 fix persistent cookie login in OpenHabitTracker.Blazor.Web
 

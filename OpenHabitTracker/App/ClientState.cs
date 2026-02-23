@@ -147,9 +147,9 @@ public class ClientState
             {
                 IReadOnlyList<UserEntity> users = await DataAccess.GetUsers();
 
-                if (users.Count > 0 && users[0] is IUserEntity user)
+                if (users.Count > 0)
                 {
-                    if (_lastRefreshAt < user.LastChangeAt)
+                    if (_lastRefreshAt < users[0].LastChangeAt)
                     {
                         await RefreshState();
 
@@ -236,6 +236,9 @@ public class ClientState
         }
     }
 
+    // TODO:: instead of bool loadWelcomeNote param:
+    // bool isFirstRun = await LoadSettings();
+    // if (isFirstRun) await AddWelcomeNote();
     public async Task LoadSettings(bool loadWelcomeNote = true)
     {
         if (Settings.Id == 0)
