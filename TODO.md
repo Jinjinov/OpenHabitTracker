@@ -125,6 +125,8 @@ Examples            — depends on MarkdownToHtml + ImportExportService
 
 5. Update call sites (UI layer)
 
+call LoadSettings() before calling GetUserData(), remove LoadSettings() from GetUserData()
+
 First run: if (await clientState.LoadSettings()) await examples.AddWelcomeNote(clientState.User);
 Delete all data: same check after DeleteAllData()
 Load examples button: await examples.AddExamples(clientState.User)
