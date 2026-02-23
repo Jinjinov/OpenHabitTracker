@@ -93,14 +93,14 @@ public static class EntityToModel
         model.Title = entity.Title;
     }
 
-    public static UserModel ToModel(this IUserEntity entity)
+    public static UserModel ToModel(this UserEntity entity)
     {
         UserModel model = new();
         entity.CopyToModel(model);
         return model;
     }
 
-    public static void CopyToModel(this IUserEntity entity, UserModel model)
+    public static void CopyToModel(this UserEntity entity, UserModel model)
     {
         model.Id = entity.Id;
         model.UserName = entity.UserName;

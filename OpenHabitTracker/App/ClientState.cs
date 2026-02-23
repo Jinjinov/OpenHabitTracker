@@ -195,15 +195,13 @@ public class ClientState
 
             await DataAccess.UpdateHabit(habitEntity);
         }
-
-        if (model is NoteModel noteModel && await DataAccess.GetNote(noteModel.Id) is NoteEntity noteEntity)
+        else if (model is NoteModel noteModel && await DataAccess.GetNote(noteModel.Id) is NoteEntity noteEntity)
         {
             noteModel.CopyToEntity(noteEntity);
 
             await DataAccess.UpdateNote(noteEntity);
         }
-
-        if (model is TaskModel taskModel && await DataAccess.GetTask(taskModel.Id) is TaskEntity taskEntity)
+        else if (model is TaskModel taskModel && await DataAccess.GetTask(taskModel.Id) is TaskEntity taskEntity)
         {
             taskModel.CopyToEntity(taskEntity);
 
@@ -217,9 +215,9 @@ public class ClientState
         {
             IReadOnlyList<UserEntity> users = await DataAccess.GetUsers();
 
-            if (users.Count > 0 && users[0] is IUserEntity user)
+            if (users.Count > 0)
             {
-                User = user.ToModel();
+                User = users[0].ToModel();
             }
             else
             {
