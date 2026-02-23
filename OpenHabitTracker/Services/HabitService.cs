@@ -106,13 +106,7 @@ public class HabitService(ClientState appData, SearchFilterService searchFilterS
         if (habit is not null && habit.TimesDone is null)
         {
             IReadOnlyList<TimeEntity> timesDone = await _appData.DataAccess.GetTimes(habit.Id);
-            habit.TimesDone = timesDone.Select(t => new TimeModel
-            {
-                Id = t.Id,
-                HabitId = t.HabitId,
-                StartedAt = t.StartedAt,
-                CompletedAt = t.CompletedAt
-            }).ToList();
+            habit.TimesDone = timesDone.Select(t => t.ToModel()).ToList();
 
             habit.RefreshTimesDoneByDay();
         }

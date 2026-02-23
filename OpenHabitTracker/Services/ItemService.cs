@@ -21,13 +21,7 @@ public class ItemService(ClientState appData)
             {
                 IReadOnlyList<ItemEntity> itms = await _appData.DataAccess.GetItems(items.Id);
 
-                items.Items = itms.Select(i => new ItemModel
-                {
-                    Id = i.Id,
-                    ParentId = i.ParentId,
-                    Title = i.Title,
-                    DoneAt = i.DoneAt
-                }).ToList();
+                items.Items = itms.Select(i => i.ToModel()).ToList();
             }
         }
 
