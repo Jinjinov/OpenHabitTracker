@@ -242,9 +242,9 @@ public class ClientState
         {
             IReadOnlyList<SettingsEntity> settings = await DataAccess.GetSettings();
 
-            if (settings.Count > 0 && settings[0] is SettingsEntity settingsEntity)
+            if (settings.Count > 0)
             {
-                Settings = settingsEntity.ToModel();
+                Settings = settings[0].ToModel();
             }
             else
             {
@@ -252,7 +252,7 @@ public class ClientState
 
                 Settings = SettingsModel.GetDefaultSettings(User.Id);
 
-                settingsEntity = Settings.ToEntity();
+                SettingsEntity settingsEntity = Settings.ToEntity();
 
                 await DataAccess.AddSettings(settingsEntity);
 
