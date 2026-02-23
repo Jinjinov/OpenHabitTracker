@@ -95,9 +95,7 @@ SetDataLocation delegates: _syncService.StartPolling() / await _syncService.Stop
 
 1. Change LoadSettings to return bool
 
-Replace bool loadWelcomeNote = true parameter with a bool return value
-Return true when settings were created for the first time, false otherwise
-Remove the AddWelcomeNote() call from inside LoadSettings
+OK
 
 2. Extract GetUserData + SetUserData into ImportExportService(ClientState)
 
@@ -115,14 +113,6 @@ ClientState loses both methods, _examples field, and Examples constructor parame
 ClientState         — no longer needs Examples
 ImportExportService — depends on ClientState
 Examples            — depends on MarkdownToHtml + ImportExportService
-
-5. Update call sites (UI layer)
-
-call LoadSettings() before calling GetUserData(), remove LoadSettings() from GetUserData()
-
-First run: if (await clientState.LoadSettings()) await examples.AddWelcomeNote(clientState.User);
-Delete all data: same check after DeleteAllData()
-Load examples button: await examples.AddExamples(clientState.User)
 
 ---------------------------------------------------------------------------------------------------
 
