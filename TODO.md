@@ -76,6 +76,11 @@ check using DateTime.Now vs DateTime.UtcNow in DB
 Timer loop continues after stop (HabitComponent.razor, TaskComponent.razor)
 PeriodicTimer loop has no CancellationToken — timer keeps running after component is disposed (memory leak)
 
+- [ ] `HabitModel` + `TaskModel` — extract identical `Duration`, `DurationProxy`, `DurationHour`, `DurationMinute` into a shared base class (e.g. `DurationModel : ItemsModel`)
+- [ ] `TrashService.RestoreAll()` — replace duplicated type-switch with a loop calling `Restore(model)` (use `.ToList()` to snapshot before iterating)
+- [ ] Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
+- [ ] `CalendarParams.SetCalendarStartToNextWeek` + `SetCalendarStartToPreviousWeek` — extract to a private `ShiftCalendarByWeek(int days)` helper; only difference is `+7` vs `-7`
+
 1.
 add help steps to Settings
    - "Show priority"
