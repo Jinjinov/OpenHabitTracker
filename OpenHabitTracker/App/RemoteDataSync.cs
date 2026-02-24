@@ -3,7 +3,7 @@ using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.App;
 
-public class RemoteDataSync(ClientState clientState)
+public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
 {
     private readonly ClientState _clientState = clientState;
 
@@ -15,6 +15,11 @@ public class RemoteDataSync(ClientState clientState)
     private readonly TimeSpan _interval = TimeSpan.FromSeconds(10);
 
     private Action? _refresh;
+
+    public async ValueTask DisposeAsync()
+    {
+        await StopPolling();
+    }
 
     public void SetRefreshAction(Action refresh)
     {
