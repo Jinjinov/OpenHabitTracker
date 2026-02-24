@@ -67,32 +67,9 @@ Polling engine:
 
 1. Create class RemoteDataSync(ClientState)
 
-
-
-2. Move to RemoteDataSync
-
 Fields: _timer, _timerTask, _cts, _interval, _refresh, _lastRefreshAt
 
 Methods: SetRefreshAction, StartPolling, StopPolling, ShortPolling, SetDataLocation
-
----------------------------------------------------------------------------------------------------
-
-1. Extract GetUserData + SetUserData into UserDataAccessor(ClientState)
-
-New class, depends only on ClientState (for model data, Load* methods, DataAccess, MarkdownToHtml)
-ClientState loses both methods
-
-2. Move AddWelcomeNote + AddExamples into Examples
-
-Examples gains UserDataAccessor as a constructor dependency
-Methods become AddWelcomeNote(UserModel user) and AddExamples(UserModel user)
-ClientState loses both methods, _examples field, and Examples constructor parameter
-
-3. Update DI registration
-
-ClientState      — no longer needs Examples
-UserDataAccessor — depends on ClientState
-Examples         — depends on MarkdownToHtml + UserDataAccessor
 
 ---------------------------------------------------------------------------------------------------
 
