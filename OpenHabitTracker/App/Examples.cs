@@ -22,6 +22,8 @@ public class Examples(ClientState clientState, MarkdownToHtml markdownToHtml)
             - use `Search, Filter, Sort` to display only what you want to focus on
 
             *Feedback is welcome on [Reddit](https://www.reddit.com/r/OpenHabitTracker) and [GitHub](https://github.com/Jinjinov/OpenHabitTracker/discussions)*
+
+            *If you enjoy using OpenHabitTracker, leaving a rating on your store would really mean a lot and help others discover the app!*
             """;
 
         UserImportExportData userData = new()
