@@ -325,18 +325,13 @@ public class ClientState
         await DataAccess.DeleteAllUserData();
 
         await RefreshState();
-        //_lastRefreshAt = DateTime.UtcNow;
     }
 
     public async Task RefreshState()
     {
         Settings = new();
 
-        bool loadWelcomeNote = await LoadSettings();
-        // RefreshState() is called from DeleteAllData(), SetDataLocation(), ShortPolling()
-        // don't add welcome note in any case
-        //if (loadWelcomeNote)
-        //    await AddWelcomeNote();
+        await LoadSettings();
 
         Habits = null;
         Notes = null;
@@ -348,18 +343,11 @@ public class ClientState
         Trash = null;
 
         await LoadContent();
-
-        //_lastRefreshAt = DateTime.UtcNow;
     }
 
     public async Task<UserImportExportData> GetUserData()
     {
-        bool loadWelcomeNote = await LoadSettings();
-        // AddWelcomeNote() must be called on the first app run
-        // there is no way to get to the import/export menu before UI is initialized
-        // so, don't add welcome note
-        //if (loadWelcomeNote)
-        //    await AddWelcomeNote();
+        await LoadSettings();
 
         await LoadContent();
 
@@ -480,7 +468,7 @@ public class ClientState
 
         // each CategoryEntity now has the id, set it to CategoryModel and to all items
 
-        categories.ForEach(x => x.Model.Id = x.Entity.Id);
+        //categories.ForEach(x => x.Model.Id = x.Entity.Id);
 
         foreach ((CategoryModel Model, CategoryEntity Entity) in categories)
         {
