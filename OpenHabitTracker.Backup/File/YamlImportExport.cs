@@ -1,13 +1,13 @@
-﻿using OpenHabitTracker.App;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.Converters;
 
 namespace OpenHabitTracker.Backup.File;
 
-public class YamlImportExport(ClientState appData)
+public class YamlImportExport(ClientState clientState)
 {
-    private readonly ClientState _appData = appData;
+    private readonly ClientState _clientState = clientState;
 
     private readonly ISerializer _serializer = new SerializerBuilder().WithTypeConverter(new TimeOnlyConverter(formats: ["HH:mm:ss"])).Build();
 
@@ -15,7 +15,7 @@ public class YamlImportExport(ClientState appData)
 
     public async Task<string> GetDataExportFileString()
     {
-        UserImportExportData userData = await _appData.GetUserData();
+        UserImportExportData userData = await _clientState.GetUserData();
 
         using StringWriter stringWriter = new();
 
@@ -32,6 +32,6 @@ public class YamlImportExport(ClientState appData)
 
         UserImportExportData userData = _deserializer.Deserialize<UserImportExportData>(content);
 
-        await _appData.SetUserData(userData);
+        await _clientState.SetUserData(userData);
     }
 }

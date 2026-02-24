@@ -1,4 +1,4 @@
-﻿using OpenHabitTracker.App;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
 using System.IO.Compression;
@@ -6,9 +6,9 @@ using System.Text.Json;
 
 namespace OpenHabitTracker.Backup.GoogleKeep;
 
-public class GoogleKeepImport(ClientState appData)
+public class GoogleKeepImport(ClientState clientState)
 {
-    private readonly ClientState _appData = appData;
+    private readonly ClientState _clientState = clientState;
 
     //readonly Dictionary<string, string> _namedColors = new()
     //{
@@ -129,7 +129,7 @@ public class GoogleKeepImport(ClientState appData)
             }
         }
 
-        await _appData.SetUserData(userData);
+        await _clientState.SetUserData(userData);
     }
 
     private static async Task<List<GoogleKeepNote>> GetGoogleKeepNotes(Stream stream)

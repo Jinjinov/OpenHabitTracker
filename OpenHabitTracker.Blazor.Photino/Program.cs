@@ -67,9 +67,9 @@ public class Program
         IDataAccess dataAccess = app.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
 
-        //ClientState appData = app.Services.GetRequiredService<ClientState>();
-        //appData.LoadUsers();
-        //appData.LoadSettings();
+        //ClientState clientState = app.Services.GetRequiredService<ClientState>();
+        //clientState.LoadUsers();
+        //clientState.LoadSettings();
 
         //IAuthService authService = app.Services.GetRequiredService<IAuthService>();
         //authService.TryRefreshTokenLogin();

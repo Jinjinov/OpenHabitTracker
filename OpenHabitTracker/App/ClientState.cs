@@ -8,18 +8,16 @@ public class ClientState
 {
     private readonly Dictionary<DataLocation, IDataAccess> _dataAccessByLocation;
     private readonly MarkdownToHtml _markdownToHtml;
-    private readonly Examples _examples;
 
     private readonly Dictionary<DataLocation, ClientData> _clientDataByLocation;
     private ClientData _clientData;
 
     private DateTime _lastRefreshAt;
 
-    public ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml, Examples examples)
+    public ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml)
     {
         _dataAccessByLocation = dataAccess.ToDictionary(x => x.DataLocation);
         _markdownToHtml = markdownToHtml;
-        _examples = examples;
 
         DataLocation = DataLocation.Local;
 
@@ -667,23 +665,5 @@ public class ClientState
 
         if (Categories is null) Categories = categories.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in categories.ToDictionary(x => x.Model.Id, x => x.Model)) Categories[pair.Key] = pair.Value;
-    }
-
-    public async Task AddWelcomeNote()
-    {
-        SettingsModel settings = SettingsModel.GetDefaultSettings(User.Id);
-
-        UserImportExportData userData = _examples.GetWelcomeNote(User, settings);
-
-        await SetUserData(userData);
-    }
-
-    public async Task AddExamples()
-    {
-        SettingsModel settings = SettingsModel.GetDefaultSettings(User.Id);
-
-        UserImportExportData userData = _examples.GetExamples(User, settings);
-
-        await SetUserData(userData);
     }
 }

@@ -70,9 +70,9 @@ public partial class MainForm : Form
         IDataAccess dataAccess = serviceProvider.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
 
-        //ClientState appData = serviceProvider.GetRequiredService<ClientState>();
-        //appData.LoadUsers();
-        //appData.LoadSettings();
+        //ClientState clientState = serviceProvider.GetRequiredService<ClientState>();
+        //clientState.LoadUsers();
+        //clientState.LoadSettings();
 
         //IAuthService authService = serviceProvider.GetRequiredService<IAuthService>();
         //authService.TryRefreshTokenLogin();

@@ -51,11 +51,12 @@ logger.LogInformation("Initializing database");
 IDataAccess dataAccess = host.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
 await dataAccess.Initialize();
 
-ClientState appData = host.Services.GetRequiredService<ClientState>();
-await appData.LoadUsers();
-bool loadWelcomeNote = await appData.LoadSettings();
+ClientState clientState = host.Services.GetRequiredService<ClientState>();
+Examples examples = host.Services.GetRequiredService<Examples>();
+await clientState.LoadUsers();
+bool loadWelcomeNote = await clientState.LoadSettings();
 if (loadWelcomeNote)
-    await appData.AddWelcomeNote();
+    await examples.AddWelcomeNote(clientState.User);
 
 logger.LogInformation("Running app");
 

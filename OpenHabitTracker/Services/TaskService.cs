@@ -5,12 +5,12 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class TaskService(ClientState appData, SearchFilterService searchFilterService)
+public class TaskService(ClientState clientState, SearchFilterService searchFilterService)
 {
-    private readonly ClientState _appData = appData;
+    private readonly ClientState _clientState = clientState;
     private readonly SearchFilterService _searchFilterService = searchFilterService;
 
-    public IReadOnlyCollection<TaskModel>? Tasks => _appData.Tasks?.Values;
+    public IReadOnlyCollection<TaskModel>? Tasks => _clientState.Tasks?.Values;
 
     public TaskModel? SelectedTask { get; set; }
 
@@ -18,7 +18,7 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
 
     public IEnumerable<TaskModel> GetTasks()
     {
-        SettingsModel settings = _appData.Settings;
+        SettingsModel settings = _clientState.Settings;
 
         IEnumerable<TaskModel> tasks = Tasks!.Where(x => !x.IsDeleted);
 
@@ -91,18 +91,18 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
 
     public async Task Initialize()
     {
-        await _appData.LoadCategories();
-        await _appData.LoadPriorities();
+        await _clientState.LoadCategories();
+        await _clientState.LoadPriorities();
 
-        await _appData.LoadTasks();
+        await _clientState.LoadTasks();
     }
 
     public void SetSelectedTask(long? id)
     {
-        if (_appData.Tasks is null)
+        if (_clientState.Tasks is null)
             return;
 
-        SelectedTask = id.HasValue && _appData.Tasks.TryGetValue(id.Value, out TaskModel? task) ? task : null;
+        SelectedTask = id.HasValue && _clientState.Tasks.TryGetValue(id.Value, out TaskModel? task) ? task : null;
 
         if (SelectedTask is not null)
             NewTask = null;
@@ -110,7 +110,7 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
 
     public async Task AddTask()
     {
-        if (_appData.Tasks is null || NewTask is null)
+        if (_clientState.Tasks is null || NewTask is null)
             return;
 
         DateTime now = DateTime.Now;
@@ -120,11 +120,11 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
 
         TaskEntity task = NewTask.ToEntity();
 
-        await _appData.DataAccess.AddTask(task);
+        await _clientState.DataAccess.AddTask(task);
 
         NewTask.Id = task.Id;
 
-        _appData.Tasks.Add(NewTask.Id, NewTask);
+        _clientState.Tasks.Add(NewTask.Id, NewTask);
 
         NewTask = null;
     }
@@ -134,11 +134,11 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
         if (Tasks is null || SelectedTask is null)
             return;
 
-        if (await _appData.DataAccess.GetTask(SelectedTask.Id) is TaskEntity task)
+        if (await _clientState.DataAccess.GetTask(SelectedTask.Id) is TaskEntity task)
         {
             SelectedTask.CopyToEntity(task);
 
-            await _appData.DataAccess.UpdateTask(task);
+            await _clientState.DataAccess.UpdateTask(task);
         }
     }
 
@@ -152,12 +152,12 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
         task.StartedAt = now;
         task.CompletedAt = null;
 
-        if (await _appData.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
+        if (await _clientState.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
             taskEntity.StartedAt = now;
             taskEntity.CompletedAt = null;
 
-            await _appData.DataAccess.UpdateTask(taskEntity);
+            await _clientState.DataAccess.UpdateTask(taskEntity);
         }
     }
 
@@ -171,10 +171,10 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
 
         task.StartedAt = startedAt;
 
-        if (await _appData.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
+        if (await _clientState.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
             taskEntity.StartedAt = startedAt;
-            await _appData.DataAccess.UpdateTask(taskEntity);
+            await _clientState.DataAccess.UpdateTask(taskEntity);
         }
     }
 
@@ -194,7 +194,7 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
 
         task.CompletedAt = dateTime;
 
-        if (await _appData.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
+        if (await _clientState.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
             if (isCompleted)
                 taskEntity.StartedAt = null;
@@ -203,7 +203,7 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
 
             taskEntity.CompletedAt = dateTime;
 
-            await _appData.DataAccess.UpdateTask(taskEntity);
+            await _clientState.DataAccess.UpdateTask(taskEntity);
         }
 
         if (task.Items is null)
@@ -213,29 +213,29 @@ public class TaskService(ClientState appData, SearchFilterService searchFilterSe
         {
             item.DoneAt = dateTime;
 
-            if (await _appData.DataAccess.GetItem(item.Id) is ItemEntity itemEntity)
+            if (await _clientState.DataAccess.GetItem(item.Id) is ItemEntity itemEntity)
             {
                 itemEntity.DoneAt = dateTime;
 
-                await _appData.DataAccess.UpdateItem(itemEntity);
+                await _clientState.DataAccess.UpdateItem(itemEntity);
             }
         }
     }
 
     public async Task DeleteTask(TaskModel task)
     {
-        if (_appData.Tasks is null)
+        if (_clientState.Tasks is null)
             return;
 
         task.IsDeleted = true;
 
         // add to Trash if it is not null (if Trash is null, it will add this on Initialize)
-        _appData.Trash?.Add(task);
+        _clientState.Trash?.Add(task);
 
-        if (await _appData.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
+        if (await _clientState.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
             taskEntity.IsDeleted = true;
-            await _appData.DataAccess.UpdateTask(taskEntity);
+            await _clientState.DataAccess.UpdateTask(taskEntity);
         }
     }
 }

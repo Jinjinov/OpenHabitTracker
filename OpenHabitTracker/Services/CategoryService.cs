@@ -5,11 +5,11 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class CategoryService(ClientState appData)
+public class CategoryService(ClientState clientState)
 {
-    private readonly ClientState _appData = appData;
+    private readonly ClientState _clientState = clientState;
 
-    public IReadOnlyCollection<CategoryModel>? Categories => _appData.Categories?.Values;
+    public IReadOnlyCollection<CategoryModel>? Categories => _clientState.Categories?.Values;
 
     public CategoryModel? SelectedCategory { get; set; }
 
@@ -17,38 +17,38 @@ public class CategoryService(ClientState appData)
 
     public string GetCategoryTitle(long category)
     {
-        return _appData.Categories?.GetValueOrDefault(category)?.Title ?? category.ToString();
+        return _clientState.Categories?.GetValueOrDefault(category)?.Title ?? category.ToString();
     }
 
     public async Task Initialize()
     {
-        await _appData.LoadCategories();
+        await _clientState.LoadCategories();
 
-        NewCategory ??= new() { UserId = _appData.User.Id };
+        NewCategory ??= new() { UserId = _clientState.User.Id };
     }
 
     public void SetSelectedCategory(long? id)
     {
-        if (_appData.Categories is null)
+        if (_clientState.Categories is null)
             return;
 
-        SelectedCategory = id.HasValue && _appData.Categories.TryGetValue(id.Value, out CategoryModel? category) ? category : null;
+        SelectedCategory = id.HasValue && _clientState.Categories.TryGetValue(id.Value, out CategoryModel? category) ? category : null;
     }
 
     public async Task AddCategory()
     {
-        if (_appData.Categories is null || NewCategory is null)
+        if (_clientState.Categories is null || NewCategory is null)
             return;
 
         CategoryEntity category = NewCategory.ToEntity();
 
-        await _appData.DataAccess.AddCategory(category);
+        await _clientState.DataAccess.AddCategory(category);
 
         NewCategory.Id = category.Id;
 
-        _appData.Categories.Add(NewCategory.Id, NewCategory);
+        _clientState.Categories.Add(NewCategory.Id, NewCategory);
 
-        NewCategory = new() { UserId = _appData.User.Id };
+        NewCategory = new() { UserId = _clientState.User.Id };
     }
 
     public async Task UpdateCategory(string title)
@@ -58,11 +58,11 @@ public class CategoryService(ClientState appData)
 
         SelectedCategory.Title = title;
 
-        if (await _appData.DataAccess.GetCategory(SelectedCategory.Id) is CategoryEntity category)
+        if (await _clientState.DataAccess.GetCategory(SelectedCategory.Id) is CategoryEntity category)
         {
             category.Title = SelectedCategory.Title;
 
-            await _appData.DataAccess.UpdateCategory(category);
+            await _clientState.DataAccess.UpdateCategory(category);
         }
 
         SelectedCategory = null;
@@ -70,7 +70,7 @@ public class CategoryService(ClientState appData)
 
     public async Task DeleteCategory(CategoryModel category)
     {
-        if (_appData.Categories is null)
+        if (_clientState.Categories is null)
             return;
 
         if (category.Notes is not null)
@@ -78,7 +78,7 @@ public class CategoryService(ClientState appData)
             {
                 note.CategoryId = 0;
                 note.IsDeleted = true;
-                await _appData.UpdateModel(note);
+                await _clientState.UpdateModel(note);
             }
 
         if (category.Tasks is not null)
@@ -86,7 +86,7 @@ public class CategoryService(ClientState appData)
             {
                 task.CategoryId = 0;
                 task.IsDeleted = true;
-                await _appData.UpdateModel(task);
+                await _clientState.UpdateModel(task);
             }
 
         if (category.Habits is not null)
@@ -94,16 +94,16 @@ public class CategoryService(ClientState appData)
             {
                 habit.CategoryId = 0;
                 habit.IsDeleted = true;
-                await _appData.UpdateModel(habit);
+                await _clientState.UpdateModel(habit);
             }
 
-        _appData.Categories.Remove(category.Id);
+        _clientState.Categories.Remove(category.Id);
 
-        await _appData.DataAccess.RemoveCategory(category.Id);
+        await _clientState.DataAccess.RemoveCategory(category.Id);
 
-        if (_appData.Settings.HiddenCategoryIds.Contains(category.Id))
+        if (_clientState.Settings.HiddenCategoryIds.Contains(category.Id))
         {
-            _appData.Settings.HiddenCategoryIds.Remove(category.Id);
+            _clientState.Settings.HiddenCategoryIds.Remove(category.Id);
 
             await UpdateSettings();
         }
@@ -111,6 +111,6 @@ public class CategoryService(ClientState appData)
 
     private async Task UpdateSettings()
     {
-        await _appData.UpdateSettings();
+        await _clientState.UpdateSettings();
     }
 }

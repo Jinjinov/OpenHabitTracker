@@ -4,15 +4,15 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class TrashService(ClientState appData)
+public class TrashService(ClientState clientState)
 {
-    private readonly ClientState _appData = appData;
+    private readonly ClientState _clientState = clientState;
 
-    public IReadOnlyList<ContentModel>? Models => _appData.Trash;
+    public IReadOnlyList<ContentModel>? Models => _clientState.Trash;
 
     public async Task Initialize()
     {
-        await _appData.LoadTrash();
+        await _clientState.LoadTrash();
     }
 
     // Fix with the visitor pattern. It's the standard solution for "I have a closed set of types and need to dispatch operations on them without type switching."
@@ -39,33 +39,33 @@ public class TrashService(ClientState appData)
             await RestoreHabit(model.Id);
         }
 
-        _appData.Trash?.Remove(model);
+        _clientState.Trash?.Remove(model);
     }
 
     private async Task RestoreHabit(long id)
     {
-        if (await _appData.DataAccess.GetHabit(id) is HabitEntity habit)
+        if (await _clientState.DataAccess.GetHabit(id) is HabitEntity habit)
         {
             habit.IsDeleted = false;
-            await _appData.DataAccess.UpdateHabit(habit);
+            await _clientState.DataAccess.UpdateHabit(habit);
         }
     }
 
     private async Task RestoreNote(long id)
     {
-        if (await _appData.DataAccess.GetNote(id) is NoteEntity note)
+        if (await _clientState.DataAccess.GetNote(id) is NoteEntity note)
         {
             note.IsDeleted = false;
-            await _appData.DataAccess.UpdateNote(note);
+            await _clientState.DataAccess.UpdateNote(note);
         }
     }
 
     private async Task RestoreTask(long id)
     {
-        if (await _appData.DataAccess.GetTask(id) is TaskEntity task)
+        if (await _clientState.DataAccess.GetTask(id) is TaskEntity task)
         {
             task.IsDeleted = false;
-            await _appData.DataAccess.UpdateTask(task);
+            await _clientState.DataAccess.UpdateTask(task);
         }
     }
 
@@ -92,7 +92,7 @@ public class TrashService(ClientState appData)
             }
         }
 
-        _appData.Trash?.Clear();
+        _clientState.Trash?.Clear();
     }
 
     public async Task Delete(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
@@ -110,30 +110,30 @@ public class TrashService(ClientState appData)
             await DeleteHabit(model.Id);
         }
 
-        _appData.Trash?.Remove(model);
+        _clientState.Trash?.Remove(model);
     }
 
     private async Task DeleteHabit(long id)
     {
-        await _appData.DataAccess.RemoveHabit(id);
+        await _clientState.DataAccess.RemoveHabit(id);
     }
 
     private async Task DeleteNote(long id)
     {
-        await _appData.DataAccess.RemoveNote(id);
+        await _clientState.DataAccess.RemoveNote(id);
     }
 
     private async Task DeleteTask(long id)
     {
-        await _appData.DataAccess.RemoveTask(id);
+        await _clientState.DataAccess.RemoveTask(id);
     }
 
     public async Task EmptyTrash()
     {
-        await _appData.DataAccess.RemoveHabits();
-        await _appData.DataAccess.RemoveNotes();
-        await _appData.DataAccess.RemoveTasks();
+        await _clientState.DataAccess.RemoveHabits();
+        await _clientState.DataAccess.RemoveNotes();
+        await _clientState.DataAccess.RemoveTasks();
 
-        _appData.Trash?.Clear();
+        _clientState.Trash?.Clear();
     }
 }

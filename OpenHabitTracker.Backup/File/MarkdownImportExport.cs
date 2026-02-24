@@ -1,17 +1,17 @@
-﻿using OpenHabitTracker.App;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
 using System.Text;
 
 namespace OpenHabitTracker.Backup.File;
 
-public class MarkdownImportExport(ClientState appData)
+public class MarkdownImportExport(ClientState clientState)
 {
-    private readonly ClientState _appData = appData;
+    private readonly ClientState _clientState = clientState;
 
     public async Task<string> GetDataExportFileString()
     {
-        UserImportExportData userData = await _appData.GetUserData();
+        UserImportExportData userData = await _clientState.GetUserData();
 
         StringBuilder stringBuilder = new();
 
@@ -165,6 +165,6 @@ public class MarkdownImportExport(ClientState appData)
             }
         }
 
-        await _appData.SetUserData(userData);
+        await _clientState.SetUserData(userData);
     }
 }

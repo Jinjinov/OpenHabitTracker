@@ -6,6 +6,7 @@
 @using OpenHabitTracker.Services
 
 @inject ClientState ClientState
+@inject Examples Examples
 @inject IStringLocalizer Loc
 @inject ILinkAttributeService LinkAttributeService
 @inject IAuthFragment AuthFragment
@@ -97,7 +98,7 @@
 
     async Task LoadExamples()
     {
-        await ClientState.AddExamples();
+        await Examples.AddExamples(ClientState.User);
 
         await OnStateChanged();
     }

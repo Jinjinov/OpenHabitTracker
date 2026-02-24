@@ -5,9 +5,9 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class ItemService(ClientState appData)
+public class ItemService(ClientState clientState)
 {
-    private readonly ClientState _appData = appData;
+    private readonly ClientState _clientState = clientState;
 
     public ItemModel? SelectedItem { get; set; }
 
@@ -19,7 +19,7 @@ public class ItemService(ClientState appData)
         {
             if (items.Items is null)
             {
-                IReadOnlyList<ItemEntity> itms = await _appData.DataAccess.GetItems(items.Id);
+                IReadOnlyList<ItemEntity> itms = await _clientState.DataAccess.GetItems(items.Id);
 
                 items.Items = itms.Select(i => i.ToModel()).ToList();
             }
@@ -41,7 +41,7 @@ public class ItemService(ClientState appData)
 
         ItemEntity item = NewItem.ToEntity();
 
-        await _appData.DataAccess.AddItem(item);
+        await _clientState.DataAccess.AddItem(item);
 
         NewItem.Id = item.Id;
 
@@ -55,11 +55,11 @@ public class ItemService(ClientState appData)
 
         SelectedItem.Title = title;
 
-        if (await _appData.DataAccess.GetItem(SelectedItem.Id) is ItemEntity item)
+        if (await _clientState.DataAccess.GetItem(SelectedItem.Id) is ItemEntity item)
         {
             item.Title = SelectedItem.Title;
 
-            await _appData.DataAccess.UpdateItem(item);
+            await _clientState.DataAccess.UpdateItem(item);
         }
     }
 
@@ -69,11 +69,11 @@ public class ItemService(ClientState appData)
 
         item.DoneAt = done ? now : null;
 
-        if (await _appData.DataAccess.GetItem(item.Id) is ItemEntity itemEntity)
+        if (await _clientState.DataAccess.GetItem(item.Id) is ItemEntity itemEntity)
         {
             itemEntity.DoneAt = item.DoneAt;
 
-            await _appData.DataAccess.UpdateItem(itemEntity);
+            await _clientState.DataAccess.UpdateItem(itemEntity);
         }
 
         // TODO:: when all habit items are done, habit is done
@@ -84,6 +84,6 @@ public class ItemService(ClientState appData)
     {
         items?.Items?.Remove(item);
 
-        await _appData.DataAccess.RemoveItem(item.Id);
+        await _clientState.DataAccess.RemoveItem(item.Id);
     }
 }

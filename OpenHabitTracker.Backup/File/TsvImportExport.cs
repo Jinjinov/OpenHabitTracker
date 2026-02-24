@@ -1,4 +1,4 @@
-﻿using CsvHelper;
+using CsvHelper;
 using CsvHelper.Configuration;
 using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
@@ -7,9 +7,9 @@ using System.Globalization;
 
 namespace OpenHabitTracker.Backup.File;
 
-public class TsvImportExport(ClientState appData)
+public class TsvImportExport(ClientState clientState)
 {
-    private readonly ClientState _appData = appData;
+    private readonly ClientState _clientState = clientState;
 
     private readonly CsvConfiguration _csvConfiguration = new(CultureInfo.InvariantCulture)
     {
@@ -20,7 +20,7 @@ public class TsvImportExport(ClientState appData)
 
     public async Task<string> GetDataExportFileString()
     {
-        UserImportExportData userData = await _appData.GetUserData();
+        UserImportExportData userData = await _clientState.GetUserData();
 
         List<Record> records = [];
 
@@ -234,7 +234,7 @@ public class TsvImportExport(ClientState appData)
             }
         }
 
-        await _appData.SetUserData(userData);
+        await _clientState.SetUserData(userData);
     }
 
     class Record

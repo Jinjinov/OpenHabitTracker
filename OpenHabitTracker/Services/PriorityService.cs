@@ -5,11 +5,11 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class PriorityService(ClientState appData)
+public class PriorityService(ClientState clientState)
 {
-    private readonly ClientState _appData = appData;
+    private readonly ClientState _clientState = clientState;
 
-    public IReadOnlyCollection<PriorityModel>? Priorities => _appData.Priorities?.Values;
+    public IReadOnlyCollection<PriorityModel>? Priorities => _clientState.Priorities?.Values;
 
     public PriorityModel? SelectedPriority { get; set; }
 
@@ -34,37 +34,37 @@ public class PriorityService(ClientState appData)
         if (priority == Priority.None)
             return "⊘";
 
-        return _appData.Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
+        return _clientState.Priorities?.GetValueOrDefault((long)priority)?.Title ?? priority.ToString();
         */
     }
 
     public async Task Initialize()
     {
-        await _appData.LoadPriorities();
+        await _clientState.LoadPriorities();
 
         NewPriority ??= new();
     }
 
     public void SetSelectedPriority(long? id)
     {
-        if (_appData.Priorities is null)
+        if (_clientState.Priorities is null)
             return;
 
-        SelectedPriority = id.HasValue && _appData.Priorities.TryGetValue(id.Value, out PriorityModel? priority) ? priority : null;
+        SelectedPriority = id.HasValue && _clientState.Priorities.TryGetValue(id.Value, out PriorityModel? priority) ? priority : null;
     }
     /*
     public async Task AddPriority()
     {
-        if (_appData.Priorities is null || NewPriority is null)
+        if (_clientState.Priorities is null || NewPriority is null)
             return;
 
         PriorityEntity priority = NewPriority.ToEntity();
 
-        await _appData.DataAccess.AddPriority(priority);
+        await _clientState.DataAccess.AddPriority(priority);
 
         NewPriority.Id = priority.Id;
 
-        _appData.Priorities.Add(NewPriority.Id, NewPriority);
+        _clientState.Priorities.Add(NewPriority.Id, NewPriority);
 
         NewPriority = new();
     }
@@ -76,11 +76,11 @@ public class PriorityService(ClientState appData)
 
         SelectedPriority.Title = title;
 
-        if (await _appData.DataAccess.GetPriority(SelectedPriority.Id) is PriorityEntity priority)
+        if (await _clientState.DataAccess.GetPriority(SelectedPriority.Id) is PriorityEntity priority)
         {
             priority.Title = SelectedPriority.Title;
 
-            await _appData.DataAccess.UpdatePriority(priority);
+            await _clientState.DataAccess.UpdatePriority(priority);
         }
 
         SelectedPriority = null;
@@ -88,12 +88,12 @@ public class PriorityService(ClientState appData)
     /*
     public async Task DeletePriority(PriorityModel priority)
     {
-        if (_appData.Priorities is null)
+        if (_clientState.Priorities is null)
             return;
 
-        _appData.Priorities.Remove(priority.Id);
+        _clientState.Priorities.Remove(priority.Id);
 
-        await _appData.DataAccess.RemovePriority(priority.Id);
+        await _clientState.DataAccess.RemovePriority(priority.Id);
     }
     */
 }

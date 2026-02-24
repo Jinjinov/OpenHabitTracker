@@ -93,9 +93,9 @@ public static class MauiProgram
         IDataAccess dataAccess = mauiApp.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
         dataAccess.Initialize();
 
-        //ClientState appData = mauiApp.Services.GetRequiredService<ClientState>();
-        //appData.LoadUsers();
-        //appData.LoadSettings();
+        //ClientState clientState = mauiApp.Services.GetRequiredService<ClientState>();
+        //clientState.LoadUsers();
+        //clientState.LoadSettings();
 
         //IAuthService authService = mauiApp.Services.GetRequiredService<IAuthService>();
         //authService.TryRefreshTokenLogin();

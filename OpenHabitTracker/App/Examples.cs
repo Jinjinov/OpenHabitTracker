@@ -3,11 +3,12 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.App;
 
-public class Examples(MarkdownToHtml markdownToHtml)
+public class Examples(ClientState clientState, MarkdownToHtml markdownToHtml)
 {
+    private readonly ClientState _clientState = clientState;
     private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
 
-    public UserImportExportData GetWelcomeNote(UserModel user, SettingsModel settings)
+    private UserImportExportData GetWelcomeNote(UserModel user, SettingsModel settings)
     {
         DateTime now = DateTime.Now;
 
@@ -51,7 +52,7 @@ public class Examples(MarkdownToHtml markdownToHtml)
         return userData;
     }
 
-    public UserImportExportData GetExamples(UserModel user, SettingsModel settings)
+    private UserImportExportData GetExamples(UserModel user, SettingsModel settings)
     {
         DateTime now = DateTime.Now;
 
@@ -321,5 +322,23 @@ public class Examples(MarkdownToHtml markdownToHtml)
             ]
         };
         return userData;
+    }
+
+    public async Task AddWelcomeNote(UserModel user)
+    {
+        SettingsModel settings = SettingsModel.GetDefaultSettings(user.Id);
+
+        UserImportExportData userData = GetWelcomeNote(user, settings);
+
+        await _clientState.SetUserData(userData);
+    }
+
+    public async Task AddExamples(UserModel user)
+    {
+        SettingsModel settings = SettingsModel.GetDefaultSettings(user.Id);
+
+        UserImportExportData userData = GetExamples(user, settings);
+
+        await _clientState.SetUserData(userData);
     }
 }
