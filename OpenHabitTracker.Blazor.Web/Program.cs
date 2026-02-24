@@ -59,6 +59,23 @@ builder.Services.AddServices();
 
 builder.Services.AddDataAccess(databasePath);
 
+// Data Protection keys encrypt auth cookies. By default they are stored in memory and lost on process restart.
+// Hosting environments (e.g. IIS idle timeout after 20 min, app pool recycling after 29 h) restart the process regularly,
+// which invalidates all existing cookies and forces every user to log in again.
+// Persisting keys to disk means cookies survive process restarts.
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(databaseFolder));
+
+// AddIdentity internally registers a cookie auth handler for scheme "Identity.Application" (IdentityConstants.ApplicationScheme).
+// SignInManager.PasswordSignInAsync always signs in using that scheme, regardless of DefaultScheme below.
+// Default settings for the "Identity.Application" cookie: ExpireTimeSpan = 14 days, SlidingExpiration = true.
+// To override those defaults, use ConfigureApplicationCookie() AFTER AddIdentity():
+//   builder.Services.ConfigureApplicationCookie(options =>
+//   {
+//       options.LoginPath = "/login";
+//       options.ExpireTimeSpan = TimeSpan.FromDays(30);
+//       options.SlidingExpiration = true;
+//   });
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     {
         options.Password.RequireDigit = false;
@@ -76,11 +93,13 @@ builder.Services.AddAuthentication(options =>
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     })
+    // AddCookie configures a separate "Cookies" scheme (CookieAuthenticationDefaults.AuthenticationScheme).
+    // This is NOT the same cookie that SignInManager uses ("Identity.Application").
+    // It is used here only to set DefaultScheme for requests that go through the generic auth middleware
+    // (e.g. [Authorize] without an explicit scheme on Blazor pages).
     .AddCookie(options =>
     {
         options.LoginPath = "/login";
-        options.ExpireTimeSpan = TimeSpan.FromDays(30);
-        options.SlidingExpiration = true;
     })
     .AddJwtBearer(options =>
     {
