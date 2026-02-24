@@ -149,9 +149,6 @@ public class ClientState
         }
     }
 
-    // TODO:: instead of bool loadWelcomeNote param:
-    // bool loadWelcomeNote = await LoadSettings();
-    // if (loadWelcomeNote) await AddWelcomeNote();
     public async Task<bool> LoadSettings()
     {
         bool loadWelcomeNote = false;
