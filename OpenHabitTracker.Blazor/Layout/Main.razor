@@ -7,6 +7,7 @@
 
 @inject ILogger<Main> Logger
 @inject ClientState ClientState
+@inject RemoteDataSync RemoteDataSync
 @inject Examples Examples
 @inject INavBarFragment NavBarFragment
 @inject NavigationManager NavigationManager
@@ -207,13 +208,13 @@
         if (loadWelcomeNote)
             await Examples.AddWelcomeNote(ClientState.User);
 
-        ClientState.SetRefreshAction(() => StateHasChanged());
+        RemoteDataSync.SetRefreshAction(() => StateHasChanged());
 
         bool loginSuccessful = await AuthFragment.TryRefreshTokenLogin();
 
         if (!loginSuccessful && ClientState.DataAccess.MultipleServicesCanModifyData)
         {
-            ClientState.StartPolling();
+            RemoteDataSync.StartPolling();
         }
 
         Localization.Loc.SetCulture(ClientState.Settings.Culture);

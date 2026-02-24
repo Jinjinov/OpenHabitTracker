@@ -58,21 +58,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ASAP:
 
-break up class ClientState
-
-Polling engine: 
-    Extract the 5 private fields (_timer, _timerTask, _cts, _interval, _refresh) 
-    and the methods StartPolling(), StopPolling(), ShortPolling(), SetRefreshAction() 
-    into a new RemoteDataSync class in OpenHabitTracker/App/. 
-
-1. Create class RemoteDataSync(ClientState)
-
-Fields: _timer, _timerTask, _cts, _interval, _refresh, _lastRefreshAt
-
-Methods: SetRefreshAction, StartPolling, StopPolling, ShortPolling, SetDataLocation
-
----------------------------------------------------------------------------------------------------
-
 fix persistent cookie login in OpenHabitTracker.Blazor.Web
 
 check using DateTime.Now vs DateTime.UtcNow in DB
@@ -84,6 +69,8 @@ PeriodicTimer loop has no CancellationToken — timer keeps running after compon
 - [ ] `TrashService.RestoreAll()` — replace duplicated type-switch with a loop calling `Restore(model)` (use `.ToList()` to snapshot before iterating)
 - [ ] Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
 - [ ] `CalendarParams.SetCalendarStartToNextWeek` + `SetCalendarStartToPreviousWeek` — extract to a private `ShiftCalendarByWeek(int days)` helper; only difference is `+7` vs `-7`
+
+---------------------------------------------------------------------------------------------------
 
 1.
 add help steps to Settings

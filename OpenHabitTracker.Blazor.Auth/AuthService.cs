@@ -7,9 +7,10 @@ using OpenHabitTracker.Dto;
 
 namespace OpenHabitTracker.Blazor.Auth;
 
-public class AuthService(ClientState clientState, AuthClient authClient, ApiClientOptions apiClientOptions, IStringLocalizer loc) : IAuthService
+public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync, AuthClient authClient, ApiClientOptions apiClientOptions, IStringLocalizer loc) : IAuthService
 {
     private readonly ClientState _clientState = clientState;
+    private readonly RemoteDataSync _remoteDataSync = remoteDataSync;
     private readonly AuthClient _authClient = authClient;
     private readonly ApiClientOptions _apiClientOptions = apiClientOptions;
     private readonly IStringLocalizer _loc = loc;
@@ -39,7 +40,7 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
                     await _clientState.UpdateSettings();
                 }
 
-                await _clientState.SetDataLocation(DataLocation.Remote);
+                await _remoteDataSync.SetDataLocation(DataLocation.Remote);
 
                 UserEntity user = await _authClient.GetCurrentUserAsync();
 
@@ -93,7 +94,7 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
 
                 await _clientState.UpdateSettings();
 
-                await _clientState.SetDataLocation(DataLocation.Remote);
+                await _remoteDataSync.SetDataLocation(DataLocation.Remote);
 
                 //UserEntity user = await _authClient.GetCurrentUserAsync();
 
@@ -123,7 +124,7 @@ public class AuthService(ClientState clientState, AuthClient authClient, ApiClie
     {
         _apiClientOptions.BearerToken = "";
 
-        await _clientState.SetDataLocation(DataLocation.Local);
+        await _remoteDataSync.SetDataLocation(DataLocation.Local);
 
         Login = "";
         Error = "";

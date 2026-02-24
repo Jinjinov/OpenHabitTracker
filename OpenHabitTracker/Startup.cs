@@ -31,6 +31,7 @@ public static class Startup
     private static void AddDefaultServices(IServiceCollection services)
     {
         services.AddScoped<ClientState>();
+        services.AddScoped<RemoteDataSync>();
         services.AddScoped<MarkdownToHtml>();
         services.AddScoped<Examples>();
 
