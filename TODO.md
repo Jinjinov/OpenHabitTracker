@@ -63,6 +63,18 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+275 https://github.com/awesome-selfhosted/awesome-selfhosted
+18  https://github.com/pluja/awesome-privacy
+9   https://github.com/Lissy93/awesome-privacy
+9   https://github.com/AdrienTorris/awesome-blazor
+3   https://github.com/woop/awesome-quantified-self
+3   https://github.com/jyguyomarch/awesome-productivity
+4   https://github.com/unicodeveloper/awesome-opensource-apps
+
+21  https://github.com/quozd/awesome-dotnet
+21  https://github.com/thangchung/awesome-dotnet-core
+2   https://github.com/jsuarezruiz/awesome-dotnet-maui
+
 1.
 add help steps to Settings
    - "Show priority"
