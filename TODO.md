@@ -56,10 +56,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-ASAP:
-
-fix persistent cookie login in OpenHabitTracker.Blazor.Web
-
 - [ ] `HabitModel` + `TaskModel` — extract identical `Duration`, `DurationProxy`, `DurationHour`, `DurationMinute` into a shared base class (e.g. `DurationModel : ItemsModel`)
 - [ ] `TrashService.RestoreAll()` — replace duplicated type-switch with a loop calling `Restore(model)` (use `.ToList()` to snapshot before iterating)
 - [ ] Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
