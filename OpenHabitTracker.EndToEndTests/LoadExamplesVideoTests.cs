@@ -6,7 +6,7 @@ namespace OpenHabitTracker.EndToEndTests;
 [TestFixture]
 public class LoadExamplesVideoTests : BrowserTest
 {
-    private const string BaseUrl = "https://localhost:7016";
+    private const string BaseUrl = "http://localhost";
 
     private async Task RunDemoScript(IPage page)
     {
