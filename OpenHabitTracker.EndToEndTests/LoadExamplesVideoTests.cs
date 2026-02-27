@@ -10,9 +10,11 @@ public class LoadExamplesVideoTests : BrowserTest
 
     private async Task RunDemoScript(IPage page)
     {
-        // 1. /data — load built-in examples
-        await page.GotoAsync($"{BaseUrl}/data");
+        // 1. menu → Data → load built-in examples
+        await page.GotoAsync(BaseUrl);
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await page.Locator("[data-main-step-1]").ClickAsync();
+        await page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Data" }).ClickAsync();
         await page.Locator("[data-data-step-1]").ClickAsync();
         await page.WaitForTimeoutAsync(2000);
 
@@ -43,16 +45,15 @@ public class LoadExamplesVideoTests : BrowserTest
         await page.Locator("[data-habits-step-11]").ClickAsync();
         await page.WaitForTimeoutAsync(1000);
 
-        // 5. /search — type search term, show filter UI
-        await page.GotoAsync($"{BaseUrl}/search");
-        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        // 5. search icon in top bar — type search term
+        await page.Locator("[data-main-step-6]").ClickAsync();
         await page.WaitForTimeoutAsync(1000);
         await page.Locator("[data-search-step-1]").FillAsync("daily");
         await page.WaitForTimeoutAsync(2000);
 
-        // 6. /settings — change theme to show visual change
-        await page.GotoAsync($"{BaseUrl}/settings");
-        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        // 6. menu → Settings — change theme to show visual change
+        await page.Locator("[data-main-step-1]").ClickAsync();
+        await page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Settings" }).ClickAsync();
         await page.WaitForTimeoutAsync(1000);
         await page.Locator("[data-settings-step-2] select").SelectOptionAsync("cerulean");
         await page.WaitForTimeoutAsync(3000);
