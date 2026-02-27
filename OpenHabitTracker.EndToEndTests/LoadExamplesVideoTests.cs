@@ -22,11 +22,47 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await _browser.CloseAsync();
     }
 
+    private static async Task MoveToAsync(ILocator locator)
+    {
+        var box = await locator.BoundingBoxAsync();
+        if (box == null) return;
+        await locator.Page.Mouse.MoveAsync(box.X + box.Width / 2, box.Y + box.Height / 2, new MouseMoveOptions { Steps = 20 }); // move cursor smoothly to element center
+    }
+
     private static async Task ClickAsync(ILocator locator)
     {
+        await MoveToAsync(locator); // move cursor smoothly to element before hovering
         await locator.HoverAsync(); // trigger :hover CSS state
         await locator.Page.WaitForTimeoutAsync(500); // pause on hover so :hover state is visible
         await locator.ClickAsync(new LocatorClickOptions { Delay = 500 }); // hold mousedown to show :active CSS state
+    }
+
+    private static async Task SetupFakeCursorAsync(IBrowserContext context)
+    {
+        await context.AddInitScriptAsync("""
+            (() => {
+                function install() {
+                    const style = document.createElement('style');
+                    style.textContent = '* { cursor: none !important; }';
+                    document.head.appendChild(style);
+
+                    const cursor = document.createElement('div');
+                    cursor.style.cssText = 'position:fixed;top:0;left:0;width:24px;height:24px;pointer-events:none;z-index:2147483647;transform:translate(-100px,-100px)';
+                    cursor.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M1 1L1 18L5 13L8 20L10 19L7 12L13 12Z" fill="white" stroke="black" stroke-width="1" stroke-linejoin="round"/></svg>';
+                    document.body.appendChild(cursor);
+
+                    document.addEventListener('mousemove', e => {
+                        cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+                    }, true);
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', install);
+                } else {
+                    install();
+                }
+            })();
+            """);
     }
 
     private async Task RunDemoScript(IPage page)
@@ -73,6 +109,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
         // 5. search icon in top bar — type search term
         await ClickAsync(page.Locator("[data-main-step-6]")); // Search toggle button in top bar
         await page.WaitForTimeoutAsync(1000);
+        await MoveToAsync(page.Locator("[data-search-step-1]")); // move cursor to search input
         await page.Locator("[data-search-step-1]").PressSequentiallyAsync("daily", new LocatorPressSequentiallyOptions { Delay = 200 }); // search input field — typed char by char
         await page.WaitForTimeoutAsync(2000);
         await ClickAsync(page.Locator("[data-search-step-3]")); // clear search term button (x)
@@ -117,6 +154,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
             IgnoreHTTPSErrors = true
         });
 
+        await SetupFakeCursorAsync(context);
         var page = await context.NewPageAsync();
         await RunDemoScript(page);
         await context.CloseAsync();
@@ -131,6 +169,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
             IgnoreHTTPSErrors = true
         });
 
+        await SetupFakeCursorAsync(context);
         var page = await context.NewPageAsync();
         await RunDemoScript(page);
         await context.CloseAsync();
