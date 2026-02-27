@@ -132,7 +132,7 @@
   "Vertical space: set the vertical spacing between each note/task/habit": "Vertikalni prostor: nastavi vertikalni razmik med vsakim zapisom/nalogo/navado",
   "Click on title: edit category title": "Klikni na naslov: uredi naslov kategorije",
   "Delete category": "Izbriši kategorijo",
-  "load example notes, tasks and habits": "naloži primerne zapise, naloge in navade",
+  "load example notes, tasks and habits": "naloži vzorčne zapise, naloge in navade",
   "permanently delete all items": "trajno izbriši vse elemente",
   "export categories, notes, tasks, habits and settings to a JSON file": "izvozi kategorije, zapise, naloge, navade in nastavitve v datoteko JSON",
   "export categories, notes, tasks and habits to a TSV file": "izvozi kategorije, zapise, naloge in navade v datoteko TSV",
