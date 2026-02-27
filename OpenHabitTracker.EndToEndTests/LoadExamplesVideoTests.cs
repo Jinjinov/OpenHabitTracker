@@ -65,6 +65,33 @@ public class LoadExamplesVideoTests : PlaywrightTest
             """);
     }
 
+    private static async Task SetupFakeMobileCursorAsync(IBrowserContext context)
+    {
+        await context.AddInitScriptAsync("""
+            (() => {
+                function install() {
+                    const style = document.createElement('style');
+                    style.textContent = '* { cursor: none !important; }';
+                    document.head.appendChild(style);
+
+                    const cursor = document.createElement('div');
+                    cursor.style.cssText = 'position:fixed;top:0;left:0;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle, transparent 52%, rgba(0,0,0,0.65) 62%, rgba(255,255,255,1.0) 76%, rgba(0,0,0,0.65) 90%, transparent 100%);box-shadow:0 0 12px 4px rgba(0,0,0,0.5);filter:blur(1px);pointer-events:none;z-index:2147483647;transform:translate(-100px,-100px)';
+                    document.body.appendChild(cursor);
+
+                    document.addEventListener('mousemove', e => {
+                        cursor.style.transform = `translate(${e.clientX - 22}px, ${e.clientY - 22}px)`;
+                    }, true);
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', install);
+                } else {
+                    install();
+                }
+            })();
+            """);
+    }
+
     private async Task RunDemoScript(IPage page)
     {
         // 1. menu → Data → load built-in examples
@@ -169,7 +196,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
             IgnoreHTTPSErrors = true
         });
 
-        await SetupFakeCursorAsync(context);
+        await SetupFakeMobileCursorAsync(context);
         var page = await context.NewPageAsync();
         await RunDemoScript(page);
         await context.CloseAsync();
