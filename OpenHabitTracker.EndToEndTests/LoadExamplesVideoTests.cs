@@ -27,7 +27,9 @@ public class LoadExamplesVideoTests : PlaywrightTest
         // 1. menu → Data → load built-in examples
         await page.GotoAsync(BaseUrl);
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await page.Locator("[data-main-step-1]").ClickAsync(); // menu toggle button (three dots)
+        await page.WaitForTimeoutAsync(1000); // wait for Blazor OnAfterRenderAsync to finish
+        if (!await page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Data" }).IsVisibleAsync())
+            await page.Locator("[data-main-step-1]").ClickAsync(); // menu toggle button (three dots) — open only if Data button not already visible
         await page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Data" }).ClickAsync(); // Data button in menu sidebar
         await page.Locator("[data-data-step-1]").ClickAsync(); // Load examples button in Data sidebar
         await page.WaitForTimeoutAsync(2000);
@@ -69,7 +71,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.Locator("[data-main-step-1]").ClickAsync(); // menu toggle button (three dots)
         await page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Settings" }).ClickAsync(); // Settings button in menu sidebar
         await page.WaitForTimeoutAsync(1000);
-        await page.Locator("[data-settings-step-2] select").SelectOptionAsync("cerulean"); // theme selector dropdown
+        await page.Locator("[data-settings-step-2] select").SelectOptionAsync("united"); // theme selector dropdown
         await page.WaitForTimeoutAsync(3000);
     }
 
