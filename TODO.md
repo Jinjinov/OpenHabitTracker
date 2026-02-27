@@ -65,6 +65,72 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 highest priority:
 
+1.
+record MP4 video for app stores
+
+    TWO VIDEOS NEEDED:
+    - Desktop: 1920x1080, landscape, 15-30s, MP4
+    - Mobile:   886x1920, portrait,  15-30s, MP4
+
+    DESKTOP VIDEO — record on Windows PC with OBS Studio:
+    - install OBS Studio (https://obsproject.com)
+    - OBS Settings → Video → Base Resolution: 1920x1080, Output Resolution: 1920x1080
+    - OBS Settings → Output → Format: mp4, Encoder: H.264, Bitrate: 50000 kbps
+    - run the app in a 16:9 window (e.g. 1600x900) — do NOT maximize on ultrawide 3440x1440
+    - add Window Capture source pointing to the app window
+    - record 15-30 seconds
+    - no need to change Windows 125% display scaling — OBS ignores it
+
+    MOBILE VIDEO — record on Mac Mini with Xcode iOS Simulator:
+    - open Xcode, run the app targeting iPhone 16 simulator
+    - in Simulator menu: File → Record Screen (or Cmd+R to start/stop)
+    - recording saves as .mov to Desktop
+    - check resolution — if not exactly 886x1920, scale with FFmpeg:
+        ffmpeg -i input.mov -vf scale=886:1920 -c:v libx264 -crf 18 -c:a aac output.mp4
+    - no need to change Mac display scaling — Simulator records virtual device, not the display
+
+    STEP 1 — self-host both MP4 files on openhabittracker.net:
+    - add <video> tag to index.html for inline playback on the website
+
+    STEP 2 — upload both videos to YouTube (for Snap Store and Google Play):
+    - upload desktop video to YouTube (landscape, unlisted is fine)
+    - upload mobile video to YouTube (portrait, unlisted is fine)
+    - save both YouTube URLs
+
+    STEP 3 — reduce file size to under 10 MB for GitHub README:
+        ffmpeg -i input.mp4 -c:v libx264 -crf 28 -preset slow -c:a aac -b:a 128k output.mp4
+    increase CRF (up to 32) if still over 10 MB
+
+    STEP 4 — upload both reduced videos to GitHub README (drag & drop in web editor):
+    - open README.md on GitHub.com in the web editor
+    - drag and drop each MP4 → GitHub hosts it and gives a permanent CDN URL
+    - GitHub renders it as a native inline video player (only works for GitHub CDN URLs)
+
+    SUBMIT DESKTOP VIDEO (1920x1080) TO:
+    - Microsoft Store:  upload MP4 in Partner Center + also upload a 1920x1080 PNG "Super Hero Art" image (required for trailer to appear at top of listing)
+    - Mac App Store:    upload MP4 in App Store Connect
+    - Flathub:          use openhabittracker.net URL in AppStream metainfo XML:
+                            <video codec="h264" width="1920" height="1080">https://openhabittracker.net/videos/desktop.mp4</video>
+    - Snap Store:       paste desktop YouTube URL in Snap developer dashboard
+    - AlternativeTo:    add video URL in the app listing editor
+    - Product Hunt:     add video in the product media section
+
+    SUBMIT MOBILE VIDEO (886x1920) TO:
+    - App Store iPhone: upload MP4 in App Store Connect (skip iPad — no separate video needed)
+    - Google Play:      paste mobile YouTube URL in Play Console (portrait video is fine)
+    - APKPure:          claim the app listing in APKPure developer dashboard, paste mobile YouTube URL
+
+    MAKE YOUTUBE VIDEOS PUBLIC:
+    - make them public (not unlisted) with proper titles, e.g.:
+        "OpenHabitTracker — Desktop Preview" / "OpenHabitTracker — Mobile Preview"
+    - description: include keywords (habit tracker, open source, privacy, cross-platform, free)
+    - pin both to a playlist so they are grouped together
+    - add channel description with the same keywords
+
+    POST TO REDDIT:
+    - post both YouTube video links to https://www.reddit.com/r/OpenHabitTracker/
+    - cross-post to r/selfhosted, r/FOSS, r/productivity
+
 2.
 exact repeating reminders, like Google Keep
 
