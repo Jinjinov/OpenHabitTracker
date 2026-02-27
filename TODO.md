@@ -68,6 +68,59 @@ highest priority:
 0.
 write unit tests:
 
+    PRIORITY 1 - OpenHabitTracker.EndToEndTests - Playwright video recording tests (needed for app store videos)
+
+    create project: OpenHabitTracker.EndToEndTests
+    NuGet: Microsoft.Playwright.NUnit
+    run once to install browsers: pwsh playwright.ps1 install
+
+    create TestData/demo-data.json:
+    - 3 categories: Work, Personal, Health
+    - 3 notes: one with multi-line markdown (headers, bold, bullet list), one short, one with color
+    - 3 tasks: one overdue, one due today, one completed — different priorities
+    - 3 habits: one daily (with several past completions to show calendar dots), one weekly, one with sub-items
+
+    create VideoRecordingTests.cs with two test methods:
+
+        [Test] RecordDesktopVideo()   // viewport 1920x1080
+        [Test] RecordMobileVideo()    // viewport 886x1920
+
+    both tests run the same demo script:
+        1. open app, navigate to /data, import demo-data.json
+        2. navigate to /notes    — scroll list, open the markdown note (2-3s pause)
+        3. navigate to /tasks    — scroll list, check off the "due today" task (2-3s pause)
+        4. navigate to /habits   — scroll list, open habit with calendar, show calendar dots (3-4s pause)
+        5. navigate to /search   — type a search term, show filtered results (2s pause)
+        6. navigate to /settings — change theme, show the visual change (2-3s pause)
+
+    Playwright video config:
+        var context = await browser.NewContextAsync(new() {
+            ViewportSize = new() { Width = 1920, Height = 1080 }, // or 886x1920
+            RecordVideoDir = "videos/",
+            RecordVideoSize = new() { Width = 1920, Height = 1080 }
+        });
+
+    selectors: use data-* tour attributes already in components (data-notes-step-1, etc.)
+    and route-based navigation: GotoAsync("/notes"), GotoAsync("/habits"), etc.
+
+    after tests run:
+    - videos saved to videos/ folder as .webm
+    - convert to MP4: ffmpeg -i desktop.webm -c:v libx264 desktop.mp4
+
+    PRIORITY 2 - OpenHabitTracker.UnitTests - general test coverage (bUnit component tests, Appium native app tests)
+    add after Priority 1 is done
+
+    why NUnit over xUnit?
+    - NUnit has [SetUp] / [TearDown] — natural fit for browser (Playwright) and device (Appium) lifecycle
+    - xUnit has better native DI — more useful for ASP.NET integration tests, not relevant here because bUnit has its own DI via TestContext.Services
+
+    why not just use Playwright for everything?
+    - Playwright = real browser, full app, slow (seconds per test) — good for catching integration bugs and recording video
+    - bUnit = renders one Blazor component in isolation, no browser, milliseconds per test — good for testing component logic and edge cases (e.g. HabitService.CalculateRatio() with many inputs)
+    - Appium = controls the native MAUI app on iOS/Android/Windows — Playwright cannot do this
+    use bUnit when a behavior is too deep or tedious to reach through the browser UI
+    use Appium when you need to verify the native app specifically (gestures, platform behavior)
+
 1.
 record MP4 video for app stores
 
@@ -75,8 +128,8 @@ record MP4 video for app stores
     - Desktop: 1920x1080, landscape, 15-30s, MP4
     - Mobile:   886x1920, portrait,  15-30s, MP4
 
-    PLAN A — record unit tests:
-    record both videos with Playwright from the PWA (see "write unit tests"):
+    PLAN A — record Playwright tests:
+    record both videos with Playwright from the PWA:
     - Playwright UI tests drive the app navigation AND record the video at the same time
     - set RecordVideoDir + ViewportSize: 1920x1080 for desktop, 886x1920 for mobile
     - no OBS, no iOS Simulator, no Mac Mini needed — everything runs on Windows PC
