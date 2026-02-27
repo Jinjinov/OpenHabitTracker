@@ -100,8 +100,10 @@ write unit tests:
             RecordVideoSize = new() { Width = 1920, Height = 1080 }
         });
 
-    selectors: use data-* tour attributes already in components (data-notes-step-1, etc.)
-    and route-based navigation: GotoAsync("/notes"), GotoAsync("/habits"), etc.
+    base URL: https://localhost:7016 (OpenHabitTracker.Blazor.Wasm launchSettings.json)
+
+    selectors: data-* tour attributes in components — [data-notes-step-2] (open note), [data-tasks-step-4] (mark done), [data-habits-step-2] (open habit), etc.
+    route-based navigation: GotoAsync("/notes"), GotoAsync("/tasks"), GotoAsync("/habits"), GotoAsync("/search"), GotoAsync("/settings")
 
     after tests run:
     - videos saved to videos/ folder as .webm
