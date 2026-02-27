@@ -112,7 +112,7 @@ public class ImportJsonVideoTests : PlaywrightTest
     {
         var context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
-            ViewportSize = new ViewportSize { Width = 886, Height = 1920 },
+            ViewportSize = new ViewportSize { Width = 500, Height = 1082 }, // iPhone 14 aspect ratio (390×844 → scaled to 500×1082), minimum width Chromium accepts in headed mode
             IgnoreHTTPSErrors = true
         });
 
