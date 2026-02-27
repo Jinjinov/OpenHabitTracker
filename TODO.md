@@ -63,11 +63,7 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-1.
-add help steps to Settings
-   - "Show priority"
-   - "Show category"
-   - "Show habit statistics"
+highest priority:
 
 2.
 exact repeating reminders, like Google Keep
