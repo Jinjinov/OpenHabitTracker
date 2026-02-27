@@ -70,28 +70,31 @@ write unit tests:
 
     PRIORITY 1 - OpenHabitTracker.EndToEndTests - Playwright video recording tests (needed for app store videos)
 
-    create project: OpenHabitTracker.EndToEndTests
-    NuGet: Microsoft.Playwright.NUnit
+    create project: OpenHabitTracker.EndToEndTests  ✓
+    NuGet: Microsoft.Playwright.NUnit  ✓
     run once to install browsers: pwsh playwright.ps1 install
 
-    create TestData/demo-data.json:
+    LoadExamplesVideoTests.cs  ✓  — clicks "Load examples", then records
+    ImportJsonVideoTests.cs    ✓  — imports TestData/demo-data.json, then records
+
+    TestData/demo-data.json  ✓
     - 3 categories: Work, Personal, Health
     - 3 notes: one with multi-line markdown (headers, bold, bullet list), one short, one with color
     - 3 tasks: one overdue, one due today, one completed — different priorities
     - 3 habits: one daily (with several past completions to show calendar dots), one weekly, one with sub-items
 
-    create VideoRecordingTests.cs with two test methods:
+    both files have two test methods:
 
         [Test] RecordDesktopVideo()   // viewport 1920x1080
         [Test] RecordMobileVideo()    // viewport 886x1920
 
-    both tests run the same demo script:
-        1. open app, navigate to /data, import demo-data.json
-        2. navigate to /notes    — scroll list, open the markdown note (2-3s pause)
-        3. navigate to /tasks    — scroll list, check off the "due today" task (2-3s pause)
-        4. navigate to /habits   — scroll list, open habit with calendar, show calendar dots (3-4s pause)
-        5. navigate to /search   — type a search term, show filtered results (2s pause)
-        6. navigate to /settings — change theme, show the visual change (2-3s pause)
+    demo script:
+        1. /data     — load examples or import demo-data.json
+        2. /notes    — open first note (2-3s pause)
+        3. /tasks    — open or check off a task (2-3s pause)
+        4. /habits   — open habit with calendar dots (3-4s pause)
+        5. /search   — type a search term (2s pause)
+        6. /settings — change theme (2-3s pause)
 
     Playwright video config:
         var context = await browser.NewContextAsync(new() {
