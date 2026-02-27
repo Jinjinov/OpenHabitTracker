@@ -4,9 +4,23 @@ using Microsoft.Playwright.NUnit;
 namespace OpenHabitTracker.EndToEndTests;
 
 [TestFixture]
-public class LoadExamplesVideoTests : BrowserTest
+public class LoadExamplesVideoTests : PlaywrightTest
 {
     private const string BaseUrl = "http://localhost";
+
+    private IBrowser _browser = null!;
+
+    [SetUp]
+    public async Task BrowserSetUp()
+    {
+        _browser = await BrowserType.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
+    }
+
+    [TearDown]
+    public async Task BrowserTearDown()
+    {
+        await _browser.CloseAsync();
+    }
 
     private async Task RunDemoScript(IPage page)
     {
@@ -62,27 +76,23 @@ public class LoadExamplesVideoTests : BrowserTest
     [Test]
     public async Task RecordDesktopVideo()
     {
-        var context = await Browser.NewContextAsync(new BrowserNewContextOptions
+        var context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = new ViewportSize { Width = 1920, Height = 1080 },
-            RecordVideoDir = "videos/",
-            RecordVideoSize = new RecordVideoSize { Width = 1920, Height = 1080 },
             IgnoreHTTPSErrors = true
         });
 
         var page = await context.NewPageAsync();
         await RunDemoScript(page);
-        await context.CloseAsync(); // must close context to flush the .webm file
+        await context.CloseAsync();
     }
 
     [Test]
     public async Task RecordMobileVideo()
     {
-        var context = await Browser.NewContextAsync(new BrowserNewContextOptions
+        var context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = new ViewportSize { Width = 886, Height = 1920 },
-            RecordVideoDir = "videos/",
-            RecordVideoSize = new RecordVideoSize { Width = 886, Height = 1920 },
             IgnoreHTTPSErrors = true
         });
 
