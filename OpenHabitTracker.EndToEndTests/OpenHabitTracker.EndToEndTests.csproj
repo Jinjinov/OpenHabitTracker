@@ -18,6 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="TestData\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Microsoft.Playwright.NUnit" />
     <Using Include="NUnit.Framework" />
     <Using Include="System.Text.RegularExpressions" />
