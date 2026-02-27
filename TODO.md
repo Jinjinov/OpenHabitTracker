@@ -65,6 +65,9 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 highest priority:
 
+0.
+write unit tests:
+
 1.
 record MP4 video for app stores
 
@@ -72,6 +75,14 @@ record MP4 video for app stores
     - Desktop: 1920x1080, landscape, 15-30s, MP4
     - Mobile:   886x1920, portrait,  15-30s, MP4
 
+    PLAN A — record unit tests:
+    record both videos with Playwright from the PWA (see "write unit tests"):
+    - Playwright UI tests drive the app navigation AND record the video at the same time
+    - set RecordVideoDir + ViewportSize: 1920x1080 for desktop, 886x1920 for mobile
+    - no OBS, no iOS Simulator, no Mac Mini needed — everything runs on Windows PC
+    - if App Store or Google Play reject the PWA recording, fall back to PLAN B
+
+    PLAN B — record manually:
     DESKTOP VIDEO — record on Windows PC with OBS Studio:
     - install OBS Studio (https://obsproject.com)
     - OBS Settings → Video → Base Resolution: 1920x1080, Output Resolution: 1920x1080
