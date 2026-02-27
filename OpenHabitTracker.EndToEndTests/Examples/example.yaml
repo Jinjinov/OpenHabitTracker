@@ -1,0 +1,314 @@
+Settings:
+  UserId: 1
+  IsDarkMode: true
+  Theme: default
+  StartPage: /notes
+  StartSidebar: Menu
+  Culture: en
+  FirstDayOfWeek: Monday
+  SelectedRatio: ElapsedToDesired
+  BaseUrl: ''
+  RefreshToken: ''
+  RememberMe: true
+  ShowHelp: true
+  UncheckAllItemsOnHabitDone: false
+  ShowPriorityDropdown: true
+  ShowItemList: true
+  ShowSmallCalendar: true
+  ShowLargeCalendar: true
+  ShowHabitStatistics: false
+  ShowCategory: true
+  ShowColor: true
+  ShowCreatedUpdated: false
+  InsertTabsInNoteContent: true
+  DisplayNoteContentAsMarkdown: true
+  HideCompletedTasks: true
+  ShowOnlyOverSelectedRatioMin: false
+  SelectedRatioMin: 50
+  HorizontalMargin: 1
+  VerticalMargin: 3
+  CategoryFilterDisplay: CheckBoxes
+  PriorityFilterDisplay: CheckBoxes
+  SelectedCategoryId: 
+  SelectedPriority: 
+  HiddenCategoryIds: []
+  ShowPriority:
+    None: true
+    VeryLow: true
+    Low: true
+    Medium: true
+    High: true
+    VeryHigh: true
+  FoldSection:
+    Search: false
+    FilterByDate: false
+    FilterByCategory: false
+    FilterByPriority: false
+    FilterByStatus: false
+    Sort: false
+  SortBy:
+    Note: Priority
+    Task: PlannedAt
+    Habit: SelectedRatio
+Categories:
+- UserId: 1
+  Title: Welcome
+  Notes:
+  - Content: >-
+      **A few tips:**
+
+      - click on the title of this note to enter edit mode where you can also change the priority (`⊘`,`︾`,`﹀`,`—`,`︿`,`︽`)
+
+      - to exit edit mode click on `Close`
+
+      - in `Settings` you can customize the look and feel of OpenHT and set which screen opens every time you start OpenHT
+
+      - load examples in the `Data` → `Load examples` submenu
+
+      - use `Search, Filter, Sort` to display only what you want to focus on
+
+
+      *Feedback is welcome on [Reddit](https://www.reddit.com/r/OpenHabitTracker) and [GitHub](https://github.com/Jinjinov/OpenHabitTracker/discussions)*
+    Title: Welcome!
+    Color: bg-info-subtle
+    Priority: None
+    IsDeleted: false
+    CreatedAt: 2026-02-24T08:01:55.6698599
+    UpdatedAt: 2026-02-24T08:01:55.6698599
+  Tasks: 
+  Habits: 
+- UserId: 1
+  Title: Examples
+  Notes:
+  - Content: >-
+      # Markdown
+
+      ## Heading
+          indented
+          code
+          block
+      **bold**
+
+      *italic*
+
+      ***bold and italic***
+
+      `code`
+
+      [OpenHabitTracker](https://openhabittracker.net)
+
+      - one item
+
+      - another item
+
+      ---
+
+      1. first item
+
+      2. second item
+
+
+      > blockquote
+    Title: Markdown example
+    Color: bg-info-subtle
+    Priority: Medium
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948
+  - Content: >-
+      here is a footnote[^1]
+
+      [^1]: this is the footnote
+
+
+      ```
+
+      fenced
+
+      code
+
+      block
+
+      ```
+
+      ~~strikethrough~~
+
+      ==highlight==
+
+
+      | table | with   | headers |
+
+      | :---  | :---:  |    ---: |
+
+      | left  | middle | right   |
+
+
+      subscript: H~2~O
+
+      superscript: X^2^
+    Title: Extended Markdown example
+    Color: bg-info-subtle
+    Priority: Medium
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948
+  Tasks: 
+  Habits: 
+- UserId: 1
+  Title: Work
+  Notes:
+  - Content: >-
+      Discuss project milestones
+
+      Assign tasks to team members
+
+      Review budget allocation
+    Title: Meeting Notes
+    Color: bg-info-subtle
+    Priority: Medium
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948
+  Tasks:
+  - PlannedAt: 2026-02-25T09:35:34.7765948
+    Duration: 02:00:00
+    StartedAt: 
+    CompletedAt: 
+    Items:
+    - Title: Collect data from team
+      DoneAt: 
+    - Title: Draft the report
+      DoneAt: 
+    - Title: Review with manager
+      DoneAt: 
+    Title: Prepare Project Report
+    Color: bg-info-subtle
+    Priority: High
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948
+  Habits:
+  - RepeatCount: 1
+    RepeatInterval: 1
+    RepeatPeriod: Day
+    Duration: 00:45:00
+    LastTimeDoneAt: 2026-02-23T09:35:34.7765948
+    TimesDone:
+    - StartedAt: 2026-02-23T09:35:34.7765948
+      CompletedAt: 2026-02-23T09:35:34.7765948
+    Items:
+    - Title: Review pull requests
+      DoneAt: 
+    - Title: Comment on code quality
+      DoneAt: 
+    Title: Daily Code Review
+    Color: bg-info-subtle
+    Priority: High
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948
+- UserId: 1
+  Title: Personal Development
+  Notes:
+  - Content: 'Key concepts: Habit stacking, 1% improvement, Cue-Routine-Reward loop'
+    Title: 'Book Summary: Atomic Habits'
+    Color: bg-info-subtle
+    Priority: Low
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948
+  Tasks:
+  - PlannedAt: 2026-02-27T09:35:34.7765948
+    Duration: 01:00:00
+    StartedAt: 
+    CompletedAt: 
+    Items:
+    - Title: Watch module 1
+      DoneAt: 
+    - Title: Complete module 1 quiz
+      DoneAt: 
+    Title: Complete Online Course
+    Color: bg-info-subtle
+    Priority: Medium
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948
+  Habits:
+  - RepeatCount: 1
+    RepeatInterval: 1
+    RepeatPeriod: Day
+    Duration: 00:20:00
+    LastTimeDoneAt: 2026-02-24T09:35:34.7765948
+    TimesDone:
+    - StartedAt: 2026-02-22T09:35:34.7765948
+      CompletedAt: 2026-02-22T09:35:34.7765948
+    - StartedAt: 2026-02-24T09:15:34.7765948
+      CompletedAt: 2026-02-24T09:35:34.7765948
+    Items:
+    - Title: Find a quiet place
+      DoneAt: 
+    - Title: Focus on breathing
+      DoneAt: 
+    Title: Morning Meditation
+    Color: bg-info-subtle
+    Priority: Medium
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948
+- UserId: 1
+  Title: Health & Fitness
+  Notes:
+  - Content: >-
+      Breakfast: Oatmeal with fruits
+
+      Lunch: Grilled chicken with salad
+
+      Dinner: Steamed veggies with quinoa
+    Title: Diet Plan
+    Color: bg-info-subtle
+    Priority: Low
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948
+  Tasks:
+  - PlannedAt: 2026-02-26T09:35:34.7765948
+    Duration: 01:30:00
+    StartedAt: 
+    CompletedAt: 
+    Items:
+    - Title: Buy fruits and vegetables
+      DoneAt: 
+    - Title: Get whole grains
+      DoneAt: 
+    - Title: Restock on lean proteins
+      DoneAt: 
+    Title: Grocery Shopping
+    Color: bg-info-subtle
+    Priority: Low
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948
+  Habits:
+  - RepeatCount: 1
+    RepeatInterval: 1
+    RepeatPeriod: Day
+    Duration: 01:00:00
+    LastTimeDoneAt: 2026-02-24T09:35:34.7765948
+    TimesDone:
+    - StartedAt: 2026-02-23T09:35:34.7765948
+      CompletedAt: 2026-02-23T09:35:34.7765948
+    - StartedAt: 2026-02-24T08:35:34.7765948
+      CompletedAt: 2026-02-24T09:35:34.7765948
+    Items:
+    - Title: Warm-up
+      DoneAt: 
+    - Title: Strength training
+      DoneAt: 
+    - Title: Cool down
+      DoneAt: 
+    Title: Daily Exercise Routine
+    Color: bg-info-subtle
+    Priority: High
+    IsDeleted: false
+    CreatedAt: 2026-02-24T09:35:34.7765948
+    UpdatedAt: 2026-02-24T09:35:34.7765948

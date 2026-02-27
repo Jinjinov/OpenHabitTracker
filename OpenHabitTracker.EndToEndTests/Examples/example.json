@@ -1,0 +1,333 @@
+{
+  "Settings": {
+    "UserId": 1,
+    "IsDarkMode": true,
+    "Theme": "default",
+    "StartPage": "/notes",
+    "StartSidebar": "Menu",
+    "Culture": "en",
+    "FirstDayOfWeek": 1,
+    "SelectedRatio": 1,
+    "BaseUrl": "",
+    "RefreshToken": "",
+    "RememberMe": true,
+    "ShowHelp": true,
+    "UncheckAllItemsOnHabitDone": false,
+    "ShowPriorityDropdown": true,
+    "ShowItemList": true,
+    "ShowSmallCalendar": true,
+    "ShowLargeCalendar": true,
+    "ShowHabitStatistics": false,
+    "ShowCategory": true,
+    "ShowColor": true,
+    "ShowCreatedUpdated": false,
+    "InsertTabsInNoteContent": true,
+    "DisplayNoteContentAsMarkdown": true,
+    "HideCompletedTasks": true,
+    "ShowOnlyOverSelectedRatioMin": false,
+    "SelectedRatioMin": 50,
+    "HorizontalMargin": 1,
+    "VerticalMargin": 3,
+    "CategoryFilterDisplay": 0,
+    "PriorityFilterDisplay": 0,
+    "SelectedCategoryId": null,
+    "SelectedPriority": null,
+    "HiddenCategoryIds": [],
+    "ShowPriority": {
+      "None": true,
+      "VeryLow": true,
+      "Low": true,
+      "Medium": true,
+      "High": true,
+      "VeryHigh": true
+    },
+    "FoldSection": {
+      "Search": false,
+      "FilterByDate": false,
+      "FilterByCategory": false,
+      "FilterByPriority": false,
+      "FilterByStatus": false,
+      "Sort": false
+    },
+    "SortBy": {
+      "Note": 1,
+      "Task": 3,
+      "Habit": 10
+    }
+  },
+  "Categories": [
+    {
+      "UserId": 1,
+      "Title": "Welcome",
+      "Notes": [
+        {
+          "Content": "**A few tips:**\r\n- click on the title of this note to enter edit mode where you can also change the priority (\u0060\u2298\u0060,\u0060\uFE3E\u0060,\u0060\uFE40\u0060,\u0060\u2014\u0060,\u0060\uFE3F\u0060,\u0060\uFE3D\u0060)\r\n- to exit edit mode click on \u0060Close\u0060\r\n- in \u0060Settings\u0060 you can customize the look and feel of OpenHT and set which screen opens every time you start OpenHT\r\n- load examples in the \u0060Data\u0060 \u2192 \u0060Load examples\u0060 submenu\r\n- use \u0060Search, Filter, Sort\u0060 to display only what you want to focus on\r\n\r\n*Feedback is welcome on [Reddit](https://www.reddit.com/r/OpenHabitTracker) and [GitHub](https://github.com/Jinjinov/OpenHabitTracker/discussions)*",
+          "Title": "Welcome!",
+          "Color": "bg-info-subtle",
+          "Priority": 0,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T08:01:55.6698599",
+          "UpdatedAt": "2026-02-24T08:01:55.6698599"
+        }
+      ],
+      "Tasks": null,
+      "Habits": null
+    },
+    {
+      "UserId": 1,
+      "Title": "Examples",
+      "Notes": [
+        {
+          "Content": "# Markdown\r\n## Heading\r\n    indented\r\n    code\r\n    block\r\n**bold**\r\n*italic*\r\n***bold and italic***\r\n\u0060code\u0060\r\n[OpenHabitTracker](https://openhabittracker.net)\r\n- one item\r\n- another item\r\n---\r\n1. first item\r\n2. second item\r\n\r\n\u003E blockquote",
+          "Title": "Markdown example",
+          "Color": "bg-info-subtle",
+          "Priority": 3,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        },
+        {
+          "Content": "here is a footnote[^1]\r\n[^1]: this is the footnote\r\n\r\n\u0060\u0060\u0060\r\nfenced\r\ncode\r\nblock\r\n\u0060\u0060\u0060\r\n~~strikethrough~~\r\n==highlight==\r\n\r\n| table | with   | headers |\r\n| :---  | :---:  |    ---: |\r\n| left  | middle | right   |\r\n\r\nsubscript: H~2~O\r\nsuperscript: X^2^",
+          "Title": "Extended Markdown example",
+          "Color": "bg-info-subtle",
+          "Priority": 3,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        }
+      ],
+      "Tasks": null,
+      "Habits": null
+    },
+    {
+      "UserId": 1,
+      "Title": "Work",
+      "Notes": [
+        {
+          "Content": "Discuss project milestones\nAssign tasks to team members\nReview budget allocation",
+          "Title": "Meeting Notes",
+          "Color": "bg-info-subtle",
+          "Priority": 3,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        }
+      ],
+      "Tasks": [
+        {
+          "PlannedAt": "2026-02-25T09:35:34.7765948",
+          "Duration": "02:00:00",
+          "StartedAt": null,
+          "CompletedAt": null,
+          "Items": [
+            {
+              "Title": "Collect data from team",
+              "DoneAt": null
+            },
+            {
+              "Title": "Draft the report",
+              "DoneAt": null
+            },
+            {
+              "Title": "Review with manager",
+              "DoneAt": null
+            }
+          ],
+          "Title": "Prepare Project Report",
+          "Color": "bg-info-subtle",
+          "Priority": 4,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        }
+      ],
+      "Habits": [
+        {
+          "RepeatCount": 1,
+          "RepeatInterval": 1,
+          "RepeatPeriod": 0,
+          "Duration": "00:45:00",
+          "LastTimeDoneAt": "2026-02-23T09:35:34.7765948",
+          "TimesDone": [
+            {
+              "StartedAt": "2026-02-23T09:35:34.7765948",
+              "CompletedAt": "2026-02-23T09:35:34.7765948"
+            }
+          ],
+          "Items": [
+            {
+              "Title": "Review pull requests",
+              "DoneAt": null
+            },
+            {
+              "Title": "Comment on code quality",
+              "DoneAt": null
+            }
+          ],
+          "Title": "Daily Code Review",
+          "Color": "bg-info-subtle",
+          "Priority": 4,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        }
+      ]
+    },
+    {
+      "UserId": 1,
+      "Title": "Personal Development",
+      "Notes": [
+        {
+          "Content": "Key concepts: Habit stacking, 1% improvement, Cue-Routine-Reward loop",
+          "Title": "Book Summary: Atomic Habits",
+          "Color": "bg-info-subtle",
+          "Priority": 2,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        }
+      ],
+      "Tasks": [
+        {
+          "PlannedAt": "2026-02-27T09:35:34.7765948",
+          "Duration": "01:00:00",
+          "StartedAt": null,
+          "CompletedAt": null,
+          "Items": [
+            {
+              "Title": "Watch module 1",
+              "DoneAt": null
+            },
+            {
+              "Title": "Complete module 1 quiz",
+              "DoneAt": null
+            }
+          ],
+          "Title": "Complete Online Course",
+          "Color": "bg-info-subtle",
+          "Priority": 3,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        }
+      ],
+      "Habits": [
+        {
+          "RepeatCount": 1,
+          "RepeatInterval": 1,
+          "RepeatPeriod": 0,
+          "Duration": "00:20:00",
+          "LastTimeDoneAt": "2026-02-24T09:35:34.7765948",
+          "TimesDone": [
+            {
+              "StartedAt": "2026-02-22T09:35:34.7765948",
+              "CompletedAt": "2026-02-22T09:35:34.7765948"
+            },
+            {
+              "StartedAt": "2026-02-24T09:15:34.7765948",
+              "CompletedAt": "2026-02-24T09:35:34.7765948"
+            }
+          ],
+          "Items": [
+            {
+              "Title": "Find a quiet place",
+              "DoneAt": null
+            },
+            {
+              "Title": "Focus on breathing",
+              "DoneAt": null
+            }
+          ],
+          "Title": "Morning Meditation",
+          "Color": "bg-info-subtle",
+          "Priority": 3,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        }
+      ]
+    },
+    {
+      "UserId": 1,
+      "Title": "Health \u0026 Fitness",
+      "Notes": [
+        {
+          "Content": "Breakfast: Oatmeal with fruits\nLunch: Grilled chicken with salad\nDinner: Steamed veggies with quinoa",
+          "Title": "Diet Plan",
+          "Color": "bg-info-subtle",
+          "Priority": 2,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        }
+      ],
+      "Tasks": [
+        {
+          "PlannedAt": "2026-02-26T09:35:34.7765948",
+          "Duration": "01:30:00",
+          "StartedAt": null,
+          "CompletedAt": null,
+          "Items": [
+            {
+              "Title": "Buy fruits and vegetables",
+              "DoneAt": null
+            },
+            {
+              "Title": "Get whole grains",
+              "DoneAt": null
+            },
+            {
+              "Title": "Restock on lean proteins",
+              "DoneAt": null
+            }
+          ],
+          "Title": "Grocery Shopping",
+          "Color": "bg-info-subtle",
+          "Priority": 2,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        }
+      ],
+      "Habits": [
+        {
+          "RepeatCount": 1,
+          "RepeatInterval": 1,
+          "RepeatPeriod": 0,
+          "Duration": "01:00:00",
+          "LastTimeDoneAt": "2026-02-24T09:35:34.7765948",
+          "TimesDone": [
+            {
+              "StartedAt": "2026-02-23T09:35:34.7765948",
+              "CompletedAt": "2026-02-23T09:35:34.7765948"
+            },
+            {
+              "StartedAt": "2026-02-24T08:35:34.7765948",
+              "CompletedAt": "2026-02-24T09:35:34.7765948"
+            }
+          ],
+          "Items": [
+            {
+              "Title": "Warm-up",
+              "DoneAt": null
+            },
+            {
+              "Title": "Strength training",
+              "DoneAt": null
+            },
+            {
+              "Title": "Cool down",
+              "DoneAt": null
+            }
+          ],
+          "Title": "Daily Exercise Routine",
+          "Color": "bg-info-subtle",
+          "Priority": 4,
+          "IsDeleted": false,
+          "CreatedAt": "2026-02-24T09:35:34.7765948",
+          "UpdatedAt": "2026-02-24T09:35:34.7765948"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+ContentType	Category	Title	Content	Priority	Duration	PlannedAt	RepeatCount	RepeatInterval	RepeatPeriod
+Note	Welcome	Welcome!	**A few tips:**	None					
+Note	Welcome	Welcome!	- click on the title of this note to enter edit mode where you can also change the priority (`⊘`,`︾`,`﹀`,`—`,`︿`,`︽`)	None					
+Note	Welcome	Welcome!	- to exit edit mode click on `Close`	None					
+Note	Welcome	Welcome!	- in `Settings` you can customize the look and feel of OpenHT and set which screen opens every time you start OpenHT	None					
+Note	Welcome	Welcome!	- load examples in the `Data` → `Load examples` submenu	None					
+Note	Welcome	Welcome!	- use `Search, Filter, Sort` to display only what you want to focus on	None					
+Note	Welcome	Welcome!		None					
+Note	Welcome	Welcome!	*Feedback is welcome on [Reddit](https://www.reddit.com/r/OpenHabitTracker) and [GitHub](https://github.com/Jinjinov/OpenHabitTracker/discussions)*	None					
+Note	Examples	Markdown example	# Markdown	Medium					
+Note	Examples	Markdown example	## Heading	Medium					
+Note	Examples	Markdown example	    indented	Medium					
+Note	Examples	Markdown example	    code	Medium					
+Note	Examples	Markdown example	    block	Medium					
+Note	Examples	Markdown example	**bold**	Medium					
+Note	Examples	Markdown example	*italic*	Medium					
+Note	Examples	Markdown example	***bold and italic***	Medium					
+Note	Examples	Markdown example	`code`	Medium					
+Note	Examples	Markdown example	[OpenHabitTracker](https://openhabittracker.net)	Medium					
+Note	Examples	Markdown example	- one item	Medium					
+Note	Examples	Markdown example	- another item	Medium					
+Note	Examples	Markdown example	---	Medium					
+Note	Examples	Markdown example	1. first item	Medium					
+Note	Examples	Markdown example	2. second item	Medium					
+Note	Examples	Markdown example		Medium					
+Note	Examples	Markdown example	> blockquote	Medium					
+Note	Examples	Extended Markdown example	here is a footnote[^1]	Medium					
+Note	Examples	Extended Markdown example	[^1]: this is the footnote	Medium					
+Note	Examples	Extended Markdown example		Medium					
+Note	Examples	Extended Markdown example	```	Medium					
+Note	Examples	Extended Markdown example	fenced	Medium					
+Note	Examples	Extended Markdown example	code	Medium					
+Note	Examples	Extended Markdown example	block	Medium					
+Note	Examples	Extended Markdown example	```	Medium					
+Note	Examples	Extended Markdown example	~~strikethrough~~	Medium					
+Note	Examples	Extended Markdown example	==highlight==	Medium					
+Note	Examples	Extended Markdown example		Medium					
+Note	Examples	Extended Markdown example	| table | with   | headers |	Medium					
+Note	Examples	Extended Markdown example	| :---  | :---:  |    ---: |	Medium					
+Note	Examples	Extended Markdown example	| left  | middle | right   |	Medium					
+Note	Examples	Extended Markdown example		Medium					
+Note	Examples	Extended Markdown example	subscript: H~2~O	Medium					
+Note	Examples	Extended Markdown example	superscript: X^2^	Medium					
+Note	Work	Meeting Notes	Discuss project milestones	Medium					
+Note	Work	Meeting Notes	Assign tasks to team members	Medium					
+Note	Work	Meeting Notes	Review budget allocation	Medium					
+Task	Work	Prepare Project Report	Collect data from team	High	02:00	02/25/2026 09:35:34			
+Task	Work	Prepare Project Report	Draft the report	High	02:00	02/25/2026 09:35:34			
+Task	Work	Prepare Project Report	Review with manager	High	02:00	02/25/2026 09:35:34			
+Habit	Work	Daily Code Review	Review pull requests	High	00:45		1	1	Day
+Habit	Work	Daily Code Review	Comment on code quality	High	00:45		1	1	Day
+Note	Personal Development	Book Summary: Atomic Habits	Key concepts: Habit stacking, 1% improvement, Cue-Routine-Reward loop	Low					
+Task	Personal Development	Complete Online Course	Watch module 1	Medium	01:00	02/27/2026 09:35:34			
+Task	Personal Development	Complete Online Course	Complete module 1 quiz	Medium	01:00	02/27/2026 09:35:34			
+Habit	Personal Development	Morning Meditation	Find a quiet place	Medium	00:20		1	1	Day
+Habit	Personal Development	Morning Meditation	Focus on breathing	Medium	00:20		1	1	Day
+Note	Health & Fitness	Diet Plan	Breakfast: Oatmeal with fruits	Low					
+Note	Health & Fitness	Diet Plan	Lunch: Grilled chicken with salad	Low					
+Note	Health & Fitness	Diet Plan	Dinner: Steamed veggies with quinoa	Low					
+Task	Health & Fitness	Grocery Shopping	Buy fruits and vegetables	Low	01:30	02/26/2026 09:35:34			
+Task	Health & Fitness	Grocery Shopping	Get whole grains	Low	01:30	02/26/2026 09:35:34			
+Task	Health & Fitness	Grocery Shopping	Restock on lean proteins	Low	01:30	02/26/2026 09:35:34			
+Habit	Health & Fitness	Daily Exercise Routine	Warm-up	High	01:00		1	1	Day
+Habit	Health & Fitness	Daily Exercise Routine	Strength training	High	01:00		1	1	Day
+Habit	Health & Fitness	Daily Exercise Routine	Cool down	High	01:00		1	1	Day
