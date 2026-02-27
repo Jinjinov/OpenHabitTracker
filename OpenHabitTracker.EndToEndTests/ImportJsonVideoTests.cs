@@ -25,7 +25,8 @@ public class ImportJsonVideoTests : PlaywrightTest
     private static async Task ClickAsync(ILocator locator)
     {
         await locator.HoverAsync(); // trigger :hover CSS state
-        await locator.ClickAsync(new LocatorClickOptions { Delay = 200 }); // hold mousedown to show :active CSS state
+        await locator.Page.WaitForTimeoutAsync(500); // pause on hover so :hover state is visible
+        await locator.ClickAsync(new LocatorClickOptions { Delay = 500 }); // hold mousedown to show :active CSS state
     }
 
     private async Task RunDemoScript(IPage page)
@@ -33,7 +34,7 @@ public class ImportJsonVideoTests : PlaywrightTest
         // 1. menu → Data → import demo data
         await page.GotoAsync(BaseUrl);
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await page.WaitForTimeoutAsync(3000); // wait for Blazor OnAfterRenderAsync to finish
+        await page.WaitForTimeoutAsync(2000); // wait for Blazor OnAfterRenderAsync to finish
         if (!await page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Data" }).IsVisibleAsync())
             await ClickAsync(page.Locator("[data-main-step-1]")); // menu toggle button (three dots) — open only if Data button not already visible
         await page.WaitForTimeoutAsync(2000);
@@ -75,11 +76,14 @@ public class ImportJsonVideoTests : PlaywrightTest
         await page.Locator("[data-search-step-1]").PressSequentiallyAsync("run", new LocatorPressSequentiallyOptions { Delay = 200 }); // search input field — typed char by char
         await page.WaitForTimeoutAsync(2000);
 
-        // 6. menu → Settings — change theme to show visual change
+        // 6. menu → Settings — toggle off dark mode, then change theme to show visual change
         await ClickAsync(page.Locator("[data-main-step-1]")); // menu toggle button (three dots)
         await page.WaitForTimeoutAsync(2000);
         await ClickAsync(page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Settings" })); // Settings button in menu sidebar
         await page.WaitForTimeoutAsync(1000);
+        if (await page.Locator("#IsDarkMode").IsCheckedAsync())
+            await ClickAsync(page.Locator("label[for='IsDarkMode']")); // Dark mode label — click to turn off dark mode
+        await page.WaitForTimeoutAsync(2000);
         await page.Locator("[data-settings-step-2] select").SelectOptionAsync("united"); // theme selector dropdown
         await page.WaitForTimeoutAsync(3000);
     }
