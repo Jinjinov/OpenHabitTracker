@@ -127,7 +127,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
     {
         var context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
-            ViewportSize = new ViewportSize { Width = 500, Height = 1082 }, // iPhone 14 aspect ratio (390×844 → scaled to 500×1082), minimum width Chromium accepts in headed mode
+            ViewportSize = new ViewportSize { Width = 500, Height = 1084 }, // original 886×1920 aspect ratio scaled to 500×1084 (1920/886*500≈1084), minimum width Chromium accepts in headed mode
             IgnoreHTTPSErrors = true
         });
 
