@@ -24,15 +24,15 @@ public class VideoTests : BrowserTest
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await page.WaitForTimeoutAsync(1000);
 
-        await page.GotoAsync($"{BaseUrl}/notes");
+        await page.Locator("[data-main-step-3]").ClickAsync(); // Notes nav link in top bar
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await page.WaitForTimeoutAsync(1000);
 
-        await page.GotoAsync($"{BaseUrl}/tasks");
+        await page.Locator("[data-main-step-4]").ClickAsync(); // Tasks nav link in top bar
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await page.WaitForTimeoutAsync(1000);
 
-        await page.GotoAsync($"{BaseUrl}/habits");
+        await page.Locator("[data-main-step-5]").ClickAsync(); // Habits nav link in top bar
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await page.WaitForTimeoutAsync(1000);
 
