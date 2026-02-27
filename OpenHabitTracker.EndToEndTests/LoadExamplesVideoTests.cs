@@ -75,6 +75,8 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForTimeoutAsync(1000);
         await page.Locator("[data-search-step-1]").PressSequentiallyAsync("daily", new LocatorPressSequentiallyOptions { Delay = 200 }); // search input field — typed char by char
         await page.WaitForTimeoutAsync(2000);
+        await ClickAsync(page.Locator("[data-search-step-3]")); // clear search term button (x)
+        await page.WaitForTimeoutAsync(1000);
 
         // 6. navigate to Home — shows all notes, tasks and habits together
         await ClickAsync(page.Locator("[data-main-step-2]")); // Home nav link in top bar
@@ -86,10 +88,23 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForTimeoutAsync(2000);
         await ClickAsync(page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Settings" })); // Settings button in menu sidebar
         await page.WaitForTimeoutAsync(1000);
-        if (await page.Locator("#IsDarkMode").IsCheckedAsync())
-            await ClickAsync(page.Locator("label[for='IsDarkMode']")); // Dark mode label — click to turn off dark mode
-        await page.WaitForTimeoutAsync(2000);
-        await page.Locator("[data-settings-step-2] select").SelectOptionAsync("united"); // theme selector dropdown
+        await ClickAsync(page.Locator("label[for='ShowHelp']")); // Show help checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowPriorityDropdown']")); // Show priority checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowItemList']")); // Show item list checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowSmallCalendar']")); // Show small calendar checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowLargeCalendar']")); // Show large calendar checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowHabitStatistics']")); // Show habit statistics checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowCategory']")); // Show category checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowColor']")); // Show color checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowCreatedUpdated']")); // Show created & updated checkbox — toggle
         await page.WaitForTimeoutAsync(3000);
     }
 
