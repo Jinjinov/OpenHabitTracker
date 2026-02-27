@@ -76,7 +76,12 @@ public class ImportJsonVideoTests : PlaywrightTest
         await page.Locator("[data-search-step-1]").PressSequentiallyAsync("run", new LocatorPressSequentiallyOptions { Delay = 200 }); // search input field — typed char by char
         await page.WaitForTimeoutAsync(2000);
 
-        // 6. menu → Settings — toggle off dark mode, then change theme to show visual change
+        // 6. navigate to Home — shows all notes, tasks and habits together
+        await ClickAsync(page.Locator("[data-main-step-2]")); // Home nav link in top bar
+        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await page.WaitForTimeoutAsync(1000);
+
+        // 7. menu → Settings — toggle off dark mode, then change theme to show visual change
         await ClickAsync(page.Locator("[data-main-step-1]")); // menu toggle button (three dots)
         await page.WaitForTimeoutAsync(2000);
         await ClickAsync(page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Settings" })); // Settings button in menu sidebar
