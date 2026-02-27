@@ -105,7 +105,7 @@ public class SettingsModel
             IsDarkMode = true,
             Theme = "default",
             StartPage = "/notes",
-            StartSidebar = "Menu",
+            StartSidebar = "",
             Culture = "en",
             FirstDayOfWeek = DayOfWeek.Monday,
             SelectedRatio = Ratio.ElapsedToDesired,
