@@ -72,7 +72,6 @@ write unit tests:
 
     run once to install browsers: pwsh playwright.ps1 install
 
-    - close Data after Load Examples
     - have all Search sections folded
 
     PRIORITY 2 - OpenHabitTracker.UnitTests - general test coverage (bUnit component tests, Appium native app tests)
