@@ -24,8 +24,11 @@ public class LoadExamplesVideoTests : PlaywrightTest
 
     private static async Task MoveToAsync(ILocator locator)
     {
-        var box = await locator.BoundingBoxAsync();
-        if (box == null) return;
+        LocatorBoundingBoxResult? box = await locator.BoundingBoxAsync();
+
+        if (box == null)
+            return;
+
         await locator.Page.Mouse.MoveAsync(box.X + box.Width / 2, box.Y + box.Height / 2, new MouseMoveOptions { Steps = 20 }); // move cursor smoothly to element center
     }
 
@@ -175,24 +178,24 @@ public class LoadExamplesVideoTests : PlaywrightTest
     [Test]
     public async Task RecordDesktopVideo()
     {
-        var context = await _browser.NewContextAsync(new BrowserNewContextOptions
+        IBrowserContext context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = new ViewportSize { Width = 1920, Height = 1086 }, // +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
             IgnoreHTTPSErrors = true
         });
 
         await SetupFakeCursorAsync(context);
-        var page = await context.NewPageAsync();
+        IPage page = await context.NewPageAsync();
 
         await page.GotoAsync(BaseUrl);
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        var offsetX = await page.EvaluateAsync<int>("window.screenX + (window.outerWidth - window.innerWidth) / 2");
-        var offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
+        int offsetX = await page.EvaluateAsync<int>("window.screenX + (window.outerWidth - window.innerWidth) / 2");
+        int offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
 
         Directory.CreateDirectory("videos");
 
-        using var ffmpeg = new Process();
+        using Process ffmpeg = new();
         ffmpeg.StartInfo = new ProcessStartInfo
         {
             FileName = "ffmpeg",
@@ -214,24 +217,24 @@ public class LoadExamplesVideoTests : PlaywrightTest
     [Test]
     public async Task RecordMobileVideo()
     {
-        var context = await _browser.NewContextAsync(new BrowserNewContextOptions
+        IBrowserContext context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = new ViewportSize { Width = 500, Height = 1090 }, // original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
             IgnoreHTTPSErrors = true
         });
 
         await SetupFakeMobileCursorAsync(context);
-        var page = await context.NewPageAsync();
+        IPage page = await context.NewPageAsync();
 
         await page.GotoAsync(BaseUrl);
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        var offsetX = await page.EvaluateAsync<int>("window.screenX + (window.outerWidth - window.innerWidth) / 2");
-        var offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
+        int offsetX = await page.EvaluateAsync<int>("window.screenX + (window.outerWidth - window.innerWidth) / 2");
+        int offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
 
         Directory.CreateDirectory("videos");
 
-        using var ffmpeg = new Process();
+        using Process ffmpeg = new();
         ffmpeg.StartInfo = new ProcessStartInfo
         {
             FileName = "ffmpeg",

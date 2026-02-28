@@ -88,24 +88,24 @@ public class VideoTests : PlaywrightTest
     [Test]
     public async Task RecordDesktopVideo()
     {
-        var context = await _browser.NewContextAsync(new BrowserNewContextOptions
+        IBrowserContext context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = new ViewportSize { Width = 1920, Height = 1086 },
             IgnoreHTTPSErrors = true
         });
 
-        var page = await context.NewPageAsync();
+        IPage page = await context.NewPageAsync();
 
         await page.GotoAsync(BaseUrl);
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        var offsetX = await page.EvaluateAsync<int>("window.screenX + (window.outerWidth - window.innerWidth) / 2");
-        var offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
+        int offsetX = await page.EvaluateAsync<int>("window.screenX + (window.outerWidth - window.innerWidth) / 2");
+        int offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
 
-        var innerWidth = await page.EvaluateAsync<int>("window.innerWidth");
-        var innerHeight = await page.EvaluateAsync<int>("window.innerHeight");
-        var outerWidth = await page.EvaluateAsync<int>("window.outerWidth");
-        var outerHeight = await page.EvaluateAsync<int>("window.outerHeight");
+        int innerWidth = await page.EvaluateAsync<int>("window.innerWidth");
+        int innerHeight = await page.EvaluateAsync<int>("window.innerHeight");
+        int outerWidth = await page.EvaluateAsync<int>("window.outerWidth");
+        int outerHeight = await page.EvaluateAsync<int>("window.outerHeight");
         Console.WriteLine($"offsetX={offsetX} offsetY={offsetY} innerWidth={innerWidth} innerHeight={innerHeight} outerWidth={outerWidth} outerHeight={outerHeight}");
         Console.WriteLine($"outerWidth - innerWidth={outerWidth - innerWidth} outerHeight - innerHeight={outerHeight - innerHeight}");
         // offsetX=108 offsetY=86 innerWidth=1920 innerHeight=1086 outerWidth=1936 outerHeight=1174
@@ -113,7 +113,7 @@ public class VideoTests : PlaywrightTest
 
         Directory.CreateDirectory("videos");
 
-        using var ffmpeg = new Process();
+        using Process ffmpeg = new();
         ffmpeg.StartInfo = new ProcessStartInfo
         {
             FileName = "ffmpeg",
