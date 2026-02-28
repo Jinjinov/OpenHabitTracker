@@ -28,7 +28,7 @@ public class VideoTests : PlaywrightTest
     {
         var context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
-            ViewportSize = new ViewportSize { Width = 1920, Height = 1080 },
+            ViewportSize = new ViewportSize { Width = 1920, Height = 1086 },
             IgnoreHTTPSErrors = true
         });
 
@@ -37,8 +37,17 @@ public class VideoTests : PlaywrightTest
         await page.GotoAsync(BaseUrl);
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        var offsetX = await page.EvaluateAsync<int>("window.screenX");
-        var offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight");
+        var offsetX = await page.EvaluateAsync<int>("window.screenX + (window.outerWidth - window.innerWidth) / 2");
+        var offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
+
+        var innerWidth = await page.EvaluateAsync<int>("window.innerWidth");
+        var innerHeight = await page.EvaluateAsync<int>("window.innerHeight");
+        var outerWidth = await page.EvaluateAsync<int>("window.outerWidth");
+        var outerHeight = await page.EvaluateAsync<int>("window.outerHeight");
+        Console.WriteLine($"offsetX={offsetX} offsetY={offsetY} innerWidth={innerWidth} innerHeight={innerHeight} outerWidth={outerWidth} outerHeight={outerHeight}");
+        Console.WriteLine($"outerWidth - innerWidth={outerWidth - innerWidth} outerHeight - innerHeight={outerHeight - innerHeight}");
+        // offsetX=108 offsetY=86 innerWidth=1920 innerHeight=1086 outerWidth=1936 outerHeight=1174
+        // outerWidth - innerWidth = 16 outerHeight - innerHeight = 88
 
         Directory.CreateDirectory("videos");
 
@@ -46,7 +55,7 @@ public class VideoTests : PlaywrightTest
         ffmpeg.StartInfo = new ProcessStartInfo
         {
             FileName = "ffmpeg",
-            Arguments = $"-y -f gdigrab -framerate 60 -offset_x {offsetX} -offset_y {offsetY} -video_size 1920x1080 -i desktop -crf 18 -preset slow videos/desktop.mp4",
+            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=60:offset_x={offsetX}:offset_y={offsetY}:video_size=1920x1080:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -crf 18 -preset slow videos/desktop.mp4",
             UseShellExecute = false,
             RedirectStandardInput = true,
         };
@@ -68,7 +77,8 @@ public class VideoTests : PlaywrightTest
 
         await context.CloseAsync();
 
-        await ffmpeg.StandardInput.WriteAsync('q'); // graceful FFmpeg shutdown — finalizes the MP4 container
+        if (!ffmpeg.HasExited)
+            await ffmpeg.StandardInput.WriteAsync('q'); // graceful FFmpeg shutdown — finalizes the MP4 container
         await ffmpeg.WaitForExitAsync();
     }
 }
