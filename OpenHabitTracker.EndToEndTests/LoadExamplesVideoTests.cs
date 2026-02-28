@@ -36,8 +36,8 @@ public class LoadExamplesVideoTests : PlaywrightTest
     {
         await MoveToAsync(locator); // move cursor smoothly to element before hovering
         await locator.HoverAsync(); // trigger :hover CSS state
-        await locator.Page.WaitForTimeoutAsync(500); // pause on hover so :hover state is visible
-        await locator.ClickAsync(new LocatorClickOptions { Delay = 500 }); // hold mousedown to show :active CSS state
+        await locator.Page.WaitForTimeoutAsync(250); // pause on hover so :hover state is visible
+        await locator.ClickAsync(new LocatorClickOptions { Delay = 250 }); // hold mousedown to show :active CSS state
     }
 
     private static async Task SetupFakeCursorAsync(IBrowserContext context)
@@ -100,21 +100,21 @@ public class LoadExamplesVideoTests : PlaywrightTest
         // 1. menu → Data → load built-in examples
         await page.GotoAsync(BaseUrl);
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await page.WaitForTimeoutAsync(2000); // wait for Blazor OnAfterRenderAsync to finish
+        await page.WaitForTimeoutAsync(1000); // wait for Blazor OnAfterRenderAsync to finish
         if (!await page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Data" }).IsVisibleAsync())
             await ClickAsync(page.Locator("[data-main-step-1]")); // menu toggle button (three dots) — open only if Data button not already visible
-        await page.WaitForTimeoutAsync(2000);
+        await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Data" })); // Data button in menu sidebar
-        await page.WaitForTimeoutAsync(2000);
+        await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("[data-data-step-1]")); // Load examples button in Data sidebar
-        await page.WaitForTimeoutAsync(2000);
+        await page.WaitForTimeoutAsync(1000);
 
         // 2. /notes — open first note, pause to show rendered content
         await ClickAsync(page.Locator("[data-main-step-3]")); // Notes nav link in top bar
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("[data-notes-step-2]").First); // note title button — opens note detail
-        await page.WaitForTimeoutAsync(3000);
+        await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("[data-notes-step-7]")); // Close button in note detail
         await page.WaitForTimeoutAsync(1000);
 
@@ -123,7 +123,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("[data-tasks-step-2]").First); // task title button — opens task detail
-        await page.WaitForTimeoutAsync(3000);
+        await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("[data-tasks-step-10]")); // Close button in task detail
         await page.WaitForTimeoutAsync(1000);
 
@@ -132,7 +132,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("[data-habits-step-2]").First); // habit title button — opens habit detail
-        await page.WaitForTimeoutAsync(4000);
+        await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("[data-habits-step-11]")); // Close button in habit detail
         await page.WaitForTimeoutAsync(1000);
 
@@ -141,7 +141,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForTimeoutAsync(1000);
         await MoveToAsync(page.Locator("[data-search-step-1]")); // move cursor to search input
         await page.Locator("[data-search-step-1]").PressSequentiallyAsync("daily", new LocatorPressSequentiallyOptions { Delay = 200 }); // search input field — typed char by char
-        await page.WaitForTimeoutAsync(2000);
+        await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("[data-search-step-3]")); // clear search term button (x)
         await page.WaitForTimeoutAsync(1000);
 
@@ -152,7 +152,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
 
         // 7. menu → Settings — toggle off dark mode, then change theme to show visual change
         await ClickAsync(page.Locator("[data-main-step-1]")); // menu toggle button (three dots)
-        await page.WaitForTimeoutAsync(2000);
+        await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Settings" })); // Settings button in menu sidebar
         await page.WaitForTimeoutAsync(1000);
         await ClickAsync(page.Locator("label[for='ShowHelp']")); // Show help checkbox — toggle
@@ -172,7 +172,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await ClickAsync(page.Locator("label[for='ShowColor']")); // Show color checkbox — toggle
         await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("label[for='ShowCreatedUpdated']")); // Show created & updated checkbox — toggle
-        await page.WaitForTimeoutAsync(3000);
+        await page.WaitForTimeoutAsync(1000);
     }
 
     [Test]
