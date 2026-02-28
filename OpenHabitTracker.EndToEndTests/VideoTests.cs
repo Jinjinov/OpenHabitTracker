@@ -138,10 +138,10 @@ public class VideoTests : PlaywrightTest
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await page.WaitForTimeoutAsync(1000);
 
-        await context.CloseAsync();
-
         if (!ffmpeg.HasExited)
             await ffmpeg.StandardInput.WriteAsync('q'); // graceful FFmpeg shutdown — finalizes the MP4 container
         await ffmpeg.WaitForExitAsync();
+
+        await context.CloseAsync();
     }
 }

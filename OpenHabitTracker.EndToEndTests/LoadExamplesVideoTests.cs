@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
@@ -13,7 +14,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
     [SetUp]
     public async Task BrowserSetUp()
     {
-        _browser = await BrowserType.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
+        _browser = await BrowserType.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false, Args = ["--window-position=100,0"] });
     }
 
     [TearDown]
@@ -177,13 +178,37 @@ public class LoadExamplesVideoTests : PlaywrightTest
     {
         var context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
-            ViewportSize = new ViewportSize { Width = 1920, Height = 1080 },
+            ViewportSize = new ViewportSize { Width = 1920, Height = 1086 }, // +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
             IgnoreHTTPSErrors = true
         });
 
         await SetupFakeCursorAsync(context);
         var page = await context.NewPageAsync();
+
+        await page.GotoAsync(BaseUrl);
+        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        var offsetX = await page.EvaluateAsync<int>("window.screenX + (window.outerWidth - window.innerWidth) / 2");
+        var offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
+
+        Directory.CreateDirectory("videos");
+
+        using var ffmpeg = new Process();
+        ffmpeg.StartInfo = new ProcessStartInfo
+        {
+            FileName = "ffmpeg",
+            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=60:offset_x={offsetX}:offset_y={offsetY}:video_size=1920x1080:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -crf 18 -preset slow videos/load-examples-desktop.mp4",
+            UseShellExecute = false,
+            RedirectStandardInput = true,
+        };
+        ffmpeg.Start();
+
         await RunDemoScript(page);
+
+        if (!ffmpeg.HasExited)
+            await ffmpeg.StandardInput.WriteAsync('q'); // graceful FFmpeg shutdown — finalizes the MP4 container
+        await ffmpeg.WaitForExitAsync();
+
         await context.CloseAsync();
     }
 
@@ -192,13 +217,37 @@ public class LoadExamplesVideoTests : PlaywrightTest
     {
         var context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
-            ViewportSize = new ViewportSize { Width = 500, Height = 1084 }, // original 886×1920 aspect ratio scaled to 500×1084 (1920/886*500≈1084), minimum width Chromium accepts in headed mode
+            ViewportSize = new ViewportSize { Width = 500, Height = 1090 }, // original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
             IgnoreHTTPSErrors = true
         });
 
         await SetupFakeMobileCursorAsync(context);
         var page = await context.NewPageAsync();
+
+        await page.GotoAsync(BaseUrl);
+        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        var offsetX = await page.EvaluateAsync<int>("window.screenX + (window.outerWidth - window.innerWidth) / 2");
+        var offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
+
+        Directory.CreateDirectory("videos");
+
+        using var ffmpeg = new Process();
+        ffmpeg.StartInfo = new ProcessStartInfo
+        {
+            FileName = "ffmpeg",
+            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=60:offset_x={offsetX}:offset_y={offsetY}:video_size=500x1084:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -crf 18 -preset slow videos/load-examples-mobile.mp4",
+            UseShellExecute = false,
+            RedirectStandardInput = true,
+        };
+        ffmpeg.Start();
+
         await RunDemoScript(page);
+
+        if (!ffmpeg.HasExited)
+            await ffmpeg.StandardInput.WriteAsync('q'); // graceful FFmpeg shutdown — finalizes the MP4 container
+        await ffmpeg.WaitForExitAsync();
+
         await context.CloseAsync();
     }
 }
