@@ -63,7 +63,9 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-add add aria labels like `aria-label="Close sidebar"` to all html
+Accessibility:
+
+add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
 
 ---------------------------------------------------------------------------------------------------
 
