@@ -179,6 +179,18 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForTimeoutAsync(500);
     }
 
+    private static async Task RunLoadExamplesScenario(IPage page)
+    {
+        await GotoBaseUrl(page);
+        await LoadExamples(page);
+        await ShowNotes(page);
+        await ShowTasks(page);
+        await ShowHabits(page);
+        await ShowHome(page);
+        await ShowSearch(page);
+        await ShowSettings(page);
+    }
+
     private async Task RecordVideo(string outputFile, string videoSize, int viewportWidth, int viewportHeight, bool mobile, Func<IPage, Task> scenario)
     {
         IBrowserContext context = await _browser.NewContextAsync(new BrowserNewContextOptions
@@ -223,29 +235,9 @@ public class LoadExamplesVideoTests : PlaywrightTest
 
     [Test]
     public async Task RecordDesktopVideo_C_inetpub_wwwroot() =>
-        await RecordVideo("videos/load-examples-desktop.mp4", "1920x1080", 1920, 1086, false, async page => // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
-        {
-            await GotoBaseUrl(page);
-            await LoadExamples(page);
-            await ShowNotes(page);
-            await ShowTasks(page);
-            await ShowHabits(page);
-            await ShowHome(page);
-            await ShowSearch(page);
-            await ShowSettings(page);
-        });
+        await RecordVideo("videos/load-examples-desktop.mp4", "1920x1080", 1920, 1086, false, RunLoadExamplesScenario); // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
 
     [Test]
     public async Task RecordMobileVideo_C_inetpub_wwwroot() =>
-        await RecordVideo("videos/load-examples-mobile.mp4", "500x1084", 500, 1090, true, async page => // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
-        {
-            await GotoBaseUrl(page);
-            await LoadExamples(page);
-            await ShowNotes(page);
-            await ShowTasks(page);
-            await ShowHabits(page);
-            await ShowHome(page);
-            await ShowSearch(page);
-            await ShowSettings(page);
-        });
+        await RecordVideo("videos/load-examples-mobile.mp4", "500x1084", 500, 1090, true, RunLoadExamplesScenario); // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
 }
