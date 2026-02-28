@@ -76,8 +76,6 @@ write unit tests:
 
     run once to install browsers: pwsh playwright.ps1 install
 
-    - have all Search sections folded
-
     1. video - focus on content, minimal sidebar: Notes, Tasks, Habits
 
     Load examples, land on Home — everything visible at once	8s
