@@ -63,6 +63,10 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+add add aria labels like `aria-label="Close sidebar"` to all html
+
+---------------------------------------------------------------------------------------------------
+
 highest priority:
 
 0.
