@@ -179,13 +179,21 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForTimeoutAsync(500);
     }
 
-    private static async Task RunFullScenario(IPage page)
+    private static async Task ShowMainContent(IPage page)
     {
         await GotoBaseUrl(page);
         await LoadExamples(page);
+
         await ShowNotes(page);
         await ShowTasks(page);
         await ShowHabits(page);
+    }
+
+    private static async Task ShowSidebar(IPage page)
+    {
+        await GotoBaseUrl(page);
+        await LoadExamples(page);
+
         await ShowHome(page);
         await ShowSearch(page);
         await ShowSettings(page);
@@ -234,10 +242,18 @@ public class LoadExamplesVideoTests : PlaywrightTest
     }
 
     [Test]
-    public async Task RecordDesktopVideo_C_inetpub_wwwroot() =>
-        await RecordVideo("videos/load-examples-desktop.mp4", "1920x1080", 1920, 1086, false, RunFullScenario); // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
+    public async Task Desktop_ShowMainContent_C_inetpub_wwwroot() =>
+        await RecordVideo("videos/load-examples-desktop.mp4", "1920x1080", 1920, 1086, false, ShowMainContent); // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
 
     [Test]
-    public async Task RecordMobileVideo_C_inetpub_wwwroot() =>
-        await RecordVideo("videos/load-examples-mobile.mp4", "500x1084", 500, 1090, true, RunFullScenario); // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
+    public async Task Desktop_ShowSidebar_C_inetpub_wwwroot() =>
+        await RecordVideo("videos/load-examples-desktop.mp4", "1920x1080", 1920, 1086, false, ShowSidebar); // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
+
+    [Test]
+    public async Task Mobile_ShowMainContent_C_inetpub_wwwroot() =>
+        await RecordVideo("videos/load-examples-mobile.mp4", "500x1084", 500, 1090, true, ShowMainContent); // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
+
+    [Test]
+    public async Task Mobile_ShowSidebar_C_inetpub_wwwroot() =>
+        await RecordVideo("videos/load-examples-mobile.mp4", "500x1084", 500, 1090, true, ShowSidebar); // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
 }
