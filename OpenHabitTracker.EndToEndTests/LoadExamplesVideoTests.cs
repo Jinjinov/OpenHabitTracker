@@ -160,18 +160,6 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await ClickAsync(page.Locator("label[for='ShowPriorityDropdown']")); // Show priority checkbox — toggle
         await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("label[for='ShowItemList']")); // Show item list checkbox — toggle
-        await page.WaitForTimeoutAsync(500);
-        await ClickAsync(page.Locator("label[for='ShowSmallCalendar']")); // Show small calendar checkbox — toggle
-        await page.WaitForTimeoutAsync(500);
-        await ClickAsync(page.Locator("label[for='ShowLargeCalendar']")); // Show large calendar checkbox — toggle
-        await page.WaitForTimeoutAsync(500);
-        await ClickAsync(page.Locator("label[for='ShowHabitStatistics']")); // Show habit statistics checkbox — toggle
-        await page.WaitForTimeoutAsync(500);
-        await ClickAsync(page.Locator("label[for='ShowCategory']")); // Show category checkbox — toggle
-        await page.WaitForTimeoutAsync(500);
-        await ClickAsync(page.Locator("label[for='ShowColor']")); // Show color checkbox — toggle
-        await page.WaitForTimeoutAsync(500);
-        await ClickAsync(page.Locator("label[for='ShowCreatedUpdated']")); // Show created & updated checkbox — toggle
         await page.WaitForTimeoutAsync(1000);
     }
 
