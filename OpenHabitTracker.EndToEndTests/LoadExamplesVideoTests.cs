@@ -177,42 +177,19 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForTimeoutAsync(500);
     }
 
-    private async Task RunDemoScript(IPage page)
-    {
-        await GotoBaseUrl(page);
-
-        // 1. load built-in examples
-        await LoadExamples(page);
-
-        // 2. notes — open first note
-        await ShowNotes(page);
-
-        // 3. tasks — open first task
-        await ShowTasks(page);
-
-        // 4. habits — open first habit
-        await ShowHabits(page);
-
-        // 5. navigate to Home — shows all notes, tasks and habits
-        await ShowHome(page);
-
-        // 6. search icon in top bar — type search term
-        await ShowSearch(page);
-
-        // 7. Settings
-        await ShowSettings(page);
-    }
-
-    [Test]
-    public async Task RecordDesktopVideo()
+    private async Task RecordVideo(string outputFile, string videoSize, int viewportWidth, int viewportHeight, bool mobile, Func<IPage, Task> scenario)
     {
         IBrowserContext context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
-            ViewportSize = new ViewportSize { Width = 1920, Height = 1086 }, // +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
+            ViewportSize = new ViewportSize { Width = viewportWidth, Height = viewportHeight },
             IgnoreHTTPSErrors = true
         });
 
-        await SetupFakeCursorAsync(context);
+        if (mobile)
+            await SetupFakeMobileCursorAsync(context);
+        else
+            await SetupFakeCursorAsync(context);
+
         IPage page = await context.NewPageAsync();
 
         await page.GotoAsync(BaseUrl);
@@ -227,13 +204,13 @@ public class LoadExamplesVideoTests : PlaywrightTest
         ffmpeg.StartInfo = new ProcessStartInfo
         {
             FileName = "ffmpeg",
-            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=60:offset_x={offsetX}:offset_y={offsetY}:video_size=1920x1080:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -crf 18 -preset slow videos/load-examples-desktop.mp4",
+            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=60:offset_x={offsetX}:offset_y={offsetY}:video_size={videoSize}:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -crf 18 -preset slow {outputFile}",
             UseShellExecute = false,
             RedirectStandardInput = true,
         };
         ffmpeg.Start();
 
-        await RunDemoScript(page);
+        await scenario(page);
 
         if (!ffmpeg.HasExited)
             await ffmpeg.StandardInput.WriteAsync('q'); // graceful FFmpeg shutdown — finalizes the MP4 container
@@ -243,41 +220,30 @@ public class LoadExamplesVideoTests : PlaywrightTest
     }
 
     [Test]
-    public async Task RecordMobileVideo()
-    {
-        IBrowserContext context = await _browser.NewContextAsync(new BrowserNewContextOptions
+    public async Task RecordDesktopVideo() =>
+        await RecordVideo("videos/load-examples-desktop.mp4", "1920x1080", 1920, 1086, false, async page => // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
         {
-            ViewportSize = new ViewportSize { Width = 500, Height = 1090 }, // original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
-            IgnoreHTTPSErrors = true
+            await GotoBaseUrl(page);
+            await LoadExamples(page);
+            await ShowNotes(page);
+            await ShowTasks(page);
+            await ShowHabits(page);
+            await ShowHome(page);
+            await ShowSearch(page);
+            await ShowSettings(page);
         });
 
-        await SetupFakeMobileCursorAsync(context);
-        IPage page = await context.NewPageAsync();
-
-        await page.GotoAsync(BaseUrl);
-        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        int offsetX = await page.EvaluateAsync<int>("window.screenX + (window.outerWidth - window.innerWidth) / 2");
-        int offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
-
-        Directory.CreateDirectory("videos");
-
-        using Process ffmpeg = new();
-        ffmpeg.StartInfo = new ProcessStartInfo
+    [Test]
+    public async Task RecordMobileVideo() =>
+        await RecordVideo("videos/load-examples-mobile.mp4", "500x1084", 500, 1090, true, async page => // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
         {
-            FileName = "ffmpeg",
-            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=60:offset_x={offsetX}:offset_y={offsetY}:video_size=500x1084:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -crf 18 -preset slow videos/load-examples-mobile.mp4",
-            UseShellExecute = false,
-            RedirectStandardInput = true,
-        };
-        ffmpeg.Start();
-
-        await RunDemoScript(page);
-
-        if (!ffmpeg.HasExited)
-            await ffmpeg.StandardInput.WriteAsync('q'); // graceful FFmpeg shutdown — finalizes the MP4 container
-        await ffmpeg.WaitForExitAsync();
-
-        await context.CloseAsync();
-    }
+            await GotoBaseUrl(page);
+            await LoadExamples(page);
+            await ShowNotes(page);
+            await ShowTasks(page);
+            await ShowHabits(page);
+            await ShowHome(page);
+            await ShowSearch(page);
+            await ShowSettings(page);
+        });
 }
