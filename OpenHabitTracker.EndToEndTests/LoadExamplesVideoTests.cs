@@ -146,6 +146,12 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForTimeoutAsync(500);
     }
 
+    private static async Task ShowHome(IPage page)
+    {
+        await ClickAsync(page.Locator("[data-main-step-2]")); // Home nav link in top bar
+        await page.WaitForTimeoutAsync(500);
+    }
+
     private static async Task ShowSearch(IPage page)
     {
         await ClickAsync(page.Locator("[data-main-step-6]")); // Search toggle button in top bar
@@ -154,12 +160,6 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.Locator("[data-search-step-1]").PressSequentiallyAsync("daily", new LocatorPressSequentiallyOptions { Delay = 200 }); // search input field — typed char by char
         await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("[data-search-step-3]")); // clear search term button (x)
-        await page.WaitForTimeoutAsync(500);
-    }
-
-    private static async Task ShowHome(IPage page)
-    {
-        await ClickAsync(page.Locator("[data-main-step-2]")); // Home nav link in top bar
         await page.WaitForTimeoutAsync(500);
     }
 
@@ -181,25 +181,25 @@ public class LoadExamplesVideoTests : PlaywrightTest
     {
         await GotoBaseUrl(page);
 
-        // 1. menu → Data → load built-in examples
+        // 1. load built-in examples
         await LoadExamples(page);
 
-        // 2. /notes — open first note
+        // 2. notes — open first note
         await ShowNotes(page);
 
-        // 3. /tasks — open first task
+        // 3. tasks — open first task
         await ShowTasks(page);
 
-        // 4. /habits — open first habit to show calendar
+        // 4. habits — open first habit
         await ShowHabits(page);
 
-        // 5. search icon in top bar — type search term
-        await ShowSearch(page);
-
-        // 6. navigate to Home — shows all notes, tasks and habits together
+        // 5. navigate to Home — shows all notes, tasks and habits
         await ShowHome(page);
 
-        // 7. menu → Settings
+        // 6. search icon in top bar — type search term
+        await ShowSearch(page);
+
+        // 7. Settings
         await ShowSettings(page);
     }
 
