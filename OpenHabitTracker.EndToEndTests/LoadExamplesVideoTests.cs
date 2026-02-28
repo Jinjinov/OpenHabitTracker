@@ -222,7 +222,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
     }
 
     [Test]
-    public async Task RecordDesktopVideo() =>
+    public async Task RecordDesktopVideo_C_inetpub_wwwroot() =>
         await RecordVideo("videos/load-examples-desktop.mp4", "1920x1080", 1920, 1086, false, async page => // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
         {
             await GotoBaseUrl(page);
@@ -236,7 +236,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
         });
 
     [Test]
-    public async Task RecordMobileVideo() =>
+    public async Task RecordMobileVideo_C_inetpub_wwwroot() =>
         await RecordVideo("videos/load-examples-mobile.mp4", "500x1084", 500, 1090, true, async page => // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
         {
             await GotoBaseUrl(page);
