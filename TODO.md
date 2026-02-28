@@ -72,8 +72,6 @@ write unit tests:
 
     run once to install browsers: pwsh playwright.ps1 install
 
-    run ffmpeg from C# code in the test
-
     - close Data after Load Examples
     - have all Search sections folded
 

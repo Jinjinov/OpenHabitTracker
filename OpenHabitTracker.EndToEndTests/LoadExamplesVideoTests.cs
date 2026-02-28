@@ -114,6 +114,8 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("[data-data-step-1]")); // Load examples button in Data sidebar
         await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("#closeSidebar")); // close sidebar button
+        await page.WaitForTimeoutAsync(500);
     }
 
     private static async Task ShowNotes(IPage page)

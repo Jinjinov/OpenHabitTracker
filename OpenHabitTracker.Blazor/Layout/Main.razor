@@ -91,7 +91,7 @@
                                 <small class="input-group-text" @onclick="@(() => StartTour(_guidedTourByTypeName[_dynamicComponentType.Name]))"><i class="bi bi-question-circle"></i></small>
                             }
                             <span class="input-group-text fw-bold text-primary flex-grow-1">@Loc[_titleByTypeName[_dynamicComponentType.Name]]</span>
-                            <button class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
+                            <button id="closeSidebar" class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
                         </div>
                     }
 
