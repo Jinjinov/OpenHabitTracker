@@ -95,72 +95,112 @@ public class LoadExamplesVideoTests : PlaywrightTest
             """);
     }
 
-    private async Task RunDemoScript(IPage page)
+    private static async Task GotoBaseUrl(IPage page)
     {
-        // 1. menu → Data → load built-in examples
         await page.GotoAsync(BaseUrl);
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await page.WaitForTimeoutAsync(1000); // wait for Blazor OnAfterRenderAsync to finish
+    }
 
+    private static async Task LoadExamples(IPage page)
+    {
         if (!await page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Data" }).IsVisibleAsync())
         {
             await ClickAsync(page.Locator("[data-main-step-1]")); // menu toggle button (three dots) — open only if Data button not already visible
-            await page.WaitForTimeoutAsync(400);
+            await page.WaitForTimeoutAsync(500);
         }
 
         await ClickAsync(page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Data" })); // Data button in menu sidebar
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("[data-data-step-1]")); // Load examples button in Data sidebar
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
+    }
 
-        // 2. /notes — open first note
+    private static async Task ShowNotes(IPage page)
+    {
         await ClickAsync(page.Locator("[data-main-step-3]")); // Notes nav link in top bar
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("[data-notes-step-2]").First); // note title button — opens note detail
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("[data-notes-step-7]")); // Close button in note detail
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
+    }
 
-        // 3. /tasks — open first task
+    private static async Task ShowTasks(IPage page)
+    {
         await ClickAsync(page.Locator("[data-main-step-4]")); // Tasks nav link in top bar
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("[data-tasks-step-2]").First); // task title button — opens task detail
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("[data-tasks-step-10]")); // Close button in task detail
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
+    }
 
-        // 4. /habits — open first habit to show calendar
+    private static async Task ShowHabits(IPage page)
+    {
         await ClickAsync(page.Locator("[data-main-step-5]")); // Habits nav link in top bar
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("[data-habits-step-2]").First); // habit title button — opens habit detail
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("[data-habits-step-11]")); // Close button in habit detail
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
+    }
 
-        // 5. search icon in top bar — type search term
+    private static async Task ShowSearch(IPage page)
+    {
         await ClickAsync(page.Locator("[data-main-step-6]")); // Search toggle button in top bar
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
         await MoveToAsync(page.Locator("[data-search-step-1]")); // move cursor to search input
         await page.Locator("[data-search-step-1]").PressSequentiallyAsync("daily", new LocatorPressSequentiallyOptions { Delay = 200 }); // search input field — typed char by char
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
         await ClickAsync(page.Locator("[data-search-step-3]")); // clear search term button (x)
-        await page.WaitForTimeoutAsync(400);
+        await page.WaitForTimeoutAsync(500);
+    }
+
+    private static async Task ShowHome(IPage page)
+    {
+        await ClickAsync(page.Locator("[data-main-step-2]")); // Home nav link in top bar
+        await page.WaitForTimeoutAsync(500);
+    }
+
+    private static async Task ShowSettings(IPage page)
+    {
+        await ClickAsync(page.Locator("[data-main-step-1]")); // menu toggle button (three dots)
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Settings" })); // Settings button in menu sidebar
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowHelp']")); // Show help checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowPriorityDropdown']")); // Show priority checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+        await ClickAsync(page.Locator("label[for='ShowItemList']")); // Show item list checkbox — toggle
+        await page.WaitForTimeoutAsync(500);
+    }
+
+    private async Task RunDemoScript(IPage page)
+    {
+        await GotoBaseUrl(page);
+
+        // 1. menu → Data → load built-in examples
+        await LoadExamples(page);
+
+        // 2. /notes — open first note
+        await ShowNotes(page);
+
+        // 3. /tasks — open first task
+        await ShowTasks(page);
+
+        // 4. /habits — open first habit to show calendar
+        await ShowHabits(page);
+
+        // 5. search icon in top bar — type search term
+        await ShowSearch(page);
 
         // 6. navigate to Home — shows all notes, tasks and habits together
-        await ClickAsync(page.Locator("[data-main-step-2]")); // Home nav link in top bar
-        await page.WaitForTimeoutAsync(400);
+        await ShowHome(page);
 
         // 7. menu → Settings
-        await ClickAsync(page.Locator("[data-main-step-1]")); // menu toggle button (three dots)
-        await page.WaitForTimeoutAsync(400);
-        await ClickAsync(page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Settings" })); // Settings button in menu sidebar
-        await page.WaitForTimeoutAsync(400);
-        await ClickAsync(page.Locator("label[for='ShowHelp']")); // Show help checkbox — toggle
-        await page.WaitForTimeoutAsync(400);
-        await ClickAsync(page.Locator("label[for='ShowPriorityDropdown']")); // Show priority checkbox — toggle
-        await page.WaitForTimeoutAsync(400);
-        await ClickAsync(page.Locator("label[for='ShowItemList']")); // Show item list checkbox — toggle
-        await page.WaitForTimeoutAsync(400);
+        await ShowSettings(page);
     }
 
     [Test]
