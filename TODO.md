@@ -74,6 +74,9 @@ write unit tests:
 
     run ffmpeg from C# code in the test
 
+    - close Data after Load Examples
+    - have all Search sections folded
+
     PRIORITY 2 - OpenHabitTracker.UnitTests - general test coverage (bUnit component tests, Appium native app tests)
 
     why NUnit over xUnit?
