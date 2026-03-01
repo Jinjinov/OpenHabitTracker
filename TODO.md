@@ -63,15 +63,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-Accessibility:
-
-add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
-
----------------------------------------------------------------------------------------------------
-
-highest priority:
-
-0.
 write unit tests:
 
     OpenHabitTracker.UnitTests - general test coverage (bUnit component tests, Appium native app tests)
@@ -89,6 +80,15 @@ write unit tests:
 
     use bUnit when a behavior is too deep or tedious to reach through the browser UI
     use Appium when you need to verify the native app specifically (platform behavior)
+
+---------------------------------------------------------------------------------------------------
+
+highest priority:
+
+0.
+Accessibility:
+
+add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
 
 1.
 record MP4 video for app stores
