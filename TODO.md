@@ -93,58 +93,21 @@ write unit tests:
 1.
 record MP4 video for app stores
 
-Apple App Store — 3
-Microsoft Store — 15
-Google Play — 1
-Snap Store — 1
-APKPure — 1
-Flathub — 1
+Apple App Store — 3 videos
+Microsoft Store — 15 videos
+Google Play — 1 video
+Snap Store — 1 video
+APKPure — 1 video
+Flathub — 1 video
 
     TWO VIDEOS NEEDED:
     - Desktop: 1920x1080, landscape, 15-30s, MP4
     - Mobile:   886x1920, portrait,  15-30s, MP4
 
-    PLAN A — record Playwright tests:
-    record both videos with Playwright from the PWA:
-    - Playwright UI tests drive the app navigation AND record the video at the same time
-    - 1920x1080 for desktop, 886x1920 for mobile
-    - no OBS, no iOS Simulator, no Mac Mini needed — everything runs on Windows PC
-    - if App Store or Google Play reject the PWA recording, fall back to PLAN B
-
-    PLAN B — record manually:
-    DESKTOP VIDEO — record on Windows PC with OBS Studio:
-    - install OBS Studio (https://obsproject.com)
-    - OBS Settings → Video → Base Resolution: 1920x1080, Output Resolution: 1920x1080
-    - OBS Settings → Output → Format: mp4, Encoder: H.264, Bitrate: 50000 kbps
-    - run the app in a 16:9 window (e.g. 1600x900) — do NOT maximize on ultrawide 3440x1440
-    - add Window Capture source pointing to the app window
-    - record 15-30 seconds
-    - no need to change Windows 125% display scaling — OBS ignores it
-
-    MOBILE VIDEO — record on Mac Mini with Xcode iOS Simulator:
-    - open Xcode, run the app targeting iPhone 16 simulator
-    - in Simulator menu: File → Record Screen (or Cmd+R to start/stop)
-    - recording saves as .mov to Desktop
-    - check resolution — if not exactly 886x1920, scale with FFmpeg:
-        ffmpeg -i input.mov -vf scale=886:1920 -c:v libx264 -crf 18 -c:a aac output.mp4
-    - no need to change Mac display scaling — Simulator records virtual device, not the display
-
-    STEP 1 — self-host both MP4 files on openhabittracker.net:
-    - add <video> tag to index.html for inline playback on the website
-
-    STEP 2 — upload both videos to YouTube (for Snap Store and Google Play):
+    upload both videos to YouTube (for Snap Store and Google Play):
     - upload desktop video to YouTube (landscape, unlisted is fine)
     - upload mobile video to YouTube (portrait, unlisted is fine)
     - save both YouTube URLs
-
-    STEP 3 — reduce file size to under 10 MB for GitHub README:
-        ffmpeg -i input.mp4 -c:v libx264 -crf 28 -preset slow -c:a aac -b:a 128k output.mp4
-    increase CRF (up to 32) if still over 10 MB
-
-    STEP 4 — upload both reduced videos to GitHub README (drag & drop in web editor):
-    - open README.md on GitHub.com in the web editor
-    - drag and drop each MP4 → GitHub hosts it and gives a permanent CDN URL
-    - GitHub renders it as a native inline video player (only works for GitHub CDN URLs)
 
     SUBMIT DESKTOP VIDEO (1920x1080) TO:
     - Microsoft Store:  upload MP4 in Partner Center + also upload a 1920x1080 PNG "Super Hero Art" image (required for trailer to appear at top of listing)
