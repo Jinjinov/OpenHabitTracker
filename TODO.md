@@ -110,6 +110,12 @@ Accessibility:
     4. Calendar arrow key navigation (roving tabindex):
        - currently Tab through every day cell (up to 42 presses for month view)
        - only one cell has tabindex="0" at a time, arrow keys move between cells, Tab exits grid
+    5. Arrow keys for Menu sidebar (ARIA menu pattern):
+       - Tab enters the menu, Up/Down arrows move between items, Tab exits
+    6. Home/End in calendar grid:
+       - Home → first day of the week, End → last day of the week
+    7. Page Up/Page Down in calendar:
+       - Page Up → previous month, Page Down → next month
 
     Changes needed across 20 Razor files in OpenHabitTracker.Blazor:
 
@@ -152,6 +158,18 @@ Accessibility:
     G. About.razor:
        - fix heading hierarchy: h3 → h6 → h5 → h3 is wrong; use h1/h2/h3 progression
        - GitHub icon link has no text: add `aria-label="Open Source on GitHub"`
+
+    H. `<html lang>` must update when language changes (WCAG 3.1.1):
+       - screen readers use lang attribute for pronunciation engine
+       - when SaveCulture() fires in Settings.razor, update <html lang="..."> via JS
+
+    I. `aria-expanded` missing on interactive toggles:
+       - Search.razor collapsible buttons: add aria-expanded="@(!_settings.FoldSection[...])"
+       - Main.razor sidebar toggle buttons: add aria-expanded and aria-controls="sidebar-id"
+
+    J. Silent operations give no screen reader feedback (WCAG 4.1.3):
+       - note save, habit marked done, item deleted — screen reader users hear nothing
+       - add aria-live="polite" region in Main.razor, write brief status text after operations
 
 1.
 desktop: https://youtu.be/qsC7lX3yZ-A
