@@ -65,6 +65,8 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 write unit tests:
 
+Extract interfaces: INoteService, ITaskService, IHabitService, IPriorityService, ICategoryService, IItemService, ICalendarService, ITrashService
+
     OpenHabitTracker.UnitTests - general test coverage (bUnit component tests, Appium native app tests)
 
     why NUnit over xUnit?
@@ -88,6 +90,68 @@ highest priority:
 0.
 Accessibility:
     add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
+    keyboard navigation
+        Naturally focusable elements:
+        <a href>, <button>, <input>, <select>, <textarea>
+        not focusable, no keyboard event, screen reader says nothing useful
+        <div @onclick>, <span @onclick>, <small @onclick>
+        Fix: replace with <button>
+
+    Keyboard navigation improvements:
+    1. More <small @onclick> to fix (same as D below):
+       - Notes.razor, Tasks.razor, Habits.razor: help/tour trigger <small @onclick>
+    2. Focus management (currently missing):
+       - sidebar opens → move focus to first element inside sidebar
+       - sidebar closes → return focus to the button that opened it (menu or search)
+       - note/task/habit edit closes → return focus to the list item that was opened
+    3. Escape key to close:
+       - sidebar: @onkeydown on sidebar container → _dynamicComponentType = null
+       - note/task/habit edit panel: Escape → CloseSelected()
+    4. Calendar arrow key navigation (roving tabindex):
+       - currently Tab through every day cell (up to 42 presses for month view)
+       - only one cell has tabindex="0" at a time, arrow keys move between cells, Tab exits grid
+
+    Changes needed across 20 Razor files in OpenHabitTracker.Blazor:
+
+    A. `aria-hidden="true"` on ALL decorative `<i class="bi bi-*">` icons (~60-80 instances, every file)
+       - icons next to text are decorative → screen readers must skip them
+
+    B. `aria-label` on ALL icon-only buttons/links (~30 instances):
+       - Main.razor:             toggle menu, home, notes, tasks, habits, search, help, close sidebar
+       - CalendarComponent.razor: prev/next month, prev/next week, add time, remove time, delete time
+       - NoteComponent.razor:    delete note
+       - TaskComponent.razor:    mark done, delete, play, pause, reset, stop timer
+       - HabitComponent.razor:   mark done, delete, play, pause, reset, stop timer
+       - ItemsComponent.razor:   delete item, add item
+       - Search.razor:           match case toggle, clear planned date, clear done date
+       - Trash.razor:            restore item, delete item (per item)
+       - Categories.razor:       delete category (per item)
+       - GuidedTourComponent:    previous, next, complete, close tour
+
+    C. Semantic HTML landmarks (Main.razor):
+       - wrap header icon row in `<nav aria-label="Main navigation">`
+       - wrap main content in `<main id="main-content">`
+       - add skip link: `<a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>`
+
+    D. Collapsible section headers (Search.razor):
+       - change `<small @onclick>` to `<button>` — `<small>` is not keyboard-focusable
+
+    E. Missing form control labels:
+       - CategoryComponent.razor:  add `aria-label` to bare `<InputSelect>`
+       - ColorComponent.razor:     add `aria-label` to bare `<InputSelect>`
+       - PriorityComponent.razor:  add `aria-label` to bare `<InputSelect>`
+       - TaskComponent.razor:      add `aria-label` to duration hour/minute `<InputSelect>`
+       - HabitComponent.razor:     add `aria-label` to duration hour/minute `<InputSelect>`
+       - Search.razor:             add `aria-label` to `<input type="range">`
+       - Settings.razor:           associate `<small>` label text with selects via `aria-label` on each `<InputSelect>`
+
+    F. Calendar day buttons (CalendarComponent.razor):
+       - add `aria-label="@dateTime.ToString("dddd, MMMM d, yyyy")"` to each day button
+       - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
+
+    G. About.razor:
+       - fix heading hierarchy: h3 → h6 → h5 → h3 is wrong; use h1/h2/h3 progression
+       - GitHub icon link has no text: add `aria-label="Open Source on GitHub"`
 
 1.
 desktop: https://youtu.be/qsC7lX3yZ-A
