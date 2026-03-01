@@ -174,15 +174,28 @@ Accessibility:
        - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
        - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
 
+    K. Contextual aria-labels for repeated list-item actions:
+       - bare "Restore deleted item" / "Delete category" is ambiguous when multiple items exist
+       - include the item title: aria-label="Restore: @item.Title", aria-label="Delete: @category.Title"
+       - applies to: Trash.razor (restore/delete), Categories.razor (delete), and note/task/habit delete buttons in B
+
     L. `aria-required="true"` on required inputs:
        - title fields in new note/task/habit add-item rows are required but not marked as such
        - screen readers won't know the field is mandatory until the user tries to submit
        - add `aria-required="true"` to those `<InputText>` elements
 
-    K. Contextual aria-labels for repeated list-item actions:
-       - bare "Restore deleted item" / "Delete category" is ambiguous when multiple items exist
-       - include the item title: aria-label="Restore: @item.Title", aria-label="Delete: @category.Title"
-       - applies to: Trash.razor (restore/delete), Categories.razor (delete), and note/task/habit delete buttons in B
+    M. `aria-current="page"` on active nav items (Main.razor, Menu.razor):
+       - currently active page's nav button/link has no aria-current="page"
+       - screen readers can't tell which page is selected when navigating by landmark
+
+    N. Color as sole conveyor of information (WCAG 1.4.1):
+       - the Color feature sets title text color; if a user relies on color to distinguish items, screen readers miss it
+       - priority and category provide parallel non-color differentiation, so likely supplementary rather than a clear violation
+       - if color is meaningful to the user, consider announcing it: add color name to aria-label or item description
+
+    O. CSS focus visibility (WCAG 2.4.7):
+       - verify `:focus` / `:focus-visible` outlines are not suppressed by the app CSS or Bootswatch themes
+       - if any theme does `outline: none`, the entire keyboard nav plan becomes invisible to sighted keyboard users
 
 1.
 desktop: https://youtu.be/qsC7lX3yZ-A
