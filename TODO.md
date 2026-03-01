@@ -93,12 +93,22 @@ add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
 1.
 record MP4 video for app stores
 
-Apple App Store — 3 videos
-Microsoft Store — 15 videos
-Google Play — 1 video
-Snap Store — 1 video
-APKPure — 1 video
-Flathub — 1 video
+YouTube URL:
+    Snap Store — desktop YouTube URL
+    Google Play — mobile YouTube URL
+    APKPure — mobile YouTube URL
+    
+    AlternativeTo — video URL
+    Product Hunt — video URL
+    https://www.reddit.com/r/OpenHabitTracker/
+
+Direct upload:
+    Microsoft Store — MP4 upload in Partner Center
+    Mac App Store — MP4 upload in App Store Connect
+    App Store iPhone — MP4 upload in App Store Connect
+
+on server openhabittracker.net/videos/
+    Flathub — hosted URL in AppStream XML
 
     TWO VIDEOS NEEDED:
     - Desktop: 1920x1080, landscape, 15-30s, MP4
