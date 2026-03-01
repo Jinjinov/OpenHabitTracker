@@ -181,7 +181,6 @@ public class LoadExamplesVideoTests : PlaywrightTest
 
     private static async Task ShowMainContent(IPage page)
     {
-        await GotoBaseUrl(page);
         await LoadExamples(page);
 
         await ShowNotes(page);
@@ -191,7 +190,6 @@ public class LoadExamplesVideoTests : PlaywrightTest
 
     private static async Task ShowSidebar(IPage page)
     {
-        await GotoBaseUrl(page);
         await LoadExamples(page);
 
         await ShowHome(page);
@@ -221,6 +219,8 @@ public class LoadExamplesVideoTests : PlaywrightTest
         int offsetY = await page.EvaluateAsync<int>("window.screenY + window.outerHeight - window.innerHeight - 2");
 
         Directory.CreateDirectory("videos");
+
+        await GotoBaseUrl(page);
 
         using Process ffmpeg = new();
         ffmpeg.StartInfo = new ProcessStartInfo
