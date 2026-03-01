@@ -45,6 +45,14 @@
   <url type="vcs-browser">https://github.com/Jinjinov/OpenHabitTracker</url>
   <url type="bugtracker">https://github.com/Jinjinov/OpenHabitTracker/issues</url>
   <screenshots>
+    <screenshot>
+      <video codec="h264" width="1920" height="1080">https://openhabittracker.net/videos/desktop-main.mp4</video>
+      <caption>Notes, Tasks, Habits</caption>
+    </screenshot>
+    <screenshot>
+      <video codec="h264" width="1920" height="1080">https://openhabittracker.net/videos/desktop-sidebar.mp4</video>
+      <caption>Search, Settings</caption>
+    </screenshot>
     <screenshot type="default">
       <image>https://openhabittracker.net/images/desktop_1_settings.png</image>
       <caption>Settings</caption>
