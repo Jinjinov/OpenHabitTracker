@@ -87,35 +87,23 @@ highest priority:
 
 0.
 Accessibility:
-
-add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
+    add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
 
 1.
 desktop: https://youtu.be/qsC7lX3yZ-A
 sidebar: https://youtu.be/dq1OmpjBBNk
-mobile: https://youtube.com/shorts/zYAg-PXe7FI
+mobile:  https://youtu.be/zYAg-PXe7FI https://youtube.com/shorts/zYAg-PXe7FI
 
-YouTube URL:
-    Snap Store — desktop YouTube URL
-    Google Play — mobile YouTube URL
-    APKPure — mobile YouTube URL
+SUBMIT DESKTOP VIDEO (1920x1080) TO:
+    - Microsoft Store: upload MP4 in Partner Center
+        also upload a 1920x1080 PNG "Super Hero Art" image 
+        (required for trailer to appear at top of listing)
+    - macOS App Store: upload MP4 in App Store Connect
+    - Snap Store: paste desktop YouTube URL in Snap developer dashboard
 
-Direct upload:
-    Microsoft Store — MP4 upload in Partner Center
-    Mac App Store — MP4 upload in App Store Connect
-    App Store iPhone — MP4 upload in App Store Connect
-
-    SUBMIT DESKTOP VIDEO (1920x1080) TO:
-    - Microsoft Store:  upload MP4 in Partner Center + also upload a 1920x1080 PNG "Super Hero Art" image (required for trailer to appear at top of listing)
-    - Mac App Store:    upload MP4 in App Store Connect
-    - Flathub:          use openhabittracker.net URL in AppStream metainfo XML:
-                            <video codec="h264" width="1920" height="1080">https://openhabittracker.net/videos/desktop.mp4</video>
-    - Snap Store:       paste desktop YouTube URL in Snap developer dashboard
-
-    SUBMIT MOBILE VIDEO (886x1920) TO:
-    - App Store iPhone: upload MP4 in App Store Connect (skip iPad — no separate video needed)
-    - Google Play:      paste mobile YouTube URL in Play Console (portrait video is fine)
-    - APKPure:          claim the app listing in APKPure developer dashboard, paste mobile YouTube URL
+SUBMIT MOBILE VIDEO (886x1920) TO:
+    - iOS App Store: upload MP4 in App Store Connect
+    - Google Play: paste mobile YouTube URL in Play Console
 
 2.
 exact repeating reminders, like Google Keep
