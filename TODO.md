@@ -91,8 +91,6 @@ Accessibility:
 add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
 
 1.
-record MP4 video for app stores
-
 desktop: https://youtu.be/qsC7lX3yZ-A
 sidebar: https://youtu.be/dq1OmpjBBNk
 mobile: https://youtube.com/shorts/zYAg-PXe7FI
@@ -102,26 +100,10 @@ YouTube URL:
     Google Play — mobile YouTube URL
     APKPure — mobile YouTube URL
 
-    AlternativeTo — video URL
-    Product Hunt — video URL
-    https://www.reddit.com/r/OpenHabitTracker/
-
 Direct upload:
     Microsoft Store — MP4 upload in Partner Center
     Mac App Store — MP4 upload in App Store Connect
     App Store iPhone — MP4 upload in App Store Connect
-
-on server openhabittracker.net/videos/
-    Flathub — hosted URL in AppStream XML
-
-    TWO VIDEOS NEEDED:
-    - Desktop: 1920x1080, landscape, 15-30s, MP4
-    - Mobile:   886x1920, portrait,  15-30s, MP4
-
-    upload both videos to YouTube (for Snap Store and Google Play):
-    - upload desktop video to YouTube (landscape, unlisted is fine)
-    - upload mobile video to YouTube (portrait, unlisted is fine)
-    - save both YouTube URLs
 
     SUBMIT DESKTOP VIDEO (1920x1080) TO:
     - Microsoft Store:  upload MP4 in Partner Center + also upload a 1920x1080 PNG "Super Hero Art" image (required for trailer to appear at top of listing)
@@ -129,24 +111,11 @@ on server openhabittracker.net/videos/
     - Flathub:          use openhabittracker.net URL in AppStream metainfo XML:
                             <video codec="h264" width="1920" height="1080">https://openhabittracker.net/videos/desktop.mp4</video>
     - Snap Store:       paste desktop YouTube URL in Snap developer dashboard
-    - AlternativeTo:    add video URL in the app listing editor
-    - Product Hunt:     add video in the product media section
 
     SUBMIT MOBILE VIDEO (886x1920) TO:
     - App Store iPhone: upload MP4 in App Store Connect (skip iPad — no separate video needed)
     - Google Play:      paste mobile YouTube URL in Play Console (portrait video is fine)
     - APKPure:          claim the app listing in APKPure developer dashboard, paste mobile YouTube URL
-
-    MAKE YOUTUBE VIDEOS PUBLIC:
-    - make them public (not unlisted) with proper titles, e.g.:
-        "OpenHabitTracker — Desktop Preview" / "OpenHabitTracker — Mobile Preview"
-    - description: include keywords (habit tracker, open source, privacy, cross-platform, free)
-    - pin both to a playlist so they are grouped together
-    - add channel description with the same keywords
-
-    POST TO REDDIT:
-    - post both YouTube video links to https://www.reddit.com/r/OpenHabitTracker/
-    - cross-post to r/selfhosted, r/FOSS, r/productivity
 
 2.
 exact repeating reminders, like Google Keep
