@@ -3,6 +3,8 @@ using System.Diagnostics;
 
 namespace OpenHabitTracker.EndToEndTests;
 
+// install browsers: pwsh playwright.ps1 install
+
 [TestFixture]
 public class LoadExamplesVideoTests : PlaywrightTest
 {

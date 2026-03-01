@@ -74,26 +74,7 @@ highest priority:
 0.
 write unit tests:
 
-    PRIORITY 1 - OpenHabitTracker.EndToEndTests - video recording tests (needed for app store videos)
-
-    run once to install browsers: pwsh playwright.ps1 install
-
-    1. video - focus on content, minimal sidebar: Notes, Tasks, Habits
-
-    Load examples, land on Home — everything visible at once	8s
-    Notes list → open one note (show content) → close	5s
-    Tasks list → check one task done	4s
-    Habits list — pause to let the red/yellow/green colors sink in	4s
-    Open a habit → show the calendar with completion history	4s
-
-    2. video - focus on sidebar: Search / Settings / Categories
-
-    Search → type "daily" → results highlight in yellow	5s
-    Open filter panel → pick a category → watch list narrow	5s
-    Open a habit → start the timer → let it count for 3s → stop it → time recorded	7s
-    Click a few days on the large calendar to mark habit done	6s
-
-    PRIORITY 2 - OpenHabitTracker.UnitTests - general test coverage (bUnit component tests, Appium native app tests)
+    OpenHabitTracker.UnitTests - general test coverage (bUnit component tests, Appium native app tests)
 
     why NUnit over xUnit?
     - NUnit has [SetUp] / [TearDown] - fit for browser (Playwright) and device (Appium) lifecycle
