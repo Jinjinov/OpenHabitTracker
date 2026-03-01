@@ -150,6 +150,8 @@ Accessibility:
        - HabitComponent.razor:     add `aria-label` to duration hour/minute `<InputSelect>`
        - Search.razor:             add `aria-label` to `<input type="range">`
        - Settings.razor:           associate `<small>` label text with selects via `aria-label` on each `<InputSelect>`
+       - NoteComponent.razor, TaskComponent.razor, HabitComponent.razor: title `<InputText>` in add-item row and edit mode
+         only has placeholder text — placeholder is not a label substitute (WCAG 1.3.1); add `aria-label="Note title"` etc.
 
     F. Calendar day buttons (CalendarComponent.razor):
        - add `aria-label="@dateTime.ToString("dddd, MMMM d, yyyy")"` to each day button
@@ -164,12 +166,23 @@ Accessibility:
        - when SaveCulture() fires in Settings.razor, update <html lang="..."> via JS
 
     I. `aria-expanded` missing on interactive toggles:
-       - Search.razor collapsible buttons: add aria-expanded="@(!_settings.FoldSection[...])"
+       - Search.razor collapsible buttons: add aria-expanded="@(!_settings.FoldSection[...])" and aria-controls="section-id"
        - Main.razor sidebar toggle buttons: add aria-expanded and aria-controls="sidebar-id"
 
     J. Silent operations give no screen reader feedback (WCAG 4.1.3):
        - note save, habit marked done, item deleted — screen reader users hear nothing
-       - add aria-live="polite" region in Main.razor, write brief status text after operations
+       - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
+       - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
+
+    L. `aria-required="true"` on required inputs:
+       - title fields in new note/task/habit add-item rows are required but not marked as such
+       - screen readers won't know the field is mandatory until the user tries to submit
+       - add `aria-required="true"` to those `<InputText>` elements
+
+    K. Contextual aria-labels for repeated list-item actions:
+       - bare "Restore deleted item" / "Delete category" is ambiguous when multiple items exist
+       - include the item title: aria-label="Restore: @item.Title", aria-label="Delete: @category.Title"
+       - applies to: Trash.razor (restore/delete), Categories.razor (delete), and note/task/habit delete buttons in B
 
 1.
 desktop: https://youtu.be/qsC7lX3yZ-A
