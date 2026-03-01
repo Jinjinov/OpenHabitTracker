@@ -115,6 +115,12 @@ After you login at http://localhost:5000/login you can use the same browser tab 
 *   [WinForms](https://learn.microsoft.com/en-us/dotnet/desktop/winforms)
 *   [Wpf](https://learn.microsoft.com/en-us/dotnet/desktop/wpf)
 
+## Desktop videos:
+
+![Notes, Tasks, Habits](OpenHabitTracker.Web/videos/desktop-main.gif)
+
+![Search, Settings](OpenHabitTracker.Web/videos/desktop-sidebar.gif)
+
 ## Desktop screenshots:
 
 [![](OpenHabitTracker.Web/images/desktop_1_settings.png)](OpenHabitTracker.Web/images/desktop_1_settings.png)
