@@ -93,11 +93,15 @@ add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
 1.
 record MP4 video for app stores
 
+desktop: https://youtu.be/qsC7lX3yZ-A
+sidebar: https://youtu.be/dq1OmpjBBNk
+mobile: https://youtube.com/shorts/zYAg-PXe7FI
+
 YouTube URL:
     Snap Store — desktop YouTube URL
     Google Play — mobile YouTube URL
     APKPure — mobile YouTube URL
-    
+
     AlternativeTo — video URL
     Product Hunt — video URL
     https://www.reddit.com/r/OpenHabitTracker/
