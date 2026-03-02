@@ -88,7 +88,7 @@
                         <div class="input-group flex-nowrap my-1">
                             @if (ClientState.Settings.ShowHelp && _dynamicComponentType != typeof(About))
                             {
-                                <small class="input-group-text" @onclick="@(() => StartTour(_guidedTourByTypeName[_dynamicComponentType.Name]))"><i class="bi bi-question-circle"></i></small>
+                                <button class="input-group-text" @onclick="@(() => StartTour(_guidedTourByTypeName[_dynamicComponentType.Name]))"><i class="bi bi-question-circle"></i></button>
                             }
                             <span class="input-group-text fw-bold text-primary flex-grow-1">@Loc[_titleByTypeName[_dynamicComponentType.Name]]</span>
                             <button id="closeSidebar" class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>

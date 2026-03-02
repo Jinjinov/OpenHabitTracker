@@ -102,7 +102,7 @@
 
             @if (ClientState.Settings.ShowHelp)
             {
-                <small class="m-1 text-end" @onclick="@(() => StartTour("tasks"))"><i class="bi bi-question-circle"></i></small>
+                <button class="btn ms-auto m-1" @onclick="@(() => StartTour("tasks"))"><i class="bi bi-question-circle"></i></button>
             }
         </div>
 
