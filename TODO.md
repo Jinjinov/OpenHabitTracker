@@ -98,15 +98,21 @@ Accessibility:
         Fix: replace with <button>
 
     Keyboard navigation improvements:
+
+    Quick & Easy:
+
     1. More <small @onclick> to fix (same as D below):
        - Notes.razor, Tasks.razor, Habits.razor: help/tour trigger <small @onclick>
-    2. Focus management (currently missing):
+    2. Escape key to close:
+       - sidebar: @onkeydown on sidebar container → _dynamicComponentType = null
+       - note/task/habit edit panel: Escape → CloseSelected()
+
+    Complex:
+
+    3. Focus management (currently missing):
        - sidebar opens → move focus to first element inside sidebar
        - sidebar closes → return focus to the button that opened it (menu or search)
        - note/task/habit edit closes → return focus to the list item that was opened
-    3. Escape key to close:
-       - sidebar: @onkeydown on sidebar container → _dynamicComponentType = null
-       - note/task/habit edit panel: Escape → CloseSelected()
     4. Calendar arrow key navigation (roving tabindex):
        - currently Tab through every day cell (up to 42 presses for month view)
        - only one cell has tabindex="0" at a time, arrow keys move between cells, Tab exits grid
@@ -119,10 +125,31 @@ Accessibility:
 
     Changes needed across 20 Razor files in OpenHabitTracker.Blazor:
 
+    Quick & Easy:
+
     A. `aria-hidden="true"` on ALL decorative `<i class="bi bi-*">` icons (~60-80 instances, every file)
        - icons next to text are decorative → screen readers must skip them
 
-    B. `aria-label` on ALL icon-only buttons/links (~30 instances):
+    B. Semantic HTML landmarks (Main.razor):
+       - wrap header icon row in `<nav aria-label="Main navigation">`
+       - wrap main content in `<main id="main-content">`
+       - add skip link: `<a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>`
+
+    C. Collapsible section headers (Search.razor):
+       - change `<small @onclick>` to `<button>` — `<small>` is not keyboard-focusable
+
+    D. About.razor:
+       - fix heading hierarchy: h3 → h6 → h5 → h3 is wrong; use h1/h2/h3 progression
+       - GitHub icon link has no text: add `aria-label="Open Source on GitHub"`
+
+    E. `aria-required="true"` on required inputs:
+       - title fields in new note/task/habit add-item rows are required but not marked as such
+       - screen readers won't know the field is mandatory until the user tries to submit
+       - add `aria-required="true"` to those `<InputText>` elements
+
+    Moderate:
+
+    F. `aria-label` on ALL icon-only buttons/links (~30 instances):
        - Main.razor:             toggle menu, home, notes, tasks, habits, search, help, close sidebar
        - CalendarComponent.razor: prev/next month, prev/next week, add time, remove time, delete time
        - NoteComponent.razor:    delete note
@@ -134,15 +161,7 @@ Accessibility:
        - Categories.razor:       delete category (per item)
        - GuidedTourComponent:    previous, next, complete, close tour
 
-    C. Semantic HTML landmarks (Main.razor):
-       - wrap header icon row in `<nav aria-label="Main navigation">`
-       - wrap main content in `<main id="main-content">`
-       - add skip link: `<a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>`
-
-    D. Collapsible section headers (Search.razor):
-       - change `<small @onclick>` to `<button>` — `<small>` is not keyboard-focusable
-
-    E. Missing form control labels:
+    G. Missing form control labels:
        - CategoryComponent.razor:  add `aria-label` to bare `<InputSelect>`
        - ColorComponent.razor:     add `aria-label` to bare `<InputSelect>`
        - PriorityComponent.razor:  add `aria-label` to bare `<InputSelect>`
@@ -153,49 +172,42 @@ Accessibility:
        - NoteComponent.razor, TaskComponent.razor, HabitComponent.razor: title `<InputText>` in add-item row and edit mode
          only has placeholder text — placeholder is not a label substitute (WCAG 1.3.1); add `aria-label="Note title"` etc.
 
-    F. Calendar day buttons (CalendarComponent.razor):
+    H. Calendar day buttons (CalendarComponent.razor):
        - add `aria-label="@dateTime.ToString("dddd, MMMM d, yyyy")"` to each day button
        - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
 
-    G. About.razor:
-       - fix heading hierarchy: h3 → h6 → h5 → h3 is wrong; use h1/h2/h3 progression
-       - GitHub icon link has no text: add `aria-label="Open Source on GitHub"`
-
-    H. `<html lang>` must update when language changes (WCAG 3.1.1):
+    I. `<html lang>` must update when language changes (WCAG 3.1.1):
        - screen readers use lang attribute for pronunciation engine
        - when SaveCulture() fires in Settings.razor, update <html lang="..."> via JS
 
-    I. `aria-expanded` missing on interactive toggles:
+    J. `aria-expanded` missing on interactive toggles:
        - Search.razor collapsible buttons: add aria-expanded="@(!_settings.FoldSection[...])" and aria-controls="section-id"
        - Main.razor sidebar toggle buttons: add aria-expanded and aria-controls="sidebar-id"
-
-    J. Silent operations give no screen reader feedback (WCAG 4.1.3):
-       - note save, habit marked done, item deleted — screen reader users hear nothing
-       - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
-       - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
 
     K. Contextual aria-labels for repeated list-item actions:
        - bare "Restore deleted item" / "Delete category" is ambiguous when multiple items exist
        - include the item title: aria-label="Restore: @item.Title", aria-label="Delete: @category.Title"
        - applies to: Trash.razor (restore/delete), Categories.razor (delete), and note/task/habit delete buttons in B
 
-    L. `aria-required="true"` on required inputs:
-       - title fields in new note/task/habit add-item rows are required but not marked as such
-       - screen readers won't know the field is mandatory until the user tries to submit
-       - add `aria-required="true"` to those `<InputText>` elements
-
-    M. `aria-current="page"` on active nav items (Main.razor, Menu.razor):
+    L. `aria-current="page"` on active nav items (Main.razor, Menu.razor):
        - currently active page's nav button/link has no aria-current="page"
        - screen readers can't tell which page is selected when navigating by landmark
 
-    N. Color as sole conveyor of information (WCAG 1.4.1):
+    M. Color as sole conveyor of information (WCAG 1.4.1):
        - the Color feature sets title text color; if a user relies on color to distinguish items, screen readers miss it
        - priority and category provide parallel non-color differentiation, so likely supplementary rather than a clear violation
        - if color is meaningful to the user, consider announcing it: add color name to aria-label or item description
 
-    O. CSS focus visibility (WCAG 2.4.7):
+    N. CSS focus visibility (WCAG 2.4.7):
        - verify `:focus` / `:focus-visible` outlines are not suppressed by the app CSS or Bootswatch themes
        - if any theme does `outline: none`, the entire keyboard nav plan becomes invisible to sighted keyboard users
+
+    Complex:
+
+    O. Silent operations give no screen reader feedback (WCAG 4.1.3):
+       - note save, habit marked done, item deleted — screen reader users hear nothing
+       - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
+       - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
 
 1.
 desktop: https://youtu.be/qsC7lX3yZ-A
