@@ -91,18 +91,11 @@ highest priority:
 Accessibility:
     add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
     keyboard navigation
-        Naturally focusable elements:
-        <a href>, <button>, <input>, <select>, <textarea>
-        not focusable, no keyboard event, screen reader says nothing useful
-        <div @onclick>, <span @onclick>, <small @onclick>
-        Fix: replace with <button>
 
     Keyboard navigation improvements:
 
     Quick & Easy:
 
-    1. More <small @onclick> to fix (same as D below):
-       - Notes.razor, Tasks.razor, Habits.razor: help/tour trigger <small @onclick>
     2. Escape key to close:
        - sidebar: @onkeydown on sidebar container → _dynamicComponentType = null
        - note/task/habit edit panel: Escape → CloseSelected()
@@ -134,9 +127,6 @@ Accessibility:
        - wrap header icon row in `<nav aria-label="Main navigation">`
        - wrap main content in `<main id="main-content">`
        - add skip link: `<a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>`
-
-    C. Collapsible section headers (Search.razor):
-       - change `<small @onclick>` to `<button>` — `<small>` is not keyboard-focusable
 
     D. About.razor:
        - GitHub icon link has no text: add `aria-label="Open Source on GitHub"`
