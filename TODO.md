@@ -139,7 +139,6 @@ Accessibility:
        - change `<small @onclick>` to `<button>` — `<small>` is not keyboard-focusable
 
     D. About.razor:
-       - fix heading hierarchy: h3 → h6 → h5 → h3 is wrong; use h1/h2/h3 progression
        - GitHub icon link has no text: add `aria-label="Open Source on GitHub"`
 
     E. `aria-required="true"` on required inputs:
