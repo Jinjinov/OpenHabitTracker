@@ -335,6 +335,12 @@
             _dynamicComponentType = null;
     }
 
-    private string? AriaCurrentPage(string path) =>
-        new Uri(NavigationManager.Uri).AbsolutePath.Trim('/') == path ? "page" : null;
+    private string? AriaCurrentPage(string path)
+    {
+        string relative = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        int separatorIndex = relative.IndexOfAny(['?', '#']);
+        if (separatorIndex >= 0)
+            relative = relative[..separatorIndex];
+        return relative.TrimEnd('/') == path ? "page" : null;
+    }
 }
