@@ -150,11 +150,7 @@ accessibility:
        - include the item title: aria-label="Restore: @item.Title", aria-label="Delete: @category.Title"
        - applies to: Trash.razor (restore/delete), Categories.razor (delete), and note/task/habit delete buttons in B
 
-    F. `aria-current="page"` on active nav items (Main.razor, Menu.razor):
-       - currently active page's nav button/link has no aria-current="page"
-       - screen readers can't tell which page is selected when navigating by landmark
-
-    G. Color as sole conveyor of information (WCAG 1.4.1):
+    F. Color as sole conveyor of information (WCAG 1.4.1):
        - the Color feature sets title text color; if a user relies on color to distinguish items, screen readers miss it
        - priority and category provide parallel non-color differentiation, so likely supplementary rather than a clear violation
        - if color is meaningful to the user, consider announcing it: add color name to aria-label or item description
