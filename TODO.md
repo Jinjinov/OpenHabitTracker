@@ -114,9 +114,6 @@ Accessibility:
 
     Quick & Easy:
 
-    A. `aria-hidden="true"` on ALL decorative `<i class="bi bi-*">` icons (~60-80 instances, every file)
-       - icons next to text are decorative → screen readers must skip them
-
     B. Semantic HTML landmarks (Main.razor):
        - wrap header icon row in `<nav aria-label="Main navigation">`
        - wrap main content in `<main id="main-content">`
@@ -124,11 +121,6 @@ Accessibility:
 
     D. About.razor:
        - GitHub icon link has no text: add `aria-label="Open Source on GitHub"`
-
-    E. `aria-required="true"` on required inputs:
-       - title fields in new note/task/habit add-item rows are required but not marked as such
-       - screen readers won't know the field is mandatory until the user tries to submit
-       - add `aria-required="true"` to those `<InputText>` elements
 
     Moderate:
 

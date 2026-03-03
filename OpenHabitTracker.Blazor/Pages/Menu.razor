@@ -18,14 +18,14 @@
             @* <NavLink class="list-group-item list-group-item-action" href="habits" @onclick="CloseMenu"><i class="bi bi-repeat"></i> @Loc["Habits"]</NavLink> *@
             @* <NavLink class="list-group-item list-group-item-action" href="about" @onclick="CloseMenu"><i class="bi bi-info-circle"></i> @Loc["About"]</NavLink> *@
 
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Trash>"><i class="bi bi-trash"></i> @Loc["Trash"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Search>"><i class="bi bi-search"></i> @Loc["Search, Filter, Sort"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Settings>"><i class="bi bi-gear"></i> @Loc["Settings"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Categories>"><i class="bi bi-tag"></i> @Loc["Categories"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Trash>"><i class="bi bi-trash" aria-hidden="true"></i> @Loc["Trash"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Search>"><i class="bi bi-search" aria-hidden="true"></i> @Loc["Search, Filter, Sort"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Settings>"><i class="bi bi-gear" aria-hidden="true"></i> @Loc["Settings"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Categories>"><i class="bi bi-tag" aria-hidden="true"></i> @Loc["Categories"]</button>
             @* <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Priorities>">@Loc["Priorities"]</button> *@
             @* <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Backup>">@Loc["Backup"]</button> *@
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Data>"><i class="bi bi-database"></i> @Loc["Data"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<About>"><i class="bi bi-info-circle"></i> @Loc["About"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Data>"><i class="bi bi-database" aria-hidden="true"></i> @Loc["Data"]</button>
+            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<About>"><i class="bi bi-info-circle" aria-hidden="true"></i> @Loc["About"]</button>
         </div>
 
     </div>

@@ -28,7 +28,7 @@
         <button class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
             <span class="input-group-text fw-bold text-primary flex-grow-1">@Loc["Add new note"]</span>
 
-            <span class="btn btn-outline-primary"><i class="bi bi-plus-square"></i></span>
+            <span class="btn btn-outline-primary"><i class="bi bi-plus-square" aria-hidden="true"></i></span>
         </button>
     }
     @if (NoteService.NewNote is not null)
@@ -75,7 +75,7 @@
         <div class="d-grid align-items-center" style="grid-template-columns: 1fr auto 1fr;">
             <div></div>
 
-            <div class="m-2 fs-4"><i class="bi bi-sticky"></i> @Loc["Notes"]</div>
+            <div class="m-2 fs-4"><i class="bi bi-sticky" aria-hidden="true"></i> @Loc["Notes"]</div>
 
             @if (ClientState.Settings.ShowHelp)
             {
