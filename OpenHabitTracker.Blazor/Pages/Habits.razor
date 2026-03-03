@@ -43,8 +43,8 @@
 
                 <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.NewHabit.Title" placeholder="@Loc["Add new habit"]" aria-required="true" />
 
-                <button class="btn btn-outline-primary" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.NewHabit.Title)"><i class="bi bi-floppy"></i></button>
-                <button class="btn btn-outline-primary" @onclick="() => HabitService.NewHabit = null"><i class="bi bi-x-square"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Save"]" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.NewHabit.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Close"]" @onclick="() => HabitService.NewHabit = null"><i class="bi bi-x-square"></i></button>
             </div>
 
             <div class="input-group">
@@ -113,7 +113,7 @@
 
             @if (ClientState.Settings.ShowHelp)
             {
-                <button class="btn ms-auto m-1" @onclick="@(() => StartTour("habits"))"><i class="bi bi-question-circle"></i></button>
+                <button class="btn ms-auto m-1" aria-label="@Loc["Help"]" @onclick="@(() => StartTour("habits"))"><i class="bi bi-question-circle"></i></button>
             }
         </div>
 
@@ -153,7 +153,7 @@
 
                             @if (!ClientState.Settings.ShowSmallCalendar)
                             {
-                                <button class="btn btn-outline-primary" @onclick="() => HabitService.MarkAsDone(habit)" data-habits-step-4><i class="bi bi-check-square"></i></button>
+                                <button class="btn btn-outline-primary" aria-label="@Loc["Mark as done"]" @onclick="() => HabitService.MarkAsDone(habit)" data-habits-step-4><i class="bi bi-check-square"></i></button>
                             }
                         </div>
 

@@ -22,7 +22,7 @@
                 <div class="input-group">
                     <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="@Loc["Add new category"]" aria-required="true" />
 
-                    <button class="btn btn-outline-primary" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
+                    <button class="btn btn-outline-primary" aria-label="@Loc["Add"]" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
                 </div>
             </form>
         }
@@ -45,7 +45,7 @@
                 {
                     <button class="input-group-text flex-grow-1 text-wrap" @onclick="() => { CategoryService.SelectedCategory = category; shouldFocus = true; }">@category.Title</button>
                 }
-                <button class="btn btn-outline-primary" @onclick="() => DeleteCategory(category)"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@($"{Loc["Delete"]}: {category.Title}")" @onclick="() => DeleteCategory(category)"><i class="bi bi-trash"></i></button>
             </div>
         }
     }

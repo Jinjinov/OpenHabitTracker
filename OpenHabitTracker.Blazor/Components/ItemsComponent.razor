@@ -31,7 +31,7 @@
                     {
                         <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => { ItemService.SelectedItem = item; shouldFocus = true; }">@((MarkupString)SearchFilterService.MarkSearchResults(item.Title))</button>
                     }
-                    <button class="btn btn-outline-primary" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
+                    <button class="btn btn-outline-primary" aria-label="@Loc["Delete"]" @onclick="() => ItemService.DeleteItem(Items, item)"><i class="bi bi-trash"></i></button>
                 }
             </div>
         }
@@ -43,7 +43,7 @@
             <div class="input-group">
                 <InputTextImmediate class="form-control bg-transparent" @bind-Value="ItemService.NewItem.Title" placeholder="@Loc["Add new item"]" aria-required="true" />
 
-                <button class="btn btn-outline-primary" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Add"]" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
             </div>
         </form>
     }

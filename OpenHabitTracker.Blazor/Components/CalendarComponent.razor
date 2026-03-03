@@ -17,11 +17,11 @@ else
     if (DisplayMonth)
     {
         <div class="input-group mb-1">
-            <button class="btn btn-outline-primary" @onclick="_calendarParams.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
-            <button class="btn btn-outline-primary" @onclick="() => _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-left"></i></button>
+            <button class="btn btn-outline-primary" aria-label="@Loc["Previous week"]" @onclick="_calendarParams.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
+            <button class="btn btn-outline-primary" aria-label="@Loc["Previous month"]" @onclick="() => _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-left"></i></button>
             <span class="input-group-text flex-grow-1" style="justify-content: center;">@_calendarParams.FirstDayOfMonth.ToString("MMMM")</span>
-            <button class="btn btn-outline-primary" @onclick="() => _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-right"></i></button>
-            <button class="btn btn-outline-primary" @onclick="_calendarParams.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
+            <button class="btn btn-outline-primary" aria-label="@Loc["Next month"]" @onclick="() => _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-right"></i></button>
+            <button class="btn btn-outline-primary" aria-label="@Loc["Next week"]" @onclick="_calendarParams.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
         </div>
 
         <div class="bg-body d-flex">
@@ -72,9 +72,9 @@ else
     if (selectedDateTime is not null)
     {
         <div class="input-group mt-1">
-            <button class="btn btn-outline-primary" @onclick="RemoveFromSelectedDay"><i class="bi bi-dash"></i></button>
+            <button class="btn btn-outline-primary" aria-label="@Loc["Decrease"]" @onclick="RemoveFromSelectedDay"><i class="bi bi-dash"></i></button>
             <span class="input-group-text flex-grow-1" style="justify-content: center;">@(selectedTimeList?.Count ?? 0)</span>
-            <button class="btn btn-outline-primary" @onclick="AddToSelectedDay"><i class="bi bi-plus"></i></button>
+            <button class="btn btn-outline-primary" aria-label="@Loc["Increase"]" @onclick="AddToSelectedDay"><i class="bi bi-plus"></i></button>
         </div>
 
         if (DisplayTimeList && selectedTimeList is not null)
@@ -86,7 +86,7 @@ else
                     <InputDate class="form-control" Type="InputDateType.Time" Value="time.StartedAt" ValueExpression="() => time.StartedAt" ValueChanged="(DateTime startedAt) => UpdateStartedAt(time, startedAt)" />
                     <span class="input-group-text">@Loc["to"]</span>
                     <InputDate class="form-control" Type="InputDateType.Time" Value="time.CompletedAt" ValueExpression="() => time.CompletedAt" ValueChanged="(DateTime? completedAt) => UpdateCompletedAt(time, completedAt)" />
-                    <button class="btn btn-outline-primary" @onclick="() => RemoveTimeDone(time)"><i class="bi bi-trash"></i></button>
+                    <button class="btn btn-outline-primary" aria-label="@Loc["Delete"]" @onclick="() => RemoveTimeDone(time)"><i class="bi bi-trash"></i></button>
                 </div>
             }
         }

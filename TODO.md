@@ -114,19 +114,7 @@ accessibility:
 
     Simple:
 
-    A. `aria-label` on ALL icon-only buttons/links (~30 instances):
-       - Main.razor:             toggle menu, home, notes, tasks, habits, search, help, close sidebar
-       - CalendarComponent.razor: prev/next month, prev/next week, add time, remove time, delete time
-       - NoteComponent.razor:    delete note
-       - TaskComponent.razor:    mark done, delete, play, pause, reset, stop timer
-       - HabitComponent.razor:   mark done, delete, play, pause, reset, stop timer
-       - ItemsComponent.razor:   delete item, add item
-       - Search.razor:           match case toggle, clear planned date, clear done date
-       - Trash.razor:            restore item, delete item (per item)
-       - Categories.razor:       delete category (per item)
-       - GuidedTourComponent:    previous, next, complete, close tour
-
-    B. Missing form control labels:
+    A. Missing form control labels:
        - CategoryComponent.razor:  add `aria-label` to bare `<InputSelect>`
        - ColorComponent.razor:     add `aria-label` to bare `<InputSelect>`
        - PriorityComponent.razor:  add `aria-label` to bare `<InputSelect>`
@@ -137,31 +125,26 @@ accessibility:
        - NoteComponent.razor, TaskComponent.razor, HabitComponent.razor: title `<InputText>` in add-item row and edit mode
          only has placeholder text — placeholder is not a label substitute (WCAG 1.3.1); add `aria-label="Note title"` etc.
 
-    C. Calendar day buttons (CalendarComponent.razor):
+    B. Calendar day buttons (CalendarComponent.razor):
        - add `aria-label="@dateTime.ToString("dddd, MMMM d, yyyy")"` to each day button
        - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
 
-    D. Contextual aria-labels for repeated list-item actions:
-       - bare "Restore deleted item" / "Delete category" is ambiguous when multiple items exist
-       - include the item title: aria-label="Restore: @item.Title", aria-label="Delete: @category.Title"
-       - applies to: Trash.razor (restore/delete), Categories.razor (delete), and note/task/habit delete buttons in B
-
-    E. Color as sole conveyor of information (WCAG 1.4.1):
+    C. Color as sole conveyor of information (WCAG 1.4.1):
        - the Color feature sets title text color; if a user relies on color to distinguish items, screen readers miss it
        - priority and category provide parallel non-color differentiation, so likely supplementary rather than a clear violation
        - if color is meaningful to the user, consider announcing it: add color name to aria-label or item description
 
     Moderate:
 
-    H. `<html lang>` must update when language changes (WCAG 3.1.1):
+    D. `<html lang>` must update when language changes (WCAG 3.1.1):
        - screen readers use lang attribute for pronunciation engine
        - when SaveCulture() fires in Settings.razor, update <html lang="..."> via JS
 
-    I. CSS focus visibility (WCAG 2.4.7):
+    E. CSS focus visibility (WCAG 2.4.7):
        - verify `:focus` / `:focus-visible` outlines are not suppressed by the app CSS or Bootswatch themes
        - if any theme does `outline: none`, the entire keyboard nav plan becomes invisible to sighted keyboard users
 
-    J. Silent operations give no screen reader feedback (WCAG 4.1.3):
+    F. Silent operations give no screen reader feedback (WCAG 4.1.3):
        - note save, habit marked done, item deleted — screen reader users hear nothing
        - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
        - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately

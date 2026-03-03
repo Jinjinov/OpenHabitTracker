@@ -168,6 +168,13 @@
   "Add": "Dodaj",
   "Close": "Zapri",
   "Match case": "Ujemaj velike črke",
+  "Toggle menu": "Preklopi meni",
+  "Close sidebar": "Zapri stransko vrstico",
+  "Mark as done": "Označi kot opravljeno",
+  "Resume": "Nadaljuj",
+  "Clear search": "Počisti iskanje",
+  "Clear planned date": "Počisti načrtovani datum",
+  "Clear done date": "Počisti datum dokončanja",
 
   "Version": "Različica",
   "Take Markdown notes, plan tasks, track habits": "Zapisujte si v Markdownu, načrtujte naloge, spremljajte navade",

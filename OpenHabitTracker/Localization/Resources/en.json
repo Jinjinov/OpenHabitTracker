@@ -168,6 +168,13 @@
   "Add": "Add",
   "Close": "Close",
   "Match case": "Match case",
+  "Toggle menu": "Toggle menu",
+  "Close sidebar": "Close sidebar",
+  "Mark as done": "Mark as done",
+  "Resume": "Resume",
+  "Clear search": "Clear search",
+  "Clear planned date": "Clear planned date",
+  "Clear done date": "Clear done date",
 
   "Version": "Version",
   "Take Markdown notes, plan tasks, track habits": "Take Markdown notes, plan tasks, track habits",

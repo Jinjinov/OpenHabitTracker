@@ -123,5 +123,10 @@
   "The date when the task was created and the date when the task was last updated.": "The date when the task was created and the date when the task was last updated.",
 
   "Restore all deleted Notes, Tasks, and Habits.": "Restore all deleted Notes, Tasks, and Habits.",
-  "Permanently remove all deleted Notes, Tasks, and Habits.": "Permanently remove all deleted Notes, Tasks, and Habits."
+  "Permanently remove all deleted Notes, Tasks, and Habits.": "Permanently remove all deleted Notes, Tasks, and Habits.",
+
+  "Previous": "Previous",
+  "Next": "Next",
+  "Complete tour": "Complete tour",
+  "Close tour": "Close tour"
 }

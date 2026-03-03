@@ -29,10 +29,10 @@
         <div class="col bg-body-secondary d-flex align-items-center">
 
             @* <button class="nav-link px-1 py-2 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> @Loc["Menu"]</button> *@
-            <button class="nav-link px-2 py-1 my-1 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="ToggleMenu" aria-expanded="@(_dynamicComponentType == typeof(Menu))" data-main-step-1><i class="bi bi-three-dots-vertical"></i></button>
+            <button class="nav-link px-2 py-1 my-1 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="ToggleMenu" aria-label="@Loc["Toggle menu"]" aria-expanded="@(_dynamicComponentType == typeof(Menu))" data-main-step-1><i class="bi bi-three-dots-vertical"></i></button>
 
             @* <button class="nav-link" @onclick="Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues"><i class="bi bi-floppy"></i> Save</button> *@
-            @* <button class="nav-link" @onclick="() => 
+            @* <button class="nav-link" @onclick="() =>
                 {
                     if(Loc is Localization.JsonStringLocalizer jsonStringLocalizer)
                     {
@@ -43,18 +43,18 @@
 
             @if (_showHome)
             {
-                <NavLink class="nav-link px-2 py-1 ms-3" href="/" Match=NavLinkMatch.All aria-current="@AriaCurrentPage("")" data-main-step-2><i class="bi bi-house"></i></NavLink>
+                <NavLink class="nav-link px-2 py-1 ms-3" href="/" Match=NavLinkMatch.All aria-current="@AriaCurrentPage("")" aria-label="@Loc["Home"]" data-main-step-2><i class="bi bi-house"></i></NavLink>
             }
-            <NavLink class="nav-link px-2 py-1 ms-3" href="notes" aria-current="@AriaCurrentPage("notes")" data-main-step-3><i class="bi bi-sticky"></i></NavLink>
-            <NavLink class="nav-link px-2 py-1 ms-3" href="tasks" aria-current="@AriaCurrentPage("tasks")" data-main-step-4><i class="bi bi-list-task"></i></NavLink>
-            <NavLink class="nav-link px-2 py-1 ms-3" href="habits" aria-current="@AriaCurrentPage("habits")" data-main-step-5><i class="bi bi-repeat"></i></NavLink>
+            <NavLink class="nav-link px-2 py-1 ms-3" href="notes" aria-current="@AriaCurrentPage("notes")" aria-label="@Loc["Notes"]" data-main-step-3><i class="bi bi-sticky"></i></NavLink>
+            <NavLink class="nav-link px-2 py-1 ms-3" href="tasks" aria-current="@AriaCurrentPage("tasks")" aria-label="@Loc["Tasks"]" data-main-step-4><i class="bi bi-list-task"></i></NavLink>
+            <NavLink class="nav-link px-2 py-1 ms-3" href="habits" aria-current="@AriaCurrentPage("habits")" aria-label="@Loc["Habits"]" data-main-step-5><i class="bi bi-repeat"></i></NavLink>
             @* <NavLink class="nav-link px-2 py-1 ms-3" href="help"><i class="bi bi-question-circle"></i></NavLink> *@
 
-            <button class="nav-link px-2 py-1 ms-3 @(_dynamicComponentType == typeof(Search) ? "active" : "")" @onclick="ToggleSearch" aria-expanded="@(_dynamicComponentType == typeof(Search))" data-main-step-6><i class="bi bi-search"></i></button>
+            <button class="nav-link px-2 py-1 ms-3 @(_dynamicComponentType == typeof(Search) ? "active" : "")" @onclick="ToggleSearch" aria-label="@Loc["Search, Filter, Sort"]" aria-expanded="@(_dynamicComponentType == typeof(Search))" data-main-step-6><i class="bi bi-search"></i></button>
 
             @if (ClientState.Settings.ShowHelp)
             {
-                <button class="nav-link px-2 py-1 ms-3" @onclick="@(() => StartTour("main"))" data-main-step-7><i class="bi bi-question-circle"></i></button>
+                <button class="nav-link px-2 py-1 ms-3" @onclick="@(() => StartTour("main"))" aria-label="@Loc["Help"]" data-main-step-7><i class="bi bi-question-circle"></i></button>
             }
 
             @if (ClientState.DataLocation == DataLocation.Remote)
@@ -88,10 +88,10 @@
                         <div class="input-group flex-nowrap my-1">
                             @if (ClientState.Settings.ShowHelp && _dynamicComponentType != typeof(About))
                             {
-                                <button class="input-group-text" @onclick="@(() => StartTour(_guidedTourByTypeName[_dynamicComponentType.Name]))"><i class="bi bi-question-circle"></i></button>
+                                <button class="input-group-text" aria-label="@Loc["Help"]" @onclick="@(() => StartTour(_guidedTourByTypeName[_dynamicComponentType.Name]))"><i class="bi bi-question-circle"></i></button>
                             }
                             <span class="input-group-text fw-bold text-primary flex-grow-1">@Loc[_titleByTypeName[_dynamicComponentType.Name]]</span>
-                            <button id="closeSidebar" class="btn btn-outline-primary" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
+                            <button id="closeSidebar" class="btn btn-outline-primary" aria-label="@Loc["Close sidebar"]" @onclick="() => _dynamicComponentType = null"><i class="bi bi-x-square"></i></button>
                         </div>
                     }
 

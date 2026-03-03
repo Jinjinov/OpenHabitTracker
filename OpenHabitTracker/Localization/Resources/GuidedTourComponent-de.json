@@ -123,5 +123,10 @@
   "The date when the task was created and the date when the task was last updated.": "Das Datum, an dem die Aufgabe erstellt wurde, und das Datum, an dem die Aufgabe zuletzt aktualisiert wurde.",
 
   "Restore all deleted Notes, Tasks, and Habits.": "Stelle alle gelöschten Notizen, Aufgaben und Gewohnheiten wieder her.",
-  "Permanently remove all deleted Notes, Tasks, and Habits.": "Entferne alle gelöschten Notizen, Aufgaben und Gewohnheiten dauerhaft."
+  "Permanently remove all deleted Notes, Tasks, and Habits.": "Entferne alle gelöschten Notizen, Aufgaben und Gewohnheiten dauerhaft.",
+
+  "Previous": "Zurück",
+  "Next": "Weiter",
+  "Complete tour": "Tour abschließen",
+  "Close tour": "Tour schließen"
 }

@@ -19,8 +19,8 @@
             </div>
         }
         <InputText class="form-control bg-transparent" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
-        <button class="@($"btn {(Task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" @onclick="() => TaskService.MarkAsDone(Task)" data-tasks-step-8><i class="bi bi-check-square"></i></button>
-        <button class="btn btn-outline-primary" @onclick="async () => { await TaskService.DeleteTask(Task); await CloseSelected.InvokeAsync(); await ContentDeleted.InvokeAsync(); }" data-tasks-step-9><i class="bi bi-trash"></i></button>
+        <button class="@($"btn {(Task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" aria-label="@Loc["Mark as done"]" @onclick="() => TaskService.MarkAsDone(Task)" data-tasks-step-8><i class="bi bi-check-square"></i></button>
+        <button class="btn btn-outline-primary" aria-label="@Loc["Delete"]" @onclick="async () => { await TaskService.DeleteTask(Task); await CloseSelected.InvokeAsync(); await ContentDeleted.InvokeAsync(); }" data-tasks-step-9><i class="bi bi-trash"></i></button>
     </div>
 
     <div data-tasks-step-11>
@@ -58,21 +58,21 @@
             @if (_timer is null)
             {
                 <span class="input-group-text bg-transparent flex-grow-1">@Loc["Start timer"]</span>
-                <button class="btn btn-outline-primary" @onclick="StartTimer"><i class="bi bi-play"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Start"]" @onclick="StartTimer"><i class="bi bi-play"></i></button>
             }
             else
             {
                 <span class="input-group-text bg-transparent flex-grow-1">@_elapsedTime.ToString(@"hh\:mm\:ss")</span>
-                <button class="btn btn-outline-primary" @onclick="ResetTimer"><i class="bi bi-arrow-counterclockwise"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Reset"]" @onclick="ResetTimer"><i class="bi bi-arrow-counterclockwise"></i></button>
                 if (_isPaused)
                 {
-                    <button class="btn btn-outline-primary" @onclick="ResumeTimer"><i class="bi bi-play"></i></button>
+                    <button class="btn btn-outline-primary" aria-label="@Loc["Resume"]" @onclick="ResumeTimer"><i class="bi bi-play"></i></button>
                 }
                 else
                 {
-                    <button class="btn btn-outline-primary" @onclick="PauseTimer"><i class="bi bi-pause"></i></button>
+                    <button class="btn btn-outline-primary" aria-label="@Loc["Pause"]" @onclick="PauseTimer"><i class="bi bi-pause"></i></button>
                 }
-                <button class="btn btn-outline-primary" @onclick="StopTimer"><i class="bi bi-stop"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Stop"]" @onclick="StopTimer"><i class="bi bi-stop"></i></button>
             }
         </div>
     }

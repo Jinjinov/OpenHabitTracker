@@ -42,8 +42,8 @@
 
                 <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="NoteService.NewNote.Title" placeholder="@Loc["Add new note"]" aria-required="true" />
 
-                <button class="btn btn-outline-primary" @onclick="NoteService.AddNote" disabled="@string.IsNullOrWhiteSpace(NoteService.NewNote.Title)"><i class="bi bi-floppy"></i></button>
-                <button class="btn btn-outline-primary" @onclick="() => NoteService.NewNote = null"><i class="bi bi-x-square"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Save"]" @onclick="NoteService.AddNote" disabled="@string.IsNullOrWhiteSpace(NoteService.NewNote.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Close"]" @onclick="() => NoteService.NewNote = null"><i class="bi bi-x-square"></i></button>
             </div>
 
             <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.NewNote.Content" placeholder="@Loc["Add note text"]" />
@@ -79,7 +79,7 @@
 
             @if (ClientState.Settings.ShowHelp)
             {
-                <button class="btn ms-auto m-1" @onclick="@(() => StartTour("notes"))"><i class="bi bi-question-circle"></i></button>
+                <button class="btn ms-auto m-1" aria-label="@Loc["Help"]" @onclick="@(() => StartTour("notes"))"><i class="bi bi-question-circle"></i></button>
             }
         </div>
 

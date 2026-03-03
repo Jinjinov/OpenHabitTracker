@@ -168,6 +168,13 @@
   "Add": "Agregar",
   "Close": "Cerrar",
   "Match case": "Coincidir mayúsculas/minúsculas",
+  "Toggle menu": "Alternar menú",
+  "Close sidebar": "Cerrar barra lateral",
+  "Mark as done": "Marcar como hecho",
+  "Resume": "Reanudar",
+  "Clear search": "Borrar búsqueda",
+  "Clear planned date": "Borrar fecha planificada",
+  "Clear done date": "Borrar fecha de finalización",
 
   "Version": "Versión",
   "Take Markdown notes, plan tasks, track habits": "Toma notas en Markdown, planifica tareas, sigue hábitos",

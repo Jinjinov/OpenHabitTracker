@@ -168,6 +168,13 @@
   "Add": "Hinzufügen",
   "Close": "Schließen",
   "Match case": "Groß-/Kleinschreibung beachten",
+  "Toggle menu": "Menü umschalten",
+  "Close sidebar": "Seitenleiste schließen",
+  "Mark as done": "Als erledigt markieren",
+  "Resume": "Fortsetzen",
+  "Clear search": "Suche löschen",
+  "Clear planned date": "Geplantes Datum löschen",
+  "Clear done date": "Erledigungsdatum löschen",
 
   "Version": "Version",
   "Take Markdown notes, plan tasks, track habits": "Markdown-Notizen machen, Aufgaben planen, Gewohnheiten verfolgen",

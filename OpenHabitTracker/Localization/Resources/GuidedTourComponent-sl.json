@@ -123,5 +123,10 @@
   "The date when the task was created and the date when the task was last updated.": "Datum, ko je bila naloga ustvarjena, in datum, ko je bila naloga nazadnje posodobljena.",
 
   "Restore all deleted Notes, Tasks, and Habits.": "Obnovi vse izbrisane Zapiske, Naloge in Navade.",
-  "Permanently remove all deleted Notes, Tasks, and Habits.": "Trajno odstrani vse izbrisane Zapiske, Naloge in Navade."
+  "Permanently remove all deleted Notes, Tasks, and Habits.": "Trajno odstrani vse izbrisane Zapiske, Naloge in Navade.",
+
+  "Previous": "Nazaj",
+  "Next": "Naprej",
+  "Complete tour": "Dokončaj vodič",
+  "Close tour": "Zapri vodič"
 }
