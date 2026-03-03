@@ -336,5 +336,5 @@
     }
 
     private string? AriaCurrentPage(string path) =>
-        NavigationManager.ToBaseRelativePath(NavigationManager.Uri).TrimEnd('/') == path ? "page" : null;
+        new Uri(NavigationManager.Uri).AbsolutePath.Trim('/') == path ? "page" : null;
 }
