@@ -141,16 +141,12 @@ accessibility:
        - add `aria-label="@dateTime.ToString("dddd, MMMM d, yyyy")"` to each day button
        - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
 
-    D. `aria-expanded` missing on interactive toggles:
-       - Search.razor collapsible buttons: add aria-expanded="@(!_settings.FoldSection[...])" and aria-controls="section-id"
-       - Main.razor sidebar toggle buttons: add aria-expanded and aria-controls="sidebar-id"
-
-    E. Contextual aria-labels for repeated list-item actions:
+    D. Contextual aria-labels for repeated list-item actions:
        - bare "Restore deleted item" / "Delete category" is ambiguous when multiple items exist
        - include the item title: aria-label="Restore: @item.Title", aria-label="Delete: @category.Title"
        - applies to: Trash.razor (restore/delete), Categories.razor (delete), and note/task/habit delete buttons in B
 
-    F. Color as sole conveyor of information (WCAG 1.4.1):
+    E. Color as sole conveyor of information (WCAG 1.4.1):
        - the Color feature sets title text color; if a user relies on color to distinguish items, screen readers miss it
        - priority and category provide parallel non-color differentiation, so likely supplementary rather than a clear violation
        - if color is meaningful to the user, consider announcing it: add color name to aria-label or item description

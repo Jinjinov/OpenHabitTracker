@@ -23,7 +23,7 @@
     {
         <div class="my-1 list-group">
 
-            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.Search)">
+            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.Search)" aria-expanded="@(!_settings.FoldSection[QuerySection.Search])">
                 <small><i class="bi bi-search" aria-hidden="true"></i> @Loc["Search"]<i class="@($"bi {GetFoldIcon(QuerySection.Search)} mx-1")" aria-hidden="true"></i></small>
             </button>
 
@@ -43,7 +43,7 @@
             </div>
             }
 
-            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByDate)">
+            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByDate)" aria-expanded="@(!_settings.FoldSection[QuerySection.FilterByDate])">
                 <small><i class="bi bi-filter" aria-hidden="true"></i> @Loc["Filter by date"]<i class="@($"bi {GetFoldIcon(QuerySection.FilterByDate)} mx-1")" aria-hidden="true"></i></small>
             </button>
 
@@ -78,7 +78,7 @@
             </div>
             }
 
-            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByCategory)">
+            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByCategory)" aria-expanded="@(!_settings.FoldSection[QuerySection.FilterByCategory])">
                 <small><i class="bi bi-filter" aria-hidden="true"></i> @Loc["Filter by category"]<i class="@($"bi {GetFoldIcon(QuerySection.FilterByCategory)} mx-1")" aria-hidden="true"></i></small>
             </button>
 
@@ -137,7 +137,7 @@
                 }
             }
 
-            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByPriority)">
+            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByPriority)" aria-expanded="@(!_settings.FoldSection[QuerySection.FilterByPriority])">
                 <small><i class="bi bi-filter" aria-hidden="true"></i> @Loc["Filter by priority"]<i class="@($"bi {GetFoldIcon(QuerySection.FilterByPriority)} mx-1")" aria-hidden="true"></i></small>
             </button>
 
@@ -228,7 +228,7 @@
                 }
             }
 
-            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByStatus)">
+            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByStatus)" aria-expanded="@(!_settings.FoldSection[QuerySection.FilterByStatus])">
                 <small><i class="bi bi-filter" aria-hidden="true"></i> @Loc["Filter by status"]<i class="@($"bi {GetFoldIcon(QuerySection.FilterByStatus)} mx-1")" aria-hidden="true"></i></small>
             </button>
 
@@ -259,7 +259,7 @@
             </div>
             }
 
-            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.Sort)">
+            <button class="btn border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.Sort)" aria-expanded="@(!_settings.FoldSection[QuerySection.Sort])">
                 <small><i class="bi bi-arrow-down-up" aria-hidden="true"></i> @Loc["Sort"]<i class="@($"bi {GetFoldIcon(QuerySection.Sort)} mx-1")" aria-hidden="true"></i></small>
             </button>
 
