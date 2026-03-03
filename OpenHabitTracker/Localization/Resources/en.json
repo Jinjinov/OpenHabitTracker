@@ -190,5 +190,8 @@
   "If you use the Docker image to enable online sync, all data is stored in your Docker container and is completely under your control.": "If you use the Docker image to enable online sync, all data is stored in your Docker container and is completely under your control.",
   "It is available on 6 platforms and on some platforms it can backup your data to your Google Drive.": "It is available on 6 platforms and on some platforms it can backup your data to your Google Drive.",
   "If you allow it to backup your data to your Google Drive, it will receive your email and display your name only on your device.": "If you allow it to backup your data to your Google Drive, it will receive your email and display your name only on your device.",
-  "You can read the privacy policy at": "You can read the privacy policy at"
+  "You can read the privacy policy at": "You can read the privacy policy at",
+
+  "Main navigation": "Main navigation",
+  "Main content": "Main content"
 }

@@ -26,7 +26,7 @@
 
         @* Header column *@
 
-        <div class="col bg-body-secondary d-flex align-items-center">
+        <nav class="col bg-body-secondary d-flex align-items-center" aria-label="@Loc["Main navigation"]">
 
             @* <button class="nav-link px-1 py-2 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> @Loc["Menu"]</button> *@
             <button class="nav-link px-2 py-1 my-1 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="ToggleMenu" data-main-step-1><i class="bi bi-three-dots-vertical"></i></button>
@@ -66,14 +66,14 @@
                 @NavBarFragment.GetNavBarFragment()
             </span> *@
 
-        </div>
+        </nav>
     </div>
 
     @if (_windowDimensions is not null)
     {
         @* Main body row *@
 
-        <div class="row flex-grow-1 parent-row">
+        <main id="main-content" class="row flex-grow-1 parent-row" aria-label="@Loc["Main content"]">
 
             @if (_dynamicComponentType is not null)
             {
@@ -116,7 +116,7 @@
                 </CascadingValue>
             </CascadingValue>
 
-        </div>
+        </main>
     }
 </div>
 

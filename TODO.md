@@ -94,8 +94,6 @@ Accessibility:
 
     Keyboard navigation improvements:
 
-    Complex:
-
     3. Focus management (currently missing):
        - sidebar opens → move focus to first element inside sidebar
        - sidebar closes → return focus to the button that opened it (menu or search)
@@ -111,18 +109,6 @@ Accessibility:
        - Page Up → previous month, Page Down → next month
 
     Changes needed across 20 Razor files in OpenHabitTracker.Blazor:
-
-    Quick & Easy:
-
-    B. Semantic HTML landmarks (Main.razor):
-       - wrap header icon row in `<nav aria-label="Main navigation">`
-       - wrap main content in `<main id="main-content">`
-       - add skip link: `<a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>`
-
-    D. About.razor:
-       - GitHub icon link has no text: add `aria-label="Open Source on GitHub"`
-
-    Moderate:
 
     F. `aria-label` on ALL icon-only buttons/links (~30 instances):
        - Main.razor:             toggle menu, home, notes, tasks, habits, search, help, close sidebar
@@ -176,8 +162,6 @@ Accessibility:
     N. CSS focus visibility (WCAG 2.4.7):
        - verify `:focus` / `:focus-visible` outlines are not suppressed by the app CSS or Bootswatch themes
        - if any theme does `outline: none`, the entire keyboard nav plan becomes invisible to sighted keyboard users
-
-    Complex:
 
     O. Silent operations give no screen reader feedback (WCAG 4.1.3):
        - note save, habit marked done, item deleted — screen reader users hear nothing
