@@ -109,6 +109,7 @@ accessibility:
        - Home → first day of the week, End → last day of the week
         Page Up/Page Down in calendar:
        - Page Up → previous month, Page Down → next month
+       - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
 
     Changes needed across 20 Razor files in OpenHabitTracker.Blazor:
 
@@ -125,26 +126,17 @@ accessibility:
        - NoteComponent.razor, TaskComponent.razor, HabitComponent.razor: title `<InputText>` in add-item row and edit mode
          only has placeholder text — placeholder is not a label substitute (WCAG 1.3.1); add `aria-label="Note title"` etc.
 
-    B. Calendar day buttons (CalendarComponent.razor):
-       - add `aria-label="@dateTime.ToString("dddd, MMMM d, yyyy")"` to each day button
-       - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
-
-    C. Color as sole conveyor of information (WCAG 1.4.1):
-       - the Color feature sets title text color; if a user relies on color to distinguish items, screen readers miss it
-       - priority and category provide parallel non-color differentiation, so likely supplementary rather than a clear violation
-       - if color is meaningful to the user, consider announcing it: add color name to aria-label or item description
-
     Moderate:
 
-    D. `<html lang>` must update when language changes (WCAG 3.1.1):
+    B. `<html lang>` must update when language changes (WCAG 3.1.1):
        - screen readers use lang attribute for pronunciation engine
        - when SaveCulture() fires in Settings.razor, update <html lang="..."> via JS
 
-    E. CSS focus visibility (WCAG 2.4.7):
+    C. CSS focus visibility (WCAG 2.4.7):
        - verify `:focus` / `:focus-visible` outlines are not suppressed by the app CSS or Bootswatch themes
        - if any theme does `outline: none`, the entire keyboard nav plan becomes invisible to sighted keyboard users
 
-    F. Silent operations give no screen reader feedback (WCAG 4.1.3):
+    D. Silent operations give no screen reader feedback (WCAG 4.1.3):
        - note save, habit marked done, item deleted — screen reader users hear nothing
        - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
        - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
