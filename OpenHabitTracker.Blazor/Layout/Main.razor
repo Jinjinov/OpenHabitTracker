@@ -22,11 +22,11 @@
 
     @* Header row *@
 
-    <div class="row flex-shrink-1">
+    <nav class="row flex-shrink-1" aria-label="@Loc["Main navigation"]">
 
         @* Header column *@
 
-        <nav class="col bg-body-secondary d-flex align-items-center" aria-label="@Loc["Main navigation"]">
+        <div class="col bg-body-secondary d-flex align-items-center">
 
             @* <button class="nav-link px-1 py-2 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> @Loc["Menu"]</button> *@
             <button class="nav-link px-2 py-1 my-1 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="ToggleMenu" data-main-step-1><i class="bi bi-three-dots-vertical"></i></button>
@@ -66,8 +66,8 @@
                 @NavBarFragment.GetNavBarFragment()
             </span> *@
 
-        </nav>
-    </div>
+        </div>
+    </nav>
 
     @if (_windowDimensions is not null)
     {
