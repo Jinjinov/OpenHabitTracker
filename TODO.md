@@ -88,29 +88,33 @@ Extract interfaces: INoteService, ITaskService, IHabitService, IPriorityService,
 highest priority:
 
 0.
-Accessibility:
+accessibility:
     add `alt="..."` and aria labels like `aria-label="Close sidebar"` to all html
     keyboard navigation
 
     Keyboard navigation improvements:
 
-    3. Focus management (currently missing):
+    Complex:
+
+    1. Arrow keys for Menu sidebar (ARIA menu pattern):
+       - Tab enters the menu, Up/Down arrows move between items, Tab exits
+    2. Focus management (currently missing):
        - sidebar opens → move focus to first element inside sidebar
        - sidebar closes → return focus to the button that opened it (menu or search)
        - note/task/habit edit closes → return focus to the list item that was opened
-    4. Calendar arrow key navigation (roving tabindex):
+    3. Calendar arrow key navigation (roving tabindex):
        - currently Tab through every day cell (up to 42 presses for month view)
        - only one cell has tabindex="0" at a time, arrow keys move between cells, Tab exits grid
-    5. Arrow keys for Menu sidebar (ARIA menu pattern):
-       - Tab enters the menu, Up/Down arrows move between items, Tab exits
-    6. Home/End in calendar grid:
+        Home/End in calendar grid:
        - Home → first day of the week, End → last day of the week
-    7. Page Up/Page Down in calendar:
+        Page Up/Page Down in calendar:
        - Page Up → previous month, Page Down → next month
 
     Changes needed across 20 Razor files in OpenHabitTracker.Blazor:
 
-    F. `aria-label` on ALL icon-only buttons/links (~30 instances):
+    Simple:
+
+    A. `aria-label` on ALL icon-only buttons/links (~30 instances):
        - Main.razor:             toggle menu, home, notes, tasks, habits, search, help, close sidebar
        - CalendarComponent.razor: prev/next month, prev/next week, add time, remove time, delete time
        - NoteComponent.razor:    delete note
@@ -122,7 +126,7 @@ Accessibility:
        - Categories.razor:       delete category (per item)
        - GuidedTourComponent:    previous, next, complete, close tour
 
-    G. Missing form control labels:
+    B. Missing form control labels:
        - CategoryComponent.razor:  add `aria-label` to bare `<InputSelect>`
        - ColorComponent.razor:     add `aria-label` to bare `<InputSelect>`
        - PriorityComponent.razor:  add `aria-label` to bare `<InputSelect>`
@@ -133,37 +137,39 @@ Accessibility:
        - NoteComponent.razor, TaskComponent.razor, HabitComponent.razor: title `<InputText>` in add-item row and edit mode
          only has placeholder text — placeholder is not a label substitute (WCAG 1.3.1); add `aria-label="Note title"` etc.
 
-    H. Calendar day buttons (CalendarComponent.razor):
+    C. Calendar day buttons (CalendarComponent.razor):
        - add `aria-label="@dateTime.ToString("dddd, MMMM d, yyyy")"` to each day button
        - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
 
-    I. `<html lang>` must update when language changes (WCAG 3.1.1):
-       - screen readers use lang attribute for pronunciation engine
-       - when SaveCulture() fires in Settings.razor, update <html lang="..."> via JS
-
-    J. `aria-expanded` missing on interactive toggles:
+    D. `aria-expanded` missing on interactive toggles:
        - Search.razor collapsible buttons: add aria-expanded="@(!_settings.FoldSection[...])" and aria-controls="section-id"
        - Main.razor sidebar toggle buttons: add aria-expanded and aria-controls="sidebar-id"
 
-    K. Contextual aria-labels for repeated list-item actions:
+    E. Contextual aria-labels for repeated list-item actions:
        - bare "Restore deleted item" / "Delete category" is ambiguous when multiple items exist
        - include the item title: aria-label="Restore: @item.Title", aria-label="Delete: @category.Title"
        - applies to: Trash.razor (restore/delete), Categories.razor (delete), and note/task/habit delete buttons in B
 
-    L. `aria-current="page"` on active nav items (Main.razor, Menu.razor):
+    F. `aria-current="page"` on active nav items (Main.razor, Menu.razor):
        - currently active page's nav button/link has no aria-current="page"
        - screen readers can't tell which page is selected when navigating by landmark
 
-    M. Color as sole conveyor of information (WCAG 1.4.1):
+    G. Color as sole conveyor of information (WCAG 1.4.1):
        - the Color feature sets title text color; if a user relies on color to distinguish items, screen readers miss it
        - priority and category provide parallel non-color differentiation, so likely supplementary rather than a clear violation
        - if color is meaningful to the user, consider announcing it: add color name to aria-label or item description
 
-    N. CSS focus visibility (WCAG 2.4.7):
+    Moderate:
+
+    H. `<html lang>` must update when language changes (WCAG 3.1.1):
+       - screen readers use lang attribute for pronunciation engine
+       - when SaveCulture() fires in Settings.razor, update <html lang="..."> via JS
+
+    I. CSS focus visibility (WCAG 2.4.7):
        - verify `:focus` / `:focus-visible` outlines are not suppressed by the app CSS or Bootswatch themes
        - if any theme does `outline: none`, the entire keyboard nav plan becomes invisible to sighted keyboard users
 
-    O. Silent operations give no screen reader feedback (WCAG 4.1.3):
+    J. Silent operations give no screen reader feedback (WCAG 4.1.3):
        - note save, habit marked done, item deleted — screen reader users hear nothing
        - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
        - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
