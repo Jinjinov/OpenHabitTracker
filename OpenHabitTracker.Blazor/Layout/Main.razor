@@ -79,7 +79,7 @@
             {
                 @* Sidebar column *@
 
-                <div class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px">
+                <div class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px" @onkeydown="HandleSidebarKeyDown">
 
                     @* Sidebar title *@
 
@@ -327,5 +327,11 @@
     private void SelectComponent(string name)
     {
         _dynamicComponentType = Type.GetType($"OpenHabitTracker.Blazor.Pages.{name}");
+    }
+
+    private void HandleSidebarKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+            _dynamicComponentType = null;
     }
 }

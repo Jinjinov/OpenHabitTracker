@@ -94,12 +94,6 @@ Accessibility:
 
     Keyboard navigation improvements:
 
-    Quick & Easy:
-
-    2. Escape key to close:
-       - sidebar: @onkeydown on sidebar container → _dynamicComponentType = null
-       - note/task/habit edit panel: Escape → CloseSelected()
-
     Complex:
 
     3. Focus management (currently missing):

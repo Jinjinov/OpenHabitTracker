@@ -11,7 +11,7 @@
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
 
-<div class="@Habit.Color">
+<div class="@Habit.Color" @onkeydown="HandleKeyDown">
     <div class="input-group flex-nowrap" data-habits-step-8>
         @if (ClientState.Settings.ShowPriorityDropdown)
         {
@@ -269,6 +269,12 @@
     public void Dispose()
     {
         _timer?.Dispose();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+            await CloseSelected.InvokeAsync();
     }
 
     async Task SaveTitle(HabitModel habit, string title)

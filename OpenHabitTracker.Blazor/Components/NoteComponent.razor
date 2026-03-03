@@ -10,7 +10,7 @@
 @inject MarkdownToHtml MarkdownToHtml
 @inject IGTourService GTourService
 
-<div class="@Note.Color">
+<div class="@Note.Color" @onkeydown="HandleKeyDown">
     <div class="input-group flex-nowrap" data-notes-step-5>
         @if (ClientState.Settings.ShowPriorityDropdown)
         {
@@ -90,6 +90,12 @@
 
             await JsInterop.SetCalculateAutoHeight(_inputTextAreaReference.Element.Value);
         }
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+            await CloseSelected.InvokeAsync();
     }
 
     async Task SaveTitle(NoteModel note, string title)
