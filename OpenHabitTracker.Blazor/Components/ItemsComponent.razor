@@ -41,7 +41,7 @@
     {
         <form @onsubmit=AddNewItem>
             <div class="input-group">
-                <InputTextImmediate class="form-control bg-transparent" @bind-Value="ItemService.NewItem.Title" placeholder="@Loc["Add new item"]" />
+                <InputTextImmediate class="form-control bg-transparent" @bind-Value="ItemService.NewItem.Title" placeholder="@Loc["Add new item"]" aria-required="true" />
 
                 <button class="btn btn-outline-primary" disabled="@string.IsNullOrWhiteSpace(ItemService.NewItem.Title)"><i class="bi bi-plus-square"></i></button>
             </div>

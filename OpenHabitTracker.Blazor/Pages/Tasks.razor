@@ -40,7 +40,7 @@
                     <PriorityComponent Model="TaskService.NewTask" />
                 }
 
-                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="TaskService.NewTask.Title" placeholder="@Loc["Add new task"]" />
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="TaskService.NewTask.Title" placeholder="@Loc["Add new task"]" aria-required="true" />
 
                 <button class="btn btn-outline-primary" @onclick="TaskService.AddTask" disabled="@string.IsNullOrWhiteSpace(TaskService.NewTask.Title)"><i class="bi bi-floppy"></i></button>
                 <button class="btn btn-outline-primary" @onclick="() => TaskService.NewTask = null"><i class="bi bi-x-square"></i></button>
