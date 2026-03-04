@@ -20,7 +20,7 @@
         {
             <form @onsubmit=AddCategory>
                 <div class="input-group">
-                    <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="@Loc["Add new category"]" aria-required="true" />
+                    <InputTextImmediate class="form-control" @bind-Value="CategoryService.NewCategory.Title" placeholder="@Loc["Add new category"]" aria-label="@Loc["Add new category"]" aria-required="true" />
 
                     <button class="btn btn-outline-primary" aria-label="@Loc["Add"]" disabled="@string.IsNullOrWhiteSpace(CategoryService.NewCategory.Title)"><i class="bi bi-plus-square"></i></button>
                 </div>

@@ -30,7 +30,7 @@
             @if (!_settings.FoldSection[QuerySection.Search])
             {
             <div class="input-group flex-nowrap">
-                <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search..."]" @attributes="dataSearchStep1" />
+                <InputTextImmediate class="form-control" Value="@SearchFilterService.SearchTerm" ValueExpression="() => SearchFilterService.SearchTerm" ValueChanged="UpdateSearchTerm" placeholder="@Loc["Search..."]" aria-label="@Loc["Search"]" @attributes="dataSearchStep1" />
                 @if (SearchFilterService.MatchCase)
                 {
                     <button class="btn btn-primary" aria-label="@Loc["Match case"]" @onclick="() => UpdateMatchCase(false)" data-search-step-2><i class="bi bi-type"></i></button>

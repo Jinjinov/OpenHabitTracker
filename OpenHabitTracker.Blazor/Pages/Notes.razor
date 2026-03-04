@@ -46,7 +46,7 @@
                 <button class="btn btn-outline-primary" aria-label="@Loc["Close"]" @onclick="() => NoteService.NewNote = null"><i class="bi bi-x-square"></i></button>
             </div>
 
-            <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.NewNote.Content" placeholder="@Loc["Add note text"]" />
+            <InputTextArea @ref="_inputTextAreaReference" class="form-control" style="resize:none" @bind-Value="NoteService.NewNote.Content" placeholder="@Loc["Add note text"]" aria-label="@Loc["Add note text"]" />
 
             @if (ClientState.Settings.ShowCategory)
             {
