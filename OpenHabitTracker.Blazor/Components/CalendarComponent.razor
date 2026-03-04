@@ -83,9 +83,9 @@ else
             {
                 <div class="input-group">
                     <span class="input-group-text">@Loc["From"]</span>
-                    <InputDate class="form-control" Type="InputDateType.Time" Value="time.StartedAt" ValueExpression="() => time.StartedAt" ValueChanged="(DateTime startedAt) => UpdateStartedAt(time, startedAt)" />
+                    <InputDate class="form-control" aria-label="@Loc["From"]" Type="InputDateType.Time" Value="time.StartedAt" ValueExpression="() => time.StartedAt" ValueChanged="(DateTime startedAt) => UpdateStartedAt(time, startedAt)" />
                     <span class="input-group-text">@Loc["to"]</span>
-                    <InputDate class="form-control" Type="InputDateType.Time" Value="time.CompletedAt" ValueExpression="() => time.CompletedAt" ValueChanged="(DateTime? completedAt) => UpdateCompletedAt(time, completedAt)" />
+                    <InputDate class="form-control" aria-label="@Loc["to"]" Type="InputDateType.Time" Value="time.CompletedAt" ValueExpression="() => time.CompletedAt" ValueChanged="(DateTime? completedAt) => UpdateCompletedAt(time, completedAt)" />
                     <button class="btn btn-outline-primary" aria-label="@Loc["Delete"]" @onclick="() => RemoveTimeDone(time)"><i class="bi bi-trash"></i></button>
                 </div>
             }

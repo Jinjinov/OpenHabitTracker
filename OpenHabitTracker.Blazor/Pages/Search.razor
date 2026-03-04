@@ -59,7 +59,7 @@
                     <option value="@DateCompare.NotOn">@("≠")</option>
                 </InputSelect>
                 </div>
-                <InputDate class="form-control" Value="SearchFilterService.PlannedAtFilter" ValueExpression="() => SearchFilterService.PlannedAtFilter" TValue="DateTime?" ValueChanged="UpdatePlannedAtFilter" Type="InputDateType.Date" @attributes="dataSearchStep6" />
+                <InputDate class="form-control" aria-label="@Loc["Planned"]" Value="SearchFilterService.PlannedAtFilter" ValueExpression="() => SearchFilterService.PlannedAtFilter" TValue="DateTime?" ValueChanged="UpdatePlannedAtFilter" Type="InputDateType.Date" @attributes="dataSearchStep6" />
                 <button class="btn btn-outline-primary" aria-label="@Loc["Clear planned date"]" @onclick="() => UpdatePlannedAtFilter(null)" data-search-step-7><i class="bi bi-x-square"></i></button>
             </div>
 
@@ -73,7 +73,7 @@
                     <option value="@DateCompare.NotOn">@("≠")</option>
                 </InputSelect>
                 </div>
-                <InputDate class="form-control" Value="SearchFilterService.DoneAtFilter" ValueExpression="() => SearchFilterService.DoneAtFilter" TValue="DateTime?" ValueChanged="UpdateDoneAtFilter" Type="InputDateType.Date" @attributes="dataSearchStep10" />
+                <InputDate class="form-control" aria-label="@Loc["Done"]" Value="SearchFilterService.DoneAtFilter" ValueExpression="() => SearchFilterService.DoneAtFilter" TValue="DateTime?" ValueChanged="UpdateDoneAtFilter" Type="InputDateType.Date" @attributes="dataSearchStep10" />
                 <button class="btn btn-outline-primary" aria-label="@Loc["Clear done date"]" @onclick="() => UpdateDoneAtFilter(null)" data-search-step-11><i class="bi bi-x-square"></i></button>
             </div>
             }
