@@ -21,7 +21,7 @@
                 else
                 {
                     <div class="input-group-text bg-transparent">
-                        <InputCheckbox class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
+                        <InputCheckbox aria-label="@item.Title" class="form-check-input mt-0" Value="item.IsDone" ValueExpression="() => item.IsDone" ValueChanged="(bool done) => ItemService.SetIsDone(item, done)" />
                     </div>
                     if (item == ItemService.SelectedItem)
                     {
