@@ -23,7 +23,7 @@
 
         <div class="list-group-item" data-settings-step-2>
             <small>@Loc["Theme"]:</small>
-            <InputSelect class="form-select" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
+            <InputSelect class="form-select" aria-label="@Loc["Theme"]" Value="_settings.Theme" ValueExpression="() => _settings.Theme" TValue="string" ValueChanged="SaveTheme">
                 <option value="default">default</option>
                 <option value="cerulean">cerulean</option>
                 <option value="cosmo">cosmo</option>
@@ -55,7 +55,7 @@
 
         <div class="list-group-item" data-settings-step-3>
             <small>@Loc["Start page"]:</small>
-            <InputSelect class="form-select" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
+            <InputSelect class="form-select" aria-label="@Loc["Start page"]" Value="_settings.StartPage" ValueExpression="() => _settings.StartPage" TValue="string" ValueChanged="SaveStartPage">
                 @if (WindowDimensions?.Width >= 1280 || WindowDimensions?.Width < 768)
                 {
                     <option value="">@Loc["Home"]</option>
@@ -69,7 +69,7 @@
 
         <div class="list-group-item" data-settings-step-4>
             <small>@Loc["Start sidebar"]:</small>
-            <InputSelect class="form-select" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
+            <InputSelect class="form-select" aria-label="@Loc["Start sidebar"]" Value="_settings.StartSidebar" ValueExpression="() => _settings.StartSidebar" TValue="string" ValueChanged="SaveStartSidebar">
                 <option value="">@Loc["None"]</option>
                 <option value="Menu">@Loc["Menu"]</option>
                 <option value="Trash">@Loc["Trash"]</option>
@@ -130,7 +130,7 @@
 
         <div class="list-group-item" data-settings-step-14>
             <small>@Loc["Language"]:</small>
-            <InputSelect class="form-select" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
+            <InputSelect class="form-select" aria-label="@Loc["Language"]" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
                 @foreach ((string key, Localization.Loc loc) in Localization.Loc.Cultures)
                 {
                     <option value="@key">@loc.Language</option>
@@ -140,7 +140,7 @@
 
         <div class="list-group-item" data-settings-step-15>
             <small>@Loc["Week start"]:</small>
-            <InputSelect class="form-select" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
+            <InputSelect class="form-select" aria-label="@Loc["Week start"]" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
                 {
                     <option value="@dayOfWeek">@Loc[dayOfWeek.ToString()]</option>
@@ -165,7 +165,7 @@
 
         <div class="list-group-item" data-settings-step-19>
             <small>@Loc["Display category filter as"]:</small>
-            <InputSelect class="form-select" Value="_settings.CategoryFilterDisplay" ValueExpression="() => _settings.CategoryFilterDisplay" TValue="FilterDisplay" ValueChanged="SaveCategoryFilterDisplay">
+            <InputSelect class="form-select" aria-label="@Loc["Display category filter as"]" Value="_settings.CategoryFilterDisplay" ValueExpression="() => _settings.CategoryFilterDisplay" TValue="FilterDisplay" ValueChanged="SaveCategoryFilterDisplay">
                 <option value="@FilterDisplay.CheckBoxes">@Loc["Check boxes"]</option>
                 <option value="@FilterDisplay.RadioButtons">@Loc["Radio buttons"]</option>
                 <option value="@FilterDisplay.SelectOptions">@Loc["Drop down list"]</option>
@@ -174,7 +174,7 @@
 
         <div class="list-group-item" data-settings-step-20>
             <small>@Loc["Display priority filter as"]:</small>
-            <InputSelect class="form-select" Value="_settings.PriorityFilterDisplay" ValueExpression="() => _settings.PriorityFilterDisplay" TValue="FilterDisplay" ValueChanged="SavePriorityFilterDisplay">
+            <InputSelect class="form-select" aria-label="@Loc["Display priority filter as"]" Value="_settings.PriorityFilterDisplay" ValueExpression="() => _settings.PriorityFilterDisplay" TValue="FilterDisplay" ValueChanged="SavePriorityFilterDisplay">
                 <option value="@FilterDisplay.CheckBoxes">@Loc["Check boxes"]</option>
                 <option value="@FilterDisplay.RadioButtons">@Loc["Radio buttons"]</option>
                 <option value="@FilterDisplay.SelectOptions">@Loc["Drop down list"]</option>
@@ -183,7 +183,7 @@
 
         <div class="list-group-item" data-settings-step-21>
             <small>@Loc["Horizontal space"]:</small>
-            <InputSelect class="form-select" Value="_settings.HorizontalMargin" ValueExpression="() => _settings.HorizontalMargin" TValue="int" ValueChanged="SaveHorizontalMargin">
+            <InputSelect class="form-select" aria-label="@Loc["Horizontal space"]" Value="_settings.HorizontalMargin" ValueExpression="() => _settings.HorizontalMargin" TValue="int" ValueChanged="SaveHorizontalMargin">
                 @for (int i = 0; i <= 5; i++)
                 {
                     <option value="@i">@i</option>
@@ -193,7 +193,7 @@
 
         <div class="list-group-item" data-settings-step-22>
             <small>@Loc["Vertical space"]:</small>
-            <InputSelect class="form-select" Value="_settings.VerticalMargin" ValueExpression="() => _settings.VerticalMargin" TValue="int" ValueChanged="SaveVerticalMargin">
+            <InputSelect class="form-select" aria-label="@Loc["Vertical space"]" Value="_settings.VerticalMargin" ValueExpression="() => _settings.VerticalMargin" TValue="int" ValueChanged="SaveVerticalMargin">
                 @for (int i = 0; i <= 5; i++)
                 {
                     <option value="@i">@i</option>

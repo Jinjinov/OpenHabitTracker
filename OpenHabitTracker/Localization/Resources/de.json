@@ -200,5 +200,18 @@
   "You can read the privacy policy at": "Sie können die Datenschutzrichtlinie unter",
 
   "Main navigation": "Hauptnavigation",
-  "Main content": "Hauptinhalt"
+  "Main content": "Hauptinhalt",
+
+  "Note title": "Notiztitel",
+  "Task title": "Aufgabentitel",
+  "Habit title": "Gewohnheitstitel",
+  "Duration hours": "Dauer Stunden",
+  "Duration minutes": "Dauer Minuten",
+  "Repeat period": "Wiederholungszeitraum",
+  "Minimum interval ratio": "Minimales Intervallverhältnis",
+  "Planned date comparison": "Vergleich Plandatum",
+  "Done date comparison": "Vergleich Erledigungsdatum",
+  "Sort notes": "Notizen sortieren",
+  "Sort tasks": "Aufgaben sortieren",
+  "Sort habits": "Gewohnheiten sortieren"
 }

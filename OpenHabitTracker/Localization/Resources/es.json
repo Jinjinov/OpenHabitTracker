@@ -200,5 +200,18 @@
   "You can read the privacy policy at": "Puedes leer la política de privacidad en",
 
   "Main navigation": "Navegación principal",
-  "Main content": "Contenido principal"
+  "Main content": "Contenido principal",
+
+  "Note title": "Título de nota",
+  "Task title": "Título de tarea",
+  "Habit title": "Título de hábito",
+  "Duration hours": "Horas de duración",
+  "Duration minutes": "Minutos de duración",
+  "Repeat period": "Período de repetición",
+  "Minimum interval ratio": "Proporción de intervalo mínimo",
+  "Planned date comparison": "Comparación de fecha planificada",
+  "Done date comparison": "Comparación de fecha realizada",
+  "Sort notes": "Ordenar notas",
+  "Sort tasks": "Ordenar tareas",
+  "Sort habits": "Ordenar hábitos"
 }

@@ -200,5 +200,18 @@
   "You can read the privacy policy at": "Pravilnik o zasebnosti lahko preberete na",
 
   "Main navigation": "Glavna navigacija",
-  "Main content": "Glavna vsebina"
+  "Main content": "Glavna vsebina",
+
+  "Note title": "Naslov zapiska",
+  "Task title": "Naslov naloge",
+  "Habit title": "Naslov navade",
+  "Duration hours": "Ure trajanja",
+  "Duration minutes": "Minute trajanja",
+  "Repeat period": "Obdobje ponavljanja",
+  "Minimum interval ratio": "Minimalno razmerje intervala",
+  "Planned date comparison": "Primerjava načrtovanega datuma",
+  "Done date comparison": "Primerjava datuma dokončanja",
+  "Sort notes": "Razvrsti zapiske",
+  "Sort tasks": "Razvrsti naloge",
+  "Sort habits": "Razvrsti navade"
 }

@@ -19,7 +19,7 @@
                 <PriorityComponent Model="Habit" />
             </div>
         }
-        <InputText class="form-control bg-transparent" Value="@Habit.Title" ValueExpression="() => Habit.Title" ValueChanged="(string title) => SaveTitle(Habit, title)" />
+        <InputText class="form-control bg-transparent" aria-label="@Loc["Habit title"]" Value="@Habit.Title" ValueExpression="() => Habit.Title" ValueChanged="(string title) => SaveTitle(Habit, title)" />
         @if (!ClientState.Settings.ShowLargeCalendar)
         {
             <button class="btn btn-outline-primary" aria-label="@Loc["Mark as done"]" @onclick="() => HabitService.MarkAsDone(Habit)" data-habits-step-9><i class="bi bi-check-square"></i></button>
@@ -47,7 +47,7 @@
         <label class="input-group-text bg-transparent" for="@($"intervalInput-{Habit.Id}")">@Loc["every"]</label>
         <InputNumber class="form-control" id="@($"intervalInput-{Habit.Id}")" Value="Habit.RepeatInterval" ValueExpression="() => Habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(Habit, repeatInterval)" />
 
-        <InputSelect class="form-select" Value="Habit.RepeatPeriod" ValueExpression="() => Habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(Habit, repeatPeriod)">
+        <InputSelect class="form-select" aria-label="@Loc["Repeat period"]" Value="Habit.RepeatPeriod" ValueExpression="() => Habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(Habit, repeatPeriod)">
             @foreach (Period period in Enum.GetValues<Period>())
             {
                 <option value="@period">@Loc[period.ToString()]</option>
@@ -58,7 +58,7 @@
     <div class="input-group" data-habits-step-15>
         <span class="input-group-text bg-transparent">@Loc["Duration"]</span>
 
-        <InputSelect class="form-select" Value="Habit.DurationHour" ValueExpression="() => Habit.DurationHour" TValue="int" ValueChanged="(int hour) => SaveDuration(Habit, hour, Habit.DurationMinute)">
+        <InputSelect class="form-select" aria-label="@Loc["Duration hours"]" Value="Habit.DurationHour" ValueExpression="() => Habit.DurationHour" TValue="int" ValueChanged="(int hour) => SaveDuration(Habit, hour, Habit.DurationMinute)">
             @for (int i = 0; i <= 23; i++)
             {
                 <option value="@i">@i</option>
@@ -66,7 +66,7 @@
         </InputSelect>
         <span class="input-group-text bg-transparent">h</span>
 
-        <InputSelect class="form-select" Value="Habit.DurationMinute" ValueExpression="() => Habit.DurationMinute" TValue="int" ValueChanged="(int minute) => SaveDuration(Habit, Habit.DurationHour, minute)">
+        <InputSelect class="form-select" aria-label="@Loc["Duration minutes"]" Value="Habit.DurationMinute" ValueExpression="() => Habit.DurationMinute" TValue="int" ValueChanged="(int minute) => SaveDuration(Habit, Habit.DurationHour, minute)">
             @for (int i = 0; i <= 59; i++)
             {
                 <option value="@i">@i</option>

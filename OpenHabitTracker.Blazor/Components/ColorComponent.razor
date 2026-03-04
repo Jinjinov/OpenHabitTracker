@@ -7,7 +7,7 @@
 
 @if (Model is not null)
 {
-    <InputSelect class="@_background" Value="Model.Color" ValueExpression="() => Model.Color" TValue="string" ValueChanged="SaveColor">
+    <InputSelect class="@_background" aria-label="@Loc["Color"]" Value="Model.Color" ValueExpression="() => Model.Color" TValue="string" ValueChanged="SaveColor">
         <option value="bg-transparent" class="bg-transparent">@Loc["transparent"]</option>
         <option value="bg-body" class="bg-body">@Loc["body"]</option>
         <option value="bg-body-secondary" class="bg-body-secondary">@Loc["body secondary"]</option>

@@ -18,7 +18,7 @@
                 <PriorityComponent Model="Note" />
             </div>
         }
-        <InputText class="form-control bg-transparent" Value="@Note.Title" ValueExpression="() => Note.Title" ValueChanged="(string title) => SaveTitle(Note, title)" />
+        <InputText class="form-control bg-transparent" aria-label="@Loc["Note title"]" Value="@Note.Title" ValueExpression="() => Note.Title" ValueChanged="(string title) => SaveTitle(Note, title)" />
         <button class="btn btn-outline-primary" aria-label="@Loc["Delete"]" @onclick="async () => { await NoteService.DeleteNote(Note); await CloseSelected.InvokeAsync(); await ContentDeleted.InvokeAsync(); }" data-notes-step-6><i class="bi bi-trash"></i></button>
     </div>
 

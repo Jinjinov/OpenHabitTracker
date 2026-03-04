@@ -18,7 +18,7 @@
                 <PriorityComponent Model="Task" />
             </div>
         }
-        <InputText class="form-control bg-transparent" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
+        <InputText class="form-control bg-transparent" aria-label="@Loc["Task title"]" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
         <button class="@($"btn {(Task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" aria-label="@Loc["Mark as done"]" @onclick="() => TaskService.MarkAsDone(Task)" data-tasks-step-8><i class="bi bi-check-square"></i></button>
         <button class="btn btn-outline-primary" aria-label="@Loc["Delete"]" @onclick="async () => { await TaskService.DeleteTask(Task); await CloseSelected.InvokeAsync(); await ContentDeleted.InvokeAsync(); }" data-tasks-step-9><i class="bi bi-trash"></i></button>
     </div>
@@ -35,7 +35,7 @@
     <div class="input-group" data-tasks-step-13>
         <span class="input-group-text bg-transparent">@Loc["Duration"]</span>
 
-        <InputSelect class="form-select" Value="Task.DurationHour" ValueExpression="() => Task.DurationHour" TValue="int" ValueChanged="(int hour) => SaveDuration(Task, hour, Task.DurationMinute)">
+        <InputSelect class="form-select" aria-label="@Loc["Duration hours"]" Value="Task.DurationHour" ValueExpression="() => Task.DurationHour" TValue="int" ValueChanged="(int hour) => SaveDuration(Task, hour, Task.DurationMinute)">
             @for (int i = 0; i <= 23; i++)
             {
                 <option value="@i">@i</option>
@@ -43,7 +43,7 @@
         </InputSelect>
         <span class="input-group-text bg-transparent">h</span>
 
-        <InputSelect class="form-select" Value="Task.DurationMinute" ValueExpression="() => Task.DurationMinute" TValue="int" ValueChanged="(int minute) => SaveDuration(Task, Task.DurationHour, minute)">
+        <InputSelect class="form-select" aria-label="@Loc["Duration minutes"]" Value="Task.DurationMinute" ValueExpression="() => Task.DurationMinute" TValue="int" ValueChanged="(int minute) => SaveDuration(Task, Task.DurationHour, minute)">
             @for (int i = 0; i <= 59; i++)
             {
                 <option value="@i">@i</option>

@@ -41,7 +41,7 @@
                     <PriorityComponent Model="HabitService.NewHabit" />
                 }
 
-                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.NewHabit.Title" placeholder="@Loc["Add new habit"]" aria-required="true" />
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.NewHabit.Title" placeholder="@Loc["Add new habit"]" aria-label="@Loc["Habit title"]" aria-required="true" />
 
                 <button class="btn btn-outline-primary" aria-label="@Loc["Save"]" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.NewHabit.Title)"><i class="bi bi-floppy"></i></button>
                 <button class="btn btn-outline-primary" aria-label="@Loc["Close"]" @onclick="() => HabitService.NewHabit = null"><i class="bi bi-x-square"></i></button>
@@ -54,7 +54,7 @@
                 <label class="input-group-text bg-transparent" for="intervalInput">@Loc["every"]</label>
                 <InputNumber class="form-control" id="intervalInput" @bind-Value="HabitService.NewHabit.RepeatInterval" />
 
-                <InputSelect class="form-select" @bind-Value="HabitService.NewHabit.RepeatPeriod">
+                <InputSelect class="form-select" aria-label="@Loc["Repeat period"]" @bind-Value="HabitService.NewHabit.RepeatPeriod">
                     @foreach (Period period in Enum.GetValues<Period>())
                     {
                         <option value="@period">@Loc[period.ToString()]</option>
@@ -65,7 +65,7 @@
             <div class="input-group">
                 <span class="input-group-text bg-transparent">@Loc["Duration"]</span>
 
-                <InputSelect class="form-select" @bind-Value="HabitService.NewHabit.DurationHour" TValue="int">
+                <InputSelect class="form-select" aria-label="@Loc["Duration hours"]" @bind-Value="HabitService.NewHabit.DurationHour" TValue="int">
                     @for (int i = 0; i <= 23; i++)
                     {
                         <option value="@i">@i</option>
@@ -73,7 +73,7 @@
                 </InputSelect>
                 <span class="input-group-text bg-transparent">h</span>
 
-                <InputSelect class="form-select" @bind-Value="HabitService.NewHabit.DurationMinute" TValue="int">
+                <InputSelect class="form-select" aria-label="@Loc["Duration minutes"]" @bind-Value="HabitService.NewHabit.DurationMinute" TValue="int">
                     @for (int i = 0; i <= 59; i++)
                     {
                         <option value="@i">@i</option>

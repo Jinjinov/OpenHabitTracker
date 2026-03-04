@@ -52,7 +52,7 @@
             <div class="input-group flex-nowrap">
                 <button class="input-group-text col-4" @onclick="() => UpdatePlannedAtFilter(DateTime.Today)" data-search-step-4>@Loc["Planned"]</button>
                 <div data-search-step-5>
-                <InputSelect class="form-control w-auto flex-grow-0" Value="SearchFilterService.PlannedAtCompare" ValueExpression="() => SearchFilterService.PlannedAtCompare" TValue="DateCompare" ValueChanged="UpdatePlannedAtCompare">
+                <InputSelect class="form-control w-auto flex-grow-0" aria-label="@Loc["Planned date comparison"]" Value="SearchFilterService.PlannedAtCompare" ValueExpression="() => SearchFilterService.PlannedAtCompare" TValue="DateCompare" ValueChanged="UpdatePlannedAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
                     <option value="@DateCompare.After">@(">")</option>
@@ -66,7 +66,7 @@
             <div class="input-group flex-nowrap">
                 <button class="input-group-text col-4" @onclick="() => UpdateDoneAtFilter(DateTime.Today)" data-search-step-8>@Loc["Done"]</button>
                 <div data-search-step-9>
-                <InputSelect class="form-control w-auto flex-grow-0" Value="SearchFilterService.DoneAtCompare" ValueExpression="() => SearchFilterService.DoneAtCompare" TValue="DateCompare" ValueChanged="UpdateDoneAtCompare">
+                <InputSelect class="form-control w-auto flex-grow-0" aria-label="@Loc["Done date comparison"]" Value="SearchFilterService.DoneAtCompare" ValueExpression="() => SearchFilterService.DoneAtCompare" TValue="DateCompare" ValueChanged="UpdateDoneAtCompare">
                     <option value="@DateCompare.Before">@("<")</option>
                     <option value="@DateCompare.On">@("=")</option>
                     <option value="@DateCompare.After">@(">")</option>
@@ -126,7 +126,7 @@
                 {
                     <div class="list-group-item" data-search-step-12>
                         <small>@Loc["Categories"]:</small>
-                        <InputSelect class="form-select" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long?" ValueChanged="SaveSelectedCategoryId">
+                        <InputSelect class="form-select" aria-label="@Loc["Categories"]" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long?" ValueChanged="SaveSelectedCategoryId">
                             <option value="">@Loc["All"]</option>
                             @foreach (CategoryModel category in CategoryService.Categories)
                             {
@@ -215,7 +215,7 @@
                 {
                     <div class="list-group-item" data-search-step-13>
                         <small>@Loc["Priorities"]:</small>
-                        <InputSelect class="form-select" Value="_settings.SelectedPriority" ValueExpression="() => _settings.SelectedPriority" TValue="Priority?" ValueChanged="SaveSelectedPriority">
+                        <InputSelect class="form-select" aria-label="@Loc["Priorities"]" Value="_settings.SelectedPriority" ValueExpression="() => _settings.SelectedPriority" TValue="Priority?" ValueChanged="SaveSelectedPriority">
                             <option value="">@Loc["All"]</option>
                             <option value="@Priority.None">⊘ @Loc["None"]</option>
                             <option value="@Priority.VeryLow">︾ @Loc["Very low"]</option>
@@ -244,7 +244,7 @@
             <div class="list-group-item">
                 <small>@Loc["Habit interval ratio"]:</small>
                 <div data-search-step-15>
-                <InputSelect class="form-select" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
+                <InputSelect class="form-select" aria-label="@Loc["Habit interval ratio"]" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
                     <option value="@Ratio.ElapsedToAverage">@Loc["Elapsed time to average interval"]</option>
                     <option value="@Ratio.ElapsedToDesired">@Loc["Elapsed time to repeat interval"]</option>
                     <option value="@Ratio.AverageToDesired">@Loc["Average interval to repeat interval"]</option>
@@ -255,7 +255,7 @@
                     <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show only habits with interval ratio over"] @_settings.SelectedRatioMin%</label>
                 </div>
 
-                <input type="range" class="form-range d-block" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-17 />
+                <input type="range" class="form-range d-block" aria-label="@Loc["Minimum interval ratio"]" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-17 />
             </div>
             }
 
@@ -267,7 +267,7 @@
             {
             <div class="list-group-item" data-search-step-18>
                 <small><i class="bi bi-sticky" aria-hidden="true"></i> @Loc["Notes"]:</small>
-                <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
+                <InputSelect class="form-select" aria-label="@Loc["Sort notes"]" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>
                     <option value="@Sort.Title">@Loc["Title"]</option>
@@ -276,7 +276,7 @@
 
             <div class="list-group-item" data-search-step-19>
                 <small><i class="bi bi-list-task" aria-hidden="true"></i> @Loc["Tasks"]:</small>
-                <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
+                <InputSelect class="form-select" aria-label="@Loc["Sort tasks"]" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>
                     <option value="@Sort.Title">@Loc["Title"]</option>
@@ -289,7 +289,7 @@
 
             <div class="list-group-item" data-search-step-20>
                 <small><i class="bi bi-repeat" aria-hidden="true"></i> @Loc["Habits"]:</small>
-                <InputSelect class="form-select" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
+                <InputSelect class="form-select" aria-label="@Loc["Sort habits"]" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
                     <option value="@Sort.Priority">@Loc["Priority"]</option>
                     <option value="@Sort.Title">@Loc["Title"]</option>

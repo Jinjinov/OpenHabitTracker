@@ -200,5 +200,18 @@
   "You can read the privacy policy at": "You can read the privacy policy at",
 
   "Main navigation": "Main navigation",
-  "Main content": "Main content"
+  "Main content": "Main content",
+
+  "Note title": "Note title",
+  "Task title": "Task title",
+  "Habit title": "Habit title",
+  "Duration hours": "Duration hours",
+  "Duration minutes": "Duration minutes",
+  "Repeat period": "Repeat period",
+  "Minimum interval ratio": "Minimum interval ratio",
+  "Planned date comparison": "Planned date comparison",
+  "Done date comparison": "Done date comparison",
+  "Sort notes": "Sort notes",
+  "Sort tasks": "Sort tasks",
+  "Sort habits": "Sort habits"
 }

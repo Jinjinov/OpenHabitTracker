@@ -40,7 +40,7 @@
                     <PriorityComponent Model="TaskService.NewTask" />
                 }
 
-                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="TaskService.NewTask.Title" placeholder="@Loc["Add new task"]" aria-required="true" />
+                <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="TaskService.NewTask.Title" placeholder="@Loc["Add new task"]" aria-label="@Loc["Task title"]" aria-required="true" />
 
                 <button class="btn btn-outline-primary" aria-label="@Loc["Save"]" @onclick="TaskService.AddTask" disabled="@string.IsNullOrWhiteSpace(TaskService.NewTask.Title)"><i class="bi bi-floppy"></i></button>
                 <button class="btn btn-outline-primary" aria-label="@Loc["Close"]" @onclick="() => TaskService.NewTask = null"><i class="bi bi-x-square"></i></button>
@@ -54,7 +54,7 @@
             <div class="input-group">
                 <span class="input-group-text bg-transparent">@Loc["Duration"]</span>
 
-                <InputSelect class="form-select" @bind-Value="TaskService.NewTask.DurationHour" TValue="int">
+                <InputSelect class="form-select" aria-label="@Loc["Duration hours"]" @bind-Value="TaskService.NewTask.DurationHour" TValue="int">
                     @for (int i = 0; i <= 23; i++)
                     {
                         <option value="@i">@i</option>
@@ -62,7 +62,7 @@
                 </InputSelect>
                 <span class="input-group-text bg-transparent">h</span>
 
-                <InputSelect class="form-select" @bind-Value="TaskService.NewTask.DurationMinute" TValue="int">
+                <InputSelect class="form-select" aria-label="@Loc["Duration minutes"]" @bind-Value="TaskService.NewTask.DurationMinute" TValue="int">
                     @for (int i = 0; i <= 59; i++)
                     {
                         <option value="@i">@i</option>
