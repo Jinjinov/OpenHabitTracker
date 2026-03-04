@@ -30,6 +30,12 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         await module.InvokeVoidAsync("setMode", mode);
     }
 
+    public async ValueTask SetLang(string lang)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("setLang", lang);
+    }
+
     public async ValueTask SetTheme(string theme)
     {
         IJSObjectReference module = await _moduleTask.Value;

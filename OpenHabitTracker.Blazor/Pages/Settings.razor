@@ -368,6 +368,8 @@
 
         Localization.Loc.SetCulture(culture);
 
+        await JsInterop.SetLang(culture);
+
         await UpdateAndRefresh();
     }
 

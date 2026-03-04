@@ -9,6 +9,10 @@ export function setMode(mode) {
     document.documentElement.setAttribute('data-bs-theme', mode);
 };
 
+export function setLang(lang) {
+    document.documentElement.setAttribute('lang', lang);
+}
+
 export function setTheme(theme) {
     document.getElementById("theme-link").href = `_content/OpenHabitTracker.Blazor/bootstrap/${theme}/bootstrap.min.css`;
 }

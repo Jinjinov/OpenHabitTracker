@@ -90,34 +90,20 @@ highest priority:
 0.
 accessibility:
 
-    Simple:
-
-    1. `<html lang>` must update when language changes (WCAG 3.1.1):
-       - screen readers use lang attribute for pronunciation engine
-       - when SaveCulture() fires in Settings.razor, update <html lang="..."> via JS
-
-    2. CSS focus visibility (WCAG 2.4.7):
-       - verify `:focus` / `:focus-visible` outlines are not suppressed by the app CSS or Bootswatch themes
-       - if any theme does `outline: none`, the entire keyboard nav plan becomes invisible to sighted keyboard users
-
-    Moderate:
-
-    3. Arrow keys for Menu sidebar (ARIA menu pattern):
+    1. Arrow keys for Menu sidebar (ARIA menu pattern):
        - Tab enters the menu, Up/Down arrows move between items, Tab exits
 
-    4. Silent operations give no screen reader feedback (WCAG 4.1.3):
+    2. Silent operations give no screen reader feedback (WCAG 4.1.3):
        - note save, habit marked done, item deleted — screen reader users hear nothing
        - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
        - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
 
-    Complex:
-
-    5. Focus management (currently missing):
+    3. Focus management (currently missing):
        - sidebar opens → move focus to first element inside sidebar
        - sidebar closes → return focus to the button that opened it (menu or search)
        - note/task/habit edit closes → return focus to the list item that was opened
 
-    6. Calendar arrow key navigation (roving tabindex):
+    4. Calendar arrow key navigation (roving tabindex):
        - currently Tab through every day cell (up to 42 presses for month view)
        - only one cell has tabindex="0" at a time, arrow keys move between cells, Tab exits grid
         Home/End in calendar grid:

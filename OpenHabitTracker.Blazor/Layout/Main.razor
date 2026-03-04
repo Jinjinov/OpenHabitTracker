@@ -225,6 +225,8 @@
         if (ClientState.Settings.Theme != "default")
             await JsInterop.SetTheme(ClientState.Settings.Theme);
 
+        await JsInterop.SetLang(ClientState.Settings.Culture);
+
         _contentDeleted = EventCallback.Factory.Create(this, OnContentDeleted);
 
         SetDynamicComponentParameters();
