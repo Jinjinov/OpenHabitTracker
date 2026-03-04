@@ -54,6 +54,10 @@ html, body {
     border-radius: 0 !important;
 }
 
+.btn-plain {
+    --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
+}
+
 .form-control {
     border-radius: 0 !important;
 }

@@ -25,7 +25,7 @@
 
     @if (NoteService.NewNote is null)
     {
-        <button class="btn input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
+        <button class="btn btn-plain input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
             <span class="input-group-text fw-bold text-primary flex-grow-1">@Loc["Add new note"]</span>
 
             <span class="btn btn-outline-primary"><i class="bi bi-plus-square" aria-hidden="true"></i></span>
@@ -79,7 +79,7 @@
 
             @if (ClientState.Settings.ShowHelp)
             {
-                <button class="btn ms-auto m-1" aria-label="@Loc["Help"]" @onclick="@(() => StartTour("notes"))"><i class="bi bi-question-circle"></i></button>
+                <button class="btn btn-plain ms-auto m-1" aria-label="@Loc["Help"]" @onclick="@(() => StartTour("notes"))"><i class="bi bi-question-circle"></i></button>
             }
         </div>
 
