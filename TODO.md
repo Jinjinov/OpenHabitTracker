@@ -85,9 +85,6 @@ Extract interfaces: INoteService, ITaskService, IHabitService, IPriorityService,
 
 ---------------------------------------------------------------------------------------------------
 
-highest priority:
-
-0.
 accessibility:
 
     1. Arrow keys for Menu sidebar (ARIA menu pattern):
@@ -111,6 +108,8 @@ accessibility:
         Page Up/Page Down in calendar:
        - Page Up → previous month, Page Down → next month
        - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
+
+---------------------------------------------------------------------------------------------------
 
 1.
 desktop: https://youtu.be/qsC7lX3yZ-A
