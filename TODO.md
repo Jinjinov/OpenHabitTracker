@@ -111,7 +111,9 @@ accessibility:
 
 ---------------------------------------------------------------------------------------------------
 
-French, Portuguese, Italian, Japanese
+add French, Portuguese, Italian, Japanese in OpenHabitTracker\OpenHabitTracker\Localization\Resources
+
+---------------------------------------------------------------------------------------------------
 
 1.
 desktop: https://youtu.be/qsC7lX3yZ-A
