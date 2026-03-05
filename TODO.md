@@ -97,7 +97,13 @@ Extract interfaces: INoteService, ITaskService, IHabitService, IPriorityService,
 
 #### 0b. Add NSubstitute to OpenHabitTracker.UnitTests.csproj
 - Add `<PackageReference Include="NSubstitute" Version="5.3.0" />`
-- Add `<PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.17"><PrivateAssets>all</PrivateAssets></PackageReference>` (catches misuse at compile time)
+- Add the following (catches misuse at compile time — `IncludeAssets` makes it analyzer-only, `PrivateAssets` hides it from consumers):
+  ```xml
+  <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.17">
+    <PrivateAssets>all</PrivateAssets>
+    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+  </PackageReference>
+  ```
 - Used to mock `IDataAccess` (already an interface) without a real database
 - `MarkdownToHtml` does not need mocking — instantiate directly with a real `MarkdownPipeline`
 
@@ -112,7 +118,7 @@ Create one interface per service, exposing all public members:
 - `IItemService` — expose full public surface
 - `ICalendarService` — expose full public surface
 - `ITrashService` — expose full public surface
-- `ISearchFilterService` — `SearchTerm`, `MatchCase`, `DoneAtFilter`, `DoneAtCompare`, `PlannedAtFilter`, `PlannedAtCompare`
+- `ISearchFilterService` — `SearchTerm`, `MatchCase`, `DoneAtFilter`, `DoneAtCompare`, `PlannedAtFilter`, `PlannedAtCompare`, `MarkSearchResults(string text)`, `MarkSearchResultsInHtml(string text)`
 - `IJsInterop` — `ConsoleLog()`, `SetMode()`, `SetLang()`, `SetTheme()`, `FocusElement()`, `SetElementProperty()`, `GetElementProperty<T>()`, `GetWindowDimensions()`, `GetElementDimensions()`, `SaveAsUTF8()`, `SetCalculateAutoHeight()`, `HandleTabKey()`
   File: `OpenHabitTracker.Blazor/IJsInterop.cs` (different project — `JsInterop` is `sealed` and in `OpenHabitTracker.Blazor/`)
   `JsInterop` must also implement `IAsyncDisposable` — add `: IJsInterop, IAsyncDisposable` to the class declaration
@@ -128,7 +134,7 @@ Classes that do NOT need interfaces (verified from @inject scan):
 
 #### 0d. Update Startup.cs DI registrations
 Change every `services.AddScoped<XService>()` to `services.AddScoped<IXService, XService>()`.
-Also change `services.AddScoped<JsInterop>()` to `services.AddScoped<IJsInterop, JsInterop>()` in whichever host project registers it.
+Also change `services.AddScoped<JsInterop>()` to `services.AddScoped<IJsInterop, JsInterop>()` in `OpenHabitTracker.Blazor/Startup.cs`.
 This allows both Blazor apps and bUnit `TestContext.Services` to register mock implementations.
 
 #### 0e. Update @inject in Blazor components
@@ -169,7 +175,15 @@ Add file: OpenHabitTracker.UnitTests/TestData.cs — static factory to keep test
             notes.ToDictionary(n => n.Id);
         internal static Dictionary<long, TaskModel> TaskDict(params TaskModel[] tasks) =>
             tasks.ToDictionary(t => t.Id);
+        internal static CategoryModel Category(long id = 1, string title = "Test",
+            List<NoteModel>? notes = null, List<TaskModel>? tasks = null, List<HabitModel>? habits = null) =>
+            new() { Id = id, Title = title, Notes = notes, Tasks = tasks, Habits = habits };
+        internal static Dictionary<long, CategoryModel> CategoryDict(params CategoryModel[] categories) =>
+            categories.ToDictionary(c => c.Id);
     }
+
+Verified: `clientState.Habits`, `clientState.Notes`, `clientState.Tasks` all have public setters
+(delegate properties to `ClientData`) — direct assignment works as shown below.
 
 SetUp boilerplate (shared across test classes):
 
@@ -304,6 +318,13 @@ Tests:
     CategoryService sut = new(clientState);
     clientState.Categories = /* Dictionary<long, CategoryModel> with test data */;
 
+CRITICAL: `DeleteCategory` reads `category.Notes`, `category.Tasks`, `category.Habits` from the
+passed `CategoryModel` object — it does NOT look them up from `clientState.Notes/Tasks/Habits`.
+Cascade tests must populate these navigation lists on the CategoryModel itself, e.g.:
+    NoteModel note = TestData.Note();
+    CategoryModel category = TestData.Category(id: 1, notes: [note]);
+    clientState.Categories = TestData.CategoryDict(category);
+
 Tests:
 - `GetCategoryTitle_WhenFound_ReturnsTitle`
 - `GetCategoryTitle_WhenNotFound_ReturnsIdAsString`
@@ -334,6 +355,11 @@ Tests:
 
 Strategy: use `bunit.TestContext`, register mock `IXService` via `ctx.Services.AddScoped`,
 render the component, find elements by CSS selector or text content, assert DOM and invoke events.
+
+Note: `IGTourService` is from the `GTour` NuGet package (`GTour.Abstractions` namespace),
+registered in `OpenHabitTracker.Blazor/Startup.cs` via `services.UseGTour()`.
+Available transitively via the Phase 0a project reference to `OpenHabitTracker.Blazor` — no extra NuGet needed.
+Add `@using GTour.Abstractions` (or a global using) in test files that reference `IGTourService`.
 
 #### File: OpenHabitTracker.UnitTests/Components/HabitComponentTests.cs
 
