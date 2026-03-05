@@ -111,6 +111,8 @@ accessibility:
 
 ---------------------------------------------------------------------------------------------------
 
+French, Portuguese, Italian, Japanese
+
 1.
 desktop: https://youtu.be/qsC7lX3yZ-A
 sidebar: https://youtu.be/dq1OmpjBBNk
