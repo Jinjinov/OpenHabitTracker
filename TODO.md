@@ -84,6 +84,27 @@ Extract interfaces: INoteService, ITaskService, IHabitService, IPriorityService,
     use bUnit when a behavior is too deep or tedious to reach through the browser UI
     use Appium when you need to verify the native app specifically (platform behavior)
 
+OpenHabitTracker/App/
+ClientState, Examples, MarkdownToHtml, RemoteDataSync
+
+OpenHabitTracker/Services/
+CalendarService, CategoryService, HabitService, ItemService, NoteService, PriorityService, SearchFilterService, TaskService, TrashService
+
+OpenHabitTracker.Backup/
+ImportExportService
+
+OpenHabitTracker.Blazor/
+IAssemblyProvider, IAuthFragment, ILinkAttributeService, JsInterop
+
+OpenHabitTracker.Blazor/Files/
+IOpenFile, ISaveFile
+
+OpenHabitTracker.Blazor/Layout/
+INavBarFragment
+
+OpenHabitTracker.Blazor.Auth/
+IAuthService
+
 ---------------------------------------------------------------------------------------------------
 
 accessibility:
