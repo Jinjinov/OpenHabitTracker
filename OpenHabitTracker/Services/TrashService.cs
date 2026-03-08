@@ -4,7 +4,7 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class TrashService(ClientState clientState)
+public class TrashService(ClientState clientState) : ITrashService
 {
     private readonly ClientState _clientState = clientState;
 

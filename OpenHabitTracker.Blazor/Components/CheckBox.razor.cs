@@ -7,7 +7,7 @@ namespace OpenHabitTracker.Blazor.Components;
 public partial class CheckBox
 {
     [Inject]
-    JsInterop JsInterop { get; set; } = null!;
+    IJsInterop JsInterop { get; set; } = null!;
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

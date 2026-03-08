@@ -35,15 +35,15 @@ public static class Startup
         services.AddScoped<MarkdownToHtml>();
         services.AddScoped<Examples>();
 
-        services.AddScoped<CalendarService>();
-        services.AddScoped<CategoryService>();
-        services.AddScoped<PriorityService>();
-        services.AddScoped<HabitService>();
-        services.AddScoped<ItemService>();
-        services.AddScoped<NoteService>();
-        services.AddScoped<TaskService>();
-        services.AddScoped<TrashService>();
-        services.AddScoped<SearchFilterService>();
+        services.AddScoped<ICalendarService, CalendarService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IPriorityService, PriorityService>();
+        services.AddScoped<IHabitService, HabitService>();
+        services.AddScoped<IItemService, ItemService>();
+        services.AddScoped<INoteService, NoteService>();
+        services.AddScoped<ITaskService, TaskService>();
+        services.AddScoped<ITrashService, TrashService>();
+        services.AddScoped<ISearchFilterService, SearchFilterService>();
 
         services.AddLocalization(options => options.ResourcesPath = @"Localization\Resources");
         services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();

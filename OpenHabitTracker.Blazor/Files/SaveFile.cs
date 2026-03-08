@@ -1,8 +1,8 @@
 ﻿namespace OpenHabitTracker.Blazor.Files;
 
-public class SaveFile(JsInterop jsInterop) : ISaveFile
+public class SaveFile(IJsInterop jsInterop) : ISaveFile
 {
-    private readonly JsInterop _jsInterop = jsInterop;
+    private readonly IJsInterop _jsInterop = jsInterop;
 
     public async Task<string> SaveFileDialog(string filename, string content)
     {

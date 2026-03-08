@@ -14,7 +14,7 @@ public class Dimensions
     public int Height { get; set; }
 }
 
-public sealed class JsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
+public sealed class JsInterop(IJSRuntime jsRuntime) : IJsInterop, IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/OpenHabitTracker.Blazor/jsInterop.js").AsTask());
 

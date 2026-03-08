@@ -5,7 +5,7 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class CategoryService(ClientState clientState)
+public class CategoryService(ClientState clientState) : ICategoryService
 {
     private readonly ClientState _clientState = clientState;
 

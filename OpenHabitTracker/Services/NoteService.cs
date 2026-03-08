@@ -5,10 +5,10 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class NoteService(ClientState clientState, SearchFilterService searchFilterService, MarkdownToHtml markdownToHtml)
+public class NoteService(ClientState clientState, ISearchFilterService searchFilterService, MarkdownToHtml markdownToHtml) : INoteService
 {
     private readonly ClientState _clientState = clientState;
-    private readonly SearchFilterService _searchFilterService = searchFilterService;
+    private readonly ISearchFilterService _searchFilterService = searchFilterService;
     private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
 
     public IReadOnlyCollection<NoteModel>? Notes => _clientState.Notes?.Values;

@@ -11,7 +11,7 @@
 @inject Examples Examples
 @inject INavBarFragment NavBarFragment
 @inject NavigationManager NavigationManager
-@inject JsInterop JsInterop
+@inject IJsInterop JsInterop
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
 @inject IAuthFragment AuthFragment
@@ -219,14 +219,6 @@
 
         Localization.Loc.SetCulture(ClientState.Settings.Culture);
 
-        if (!ClientState.Settings.IsDarkMode)
-            await JsInterop.SetMode("light");
-
-        if (ClientState.Settings.Theme != "default")
-            await JsInterop.SetTheme(ClientState.Settings.Theme);
-
-        await JsInterop.SetLang(ClientState.Settings.Culture);
-
         _contentDeleted = EventCallback.Factory.Create(this, OnContentDeleted);
 
         SetDynamicComponentParameters();
@@ -279,6 +271,14 @@
             Logger.LogInformation("MainLayout.OnAfterRenderAsync start");
 
             _windowDimensions = await JsInterop.GetWindowDimensions();
+
+            if (!ClientState.Settings.IsDarkMode)
+                await JsInterop.SetMode("light");
+
+            if (ClientState.Settings.Theme != "default")
+                await JsInterop.SetTheme(ClientState.Settings.Theme);
+
+            await JsInterop.SetLang(ClientState.Settings.Culture);
 
             SetDynamicComponentParameters();
 

@@ -1,6 +1,6 @@
 ﻿namespace OpenHabitTracker.Services;
 
-public class CalendarService
+public class CalendarService : ICalendarService
 {
     private readonly Dictionary<long, DateTime> _dateByTicks = [];
 

@@ -8,7 +8,7 @@ public static class Startup
 {
     public static IServiceCollection AddBlazor(this IServiceCollection services)
     {
-        services.AddScoped<JsInterop>();
+        services.AddScoped<IJsInterop, JsInterop>();
         services.AddScoped<IRuntimeClientData, RuntimeClientData>();
 
         services.UseGTour();

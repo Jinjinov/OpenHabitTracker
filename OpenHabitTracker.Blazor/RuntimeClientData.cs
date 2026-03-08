@@ -2,9 +2,9 @@ using OpenHabitTracker.App;
 
 namespace OpenHabitTracker.Blazor;
 
-public class RuntimeClientData(JsInterop jsInterop, IPreRenderService preRenderService) : IRuntimeClientData
+public class RuntimeClientData(IJsInterop jsInterop, IPreRenderService preRenderService) : IRuntimeClientData
 {
-    private readonly JsInterop _jsInterop = jsInterop;
+    private readonly IJsInterop _jsInterop = jsInterop;
     private readonly IPreRenderService _preRenderService = preRenderService;
     private int? _windowWidth;
 

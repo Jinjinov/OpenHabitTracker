@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace OpenHabitTracker.Services;
 
-public class SearchFilterService
+public class SearchFilterService : ISearchFilterService
 {
     public string? SearchTerm { get; set; }
 

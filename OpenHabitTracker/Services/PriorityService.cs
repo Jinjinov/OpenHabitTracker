@@ -5,7 +5,7 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class PriorityService(ClientState clientState)
+public class PriorityService(ClientState clientState) : IPriorityService
 {
     private readonly ClientState _clientState = clientState;
 

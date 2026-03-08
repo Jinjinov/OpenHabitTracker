@@ -17,6 +17,7 @@ Create one interface per service, exposing all public members:
 - `ITrashService` 
 - `ISearchFilterService` 
 - `IJsInterop` 
+Keep the order of the members.
 
 One interface per file, placed alongside the concrete class (`OpenHabitTracker/Services/IHabitService.cs` next to `HabitService.cs`, etc.).
 

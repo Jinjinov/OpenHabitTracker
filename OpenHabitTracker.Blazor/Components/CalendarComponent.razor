@@ -3,8 +3,8 @@
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
-@inject CalendarService CalendarService
-@inject HabitService HabitService
+@inject ICalendarService CalendarService
+@inject IHabitService HabitService
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
 
@@ -27,7 +27,7 @@ else
         <div class="bg-body d-flex">
             @for (int i = 0; i < 7; i++)
             {
-                int dayIdx = CalendarService.GetDayOfWeek(ClientState.Settings.FirstDayOfWeek, i);
+                int dayIdx = OpenHabitTracker.Services.CalendarService.GetDayOfWeek(ClientState.Settings.FirstDayOfWeek, i);
                 string day = Loc[_days[dayIdx]];
                 <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
             }

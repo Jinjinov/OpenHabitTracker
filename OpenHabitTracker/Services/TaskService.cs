@@ -5,10 +5,10 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class TaskService(ClientState clientState, SearchFilterService searchFilterService)
+public class TaskService(ClientState clientState, ISearchFilterService searchFilterService) : ITaskService
 {
     private readonly ClientState _clientState = clientState;
-    private readonly SearchFilterService _searchFilterService = searchFilterService;
+    private readonly ISearchFilterService _searchFilterService = searchFilterService;
 
     public IReadOnlyCollection<TaskModel>? Tasks => _clientState.Tasks?.Values;
 
