@@ -33,7 +33,7 @@ Document this constraint in a `README.md` or at the top of each test fixture:
     // dotnet run --project OpenHabitTracker.Blazor.Web --configuration Release
 
 Reason: Playwright tests assert against a live app. Tests that run against a stale build will NOT
-detect newly added data attributes or JS fixes made since the last server restart.
+detect JS fixes or markup changes made since the last server restart.
 
 #### 0b. Create a shared base class: BaseTest.cs
 
@@ -89,10 +89,27 @@ previous test runs or other tests. This is why the video tests call `LoadExample
 There is no need for a `ClearAppDataAsync` helper — the fresh `Context` created in `BaseSetUp`
 already guarantees a clean state.
 
-#### 0d. Register data-step attributes on Razor components that lack them
+#### 0c. Element locator strategy
 
-Functional tests locate elements by `data-*` attributes set on key interactive elements.
-The video tests already rely on:
+`data-*` attributes (e.g. `data-main-step-1`) are owned by the GTour guided tour library.
+**Do NOT add new `data-*` attributes for tests** — the tour library scans for them and extra
+attributes would interfere with tour step discovery.
+
+Tests may reuse existing `data-*` attributes where they already target the right element.
+For all other elements, use locators that are already present in the markup, in priority order:
+
+1. `id` — most stable; use when the element is unique on the page (e.g. `#closeSidebar`, `#main-content`)
+   - If an element has no `id` but is unique (non-repeating) and suitable for one, **ask the user
+     before adding an `id`** — ids are neutral (not owned by any library) and may be added, but
+     only with explicit approval.
+2. `data-*` tour attribute — stable and language-independent; reuse where it already exists.
+   **Never add new `data-*` attributes.**
+3. More complex structural locator — when the element repeats and has no id, combine role, CSS
+   class, position (`.First`, `.Nth()`), or parent/child relationships to narrow it down
+4. `aria-label` — **avoid**: values are localized via `@Loc[...]` and will break if language changes
+5. Visible text / `HasText` filter — **avoid for assertions**: also localized and fragile
+
+Existing attributes already usable by tests (do not need to be added):
 - `data-main-step-1` — menu toggle button
 - `data-main-step-2` — Home nav link
 - `data-main-step-3` — Notes nav link
@@ -108,10 +125,7 @@ The video tests already rely on:
 - `data-data-step-1` — Load examples button in Data sidebar
 - `data-search-step-1` — search input field
 - `data-search-step-3` — clear search term button
-
-For Phase 1–3 tests, identify and add any missing `data-*` attributes (e.g. on "Add note" button,
-note title input, "Mark as done" button, etc.) while writing the corresponding tests.
-Do not bulk-add attributes before writing tests — add them only as each test needs them.
+- `id="closeSidebar"` — sidebar close button
 
 ---
 
@@ -200,9 +214,9 @@ tests). Assert DOM state after each operation.
 
 #### File: OpenHabitTracker.EndToEndTests/CRUD/NoteTests.cs
 
-Note: "Add note" button and note title input need `data-*` attributes (see Phase 0d).
-Use `data-notes-add-button`, `data-notes-title-input`, `data-note-delete-button` etc.
-Add these attributes to the Razor components while writing the tests.
+Locators to investigate before writing: find the "Add note" button (`aria-label` or role+text),
+note title input (`name`, `placeholder`, or `aria-label`), and delete button (`aria-label`).
+Read the Razor source to identify what attributes already exist before writing any locator.
 
     [TestFixture]
     public class NoteTests : BaseTest
@@ -372,6 +386,6 @@ Tests:
 2. **Phase 1** — write smoke tests (highest priority — SSR regression detection)
 3. **Phase 2** — write navigation tests
 4. **Phase 4** — write settings persistence tests (independent of CRUD)
-5. **Phase 3** — write CRUD tests (add `data-*` attributes to Razor components as needed)
+5. **Phase 3** — write CRUD tests (read Razor source to find existing locators before writing each test)
 6. **Phase 5** — write search/filter tests
 7. **Phase 6** — write trash/restore tests
