@@ -4,38 +4,19 @@
 
 ### Phase 0: Prerequisites — must be done before any test can compile
 
-#### 0a. Add project references to OpenHabitTracker.UnitTests.csproj
-- Add `<ProjectReference Include="..\OpenHabitTracker\OpenHabitTracker.csproj" />`
-- Add `<ProjectReference Include="..\OpenHabitTracker.Blazor\OpenHabitTracker.Blazor.csproj" />`
-  (needed for bUnit component rendering tests)
-
-#### 0b. Add NSubstitute to OpenHabitTracker.UnitTests.csproj
-- Add `<PackageReference Include="NSubstitute" Version="5.3.0" />`
-- Add the following (catches misuse at compile time — `IncludeAssets` makes it analyzer-only, `PrivateAssets` hides it from consumers):
-  ```xml
-  <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.17">
-    <PrivateAssets>all</PrivateAssets>
-    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-  </PackageReference>
-  ```
-- Used to mock `IDataAccess` (already an interface) without a real database
-- `MarkdownToHtml` does not need mocking — instantiate directly with a real `MarkdownPipeline`
-
-#### 0c. Extract service interfaces in OpenHabitTracker/Services/
+#### 0a. Extract service interfaces in OpenHabitTracker/Services/
 Required for bUnit component tests — components must inject by interface so tests can substitute mocks.
 Create one interface per service, exposing all public members:
-- `IHabitService` — `GetHabits()`, `AddHabit()`, `UpdateHabit()`, `DeleteHabit()`, `MarkAsDone()`, `Start()`, `SetStartTime()`, `AddTimeDone()`, `RemoveTimeDone()`, `UpdateTimeDone()`, `LoadTimesDone()`, `SetSelectedHabit()`, `Initialize()`, `Habits`, `SelectedHabit`, `NewHabit`
-- `INoteService`  — `GetNotes()`, `AddNote()`, `UpdateNote()`, `DeleteNote()`, `SetSelectedNote()`, `Initialize()`, `Notes`, `SelectedNote`, `NewNote`
-- `ITaskService`  — `GetTasks()`, `AddTask()`, `UpdateTask()`, `DeleteTask()`, `Start()`, `SetStartTime()`, `MarkAsDone()`, `SetSelectedTask()`, `Initialize()`, `Tasks`, `SelectedTask`, `NewTask`
-- `ICategoryService` — `GetCategoryTitle()`, `AddCategory()`, `UpdateCategory()`, `DeleteCategory()`, `SetSelectedCategory()`, `Initialize()`, `Categories`, `SelectedCategory`, `NewCategory`
-- `IPriorityService` — expose full public surface
-- `IItemService` — expose full public surface
-- `ICalendarService` — expose full public surface
-- `ITrashService` — expose full public surface
-- `ISearchFilterService` — `SearchTerm`, `MatchCase`, `DoneAtFilter`, `DoneAtCompare`, `PlannedAtFilter`, `PlannedAtCompare`, `MarkSearchResults(string text)`, `MarkSearchResultsInHtml(string text)`
-- `IJsInterop` — `ConsoleLog()`, `SetMode()`, `SetLang()`, `SetTheme()`, `FocusElement()`, `SetElementProperty()`, `GetElementProperty<T>()`, `GetWindowDimensions()`, `GetElementDimensions()`, `SaveAsUTF8()`, `SetCalculateAutoHeight()`, `HandleTabKey()`
-  File: `OpenHabitTracker.Blazor/IJsInterop.cs` (different project — `JsInterop` is `sealed` and in `OpenHabitTracker.Blazor/`)
-  `JsInterop` must also implement `IAsyncDisposable` — add `: IJsInterop, IAsyncDisposable` to the class declaration
+- `IHabitService` 
+- `INoteService`  
+- `ITaskService`  
+- `ICategoryService` 
+- `IPriorityService` 
+- `IItemService` 
+- `ICalendarService` 
+- `ITrashService` 
+- `ISearchFilterService` 
+- `IJsInterop` 
 
 One interface per file, placed alongside the concrete class (`OpenHabitTracker/Services/IHabitService.cs` next to `HabitService.cs`, etc.).
 
@@ -46,12 +27,12 @@ Classes that do NOT need interfaces (verified from @inject scan):
 - `Examples` — only in `Data.razor` and `Main.razor`, not in planned component tests
 - `ImportExportService` — only in `Backup.razor`, not in planned component tests
 
-#### 0d. Update Startup.cs DI registrations
+#### 0b. Update Startup.cs DI registrations
 Change every `services.AddScoped<XService>()` to `services.AddScoped<IXService, XService>()`.
 Also change `services.AddScoped<JsInterop>()` to `services.AddScoped<IJsInterop, JsInterop>()` in `OpenHabitTracker.Blazor/Startup.cs`.
 This allows both Blazor apps and bUnit `TestContext.Services` to register mock implementations.
 
-#### 0e. Update @inject in Blazor components
+#### 0c. Update @inject in Blazor components
 Replace concrete types with interface types in every component that injects a service or JsInterop:
 - `HabitComponent.razor`, `Habits.razor` → `@inject IHabitService`
 - `NoteComponent.razor`, `Notes.razor` → `@inject INoteService`
@@ -337,10 +318,8 @@ Tests:
 
 ### Execution order
 
-1. **Phase 0a** — add project references (compile gate for everything else)
-2. **Phase 0b** — add NSubstitute package
-3. **Phase 0c** — extract service interfaces
-4. **Phase 0d** — update Startup.cs registrations
-5. **Phase 0e** — update @inject in Razor components
+3. **Phase 0a** — extract service interfaces
+4. **Phase 0b** — update Startup.cs registrations
+5. **Phase 0c** — update @inject in Razor components
 6. **Phase 1** — write NUnit service tests (can proceed service by service)
 7. **Phase 2** — write bUnit component tests (requires Phases 0c–0e)
