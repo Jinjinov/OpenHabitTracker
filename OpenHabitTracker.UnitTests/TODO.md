@@ -2,49 +2,13 @@
 
 ## Unit Test Plan (NUnit + bUnit)
 
-### Phase 0: Prerequisites — must be done before any test can compile
+### Phase 0: Prerequisites
 
-#### 0a. Extract service interfaces in OpenHabitTracker/Services/
-Required for bUnit component tests — components must inject by interface so tests can substitute mocks.
-Create one interface per service, exposing all public members:
-- `IHabitService` 
-- `INoteService`  
-- `ITaskService`  
-- `ICategoryService` 
-- `IPriorityService` 
-- `IItemService` 
-- `ICalendarService` 
-- `ITrashService` 
-- `ISearchFilterService` 
-- `IJsInterop` 
-Keep the order of the members.
-
-One interface per file, placed alongside the concrete class (`OpenHabitTracker/Services/IHabitService.cs` next to `HabitService.cs`, etc.).
-
-Classes that do NOT need interfaces (verified from @inject scan):
 - `ClientState` — injected almost everywhere; register real `ClientState` with mock `IDataAccess` in bUnit `TestContext.Services`
 - `MarkdownToHtml` — injected in `NoteComponent`; register real instance (takes `MarkdownPipeline`, no side effects)
 - `RemoteDataSync` — only in `Main.razor` layout, not in planned component tests
 - `Examples` — only in `Data.razor` and `Main.razor`, not in planned component tests
 - `ImportExportService` — only in `Backup.razor`, not in planned component tests
-
-#### 0b. Update Startup.cs DI registrations
-Change every `services.AddScoped<XService>()` to `services.AddScoped<IXService, XService>()`.
-Also change `services.AddScoped<JsInterop>()` to `services.AddScoped<IJsInterop, JsInterop>()` in `OpenHabitTracker.Blazor/Startup.cs`.
-This allows both Blazor apps and bUnit `TestContext.Services` to register mock implementations.
-
-#### 0c. Update @inject in Blazor components
-Replace concrete types with interface types in every component that injects a service or JsInterop:
-- `HabitComponent.razor`, `Habits.razor` → `@inject IHabitService`
-- `NoteComponent.razor`, `Notes.razor` → `@inject INoteService`
-- `TaskComponent.razor`, `Tasks.razor` → `@inject ITaskService`
-- `CategoryComponent.razor`, `Categories.razor` → `@inject ICategoryService`
-- `CalendarComponent.razor` → `@inject ICalendarService`
-- `NoteComponent.razor`, `Notes.razor`, `Habits.razor`, `Settings.razor`, `Main.razor` → `@inject IJsInterop`
-- `ItemsComponent.razor`, `Search.razor` → `@inject ISearchFilterService`
-- `Trash.razor` → `@inject ITrashService`
-- `ItemsComponent.razor` → `@inject IItemService`
-- `PriorityComponent.razor`, `Tasks.razor`, `Notes.razor`, `Habits.razor`, `Priorities.razor` → `@inject IPriorityService`
 
 ---
 
@@ -314,13 +278,3 @@ Tests:
 - `WeekView_Renders_SevenDayCells`
 - `NextWeek_ButtonClick_AdvancesCalendarBySevenDays`
 - `PreviousWeek_ButtonClick_MovesCalendarBackSevenDays`
-
----
-
-### Execution order
-
-3. **Phase 0a** — extract service interfaces
-4. **Phase 0b** — update Startup.cs registrations
-5. **Phase 0c** — update @inject in Razor components
-6. **Phase 1** — write NUnit service tests (can proceed service by service)
-7. **Phase 2** — write bUnit component tests (requires Phases 0c–0e)
