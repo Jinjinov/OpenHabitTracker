@@ -243,19 +243,19 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await context.CloseAsync();
     }
 
-    [Test]
+    //[Test]
     public async Task Desktop_ShowMainContent_C_inetpub_wwwroot() =>
         await RecordVideo("videos/desktop-main.mp4", "1920x1080", 1920, 1086, false, ShowMainContent); // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
 
-    [Test]
+    //[Test]
     public async Task Desktop_ShowSidebar_C_inetpub_wwwroot() =>
         await RecordVideo("videos/desktop-sidebar.mp4", "1920x1080", 1920, 1086, false, ShowSidebar); // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
 
-    [Test]
+    //[Test]
     public async Task Mobile_ShowMainContent_C_inetpub_wwwroot() =>
         await RecordVideo("videos/mobile-main.mp4", "500x1084", 500, 1090, true, ShowMainContent); // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
 
-    [Test]
+    //[Test]
     public async Task Mobile_ShowSidebar_C_inetpub_wwwroot() =>
         await RecordVideo("videos/mobile-sidebar.mp4", "500x1084", 500, 1090, true, ShowSidebar); // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
 }

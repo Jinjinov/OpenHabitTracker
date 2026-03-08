@@ -87,7 +87,8 @@ public class VideoTests : PlaywrightTest
      * Fix: if stderr capture is needed, start ReadToEndAsync() as a concurrent Task
      * BEFORE calling WaitForExitAsync(), so it drains the buffer while FFmpeg runs.
      */
-    [Test]
+
+    //[Test]
     public async Task RecordDesktopVideo()
     {
         IBrowserContext context = await _browser.NewContextAsync(new BrowserNewContextOptions
