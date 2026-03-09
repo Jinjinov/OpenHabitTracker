@@ -4,7 +4,6 @@
 - improved accessibility: navigation landmarks, ARIA labels, keyboard navigation
 - fixed Google Keep import
 - fixed date comparison bug
-- fixed keyboard covered text input on Android
 - fixed login session expiring on Docker VM suspension
 
 # 1.1.5 - Feb 14, 2025

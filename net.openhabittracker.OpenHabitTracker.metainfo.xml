@@ -93,7 +93,6 @@
         <p>Improved accessibility: navigation landmarks, ARIA labels, keyboard navigation</p>
         <p>Fixed Google Keep import</p>
         <p>Fixed date comparison bug</p>
-        <p>Fixed keyboard covered text input on Android</p>
         <p>Fixed login session expiring on Docker VM suspension</p>
       </description>
     </release>
