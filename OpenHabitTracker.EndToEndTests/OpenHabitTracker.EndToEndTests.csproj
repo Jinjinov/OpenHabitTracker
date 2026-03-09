@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="Microsoft.Playwright" />
     <Using Include="Microsoft.Playwright.NUnit" />
     <Using Include="NUnit.Framework" />
     <Using Include="System.Text.RegularExpressions" />
