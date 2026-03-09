@@ -37,24 +37,21 @@ public class HabitTests : BaseTest
     }
 
     [Test]
-    public async Task MarkHabitAsDone_ButtonClick_DoneCountIncreases()
+    public async Task MarkHabitAsDone_ButtonClick_ElapsedTimeUpdates()
     {
-        // Disable ShowLargeCalendar so the Mark as done button (data-habits-step-9) becomes visible
+        // Disable ShowSmallCalendar so the Mark as done button (data-habits-step-4) becomes visible in the list
         await OpenSidebarAsync("bi-gear");
-        await Page.Locator("label[for='ShowLargeCalendar']").ClickAsync();
+        await Page.Locator("label[for='ShowSmallCalendar']").ClickAsync();
         await CloseSidebarAsync();
 
         await AddItemAsync("Daily Stretch");
 
-        // Open habit detail (second column at 1920px width)
-        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Daily Stretch" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        await Page.Locator("[data-habits-step-9]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        // After marking done, elapsed time changes from ⊘ (LastTimeDoneAt was null) to "0 m" in the list
         ILocator habitRow = Page.Locator("div.input-group.flex-nowrap").Filter(new LocatorFilterOptions { Has = Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Daily Stretch" }) });
+
+        await habitRow.Locator("[data-habits-step-4]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // After marking done, elapsed time changes from ⊘ (LastTimeDoneAt was null) to "0 m"
         await Expect(habitRow.Locator("[data-habits-step-3]")).ToContainTextAsync("0 m");
     }
 
