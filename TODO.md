@@ -1,12 +1,11 @@
 # TODO:
 
-write unit tests: https://bunit.dev/ https://github.com/bUnit-dev/bUnit
+write Appium unit tests:
 
 https://learn.microsoft.com/en-us/samples/dotnet/maui-samples/uitest-appium-nunit/
 https://github.com/dotnet/maui-samples/tree/main/8.0/UITesting/BasicAppiumNunitSample
 
 https://devblogs.microsoft.com/dotnet/dotnet-maui-ui-testing-appium/
-https://github.com/jfversluis/Template.Maui.UITesting
 
 ---------------------------------------------------------------------------------------------------
 
@@ -63,50 +62,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-write unit tests:
-
-Extract interfaces: INoteService, ITaskService, IHabitService, IPriorityService, ICategoryService, IItemService, ICalendarService, ITrashService
-
-    OpenHabitTracker.UnitTests - general test coverage (bUnit component tests, Appium native app tests)
-
-    why NUnit over xUnit?
-    - NUnit has [SetUp] / [TearDown] - fit for browser (Playwright) and device (Appium) lifecycle
-    - xUnit has better native DI 
-        - more useful for ASP.NET integration tests
-        - not relevant here because bUnit has its own DI via TestContext.Services
-    - NUnit has more built-in assertions than xUnit - no need for FluentAssertions or Shouldly
-
-    why not just use Playwright for everything?
-    - Playwright = real browser, full app, slow (seconds per test)
-    - bUnit = renders one Blazor component in isolation, no browser, milliseconds per test
-    - Appium = controls the native MAUI app on iOS/Android/Windows - Playwright cannot do this
-
-    use bUnit when a behavior is too deep or tedious to reach through the browser UI
-    use Appium when you need to verify the native app specifically (platform behavior)
-
-OpenHabitTracker/App/
-ClientState, Examples, MarkdownToHtml, RemoteDataSync
-
-OpenHabitTracker/Services/
-CalendarService, CategoryService, HabitService, ItemService, NoteService, PriorityService, SearchFilterService, TaskService, TrashService
-
-OpenHabitTracker.Backup/
-ImportExportService
-
-OpenHabitTracker.Blazor/
-IAssemblyProvider, IAuthFragment, ILinkAttributeService, JsInterop
-
-OpenHabitTracker.Blazor/Files/
-IOpenFile, ISaveFile
-
-OpenHabitTracker.Blazor/Layout/
-INavBarFragment
-
-OpenHabitTracker.Blazor.Auth/
-IAuthService
-
----------------------------------------------------------------------------------------------------
-
 accessibility:
 
     1. Arrow keys for Menu sidebar (ARIA menu pattern):
@@ -130,13 +85,6 @@ accessibility:
         Page Up/Page Down in calendar:
        - Page Up → previous month, Page Down → next month
        - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
-
----------------------------------------------------------------------------------------------------
-
-add Chinese, Korean, 
-Dutch, Swedish, Norwegian, Danish, 
-Polish, Slovak, Czech, Croatian, Serbian 
-in OpenHabitTracker\OpenHabitTracker\Localization\Resources
 
 ---------------------------------------------------------------------------------------------------
 
@@ -302,16 +250,10 @@ use DB in Blazor Server for multi user sync with REST API endpoints
 ---------------------------------------------------------------------------------------------------
 
 11.
-write unit tests with Appium / bUnit
-
-12.
 Android: get permission to save SQLite DB in an external folder that can be part of Google Drive, OneDrive, iCloud, Dropbox
 
-13.
+12.
 deploy Blazor Server Docker image to Raspberry Pi 5 / Synology NAS DS224+
-
-14.
-Flatpak: test on Raspberry Pi
 
 ---------------------------------------------------------------------------------------------------
 
