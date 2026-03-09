@@ -27,7 +27,7 @@ public class Loc
         { "pt", new() { Language = "português", Culture = new CultureInfo("pt") } },
         { "sk", new() { Language = "slovenčina", Culture = new CultureInfo("sk") } },
         { "sl", new() { Language = "slovenščina", Culture = new CultureInfo("sl") } },
-        { "sr", new() { Language = "srpski", Culture = new CultureInfo("sr") } },
+        { "sr", new() { Language = "srpski", Culture = new CultureInfo("sr-Latn") } },
         { "sv", new() { Language = "svenska", Culture = new CultureInfo("sv") } },
         { "zh", new() { Language = "中文", Culture = new CultureInfo("zh") } }
     };
