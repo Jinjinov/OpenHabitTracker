@@ -1,7 +1,7 @@
 using Microsoft.Playwright;
 using System.Diagnostics;
 
-namespace OpenHabitTracker.EndToEndTests;
+namespace OpenHabitTracker.EndToEndTests.Video;
 
 // install browsers: pwsh playwright.ps1 install
 
