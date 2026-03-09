@@ -60,15 +60,75 @@ accessibility:
     1. Arrow keys for Menu sidebar (ARIA menu pattern):
        - Tab enters the menu, Up/Down arrows move between items, Tab exits
 
+       PLAN:
+       File: OpenHabitTracker.Blazor/Pages/Menu.razor
+       - Add role="menu" to the outer <div class="list-group"> container
+       - Add role="menuitem" and tabindex="-1" to every <button class="list-group-item"> (all except the first get tabindex="-1"; the first gets tabindex="0" so Tab enters the menu)
+       - Add @onkeydown="HandleKeyDown" to the container div
+       - Add @ref attributes to each button: store them in ElementReference[] _items
+       - Track int _focusedIndex = 0
+       - In HandleKeyDown:
+           ArrowDown / ArrowRight → _focusedIndex = (_focusedIndex + 1) % _items.Length; await JsInterop.FocusElement(_items[_focusedIndex]);
+           ArrowUp / ArrowLeft   → _focusedIndex = (_focusedIndex - 1 + _items.Length) % _items.Length; await JsInterop.FocusElement(_items[_focusedIndex]);
+           Home                  → _focusedIndex = 0; await JsInterop.FocusElement(_items[0]);
+           End                   → _focusedIndex = _items.Length - 1; await JsInterop.FocusElement(_items[^1]);
+           Tab / Escape          → e.StopPropagation() is NOT needed — let Tab bubble so focus exits naturally
+       - Update tabindex on each button dynamically: tabindex="@(i == _focusedIndex ? 0 : -1)"
+       - On menu item click: update _focusedIndex to match clicked item
+       - Add @inject IJsInterop JsInterop
+
     2. Silent operations give no screen reader feedback (WCAG 4.1.3):
        - note save, habit marked done, item deleted — screen reader users hear nothing
        - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
        - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
 
+       PLAN:
+       Step A — shared StatusService (OpenHabitTracker.Blazor/StatusService.cs):
+       - Add a Scoped service: public class StatusService { public string Message { get; private set; } public event Action? OnChange; public void Set(string msg) { Message = msg; OnChange?.Invoke(); } public void Clear() { Message = string.Empty; OnChange?.Invoke(); } }
+       - Register in DI: builder.Services.AddScoped<StatusService>();
+
+       Step B — live region in Main.razor:
+       - Add <div role="status" aria-live="polite" aria-atomic="true" class="visually-hidden">@StatusService.Message</div> at the bottom of the layout (inside <main> or just before </body>)
+       - Subscribe to StatusService.OnChange in OnInitialized; call StateHasChanged in the handler
+       - Auto-clear after 3 seconds: use a CancellationTokenSource, cancel previous timer before starting a new one
+
+       Step C — call StatusService.Set() after each silent operation:
+       - HabitComponent.razor: after MarkAsDone → StatusService.Set(Loc["Habit marked as done"])
+       - NoteComponent.razor: after Save → StatusService.Set(Loc["Note saved"])
+       - HabitComponent/NoteComponent/TaskComponent.razor: after Delete → StatusService.Set(Loc["Item deleted"])
+       - ItemsComponent.razor: after item checkbox toggled → StatusService.Set(Loc["Item checked"] / Loc["Item unchecked"])
+
+       Step D — validation errors (role="alert"):
+       - Where form validation messages are shown, wrap in <div role="alert">...</div> (role="alert" implies aria-live="assertive" so no extra attribute needed)
+       - Existing ValidationMessage components can be wrapped; no changes to the validation logic itself
+
     3. Focus management (currently missing):
        - sidebar opens → move focus to first element inside sidebar
        - sidebar closes → return focus to the button that opened it (menu or search)
        - note/task/habit edit closes → return focus to the list item that was opened
+
+       PLAN:
+       File: OpenHabitTracker.Blazor/Layout/Main.razor
+
+       Step A — sidebar focus on open:
+       - Main.razor already renders sidebar content in a <div @onkeydown="HandleSidebarKeyDown">
+       - After setting _dynamicComponentType (i.e., opening the sidebar), call await JsInterop.FocusElement() on the first focusable element inside the sidebar div
+       - Use a JS helper: add focusFirstIn(selector) to jsInterop.js that does container.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])').focus()
+       - Add ValueTask FocusFirstIn(string cssSelector) to IJsInterop.cs and JsInterop.cs
+       - After OnAfterRenderAsync detects sidebar just opened, call await JsInterop.FocusFirstIn("#sidebar-container")
+       - Add id="sidebar-container" to the sidebar div
+
+       Step B — restore focus to opener button on sidebar close:
+       - Main.razor has two opener buttons: the menu toggle button and the search toggle button
+       - Add @ref="_menuButtonRef" and @ref="_searchButtonRef" on those two buttons
+       - Track which one was last clicked: ElementReference _lastOpenerRef
+       - Set _lastOpenerRef = _menuButtonRef (or _searchButtonRef) in the click handler before opening the sidebar
+       - On close (when _dynamicComponentType is set to null), call await JsInterop.FocusElement(_lastOpenerRef) after StateHasChanged
+
+       Step C — restore focus to list item on edit close:
+       - In Habits.razor / Notes.razor / Tasks.razor, each list item that can be opened for editing has a button or row
+       - Add @ref on the "open edit" button for each item (use a Dictionary<long, ElementReference> _itemRefs keyed by item Id)
+       - When edit closes (CloseSelected callback fires), call await JsInterop.FocusElement(_itemRefs[_selectedId]) where _selectedId is the id of the item that was open
 
     4. Calendar arrow key navigation (roving tabindex):
        - currently Tab through every day cell (up to 42 presses for month view)
@@ -78,6 +138,39 @@ accessibility:
         Page Up/Page Down in calendar:
        - Page Up → previous month, Page Down → next month
        - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
+
+       PLAN:
+       File: OpenHabitTracker.Blazor/Components/CalendarComponent.razor
+
+       Step A — ARIA grid roles:
+       - Outermost calendar container: add role="grid" aria-label="@Loc["Calendar"]"
+       - Each week row div: add role="row"
+       - Each day-of-week header cell: add role="columnheader" scope="col"
+       - Each day button: change from <button> to a <div role="gridcell"> wrapping a <button> (or keep <button> and add role="gridcell" directly — gridcell on the button is acceptable and simpler)
+
+       Step B — roving tabindex state:
+       - Add int _activeDayIndex = 0 (index into the flat list of displayed day cells, 0–41 for month view)
+       - Add ElementReference[] _dayCellRefs with a slot per rendered day
+       - In the day cell loop: tabindex="@(i == _activeDayIndex ? 0 : -1)" and @ref="@_dayCellRefs[i]"
+       - On click of a day cell: _activeDayIndex = i; (focus is already there by click)
+
+       Step C — keyboard handler on the grid container:
+       - Add @onkeydown="HandleGridKeyDown" @onkeydown:preventDefault="@_preventDefaultOnGrid" to the role="grid" div
+       - bool _preventDefaultOnGrid — set true only for handled keys to avoid blocking Tab
+       - In HandleGridKeyDown:
+           ArrowRight  → move _activeDayIndex += 1; if overflows, advance to next month and set _activeDayIndex = 0
+           ArrowLeft   → move _activeDayIndex -= 1; if underflows, go to previous month and set _activeDayIndex = last cell
+           ArrowDown   → _activeDayIndex += 7 (next week); if overflows, go to next month
+           ArrowUp     → _activeDayIndex -= 7 (prev week); if underflows, go to previous month
+           Home        → _activeDayIndex = index of first day of current week (round down to nearest multiple of 7)
+           End         → _activeDayIndex = index of last day of current week (round up to nearest multiple of 7, minus 1)
+           PageDown    → call existing next-month navigation; keep same day-of-month if possible, else clamp to last day
+           PageUp      → call existing prev-month navigation; same clamping
+           Tab         → do NOT prevent default; let browser handle Tab to exit the grid naturally
+       - After _activeDayIndex changes: await JsInterop.FocusElement(_dayCellRefs[_activeDayIndex])
+
+       Step D — aria-label on each day cell button:
+       - Add aria-label="@dateTime.ToString("dddd, MMMM d", culture) — @timesDone @Loc["times done"]" to each day cell button so screen readers announce the full date and completion count
 
 ---------------------------------------------------------------------------------------------------
 
