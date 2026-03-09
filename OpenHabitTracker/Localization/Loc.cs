@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 
 namespace OpenHabitTracker.Localization;
 
@@ -10,21 +10,26 @@ public class Loc
 
     public static Dictionary<string, Loc> Cultures { get; } = new()
     {
+        { "cs", new() { Language = "čeština", Culture = new CultureInfo("cs") } },
         { "da", new() { Language = "dansk", Culture = new CultureInfo("da") } },
         { "de", new() { Language = "Deutsch", Culture = new CultureInfo("de") } },
         { "en", new() { Language = "English", Culture = new CultureInfo("en") } },
         { "es", new() { Language = "español", Culture = new CultureInfo("es") } },
         { "fi", new() { Language = "suomi", Culture = new CultureInfo("fi") } },
         { "fr", new() { Language = "français", Culture = new CultureInfo("fr") } },
+        { "hr", new() { Language = "hrvatski", Culture = new CultureInfo("hr") } },
         { "it", new() { Language = "italiano", Culture = new CultureInfo("it") } },
         { "ja", new() { Language = "日本語", Culture = new CultureInfo("ja") } },
         { "ko", new() { Language = "한국어", Culture = new CultureInfo("ko") } },
         { "nl", new() { Language = "Nederlands", Culture = new CultureInfo("nl") } },
         { "no", new() { Language = "norsk", Culture = new CultureInfo("no") } },
+        { "pl", new() { Language = "polski", Culture = new CultureInfo("pl") } },
         { "pt", new() { Language = "português", Culture = new CultureInfo("pt") } },
+        { "sk", new() { Language = "slovenčina", Culture = new CultureInfo("sk") } },
+        { "sl", new() { Language = "slovenščina", Culture = new CultureInfo("sl") } },
+        { "sr", new() { Language = "srpski", Culture = new CultureInfo("sr") } },
         { "sv", new() { Language = "svenska", Culture = new CultureInfo("sv") } },
-        { "zh", new() { Language = "中文", Culture = new CultureInfo("zh") } },
-        { "sl", new() { Language = "slovenščina", Culture = new CultureInfo("sl") } }
+        { "zh", new() { Language = "中文", Culture = new CultureInfo("zh") } }
     };
 
     public static void SetCulture(string code)

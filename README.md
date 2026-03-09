@@ -12,7 +12,7 @@ Take Markdown notes, plan tasks, track habits
 - Open Source
 - Privacy Focused: All user data is stored locally on your device
 - Available on Windows, Linux, Android, iOS, macOS, and as a web app
-- Localized to English, German, Spanish, Slovenian, French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish
+- Localized to English, German, Spanish, Slovenian, French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Czech, Slovak, Croatian, Serbian
 
 Key Features:
 
