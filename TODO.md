@@ -1,15 +1,8 @@
 # TODO:
 
-write Appium unit tests:
-
-https://learn.microsoft.com/en-us/samples/dotnet/maui-samples/uitest-appium-nunit/
-https://github.com/dotnet/maui-samples/tree/main/8.0/UITesting/BasicAppiumNunitSample
-
-https://devblogs.microsoft.com/dotnet/dotnet-maui-ui-testing-appium/
-
 ---------------------------------------------------------------------------------------------------
 
-find out why `padding-left: 12px !important;` is needed on iOS - try: `padding-left: env(safe-area-inset-left) !important;`
+find out why `padding-left: 12px !important;` is needed on iOS - why `padding-left: env(safe-area-inset-left) !important;` doesn't work
 
 ---------------------------------------------------------------------------------------------------
 
@@ -581,6 +574,26 @@ virtualized container
 benchmark: method time & render time
 method trace logging - benchmark method performance
 https://learn.microsoft.com/en-us/aspnet/core/blazor/performance
+
+---------------------------------------------------------------------------------------------------
+
+bUnit - Always invisible (in-memory, no browser/device)
+Playwright - Configurable — headless (invisible) or headed (visible)
+Appium - Always visible — real device or emulator screen
+
+write Appium integration tests:
+
+The only things Appium could uniquely cover that Playwright can't:
+    App launch on device — does the MAUI shell start without crashing on Android/iOS/Windows?
+    Android back button — does pressing the hardware back button behave correctly (navigate back vs. exit)?
+    iOS swipe-back gesture — does swiping from the left edge navigate back?
+    App lifecycle — does the app resume correctly after being backgrounded (e.g., data not lost after switching apps)?
+    Permissions dialogs — if you ever add camera/storage/notification permissions, Appium can tap "Allow" on the native OS dialog.
+
+https://learn.microsoft.com/en-us/samples/dotnet/maui-samples/uitest-appium-nunit/
+https://github.com/dotnet/maui-samples/tree/main/8.0/UITesting/BasicAppiumNunitSample
+
+https://devblogs.microsoft.com/dotnet/dotnet-maui-ui-testing-appium/
 
 ---------------------------------------------------------------------------------------------------
 
