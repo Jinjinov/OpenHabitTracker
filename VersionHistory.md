@@ -1,3 +1,12 @@
+# 1.1.6 - Mar 14, 2026
+
+- added 16 new languages: French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Slovak, Czech, Croatian, Serbian
+- improved accessibility: navigation landmarks, ARIA labels, keyboard navigation
+- fixed Google Keep import
+- fixed date comparison bug
+- fixed keyboard covered text input on Android
+- fixed login session expiring on Docker VM suspension
+
 # 1.1.5 - Feb 14, 2025
 
 - replaced "X" with "Close"
