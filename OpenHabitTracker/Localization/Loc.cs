@@ -16,7 +16,9 @@ public class Loc
         { "fr", new() { Language = "français", Culture = new CultureInfo("fr") } },
         { "it", new() { Language = "italiano", Culture = new CultureInfo("it") } },
         { "ja", new() { Language = "日本語", Culture = new CultureInfo("ja") } },
+        { "ko", new() { Language = "한국어", Culture = new CultureInfo("ko") } },
         { "pt", new() { Language = "português", Culture = new CultureInfo("pt") } },
+        { "zh", new() { Language = "中文", Culture = new CultureInfo("zh") } },
         { "sl", new() { Language = "slovenščina", Culture = new CultureInfo("sl") } }
     };
 

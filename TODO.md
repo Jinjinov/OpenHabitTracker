@@ -133,7 +133,10 @@ accessibility:
 
 ---------------------------------------------------------------------------------------------------
 
-add French, Portuguese, Italian, Japanese in OpenHabitTracker\OpenHabitTracker\Localization\Resources
+add Chinese, Korean, 
+Dutch, Swedish, Norwegian, Danish, 
+Polish, Slovak, Czech, Croatian, Serbian 
+in OpenHabitTracker\OpenHabitTracker\Localization\Resources
 
 ---------------------------------------------------------------------------------------------------
 
