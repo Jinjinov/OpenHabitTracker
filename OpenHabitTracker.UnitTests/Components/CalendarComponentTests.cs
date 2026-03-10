@@ -105,4 +105,32 @@ public class CalendarComponentTests
 
         Assert.That(firstDayAfter, Is.Not.EqualTo(firstDayBefore));
     }
+
+    [Test]
+    public void MonthView_Renders_FortyTwoCells()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        IReadOnlyList<IElement> dayCells = cut.FindAll("div.d-flex > button");
+
+        Assert.That(dayCells, Has.Count.EqualTo(42));
+    }
+
+    [Test]
+    public async Task MonthView_DayCellClick_ShowsCountControls()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        await cut.Find("div.d-flex > button").ClickAsync(new MouseEventArgs());
+
+        IElement countControls = cut.Find("div.input-group.mt-1");
+
+        Assert.That(countControls, Is.Not.Null);
+    }
 }
