@@ -1,6 +1,7 @@
 .vs
 .vscode
 .idea
+.claude
 bin
 obj
 *.user
