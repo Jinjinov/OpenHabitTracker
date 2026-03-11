@@ -184,11 +184,9 @@ SUBMIT DESKTOP VIDEO (1920x1080) TO:
         also upload a 1920x1080 PNG "Super Hero Art" image 
         (required for trailer to appear at top of listing)
     - macOS App Store: upload MP4 in App Store Connect
-    - Snap Store: paste desktop YouTube URL in Snap developer dashboard
 
 SUBMIT MOBILE VIDEO (886x1920) TO:
     - iOS App Store: upload MP4 in App Store Connect
-    - Google Play: paste mobile YouTube URL in Play Console
 
 2.
 exact repeating reminders, like Google Keep
