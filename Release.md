@@ -1,4 +1,8 @@
 - increase version number
+- increase ApplicationVersion
+
+- create tag on git
+- update commit hash in net.openhabittracker.OpenHabitTracker.yaml
 
 - update VersionHistory.md
 
