@@ -55,19 +55,6 @@ You must upload a screenshot for 5.5-inch iPhone displays.
 
 ---------------------------------------------------------------------------------------------------
 
-.NET runtime version: 8.0.8
-.NET SDK version: 8.0.400
-dotnet workload version: 8.0.82 for windows, 34.0.138 for Android, 17.5.8030 for iOS, macOS
-NuGet package version: 8.0.8
-
-Windows version: 10.0.19041.0
-Windows supported version: 10.0.17763.0
-Windows SDK version: 1.5.240607001
-Android SDK version: 34 - one version of Android Studion - for multiple Android SDK versions just select and download them
-iOS version: 17.5 - each version of Xcode comes with its own SDK version - for multiple SDK versions install multiple versions of Xcode (rename the .app before installing new version)
-Xcode version: 15.4
-macOS version: 14.4
-
 https://github.com/dotnet/maui/wiki/Release-Versions
 
 `dotnet --info`
@@ -76,25 +63,13 @@ https://github.com/dotnet/maui/wiki/Release-Versions
 
 `dotnet workload list`
 
-Installed Workload Id      Manifest Version       Installation Source
----------------------------------------------------------------------------------
-android                    34.0.138/8.0.100       SDK 8.0.400, VS 17.11.35303.130
-aspire                     8.2.0/8.0.100          SDK 8.0.400, VS 17.11.35303.130
-ios                        17.5.8030/8.0.100      SDK 8.0.400, VS 17.11.35303.130
-maccatalyst                17.5.8030/8.0.100      SDK 8.0.400, VS 17.11.35303.130
-maui-windows               8.0.82/8.0.100         SDK 8.0.400, VS 17.11.35303.130
-wasm-tools                 8.0.8/8.0.100          SDK 8.0.400, VS 17.11.35303.130
-
 `dotnet workload update`
 
 `dotnet nuget locals all --list`
 
 `dotnet nuget locals all --clear`
 
-NuGet package versions: MauiVersion == Manifest Version
-    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
+---------------------------------------------------------------------------------------------------
 
 Publish Windows:
 
@@ -224,29 +199,11 @@ workaround: TValue="int" / TValue="long" for <InputNumber> <InputSelect> <InputD
 
 ---------------------------------------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Components.Forms; InputFile / download
-using Microsoft.Maui.Storage; IFilePicker / namespace CommunityToolkit.Maui.Storage; interface IFileSaver
-using Microsoft.Win32; OpenFileDialog / SaveFileDialog
-using System.Windows.Forms; OpenFileDialog / SaveFileDialog
-
-PhotinoBlazorApp app = builder.Build();
-    app.MainWindow.ShowSaveFile();
-    app.MainWindow.ShowOpenFile();
-
----------------------------------------------------------------------------------------------------
-
 Blazor's enhanced navigation and form handling avoid the need for a full-page reload and preserves more of the page state
     https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-8.0#enhanced-navigation-and-form-handling
 
 Blazor NavigationManager.NavigateTo always scrolls page to the top
     https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1324689082
-
----------------------------------------------------------------------------------------------------
-
-Localization:
-
-https://learn.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-8.0
-https://github.com/xaviersolau/BlazorJsonLocalization
 
 ---------------------------------------------------------------------------------------------------
 
@@ -257,6 +214,8 @@ https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web.JS/src/Platfor
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web/src/Web/ErrorBoundary.cs#L48
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web/src/Forms/ValidationSummary.cs#L76
 https://github.com/dotnet/aspnetcore/blob/main/src/Components/Web/src/Forms/ValidationMessage.cs#L74
+
+---------------------------------------------------------------------------------------------------
 
 The following built-in Razor components are provided by the Blazor framework:
 
@@ -312,284 +271,6 @@ ValidationSummary			https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspne
 Virtualize					https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.web.virtualization.virtualize-1?view=aspnetcore-8.0
 
 ---------------------------------------------------------------------------------------------------
-
-- Calendar
-    - 7 row, one for each day of the week
-    - 6 columns = one month - 4 full weeks = 28 - another 0/1/2/3 days can take max 2 weeks more
-    - find the last monday of the previous month
-        DateTime currentDate = DateTime.Now;
-        DateTime lastDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-        DateTime lastMonday = lastDayOfMonth.AddDays((int)DayOfWeek.Monday - (int)lastDayOfMonth.DayOfWeek);
-    - previous month DaysInMonth
-    - this month DaysInMonth
-    - next month until sunday - until max 14.
-
----------------------------------------------------------------------------------------------------
-
-public class ApplicationDbContext : DbContext
-{
-    public DbSet<ListItem> Items { get; set; }
-    private const string DatabaseName = "myItems.db";
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        String databasePath;
-        switch (Device.RuntimePlatform)
-        {
-            case Device.iOS:
-                databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library", DatabaseName);
-                break;
-            case Device.Android:
-                databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), DatabaseName);
-                break;
-            default:
-                throw new NotImplementedException("Platform not supported");
-        }
-        optionsBuilder.UseSqlite($"Filename={databasePath}"); // “Filename” and “DataSource” are aliases for “Data Source”
-    }
-}
-
-SQLitePCL.Batteries_V2.Init();
-
-[assembly: Preserve(typeof(System.Linq.Queryable), AllMembers = true)]
-[assembly: Preserve(typeof(System.DateTime), AllMembers = true)]
-[assembly: Preserve(typeof(System.Linq.Enumerable), AllMembers = true)]
-[assembly: Preserve(typeof(System.Linq.IQueryable), AllMembers = true)]
-
-Microsoft.Data.Sqlite.SqliteException: 'SQLite Error 14: 'unable to open database file'.'
-
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-var sqlitePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"OlsonSoftware\FinanceManager");
-Directory.CreateDirectory(sqlitePath);
-optionsBuilder.UseSqlite($"Data Source={sqlitePath}\fmd.db");
-
----------------------------------------------------------------------------------------------------
-
-https://github.com/EdCharbeneau/BlazorSize/wiki
-
-// wwwroot/js/interop.js
-window.getScreenWidth = function () {
-    return window.innerWidth;
-};
-
-window.addEventListener("resize", function() {
-    var screenWidth = window.innerWidth;
-    DotNet.invokeMethodAsync('YourAssemblyName', 'UpdateScreenWidth', screenWidth);
-});
-
-@code {
-    int screenWidth;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            screenWidth = await JsRuntime.InvokeAsync<int>("getScreenWidth");
-        }
-    }
-
-    [JSInvokable]
-    public async Task UpdateScreenWidth(int screenWidth)
-    {
-        this.screenWidth = screenWidth;
-        StateHasChanged();
-    }
-}
-
----------------------------------------------------------------------------------------------------
-
-The path that works is within the App Sandbox:
-    ~/Library/Containers/app-bundle-id/Data/
-    /Users/ddarby/Library/Containers/com.cerescape.Accountable/Data/Documents/
-
-System.Environment.SpecialFolder.ApplicationData
-System.Environment.SpecialFolder.LocalApplicationData
-
-Microsoft.Maui.Storage.FileSystem.Current.CacheDirectory
-"C:\\Users\\Urban\\AppData\\Local\\Packages\\ididit.blazor.maui_9zz4h110yvjzm\\LocalCache"
-
-Microsoft.Maui.Storage.FileSystem.Current.AppDataDirectory
-"C:\\Users\\Urban\\AppData\\Local\\Packages\\ididit.blazor.maui_9zz4h110yvjzm\\LocalState"
-
-public string CacheDirectory
-    => PlatformCacheDirectory;
-
-public string AppDataDirectory
-    => PlatformAppDataDirectory;
-
-static string CleanPath(string path) =>
-    string.Join("_", path.Split(Path.GetInvalidFileNameChars()));
-
-static string AppSpecificPath =>
-    Path.Combine(CleanPath(AppInfoImplementation.PublisherName), CleanPath(AppInfo.PackageName));
-
-string PlatformCacheDirectory
-    => AppInfoUtils.IsPackagedApp
-        ? ApplicationData.Current.LocalCacheFolder.Path
-        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppSpecificPath, "Cache");
-
-string PlatformAppDataDirectory
-    => AppInfoUtils.IsPackagedApp
-        ? ApplicationData.Current.LocalFolder.Path
-        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppSpecificPath, "Data");
-
----------------------------------------------------------------------------------------------------
-
-Bug: Release version on Android shows loading screen and immediately closes - Debug version works ok
-
-How to debug: open Logcat in Android studio, set filter to "level:ERROR", start Android emulator, start the Release version
-
-2024-08-29 22:24:47.732 29433-29433 penhabittracker         
-net.openhabittracker                 
-E  * Assertion at /__w/1/s/src/mono/mono/mini/aot-runtime.c:3810, 
-condition `is_ok (error)' not met, 
-function:decode_patch, 
-module 'OpenHT.dll.so' is unusable (GUID of dependent assembly Microsoft.AspNetCore.Components.WebView.Maui doesn't match (expected '25DD9A5A-6B30-4279-9CB3-056987FB48E7', got '7D3793C6-311B-4DDD-9CF3-6EC16FF9BC9D'))
-
-Delete bin and obj folders from your project.
-Clear the local NuGet cache on your machine.
-
-https://devblogs.microsoft.com/visualstudio/introducing-visual-studio-rollback/
-
-/p:RunAOTCompilation=False /p:PublishTrimmed=False
-
-AndroidLinkMode=None is the same as setting PublishTrimmed=false
-
-<PropertyGroup>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <RunAOTCompilation>False</RunAOTCompilation>
-    <PublishTrimmed>False</PublishTrimmed>
-</PropertyGroup>
-
-<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and $(Configuration)=='Release'">
-    <AndroidLinkResources>true</AndroidLinkResources>
-    <AndroidLinkMode>None</AndroidLinkMode>
-    <RunAOTCompilation>false</RunAOTCompilation>
-    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-</PropertyGroup>
-
-<PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and $(Configuration)=='Release'">
-    <MtouchLink>None</MtouchLink>
-</PropertyGroup>
-
-<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
-    <AndroidLinkMode>None</AndroidLinkMode>
-    <RunAOTCompilation>false</RunAOTCompilation>
-    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-</PropertyGroup>
-
----------------------------------------------------------------------------------------------------
-
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#global-exception-handling
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#error-boundaries
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#alternative-global-exception-handling
-
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#places-where-errors-may-occur
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#component-instantiation
-https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/handle-errors?view=aspnetcore-8.0#lifecycle-methods
-
-add `@using Microsoft.Extensions.Logging` @inject ILogger Logger
-
-https://stackoverflow.com/questions/57539330/is-there-a-way-to-globally-catch-all-unhandled-errors-in-a-blazor-single-page-ap
-https://stackoverflow.com/questions/66695516/tracking-down-unhandled-exceptions-in-blazor-webassembly
-https://stackoverflow.com/questions/75534867/how-to-globally-handle-catch-exceptions-in-blazor-server-c-sharp
-
-https://stackoverflow.com/questions/70198098/catch-and-display-on-the-page-any-error-in-a-net-maui-blazor-project
-https://github.com/bUnit-dev/bUnit/issues/410
-https://github.com/bUnit-dev/bUnit/pull/418
-
-To use <ErrorBoundary> the DI needs IErrorBoundaryLogger
-You should check if each platform already registers IErrorBoundaryLogger on start to DI with AddSingleton<IErrorBoundaryLogger, ErrorBoundaryLogger>();
-If it does not register it, write your own and register it
-
-https://github.com/dotnet/maui/issues/4502
-https://github.com/dotnet/aspnetcore/blob/main/src/Components/WebAssembly/WebAssembly/src/Services/WebAssemblyErrorBoundaryLogger.cs
-
-public sealed class ErrorBoundaryLogger : IErrorBoundaryLogger
-{
-    private readonly ILogger<ErrorBoundary> _errorBoundaryLogger;
-
-    public ErrorBoundaryLogger(ILogger<ErrorBoundary> errorBoundaryLogger)
-    {
-        _errorBoundaryLogger = errorBoundaryLogger ?? throw new ArgumentNullException(nameof(errorBoundaryLogger));
-    }
-
-    public ValueTask LogErrorAsync(Exception exception)
-    {
-        // For client-side code, all internal state is visible to the end user.
-        // We can just log directly to the console.
-        _errorBoundaryLogger.LogError(exception, "ErrorBoundary");
-
-        return ValueTask.CompletedTask;
-    }
-}
-
-https://stackoverflow.com/questions/50744024/iloggerfactory-vs-servicecollection-addlogging-vs-webhostbuilder-configureloggin
-
----------------------------------------------------------------------------------------------------
-
-PhotinoWebViewManager.cs
-
-        public Stream HandleWebRequest(object sender, string schema, string url, out string contentType)
-        {
-            // Intercept web requests to external websites (e.g., app://github.com) and open the link in the user's
-            // browser.
-            if (!url.Contains("localhost") && !url.Contains("0.0.0.0"))
-            {
-                Process.Start(new ProcessStartInfo(url.Replace($"{schema}://", "http://")) { UseShellExecute = true });
-                contentType = default;
-                return null;
-            }
-
-            // It would be better if we were told whether or not this is a navigation request, but
-            // since we're not, guess.
-            var localPath = (new Uri(url)).LocalPath;
-            var hasFileExtension = localPath.LastIndexOf('.') > localPath.LastIndexOf('/');
-
-            //Remove parameters before attempting to retrieve the file. For example: http://localhost/_content/Blazorise/button.js?v=1.0.7.0
-            if (url.Contains('?')) url = url.Substring(0, url.IndexOf('?'));
-
-            if (url.StartsWith(AppBaseUri, StringComparison.Ordinal)
-                && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage,
-                    out var content, out var headers))
-            {
-                headers.TryGetValue("Content-Type", out contentType);
-                return content;
-            }
-            else
-            {
-                contentType = default;
-                return null;
-            }
-        }
-
----------------------------------------------------------------------------------------------------
-
-https://v2.tauri.app/distribute/flatpak/
-
-runtime: org.gnome.Platform
-runtime-version: '46'
-sdk: org.gnome.Sdk
-
-https://v2.tauri.app/distribute/snapcraft/
-
-layout:
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.1:
-    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.1
-
-build-packages:
-      libwebkit2gtk-4.1-dev
-
-stage-packages:
-      libwebkit2gtk-4.1-0
-
----------------------------------------------------------------------------------------------------
-
-https://docs.tryphotino.io/Photino-Comparison-with-Electron
-https://github.com/tryphotino/photino.Documentation/issues/18
-https://github.com/tryphotino/photino.Samples/tree/debug/Photino.PublishPhotino
 
 Snap: Preinstalled on Ubuntu and derivatives, available for other distros but not preinstalled.
     https://snapcraft.io/docs/dotnet-apps
@@ -816,62 +497,6 @@ docker push ghcr.io/jinjinov/openhabittracker:latest
 https://github.com/users/Jinjinov/packages/container/package/openhabittracker
 
 https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker
-
----------------------------------------------------------------------------------------------------
-
-id: com.daniel15.wcc
-runtime: org.gnome.Platform
-runtime-version: "47"
-sdk: org.gnome.Sdk
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.dotnet8
-build-options:
-  prepend-path: "/usr/lib/sdk/dotnet8/bin"
-  append-ld-library-path: "/usr/lib/sdk/dotnet8/lib"
-  prepend-pkg-config-path: "/usr/lib/sdk/dotnet8/lib/pkgconfig"
-  arch:
-    aarch64:
-      env:
-        - RUNTIME=linux-arm64
-    x86_64:
-      env:
-        - RUNTIME=linux-x64
-
-command: webcamcontrol
-
-finish-args:
-  # Required for access to webcams (/sys/class/video4linux/ and /dev/video*) 
-  - --device=all
-  - --env=DOTNET_ROOT=/app/lib/dotnet
-  - --share=ipc
-  - --socket=wayland
-  - --socket=fallback-x11
-
-modules:
-  - name: blueprint-compiler
-    buildsystem: meson
-    cleanup:
-      - "*"
-    sources:
-      - type: git
-        url: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
-        tag: v0.14.0
-
-  - name: WebCamControl
-    buildsystem: simple
-    sources:
-      - type: git
-        url: https://github.com/Daniel15/WebCamControl.git
-        commit: f1c4a644101b2010ccfa3d767bcd95299eceb735
-      - ./nuget-sources.json
-    build-commands:
-      - dotnet msbuild src/WebCamControl.Gtk/WebCamControl.Gtk.csproj /t:BlueprintBuild
-      - dotnet publish src/WebCamControl.Gtk/WebCamControl.Gtk.csproj -c Release --runtime $RUNTIME --source ./nuget-sources --source /usr/lib/sdk/dotnet8/nuget/packages --self-contained true
-      - mkdir -p ${FLATPAK_DEST}/bin
-      - cp -r --remove-destination src/WebCamControl.Gtk/bin/Release/net8.0/$RUNTIME/publish/* ${FLATPAK_DEST}/bin
-      - install -D src/WebCamControl.Gtk/icon-512x512.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/com.daniel15.wcc.png
-      - install -D src/WebCamControl.Gtk/com.daniel15.wcc.desktop ${FLATPAK_DEST}/share/applications/com.daniel15.wcc.desktop
-      - install -D src/WebCamControl.Gtk/com.daniel15.wcc.metainfo.xml ${FLATPAK_DEST}/share/metainfo/com.daniel15.wcc.metainfo.xml
 
 ---------------------------------------------------------------------------------------------------
 
