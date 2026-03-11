@@ -1,6 +1,7 @@
 @* @page "/menu" *@
 
 @inject IStringLocalizer Loc
+@inject IJsInterop JsInterop
 
 @* <PageTitle>OpenHabitTracker - Menu</PageTitle> *@
 
@@ -8,7 +9,7 @@
 
     <div class="my-1">
 
-        <div class="list-group">
+        <div class="list-group" role="menu" @onkeydown="HandleKeyDown">
             @* @if (WindowDimensions?.Width >= 1280 || WindowDimensions?.Width < 768)
             {
                 <NavLink class="list-group-item list-group-item-action" href="/" @onclick="CloseMenu" Match=NavLinkMatch.All><i class="bi bi-house"></i> @Loc["Home"]</NavLink>
@@ -18,14 +19,14 @@
             @* <NavLink class="list-group-item list-group-item-action" href="habits" @onclick="CloseMenu"><i class="bi bi-repeat"></i> @Loc["Habits"]</NavLink> *@
             @* <NavLink class="list-group-item list-group-item-action" href="about" @onclick="CloseMenu"><i class="bi bi-info-circle"></i> @Loc["About"]</NavLink> *@
 
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Trash>"><i class="bi bi-trash" aria-hidden="true"></i> @Loc["Trash"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Search>"><i class="bi bi-search" aria-hidden="true"></i> @Loc["Search, Filter, Sort"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Settings>"><i class="bi bi-gear" aria-hidden="true"></i> @Loc["Settings"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Categories>"><i class="bi bi-tag" aria-hidden="true"></i> @Loc["Categories"]</button>
+            <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 0 ? 0 : -1)" @ref="_items[0]" @onclick="() => SelectComponentAt<Trash>(0)"><i class="bi bi-trash" aria-hidden="true"></i> @Loc["Trash"]</button>
+            <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 1 ? 0 : -1)" @ref="_items[1]" @onclick="() => SelectComponentAt<Search>(1)"><i class="bi bi-search" aria-hidden="true"></i> @Loc["Search, Filter, Sort"]</button>
+            <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 2 ? 0 : -1)" @ref="_items[2]" @onclick="() => SelectComponentAt<Settings>(2)"><i class="bi bi-gear" aria-hidden="true"></i> @Loc["Settings"]</button>
+            <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 3 ? 0 : -1)" @ref="_items[3]" @onclick="() => SelectComponentAt<Categories>(3)"><i class="bi bi-tag" aria-hidden="true"></i> @Loc["Categories"]</button>
             @* <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Priorities>">@Loc["Priorities"]</button> *@
             @* <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Backup>">@Loc["Backup"]</button> *@
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<Data>"><i class="bi bi-database" aria-hidden="true"></i> @Loc["Data"]</button>
-            <button class="list-group-item list-group-item-action" @onclick="SelectComponent<About>"><i class="bi bi-info-circle" aria-hidden="true"></i> @Loc["About"]</button>
+            <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 4 ? 0 : -1)" @ref="_items[4]" @onclick="() => SelectComponentAt<Data>(4)"><i class="bi bi-database" aria-hidden="true"></i> @Loc["Data"]</button>
+            <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 5 ? 0 : -1)" @ref="_items[5]" @onclick="() => SelectComponentAt<About>(5)"><i class="bi bi-info-circle" aria-hidden="true"></i> @Loc["About"]</button>
         </div>
 
     </div>
@@ -41,6 +42,40 @@
 
     [Parameter]
     public Dimensions? WindowDimensions { get; set; }
+
+    ElementReference[] _items = new ElementReference[6];
+    int _focusedIndex = 0;
+
+    async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "ArrowDown":
+            case "ArrowRight":
+                _focusedIndex = (_focusedIndex + 1) % _items.Length;
+                await JsInterop.FocusElement(_items[_focusedIndex]);
+                break;
+            case "ArrowUp":
+            case "ArrowLeft":
+                _focusedIndex = (_focusedIndex - 1 + _items.Length) % _items.Length;
+                await JsInterop.FocusElement(_items[_focusedIndex]);
+                break;
+            case "Home":
+                _focusedIndex = 0;
+                await JsInterop.FocusElement(_items[0]);
+                break;
+            case "End":
+                _focusedIndex = _items.Length - 1;
+                await JsInterop.FocusElement(_items[^1]);
+                break;
+        }
+    }
+
+    async Task SelectComponentAt<T>(int index)
+    {
+        _focusedIndex = index;
+        await SelectComponent<T>();
+    }
 
     async Task SelectComponent<T>()
     {
