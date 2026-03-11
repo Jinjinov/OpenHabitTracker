@@ -294,19 +294,19 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
     newgrp lxd
 
     To build snapcraft.yaml run:
-    snapcraft pack --debug
+        snapcraft pack --debug
 
-    sudo snap install openhabittracker_1.1.5_amd64.snap --dangerous --devmode
+        sudo snap install openhabittracker_1.1.5_amd64.snap --dangerous --devmode
 
-    snap list
+        snap list
 
-    snap run openhabittracker
+        snap run openhabittracker
 
-    snapcraft login
+        snapcraft login
 
-    snapcraft upload --release=stable openhabittracker_1.1.5_amd64.snap
+        snapcraft upload --release=stable openhabittracker_1.1.5_amd64.snap
 
-    snapcraft status openhabittracker
+        snapcraft status openhabittracker
 
     https://snapcraft.io/docs/registering-your-app-name
     https://snapcraft.io/account
@@ -325,7 +325,6 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 ---------------------------------------------------------------------------------------------------
 
 Flatpak: Preinstalled on Fedora, available for other distros but not preinstalled.
-    error: 'net.openhabittracker' is not a valid application name: Names must contain at least 2 periods
 
     https://github.com/flathub/org.freedesktop.Sdk.Extension.dotnet9
 
@@ -353,27 +352,11 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
         sudo apt update
         sudo apt install flatpak-builder
 
-    runtime: org.freedesktop.Platform
-    runtime-version: '23.08'
-    sdk: org.freedesktop.Sdk
-
-    org.freedesktop.Platform, org.freedesktop.Sdk
-    org.gnome.Platform, org.gnome.Sdk
-    org.kde.Platform, org.kde.Sdk
-    io.elementary.Platform, io.elementary.Sdk
-
 git rev-parse 1.1.5
 
 git ls-remote https://github.com/Jinjinov/OpenHabitTracker.git refs/tags/1.1.5
 
     flatpak-builder build-dir --user --install-deps-from=flathub --download-only net.openhabittracker.OpenHabitTracker.yaml --force-clean
-
-    <Configuration>Release</Configuration>
-    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-    <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>true</SelfContained>
-
-    ??? flatpak install flathub org.freedesktop.Sdk/x86_64/25.08 ???
 
 from parent of OpenHabitTracker:
 
@@ -394,7 +377,6 @@ from parent of OpenHabitTracker:
     flatpak-builder build-dir --user --force-clean --install --repo=repo net.openhabittracker.OpenHabitTracker.yaml
 
     Error: Failure spawning rofiles-fuse, exit_status: 1024
-
     flatpak-builder build-dir --user --force-clean --install --repo=repo net.openhabittracker.OpenHabitTracker.yaml --disable-rofiles-fuse
 
     flatpak run net.openhabittracker.OpenHabitTracker
@@ -472,31 +454,31 @@ DO NOT RUN DOCKER IMAGE FROM THE UI, BECAUSE docker-compose.yml IS NOT USED!!!
 
 Docker Hub:
 
-docker login
+    docker login
 
-docker tag openhabittracker jinjinov/openhabittracker:1.1.5
-docker push jinjinov/openhabittracker:1.1.5
+    docker tag openhabittracker jinjinov/openhabittracker:1.1.5
+    docker push jinjinov/openhabittracker:1.1.5
 
-docker tag openhabittracker jinjinov/openhabittracker:latest
-docker push jinjinov/openhabittracker:latest
+    docker tag openhabittracker jinjinov/openhabittracker:latest
+    docker push jinjinov/openhabittracker:latest
 
-https://hub.docker.com/repository/docker/jinjinov/openhabittracker
+    https://hub.docker.com/repository/docker/jinjinov/openhabittracker
 
-https://hub.docker.com/r/jinjinov/openhabittracker
+    https://hub.docker.com/r/jinjinov/openhabittracker
 
 GitHub Container Registry:
 
-echo <GitHubToken> | docker login ghcr.io -u Jinjinov --password-stdin
+    echo <GitHubToken> | docker login ghcr.io -u Jinjinov --password-stdin
 
-docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:1.1.5
-docker push ghcr.io/jinjinov/openhabittracker:1.1.5
+    docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:1.1.5
+    docker push ghcr.io/jinjinov/openhabittracker:1.1.5
 
-docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:latest
-docker push ghcr.io/jinjinov/openhabittracker:latest
+    docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:latest
+    docker push ghcr.io/jinjinov/openhabittracker:latest
 
-https://github.com/users/Jinjinov/packages/container/package/openhabittracker
+    https://github.com/users/Jinjinov/packages/container/package/openhabittracker
 
-https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker
+    https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker
 
 ---------------------------------------------------------------------------------------------------
 
