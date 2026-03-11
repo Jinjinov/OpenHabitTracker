@@ -120,34 +120,47 @@ accessibility:
        Step A — inject IJsInterop (not currently present):
        - Add @inject IJsInterop JsInterop at the top
 
-       Step B — ARIA roles:
-       - Outermost row-container div (wrapping all @for row loops): add role="grid" aria-label="@Loc["Calendar"]"
-       - Each week row <div class="d-flex">: add role="row"
-       - Each day-of-week header <div>: add role="columnheader" scope="col"
-       - Each day <button>: add role="gridcell"
+       Step B — ARIA roles + restructure template:
+       - The rows loop has no wrapper div today — CREATE a new one wrapping both the header row and data rows:
+           // nav buttons stay outside the grid
+           @if (DisplayMonth) { <div class="input-group mb-1">...</div> }
+
+           <div role="grid" aria-label="@Loc["Calendar"]" @onkeydown="HandleGridKeyDown">
+               @if (DisplayMonth) {
+                   <div class="bg-body d-flex" role="row">   // header row moved INSIDE grid
+                       <div role="columnheader" scope="col" ...>@day</div>  // each header cell
+                   </div>
+               }
+               @for (int row ...) {
+                   <div class="d-flex" role="row">            // each data row
+                       <button role="gridcell" ...>           // each day cell
+                   </div>
+               }
+           </div>
 
        Step C — roving tabindex state (same as Menu.razor):
        - Add int _activeDayIndex = 0
-       - Add ElementReference[] _dayCellRefs = new ElementReference[42] for month mode; re-size when daysInRow changes for strip mode
-       - In the day cell loop capture flat index: int cellIndex = row * daysInRow + day
+       - Add ElementReference[] _dayCellRefs = new ElementReference[rowCount * daysInRow]; re-create in OnParametersSetAsync after rowCount/daysInRow are set
+       - In the day cell loop: int cellIndex = row * daysInRow + day  (already used for GetCalendarDay — capture as local var so lambda closes over it correctly)
        - On each button: tabindex="@(cellIndex == _activeDayIndex ? 0 : -1)" and @ref="_dayCellRefs[cellIndex]"
-       - Update DayClicked to also accept int index: set _activeDayIndex = index (focus already there from click)
+       - Update DayClicked to also accept int index: set _activeDayIndex = index (focus is already there from click)
 
        Step D — keyboard handler:
-       - Add @onkeydown="HandleGridKeyDown" to the role="grid" div (no preventDefault needed — arrow keys on focused buttons do not scroll)
+       - @onkeydown="HandleGridKeyDown" goes on the new role="grid" div (no preventDefault needed — arrow keys on focused buttons do not scroll)
        - In HandleGridKeyDown:
-           ArrowRight / ArrowLeft → ±1; if overflows/underflows, call next/prev month or week nav and set _activeDayIndex = 0 / last
-           ArrowDown  / ArrowUp   → ±daysInRow (±7 in month, ±1 in strip); same overflow handling
-           Home → _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow  (first cell of current row)
+           ArrowRight / ArrowLeft → ±1; if overflows/underflows, call next/prev nav and set _activeDayIndex = 0 / last
+           ArrowDown  / ArrowUp   → ±daysInRow; same overflow handling (in strip mode daysInRow == total cells so always overflows → navigates to next/prev strip)
+           Home → _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow        (first cell of current row)
            End  → _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow + daysInRow - 1  (last cell of current row)
-           PageDown → call existing next-month/week nav; set _activeDayIndex = 0
-           PageUp   → call existing prev-month/week nav; set _activeDayIndex = 0
+           PageDown → if (DisplayMonth) SetCalendarStartToNextMonth(FirstDayOfWeek) else SetCalendarStartToNextWeek(); _activeDayIndex = 0
+           PageUp   → if (DisplayMonth) SetCalendarStartToPreviousMonth(FirstDayOfWeek) else SetCalendarStartToPreviousWeek(); _activeDayIndex = 0
            Tab      → unhandled — falls through switch, bubbles naturally, focus exits grid
        - After _activeDayIndex changes: await JsInterop.FocusElement(_dayCellRefs[_activeDayIndex])
 
        Step E — aria-label on each day cell button:
-       - Add aria-label="@dateTime.ToString("dddd, MMMM d") — @timesDone @Loc["times done"]"
-       - No culture parameter needed; DateTime.ToString(format) uses CultureInfo.CurrentCulture by default, which Loc.SetCulture() keeps in sync with the user's chosen language
+       - Use list?.Count ?? 0 for the count (not timesDone — that string is "" for 0 and 1 completions, wrong for screen readers)
+       - Add aria-label="@dateTime.ToString("dddd, MMMM d") — @(list?.Count ?? 0) @Loc["times done"]"
+       - DateTime.ToString(format) uses CultureInfo.CurrentCulture by default, which Loc.SetCulture() keeps in sync with the user's chosen language
 
 ---------------------------------------------------------------------------------------------------
 
