@@ -506,3 +506,25 @@ options.UseSqlite("Data Source=mydb.db;Mode=ReadWriteCreate;Journal Mode=Delete"
 context.Database.ExecuteSqlRaw("PRAGMA journal_mode=DELETE;");
 
 ---------------------------------------------------------------------------------------------------
+
+CRF (Constant Rate Factor) controls quality vs file size.
+
+mp4 - H.264 CRF scale is 0–51:
+
+CRF	    Quality	                        File size
+0	    Lossless	                    Very large
+15–18	Very high (visually lossless)	Large
+23	    Good (default)	                Medium
+28–33	Acceptable	                    Small
+51	    Worst	                        Very small
+
+mkv - VP9 CRF scale is 0–63:
+
+CRF	    Quality	        File size
+0	    Lossless	    Very large
+15–20	Very high	    Large
+33	    Good (default)	Medium
+40–50	Acceptable	    Small
+63	    Worst	        Very small
+
+---------------------------------------------------------------------------------------------------
