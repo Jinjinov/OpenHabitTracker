@@ -1,3 +1,7 @@
+- increase version number
+
+- update VersionHistory.md
+
 OpenHabitTracker.Blazor.Maui
 - publish and upload to Windows Store
 - publish and upload to Google Play Store + apk FTP upload to server
