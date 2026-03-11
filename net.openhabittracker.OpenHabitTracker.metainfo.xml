@@ -9,7 +9,7 @@
     <name>Jinjinov</name>
   </developer>
   <description>
-    <p>OpenHabitTracker is:</p>
+    <p>OpenHabitTracker is a free, open-source, privacy-focused app to take notes, plan tasks, and track habits.</p>
     <ul>
       <li>Free and Ad-Free</li>
       <li>Open Source</li>
@@ -46,11 +46,11 @@
   <url type="bugtracker">https://github.com/Jinjinov/OpenHabitTracker/issues</url>
   <screenshots>
     <screenshot>
-      <video codec="h264" width="1920" height="1080">https://openhabittracker.net/videos/desktop-main.mp4</video>
+      <video codec="vp9" width="1920" height="1080">https://openhabittracker.net/videos/desktop-main.webm</video>
       <caption>Notes, Tasks, Habits</caption>
     </screenshot>
     <screenshot>
-      <video codec="h264" width="1920" height="1080">https://openhabittracker.net/videos/desktop-sidebar.mp4</video>
+      <video codec="vp9" width="1920" height="1080">https://openhabittracker.net/videos/desktop-sidebar.webm</video>
       <caption>Search, Settings</caption>
     </screenshot>
     <screenshot type="default">
@@ -87,7 +87,7 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.1.6" date="2026-03-14">
+    <release version="1.1.6" date="2026-03-11">
       <description>
         <p>Added 16 new languages: French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Slovak, Czech, Croatian, Serbian</p>
         <p>Improved accessibility: navigation landmarks, ARIA labels, keyboard navigation</p>
