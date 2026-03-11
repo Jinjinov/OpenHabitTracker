@@ -228,7 +228,13 @@ public class LoadExamplesVideoTests : PlaywrightTest
         ffmpeg.StartInfo = new ProcessStartInfo
         {
             FileName = "ffmpeg",
-            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=60:offset_x={offsetX}:offset_y={offsetY}:video_size={videoSize}:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -crf 18 -preset slow {outputFile}",
+            // -f lavfi -i anullsrc: add a silent audio source as a second input — Microsoft Partner Center silently hangs when uploading videos with no audio track
+            // -c:v libx264: explicit H.264 video codec
+            // -c:a aac: encode the silent audio as AAC, the standard audio codec for MP4
+            // -pix_fmt yuv420p: ddagrab outputs bgra which libx264 encodes as yuv444p (High 4:4:4 Predictive profile) — many upload portals reject this; yuv420p uses the standard High profile accepted everywhere
+            // -movflags +faststart: moves the moov atom (metadata) to the beginning of the file — without this, web-based uploaders that need to read metadata before the full file is received will silently hang
+            // -shortest: stop encoding when the shortest stream ends (the video), so the infinite silent audio source does not extend the output beyond the video duration
+            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=60:offset_x={offsetX}:offset_y={offsetY}:video_size={videoSize}:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -f lavfi -i anullsrc -c:v libx264 -c:a aac -pix_fmt yuv420p -movflags +faststart -crf 18 -preset slow -shortest {outputFile}",
             UseShellExecute = false,
             RedirectStandardInput = true,
         };

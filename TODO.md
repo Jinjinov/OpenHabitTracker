@@ -200,9 +200,6 @@ CRF	    Quality	        File size
 63	    Worst	        Very small
 
 SUBMIT DESKTOP VIDEO (1920x1080) TO:
-    - Microsoft Store: upload MP4 in Partner Center
-        also upload a 1920x1080 PNG "Super Hero Art" image 
-        (required for trailer to appear at top of listing)
     - macOS App Store: upload MP4 in App Store Connect
 
 SUBMIT MOBILE VIDEO (886x1920) TO:
