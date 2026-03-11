@@ -57,27 +57,7 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 accessibility:
 
-    1. Arrow keys for Menu sidebar (ARIA menu pattern):
-       - Tab enters the menu, Up/Down arrows move between items, Tab exits
-
-       PLAN:
-       File: OpenHabitTracker.Blazor/Pages/Menu.razor
-       - Add role="menu" to the outer <div class="list-group"> container
-       - Add role="menuitem" and tabindex="-1" to every <button class="list-group-item"> (all except the first get tabindex="-1"; the first gets tabindex="0" so Tab enters the menu)
-       - Add @onkeydown="HandleKeyDown" to the container div
-       - Add @ref attributes to each button: store them in ElementReference[] _items
-       - Track int _focusedIndex = 0
-       - In HandleKeyDown:
-           ArrowDown / ArrowRight → _focusedIndex = (_focusedIndex + 1) % _items.Length; await JsInterop.FocusElement(_items[_focusedIndex]);
-           ArrowUp / ArrowLeft   → _focusedIndex = (_focusedIndex - 1 + _items.Length) % _items.Length; await JsInterop.FocusElement(_items[_focusedIndex]);
-           Home                  → _focusedIndex = 0; await JsInterop.FocusElement(_items[0]);
-           End                   → _focusedIndex = _items.Length - 1; await JsInterop.FocusElement(_items[^1]);
-           Tab / Escape          → e.StopPropagation() is NOT needed — let Tab bubble so focus exits naturally
-       - Update tabindex on each button dynamically: tabindex="@(i == _focusedIndex ? 0 : -1)"
-       - On menu item click: update _focusedIndex to match clicked item
-       - Add @inject IJsInterop JsInterop
-
-    2. Silent operations give no screen reader feedback (WCAG 4.1.3):
+    1. Silent operations give no screen reader feedback (WCAG 4.1.3):
        - note save, habit marked done, item deleted — screen reader users hear nothing
        - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
        - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
@@ -102,7 +82,7 @@ accessibility:
        - Where form validation messages are shown, wrap in <div role="alert">...</div> (role="alert" implies aria-live="assertive" so no extra attribute needed)
        - Existing ValidationMessage components can be wrapped; no changes to the validation logic itself
 
-    3. Focus management (currently missing):
+    2. Focus management (currently missing):
        - sidebar opens → move focus to first element inside sidebar
        - sidebar closes → return focus to the button that opened it (menu or search)
        - note/task/habit edit closes → return focus to the list item that was opened
@@ -130,7 +110,7 @@ accessibility:
        - Add @ref on the "open edit" button for each item (use a Dictionary<long, ElementReference> _itemRefs keyed by item Id)
        - When edit closes (CloseSelected callback fires), call await JsInterop.FocusElement(_itemRefs[_selectedId]) where _selectedId is the id of the item that was open
 
-    4. Calendar arrow key navigation (roving tabindex):
+    3. Calendar arrow key navigation (roving tabindex):
        - currently Tab through every day cell (up to 42 presses for month view)
        - only one cell has tabindex="0" at a time, arrow keys move between cells, Tab exits grid
         Home/End in calendar grid:
