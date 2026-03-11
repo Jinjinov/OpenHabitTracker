@@ -409,8 +409,11 @@ from parent of OpenHabitTracker:
         🚧 Started test build.
         ✅ Test build succeeded.
 
-        if the test fails, push a fix and comment in the GitHub pull request:
-            bot, build net.openhabittracker.OpenHabitTracker
+        if the test fails:
+            - push a fix
+            - update tag and commit in yaml
+            - comment in the GitHub pull request:
+                bot, build net.openhabittracker.OpenHabitTracker
 
         3.
         Merge pull request
