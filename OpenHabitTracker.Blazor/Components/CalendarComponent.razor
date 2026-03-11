@@ -14,7 +14,7 @@
 }
 else
 {
-    if (DisplayMonth)
+    @if (DisplayMonth)
     {
         <div class="input-group mb-1">
             <button class="btn btn-outline-primary" aria-label="@Loc["Previous week"]" @onclick="_calendarParams.SetCalendarStartToPreviousWeek"><i class="bi bi-chevron-double-up"></i></button>
@@ -23,51 +23,56 @@ else
             <button class="btn btn-outline-primary" aria-label="@Loc["Next month"]" @onclick="() => _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek)"><i class="bi bi-chevron-double-right"></i></button>
             <button class="btn btn-outline-primary" aria-label="@Loc["Next week"]" @onclick="_calendarParams.SetCalendarStartToNextWeek"><i class="bi bi-chevron-double-down"></i></button>
         </div>
-
-        <div class="bg-body d-flex">
-            @for (int i = 0; i < 7; i++)
-            {
-                int dayIdx = OpenHabitTracker.Services.CalendarService.GetDayOfWeek(ClientState.Settings.FirstDayOfWeek, i);
-                string day = Loc[_days[dayIdx]];
-                <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
-            }
-        </div>
     }
 
-    @for (int row = 0; row < rowCount; row++)
-    {
-        <div class="d-flex">
-            @for (int day = 0; day < daysInRow; day++)
-            {
-                DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, row * daysInRow + day); // if not captured locally, day becomes the last value used in the loop
-
-                string text = dateTime.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "text-warning" : "text-secondary";
-                if (dateTime.Month == _calendarParams.FirstDayOfMonth.Month)
-                    text += "-emphasis";
-                string border = dateTime == selectedDateTime ? "border-4 border-success-subtle" : dateTime.Date == DateTime.Today ? "border-4 border-primary-subtle" : "";
-                string background = "bg-body-tertiary";
-                string timesDone = "";
-                List<TimeModel>? list = null;
-
-                if (Habit.TimesDoneByDay.TryGetValue(dateTime, out list) && list.Count > 0)
+    <div>
+        @if (DisplayMonth)
+        {
+            <div class="bg-body d-flex">
+                @for (int i = 0; i < 7; i++)
                 {
-                    if (list.Count > 1)
-                        timesDone = $"({list.Count})";
-
-                    if ((Habit.RepeatPeriod == Period.Day && list.Count >= Habit.RepeatCount) || (Habit.RepeatPeriod != Period.Day && Habit.RepeatCountReached(dateTime)))
-                        background = "bg-success-subtle";
-                    else
-                        background = "bg-warning-subtle";
+                    int dayIdx = OpenHabitTracker.Services.CalendarService.GetDayOfWeek(ClientState.Settings.FirstDayOfWeek, i);
+                    string day = Loc[_days[dayIdx]];
+                    <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
                 }
+            </div>
+        }
 
-                <button class="@($"border {border} {text} d-flex {background}")"
-                        style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
-                        @onclick="() => DayClicked(dateTime, list)">
-                    @dateTime.Day<small>@timesDone</small>
-                </button>
-            }
-        </div>
-    }
+        @for (int row = 0; row < rowCount; row++)
+        {
+            <div class="d-flex">
+                @for (int day = 0; day < daysInRow; day++)
+                {
+                    DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, row * daysInRow + day); // if not captured locally, day becomes the last value used in the loop
+
+                    string text = dateTime.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "text-warning" : "text-secondary";
+                    if (dateTime.Month == _calendarParams.FirstDayOfMonth.Month)
+                        text += "-emphasis";
+                    string border = dateTime == selectedDateTime ? "border-4 border-success-subtle" : dateTime.Date == DateTime.Today ? "border-4 border-primary-subtle" : "";
+                    string background = "bg-body-tertiary";
+                    string timesDone = "";
+                    List<TimeModel>? list = null;
+
+                    if (Habit.TimesDoneByDay.TryGetValue(dateTime, out list) && list.Count > 0)
+                    {
+                        if (list.Count > 1)
+                            timesDone = $"({list.Count})";
+
+                        if ((Habit.RepeatPeriod == Period.Day && list.Count >= Habit.RepeatCount) || (Habit.RepeatPeriod != Period.Day && Habit.RepeatCountReached(dateTime)))
+                            background = "bg-success-subtle";
+                        else
+                            background = "bg-warning-subtle";
+                    }
+
+                    <button class="@($"border {border} {text} d-flex {background}")"
+                            style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
+                            @onclick="() => DayClicked(dateTime, list)">
+                        @dateTime.Day<small>@timesDone</small>
+                    </button>
+                }
+            </div>
+        }
+    </div>
 
     if (selectedDateTime is not null)
     {
