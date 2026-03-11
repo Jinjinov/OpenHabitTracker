@@ -111,46 +111,43 @@ accessibility:
        - When edit closes (CloseSelected callback fires), call await JsInterop.FocusElement(_itemRefs[_selectedId]) where _selectedId is the id of the item that was open
 
     3. Calendar arrow key navigation (roving tabindex):
-       - currently Tab through every day cell (up to 42 presses for month view)
-       - only one cell has tabindex="0" at a time, arrow keys move between cells, Tab exits grid
-        Home/End in calendar grid:
-       - Home → first day of the week, End → last day of the week
-        Page Up/Page Down in calendar:
-       - Page Up → previous month, Page Down → next month
-       - add `role="grid"` / `role="row"` / `role="gridcell"` / `role="columnheader"` to grid divs
+       - same pattern as Menu.razor: only one cell has tabindex="0" at a time, arrow keys move between cells, Tab exits grid
+       - two modes: month (6 rows × 7 cols = 42 cells) and strip (1 row × daysInRow cells, variable)
 
        PLAN:
        File: OpenHabitTracker.Blazor/Components/CalendarComponent.razor
 
-       Step A — ARIA grid roles:
-       - Outermost calendar container: add role="grid" aria-label="@Loc["Calendar"]"
-       - Each week row div: add role="row"
-       - Each day-of-week header cell: add role="columnheader" scope="col"
-       - Each day button: change from <button> to a <div role="gridcell"> wrapping a <button> (or keep <button> and add role="gridcell" directly — gridcell on the button is acceptable and simpler)
+       Step A — inject IJsInterop (not currently present):
+       - Add @inject IJsInterop JsInterop at the top
 
-       Step B — roving tabindex state:
-       - Add int _activeDayIndex = 0 (index into the flat list of displayed day cells, 0–41 for month view)
-       - Add ElementReference[] _dayCellRefs with a slot per rendered day
-       - In the day cell loop: tabindex="@(i == _activeDayIndex ? 0 : -1)" and @ref="@_dayCellRefs[i]"
-       - On click of a day cell: _activeDayIndex = i; (focus is already there by click)
+       Step B — ARIA roles:
+       - Outermost row-container div (wrapping all @for row loops): add role="grid" aria-label="@Loc["Calendar"]"
+       - Each week row <div class="d-flex">: add role="row"
+       - Each day-of-week header <div>: add role="columnheader" scope="col"
+       - Each day <button>: add role="gridcell"
 
-       Step C — keyboard handler on the grid container:
-       - Add @onkeydown="HandleGridKeyDown" @onkeydown:preventDefault="@_preventDefaultOnGrid" to the role="grid" div
-       - bool _preventDefaultOnGrid — set true only for handled keys to avoid blocking Tab
+       Step C — roving tabindex state (same as Menu.razor):
+       - Add int _activeDayIndex = 0
+       - Add ElementReference[] _dayCellRefs = new ElementReference[42] for month mode; re-size when daysInRow changes for strip mode
+       - In the day cell loop capture flat index: int cellIndex = row * daysInRow + day
+       - On each button: tabindex="@(cellIndex == _activeDayIndex ? 0 : -1)" and @ref="_dayCellRefs[cellIndex]"
+       - Update DayClicked to also accept int index: set _activeDayIndex = index (focus already there from click)
+
+       Step D — keyboard handler:
+       - Add @onkeydown="HandleGridKeyDown" to the role="grid" div (no preventDefault needed — arrow keys on focused buttons do not scroll)
        - In HandleGridKeyDown:
-           ArrowRight  → move _activeDayIndex += 1; if overflows, advance to next month and set _activeDayIndex = 0
-           ArrowLeft   → move _activeDayIndex -= 1; if underflows, go to previous month and set _activeDayIndex = last cell
-           ArrowDown   → _activeDayIndex += 7 (next week); if overflows, go to next month
-           ArrowUp     → _activeDayIndex -= 7 (prev week); if underflows, go to previous month
-           Home        → _activeDayIndex = index of first day of current week (round down to nearest multiple of 7)
-           End         → _activeDayIndex = index of last day of current week (round up to nearest multiple of 7, minus 1)
-           PageDown    → call existing next-month navigation; keep same day-of-month if possible, else clamp to last day
-           PageUp      → call existing prev-month navigation; same clamping
-           Tab         → do NOT prevent default; let browser handle Tab to exit the grid naturally
+           ArrowRight / ArrowLeft → ±1; if overflows/underflows, call next/prev month or week nav and set _activeDayIndex = 0 / last
+           ArrowDown  / ArrowUp   → ±daysInRow (±7 in month, ±1 in strip); same overflow handling
+           Home → _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow  (first cell of current row)
+           End  → _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow + daysInRow - 1  (last cell of current row)
+           PageDown → call existing next-month/week nav; set _activeDayIndex = 0
+           PageUp   → call existing prev-month/week nav; set _activeDayIndex = 0
+           Tab      → unhandled — falls through switch, bubbles naturally, focus exits grid
        - After _activeDayIndex changes: await JsInterop.FocusElement(_dayCellRefs[_activeDayIndex])
 
-       Step D — aria-label on each day cell button:
-       - Add aria-label="@dateTime.ToString("dddd, MMMM d", culture) — @timesDone @Loc["times done"]" to each day cell button so screen readers announce the full date and completion count
+       Step E — aria-label on each day cell button:
+       - Add aria-label="@dateTime.ToString("dddd, MMMM d") — @timesDone @Loc["times done"]"
+       - No culture parameter needed; DateTime.ToString(format) uses CultureInfo.CurrentCulture by default, which Loc.SetCulture() keeps in sync with the user's chosen language
 
 ---------------------------------------------------------------------------------------------------
 
