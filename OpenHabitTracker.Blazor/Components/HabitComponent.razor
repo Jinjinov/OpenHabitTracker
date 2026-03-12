@@ -11,7 +11,7 @@
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
 
-<div class="@Habit.Color" @onkeydown="HandleKeyDown">
+<div id="habit-component" class="@Habit.Color" @onkeydown="HandleKeyDown">
     <div class="input-group flex-nowrap" data-habits-step-8>
         @if (ClientState.Settings.ShowPriorityDropdown)
         {

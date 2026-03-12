@@ -100,7 +100,7 @@
                                 <span class="input-group-text bg-transparent" data-notes-step-1>@PriorityService.GetPriorityTitle(note.Priority)</span>
                             }
 
-                            <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(note.Id)" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
+                            <button id="note-item-@note.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(note.Id)" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
                         </div>
 
                         @if (ClientState.Settings.DisplayNoteContentAsMarkdown)
@@ -188,6 +188,9 @@
     InputTextImmediate? inputElement;
 
     bool shouldFocus;
+    bool _shouldFocusEdit;
+    bool _prevShowNoteComponent;
+    long _lastSelectedId;
 
     InputTextArea? _inputTextAreaReference;
 
@@ -216,6 +219,20 @@
 
             await JsInterop.SetCalculateAutoHeight(_inputTextAreaReference.Element.Value);
         }
+
+        bool editOpened = !_prevShowNoteComponent && _showNoteComponent;
+        bool editClosed = _prevShowNoteComponent && !_showNoteComponent;
+        _prevShowNoteComponent = _showNoteComponent;
+
+        if (_shouldFocusEdit && editOpened)
+        {
+            _shouldFocusEdit = false;
+            await JsInterop.FocusFirstIn("#note-component");
+        }
+        else if (editClosed && _lastSelectedId != 0)
+        {
+            await JsInterop.FocusElementById($"note-item-{_lastSelectedId}");
+        }
     }
 
     void AddNew()
@@ -226,6 +243,8 @@
 
     async Task OpenSelected(long id)
     {
+        _lastSelectedId = id;
+        _shouldFocusEdit = true;
         if (IsEmbedded)
         {
             Id = id;

@@ -10,7 +10,7 @@
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
 
-<div class="@Task.Color" @onkeydown="HandleKeyDown">
+<div id="task-component" class="@Task.Color" @onkeydown="HandleKeyDown">
     <div class="input-group flex-nowrap" data-tasks-step-7>
         @if (ClientState.Settings.ShowPriorityDropdown)
         {
