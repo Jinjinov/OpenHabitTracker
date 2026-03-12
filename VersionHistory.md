@@ -13,7 +13,7 @@
 - fixed date comparison bug
 - fixed login session expiring on Docker VM suspension
 
-# 1.1.5 - Feb 14, 2025
+# 1.1.5 - Feb 14, 2026
 
 - replaced "X" with "Close"
 - search icon is now a toggle
@@ -66,6 +66,13 @@
 - improved Search, Filter, Sort
 
 # 1.0.7 - Sep 23, 2024
+
+- fixed import and export for notes, tasks, habits without a category
+- fixed TSV export
+- fixed YAML export
+- added import and export in Linux
+
+# 1.0.6 - Sep 15, 2024
 
 - set default title color
 - add blockquote and table support in a note
