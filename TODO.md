@@ -110,14 +110,6 @@ accessibility:
        - Add @ref on the "open edit" button for each item (use a Dictionary<long, ElementReference> _itemRefs keyed by item Id)
        - When edit closes (CloseSelected callback fires), call await JsInterop.FocusElement(_itemRefs[_selectedId]) where _selectedId is the id of the item that was open
 
-    3. Calendar arrow key navigation (roving tabindex): ✅ DONE
-       - same pattern as Menu.razor: only one cell has tabindex="0" at a time, arrow keys move between cells, Tab exits grid
-       - two modes: month (6 rows × 7 cols = 42 cells) and strip (1 row × daysInRow cells, variable)
-       - role="grid" / role="row" / role="columnheader" / role="gridcell" + aria-label on each cell
-       - HandleGridKeyDown: ArrowRight/Left/Down/Up with period overflow, Home/End row-boundary, PageDown/PageUp
-       - Unit tests in CalendarComponentTests.cs (tabindex, ArrowRight, ArrowDown, Home, End, click, aria-label, JsInterop)
-       - E2E tests in CalendarKeyboardTests.cs (ArrowRight, ArrowLeft, ArrowDown, ArrowUp, End, Home)
-
 ---------------------------------------------------------------------------------------------------
 
 1.
