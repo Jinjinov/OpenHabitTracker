@@ -230,7 +230,7 @@ public class CalendarComponentTests
     }
 
     [Test]
-    public async Task MonthView_DayCellHasAriaLabel()
+    public void MonthView_DayCellHasAriaLabel()
     {
         IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
             parameters => parameters

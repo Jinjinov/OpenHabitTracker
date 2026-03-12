@@ -1,6 +1,6 @@
 namespace OpenHabitTracker.EndToEndTests.Accessibility;
 
-// Prerequisite: start OpenHabitTracker.Blazor.Web at http://localhost before running tests.
+// Prerequisite: start OpenHabitTracker.Blazor.Wasm at http://localhost before running tests.
 
 [TestFixture]
 public class CalendarKeyboardTests : BaseTest
@@ -14,21 +14,28 @@ public class CalendarKeyboardTests : BaseTest
         await Page.WaitForTimeoutAsync(500);
 
         await AddItemAsync("Keyboard Test Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Keyboard Test Habit" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
     }
+
+    private ILocator LargeCalendarCells() =>
+        Page.Locator("[data-habits-step-13] div[role='grid'] div[role='row'] button[role='gridcell']");
 
     [Test]
     public async Task Calendar_ArrowRight_MovesFocusToNextCell()
     {
-        await Page.Locator("div[role='grid'] div[role='row'] button[role='gridcell']").First.ClickAsync();
+        await LargeCalendarCells().First.ClickAsync();
         await Page.Keyboard.PressAsync("ArrowRight");
 
-        await Expect(Page.Locator("div[role='grid'] div[role='row'] button[role='gridcell']").Nth(1)).ToBeFocusedAsync();
+        await Expect(LargeCalendarCells().Nth(1)).ToBeFocusedAsync();
     }
 
     [Test]
     public async Task Calendar_ArrowLeft_MovesFocusToPreviousCell()
     {
-        ILocator cells = Page.Locator("div[role='grid'] div[role='row'] button[role='gridcell']");
+        ILocator cells = LargeCalendarCells();
 
         await cells.First.ClickAsync();
         await Page.Keyboard.PressAsync("ArrowRight");
@@ -41,7 +48,7 @@ public class CalendarKeyboardTests : BaseTest
     [Test]
     public async Task Calendar_ArrowDown_MovesFocusDownOneRow()
     {
-        ILocator cells = Page.Locator("div[role='grid'] div[role='row'] button[role='gridcell']");
+        ILocator cells = LargeCalendarCells();
 
         await cells.First.ClickAsync();
         await Page.Keyboard.PressAsync("ArrowDown");
@@ -52,7 +59,7 @@ public class CalendarKeyboardTests : BaseTest
     [Test]
     public async Task Calendar_ArrowUp_MovesFocusUpOneRow()
     {
-        ILocator cells = Page.Locator("div[role='grid'] div[role='row'] button[role='gridcell']");
+        ILocator cells = LargeCalendarCells();
 
         await cells.First.ClickAsync();
         await Page.Keyboard.PressAsync("ArrowDown");
@@ -65,7 +72,7 @@ public class CalendarKeyboardTests : BaseTest
     [Test]
     public async Task Calendar_EndKey_MovesFocusToLastCellOfRow()
     {
-        ILocator cells = Page.Locator("div[role='grid'] div[role='row'] button[role='gridcell']");
+        ILocator cells = LargeCalendarCells();
 
         await cells.First.ClickAsync();
         await Page.Keyboard.PressAsync("End");
@@ -76,7 +83,7 @@ public class CalendarKeyboardTests : BaseTest
     [Test]
     public async Task Calendar_HomeKey_MovesFocusToFirstCellOfRow()
     {
-        ILocator cells = Page.Locator("div[role='grid'] div[role='row'] button[role='gridcell']");
+        ILocator cells = LargeCalendarCells();
 
         await cells.First.ClickAsync();
         await Page.Keyboard.PressAsync("End");
