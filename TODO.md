@@ -85,6 +85,7 @@ accessibility:
     2. Focus management (currently missing):
        - sidebar opens → move focus to first element inside sidebar
        - sidebar closes → return focus to the button that opened it (menu or search)
+       - note/task/habit edit opens → move focus to first element inside sidebar
        - note/task/habit edit closes → return focus to the list item that was opened
 
        PLAN:
@@ -105,7 +106,13 @@ accessibility:
        - Set _lastOpenerRef = _menuButtonRef (or _searchButtonRef) in the click handler before opening the sidebar
        - On close (when _dynamicComponentType is set to null), call await JsInterop.FocusElement(_lastOpenerRef) after StateHasChanged
 
-       Step C — restore focus to list item on edit close:
+       Step C — focus first element when opening edit:
+       - In Habits.razor / Notes.razor / Tasks.razor, after OpenSelected causes the edit component to render, call await JsInterop.FocusFirstIn("#habit-component") / "#note-component" / "#task-component"
+       - Add the corresponding id attribute to the root element of HabitComponent.razor / NoteComponent.razor / TaskComponent.razor
+       - In OnAfterRenderAsync, detect edit just opened (similar to how shouldFocus works for "Add new") and call FocusFirstIn
+       - Reuses the same FocusFirstIn JS helper from Step A — no extra JS needed
+
+       Step D — restore focus to list item on edit close:
        - In Habits.razor / Notes.razor / Tasks.razor, each list item that can be opened for editing has a button or row
        - Add @ref on the "open edit" button for each item (use a Dictionary<long, ElementReference> _itemRefs keyed by item Id)
        - When edit closes (CloseSelected callback fires), call await JsInterop.FocusElement(_itemRefs[_selectedId]) where _selectedId is the id of the item that was open
