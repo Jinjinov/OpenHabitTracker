@@ -93,29 +93,34 @@ accessibility:
 
        Step A — sidebar focus on open:
        - Main.razor already renders sidebar content in a <div @onkeydown="HandleSidebarKeyDown">
-       - After setting _dynamicComponentType (i.e., opening the sidebar), call await JsInterop.FocusElement() on the first focusable element inside the sidebar div
-       - Use a JS helper: add focusFirstIn(selector) to jsInterop.js that does container.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])').focus()
-       - Add ValueTask FocusFirstIn(string cssSelector) to IJsInterop.cs and JsInterop.cs
-       - After OnAfterRenderAsync detects sidebar just opened, call await JsInterop.FocusFirstIn("#sidebar-container")
        - Add id="sidebar-container" to the sidebar div
+       - Add focusFirstIn(selector) to jsInterop.js: const el = document.querySelector(selector)?.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'); el?.focus();
+       - Add ValueTask FocusFirstIn(string cssSelector) to IJsInterop.cs and JsInterop.cs
+       - In OnAfterRenderAsync, track _prevDynamicComponentType; when it transitions null → non-null, call await JsInterop.FocusFirstIn("#sidebar-container")
+       - Note: same pattern already used in Habits.razor (_dynamicComponentTypeName, lines 298–300)
 
        Step B — restore focus to opener button on sidebar close:
        - Main.razor has two opener buttons: the menu toggle button and the search toggle button
        - Add @ref="_menuButtonRef" and @ref="_searchButtonRef" on those two buttons
        - Track which one was last clicked: ElementReference _lastOpenerRef
-       - Set _lastOpenerRef = _menuButtonRef (or _searchButtonRef) in the click handler before opening the sidebar
-       - On close (when _dynamicComponentType is set to null), call await JsInterop.FocusElement(_lastOpenerRef) after StateHasChanged
+       - Set _lastOpenerRef = _menuButtonRef (or _searchButtonRef) in ToggleMenu / ToggleSearch before opening
+       - In OnAfterRenderAsync, when _prevDynamicComponentType transitions non-null → null, call await JsInterop.FocusElement(_lastOpenerRef)
+       - Note: all close paths (Escape key, close button, toggle) are caught by the null transition check
 
        Step C — focus first element when opening edit:
-       - In Habits.razor / Notes.razor / Tasks.razor, after OpenSelected causes the edit component to render, call await JsInterop.FocusFirstIn("#habit-component") / "#note-component" / "#task-component"
-       - Add the corresponding id attribute to the root element of HabitComponent.razor / NoteComponent.razor / TaskComponent.razor
-       - In OnAfterRenderAsync, detect edit just opened (similar to how shouldFocus works for "Add new") and call FocusFirstIn
+       - Add the corresponding id attribute to the root element of HabitComponent.razor / NoteComponent.razor / TaskComponent.razor (id="habit-component" / "note-component" / "task-component")
+       - Each component renders in at most one location in the DOM at a time (inline or second column, never both), so the id is always unique
+       - In Habits.razor / Notes.razor / Tasks.razor OnAfterRenderAsync, track _prevShowHabitComponent (bool); when it transitions false → true, call await JsInterop.FocusFirstIn("#habit-component")
+       - Use a _shouldFocusEdit bool set in OpenSelected and cleared after FocusFirstIn (same pattern as shouldFocus for "Add new")
        - Reuses the same FocusFirstIn JS helper from Step A — no extra JS needed
 
        Step D — restore focus to list item on edit close:
-       - In Habits.razor / Notes.razor / Tasks.razor, each list item that can be opened for editing has a button or row
-       - Add @ref on the "open edit" button for each item (use a Dictionary<long, ElementReference> _itemRefs keyed by item Id)
-       - When edit closes (CloseSelected callback fires), call await JsInterop.FocusElement(_itemRefs[_selectedId]) where _selectedId is the id of the item that was open
+       - DO NOT use @ref + Dictionary<long, ElementReference> — Blazor's @ref on HTML elements inside foreach loops does not support dictionary indexer expressions
+       - Instead: add id="habit-item-@habit.Id" to the "open edit" button for each list item in Habits.razor / Notes.razor / Tasks.razor
+       - Add focusElementById(id) to jsInterop.js: document.getElementById(id)?.focus();
+       - Add ValueTask FocusElementById(string id) to IJsInterop.cs and JsInterop.cs
+       - Track long _lastSelectedId = 0; set it in OpenSelected before navigating
+       - In OnAfterRenderAsync, when _prevShowHabitComponent transitions true → false, call await JsInterop.FocusElementById($"habit-item-{_lastSelectedId}")
 
 ---------------------------------------------------------------------------------------------------
 
