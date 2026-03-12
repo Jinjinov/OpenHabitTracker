@@ -1,5 +1,11 @@
 # Notes:
 
+desktop: https://youtu.be/qsC7lX3yZ-A
+sidebar: https://youtu.be/dq1OmpjBBNk
+mobile:  https://youtu.be/zYAg-PXe7FI https://youtube.com/shorts/zYAg-PXe7FI
+
+---------------------------------------------------------------------------------------------------
+
 nuget.config
 
 <?xml version="1.0" encoding="utf-8"?>
