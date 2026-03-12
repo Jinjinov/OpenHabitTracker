@@ -1,3 +1,10 @@
+# 1.1.7
+
+- added arrow key navigation for the menu
+- added arrow key navigation for the calendar
+- added focus management
+- improved keyboard navigation
+
 # 1.1.6 - Mar 14, 2026
 
 - added 16 new languages: French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Slovak, Czech, Croatian, Serbian
