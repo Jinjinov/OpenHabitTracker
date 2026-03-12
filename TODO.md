@@ -83,9 +83,9 @@ accessibility:
        - Existing ValidationMessage components can be wrapped; no changes to the validation logic itself
 
     2. Focus management (currently missing):
-       - sidebar opens → move focus to first element inside sidebar
+       - sidebar opens → move focus to first element inside
        - sidebar closes → return focus to the button that opened it (menu or search)
-       - note/task/habit edit opens → move focus to first element inside sidebar
+       - note/task/habit edit opens → move focus to first element inside
        - note/task/habit edit closes → return focus to the list item that was opened
 
        PLAN:
@@ -120,10 +120,6 @@ accessibility:
 ---------------------------------------------------------------------------------------------------
 
 1.
-desktop: https://youtu.be/qsC7lX3yZ-A
-sidebar: https://youtu.be/dq1OmpjBBNk
-mobile:  https://youtu.be/zYAg-PXe7FI https://youtube.com/shorts/zYAg-PXe7FI
-
 SUBMIT DESKTOP VIDEO (1920x1080) TO:
     - macOS App Store: upload MP4 in App Store Connect
 
