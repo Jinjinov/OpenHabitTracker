@@ -186,7 +186,9 @@ else
             if (Habit.TimesDoneByDay is not null && selectedDateTime.HasValue)
             {
                 if (!Habit.TimesDoneByDay.TryGetValue(selectedDateTime.Value, out selectedTimeList))
-                    selectedDateTime = null;
+                {
+                    //selectedDateTime = null; - don't clear the selected day, so that user can Tab to RemoveFromSelectedDay / AddToSelectedDay, selectedTimeList
+                }
             }
         }
     }
