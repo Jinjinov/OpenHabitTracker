@@ -199,6 +199,12 @@ html, body {
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .spinner {
+        animation: none;
+    }
+}
+
 .spinner-text {
     font-family: 'Miltonian', cursive;
     font-size: 110px;
