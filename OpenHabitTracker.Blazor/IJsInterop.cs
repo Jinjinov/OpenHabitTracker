@@ -9,6 +9,8 @@ public interface IJsInterop
     ValueTask SetLang(string lang);
     ValueTask SetTheme(string theme);
     ValueTask FocusElement(ElementReference element);
+    ValueTask FocusFirstIn(string cssSelector);
+    ValueTask FocusElementById(string id);
     ValueTask SetElementProperty(ElementReference element, string property, object value);
     ValueTask<T> GetElementProperty<T>(ElementReference element, string property);
     Task<Dimensions> GetWindowDimensions();

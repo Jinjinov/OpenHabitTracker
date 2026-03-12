@@ -15,6 +15,7 @@
 @inject ISearchFilterService SearchFilterService
 @inject IStringLocalizer Loc
 @inject IPriorityService PriorityService
+@inject IJsInterop JsInterop
 @inject IGTourService GTourService
 
 <PageTitle>OpenHabitTracker - Tasks</PageTitle>
@@ -123,7 +124,7 @@
                                 <span class="input-group-text bg-transparent" data-tasks-step-1>@PriorityService.GetPriorityTitle(task.Priority)</span>
                             }
 
-                            <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(task.Id)" data-tasks-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
+                            <button id="task-item-@task.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(task.Id)" data-tasks-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
                             @if (task.PlannedAt is not null)
                             {
                                 <small class="input-group-text bg-transparent" data-tasks-step-3>@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
@@ -231,6 +232,9 @@
     InputTextImmediate? inputElement;
 
     bool shouldFocus;
+    bool _shouldFocusEdit;
+    bool _prevShowTaskComponent;
+    long _lastSelectedId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -249,6 +253,20 @@
             shouldFocus = false;
             await inputElement.Element.Value.FocusAsync();
         }
+
+        bool editOpened = !_prevShowTaskComponent && _showTaskComponent;
+        bool editClosed = _prevShowTaskComponent && !_showTaskComponent;
+        _prevShowTaskComponent = _showTaskComponent;
+
+        if (_shouldFocusEdit && editOpened)
+        {
+            _shouldFocusEdit = false;
+            await JsInterop.FocusFirstIn("#task-component");
+        }
+        else if (editClosed && _lastSelectedId != 0)
+        {
+            await JsInterop.FocusElementById($"task-item-{_lastSelectedId}");
+        }
     }
 
     void AddNew()
@@ -259,6 +277,8 @@
 
     async Task OpenSelected(long id)
     {
+        _lastSelectedId = id;
+        _shouldFocusEdit = true;
         if (IsEmbedded)
         {
             Id = id;

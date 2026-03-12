@@ -8,7 +8,8 @@ public class SearchTests : BaseTest
     [SetUp]
     public async Task SetUp()
     {
-        await GotoAsync("notes");
+        await GotoAsync();
+        await NavigateToAsync("[data-main-step-3]");
         await LoadExamplesViaUiAsync();
     }
 

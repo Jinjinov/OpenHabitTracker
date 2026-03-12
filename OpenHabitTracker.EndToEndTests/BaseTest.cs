@@ -69,6 +69,13 @@ public abstract class BaseTest : PlaywrightTest
         await CloseSidebarAsync();
     }
 
+    protected async Task NavigateToAsync(string dataStepSelector)
+    {
+        await Page.Locator(dataStepSelector).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500); // OnAfterRenderAsync completes after NetworkIdle
+    }
+
     protected async Task AddItemAsync(string title)
     {
         await Page.Locator("button.btn-plain.input-group").ClickAsync();

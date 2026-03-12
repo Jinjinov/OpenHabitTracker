@@ -136,7 +136,7 @@
                                 <span class="input-group-text bg-transparent" data-habits-step-1>@PriorityService.GetPriorityTitle(habit.Priority)</span>
                             }
 
-                            <button class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(habit.Id)" data-habits-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
+                            <button id="habit-item-@habit.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(habit.Id)" data-habits-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
 
                             @{
                                 string color = habit.GetRatio(ClientState.Settings.SelectedRatio) switch
@@ -279,6 +279,9 @@
     InputTextImmediate? inputElement;
 
     bool shouldFocus;
+    bool _shouldFocusEdit;
+    bool _prevShowHabitComponent;
+    long _lastSelectedId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -321,6 +324,20 @@
             shouldFocus = false;
             await inputElement.Element.Value.FocusAsync();
         }
+
+        bool editOpened = !_prevShowHabitComponent && _showHabitComponent;
+        bool editClosed = _prevShowHabitComponent && !_showHabitComponent;
+        _prevShowHabitComponent = _showHabitComponent;
+
+        if (_shouldFocusEdit && editOpened)
+        {
+            _shouldFocusEdit = false;
+            await JsInterop.FocusFirstIn("#habit-component");
+        }
+        else if (editClosed && _lastSelectedId != 0)
+        {
+            await JsInterop.FocusElementById($"habit-item-{_lastSelectedId}");
+        }
     }
 
     void AddNew()
@@ -331,6 +348,8 @@
 
     async Task OpenSelected(long id)
     {
+        _lastSelectedId = id;
+        _shouldFocusEdit = true;
         if (IsEmbedded)
         {
             Id = id;

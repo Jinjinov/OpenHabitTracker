@@ -29,7 +29,7 @@
         <div class="col bg-body-secondary d-flex align-items-center">
 
             @* <button class="nav-link px-1 py-2 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> @Loc["Menu"]</button> *@
-            <button class="nav-link px-2 py-1 my-1 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="ToggleMenu" aria-label="@Loc["Toggle menu"]" aria-expanded="@(_dynamicComponentType == typeof(Menu))" data-main-step-1><i class="bi bi-three-dots-vertical"></i></button>
+            <button @ref="_menuButtonRef" class="nav-link px-2 py-1 my-1 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="ToggleMenu" aria-label="@Loc["Toggle menu"]" aria-expanded="@(_dynamicComponentType == typeof(Menu))" data-main-step-1><i class="bi bi-three-dots-vertical"></i></button>
 
             @* <button class="nav-link" @onclick="Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues"><i class="bi bi-floppy"></i> Save</button> *@
             @* <button class="nav-link" @onclick="() =>
@@ -50,7 +50,7 @@
             <NavLink class="nav-link px-2 py-1 ms-3" href="habits" aria-current="@AriaCurrentPage("habits")" aria-label="@Loc["Habits"]" data-main-step-5><i class="bi bi-repeat"></i></NavLink>
             @* <NavLink class="nav-link px-2 py-1 ms-3" href="help"><i class="bi bi-question-circle"></i></NavLink> *@
 
-            <button class="nav-link px-2 py-1 ms-3 @(_dynamicComponentType == typeof(Search) ? "active" : "")" @onclick="ToggleSearch" aria-label="@Loc["Search, Filter, Sort"]" aria-expanded="@(_dynamicComponentType == typeof(Search))" data-main-step-6><i class="bi bi-search"></i></button>
+            <button @ref="_searchButtonRef" class="nav-link px-2 py-1 ms-3 @(_dynamicComponentType == typeof(Search) ? "active" : "")" @onclick="ToggleSearch" aria-label="@Loc["Search, Filter, Sort"]" aria-expanded="@(_dynamicComponentType == typeof(Search))" data-main-step-6><i class="bi bi-search"></i></button>
 
             @if (ClientState.Settings.ShowHelp)
             {
@@ -79,7 +79,7 @@
             {
                 @* Sidebar column *@
 
-                <div class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px" @onkeydown="HandleSidebarKeyDown">
+                <div id="sidebar-container" class="col-12 col-md-2 child-column px-0 px-md-1" style="min-width: 350px" @onkeydown="HandleSidebarKeyDown">
 
                     @* Sidebar title *@
 
@@ -171,6 +171,11 @@
 
     private Type? _dynamicComponentType;
     private Type? _previousDynamicComponentType;
+    private bool _sidebarWasOpen;
+
+    private ElementReference _menuButtonRef;
+    private ElementReference _searchButtonRef;
+    private ElementReference? _lastOpenerRef;
     private Dictionary<string, Dictionary<string, object>> _dynamicComponentParametersByName = new();
 
     private readonly Dictionary<string, string> _titleByTypeName = new()
@@ -294,10 +299,20 @@
 
             Logger.LogInformation("MainLayout.OnAfterRenderAsync end");
         }
+
+        bool sidebarOpened = !_sidebarWasOpen && _dynamicComponentType is not null;
+        bool sidebarClosed = _sidebarWasOpen && _dynamicComponentType is null;
+        _sidebarWasOpen = _dynamicComponentType is not null;
+
+        if (sidebarOpened)
+            await JsInterop.FocusFirstIn("#sidebar-container");
+        else if (sidebarClosed && _lastOpenerRef.HasValue)
+            await JsInterop.FocusElement(_lastOpenerRef.Value);
     }
 
     private void ToggleMenu()
     {
+        _lastOpenerRef = _menuButtonRef;
         if (_dynamicComponentType != typeof(Menu))
         {
             _previousDynamicComponentType = _dynamicComponentType;
@@ -311,6 +326,7 @@
 
     private void ToggleSearch()
     {
+        _lastOpenerRef = _searchButtonRef;
         if (_dynamicComponentType != typeof(Search))
         {
             SelectComponent<Search>();

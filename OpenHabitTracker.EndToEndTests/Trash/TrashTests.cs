@@ -6,7 +6,11 @@ namespace OpenHabitTracker.EndToEndTests.Trash;
 public class TrashTests : BaseTest
 {
     [SetUp]
-    public async Task SetUp() => await GotoAsync("notes");
+    public async Task SetUp()
+    {
+        await GotoAsync();
+        await NavigateToAsync("[data-main-step-3]");
+    }
 
     private async Task AddAndDeleteNoteAsync(string title)
     {
@@ -39,7 +43,7 @@ public class TrashTests : BaseTest
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await CloseSidebarAsync();
-        await GotoAsync("notes");
+        await NavigateToAsync("[data-main-step-3]");
 
         await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Restore Me" })).ToBeVisibleAsync();
     }

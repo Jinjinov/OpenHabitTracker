@@ -6,7 +6,11 @@ namespace OpenHabitTracker.EndToEndTests.CRUD;
 public class NoteTests : BaseTest
 {
     [SetUp]
-    public async Task SetUp() => await GotoAsync("notes");
+    public async Task SetUp()
+    {
+        await GotoAsync();
+        await NavigateToAsync("[data-main-step-3]");
+    }
 
     [Test]
     public async Task AddNote_TypeTitle_NoteAppearsInList()
