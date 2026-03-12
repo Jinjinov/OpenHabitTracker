@@ -55,72 +55,26 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-accessibility:
-
-    1. Silent operations give no screen reader feedback (WCAG 4.1.3):
-       - note save, habit marked done, item deleted — screen reader users hear nothing
-       - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
-       - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
-
-       PLAN:
-       Step A — shared StatusService (OpenHabitTracker.Blazor/StatusService.cs):
-       - Add a Scoped service: public class StatusService { public string Message { get; private set; } public event Action? OnChange; public void Set(string msg) { Message = msg; OnChange?.Invoke(); } public void Clear() { Message = string.Empty; OnChange?.Invoke(); } }
-       - Register in DI: builder.Services.AddScoped<StatusService>();
-
-       Step B — live region in Main.razor:
-       - Add <div role="status" aria-live="polite" aria-atomic="true" class="visually-hidden">@StatusService.Message</div> at the bottom of the layout (inside <main> or just before </body>)
-       - Subscribe to StatusService.OnChange in OnInitialized; call StateHasChanged in the handler
-       - Auto-clear after 3 seconds: use a CancellationTokenSource, cancel previous timer before starting a new one
-
-       Step C — call StatusService.Set() after each silent operation:
-       - HabitComponent.razor: after MarkAsDone → StatusService.Set(Loc["Habit marked as done"])
-       - NoteComponent.razor: after Save → StatusService.Set(Loc["Note saved"])
-       - HabitComponent/NoteComponent/TaskComponent.razor: after Delete → StatusService.Set(Loc["Item deleted"])
-       - ItemsComponent.razor: after item checkbox toggled → StatusService.Set(Loc["Item checked"] / Loc["Item unchecked"])
-
-       Step D — validation errors (role="alert"):
-       - Where form validation messages are shown, wrap in <div role="alert">...</div> (role="alert" implies aria-live="assertive" so no extra attribute needed)
-       - Existing ValidationMessage components can be wrapped; no changes to the validation logic itself
-
-    2. Focus management (currently missing):
-       - sidebar opens → move focus to first element inside
-       - sidebar closes → return focus to the button that opened it (menu or search)
-       - note/task/habit edit opens → move focus to first element inside
-       - note/task/habit edit closes → return focus to the list item that was opened
-
-       PLAN:
-       File: OpenHabitTracker.Blazor/Layout/Main.razor
-
-       Step A — sidebar focus on open:
-       - Main.razor already renders sidebar content in a <div @onkeydown="HandleSidebarKeyDown">
-       - Add id="sidebar-container" to the sidebar div
-       - Add focusFirstIn(selector) to jsInterop.js: const el = document.querySelector(selector)?.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'); el?.focus();
-       - Add ValueTask FocusFirstIn(string cssSelector) to IJsInterop.cs and JsInterop.cs
-       - In OnAfterRenderAsync, track _prevDynamicComponentType; when it transitions null → non-null, call await JsInterop.FocusFirstIn("#sidebar-container")
-       - Note: same pattern already used in Habits.razor (_dynamicComponentTypeName, lines 298–300)
-
-       Step B — restore focus to opener button on sidebar close:
-       - Main.razor has two opener buttons: the menu toggle button and the search toggle button
-       - Add @ref="_menuButtonRef" and @ref="_searchButtonRef" on those two buttons
-       - Track which one was last clicked: ElementReference _lastOpenerRef
-       - Set _lastOpenerRef = _menuButtonRef (or _searchButtonRef) in ToggleMenu / ToggleSearch before opening
-       - In OnAfterRenderAsync, when _prevDynamicComponentType transitions non-null → null, call await JsInterop.FocusElement(_lastOpenerRef)
-       - Note: all close paths (Escape key, close button, toggle) are caught by the null transition check
-
-       Step C — focus first element when opening edit:
-       - Add the corresponding id attribute to the root element of HabitComponent.razor / NoteComponent.razor / TaskComponent.razor (id="habit-component" / "note-component" / "task-component")
-       - Each component renders in at most one location in the DOM at a time (inline or second column, never both), so the id is always unique
-       - In Habits.razor / Notes.razor / Tasks.razor OnAfterRenderAsync, track _prevShowHabitComponent (bool); when it transitions false → true, call await JsInterop.FocusFirstIn("#habit-component")
-       - Use a _shouldFocusEdit bool set in OpenSelected and cleared after FocusFirstIn (same pattern as shouldFocus for "Add new")
-       - Reuses the same FocusFirstIn JS helper from Step A — no extra JS needed
-
-       Step D — restore focus to list item on edit close:
-       - DO NOT use @ref + Dictionary<long, ElementReference> — Blazor's @ref on HTML elements inside foreach loops does not support dictionary indexer expressions
-       - Instead: add id="habit-item-@habit.Id" to the "open edit" button for each list item in Habits.razor / Notes.razor / Tasks.razor
-       - Add focusElementById(id) to jsInterop.js: document.getElementById(id)?.focus();
-       - Add ValueTask FocusElementById(string id) to IJsInterop.cs and JsInterop.cs
-       - Track long _lastSelectedId = 0; set it in OpenSelected before navigating
-       - In OnAfterRenderAsync, when _prevShowHabitComponent transitions true → false, call await JsInterop.FocusElementById($"habit-item-{_lastSelectedId}")
+accessibility: Silent operations give no screen reader feedback (WCAG 4.1.3):
+    - note save, habit marked done, item deleted — screen reader users hear nothing
+    - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
+    - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
+    PLAN:
+    Step A — shared StatusService (OpenHabitTracker.Blazor/StatusService.cs):
+    - Add a Scoped service: public class StatusService { public string Message { get; private set; } public event Action? OnChange; public void Set(string msg) { Message = msg; OnChange?.Invoke(); } public void Clear() { Message = string.Empty; OnChange?.Invoke(); } }
+    - Register in DI: builder.Services.AddScoped<StatusService>();
+    Step B — live region in Main.razor:
+    - Add <div role="status" aria-live="polite" aria-atomic="true" class="visually-hidden">@StatusService.Message</div> at the bottom of the layout (inside <main> or just before </body>)
+    - Subscribe to StatusService.OnChange in OnInitialized; call StateHasChanged in the handler
+    - Auto-clear after 3 seconds: use a CancellationTokenSource, cancel previous timer before starting a new one
+    Step C — call StatusService.Set() after each silent operation:
+    - HabitComponent.razor: after MarkAsDone → StatusService.Set(Loc["Habit marked as done"])
+    - NoteComponent.razor: after Save → StatusService.Set(Loc["Note saved"])
+    - HabitComponent/NoteComponent/TaskComponent.razor: after Delete → StatusService.Set(Loc["Item deleted"])
+    - ItemsComponent.razor: after item checkbox toggled → StatusService.Set(Loc["Item checked"] / Loc["Item unchecked"])
+    Step D — validation errors (role="alert"):
+    - Where form validation messages are shown, wrap in <div role="alert">...</div> (role="alert" implies aria-live="assertive" so no extra attribute needed)
+    - Existing ValidationMessage components can be wrapped; no changes to the validation logic itself
 
 ---------------------------------------------------------------------------------------------------
 
