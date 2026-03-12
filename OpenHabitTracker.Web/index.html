@@ -210,14 +210,13 @@
         <a class="nav-link" href="#webapp">Web app</a>
         <a class="nav-link d-none d-md-block" href="#stores">Stores</a>
         <a class="nav-link d-none d-lg-block" href="#sync">Online sync</a>
-        <a class="nav-link d-none d-sm-block" href="#downloads">Downloads</a>
         <a class="nav-link" href="#features">Features</a>
         <a class="nav-link d-none d-lg-block" href="#formats">Formats</a>
-        <a class="nav-link d-none d-sm-block" href="#languages">Languages</a>
-        <a class="nav-link" href="#about">About</a>
+        <a class="nav-link d-none d-sm-block" href="#ui-ux">UI &amp; UX</a>
+        <a class="nav-link d-none d-sm-block" href="#downloads">Downloads</a>
         <a class="nav-link d-none d-lg-block" href="#videos">Videos</a>
         <a class="nav-link d-none d-lg-block" href="#screenshots">Screenshots</a>
-        <a class="nav-link d-none d-md-block" href="#themes">Themes</a>
+        <a class="nav-link" href="#about">About</a>
       </nav>
 
       <div class="card">
@@ -273,6 +272,82 @@
             <li>all data is saved online</li>
             <li><a href="https://hub.docker.com/r/jinjinov/openhabittracker" onclick="dockerHubVisit()">Docker Hub</a></li>
             <li><a href="https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker" onclick="gitHubContainerRegistryVisit()">GitHub Container Registry</a></li>
+          </ul>
+
+          <h3 id="features" class="card-title mt-5">Features</h3>
+
+          <h4 class="card-subtitle my-3 text-muted">Take notes, manage tasks, track habits:</h4>
+          <ul>
+            <li>Define your goals by organizing your notes, tasks and habits all in one place</li>
+            <li>Use categories to group similar goals</li>
+            <li>Keep track of what is important by assigning priorities</li>
+          </ul>
+
+          <h4 class="card-subtitle my-3 text-muted">Search, filter and sort:</h4>
+          <ul>
+            <li>Use search to quickly find any content</li>
+            <li>Use filters to view only what you want to focus on</li>
+            <li>Sort your notes, tasks and habits by any property</li>
+          </ul>
+
+          <h4 class="card-subtitle my-3 text-muted">Habit tracking:</h4>
+          <ul>
+            <li>Set the desired interval for your habits (repeating tasks)</li>
+            <li>Compare the average interval with the desired interval</li>
+            <li>See when you last completed a task and how that compares to the desired interval</li>
+          </ul>
+
+          <h3 id="formats" class="card-title mt-5">Formats</h3>
+
+          <h4 class="card-subtitle my-3 text-muted">Integration with Google services:</h4>
+          <ul>
+            <li>Import from Google Keep</li>
+            <!--
+            <li>Backup JSON to Google Drive</li>
+            -->
+          </ul>
+
+          <h4 class="card-subtitle my-3 text-muted">File import/export:</h4>
+          <ul>
+            <li>Markdown</li>
+            <li>YAML</li>
+            <li>JSON</li>
+            <li>TSV (Tab Separated Values)</li>
+          </ul>
+
+          <h3 id="ui-ux" class="card-title mt-5">UI &amp; UX</h3>
+
+          <h4 class="card-subtitle my-3 text-muted">Appearance &amp; accessibility:</h4>
+          <ul>
+            <li>Light &amp; dark mode</li>
+            <li>26 themes</li>
+            <li>Customizable UI</li>
+            <li>Keyboard navigation</li>
+            <li>Accessibility support</li>
+          </ul>
+
+          <h4 class="card-subtitle my-3 text-muted">Available in 20 languages:</h4>
+          <ul>
+            <li>Chinese</li>
+            <li>Croatian</li>
+            <li>Czech</li>
+            <li>Danish</li>
+            <li>Dutch</li>
+            <li>English</li>
+            <li>Finnish</li>
+            <li>French</li>
+            <li>German</li>
+            <li>Italian</li>
+            <li>Japanese</li>
+            <li>Korean</li>
+            <li>Norwegian</li>
+            <li>Polish</li>
+            <li>Portuguese</li>
+            <li>Serbian</li>
+            <li>Slovak</li>
+            <li>Slovenian</li>
+            <li>Spanish</li>
+            <li>Swedish</li>
           </ul>
 
           <h3 id="downloads" class="card-title mt-5">Downloads</h3>
@@ -360,97 +435,6 @@
           <p><i class="fab fa-linux"></i> <b>Linux:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Linux.1.0.0.zip" onclick="linuxAppDownload()" class="card-link">OpenHabitTracker.Linux.1.0.0.zip</a> - run <span class="text-light bg-dark font-monospace">OpenHT</span></p>
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.0.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.0.0.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.0.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.0.0.apk</a></p>
-
-          <h3 id="features" class="card-title mt-5">Features</h3>
-
-          <h4 class="card-subtitle my-3 text-muted">Take notes, manage tasks, track habits:</h4>
-          <ul>
-            <li>Define your goals by organizing your notes, tasks and habits all in one place</li>
-            <li>Use categories to group similar goals</li>
-            <li>Keep track of what is important by assigning priorities</li>
-          </ul>
-
-          <h4 class="card-subtitle my-3 text-muted">Search, filter and sort:</h4>
-          <ul>
-            <li>Use search to quickly find any content</li>
-            <li>Use filters to view only what you want to focus on</li>
-            <li>Sort your notes, tasks and habits by any property</li>
-          </ul>
-
-          <h4 class="card-subtitle my-3 text-muted">Habit tracking:</h4>
-          <ul>
-            <li>Set the desired interval for your habits (repeating tasks)</li>
-            <li>Compare the average interval with the desired interval</li>
-            <li>See when you last completed a task and how that compares to the desired interval</li>
-          </ul>
-
-          <h3 id="formats" class="card-title mt-5">Formats</h3>
-
-          <h4 class="card-subtitle my-3 text-muted">Integration with Google services:</h4>
-          <ul>
-            <li>Import from Google Keep</li>
-            <!--
-            <li>Backup JSON to Google Drive</li>
-            -->
-          </ul>
-
-          <h4 class="card-subtitle my-3 text-muted">File import/export:</h4>
-          <ul>
-            <li>Markdown</li>
-            <li>YAML</li>
-            <li>JSON</li>
-            <li>TSV (Tab Separated Values)</li>
-          </ul>
-
-          <h3 id="languages" class="card-title mt-5">Languages</h3>
-
-          <h4 class="card-subtitle my-3 text-muted">Available in 20 languages:</h4>
-          <ul>
-            <li>Chinese</li>
-            <li>Croatian</li>
-            <li>Czech</li>
-            <li>Danish</li>
-            <li>Dutch</li>
-            <li>English</li>
-            <li>Finnish</li>
-            <li>French</li>
-            <li>German</li>
-            <li>Italian</li>
-            <li>Japanese</li>
-            <li>Korean</li>
-            <li>Norwegian</li>
-            <li>Polish</li>
-            <li>Portuguese</li>
-            <li>Serbian</li>
-            <li>Slovak</li>
-            <li>Slovenian</li>
-            <li>Spanish</li>
-            <li>Swedish</li>
-          </ul>
-
-          <h3 id="about" class="card-title mt-5">About</h3>
-
-          <h4 class="card-subtitle my-3 text-muted"><span class="caveat large">OpenHabitTracker </span> is:</h4>
-          <ul>
-            <li>Free</li>
-            <li>Open source: <a href="https://github.com/Jinjinov/OpenHabitTracker" onclick="gitHubVisit()">GitHub</a></li>
-            <li>Cross platform: Web, Windows, Android, iOS, macOS and Linux</li>
-          </ul>
-
-          <h4 class="card-subtitle my-3 text-muted">Made with latest technologies:</h4>
-          <ul>
-            <li><a href="https://dotnet.microsoft.com/en-us/download/dotnet">.NET</a></li>
-            <li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/">C#</a></li>
-            <li><a href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">Blazor</a></li>
-            <li><a href="https://getbootstrap.com/">Bootstrap</a></li>
-            <li><a href="https://bootswatch.com/">Bootswatch</a></li>
-            <li><a href="https://joshclose.github.io/CsvHelper/">CsvHelper</a></li>
-            <li><a href="https://github.com/amuste/DnetIndexedDb">DnetIndexedDb</a></li>
-            <li><a href="https://github.com/xoofx/markdig">Markdig</a></li>
-            <li><a href="https://docs.microsoft.com/en-us/dotnet/maui/">MAUI</a></li>
-            <li><a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/">WebView2</a></li>
-            <li><a href="https://aaubry.net/pages/yamldotnet.html">YamlDotNet</a></li>
-          </ul>
 
           <h3 id="videos" class="card-title mt-5">Videos</h3>
 
@@ -618,36 +602,28 @@
 
           </div>
 
-          <h3 id="themes" class="card-title mt-5">Themes</h3>
+          <h3 id="about" class="card-title mt-5">About</h3>
 
-          <h4 class="card-subtitle my-3 text-muted">Available in 26 themes:</h4>
+          <h4 class="card-subtitle my-3 text-muted"><span class="caveat large">OpenHabitTracker </span> is:</h4>
           <ul>
-            <li>default</li>
-            <li>cerulean</li>
-            <li>cosmo</li>
-            <li>cyborg</li>
-            <li>darkly</li>
-            <li>flatly</li>
-            <li>journal</li>
-            <li>litera</li>
-            <li>lumen</li>
-            <li>lux</li>
-            <li>materia</li>
-            <li>minty</li>
-            <li>morph</li>
-            <li>pulse</li>
-            <li>quartz</li>
-            <li>sandstone</li>
-            <li>simplex</li>
-            <li>sketchy</li>
-            <li>slate</li>
-            <li>solar</li>
-            <li>spacelab</li>
-            <li>superhero</li>
-            <li>united</li>
-            <li>vapor</li>
-            <li>yeti</li>
-            <li>zephyr</li>
+            <li>Free</li>
+            <li>Open source: <a href="https://github.com/Jinjinov/OpenHabitTracker" onclick="gitHubVisit()">GitHub</a></li>
+            <li>Cross platform: Web, Windows, Android, iOS, macOS and Linux</li>
+          </ul>
+
+          <h4 class="card-subtitle my-3 text-muted">Made with latest technologies:</h4>
+          <ul>
+            <li><a href="https://dotnet.microsoft.com/en-us/download/dotnet">.NET</a></li>
+            <li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/">C#</a></li>
+            <li><a href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">Blazor</a></li>
+            <li><a href="https://getbootstrap.com/">Bootstrap</a></li>
+            <li><a href="https://bootswatch.com/">Bootswatch</a></li>
+            <li><a href="https://joshclose.github.io/CsvHelper/">CsvHelper</a></li>
+            <li><a href="https://github.com/amuste/DnetIndexedDb">DnetIndexedDb</a></li>
+            <li><a href="https://github.com/xoofx/markdig">Markdig</a></li>
+            <li><a href="https://docs.microsoft.com/en-us/dotnet/maui/">MAUI</a></li>
+            <li><a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/">WebView2</a></li>
+            <li><a href="https://aaubry.net/pages/yamldotnet.html">YamlDotNet</a></li>
           </ul>
 
         </div>
