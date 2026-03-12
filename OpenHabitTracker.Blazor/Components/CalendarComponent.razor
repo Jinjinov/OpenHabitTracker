@@ -7,6 +7,7 @@
 @inject IHabitService HabitService
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
+@inject IJsInterop JsInterop
 
 @if (Habit is null || Habit.TimesDoneByDay is null)
 {
@@ -25,25 +26,26 @@ else
         </div>
     }
 
-    <div>
+    <div role="grid" aria-label="@Loc["Calendar"]" @onkeydown="HandleGridKeyDown" @ref="_gridRef">
         @if (DisplayMonth)
         {
-            <div class="bg-body d-flex">
+            <div class="bg-body d-flex" role="row">
                 @for (int i = 0; i < 7; i++)
                 {
                     int dayIdx = OpenHabitTracker.Services.CalendarService.GetDayOfWeek(ClientState.Settings.FirstDayOfWeek, i);
                     string day = Loc[_days[dayIdx]];
-                    <div @key="day" class="border d-flex" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
+                    <div @key="day" class="border d-flex" role="columnheader" scope="col" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
                 }
             </div>
         }
 
         @for (int row = 0; row < rowCount; row++)
         {
-            <div class="d-flex">
+            <div class="d-flex" role="row">
                 @for (int day = 0; day < daysInRow; day++)
                 {
-                    DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, row * daysInRow + day); // if not captured locally, day becomes the last value used in the loop
+                    int cellIndex = row * daysInRow + day;
+                    DateTime dateTime = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, cellIndex); // if not captured locally, day becomes the last value used in the loop
 
                     string text = dateTime.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "text-warning" : "text-secondary";
                     if (dateTime.Month == _calendarParams.FirstDayOfMonth.Month)
@@ -64,9 +66,15 @@ else
                             background = "bg-warning-subtle";
                     }
 
+                    string ariaLabel = $"{dateTime:dddd, MMMM d} \u2014 {list?.Count ?? 0} {Loc["times done"]}";
+
                     <button class="@($"border {border} {text} d-flex {background}")"
+                            role="gridcell"
                             style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
-                            @onclick="() => DayClicked(dateTime, list)">
+                            tabindex="@(cellIndex == _activeDayIndex ? 0 : -1)"
+                            @ref="_dayCellRefs[cellIndex]"
+                            aria-label="@ariaLabel"
+                            @onclick="() => DayClicked(dateTime, list, cellIndex)">
                         @dateTime.Day<small>@timesDone</small>
                     </button>
                 }
@@ -128,6 +136,10 @@ else
 
     private readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
 
+    int _activeDayIndex = 0;
+    ElementReference[] _dayCellRefs = Array.Empty<ElementReference>();
+    ElementReference _gridRef;
+
     protected override async Task OnParametersSetAsync()
     {
         if (_calendarParams.CalendarStart == DateTime.MinValue || _calendarParams.CalendarStart.DayOfWeek != ClientState.Settings.FirstDayOfWeek)
@@ -159,6 +171,13 @@ else
             }
         }
 
+        int totalCells = rowCount * daysInRow;
+        if (_dayCellRefs.Length != totalCells)
+        {
+            _dayCellRefs = new ElementReference[totalCells];
+            _activeDayIndex = 0;
+        }
+
         if (Habit is not null)
         {
             if (Habit.TimesDoneByDay is null)
@@ -170,6 +189,12 @@ else
                     selectedDateTime = null;
             }
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await JsInterop.PreventScrollKeys(_gridRef);
     }
 
     DateTime? selectedDateTime;
@@ -188,8 +213,88 @@ else
             Habit!.TimesDoneByDay!.TryGetValue(selectedDateTime!.Value, out selectedTimeList);
     }
 
-    async Task DayClicked(DateTime dateTime, List<TimeModel>? timeList)
+    async Task HandleGridKeyDown(KeyboardEventArgs e)
     {
+        int totalCells = rowCount * daysInRow;
+        switch (e.Key)
+        {
+            case "ArrowRight":
+                if (_activeDayIndex + 1 < totalCells)
+                    _activeDayIndex++;
+                else
+                {
+                    if (DisplayMonth)
+                        _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek);
+                    else
+                        _calendarParams.SetCalendarStartToNextWeek();
+                    _activeDayIndex = 0;
+                }
+                break;
+            case "ArrowLeft":
+                if (_activeDayIndex - 1 >= 0)
+                    _activeDayIndex--;
+                else
+                {
+                    if (DisplayMonth)
+                        _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek);
+                    else
+                        _calendarParams.SetCalendarStartToPreviousWeek();
+                    _activeDayIndex = totalCells - 1;
+                }
+                break;
+            case "ArrowDown":
+                if (_activeDayIndex + daysInRow < totalCells)
+                    _activeDayIndex += daysInRow;
+                else
+                {
+                    if (DisplayMonth)
+                        _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek);
+                    else
+                        _calendarParams.SetCalendarStartToNextWeek();
+                    _activeDayIndex = 0;
+                }
+                break;
+            case "ArrowUp":
+                if (_activeDayIndex - daysInRow >= 0)
+                    _activeDayIndex -= daysInRow;
+                else
+                {
+                    if (DisplayMonth)
+                        _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek);
+                    else
+                        _calendarParams.SetCalendarStartToPreviousWeek();
+                    _activeDayIndex = totalCells - 1;
+                }
+                break;
+            case "Home":
+                _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow;
+                break;
+            case "End":
+                _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow + daysInRow - 1;
+                break;
+            case "PageDown":
+                if (DisplayMonth)
+                    _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek);
+                else
+                    _calendarParams.SetCalendarStartToNextWeek();
+                _activeDayIndex = 0;
+                break;
+            case "PageUp":
+                if (DisplayMonth)
+                    _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek);
+                else
+                    _calendarParams.SetCalendarStartToPreviousWeek();
+                _activeDayIndex = 0;
+                break;
+            default:
+                return;
+        }
+        await JsInterop.FocusElement(_dayCellRefs[_activeDayIndex]);
+    }
+
+    async Task DayClicked(DateTime dateTime, List<TimeModel>? timeList, int cellIndex)
+    {
+        _activeDayIndex = cellIndex;
         if (DisplayMonth)
         {
             if (selectedDateTime == dateTime)

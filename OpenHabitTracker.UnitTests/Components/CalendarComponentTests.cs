@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using NSubstitute;
 using OpenHabitTracker.App;
+using OpenHabitTracker.Blazor;
 using OpenHabitTracker.Blazor.Components;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
@@ -18,6 +19,7 @@ public class CalendarComponentTests
 {
     private BunitContext _ctx = null!;
     private ICalendarService _calendarService = null!;
+    private IJsInterop _jsInterop = null!;
     private HabitModel _habit = null!;
 
     [SetUp]
@@ -40,10 +42,13 @@ public class CalendarComponentTests
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
 
+        _jsInterop = Substitute.For<IJsInterop>();
+
         _ctx.Services.AddScoped(_ => _calendarService);
         _ctx.Services.AddScoped(_ => Substitute.For<IHabitService>());
         _ctx.Services.AddScoped(_ => clientState);
         _ctx.Services.AddSingleton(loc);
+        _ctx.Services.AddScoped(_ => _jsInterop);
 
         _habit = new HabitModel { Title = "Exercise", TimesDoneByDay = new Dictionary<DateTime, List<TimeModel>>() };
     }
@@ -132,5 +137,137 @@ public class CalendarComponentTests
         IElement countControls = cut.Find("div.input-group.mt-1");
 
         Assert.That(countControls, Is.Not.Null);
+    }
+
+    [Test]
+    public void MonthView_Renders_FirstCellWithTabindexZero()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        IReadOnlyList<IElement> cells = cut.FindAll("div.d-flex > button");
+
+        Assert.That(cells[0].GetAttribute("tabindex"), Is.EqualTo("0"));
+        Assert.That(cells[1].GetAttribute("tabindex"), Is.EqualTo("-1"));
+    }
+
+    [Test]
+    public async Task MonthView_ArrowRight_MovesTabindexToNextCell()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        await cut.Find("div[role='grid']").KeyDownAsync(new KeyboardEventArgs { Key = "ArrowRight" });
+
+        IReadOnlyList<IElement> cells = cut.FindAll("div.d-flex > button");
+        Assert.That(cells[0].GetAttribute("tabindex"), Is.EqualTo("-1"));
+        Assert.That(cells[1].GetAttribute("tabindex"), Is.EqualTo("0"));
+    }
+
+    [Test]
+    public async Task MonthView_ArrowDown_MovesTabindexBySevenCells()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        await cut.Find("div[role='grid']").KeyDownAsync(new KeyboardEventArgs { Key = "ArrowDown" });
+
+        IReadOnlyList<IElement> cells = cut.FindAll("div.d-flex > button");
+        Assert.That(cells[7].GetAttribute("tabindex"), Is.EqualTo("0"));
+        Assert.That(cells[0].GetAttribute("tabindex"), Is.EqualTo("-1"));
+    }
+
+    [Test]
+    public async Task MonthView_End_MovesTabindexToLastCellOfRow()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        await cut.Find("div[role='grid']").KeyDownAsync(new KeyboardEventArgs { Key = "End" });
+
+        IReadOnlyList<IElement> cells = cut.FindAll("div.d-flex > button");
+        Assert.That(cells[6].GetAttribute("tabindex"), Is.EqualTo("0"));
+        Assert.That(cells[0].GetAttribute("tabindex"), Is.EqualTo("-1"));
+    }
+
+    [Test]
+    public async Task MonthView_Home_MovesTabindexToFirstCellOfRow()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        await cut.Find("div[role='grid']").KeyDownAsync(new KeyboardEventArgs { Key = "End" });
+        await cut.Find("div[role='grid']").KeyDownAsync(new KeyboardEventArgs { Key = "Home" });
+
+        IReadOnlyList<IElement> cells = cut.FindAll("div.d-flex > button");
+        Assert.That(cells[0].GetAttribute("tabindex"), Is.EqualTo("0"));
+    }
+
+    [Test]
+    public async Task MonthView_CellClick_UpdatesTabindex()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        IReadOnlyList<IElement> cells = cut.FindAll("div.d-flex > button");
+        await cells[5].ClickAsync(new MouseEventArgs());
+
+        cells = cut.FindAll("div.d-flex > button");
+        Assert.That(cells[5].GetAttribute("tabindex"), Is.EqualTo("0"));
+        Assert.That(cells[0].GetAttribute("tabindex"), Is.EqualTo("-1"));
+    }
+
+    [Test]
+    public async Task MonthView_DayCellHasAriaLabel()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        IElement firstCell = cut.Find("div.d-flex > button");
+
+        Assert.That(firstCell.GetAttribute("aria-label"), Is.Not.Null.And.Not.Empty);
+    }
+
+    [Test]
+    public async Task MonthView_ArrowRight_CallsFocusElementOnJsInterop()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        await cut.Find("div[role='grid']").KeyDownAsync(new KeyboardEventArgs { Key = "ArrowRight" });
+
+        await _jsInterop.Received(1).FocusElement(Arg.Any<Microsoft.AspNetCore.Components.ElementReference>());
+    }
+
+    [Test]
+    public async Task WeekView_ArrowRight_MovesTabindexToNextCell()
+    {
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, false)
+                .Add(p => p.ColumnWidth, 350));
+
+        await cut.Find("div[role='grid']").KeyDownAsync(new KeyboardEventArgs { Key = "ArrowRight" });
+
+        IReadOnlyList<IElement> cells = cut.FindAll("div.d-flex > button");
+        Assert.That(cells[0].GetAttribute("tabindex"), Is.EqualTo("-1"));
+        Assert.That(cells[1].GetAttribute("tabindex"), Is.EqualTo("0"));
     }
 }
