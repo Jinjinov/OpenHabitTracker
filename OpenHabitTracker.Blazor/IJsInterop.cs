@@ -16,4 +16,5 @@ public interface IJsInterop
     ValueTask SaveAsUTF8(string filename, string content);
     ValueTask SetCalculateAutoHeight(ElementReference element);
     ValueTask HandleTabKey(ElementReference element);
+    ValueTask PreventScrollKeys(ElementReference element);
 }

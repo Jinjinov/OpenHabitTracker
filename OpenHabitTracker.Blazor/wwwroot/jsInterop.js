@@ -80,6 +80,19 @@ export function setCalculateAutoHeight(textarea) {
     }
 }
 
+const _scrollKeys = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown']);
+
+export function preventScrollKeys(element) {
+    if (element && !element.scrollKeyHandlerAdded) {
+        element.addEventListener('keydown', function (event) {
+            if (_scrollKeys.has(event.key)) {
+                event.preventDefault();
+            }
+        });
+        element.scrollKeyHandlerAdded = true;
+    }
+}
+
 export function handleTabKey(textarea) {
     if (textarea && !textarea.tabKeyHandlerAdded) {
         textarea.addEventListener('keydown', function (event) {

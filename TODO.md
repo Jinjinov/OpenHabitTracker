@@ -110,57 +110,13 @@ accessibility:
        - Add @ref on the "open edit" button for each item (use a Dictionary<long, ElementReference> _itemRefs keyed by item Id)
        - When edit closes (CloseSelected callback fires), call await JsInterop.FocusElement(_itemRefs[_selectedId]) where _selectedId is the id of the item that was open
 
-    3. Calendar arrow key navigation (roving tabindex):
+    3. Calendar arrow key navigation (roving tabindex): ✅ DONE
        - same pattern as Menu.razor: only one cell has tabindex="0" at a time, arrow keys move between cells, Tab exits grid
        - two modes: month (6 rows × 7 cols = 42 cells) and strip (1 row × daysInRow cells, variable)
-
-       PLAN:
-       File: OpenHabitTracker.Blazor/Components/CalendarComponent.razor
-
-       Step A — inject IJsInterop (not currently present):
-       - Add @inject IJsInterop JsInterop at the top
-
-       Step B — ARIA roles + restructure template:
-       - The rows loop has no wrapper div today — CREATE a new one wrapping both the header row and data rows:
-           // nav buttons stay outside the grid
-           @if (DisplayMonth) { <div class="input-group mb-1">...</div> }
-
-           <div role="grid" aria-label="@Loc["Calendar"]" @onkeydown="HandleGridKeyDown">
-               @if (DisplayMonth) {
-                   <div class="bg-body d-flex" role="row">   // header row moved INSIDE grid
-                       <div role="columnheader" scope="col" ...>@day</div>  // each header cell
-                   </div>
-               }
-               @for (int row ...) {
-                   <div class="d-flex" role="row">            // each data row
-                       <button role="gridcell" ...>           // each day cell
-                   </div>
-               }
-           </div>
-
-       Step C — roving tabindex state (same as Menu.razor):
-       - Add int _activeDayIndex = 0
-       - Add ElementReference[] _dayCellRefs = new ElementReference[rowCount * daysInRow]; re-create in OnParametersSetAsync after rowCount/daysInRow are set
-       - In the day cell loop: int cellIndex = row * daysInRow + day  (already used for GetCalendarDay — capture as local var so lambda closes over it correctly)
-       - On each button: tabindex="@(cellIndex == _activeDayIndex ? 0 : -1)" and @ref="_dayCellRefs[cellIndex]"
-       - Update DayClicked to also accept int index: set _activeDayIndex = index (focus is already there from click)
-
-       Step D — keyboard handler:
-       - @onkeydown="HandleGridKeyDown" goes on the new role="grid" div (no preventDefault needed — arrow keys on focused buttons do not scroll)
-       - In HandleGridKeyDown:
-           ArrowRight / ArrowLeft → ±1; if overflows/underflows, call next/prev nav and set _activeDayIndex = 0 / last
-           ArrowDown  / ArrowUp   → ±daysInRow; same overflow handling (in strip mode daysInRow == total cells so always overflows → navigates to next/prev strip)
-           Home → _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow        (first cell of current row)
-           End  → _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow + daysInRow - 1  (last cell of current row)
-           PageDown → if (DisplayMonth) SetCalendarStartToNextMonth(FirstDayOfWeek) else SetCalendarStartToNextWeek(); _activeDayIndex = 0
-           PageUp   → if (DisplayMonth) SetCalendarStartToPreviousMonth(FirstDayOfWeek) else SetCalendarStartToPreviousWeek(); _activeDayIndex = 0
-           Tab      → unhandled — falls through switch, bubbles naturally, focus exits grid
-       - After _activeDayIndex changes: await JsInterop.FocusElement(_dayCellRefs[_activeDayIndex])
-
-       Step E — aria-label on each day cell button:
-       - Use list?.Count ?? 0 for the count (not timesDone — that string is "" for 0 and 1 completions, wrong for screen readers)
-       - Add aria-label="@dateTime.ToString("dddd, MMMM d") — @(list?.Count ?? 0) @Loc["times done"]"
-       - DateTime.ToString(format) uses CultureInfo.CurrentCulture by default, which Loc.SetCulture() keeps in sync with the user's chosen language
+       - role="grid" / role="row" / role="columnheader" / role="gridcell" + aria-label on each cell
+       - HandleGridKeyDown: ArrowRight/Left/Down/Up with period overflow, Home/End row-boundary, PageDown/PageUp
+       - Unit tests in CalendarComponentTests.cs (tabindex, ArrowRight, ArrowDown, Home, End, click, aria-label, JsInterop)
+       - E2E tests in CalendarKeyboardTests.cs (ArrowRight, ArrowLeft, ArrowDown, ArrowUp, End, Home)
 
 ---------------------------------------------------------------------------------------------------
 
