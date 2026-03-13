@@ -174,9 +174,6 @@ method to copy one db context to another
 ---------------------------------------------------------------------------------------------------
 
 5.
-add comments to methods - 1. for any open source contributor - 2. for GitHub Copilot
-
-6.
 make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
 
 ---------------------------------------------------------------------------------------------------
@@ -206,7 +203,7 @@ https://github.com/dotnet/maui/blob/main/src/Essentials/samples/Sample.Server.We
 
 https://github.com/dotnet/maui/blob/main/src/Essentials/samples/Sample.Server.WebAuthenticator/Controllers/MobileAuthController.cs
 
-7.
+6.
 add OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
     Google Drive
     Microsoft OneDrive
@@ -214,10 +211,10 @@ add OAuth to Blazor Wasm, Photino, Wpf, WinForms, Blazor Server, Maui
     Box
     Nextcloud
 
-8.
+7.
 use Google, Microsoft, Dropbox OAuth for unique user id and login
 
-9.
+8.
 add backup to
     Google Drive
     Microsoft OneDrive
@@ -225,19 +222,12 @@ add backup to
     Box
     Nextcloud
 
-10.
+9.
 use DB in Blazor Server for multi user sync with REST API endpoints
 
 ---------------------------------------------------------------------------------------------------
 
-11.
-Android: get permission to save SQLite DB in an external folder that can be part of Google Drive, OneDrive, iCloud, Dropbox
-
-12.
-deploy Blazor Server Docker image to Raspberry Pi 5 / Synology NAS DS224+
-
----------------------------------------------------------------------------------------------------
-
+10.
 Android:
     save SQLite DB in an external folder
     can be part of Google Drive, OneDrive, iCloud, Dropbox
@@ -248,7 +238,7 @@ MANAGE_EXTERNAL_STORAGE
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
----------------------------------------------------------------------------------------------------
+Android: get permission to save SQLite DB in an external folder that can be part of Google Drive, OneDrive, iCloud, Dropbox
 
     using System;
     using System.IO;
@@ -582,6 +572,12 @@ https://learn.microsoft.com/en-us/samples/dotnet/maui-samples/uitest-appium-nuni
 https://github.com/dotnet/maui-samples/tree/main/8.0/UITesting/BasicAppiumNunitSample
 
 https://devblogs.microsoft.com/dotnet/dotnet-maui-ui-testing-appium/
+
+---------------------------------------------------------------------------------------------------
+
+add comments to methods - 1. for any open source contributor - 2. for GitHub Copilot
+
+deploy Blazor Server Docker image to Raspberry Pi 5 / Synology NAS DS224+
 
 ---------------------------------------------------------------------------------------------------
 
