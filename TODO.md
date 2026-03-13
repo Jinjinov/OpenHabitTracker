@@ -48,42 +48,18 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-- [ ] `HabitModel` + `TaskModel` — extract identical `Duration`, `DurationProxy`, `DurationHour`, `DurationMinute` into a shared base class (e.g. `DurationModel : ItemsModel`)
-- [ ] `TrashService.RestoreAll()` — replace duplicated type-switch with a loop calling `Restore(model)` (use `.ToList()` to snapshot before iterating)
-- [ ] Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
-- [ ] `CalendarParams.SetCalendarStartToNextWeek` + `SetCalendarStartToPreviousWeek` — extract to a private `ShiftCalendarByWeek(int days)` helper; only difference is `+7` vs `-7`
-
----------------------------------------------------------------------------------------------------
-
-accessibility: Silent operations give no screen reader feedback (WCAG 4.1.3):
-    - note save, habit marked done, item deleted — screen reader users hear nothing
-    - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
-    - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
-    PLAN:
-    Step A — shared StatusService (OpenHabitTracker.Blazor/StatusService.cs):
-    - Add a Scoped service: public class StatusService { public string Message { get; private set; } public event Action? OnChange; public void Set(string msg) { Message = msg; OnChange?.Invoke(); } public void Clear() { Message = string.Empty; OnChange?.Invoke(); } }
-    - Register in DI: builder.Services.AddScoped<StatusService>();
-    Step B — live region in Main.razor:
-    - Add <div role="status" aria-live="polite" aria-atomic="true" class="visually-hidden">@StatusService.Message</div> at the bottom of the layout (inside <main> or just before </body>)
-    - Subscribe to StatusService.OnChange in OnInitialized; call StateHasChanged in the handler
-    - Auto-clear after 3 seconds: use a CancellationTokenSource, cancel previous timer before starting a new one
-    Step C — call StatusService.Set() after each silent operation:
-    - HabitComponent.razor: after MarkAsDone → StatusService.Set(Loc["Habit marked as done"])
-    - NoteComponent.razor: after Save → StatusService.Set(Loc["Note saved"])
-    - HabitComponent/NoteComponent/TaskComponent.razor: after Delete → StatusService.Set(Loc["Item deleted"])
-    - ItemsComponent.razor: after item checkbox toggled → StatusService.Set(Loc["Item checked"] / Loc["Item unchecked"])
-    Step D — validation errors (role="alert"):
-    - Where form validation messages are shown, wrap in <div role="alert">...</div> (role="alert" implies aria-live="assertive" so no extra attribute needed)
-    - Existing ValidationMessage components can be wrapped; no changes to the validation logic itself
-
----------------------------------------------------------------------------------------------------
-
-1.
+0.
 SUBMIT DESKTOP VIDEO (1920x1080) TO:
     - macOS App Store: upload MP4 in App Store Connect
 
 SUBMIT MOBILE VIDEO (886x1920) TO:
     - iOS App Store: upload MP4 in App Store Connect
+
+1.
+- `HabitModel` + `TaskModel` — extract identical `Duration`, `DurationProxy`, `DurationHour`, `DurationMinute` into a shared base class (e.g. `DurationModel : ItemsModel`)
+- `TrashService.RestoreAll()` — replace duplicated type-switch with a loop calling `Restore(model)` (use `.ToList()` to snapshot before iterating)
+- Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
+- `CalendarParams.SetCalendarStartToNextWeek` + `SetCalendarStartToPreviousWeek` — extract to a private `ShiftCalendarByWeek(int days)` helper; only difference is `+7` vs `-7`
 
 2.
 exact repeating reminders, like Google Keep
@@ -462,8 +438,6 @@ horizontal calendar with vertical weeks
 
 ---------------------------------------------------------------------------------------------------
 
-replace all `@inject AppData AppData` with appropriate services
-
 call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
     save TotalTimeSpent
     save AverageInterval
@@ -474,9 +448,15 @@ read Settings from DB before Run() - !!! Transient / Scoped / Singleton !!! - Sc
 
 unify into one property ??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
 
+---------------------------------------------------------------------------------------------------
+
+easy for AI ?
+
 common `Router`
     OpenHabitTracker.Blazor - Routes.razor
     OpenHabitTracker.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
+
+easy for AI ?
 
 OpenHabitTracker.Blazor.Server:
     - @page "/Error"
@@ -540,12 +520,12 @@ copy Loop Habit Tracker
 
 ---------------------------------------------------------------------------------------------------
 
-keyboard navigation
-
 ASAP tasks: when, where, contact/company name, address, phone number, working hours, website, email
 
 email: copy task list as HTML with checkboxes to clipboard
 sms, message: copy task list with Unicode checkboxes
+
+---------------------------------------------------------------------------------------------------
 
 virtualized container
 
@@ -572,6 +552,29 @@ https://learn.microsoft.com/en-us/samples/dotnet/maui-samples/uitest-appium-nuni
 https://github.com/dotnet/maui-samples/tree/main/8.0/UITesting/BasicAppiumNunitSample
 
 https://devblogs.microsoft.com/dotnet/dotnet-maui-ui-testing-appium/
+
+---------------------------------------------------------------------------------------------------
+
+accessibility: Silent operations give no screen reader feedback (WCAG 4.1.3):
+    - note save, habit marked done, item deleted — screen reader users hear nothing
+    - success feedback: aria-live="polite" (role="status") region in Main.razor, write brief status text after operations
+    - error feedback: role="alert" (implies aria-live="assertive") for validation errors — interrupts immediately
+    PLAN:
+    Step A — shared StatusService (OpenHabitTracker.Blazor/StatusService.cs):
+    - Add a Scoped service: public class StatusService { public string Message { get; private set; } public event Action? OnChange; public void Set(string msg) { Message = msg; OnChange?.Invoke(); } public void Clear() { Message = string.Empty; OnChange?.Invoke(); } }
+    - Register in DI: builder.Services.AddScoped<StatusService>();
+    Step B — live region in Main.razor:
+    - Add <div role="status" aria-live="polite" aria-atomic="true" class="visually-hidden">@StatusService.Message</div> at the bottom of the layout (inside <main> or just before </body>)
+    - Subscribe to StatusService.OnChange in OnInitialized; call StateHasChanged in the handler
+    - Auto-clear after 3 seconds: use a CancellationTokenSource, cancel previous timer before starting a new one
+    Step C — call StatusService.Set() after each silent operation:
+    - HabitComponent.razor: after MarkAsDone → StatusService.Set(Loc["Habit marked as done"])
+    - NoteComponent.razor: after Save → StatusService.Set(Loc["Note saved"])
+    - HabitComponent/NoteComponent/TaskComponent.razor: after Delete → StatusService.Set(Loc["Item deleted"])
+    - ItemsComponent.razor: after item checkbox toggled → StatusService.Set(Loc["Item checked"] / Loc["Item unchecked"])
+    Step D — validation errors (role="alert"):
+    - Where form validation messages are shown, wrap in <div role="alert">...</div> (role="alert" implies aria-live="assertive" so no extra attribute needed)
+    - Existing ValidationMessage components can be wrapped; no changes to the validation logic itself
 
 ---------------------------------------------------------------------------------------------------
 
