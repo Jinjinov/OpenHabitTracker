@@ -254,7 +254,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
             FileName = "ffmpeg",
             // -f lavfi -i anullsrc=r=48000:cl=stereo: silent stereo audio source at 48 kHz — Apple requires stereo (anullsrc defaults to mono) and 44.1/48 kHz sample rate; Microsoft Partner Center silently hangs when uploading videos with no audio track
             // -c:v libx264: explicit H.264 video codec
-            // -c:a aac -b:a 256k: encode the silent audio as AAC at 256 kbps — Apple explicitly requires 256 kbps AAC; without -b:a the encoder uses ~2 kbps on silence which fails validation
+            // -c:a aac -b:a 256k: encode the silent audio as AAC targeting 256 kbps — Apple specifies 256 kbps AAC; in practice AAC compresses silence to ~2 kbps regardless of the target, but the flag signals intent and Apple's validator appears to check codec/channels/sample-rate rather than actual bitrate
             // -pix_fmt yuv420p: ddagrab outputs bgra which libx264 encodes as yuv444p (High 4:4:4 Predictive profile) — many upload portals reject this; yuv420p uses the standard High profile accepted everywhere
             // -movflags +faststart: moves the moov atom (metadata) to the beginning of the file — without this, web-based uploaders that need to read metadata before the full file is received will silently hang
             // -shortest: stop encoding when the shortest stream ends (the video), so the infinite silent audio source does not extend the output beyond the video duration
