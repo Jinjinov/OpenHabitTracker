@@ -284,6 +284,15 @@ public class LoadExamplesVideoTests : PlaywrightTest
     public async Task Desktop_ShowSidebar_C_inetpub_wwwroot() =>
         await RecordVideo("videos/desktop-sidebar.mp4", "1920x1080", 1920, 1086, false, ShowSidebar); // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
 
+    // NOTE: mobile videos are recorded at 500×1084 (scaled from Apple's required 886×1920) because a 3440×1440 monitor is only 1440px tall — ddagrab cannot capture taller than the physical display.
+    // Two approaches that do NOT work:
+    //   1. Playwright built-in RecordVideo: captures browser content at any size without ddagrab, but output quality is too poor for store submission.
+    //   2. ffmpeg scale=886:1920 upscale: 500/1084 ≈ 886/1920 aspect ratios look identical on paper, but the re-encode produces sample_aspect_ratio: 120000:120053 (non-square pixels) which causes Apple's validator to compute display dimensions different from the encoded dimensions and reject the file.
+    // Two real fixes: (1) rotate the Windows display to portrait via Display Settings → Display orientation → Portrait (3440×1440 becomes 1440×3440, so 886×1920 fits); restore to Landscape after recording.
+    //               (2) a virtual monitor driver (e.g. parsec-vdd) that creates a display tall enough to fit 886×1920 plus Chromium window chrome (~88px) plus invisible DWM borders (~8px);
+    //                   the offsetX/offsetY calculation is already dynamic so it adapts, but the hardcoded +6 viewport height correction and -2 offsetY correction (see VideoTests.cs quirks comment)
+    //                   were measured empirically on a physical display and may need to be re-measured if the virtual driver reports window chrome or DWM borders differently.
+
     //[Test]
     public async Task Mobile_ShowMainContent_C_inetpub_wwwroot() =>
         await RecordVideo("videos/mobile-main.mp4", "500x1084", 500, 1090, true, ShowMainContent); // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
