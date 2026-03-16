@@ -260,7 +260,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
             // -shortest: stop encoding when the shortest stream ends (the video), so the infinite silent audio source does not extend the output beyond the video duration
             // framerate=30: Apple App Store caps at 30 fps; at 60 fps libx264 produces H.264 Level 4.2 which exceeds Apple's Level 4.0 limit — 30 fps keeps the level at 4.0 and also matches Microsoft's preferred 29.97 fps
             // -level 4.0: explicitly cap H.264 level — without this, libx264 inherits the source level even after dropping to 30 fps
-            // -crf 18: high quality constant-rate-factor encode; Apple's 10–12 Mbps figure is a maximum encoder target, not a minimum — CRF produces lower bitrates on short clips which is fine
+            // -crf 18: high quality constant-rate-factor encode; Apple's 10–12 Mbps figure is a target, not a hard limit — CRF produces lower bitrates on short clips which is acceptable
             Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=30:offset_x={offsetX}:offset_y={offsetY}:video_size={videoSize}:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -f lavfi -i anullsrc -c:v libx264 -c:a aac -pix_fmt yuv420p -level 4.0 -movflags +faststart -crf 18 -preset slow -shortest {outputFile}",
             UseShellExecute = false,
             RedirectStandardInput = true,
