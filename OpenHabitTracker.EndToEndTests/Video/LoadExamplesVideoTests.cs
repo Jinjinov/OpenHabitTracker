@@ -258,9 +258,10 @@ public class LoadExamplesVideoTests : PlaywrightTest
             // -pix_fmt yuv420p: ddagrab outputs bgra which libx264 encodes as yuv444p (High 4:4:4 Predictive profile) — many upload portals reject this; yuv420p uses the standard High profile accepted everywhere
             // -movflags +faststart: moves the moov atom (metadata) to the beginning of the file — without this, web-based uploaders that need to read metadata before the full file is received will silently hang
             // -shortest: stop encoding when the shortest stream ends (the video), so the infinite silent audio source does not extend the output beyond the video duration
-            // framerate=30: Apple App Store caps at 30 fps; at 60 fps libx264 would produce H.264 Level 4.2 which exceeds Apple's Level 4.0 limit — 30 fps keeps the level at 4.0 and also matches Microsoft's preferred 29.97 fps
-            // -b:v 11M: Apple targets 10–12 Mbps for H.264; without an explicit bitrate CRF 18 at 1080p can exceed that — 11 Mbps lands in the middle of Apple's range and is well under Microsoft's 50 Mbps cap
-            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=30:offset_x={offsetX}:offset_y={offsetY}:video_size={videoSize}:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -f lavfi -i anullsrc -c:v libx264 -c:a aac -pix_fmt yuv420p -movflags +faststart -b:v 11M -preset slow -shortest {outputFile}",
+            // framerate=30: Apple App Store caps at 30 fps; at 60 fps libx264 produces H.264 Level 4.2 which exceeds Apple's Level 4.0 limit — 30 fps keeps the level at 4.0 and also matches Microsoft's preferred 29.97 fps
+            // -level 4.0: explicitly cap H.264 level — without this, libx264 inherits the source level even after dropping to 30 fps
+            // -crf 18: high quality constant-rate-factor encode; Apple's 10–12 Mbps figure is a maximum encoder target, not a minimum — CRF produces lower bitrates on short clips which is fine
+            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=30:offset_x={offsetX}:offset_y={offsetY}:video_size={videoSize}:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -f lavfi -i anullsrc -c:v libx264 -c:a aac -pix_fmt yuv420p -level 4.0 -movflags +faststart -crf 18 -preset slow -shortest {outputFile}",
             UseShellExecute = false,
             RedirectStandardInput = true,
         };
