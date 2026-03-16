@@ -289,9 +289,9 @@ public class LoadExamplesVideoTests : PlaywrightTest
     //   1. Playwright built-in RecordVideo: captures browser content at any size without ddagrab, but output quality is too poor for store submission.
     //   2. ffmpeg scale=886:1920 upscale: 500/1084 ≈ 886/1920 aspect ratios look identical on paper, but the re-encode produces sample_aspect_ratio: 120000:120053 (non-square pixels) which causes Apple's validator to compute display dimensions different from the encoded dimensions and reject the file.
     // Two real fixes: (1) rotate the Windows display to portrait via Display Settings → Display orientation → Portrait (3440×1440 becomes 1440×3440, so 886×1920 fits); restore to Landscape after recording.
-    //               (2) a virtual monitor driver (e.g. parsec-vdd) that creates a display tall enough to fit 886×1920 plus Chromium window chrome (~88px) plus invisible DWM borders (~8px);
-    //                   the offsetX/offsetY calculation is already dynamic so it adapts, but the hardcoded +6 viewport height correction and -2 offsetY correction (see VideoTests.cs quirks comment)
-    //                   were measured empirically on a physical display and may need to be re-measured if the virtual driver reports window chrome or DWM borders differently.
+    //                 (2) a virtual monitor driver (e.g. parsec-vdd) that creates a display tall enough to fit 886×1920 plus Chromium window chrome (~88px) plus invisible DWM (Desktop Window Manager) borders (~8px);
+    //                     the offsetX/offsetY calculation is already dynamic so it adapts, but the hardcoded +6 viewport height correction and -2 offsetY correction (see VideoTests.cs quirks comment)
+    //                     were measured empirically on a physical display and may need to be re-measured if the virtual driver reports window chrome or DWM (Desktop Window Manager) borders differently.
 
     //[Test]
     public async Task Mobile_ShowMainContent_C_inetpub_wwwroot() =>

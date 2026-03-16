@@ -28,7 +28,7 @@ public class VideoTests : PlaywrightTest
      * WINDOWS + CHROMIUM + FFMPEG QUIRKS — why this code looks the way it does
      *
      * ── 1. --window-position=100,0 instead of 0,0 ──────────────────────────────
-     * Windows 10 DWM adds invisible resize borders around every window. These borders
+     * Windows 10 DWM (Desktop Window Manager) adds invisible resize borders around every window. These borders
      * exist as mouse hit-test areas for resizing but are not rendered visually.
      * GetWindowRect() (which Chromium uses internally) returns bounds that INCLUDE
      * these invisible borders, so --window-position=0,0 actually places the visible
@@ -42,7 +42,7 @@ public class VideoTests : PlaywrightTest
      * results in exactly 1080px of visible content (confirmed by FFmpeg output).
      * window.innerHeight still reports the requested value (1086), not the actual
      * rendered pixels, so it cannot be used to detect this discrepancy.
-     * This appears to be caused by DWM compositor frame reservation and Chromium's
+     * This appears to be caused by DWM (Desktop Window Manager) compositor frame reservation and Chromium's
      * own non-client area handling on Windows.
      * Reference: https://chromium.googlesource.com/chromium/src/+/bde885b4e8cf11db7ba2af6c70a6580830a52e7a/ui/views/win/hwnd_message_handler.cc
      *
