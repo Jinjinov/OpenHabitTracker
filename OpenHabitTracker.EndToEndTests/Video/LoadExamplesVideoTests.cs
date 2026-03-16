@@ -224,6 +224,30 @@ public class LoadExamplesVideoTests : PlaywrightTest
 
         await GotoBaseUrl(page);
 
+        // Apple App Store — App Preview requirements:
+        // https://developer.apple.com/help/app-store-connect/reference/app-information/app-preview-specifications/
+        //   Duration:    15–30 seconds
+        //   Max size:    500 MB
+        //   Max fps:     30
+        //   Formats:     .mov, .m4v, .mp4
+        //   H.264:       10–12 Mbps, High Profile Level 4.0, progressive
+        //   ProRes HQ:   ~220 Mbps VBR, progressive, .mov only
+        //   Audio:       stereo, AAC 256 kbps or PCM, 44.1/48 kHz
+        //   Resolutions: iPhone 886×1920 (portrait) / 1920×886 (landscape)
+        //                iPad 900–1600 px (varies by model)
+        //                Mac / Apple TV 1920×1080
+        //                Vision Pro 3840×2160
+
+        // Microsoft Store — Trailer requirements:
+        // https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/screenshots-and-images
+        //   Duration:    ≤ 60 seconds recommended
+        //   Max size:    < 2 GB
+        //   Resolution:  1920×1080
+        //   Formats:     .mp4 or .mov
+        //   Thumbnail:   PNG, 1920×1080
+        //   MP4 (H.264/AVC1): High Profile, progressive, 50 Mbps, 4:2:0, AAC-LC 384 kbps stereo / 512 kbps surround, 48 kHz
+        //   MOV (ProRes): 1080p ProRes HQ, native fps (29.97 preferred), stereo −16 LKFS/LUFS
+
         using Process ffmpeg = new();
         ffmpeg.StartInfo = new ProcessStartInfo
         {
@@ -234,7 +258,9 @@ public class LoadExamplesVideoTests : PlaywrightTest
             // -pix_fmt yuv420p: ddagrab outputs bgra which libx264 encodes as yuv444p (High 4:4:4 Predictive profile) — many upload portals reject this; yuv420p uses the standard High profile accepted everywhere
             // -movflags +faststart: moves the moov atom (metadata) to the beginning of the file — without this, web-based uploaders that need to read metadata before the full file is received will silently hang
             // -shortest: stop encoding when the shortest stream ends (the video), so the infinite silent audio source does not extend the output beyond the video duration
-            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=60:offset_x={offsetX}:offset_y={offsetY}:video_size={videoSize}:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -f lavfi -i anullsrc -c:v libx264 -c:a aac -pix_fmt yuv420p -movflags +faststart -crf 18 -preset slow -shortest {outputFile}",
+            // framerate=30: Apple App Store caps at 30 fps; at 60 fps libx264 would produce H.264 Level 4.2 which exceeds Apple's Level 4.0 limit — 30 fps keeps the level at 4.0 and also matches Microsoft's preferred 29.97 fps
+            // -b:v 11M: Apple targets 10–12 Mbps for H.264; without an explicit bitrate CRF 18 at 1080p can exceed that — 11 Mbps lands in the middle of Apple's range and is well under Microsoft's 50 Mbps cap
+            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=30:offset_x={offsetX}:offset_y={offsetY}:video_size={videoSize}:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -f lavfi -i anullsrc -c:v libx264 -c:a aac -pix_fmt yuv420p -movflags +faststart -b:v 11M -preset slow -shortest {outputFile}",
             UseShellExecute = false,
             RedirectStandardInput = true,
         };
