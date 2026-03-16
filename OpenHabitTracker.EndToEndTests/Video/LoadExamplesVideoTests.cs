@@ -252,16 +252,16 @@ public class LoadExamplesVideoTests : PlaywrightTest
         ffmpeg.StartInfo = new ProcessStartInfo
         {
             FileName = "ffmpeg",
-            // -f lavfi -i anullsrc: add a silent audio source as a second input — Microsoft Partner Center silently hangs when uploading videos with no audio track
+            // -f lavfi -i anullsrc=r=48000:cl=stereo: silent stereo audio source at 48 kHz — Apple requires stereo (anullsrc defaults to mono) and 44.1/48 kHz sample rate; Microsoft Partner Center silently hangs when uploading videos with no audio track
             // -c:v libx264: explicit H.264 video codec
-            // -c:a aac: encode the silent audio as AAC, the standard audio codec for MP4
+            // -c:a aac -b:a 256k: encode the silent audio as AAC at 256 kbps — Apple explicitly requires 256 kbps AAC; without -b:a the encoder uses ~2 kbps on silence which fails validation
             // -pix_fmt yuv420p: ddagrab outputs bgra which libx264 encodes as yuv444p (High 4:4:4 Predictive profile) — many upload portals reject this; yuv420p uses the standard High profile accepted everywhere
             // -movflags +faststart: moves the moov atom (metadata) to the beginning of the file — without this, web-based uploaders that need to read metadata before the full file is received will silently hang
             // -shortest: stop encoding when the shortest stream ends (the video), so the infinite silent audio source does not extend the output beyond the video duration
             // framerate=30: Apple App Store caps at 30 fps; at 60 fps libx264 produces H.264 Level 4.2 which exceeds Apple's Level 4.0 limit — 30 fps keeps the level at 4.0 and also matches Microsoft's preferred 29.97 fps
             // -level 4.0: explicitly cap H.264 level — without this, libx264 inherits the source level even after dropping to 30 fps
             // -crf 18: high quality constant-rate-factor encode; Apple's 10–12 Mbps figure is a target, not a hard limit — CRF produces lower bitrates on short clips which is acceptable
-            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=30:offset_x={offsetX}:offset_y={offsetY}:video_size={videoSize}:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -f lavfi -i anullsrc -c:v libx264 -c:a aac -pix_fmt yuv420p -level 4.0 -movflags +faststart -crf 18 -preset slow -shortest {outputFile}",
+            Arguments = $"-y -f lavfi -i \"ddagrab=output_idx=0:framerate=30:offset_x={offsetX}:offset_y={offsetY}:video_size={videoSize}:draw_mouse=0\" -vf \"hwdownload,format=bgra\" -f lavfi -i \"anullsrc=r=48000:cl=stereo\" -c:v libx264 -c:a aac -b:a 256k -pix_fmt yuv420p -level 4.0 -movflags +faststart -crf 18 -preset slow -shortest {outputFile}",
             UseShellExecute = false,
             RedirectStandardInput = true,
         };
