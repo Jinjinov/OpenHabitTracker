@@ -28,7 +28,6 @@
 
         <div class="col bg-body-secondary d-flex align-items-center">
 
-            @* <button class="nav-link px-1 py-2 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="SelectComponent<Menu>"><i class="bi bi-list"></i> @Loc["Menu"]</button> *@
             <button @ref="_menuButtonRef" class="nav-link px-2 py-1 my-1 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="ToggleMenu" aria-label="@Loc["Toggle menu"]" aria-expanded="@(_dynamicComponentType == typeof(Menu))" data-main-step-1><i class="bi bi-three-dots-vertical"></i></button>
 
             @* <button class="nav-link" @onclick="Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues"><i class="bi bi-floppy"></i> Save</button> *@
@@ -48,7 +47,6 @@
             <NavLink class="nav-link px-2 py-1 ms-3" href="notes" aria-current="@AriaCurrentPage("notes")" aria-label="@Loc["Notes"]" data-main-step-3><i class="bi bi-sticky"></i></NavLink>
             <NavLink class="nav-link px-2 py-1 ms-3" href="tasks" aria-current="@AriaCurrentPage("tasks")" aria-label="@Loc["Tasks"]" data-main-step-4><i class="bi bi-list-task"></i></NavLink>
             <NavLink class="nav-link px-2 py-1 ms-3" href="habits" aria-current="@AriaCurrentPage("habits")" aria-label="@Loc["Habits"]" data-main-step-5><i class="bi bi-repeat"></i></NavLink>
-            @* <NavLink class="nav-link px-2 py-1 ms-3" href="help"><i class="bi bi-question-circle"></i></NavLink> *@
 
             <button @ref="_searchButtonRef" class="nav-link px-2 py-1 ms-3 @(_dynamicComponentType == typeof(Search) ? "active" : "")" @onclick="ToggleSearch" aria-label="@Loc["Search, Filter, Sort"]" aria-expanded="@(_dynamicComponentType == typeof(Search))" data-main-step-6><i class="bi bi-search"></i></button>
 
