@@ -60,7 +60,6 @@ public class NoteService(ClientState clientState, ISearchFilterService searchFil
     public async Task Initialize()
     {
         await _clientState.LoadCategories();
-        await _clientState.LoadPriorities();
 
         await _clientState.LoadNotes();
     }

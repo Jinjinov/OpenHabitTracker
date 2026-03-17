@@ -83,7 +83,6 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
     public async Task Initialize()
     {
         await _clientState.LoadCategories();
-        await _clientState.LoadPriorities();
 
         await _clientState.LoadHabits();
     }

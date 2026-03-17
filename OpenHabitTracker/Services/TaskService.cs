@@ -92,7 +92,6 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
     public async Task Initialize()
     {
         await _clientState.LoadCategories();
-        await _clientState.LoadPriorities();
 
         await _clientState.LoadTasks();
     }

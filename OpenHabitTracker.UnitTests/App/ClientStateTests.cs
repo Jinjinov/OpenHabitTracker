@@ -96,16 +96,7 @@ public class ClientStateTests
     }
 
     [Test]
-    public async Task LoadPriorities_WhenNoneExist_AddsDefaultFivePriorities()
-    {
-        await _sut.LoadPriorities();
-
-        await _dataAccess.Received(1).AddPriorities(Arg.Is<IReadOnlyList<PriorityEntity>>(x => x.Count == 5));
-        Assert.That(_sut.Priorities, Has.Count.EqualTo(5));
-    }
-
-    [Test]
-    public async Task RefreshState_ClearsHabits_Notes_Tasks_Times_Items_Categories_Priorities_Trash()
+    public async Task RefreshState_ClearsHabits_Notes_Tasks_Times_Items_Categories_Trash()
     {
         // Pre-populate everything to non-null values
         _sut.Habits = new Dictionary<long, HabitModel>();
@@ -114,7 +105,6 @@ public class ClientStateTests
         _sut.Times = new Dictionary<long, TimeModel>();
         _sut.Items = new Dictionary<long, ItemModel>();
         _sut.Categories = new Dictionary<long, CategoryModel>();
-        _sut.Priorities = new Dictionary<long, PriorityModel>();
         _sut.Trash = [];
 
         await _sut.RefreshState();
@@ -124,6 +114,5 @@ public class ClientStateTests
         Assert.That(_sut.Notes, Is.Not.Null);
         Assert.That(_sut.Tasks, Is.Not.Null);
         Assert.That(_sut.Categories, Is.Not.Null);
-        Assert.That(_sut.Priorities, Is.Not.Null);
     }
 }
