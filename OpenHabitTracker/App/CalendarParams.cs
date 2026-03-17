@@ -47,19 +47,21 @@ public class CalendarParams
         CalendarStart = GetFirstDayOfWeek(firstDayOfWeek, FirstDayOfMonth);
     }
 
-    public void SetCalendarStartToNextWeek()
+    private void ShiftCalendarByDays(int days)
     {
-        CalendarStart = CalendarStart.AddDays(7);
+        CalendarStart = CalendarStart.AddDays(days);
         FirstDayOfMonth = GetFirstDayOfMonth(CalendarStart);
         if (CalendarStart.Day > 14)
             FirstDayOfMonth = FirstDayOfMonth.AddMonths(1);
     }
 
+    public void SetCalendarStartToNextWeek()
+    {
+        ShiftCalendarByDays(7);
+    }
+
     public void SetCalendarStartToPreviousWeek()
     {
-        CalendarStart = CalendarStart.AddDays(-7);
-        FirstDayOfMonth = GetFirstDayOfMonth(CalendarStart);
-        if (CalendarStart.Day > 14)
-            FirstDayOfMonth = FirstDayOfMonth.AddMonths(1);
+        ShiftCalendarByDays(-7);
     }
 }
