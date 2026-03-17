@@ -64,12 +64,11 @@ SUBMIT MOBILE VIDEO (886x1920) TO:
     - Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
     - `ClientData` mixes data bag with query/filter/sort logic (SRP) — 40-70 line query methods inside what should be a plain data container
     - Duplicate query logic across `HabitService`, `NoteService`, `TaskService` (SRP) — same filter/sort structure (priority, search, category, date, sort switch) maintained independently in all three
-
-1c QueryParameters:
-    - `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
-    - Currently all records are loaded into memory first, then filtered in C# — the intent is to push filters down to the data layer
-    - `_dataAccess` calls would receive query parameters (search term, category, priority, date range) and return only matching records
-    - This would eliminate the need for large in-memory filter blocks and reduce data transferred from the data source
+    QueryParameters:
+        - `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
+        - Currently all records are loaded into memory first, then filtered in C# — the intent is to push filters down to the data layer
+        - `_dataAccess` calls would receive query parameters (search term, category, priority, date range) and return only matching records
+        - This would eliminate the need for large in-memory filter blocks and reduce data transferred from the data source
 
 2.
 exact repeating reminders, like Google Keep
