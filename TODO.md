@@ -48,10 +48,23 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-1.
+1. FIXED
 fix "app.MainWindow.SetIconFile("favicon.ico");" in OpenHabitTracker.Blazor.Photino
 
-https://github.com/tryphotino/photino.Blazor/blob/master/Samples/Photino.Blazor.Sample/Program.cs#L25
+root cause:
+- Photino.NET's SetIconFile C# validates the file using AppContext.BaseDirectory + filename
+  but passes the raw relative string "favicon.ico" to the native GTK layer
+- GTK resolves relative paths from the working directory, not AppContext.BaseDirectory
+- when run via "dotnet run" from the repo root, working dir is /mnt/data/.../OpenHabitTracker/
+  which has no favicon.ico - GTK segfaults (exit 139) instead of failing gracefully
+- the Photino.Blazor.Sample worked because favicon.ico exists in both the project dir
+  and the solution root dir, so GTK finds it from the working directory either way
+
+fix applied in Program.cs:
+    app.MainWindow.SetIconFile(Path.Combine(AppContext.BaseDirectory, "favicon.ico"));
+
+verified: app runs without crash, icon shows on Linux
+
 
 2.
 SUBMIT DESKTOP VIDEO (1920x1080) TO:
