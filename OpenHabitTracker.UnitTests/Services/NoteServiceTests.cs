@@ -237,12 +237,12 @@ public class NoteServiceTests
     {
         NoteModel note = TestData.Note(id: 1);
         _clientState.Notes = TestData.NoteDict(note);
-        _clientState.Trash = [];
+        _clientState.TrashedNotes = [];
         _dataAccess.GetNote(note.Id).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = note.Id }));
 
         await _sut.DeleteNote(note);
 
-        Assert.That(_clientState.Trash, Has.Count.EqualTo(1));
-        Assert.That(_clientState.Trash[0], Is.SameAs(note));
+        Assert.That(_clientState.TrashedNotes, Has.Count.EqualTo(1));
+        Assert.That(_clientState.TrashedNotes[0], Is.SameAs(note));
     }
 }

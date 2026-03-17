@@ -118,8 +118,8 @@ public class NoteService(ClientState clientState, ISearchFilterService searchFil
 
         note.IsDeleted = true;
 
-        // add to Trash if it is not null (if Trash is null, it will add this on Initialize)
-        _clientState.Trash?.Add(note);
+        // add to TrashedNotes if it is not null (if TrashedNotes is null, it will add this on Initialize)
+        _clientState.TrashedNotes?.Add(note);
 
         if (await _clientState.DataAccess.GetNote(note.Id) is NoteEntity noteEntity)
         {

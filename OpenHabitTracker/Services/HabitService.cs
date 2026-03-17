@@ -334,8 +334,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         habit.IsDeleted = true;
 
-        // add to Trash if it is not null (if Trash is null, it will add this on Initialize)
-        _clientState.Trash?.Add(habit);
+        // add to TrashedHabits if it is not null (if TrashedHabits is null, it will add this on Initialize)
+        _clientState.TrashedHabits?.Add(habit);
 
         if (await _clientState.DataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
         {

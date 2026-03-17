@@ -19,9 +19,33 @@
 
     </div>
 
-    @if (TrashService.Models is not null)
+    @if (TrashService.TrashedNotes is not null)
     {
-        foreach (ContentModel model in TrashService.Models)
+        foreach (NoteModel model in TrashService.TrashedNotes)
+        {
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text flex-grow-1 text-wrap">@model.Title</span>
+                <button class="btn btn-outline-primary" aria-label="@($"{Loc["Restore"]}: {model.Title}")" @onclick="() => Restore(model)"><i class="bi bi-recycle"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@($"{Loc["Delete"]}: {model.Title}")" @onclick="() => Delete(model)"><i class="bi bi-trash"></i></button>
+            </div>
+        }
+    }
+
+    @if (TrashService.TrashedTasks is not null)
+    {
+        foreach (TaskModel model in TrashService.TrashedTasks)
+        {
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text flex-grow-1 text-wrap">@model.Title</span>
+                <button class="btn btn-outline-primary" aria-label="@($"{Loc["Restore"]}: {model.Title}")" @onclick="() => Restore(model)"><i class="bi bi-recycle"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@($"{Loc["Delete"]}: {model.Title}")" @onclick="() => Delete(model)"><i class="bi bi-trash"></i></button>
+            </div>
+        }
+    }
+
+    @if (TrashService.TrashedHabits is not null)
+    {
+        foreach (HabitModel model in TrashService.TrashedHabits)
         {
             <div class="input-group flex-nowrap">
                 <span class="input-group-text flex-grow-1 text-wrap">@model.Title</span>
@@ -86,17 +110,39 @@
         await OnStateChanged();
     }
 
-    async Task Restore(ContentModel model)
+    async Task Restore(HabitModel model)
     {
         await TrashService.Restore(model);
-
         await OnStateChanged();
     }
 
-    async Task Delete(ContentModel model)
+    async Task Restore(NoteModel model)
+    {
+        await TrashService.Restore(model);
+        await OnStateChanged();
+    }
+
+    async Task Restore(TaskModel model)
+    {
+        await TrashService.Restore(model);
+        await OnStateChanged();
+    }
+
+    async Task Delete(HabitModel model)
     {
         await TrashService.Delete(model);
+        await OnStateChanged();
+    }
 
+    async Task Delete(NoteModel model)
+    {
+        await TrashService.Delete(model);
+        await OnStateChanged();
+    }
+
+    async Task Delete(TaskModel model)
+    {
+        await TrashService.Delete(model);
         await OnStateChanged();
     }
 }
