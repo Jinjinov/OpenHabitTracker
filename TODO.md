@@ -48,12 +48,19 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-0.
+1.
+fix "app.MainWindow.SetIconFile("favicon.ico");" in OpenHabitTracker.Blazor.Photino
+
+https://github.com/tryphotino/photino.Blazor/blob/master/Samples/Photino.Blazor.Sample/Program.cs#L25
+
+2.
 SUBMIT DESKTOP VIDEO (1920x1080) TO:
     - macOS App Store: upload MP4 in App Store Connect
 
 SUBMIT MOBILE VIDEO (886x1920) TO:
     - iOS App Store: upload MP4 in App Store Connect
+
+---------------------------------------------------------------------------------------------------
 
 1.
 Filter:
