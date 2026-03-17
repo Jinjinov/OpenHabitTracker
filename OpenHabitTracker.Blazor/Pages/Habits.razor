@@ -22,8 +22,6 @@
 
 <div @ref="columnRef" class="@($"col child-column px-0 px-md-{ClientState.Settings.HorizontalMargin}")">
 
-    @* <small class="m-1">@Loc["Add new habit"]</small> *@
-
     @if (HabitService.NewHabit is null)
     {
         <button class="btn btn-plain input-group d-flex flex-nowrap my-1 p-0" @onclick="AddNew">
