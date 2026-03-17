@@ -1,9 +1,7 @@
-@using OpenHabitTracker.App
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
 @inject ICategoryService CategoryService
-@inject ClientState ClientState
 @inject IStringLocalizer Loc
 
 @if (CategoryService.Categories is not null && Model is not null)
@@ -22,6 +20,9 @@
     [Parameter]
     public ContentModel? Model { get; set; }
 
+    [Parameter]
+    public EventCallback OnChange { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.Initialize();
@@ -34,6 +35,6 @@
 
         Model.CategoryId = categoryId;
 
-        await ClientState.UpdateModel(Model);
+        await OnChange.InvokeAsync();
     }
 }

@@ -1,10 +1,8 @@
-@using OpenHabitTracker.App
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
 @inject IPriorityService PriorityService
-@inject ClientState ClientState
 @inject IStringLocalizer Loc
 
 @if (Model is not null)
@@ -22,6 +20,9 @@
     [Parameter]
     public ContentModel? Model { get; set; }
 
+    [Parameter]
+    public EventCallback OnChange { get; set; }
+
     async Task SavePriority(Priority priority)
     {
         if (Model is null)
@@ -29,6 +30,6 @@
 
         Model.Priority = priority;
 
-        await ClientState.UpdateModel(Model);
+        await OnChange.InvokeAsync();
     }
 }

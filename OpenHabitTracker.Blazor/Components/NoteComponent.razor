@@ -15,7 +15,7 @@
         @if (ClientState.Settings.ShowPriorityDropdown)
         {
             <div data-notes-step-4>
-                <PriorityComponent Model="Note" />
+                <PriorityComponent Model="Note" OnChange="SaveModel" />
             </div>
         }
         <InputText class="form-control bg-transparent" aria-label="@Loc["Note title"]" Value="@Note.Title" ValueExpression="() => Note.Title" ValueChanged="(string title) => SaveTitle(Note, title)" />
@@ -30,7 +30,7 @@
     {
         <div class="input-group flex-nowrap" data-notes-step-9>
             <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
-            <CategoryComponent Model="Note" />
+            <CategoryComponent Model="Note" OnChange="SaveModel" />
         </div>
     }
 
@@ -38,7 +38,7 @@
     {
         <div class="input-group flex-nowrap" data-notes-step-10>
             <span class="input-group-text bg-transparent col-4">@Loc["Color"]</span>
-            <ColorComponent Model="Note" />
+            <ColorComponent Model="Note" OnChange="SaveModel" />
         </div>
     }
 
@@ -110,6 +110,11 @@
         note.Content = content;
         note.ContentMarkdown = MarkdownToHtml.GetMarkdown(content);
 
+        await NoteService.UpdateNote();
+    }
+
+    async Task SaveModel()
+    {
         await NoteService.UpdateNote();
     }
 }

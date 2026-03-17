@@ -1,8 +1,6 @@
-@using OpenHabitTracker.App
 @using OpenHabitTracker.Data.Models
 @using OpenHabitTracker.Services
 
-@inject ClientState ClientState
 @inject IStringLocalizer Loc
 
 @if (Model is not null)
@@ -28,6 +26,9 @@
     [Parameter]
     public ContentModel? Model { get; set; }
 
+    [Parameter]
+    public EventCallback OnChange { get; set; }
+
     string _background => Model is not null ? $"form-select {Model.Color}" : "form-select";
 
     async Task SaveColor(string color)
@@ -37,6 +38,6 @@
 
         Model.Color = color;
 
-        await ClientState.UpdateModel(Model);
+        await OnChange.InvokeAsync();
     }
 }

@@ -78,7 +78,11 @@ public class CategoryService(ClientState clientState) : ICategoryService
             {
                 note.CategoryId = 0;
                 note.IsDeleted = true;
-                await _clientState.UpdateModel(note);
+                if (await _clientState.DataAccess.GetNote(note.Id) is NoteEntity noteEntity)
+                {
+                    note.CopyToEntity(noteEntity);
+                    await _clientState.DataAccess.UpdateNote(noteEntity);
+                }
             }
 
         if (category.Tasks is not null)
@@ -86,15 +90,23 @@ public class CategoryService(ClientState clientState) : ICategoryService
             {
                 task.CategoryId = 0;
                 task.IsDeleted = true;
-                await _clientState.UpdateModel(task);
+                if (await _clientState.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
+                {
+                    task.CopyToEntity(taskEntity);
+                    await _clientState.DataAccess.UpdateTask(taskEntity);
+                }
             }
 
         if (category.Habits is not null)
-            foreach(HabitModel habit in category.Habits)
+            foreach (HabitModel habit in category.Habits)
             {
                 habit.CategoryId = 0;
                 habit.IsDeleted = true;
-                await _clientState.UpdateModel(habit);
+                if (await _clientState.DataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
+                {
+                    habit.CopyToEntity(habitEntity);
+                    await _clientState.DataAccess.UpdateHabit(habitEntity);
+                }
             }
 
         _clientState.Categories.Remove(category.Id);
