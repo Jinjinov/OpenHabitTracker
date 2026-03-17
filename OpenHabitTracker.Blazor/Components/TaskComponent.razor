@@ -15,7 +15,7 @@
         @if (ClientState.Settings.ShowPriorityDropdown)
         {
             <div data-tasks-step-6>
-                <PriorityComponent Model="Task" />
+                <PriorityComponent Model="Task" OnChange="SaveModel" />
             </div>
         }
         <InputText class="form-control bg-transparent" aria-label="@Loc["Task title"]" Value="@Task.Title" ValueExpression="() => Task.Title" ValueChanged="(string title) => SaveTitle(Task, title)" />
@@ -101,7 +101,7 @@
     {
         <div class="input-group flex-nowrap" data-tasks-step-18>
             <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
-            <CategoryComponent Model="Task" />
+            <CategoryComponent Model="Task" OnChange="SaveModel" />
         </div>
     }
 
@@ -109,7 +109,7 @@
     {
         <div class="input-group flex-nowrap" data-tasks-step-19>
             <span class="input-group-text bg-transparent col-4">@Loc["Color"]</span>
-            <ColorComponent Model="Task" />
+            <ColorComponent Model="Task" OnChange="SaveModel" />
         </div>
     }
 
@@ -270,6 +270,11 @@
     {
         task.DurationProxy = new TimeOnly(hour, minute);
 
+        await TaskService.UpdateTask();
+    }
+
+    async Task SaveModel()
+    {
         await TaskService.UpdateTask();
     }
 }
