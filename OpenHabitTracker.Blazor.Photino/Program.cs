@@ -75,8 +75,7 @@ public class Program
         //authService.TryRefreshTokenLogin();
 
         // customize window
-        if (!OperatingSystem.IsLinux()) // TODO:: find out why this works in Photino sample
-            app.MainWindow.SetIconFile("favicon.ico");
+        app.MainWindow.SetIconFile(Path.Combine(AppContext.BaseDirectory, "favicon.ico"));
         app.MainWindow.SetTitle("OpenHabitTracker");
         app.MainWindow.SetUseOsDefaultSize(false);
         app.MainWindow.SetSize(1680, 1050);
