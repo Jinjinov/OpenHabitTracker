@@ -90,11 +90,7 @@
         </div>
     }
 
-    @if (TaskService.Tasks is null)
-    {
-        @* <p>Failed to load. Try refreshing.</p> *@
-    }
-    else
+    @if (TaskService.Tasks is not null)
     {
         <div class="d-grid align-items-center" style="grid-template-columns: 1fr auto 1fr;">
             <div></div>

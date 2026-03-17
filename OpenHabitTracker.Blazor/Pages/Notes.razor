@@ -66,11 +66,7 @@
         </div>
     }
 
-    @if (NoteService.Notes is null)
-    {
-        @* <p>Failed to load. Try refreshing.</p> *@
-    }
-    else
+    @if (NoteService.Notes is not null)
     {
         <div class="d-grid align-items-center" style="grid-template-columns: 1fr auto 1fr;">
             <div></div>

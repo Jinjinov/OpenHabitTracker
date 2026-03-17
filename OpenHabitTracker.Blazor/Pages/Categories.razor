@@ -23,11 +23,7 @@
         }
     </div>
 
-    @if (CategoryService.Categories is null)
-    {
-        @* <p>Failed to load. Try refreshing.</p> *@
-    }
-    else
+    @if (CategoryService.Categories is not null)
     {
         foreach (CategoryModel category in CategoryService.Categories)
         {
