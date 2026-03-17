@@ -8,8 +8,6 @@ public class HabitModel : ItemsModel
 
     public Period RepeatPeriod { get; set; } = Period.Day;
 
-    public TimeOnly? Duration { get; set; }
-
     public DateTime? LastTimeDoneAt { get; set; }
 
     public List<TimeModel>? TimesDone { get; set; }
@@ -29,24 +27,6 @@ public class HabitModel : ItemsModel
     internal double ElapsedTimeToAverageIntervalRatio => ElapsedTime / AverageInterval * 100.0;
 
     internal double AverageIntervalToRepeatIntervalRatio => AverageInterval / GetRepeatInterval() * 100.0;
-
-    internal TimeOnly DurationProxy
-    {
-        get => Duration ?? TimeOnly.MinValue;
-        set => Duration = value == TimeOnly.MinValue ? null : value;
-    }
-
-    internal int DurationHour
-    {
-        get => DurationProxy.Hour;
-        set => DurationProxy = new TimeOnly(value, DurationProxy.Minute);
-    }
-
-    internal int DurationMinute
-    {
-        get => DurationProxy.Minute;
-        set => DurationProxy = new TimeOnly(DurationProxy.Hour, value);
-    }
 
     internal Dictionary<DateTime, List<TimeModel>>? TimesDoneByDay { get; set; }
 
