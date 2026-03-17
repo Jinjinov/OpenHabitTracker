@@ -94,7 +94,15 @@ public class ClientState
 
     // UpdateModel() used in CategoryService is secondary, the primary use of UpdateModel() is in CategoryComponent.razor, ColorComponent.razor, PriorityComponent.razor
     // TODO:: replace call to UpdateModel in CategoryComponent.razor, ColorComponent.razor, PriorityComponent.razor with EventCallback
-    // Habits, Notes, Tasks, HabitComponent, NoteComponent, TaskComponent handle the EventCallback
+    // Habits, Notes, Tasks, HabitComponent, NoteComponent, TaskComponent should handle the EventCallback
+
+    // Plan: replace callers with EventCallback
+    // 1. In CategoryComponent, ColorComponent, PriorityComponent: add EventCallback OnChange parameter
+    // 2. In HabitComponent, NoteComponent, TaskComponent: pass their own typed save handler as OnChange when rendering the child components
+    // 3. The parent already knows the concrete type so it calls DataAccess directly without type-switching
+    // 4. In Habits.razor, Notes.razor, Tasks.razor: these use the same three components for the new-item form (NewHabit, NewNote, NewTask) — pass a no-op EventCallback since the new model has no ID yet and UpdateModel currently does nothing for it anyway
+    // 5. In CategoryService (secondary caller, lines 81/89/97): already has concrete types — replace UpdateModel calls with direct DataAccess calls
+    // 6. Once all callers are migrated, delete UpdateModel entirely
     public async Task UpdateModel(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
     {
         if (model is HabitModel habitModel && await DataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)
