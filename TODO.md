@@ -57,8 +57,7 @@ SUBMIT MOBILE VIDEO (886x1920) TO:
 
 1.
 1a Type-switch:
-    - Type-switching on `ContentModel` (OCP) — `is HabitModel / NoteModel / TaskModel` chains in `TrashService` and `ClientState.UpdateModel`; plans written above each method
-    - `TrashService.RestoreAll()` — replace duplicated type-switch with a loop calling `Restore(model)` (use `.ToList()` to snapshot before iterating)
+    - Type-switching on `ContentModel` (OCP) — `is HabitModel / NoteModel / TaskModel` chain in `ClientState.UpdateModel`; plan written above the method
 
 1b Filter:
     - Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
