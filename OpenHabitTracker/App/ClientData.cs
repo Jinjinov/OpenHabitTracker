@@ -17,7 +17,6 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
     public Dictionary<long, TimeModel>? Times { get; set; }
     public Dictionary<long, ItemModel>? Items { get; set; }
     public Dictionary<long, CategoryModel>? Categories { get; set; }
-    public Dictionary<long, PriorityModel>? Priorities { get; set; }
     public List<ContentModel>? Trash { get; set; }
 
     public async Task<IEnumerable<NoteModel>> GetNotes(QueryParameters queryParameters)

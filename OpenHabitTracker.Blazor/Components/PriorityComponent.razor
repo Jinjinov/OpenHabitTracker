@@ -7,7 +7,7 @@
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
 
-@if (PriorityService.Priorities is not null && Model is not null)
+@if (Model is not null)
 {
     <InputSelect class="@($"form-select flex-grow-0 w-auto {Model.Color}")" aria-label="@Loc["Priority"]" Value="Model.Priority" ValueExpression="() => Model.Priority" TValue="Priority" ValueChanged="SavePriority">
         @foreach (Priority priority in Enum.GetValues<Priority>().OrderDescending())
@@ -21,11 +21,6 @@
     [EditorRequired]
     [Parameter]
     public ContentModel? Model { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await PriorityService.Initialize();
-    }
 
     async Task SavePriority(Priority priority)
     {

@@ -75,11 +75,6 @@ public class ClientState
         get => _clientData.Categories;
         set => _clientData.Categories = value;
     }
-    public Dictionary<long, PriorityModel>? Priorities
-    {
-        get => _clientData.Priorities;
-        set => _clientData.Priorities = value;
-    }
     public List<ContentModel>? Trash
     {
         get => _clientData.Trash;
@@ -195,7 +190,6 @@ public class ClientState
         if (Habits is null)
         {
             await LoadCategories();
-            await LoadPriorities();
 
             await LoadTimes(); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
 
@@ -219,7 +213,6 @@ public class ClientState
         if (Notes is null)
         {
             await LoadCategories();
-            await LoadPriorities();
 
             IReadOnlyList<NoteEntity> notes = await DataAccess.GetNotes();
             Notes = notes.Select(x =>
@@ -236,7 +229,6 @@ public class ClientState
         if (Tasks is null)
         {
             await LoadCategories();
-            await LoadPriorities();
 
             IReadOnlyList<TaskEntity> tasks = await DataAccess.GetTasks();
             Tasks = tasks.Select(x => x.ToModel()).ToDictionary(x => x.Id);
@@ -271,34 +263,6 @@ public class ClientState
         }
     }
 
-    public async Task LoadPriorities()
-    {
-        if (Priorities is null)
-        {
-            Priorities = []; // TODO:: add bool _isInitializing, remove this line
-
-            IReadOnlyList<PriorityEntity> priorities = await DataAccess.GetPriorities();
-
-            if (priorities.Count == 0)
-            {
-                List<PriorityEntity> defaultPriorities =
-                [
-                    new() { Title = "︾" },
-                    new() { Title = "﹀" },
-                    new() { Title = "—" },
-                    new() { Title = "︿" },
-                    new() { Title = "︽" },
-                ];
-
-                await DataAccess.AddPriorities(defaultPriorities);
-
-                priorities = defaultPriorities;
-            }
-
-            Priorities = priorities.Select(c => c.ToModel()).ToDictionary(x => x.Id);
-        }
-    }
-
     public async Task LoadTrash()
     {
         if (Trash is null)
@@ -313,7 +277,6 @@ public class ClientState
     private async Task LoadContent()
     {
         await LoadCategories();
-        await LoadPriorities();
 
         await LoadHabits();
         await LoadNotes();
@@ -339,7 +302,6 @@ public class ClientState
         Times = null;
         Items = null;
         Categories = null;
-        Priorities = null;
         Trash = null;
 
         await LoadContent();
@@ -362,7 +324,7 @@ public class ClientState
         await LoadTimes();
         await LoadItems();
 
-        if (Priorities is null || Categories is null || Notes is null || Tasks is null || Habits is null || Times is null || Items is null)
+        if (Categories is null || Notes is null || Tasks is null || Habits is null || Times is null || Items is null)
             throw new NullReferenceException();
 
         Dictionary<long, List<HabitModel>> habitsByCategoryId = Habits.Values.GroupBy(x => x.CategoryId).ToDictionary(g => g.Key, g => g.ToList());
