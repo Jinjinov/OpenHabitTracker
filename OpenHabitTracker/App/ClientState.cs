@@ -113,7 +113,7 @@ public class ClientState
     // 4. In Habits.razor, Notes.razor, Tasks.razor: these use the same three components for the new-item form (NewHabit, NewNote, NewTask) — pass a no-op EventCallback since the new model has no ID yet and UpdateModel currently does nothing for it anyway
     // 5. In CategoryService (secondary caller, lines 81/89/97): already has concrete types — replace UpdateModel calls with direct DataAccess calls
     // 6. Once all callers are migrated, delete UpdateModel entirely
-    public async Task UpdateModel(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
+    public async Task UpdateModel(ContentModel model)
     {
         if (model is HabitModel habitModel && await DataAccess.GetHabit(habitModel.Id) is HabitEntity habitEntity)
         {
