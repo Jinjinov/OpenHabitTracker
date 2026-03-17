@@ -100,11 +100,7 @@
         </div>
     }
 
-    @if (HabitService.Habits is null)
-    {
-        @* <p>Failed to load. Try refreshing.</p> *@
-    }
-    else if (columnWidth != 0)
+    @if (HabitService.Habits is not null && columnWidth != 0)
     {
         <div class="d-grid align-items-center" style="grid-template-columns: 1fr auto 1fr;">
             <div></div>

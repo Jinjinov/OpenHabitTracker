@@ -9,11 +9,7 @@
 @inject IStringLocalizer Loc
 @inject IJsInterop JsInterop
 
-@if (Habit is null || Habit.TimesDoneByDay is null)
-{
-    @* <p>Failed to load. Try refreshing.</p> *@
-}
-else
+@if (Habit is not null && Habit.TimesDoneByDay is not null)
 {
     @if (DisplayMonth)
     {

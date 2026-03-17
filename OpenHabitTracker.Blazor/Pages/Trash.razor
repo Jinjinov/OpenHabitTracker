@@ -19,11 +19,7 @@
 
     </div>
 
-    @if (TrashService.Models is null)
-    {
-        @* <p>Failed to load. Try refreshing.</p> *@
-    }
-    else
+    @if (TrashService.Models is not null)
     {
         foreach (ContentModel model in TrashService.Models)
         {
