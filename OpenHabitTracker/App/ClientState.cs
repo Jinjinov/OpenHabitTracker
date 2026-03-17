@@ -430,8 +430,6 @@ public class ClientState
 
         // each CategoryEntity now has the id, set it to CategoryModel and to all items
 
-        //categories.ForEach(x => x.Model.Id = x.Entity.Id);
-
         foreach ((CategoryModel Model, CategoryEntity Entity) in categories)
         {
             Model.Id = Entity.Id;
