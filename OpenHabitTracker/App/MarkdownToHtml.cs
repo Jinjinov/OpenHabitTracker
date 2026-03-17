@@ -8,7 +8,6 @@ public class MarkdownToHtml(MarkdownPipeline markdownPipeline)
 
     public string GetMarkdown(string content)
     {
-        //return Settings.DisplayNoteContentAsMarkdown ? Markdown.ToHtml(content, _markdownPipeline) : content;
         return Markdown.ToHtml(content, _markdownPipeline);
     }
 }
