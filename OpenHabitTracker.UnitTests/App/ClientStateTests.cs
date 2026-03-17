@@ -105,7 +105,9 @@ public class ClientStateTests
         _sut.Times = new Dictionary<long, TimeModel>();
         _sut.Items = new Dictionary<long, ItemModel>();
         _sut.Categories = new Dictionary<long, CategoryModel>();
-        _sut.Trash = [];
+        _sut.TrashedHabits = [];
+        _sut.TrashedNotes = [];
+        _sut.TrashedTasks = [];
 
         await _sut.RefreshState();
 

@@ -75,10 +75,20 @@ public class ClientState
         get => _clientData.Categories;
         set => _clientData.Categories = value;
     }
-    public List<ContentModel>? Trash
+    public List<HabitModel>? TrashedHabits
     {
-        get => _clientData.Trash;
-        set => _clientData.Trash = value;
+        get => _clientData.TrashedHabits;
+        set => _clientData.TrashedHabits = value;
+    }
+    public List<NoteModel>? TrashedNotes
+    {
+        get => _clientData.TrashedNotes;
+        set => _clientData.TrashedNotes = value;
+    }
+    public List<TaskModel>? TrashedTasks
+    {
+        get => _clientData.TrashedTasks;
+        set => _clientData.TrashedTasks = value;
     }
 
     public async Task SetDataLocationAndRefresh(DataLocation dataLocation)
@@ -273,12 +283,16 @@ public class ClientState
 
     public async Task LoadTrash()
     {
-        if (Trash is null)
+        if (TrashedHabits is null || TrashedNotes is null || TrashedTasks is null)
         {
             await LoadContent();
 
-            if (Habits is not null && Notes is not null && Tasks is not null)
-                Trash = [.. Habits.Values.Where(m => m.IsDeleted), .. Notes.Values.Where(m => m.IsDeleted), .. Tasks.Values.Where(m => m.IsDeleted)];
+            if (Habits is not null)
+                TrashedHabits = Habits.Values.Where(m => m.IsDeleted).ToList();
+            if (Notes is not null)
+                TrashedNotes = Notes.Values.Where(m => m.IsDeleted).ToList();
+            if (Tasks is not null)
+                TrashedTasks = Tasks.Values.Where(m => m.IsDeleted).ToList();
         }
     }
 
@@ -310,7 +324,9 @@ public class ClientState
         Times = null;
         Items = null;
         Categories = null;
-        Trash = null;
+        TrashedHabits = null;
+        TrashedNotes = null;
+        TrashedTasks = null;
 
         await LoadContent();
     }

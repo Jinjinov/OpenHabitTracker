@@ -228,8 +228,8 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
         task.IsDeleted = true;
 
-        // add to Trash if it is not null (if Trash is null, it will add this on Initialize)
-        _clientState.Trash?.Add(task);
+        // add to TrashedTasks if it is not null (if TrashedTasks is null, it will add this on Initialize)
+        _clientState.TrashedTasks?.Add(task);
 
         if (await _clientState.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {

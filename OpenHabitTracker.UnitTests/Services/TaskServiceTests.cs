@@ -362,13 +362,13 @@ public class TaskServiceTests
     {
         TaskModel task = TestData.Task(id: 1);
         _clientState.Tasks = TestData.TaskDict(task);
-        _clientState.Trash = [];
+        _clientState.TrashedTasks = [];
         _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
 
         await _sut.DeleteTask(task);
 
         Assert.That(task.IsDeleted, Is.True);
-        Assert.That(_clientState.Trash, Has.Count.EqualTo(1));
+        Assert.That(_clientState.TrashedTasks, Has.Count.EqualTo(1));
     }
 
     // --- Start tests ---

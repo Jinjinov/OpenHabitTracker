@@ -442,13 +442,13 @@ public class HabitServiceTests
     {
         HabitModel habit = TestData.Habit(id: 1);
         _clientState.Habits = TestData.HabitDict(habit);
-        _clientState.Trash = [];
+        _clientState.TrashedHabits = [];
         _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
 
         await _sut.DeleteHabit(habit);
 
-        Assert.That(_clientState.Trash, Has.Count.EqualTo(1));
-        Assert.That(_clientState.Trash[0], Is.SameAs(habit));
+        Assert.That(_clientState.TrashedHabits, Has.Count.EqualTo(1));
+        Assert.That(_clientState.TrashedHabits[0], Is.SameAs(habit));
     }
 
     // --- RemoveTimeDone tests ---

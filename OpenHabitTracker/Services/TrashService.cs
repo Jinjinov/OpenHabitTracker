@@ -8,49 +8,34 @@ public class TrashService(ClientState clientState) : ITrashService
 {
     private readonly ClientState _clientState = clientState;
 
-    public IReadOnlyList<ContentModel>? Models => _clientState.Trash;
+    public IReadOnlyList<HabitModel>? TrashedHabits => _clientState.TrashedHabits;
+    public IReadOnlyList<NoteModel>? TrashedNotes => _clientState.TrashedNotes;
+    public IReadOnlyList<TaskModel>? TrashedTasks => _clientState.TrashedTasks;
 
     public async Task Initialize()
     {
         await _clientState.LoadTrash();
     }
 
-    // Fix with the visitor pattern. It's the standard solution for "I have a closed set of types and need to dispatch operations on them without type switching."
-    // The idea: instead of the caller switching on the type, each model "accepts" a visitor and calls the right overload automatically (double dispatch).
-
-    // another fix is to separate List<ContentModel>? Trash into
-    // List<HabitModel>? TrashedHabits
-    // List<NoteModel>?  TrashedNotes
-    // List<TaskModel>?  TrashedTasks
-
-    // Plan: separate typed lists
-    // 1. In ClientData: replace List<ContentModel>? Trash with List<HabitModel>? TrashedHabits, List<NoteModel>? TrashedNotes, List<TaskModel>? TrashedTasks (ClientState exposes it as a pass-through property — update that too)
-    // 2. In ClientState.LoadTrash(): populate TrashedHabits, TrashedNotes, TrashedTasks separately instead of merging into one list
-    // 2a. In ClientState.RefreshState(): replace Trash = null with TrashedHabits = null, TrashedNotes = null, TrashedTasks = null
-    // 3. In HabitService, NoteService, TaskService: replace Trash?.Add(...) with the typed list: TrashedHabits?.Add(habit), TrashedNotes?.Add(note), TrashedTasks?.Add(task)
-    // 4. In ITrashService: replace IReadOnlyList<ContentModel>? Models with IReadOnlyList<HabitModel>? TrashedHabits, IReadOnlyList<NoteModel>? TrashedNotes, IReadOnlyList<TaskModel>? TrashedTasks
-    // 5. Replace Restore(ContentModel), Delete(ContentModel) with three typed overloads each: Restore(HabitModel), Restore(NoteModel), Restore(TaskModel)
-    // 6. RestoreAll() and EmptyTrash() iterate each typed list separately — no type-switching needed
-    // 7. In Trash.razor (only UI caller): replace Models null-check and foreach with three separate loops over TrashedHabits, TrashedNotes, TrashedTasks
-    // 8. In unit tests: replace _clientState.Trash assignments and assertions with the typed lists (HabitServiceTests, NoteServiceTests, TaskServiceTests, ClientStateTests)
-    public async Task Restore(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
+    public async Task Restore(HabitModel model)
     {
         model.IsDeleted = false;
+        await RestoreHabit(model.Id);
+        _clientState.TrashedHabits?.Remove(model);
+    }
 
-        if (model is NoteModel)
-        {
-            await RestoreNote(model.Id);
-        }
-        else if (model is TaskModel)
-        {
-            await RestoreTask(model.Id);
-        }
-        else if (model is HabitModel)
-        {
-            await RestoreHabit(model.Id);
-        }
+    public async Task Restore(NoteModel model)
+    {
+        model.IsDeleted = false;
+        await RestoreNote(model.Id);
+        _clientState.TrashedNotes?.Remove(model);
+    }
 
-        _clientState.Trash?.Remove(model);
+    public async Task Restore(TaskModel model)
+    {
+        model.IsDeleted = false;
+        await RestoreTask(model.Id);
+        _clientState.TrashedTasks?.Remove(model);
     }
 
     private async Task RestoreHabit(long id)
@@ -82,46 +67,48 @@ public class TrashService(ClientState clientState) : ITrashService
 
     public async Task RestoreAll()
     {
-        if (Models is null)
-            return;
-
-        foreach (ContentModel model in Models) // TODO:: learn to use generics, perhaps you will like them...
-        {
-            model.IsDeleted = false;
-
-            if (model is NoteModel)
+        if (_clientState.TrashedHabits is not null)
+            foreach (HabitModel model in _clientState.TrashedHabits.ToList())
             {
-                await RestoreNote(model.Id);
-            }
-            else if (model is TaskModel)
-            {
-                await RestoreTask(model.Id);
-            }
-            else if (model is HabitModel)
-            {
+                model.IsDeleted = false;
                 await RestoreHabit(model.Id);
             }
-        }
 
-        _clientState.Trash?.Clear();
+        if (_clientState.TrashedNotes is not null)
+            foreach (NoteModel model in _clientState.TrashedNotes.ToList())
+            {
+                model.IsDeleted = false;
+                await RestoreNote(model.Id);
+            }
+
+        if (_clientState.TrashedTasks is not null)
+            foreach (TaskModel model in _clientState.TrashedTasks.ToList())
+            {
+                model.IsDeleted = false;
+                await RestoreTask(model.Id);
+            }
+
+        _clientState.TrashedHabits?.Clear();
+        _clientState.TrashedNotes?.Clear();
+        _clientState.TrashedTasks?.Clear();
     }
 
-    public async Task Delete(ContentModel model) // TODO:: learn to use generics, perhaps you will like them...
+    public async Task Delete(HabitModel model)
     {
-        if (model is NoteModel)
-        {
-            await DeleteNote(model.Id);
-        }
-        else if (model is TaskModel)
-        {
-            await DeleteTask(model.Id);
-        }
-        else if (model is HabitModel)
-        {
-            await DeleteHabit(model.Id);
-        }
+        await DeleteHabit(model.Id);
+        _clientState.TrashedHabits?.Remove(model);
+    }
 
-        _clientState.Trash?.Remove(model);
+    public async Task Delete(NoteModel model)
+    {
+        await DeleteNote(model.Id);
+        _clientState.TrashedNotes?.Remove(model);
+    }
+
+    public async Task Delete(TaskModel model)
+    {
+        await DeleteTask(model.Id);
+        _clientState.TrashedTasks?.Remove(model);
     }
 
     private async Task DeleteHabit(long id)
@@ -145,6 +132,8 @@ public class TrashService(ClientState clientState) : ITrashService
         await _clientState.DataAccess.RemoveNotes();
         await _clientState.DataAccess.RemoveTasks();
 
-        _clientState.Trash?.Clear();
+        _clientState.TrashedHabits?.Clear();
+        _clientState.TrashedNotes?.Clear();
+        _clientState.TrashedTasks?.Clear();
     }
 }
