@@ -102,7 +102,6 @@ Plan:
 LastDone date: for a group, for the items
 - add date to habit item
 - add date to category
-- all of the above
 add settings to show, hide this extra info
 
 Plan:
