@@ -96,22 +96,93 @@ drag & drop reorder - manual sort - 1000000 sort index
 
 ---------------------------------------------------------------------------------------------------
 
-4.
+<p>Stats:</p>
+
+1.
+Category-grouped main list (togglable alternative view):
+- controlled by a new ShowGroupedByCategory setting (bool, default false)
+- replaces the current flat foreach (HabitModel habit in HabitService.GetHabits())
+- outer loop: foreach (CategoryModel category in CategoryService.Categories)
+- inner loop: habits filtered+sorted per category (new GetHabits(categoryId) overload,
+  NOT category.Habits directly which is unfiltered and unsorted)
+- category header row shows: category title, and/or toggle button (see task 2), status color,
+  LastTimeDoneAt (see task 3), collapse/expand
+- cross-category sorting still works in flat view; grouped view sorts within each category
+
+2.
 add group "and / or" toggle:
 - all habits/items done -> green
 - one habit/item done -> green
 
-5.
+Plan:
+- add AndOrToggle property to CategoryModel (enum: And / Or)
+- two display locations, both optional and independent:
+
+  A. Stats panel (second column, see task 4 plan):
+     - show per-category toggle state alongside the green/orange/red aggregate
+     - user can flip the toggle directly in the stats panel
+     - affects how the category's status color is computed in stats
+
+  B. Category-grouped main list (see task 1):
+     - and/or toggle button in the category header row
+
+3.
 LastDone date: for a group, for the items
 - add date to habit item
 - add date to category
 - all of the above
 add settings to show, hide this extra info
 
-6.
-This week (xx.xx - yy.yy) statistics 
+Plan:
+- "last done for an item" already exists: HabitModel.LastTimeDoneAt (DateTime?)
+- "last done for a category" = max(LastTimeDoneAt) across all habits in that category
+- two display locations, both optional and independent:
+
+  A. Stats panel (second column, see task 4 plan):
+     - show per-category LastTimeDoneAt (most recent across all habits in that category)
+     - always visible in stats, no extra setting needed (it is the stats panel)
+
+  B. Category-grouped main list (see task 1):
+     - show LastTimeDoneAt in the category header row
+     - controlled by a new ShowLastDoneInGroupHeader setting (bool, default true when
+       ShowGroupedByCategory is true)
+
+  C. Per-habit in the flat main list:
+     - already shown (ElapsedTime + ratio badge on each habit row)
+     - no change needed
+
+4.
+This week (xx.xx - yy.yy) statistics
 - x out of y habits done
 - x out of y groups are green
+
+Plan:
+- show stats in the second column when _showSecondColumn is true AND no item is selected
+  (mutually exclusive with the edit component - stats disappear when you open a habit/task/note)
+- second column already exists and is empty in this case - uncomment and implement the else branch
+- inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor (not currently injected)
+- iterate ClientData.Categories (already has .Habits/.Tasks/.Notes populated at runtime
+  via ClientState, lines 354-356), respect HiddenCategoryIds / SelectedCategoryId from Settings
+
+Habits stats (richest):
+- per category row: category title | habit count | green/orange/red counts (using existing
+  GetRatio() + SelectedRatio logic) | LastTimeDoneAt of most recent habit in category
+- "this week" aggregate at top: habits done at least once this week (TimesDone entries where
+  StartedAt >= week start) out of total habits; categories fully green this week
+- week boundaries: "SettingsModel.FirstDayOfWeek + 7 days" of current week
+- data source: HabitModel.TimesDone (List<TimeModel>, already loaded after Initialize())
+  TimeModel.StartedAt / CompletedAt; HabitModel.TotalTimeSpent / AverageTimeSpent already computed
+
+Tasks stats:
+- per category row: category title | total count | done count (CompletedAt != null) |
+  overdue count (PlannedAt < now && CompletedAt == null) | total time spent (sum of
+  CompletedAt - StartedAt across completed tasks in category)
+- "this week" aggregate at top: tasks completed this week | tasks planned this week
+
+Notes stats (thin but consistent):
+- per category row: category title | total count | count per Priority | count per Color
+- no time-based stats (notes have no done/planned concept)
+- CreatedAt / UpdatedAt from ContentModel available but not very meaningful for stats
 
 ---------------------------------------------------------------------------------------------------
 
