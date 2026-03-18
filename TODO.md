@@ -100,14 +100,27 @@ drag & drop reorder - manual sort - 1000000 sort index
 
 1.
 Category-grouped main list (togglable alternative view):
+- applies to Notes, Tasks, and Habits pages
 - controlled by a new ShowGroupedByCategory setting (bool, default false)
-- replaces the current flat foreach (HabitModel habit in HabitService.GetHabits())
+- replaces the current flat foreach in each page:
+  - foreach (NoteModel note in NoteService.GetNotes())
+  - foreach (TaskModel task in TaskService.GetTasks())
+  - foreach (HabitModel habit in HabitService.GetHabits())
 - outer loop: foreach (CategoryModel category in CategoryService.Categories)
-- inner loop: habits filtered+sorted per category (new GetHabits(categoryId) overload,
-  NOT category.Habits directly which is unfiltered and unsorted)
-- category header row shows: category title, and/or toggle button (see task 2), status color,
-  LastTimeDoneAt (see task 3), collapse/expand
+- inner loop: items filtered+sorted per category (new GetNotes/GetTasks/GetHabits(categoryId)
+  overload, NOT category.Notes/Tasks/Habits directly which are unfiltered and unsorted)
+- category header row (all three pages): category title, collapse/expand
+- category header row (Habits only): also and/or toggle button (see task 2), status color,
+  LastTimeDoneAt (see task 3)
 - cross-category sorting still works in flat view; grouped view sorts within each category
+- inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor (not currently injected)
+- all new UI strings (collapse/expand, category header labels) must use @Loc["..."] — app has 20 languages
+- persistence chain for ShowGroupedByCategory (bool, new SettingsModel/SettingsEntity field):
+  - add to SettingsModel and SettingsEntity
+  - add mapping in EntityToModel.cs and ModelToEntity.cs
+  - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
+    and OpenHabitTracker.Blazor.Web/Migrations/
+  - export/import: automatically included since full SettingsModel is serialized
 
 2.
 add group "and / or" toggle:
@@ -116,6 +129,13 @@ add group "and / or" toggle:
 
 Plan:
 - add AndOrToggle property to CategoryModel (enum: And / Or)
+- full persistence chain (AndOrToggle is a new persisted field, unlike display-only settings):
+  - add to CategoryEntity
+  - add mapping in EntityToModel.cs and ModelToEntity.cs
+  - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
+    and OpenHabitTracker.Blazor.Web/Migrations/
+  - include in all export/import formats: JSON, YAML, TSV, Markdown (Google Keep is import-only)
+- all new UI strings (toggle labels, etc.) must use @Loc["..."] — app has 20 languages
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
@@ -146,6 +166,12 @@ Plan:
      - show LastTimeDoneAt in the category header row
      - controlled by a new ShowLastDoneInGroupHeader setting (bool, default true when
        ShowGroupedByCategory is true)
+     - persistence chain for ShowLastDoneInGroupHeader (bool, new SettingsModel/SettingsEntity field):
+       - add to SettingsModel and SettingsEntity
+       - add mapping in EntityToModel.cs and ModelToEntity.cs
+       - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
+         and OpenHabitTracker.Blazor.Web/Migrations/
+       - export/import: automatically included since full SettingsModel is serialized
 
   C. Per-habit in the flat main list:
      - already shown (ElapsedTime + ratio badge on each habit row)
@@ -159,10 +185,13 @@ This week (xx.xx - yy.yy) statistics
 Plan:
 - show stats in the second column when _showSecondColumn is true AND no item is selected
   (mutually exclusive with the edit component - stats disappear when you open a habit/task/note)
+  NOTE: this is separate from the existing ShowHabitStatistics setting, which shows per-habit
+  detail stats (time spent, ratios, elapsed) inside HabitComponent when editing a single habit
 - second column already exists and is empty in this case - uncomment and implement the else branch
-- inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor (not currently injected)
+- inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor (already done if task 1 is implemented)
 - iterate ClientData.Categories (already has .Habits/.Tasks/.Notes populated at runtime
   via ClientState, lines 354-356), respect HiddenCategoryIds / SelectedCategoryId from Settings
+- all new UI strings must use @Loc["..."] — app has 20 languages
 
 Habits stats (richest):
 - per category row: category title | habit count | green/orange/red counts (using existing
