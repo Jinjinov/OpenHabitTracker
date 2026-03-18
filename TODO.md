@@ -183,10 +183,17 @@ This week (xx.xx - yy.yy) statistics
 - x out of y groups are green
 
 Plan:
-- show stats in the second column when _showSecondColumn is true AND no item is selected
-  (mutually exclusive with the edit component - stats disappear when you open a habit/task/note)
+- implement as 3 reusable components: NoteStatsComponent, TaskStatsComponent, HabitStatsComponent
+- wide screens (>= 1280px): each component renders in the else branch of the second column
+  on its respective page when no item is selected (mutually exclusive with the edit component —
+  stats disappear when you open a habit/task/note)
   NOTE: this is separate from the existing ShowHabitStatistics setting, which shows per-habit
   detail stats (time spent, ratios, elapsed) inside HabitComponent when editing a single habit
+- mobile: add a new Stats.razor (@page "/stats") mirroring Home.razor pattern:
+    <NoteStatsComponent IsEmbedded />
+    <TaskStatsComponent IsEmbedded />
+    <HabitStatsComponent IsEmbedded />
+  add Stats to the navigation menu
 - second column already exists and is empty in this case - uncomment and implement the else branch
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor (already done if task 1 is implemented)
 - iterate ClientData.Categories (already has .Habits/.Tasks/.Notes populated at runtime
