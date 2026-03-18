@@ -48,54 +48,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-1. FIXED
-fix "app.MainWindow.SetIconFile("favicon.ico");" in OpenHabitTracker.Blazor.Photino
-
-root cause:
-- Photino.NET's SetIconFile C# validates the file using AppContext.BaseDirectory + filename
-  but passes the raw relative string "favicon.ico" to the native GTK layer
-- GTK resolves relative paths from the working directory, not AppContext.BaseDirectory
-- when run via "dotnet run" from the repo root, working dir is /mnt/data/.../OpenHabitTracker/
-  which has no favicon.ico - GTK segfaults (exit 139) instead of failing gracefully
-- the Photino.Blazor.Sample worked because favicon.ico exists in both the project dir
-  and the solution root dir, so GTK finds it from the working directory either way
-
-fix applied in Program.cs:
-    app.MainWindow.SetIconFile(Path.Combine(AppContext.BaseDirectory, "favicon.ico"));
-
-verified: app runs without crash, icon shows on Linux
-
-
-2.
-SUBMIT DESKTOP VIDEO (1920x1080) TO:
-    - macOS App Store: upload MP4 in App Store Connect
-
-SUBMIT MOBILE VIDEO (886x1920) TO:
-    - iOS App Store: upload MP4 in App Store Connect
-
----------------------------------------------------------------------------------------------------
-
-1.
-Filter:
-    - Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
-    - `ClientData` mixes data bag with query/filter/sort logic (SRP) — 40-70 line query methods inside what should be a plain data container
-    - Duplicate query logic across `HabitService`, `NoteService`, `TaskService` (SRP) — same filter/sort structure (priority, search, category, date, sort switch) maintained independently in all three
-QueryParameters:
-    - `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
-    - Currently all records are loaded into memory first, then filtered in C# — the intent is to push filters down to the data layer
-    - `_dataAccess` calls would receive query parameters (search term, category, priority, date range) and return only matching records
-    - This would eliminate the need for large in-memory filter blocks and reduce data transferred from the data source
-
-2.
-exact repeating reminders, like Google Keep
-
-3.
-drag & drop reorder - manual sort - 1000000 sort index
-- sort categories?
-- sort items?
-
----------------------------------------------------------------------------------------------------
-
 <p>Stats:</p>
 
 1.
@@ -220,12 +172,40 @@ Notes stats (thin but consistent):
 - no time-based stats (notes have no done/planned concept)
 - CreatedAt / UpdatedAt from ContentModel available but not very meaningful for stats
 
+5.
+SUBMIT DESKTOP VIDEO (1920x1080) TO:
+    - macOS App Store: upload MP4 in App Store Connect
+
+SUBMIT MOBILE VIDEO (886x1920) TO:
+    - iOS App Store: upload MP4 in App Store Connect
+
 ---------------------------------------------------------------------------------------------------
 
-7.
+1.
+Filter:
+    - Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
+    - `ClientData` mixes data bag with query/filter/sort logic (SRP) — 40-70 line query methods inside what should be a plain data container
+    - Duplicate query logic across `HabitService`, `NoteService`, `TaskService` (SRP) — same filter/sort structure (priority, search, category, date, sort switch) maintained independently in all three
+QueryParameters:
+    - `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
+    - Currently all records are loaded into memory first, then filtered in C# — the intent is to push filters down to the data layer
+    - `_dataAccess` calls would receive query parameters (search term, category, priority, date range) and return only matching records
+    - This would eliminate the need for large in-memory filter blocks and reduce data transferred from the data source
+
+2.
+exact repeating reminders, like Google Keep
+
+3.
+drag & drop reorder - manual sort - 1000000 sort index
+- sort categories?
+- sort items?
+
+---------------------------------------------------------------------------------------------------
+
+4.
 upgrade to .NET 10
 
-8.
+5.
 upgrade NuGet versions
 
 ---------------------------------------------------------------------------------------------------
