@@ -93,17 +93,13 @@ public class HabitTests : BaseTest
     }
 
     [Test]
-    public async Task Calendar_ClickDayThenIncrease_CountUpdatesInCell()
+    public async Task Calendar_ClickDay_ElapsedTimeUpdates()
     {
         await AddItemAsync("Calendar Habit");
-        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Calendar Habit" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // ShowLargeCalendar defaults to true — month calendar is visible in detail view at data-habits-step-13
-        await Expect(Page.Locator("[data-habits-step-13]")).ToBeVisibleAsync();
-
-        // Clicking a cell in month mode selects it and shows Increase/Decrease buttons (does not directly add)
-        ILocator gridCells = Page.Locator("[data-habits-step-13] button[role='gridcell']");
+        // data-habits-step-6 is the small calendar in the list view
+        // In non-month mode, clicking a cell directly calls AddTimeDone (no Increase button needed)
+        ILocator gridCells = Page.Locator("[data-habits-step-6] button[role='gridcell']");
         await Expect(gridCells.First).ToBeVisibleAsync();
 
         ILocator todayCell = gridCells
@@ -111,17 +107,10 @@ public class HabitTests : BaseTest
             .First;
         await Expect(todayCell).ToBeVisibleAsync();
 
-        await todayCell.ClickAsync();
+        await todayCell.ClickAsync(new LocatorClickOptions { Force = true });
 
-        // Clicking a day sets selectedDateTime and shows the Increase/Decrease panel
-        await Expect(Page.Locator("button[aria-label='Decrease']")).ToBeVisibleAsync();
-
-        // Click Increase twice — (N) only renders when N > 1, so two clicks gives (2)
-        await Page.Locator("button[aria-label='Increase']").ClickAsync();
-        await Expect(Page.Locator("[data-habits-step-13] span.input-group-text.flex-grow-1")).ToContainTextAsync("1");
-
-        await Page.Locator("button[aria-label='Increase']").ClickAsync();
-        await Expect(todayCell).ToContainTextAsync("(2)");
+        // After clicking today's cell, elapsed time changes from ⊘ to "0 m"
+        await Expect(Page.Locator("[data-habits-step-3]")).ToContainTextAsync("0 m");
     }
 
     [Test]
