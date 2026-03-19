@@ -80,11 +80,13 @@ Category-grouped main list (togglable alternative view):
   - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
     and OpenHabitTracker.Blazor.Web/Migrations/
   - export/import: automatically included since full SettingsModel is serialized
+- all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
+- new localization string: "Group by category"
 
 2.
 add group "and / or" toggle:
-- all habits/items done -> green
-- one habit/item done -> green
+- all habits/items done -> green (color) / "complete" (text)
+- one habit/item done -> green (color) / "complete" (text)
 
 Plan:
 - add CompletionRule property to CategoryModel (enum CompletionRule { All, Any })
@@ -94,7 +96,8 @@ Plan:
   - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
     and OpenHabitTracker.Blazor.Web/Migrations/
   - include in all export/import formats: JSON, YAML, TSV, Markdown (Google Keep is import-only)
-- all new UI strings (toggle labels) must use @Loc["..."] and add translations to json — app has 20 languages
+- all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
+- new localization strings: "Mark complete when all habits done" / "Mark complete when any habit done"
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
@@ -114,6 +117,7 @@ Plan:
 - "last done for an item" already exists: HabitModel.LastTimeDoneAt (DateTime?)
 - "last done for a category" = max(LastTimeDoneAt) across all habits in that category
 - all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
+- new localization strings: "Last done", "Show last done"
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
@@ -137,7 +141,7 @@ Plan:
 4.
 This week (xx.xx - yy.yy) statistics
 - x out of y habits done
-- x out of y groups are green
+- x out of y groups are green (color) / "complete" (text)
 
 Plan:
 - implement as 3 reusable components: NotesStatisticsComponent, TasksStatisticsComponent, HabitsStatisticsComponent
@@ -152,13 +156,14 @@ Plan:
 - respect ShowGroupedByCategory (see task 1) - iterate Notes, Tasks, Habits OR ClientData.Categories (already has .Habits/.Tasks/.Notes populated at runtime
   via ClientState), respect HiddenCategoryIds / SelectedCategoryId from Settings
 - all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
+- new localization strings: "This week", "out of", "overdue", "complete"
 
 Habits stats:
 - respect ShowGroupedByCategory (see task 1)
 - category title (if ShowGroupedByCategory) | habit count | green/orange/red counts (using existing
   GetRatio() + SelectedRatio logic) | LastTimeDoneAt of most recent habit
 - "this week" aggregate at top: habits done at least once this week (TimesDone entries where
-  StartedAt >= week start) out of total habits; categories fully green this week
+  StartedAt >= week start) out of total habits; categories fully complete this week
 - week boundaries: "SettingsModel.FirstDayOfWeek + 7 days" of current week
 - data source: HabitModel.TimesDone (List<TimeModel>, already loaded after Initialize())
   TimeModel.StartedAt / CompletedAt; HabitModel.TotalTimeSpent / AverageTimeSpent already computed
