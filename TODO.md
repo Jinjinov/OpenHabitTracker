@@ -52,7 +52,8 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 1, 2, 3 must be done at the same time so there is one new DB migration, not three
 
-0. prerequisite for task 1 (avoids duplicating row HTML between flat and grouped loops):
+0.
+prerequisite for task 1 (avoids duplicating row HTML between flat and grouped loops):
 - extract HabitRowComponent from the habit row block in Habits.razor
 - extract TaskRowComponent from the task row block in Tasks.razor
 - extract NoteRowComponent from the note row block in Notes.razor
