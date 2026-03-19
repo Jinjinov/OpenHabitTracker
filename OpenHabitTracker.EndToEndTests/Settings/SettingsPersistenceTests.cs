@@ -56,6 +56,32 @@ public class SettingsPersistenceTests : BaseTest
     }
 
     [Test]
+    public async Task ShowItemList_Toggle_DoesNotCrash()
+    {
+        await OpenSettingsAsync();
+        await Page.Locator("label[for='ShowItemList']").ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
+
+        await Page.Locator("label[for='ShowItemList']").ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
+
+        await Expect(Page.Locator("label[for='ShowItemList']")).ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task ShowCategory_Toggle_DoesNotCrash()
+    {
+        await OpenSettingsAsync();
+        await Page.Locator("label[for='ShowCategory']").ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
+
+        await Page.Locator("label[for='ShowCategory']").ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
+
+        await Expect(Page.Locator("label[for='ShowCategory']")).ToBeVisibleAsync();
+    }
+
+    [Test]
     public async Task Theme_Change_AppliesColorVariable()
     {
         await OpenSettingsAsync();
