@@ -48,8 +48,6 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
-<p>Stats:</p>
-
 1.
 Category-grouped main list (togglable alternative view):
 - applies to Notes, Tasks, and Habits pages
@@ -61,12 +59,12 @@ Category-grouped main list (togglable alternative view):
 - outer loop: foreach (CategoryModel category in CategoryService.Categories)
 - inner loop: items filtered+sorted per category (new GetNotes/GetTasks/GetHabits(categoryId)
   overload, NOT category.Notes/Tasks/Habits directly which are unfiltered and unsorted)
-- category header row (all three pages): category title, collapse/expand
+- category header row (all three pages): category title, collapse/expand (same unicode char as in Search)
 - category header row (Habits only): also and/or toggle button (see task 2), status color,
   LastTimeDoneAt (see task 3)
 - cross-category sorting still works in flat view; grouped view sorts within each category
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor (not currently injected)
-- all new UI strings (collapse/expand, category header labels) must use @Loc["..."] — app has 20 languages
+- all new UI strings (category header labels) must use @Loc["..."] — app has 20 languages
 - persistence chain for ShowGroupedByCategory (bool, new SettingsModel/SettingsEntity field):
   - add to SettingsModel and SettingsEntity
   - add mapping in EntityToModel.cs and ModelToEntity.cs
@@ -87,12 +85,11 @@ Plan:
   - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
     and OpenHabitTracker.Blazor.Web/Migrations/
   - include in all export/import formats: JSON, YAML, TSV, Markdown (Google Keep is import-only)
-- all new UI strings (toggle labels, etc.) must use @Loc["..."] — app has 20 languages
+- all new UI strings (toggle labels) must use @Loc["..."] — app has 20 languages
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
      - show per-category toggle state alongside the green/orange/red aggregate
-     - user can flip the toggle directly in the stats panel
      - affects how the category's status color is computed in stats
 
   B. Category-grouped main list (see task 1):
@@ -110,14 +107,13 @@ Plan:
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
-     - show per-category LastTimeDoneAt (most recent across all habits in that category)
-     - always visible in stats, no extra setting needed (it is the stats panel)
+     - show LastTimeDoneAt (most recent across all habits)
 
   B. Category-grouped main list (see task 1):
      - show LastTimeDoneAt in the category header row
-     - controlled by a new ShowLastDoneInGroupHeader setting (bool, default true when
+     - controlled by a new ShowLastTimeDone setting (bool, default true when
        ShowGroupedByCategory is true)
-     - persistence chain for ShowLastDoneInGroupHeader (bool, new SettingsModel/SettingsEntity field):
+     - persistence chain for ShowLastTimeDone (bool, new SettingsModel/SettingsEntity field):
        - add to SettingsModel and SettingsEntity
        - add mapping in EntityToModel.cs and ModelToEntity.cs
        - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
@@ -134,26 +130,23 @@ This week (xx.xx - yy.yy) statistics
 - x out of y groups are green
 
 Plan:
-- implement as 3 reusable components: NoteStatsComponent, TaskStatsComponent, HabitStatsComponent
-- wide screens (>= 1280px): each component renders in the else branch of the second column
-  on its respective page when no item is selected (mutually exclusive with the edit component —
-  stats disappear when you open a habit/task/note)
+- implement as 3 reusable components: NoteStatisticsComponent, TaskStatisticsComponent, HabitStatisticsComponent
   NOTE: this is separate from the existing ShowHabitStatistics setting, which shows per-habit
   detail stats (time spent, ratios, elapsed) inside HabitComponent when editing a single habit
-- mobile: add a new Stats.razor (@page "/stats") mirroring Home.razor pattern:
-    <NoteStatsComponent IsEmbedded />
-    <TaskStatsComponent IsEmbedded />
-    <HabitStatsComponent IsEmbedded />
-  add Stats to the navigation menu
-- second column already exists and is empty in this case - uncomment and implement the else branch
-- inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor (already done if task 1 is implemented)
-- iterate ClientData.Categories (already has .Habits/.Tasks/.Notes populated at runtime
-  via ClientState, lines 354-356), respect HiddenCategoryIds / SelectedCategoryId from Settings
+- wide screens (>= 1280px): each component renders in the else branch inside the second column
+  on its respective page when no item is selected (mutually exclusive with the edit component —
+  stats disappear when you open a habit/task/note)
+  second column already exists and is empty in this case - uncomment and implement the else branch
+- mobile: each component renders in the else branch instead of the second column - uncomment and implement the else branch
+- inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
+- respect ShowGroupedByCategory (see task 1) - iterate Notes, Tasks, Habits OR ClientData.Categories (already has .Habits/.Tasks/.Notes populated at runtime
+  via ClientState), respect HiddenCategoryIds / SelectedCategoryId from Settings
 - all new UI strings must use @Loc["..."] — app has 20 languages
 
-Habits stats (richest):
-- per category row: category title | habit count | green/orange/red counts (using existing
-  GetRatio() + SelectedRatio logic) | LastTimeDoneAt of most recent habit in category
+Habits stats:
+- respect ShowGroupedByCategory (see task 1)
+- category title (if ShowGroupedByCategory) | habit count | green/orange/red counts (using existing
+  GetRatio() + SelectedRatio logic) | LastTimeDoneAt of most recent habit
 - "this week" aggregate at top: habits done at least once this week (TimesDone entries where
   StartedAt >= week start) out of total habits; categories fully green this week
 - week boundaries: "SettingsModel.FirstDayOfWeek + 7 days" of current week
@@ -161,15 +154,16 @@ Habits stats (richest):
   TimeModel.StartedAt / CompletedAt; HabitModel.TotalTimeSpent / AverageTimeSpent already computed
 
 Tasks stats:
-- per category row: category title | total count | done count (CompletedAt != null) |
+- respect ShowGroupedByCategory (see task 1)
+- category title (if ShowGroupedByCategory) | total count | done count (CompletedAt != null) |
   overdue count (PlannedAt < now && CompletedAt == null) | total time spent (sum of
-  CompletedAt - StartedAt across completed tasks in category)
+  CompletedAt - StartedAt across completed tasks)
 - "this week" aggregate at top: tasks completed this week | tasks planned this week
 
-Notes stats (thin but consistent):
-- per category row: category title | total count | count per Priority | count per Color
-- no time-based stats (notes have no done/planned concept)
-- CreatedAt / UpdatedAt from ContentModel available but not very meaningful for stats
+Notes stats:
+- respect ShowGroupedByCategory (see task 1)
+- category title (if ShowGroupedByCategory) | total count | count per Priority
+- CreatedAt / UpdatedAt
 
 5.
 SUBMIT DESKTOP VIDEO (1920x1080) TO:

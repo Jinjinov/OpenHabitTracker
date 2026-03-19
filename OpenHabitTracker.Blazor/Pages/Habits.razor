@@ -195,7 +195,7 @@
         }
         @* else
         {
-            <p>Stats:</p>
+            <p>This week (xx.xx - yy.yy) statistics:</p>
 
             foreach (CategoryModel category in CategoryService.Categories)
             {
@@ -204,6 +204,15 @@
         } *@
     </div>
 }
+@* else
+{
+    <p>This week (xx.xx - yy.yy) statistics:</p>
+
+    foreach (CategoryModel category in CategoryService.Categories)
+    {
+
+    }
+} *@
 
 @code {
     TourStep[] tourSteps;
