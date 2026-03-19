@@ -20,18 +20,7 @@ public class NoteService(ClientState clientState, ISearchFilterService searchFil
 
     public IEnumerable<NoteModel> GetNotes()
     {
-        QueryParameters queryParameters = new()
-        {
-            SearchTerm = _searchFilterService.SearchTerm,
-            MatchCase = _searchFilterService.MatchCase,
-            CategoryFilterDisplay = _clientState.Settings.CategoryFilterDisplay,
-            PriorityFilterDisplay = _clientState.Settings.PriorityFilterDisplay,
-            SelectedCategoryId = _clientState.Settings.SelectedCategoryId,
-            SelectedPriority = _clientState.Settings.SelectedPriority,
-            HiddenCategoryIds = _clientState.Settings.HiddenCategoryIds,
-            ShowPriority = _clientState.Settings.ShowPriority,
-            SortBy = _clientState.Settings.SortBy,
-        };
+        QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);
 
         return Notes!.FilterNotes(queryParameters);
     }
