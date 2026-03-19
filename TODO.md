@@ -66,7 +66,7 @@ Category-grouped main list (togglable alternative view):
   LastTimeDoneAt (see task 3)
 - cross-category sorting still works in flat view; grouped view sorts within each category
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor (not currently injected)
-- all new UI strings (category header labels) must use @Loc["..."] — app has 20 languages
+- all new UI strings (category header labels) must use @Loc["..."] and add translations to json — app has 20 languages
 - persistence chain for ShowGroupedByCategory (bool, new SettingsModel/SettingsEntity field):
   - add to SettingsModel and SettingsEntity
   - add mapping in EntityToModel.cs and ModelToEntity.cs
@@ -87,7 +87,7 @@ Plan:
   - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
     and OpenHabitTracker.Blazor.Web/Migrations/
   - include in all export/import formats: JSON, YAML, TSV, Markdown (Google Keep is import-only)
-- all new UI strings (toggle labels) must use @Loc["..."] — app has 20 languages
+- all new UI strings (toggle labels) must use @Loc["..."] and add translations to json — app has 20 languages
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
@@ -143,7 +143,7 @@ Plan:
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
 - respect ShowGroupedByCategory (see task 1) - iterate Notes, Tasks, Habits OR ClientData.Categories (already has .Habits/.Tasks/.Notes populated at runtime
   via ClientState), respect HiddenCategoryIds / SelectedCategoryId from Settings
-- all new UI strings must use @Loc["..."] — app has 20 languages
+- all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
 
 Habits stats:
 - respect ShowGroupedByCategory (see task 1)
