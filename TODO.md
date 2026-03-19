@@ -69,11 +69,6 @@ new findings (discovered while planning Category-grouped main list):
 
 more tests in OpenHabitTracker.EndToEndTests and OpenHabitTracker.UnitTests - specifically:
 
-critical (covers known bug):
-    - CategoryService.DeleteCategory() — existing cascade tests pre-populate category.Notes/Tasks/Habits
-      manually, so they pass; add a test where those lists are null (real runtime state) and verify
-      children in ClientState.Notes/Tasks/Habits with that CategoryId are still marked IsDeleted=true
-
 future (when work on "ClientState dict sync" starts):
     - HabitService.Start() — verify new TimeModel is added to ClientState.Times
     - HabitService.AddTimeDone() — verify new TimeModel is added to ClientState.Times
@@ -81,69 +76,18 @@ future (when work on "ClientState dict sync" starts):
     - ItemService.AddItem() — verify new ItemModel is added to ClientState.Items
     - ItemService.DeleteItem() — verify ItemModel is removed from ClientState.Items
 
-HabitService (untested methods/paths):
-    - UpdateHabit() — verify entity is updated in DataAccess
-    - SetStartTime() — verify StartedAt is updated on model and entity
-    - UpdateTimeDone() — verify entity StartedAt/CompletedAt are updated, LastTimeDoneAt recalculated
-    - LoadTimesDone() — when TimesDone is null, loads from DataAccess and calls RefreshTimesDoneByDay
-    - LoadTimesDone() — when TimesDone is not null, does NOT call DataAccess
-    - MarkAsDone() — when last time is in progress, updates LastTimeDoneAt
-    - MarkAsDone() — when UncheckAllItemsOnHabitDone is enabled and Items is null, does not throw
-
-TaskService (untested methods/paths):
-    - UpdateTask() — verify entity is updated in DataAccess
-    - SetStartTime() — when task already completed, does nothing
-    - SetStartTime() — when task in progress, updates StartedAt on model and entity
-    - AddTask() — when NewTask is null, does nothing
-    - DeleteTask() — when TrashedTasks is null, does not throw
-    - MarkAsDone() — when not done, sets StartedAt if not already set
-
-NoteService (untested methods/paths):
-    - UpdateNote() — verify entity is updated in DataAccess
-    - AddNote() — when NewNote is null, does nothing
-    - SetSelectedNote() — when id exists, sets SelectedNote
-    - SetSelectedNote() — when id is null, clears SelectedNote
-
-ItemService (no tests at all):
-    - Initialize() — when Items is null, loads from DataAccess and sets on model
-    - Initialize() — when Items is not null, does NOT call DataAccess
-    - AddItem() — adds to items.Items list, writes to DataAccess, sets Id
-    - AddItem() — when items.Items is null, initializes the list first
-    - UpdateItem() — updates Title on model and entity
-    - DeleteItem() — removes from items.Items and calls DataAccess.RemoveItem
-    - SetIsDone() — when true, sets DoneAt to now
-    - SetIsDone() — when false, clears DoneAt
-
-ClientState (untested methods/paths):
-    - LoadSettings() — when no settings exist, creates default and writes to DataAccess
-    - LoadSettings() — when settings exist, loads from DataAccess
-    - UpdateSettings() — writes current Settings to DataAccess
-    - LoadCategories() — loads from DataAccess, populates Categories dict
-    - LoadCategories() — when already loaded, does not call DataAccess again
-    - DeleteAllData() — calls DataAccess.DeleteAllUserData and resets state
-    - GetUserData() — populates CategoryModel.Notes/Tasks/Habits from flat dicts
-    - SetUserData() — writes all categories/notes/tasks/habits/times/items to DataAccess
-
-HabitModel (no tests at all):
-    - RefreshTimesDoneByDay() — groups TimesDone by date correctly
-    - GetRepeatInterval() — Day/Week/Month/Year returns correct TimeSpan
-    - RepeatCountReached() — returns true when count within interval is met
-    - RepeatCountReached() — returns false when count not met
+HabitModel (remaining):
     - OnTimesDoneChanged() — zero entries sets all averages to zero
     - OnTimesDoneChanged() — one entry sets AverageInterval to GetRepeatInterval()
     - OnTimesDoneChanged() — multiple entries computes correct AverageInterval and TotalTimeSpent
     - ElapsedTime — when never done, is time since CreatedAt
     - ElapsedTime — when done, is time since LastTimeDoneAt
-    - GetRatio() — each Ratio enum value returns correct computed value
 
-SearchFilterService (no tests at all):
-    - GetQueryParameters() — maps all relevant SettingsModel fields correctly
-    - MarkSearchResults() — wraps match in <mark> tag, case-insensitive
-    - MarkSearchResults() — case-sensitive when MatchCase is true
-    - MarkSearchResultsInHtml() — wraps only text nodes, does not corrupt HTML tags
+ClientState (remaining):
+    - SetUserData() — writes all categories/notes/tasks/habits/times/items to DataAccess
 
-EntityToModel / ModelToEntity (no tests at all):
-    - ToModel() round-trip for each type: Category, Habit, Task, Note, Item, Time, Settings
+EntityToModel / ModelToEntity (remaining):
+    - ToModel() / ToEntity() round-trip for Settings
     - CopyToModel() / CopyToEntity() preserve all fields
 
 import/export (no tests at all):
@@ -160,14 +104,11 @@ E2E gaps:
     - DeleteCategory: child habits/tasks/notes disappear from their respective lists
     - Habit timer: start timer, stop timer, verify elapsed time shown
     - Calendar: click a day to mark habit done, verify count updates
-    - Trash: restore habit from trash, restore task from trash
     - Trash: permanently delete item from trash
     - Import/Export: export JSON, reimport, verify data matches
     - Search: filter by priority
     - Search: filter by DoneAt date
-    - Settings: ShowItemList toggle shows/hides sub-items
     - Settings: HideCompletedTasks toggle hides/shows completed tasks
-    - Settings: ShowCategory toggle shows/hides category selector on new item form
     - Sort: sort habits/tasks/notes by each available sort option
 
 ---------------------------------------------------------------------------------------------------
