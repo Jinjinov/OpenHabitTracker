@@ -69,15 +69,12 @@ new findings (discovered while planning Category-grouped main list):
 
 more tests in OpenHabitTracker.EndToEndTests and OpenHabitTracker.UnitTests - specifically:
 
-future (when work on "ClientState dict sync" starts):
+ClientState dict sync:
     - HabitService.Start() — verify new TimeModel is added to ClientState.Times
     - HabitService.AddTimeDone() — verify new TimeModel is added to ClientState.Times
     - HabitService.RemoveTimeDone() — verify TimeModel is removed from ClientState.Times
     - ItemService.AddItem() — verify new ItemModel is added to ClientState.Items
     - ItemService.DeleteItem() — verify ItemModel is removed from ClientState.Items
-
-E2E gaps:
-    - Import/Export: export JSON, reimport, verify data matches
 
 ---------------------------------------------------------------------------------------------------
 
