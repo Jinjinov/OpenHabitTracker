@@ -59,8 +59,12 @@ Category-grouped main list (togglable alternative view):
   - foreach (TaskModel task in TaskService.GetTasks())
   - foreach (HabitModel habit in HabitService.GetHabits())
 - outer loop: foreach (CategoryModel category in CategoryService.Categories)
-- inner loop: items filtered+sorted per category (new GetNotes/GetTasks/GetHabits(categoryId)
-  overload, NOT category.Notes/Tasks/Habits directly which are unfiltered and unsorted)
+- inner loop: items filtered+sorted per category
+    use extension methods: 
+    `category.Notes.FilterNotes(queryParameters)`, 
+    `category.Tasks.FilterTasks(queryParameters)`, 
+    `category.Habits.FilterHabits(queryParameters)`, 
+    NOT category.Notes/Tasks/Habits directly which are unfiltered and unsorted
 - category header row (all three pages): category title, collapse/expand (same unicode char as in Search)
 - category header row (Habits only): also and/or toggle button (see task 2), status color,
   LastTimeDoneAt (see task 3)
@@ -178,16 +182,7 @@ SUBMIT MOBILE VIDEO (886x1920) TO:
 
 1.
 1a Filter:
-    - Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
-    - `ClientData` mixes data bag with query/filter/sort logic (SRP) — 40-70 line query methods inside what should be a plain data container
-    - Duplicate query logic across `HabitService`, `NoteService`, `TaskService` (SRP) — same filter/sort structure (priority, search, category, date, sort switch) maintained independently in all three
-    - Plan to eliminate duplication:
-      1. Create `Query/` folder with two files:
-         - `Query/QueryParameters.cs` — move from `Dto/QueryParameters.cs`, update namespace to `OpenHabitTracker.Query`
-         - `Query/QueryExtensions.cs` — new static class with extension methods `IEnumerable<NoteModel>.FilterNotes(QueryParameters)`, `IEnumerable<TaskModel>.FilterTasks(QueryParameters)`, `IEnumerable<HabitModel>.FilterHabits(QueryParameters)` — single authoritative filter+sort logic for each type
-      2. `ClientData.GetNotes/GetTasks/GetHabits(QueryParameters)` keep only the `if (X is null) { /* lazy load */ }` block, then call `Notes.Values.FilterNotes(queryParameters)` / `Tasks.Values.FilterTasks(queryParameters)` / `Habits.Values.FilterHabits(queryParameters)`
-      3. `NoteService.GetNotes()` / `TaskService.GetTasks()` / `HabitService.GetHabits()` build a `QueryParameters` from `_clientState.Settings` + `_searchFilterService`, then call `Notes!.FilterNotes(queryParameters)` / `Tasks` / `Habits` directly — no delegation to `ClientData`, same access pattern as today but without the duplicated filter/sort code
-      4. "Category-grouped main list" feature (TODO item line 54) can use the same extension methods directly: `category.Notes.FilterNotes(queryParameters)`, `category.Tasks.FilterTasks(queryParameters)`, `category.Habits.FilterHabits(queryParameters)` — no async, no lazy load, data already in memory
+    - Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6x
 1b QueryParameters:
     - `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
     - Currently all records are loaded into memory first, then filtered in C# — the intent is to push filters down to the data layer
