@@ -2,6 +2,7 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Query;
 
 namespace OpenHabitTracker.Services;
 
@@ -19,42 +20,20 @@ public class NoteService(ClientState clientState, ISearchFilterService searchFil
 
     public IEnumerable<NoteModel> GetNotes()
     {
-        SettingsModel settings = _clientState.Settings;
-
-        IEnumerable<NoteModel> notes = Notes!.Where(x => !x.IsDeleted);
-
-        if (settings.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
+        QueryParameters queryParameters = new()
         {
-            notes = notes.Where(x => settings.ShowPriority[x.Priority]);
-        }
-        else if (settings.SelectedPriority is not null)
-        {
-            notes = notes.Where(x => x.Priority == settings.SelectedPriority);
-        }
-
-        if (_searchFilterService.SearchTerm is not null)
-        {
-            StringComparison comparisonType = _searchFilterService.MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-
-            notes = notes.Where(x => x.Title.Contains(_searchFilterService.SearchTerm, comparisonType) || x.Content.Contains(_searchFilterService.SearchTerm, comparisonType));
-        }
-
-        if (settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes)
-        {
-            notes = notes.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
-        }
-        else if (settings.SelectedCategoryId is not null)
-        {
-            notes = notes.Where(x => x.CategoryId == settings.SelectedCategoryId);
-        }
-
-        return settings.SortBy[ContentType.Note] switch
-        {
-            Sort.Category => notes.OrderBy(x => x.CategoryId),
-            Sort.Priority => notes.OrderByDescending(x => x.Priority),
-            Sort.Title => notes.OrderBy(x => x.Title),
-            _ => notes
+            SearchTerm = _searchFilterService.SearchTerm,
+            MatchCase = _searchFilterService.MatchCase,
+            CategoryFilterDisplay = _clientState.Settings.CategoryFilterDisplay,
+            PriorityFilterDisplay = _clientState.Settings.PriorityFilterDisplay,
+            SelectedCategoryId = _clientState.Settings.SelectedCategoryId,
+            SelectedPriority = _clientState.Settings.SelectedPriority,
+            HiddenCategoryIds = _clientState.Settings.HiddenCategoryIds,
+            ShowPriority = _clientState.Settings.ShowPriority,
+            SortBy = _clientState.Settings.SortBy,
         };
+
+        return Notes!.FilterNotes(queryParameters);
     }
 
     public async Task Initialize()

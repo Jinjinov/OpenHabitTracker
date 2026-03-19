@@ -2,6 +2,7 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Query;
 
 namespace OpenHabitTracker.Services;
 
@@ -18,75 +19,25 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
     public IEnumerable<TaskModel> GetTasks()
     {
-        SettingsModel settings = _clientState.Settings;
-
-        IEnumerable<TaskModel> tasks = Tasks!.Where(x => !x.IsDeleted);
-
-        if (settings.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
+        QueryParameters queryParameters = new()
         {
-            tasks = tasks.Where(x => settings.ShowPriority[x.Priority]);
-        }
-        else if (settings.SelectedPriority is not null)
-        {
-            tasks = tasks.Where(x => x.Priority == settings.SelectedPriority);
-        }
-
-        if (_searchFilterService.SearchTerm is not null)
-        {
-            StringComparison comparisonType = _searchFilterService.MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-
-            tasks = tasks.Where(x => x.Title.Contains(_searchFilterService.SearchTerm, comparisonType) || x.Items?.Any(i => i.Title.Contains(_searchFilterService.SearchTerm, comparisonType)) == true);
-        }
-
-        if (_searchFilterService.DoneAtFilter is not null)
-        {
-            tasks = _searchFilterService.DoneAtCompare switch
-            {
-                DateCompare.Before => tasks.Where(x => x.CompletedAt?.Date < _searchFilterService.DoneAtFilter.Value.Date),
-                DateCompare.On => tasks.Where(x => x.CompletedAt?.Date == _searchFilterService.DoneAtFilter.Value.Date),
-                DateCompare.After => tasks.Where(x => x.CompletedAt?.Date > _searchFilterService.DoneAtFilter.Value.Date),
-                DateCompare.NotOn => tasks.Where(x => x.CompletedAt?.Date != _searchFilterService.DoneAtFilter.Value.Date),
-                _ => throw new ArgumentOutOfRangeException(nameof(_searchFilterService.DoneAtCompare))
-            };
-        }
-
-        if (_searchFilterService.PlannedAtFilter is not null)
-        {
-            tasks = _searchFilterService.PlannedAtCompare switch
-            {
-                DateCompare.Before => tasks.Where(x => x.PlannedAt?.Date < _searchFilterService.PlannedAtFilter.Value.Date),
-                DateCompare.On => tasks.Where(x => x.PlannedAt?.Date == _searchFilterService.PlannedAtFilter.Value.Date),
-                DateCompare.After => tasks.Where(x => x.PlannedAt?.Date > _searchFilterService.PlannedAtFilter.Value.Date),
-                DateCompare.NotOn => tasks.Where(x => x.PlannedAt?.Date != _searchFilterService.PlannedAtFilter.Value.Date),
-                _ => throw new ArgumentOutOfRangeException(nameof(_searchFilterService.PlannedAtCompare))
-            };
-        }
-
-        if (settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes)
-        {
-            tasks = tasks.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
-        }
-        else if (settings.SelectedCategoryId is not null)
-        {
-            tasks = tasks.Where(x => x.CategoryId == settings.SelectedCategoryId);
-        }
-
-        if (settings.HideCompletedTasks)
-        {
-            tasks = tasks.Where(x => x.CompletedAt is null);
-        }
-
-        return settings.SortBy[ContentType.Task] switch
-        {
-            Sort.Category => tasks.OrderBy(x => x.CategoryId),
-            Sort.Priority => tasks.OrderByDescending(x => x.Priority),
-            Sort.Title => tasks.OrderBy(x => x.Title),
-            Sort.Duration => tasks.OrderBy(x => x.Duration),
-            Sort.ElapsedTime => tasks.OrderBy(x => x.CompletedAt),
-            Sort.PlannedAt => tasks.OrderBy(x => x.PlannedAt),
-            Sort.TimeSpent => tasks.OrderBy(x => x.TimeSpent),
-            _ => tasks
+            SearchTerm = _searchFilterService.SearchTerm,
+            MatchCase = _searchFilterService.MatchCase,
+            DoneAtFilter = _searchFilterService.DoneAtFilter,
+            DoneAtCompare = _searchFilterService.DoneAtCompare,
+            PlannedAtFilter = _searchFilterService.PlannedAtFilter,
+            PlannedAtCompare = _searchFilterService.PlannedAtCompare,
+            HideCompletedTasks = _clientState.Settings.HideCompletedTasks,
+            CategoryFilterDisplay = _clientState.Settings.CategoryFilterDisplay,
+            PriorityFilterDisplay = _clientState.Settings.PriorityFilterDisplay,
+            SelectedCategoryId = _clientState.Settings.SelectedCategoryId,
+            SelectedPriority = _clientState.Settings.SelectedPriority,
+            HiddenCategoryIds = _clientState.Settings.HiddenCategoryIds,
+            ShowPriority = _clientState.Settings.ShowPriority,
+            SortBy = _clientState.Settings.SortBy,
         };
+
+        return Tasks!.FilterTasks(queryParameters);
     }
 
     public async Task Initialize()
