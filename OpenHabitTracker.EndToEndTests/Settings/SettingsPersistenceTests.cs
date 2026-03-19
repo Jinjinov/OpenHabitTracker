@@ -84,7 +84,16 @@ public class SettingsPersistenceTests : BaseTest
     [Test]
     public async Task HideCompletedTasks_Toggle_DoesNotCrash()
     {
-        await OpenSettingsAsync();
+        // HideCompletedTasks is in the Search panel under the "Filter by status" section
+        await Page.Locator("[data-main-step-6]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Expand the "Filter by status" section if it is folded
+        ILocator filterByStatusButton = Page.Locator("button:has(i.bi-filter)").First;
+        if (await filterByStatusButton.GetAttributeAsync("aria-expanded") == "false")
+            await filterByStatusButton.ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
+
         await Page.Locator("label[for='HideCompletedTasks']").ClickAsync();
         await Page.WaitForTimeoutAsync(300);
 
