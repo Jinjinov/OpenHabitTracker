@@ -63,6 +63,7 @@ Category-grouped main list (togglable alternative view):
 - outer loop: foreach (CategoryModel category in CategoryService.Categories)
 - inner loop: items filtered+sorted per category
     use extension methods: 
+    `QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);`
     `category.Notes.FilterNotes(queryParameters)`, 
     `category.Tasks.FilterTasks(queryParameters)`, 
     `category.Habits.FilterHabits(queryParameters)`, 
