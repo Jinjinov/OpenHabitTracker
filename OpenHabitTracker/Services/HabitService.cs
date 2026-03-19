@@ -2,6 +2,7 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Query;
 
 namespace OpenHabitTracker.Services;
 
@@ -18,66 +19,25 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
     public IEnumerable<HabitModel> GetHabits()
     {
-        SettingsModel settings = _clientState.Settings;
-
-        IEnumerable<HabitModel> habits = Habits!.Where(x => !x.IsDeleted);
-
-        if (settings.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
+        QueryParameters queryParameters = new()
         {
-            habits = habits.Where(x => settings.ShowPriority[x.Priority]);
-        }
-        else if (settings.SelectedPriority is not null)
-        {
-            habits = habits.Where(x => x.Priority == settings.SelectedPriority);
-        }
-
-        if (_searchFilterService.SearchTerm is not null)
-        {
-            StringComparison comparisonType = _searchFilterService.MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-
-            habits = habits.Where(x => x.Title.Contains(_searchFilterService.SearchTerm, comparisonType) || x.Items?.Any(i => i.Title.Contains(_searchFilterService.SearchTerm, comparisonType)) == true);
-        }
-
-        if (_searchFilterService.DoneAtFilter is not null)
-        {
-            habits = _searchFilterService.DoneAtCompare switch
-            {
-                DateCompare.Before => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date < _searchFilterService.DoneAtFilter.Value.Date) == true),
-                DateCompare.On => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date == _searchFilterService.DoneAtFilter.Value.Date) == true),
-                DateCompare.After => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date > _searchFilterService.DoneAtFilter.Value.Date) == true),
-                DateCompare.NotOn => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date == _searchFilterService.DoneAtFilter.Value.Date) != true),
-                _ => throw new ArgumentOutOfRangeException(nameof(_searchFilterService.DoneAtCompare))
-            };
-        }
-
-        if (settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes)
-        {
-            habits = habits.Where(x => !settings.HiddenCategoryIds.Contains(x.CategoryId));
-        }
-        else if (settings.SelectedCategoryId is not null)
-        {
-            habits = habits.Where(x => x.CategoryId == settings.SelectedCategoryId);
-        }
-
-        if (settings.ShowOnlyOverSelectedRatioMin)
-        {
-            habits = habits.Where(x => x.GetRatio(settings.SelectedRatio) > settings.SelectedRatioMin);
-        }
-
-        return settings.SortBy[ContentType.Habit] switch
-        {
-            Sort.Category => habits.OrderBy(x => x.CategoryId),
-            Sort.Priority => habits.OrderByDescending(x => x.Priority),
-            Sort.Title => habits.OrderBy(x => x.Title),
-            Sort.Duration => habits.OrderBy(x => x.Duration),
-            Sort.RepeatInterval => habits.OrderBy(x => x.GetRepeatInterval() / x.NonZeroRepeatCount),
-            Sort.AverageInterval => habits.OrderBy(x => x.AverageInterval / x.NonZeroRepeatCount),
-            Sort.TimeSpent => habits.OrderBy(x => x.TotalTimeSpent),
-            Sort.AverageTimeSpent => habits.OrderBy(x => x.AverageTimeSpent),
-            Sort.ElapsedTime => habits.OrderBy(x => x.LastTimeDoneAt),
-            Sort.SelectedRatio => habits.OrderByDescending(x => x.GetRatio(settings.SelectedRatio) * x.NonZeroRepeatCount),
-            _ => habits
+            SearchTerm = _searchFilterService.SearchTerm,
+            MatchCase = _searchFilterService.MatchCase,
+            DoneAtFilter = _searchFilterService.DoneAtFilter,
+            DoneAtCompare = _searchFilterService.DoneAtCompare,
+            ShowOnlyOverSelectedRatioMin = _clientState.Settings.ShowOnlyOverSelectedRatioMin,
+            SelectedRatioMin = _clientState.Settings.SelectedRatioMin,
+            SelectedRatio = _clientState.Settings.SelectedRatio,
+            CategoryFilterDisplay = _clientState.Settings.CategoryFilterDisplay,
+            PriorityFilterDisplay = _clientState.Settings.PriorityFilterDisplay,
+            SelectedCategoryId = _clientState.Settings.SelectedCategoryId,
+            SelectedPriority = _clientState.Settings.SelectedPriority,
+            HiddenCategoryIds = _clientState.Settings.HiddenCategoryIds,
+            ShowPriority = _clientState.Settings.ShowPriority,
+            SortBy = _clientState.Settings.SortBy,
         };
+
+        return Habits!.FilterHabits(queryParameters);
     }
 
     public async Task Initialize()

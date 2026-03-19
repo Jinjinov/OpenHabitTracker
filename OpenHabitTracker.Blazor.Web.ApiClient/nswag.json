@@ -16,7 +16,8 @@
       "additionalNamespaceUsages": [
         "OpenHabitTracker.Data.Entities",
         "OpenHabitTracker.Data.Models",
-        "OpenHabitTracker.Dto"
+        "OpenHabitTracker.Dto",
+        "OpenHabitTracker.Query"
       ],
       "responseArrayType": "System.Collections.Generic.IReadOnlyList",
       "jsonLibrary": "SystemTextJson",
