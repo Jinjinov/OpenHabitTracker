@@ -66,6 +66,21 @@ new findings (discovered while planning Category-grouped main list):
 
 ---------------------------------------------------------------------------------------------------
 
+more tests in OpenHabitTracker.EndToEndTests and OpenHabitTracker.UnitTests - specifically:
+
+critical (covers known bug):
+    - CategoryService.DeleteCategory() — verify that child notes/tasks/habits are marked IsDeleted=true
+      and removed from ClientState after deleting a category
+
+future (ClientState dict sync):
+    - HabitService.Start() — verify new TimeModel is added to ClientState.Times
+    - HabitService.AddTimeDone() — verify new TimeModel is added to ClientState.Times
+    - HabitService.RemoveTimeDone() — verify TimeModel is removed from ClientState.Times
+    - ItemService.AddItem() — verify new ItemModel is added to ClientState.Items
+    - ItemService.DeleteItem() — verify ItemModel is removed from ClientState.Items
+
+---------------------------------------------------------------------------------------------------
+
 1, 2, 3 must be done at the same time so there is one new DB migration, not three
 
 0.
