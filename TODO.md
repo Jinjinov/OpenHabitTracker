@@ -139,7 +139,7 @@ Plan:
   on its respective page when no item is selected (mutually exclusive with the edit component —
   stats disappear when you open a habit/task/note)
   second column already exists and is empty in this case - uncomment and implement the else branch
-- mobile: each component renders in the else branch instead of the second column - uncomment and implement the else branch
+- mobile: each component renders if (!_showSecondColumn)
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
 - respect ShowGroupedByCategory (see task 1) - iterate Notes, Tasks, Habits OR ClientData.Categories (already has .Habits/.Tasks/.Notes populated at runtime
   via ClientState), respect HiddenCategoryIds / SelectedCategoryId from Settings
