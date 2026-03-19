@@ -54,7 +54,13 @@ new findings (discovered while planning Category-grouped main list):
     - ItemService.Initialize() lazy-loads Items per-instance via _dataAccess.GetItems(items.Id)
       but does NOT store them back into ClientState.Items — orphaned objects, not in the dict
       same problem as HabitService.LoadTimesDone → _dataAccess.GetTimes(habit.Id)
-    - these 3 issues (Times, Items, CategoryModel lists) must all be solved together
+    - HabitService.RemoveTimeDone() removes from habit.TimesDone but NOT from ClientState.Times
+    - ItemService.DeleteItem() removes from items.Items but NOT from ClientState.Items
+    - CategoryService.DeleteCategory() cascade is completely broken:
+      iterates category.Notes/Tasks/Habits to mark children IsDeleted=true,
+      but those lists are always null at runtime — children are never marked deleted,
+      silently left in ClientState.Notes/Tasks/Habits as live items with a dangling CategoryId
+    - these issues (Times, Items, CategoryModel lists) must all be solved together
       solving only CategoryModel.Notes/Tasks/Habits (for grouped view) while leaving Times/Items
       broken would be inconsistent and pull on the same thread without finishing it
 
