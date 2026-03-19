@@ -218,6 +218,59 @@ public class NoteServiceTests
         Assert.That(_sut.NewNote, Is.Null);
     }
 
+    // --- UpdateNote tests ---
+
+    [Test]
+    public async Task UpdateNote_UpdatesEntityInDataAccess()
+    {
+        NoteModel note = TestData.Note(id: 1);
+        _clientState.Notes = TestData.NoteDict(note);
+        _sut.SelectedNote = note;
+        _dataAccess.GetNote(note.Id).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = note.Id }));
+
+        await _sut.UpdateNote();
+
+        await _dataAccess.Received(1).UpdateNote(Arg.Is<NoteEntity>(e => e.Id == note.Id));
+    }
+
+    // --- AddNote additional tests ---
+
+    [Test]
+    public async Task AddNote_WhenNewNoteIsNull_DoesNothing()
+    {
+        _clientState.Notes = new();
+        _sut.NewNote = null;
+
+        await _sut.AddNote();
+
+        Assert.That(_clientState.Notes, Is.Empty);
+    }
+
+    // --- SetSelectedNote tests ---
+
+    [Test]
+    public void SetSelectedNote_WhenIdExists_SetsSelectedNote()
+    {
+        NoteModel note = TestData.Note(id: 5);
+        _clientState.Notes = TestData.NoteDict(note);
+
+        _sut.SetSelectedNote(5);
+
+        Assert.That(_sut.SelectedNote, Is.SameAs(note));
+    }
+
+    [Test]
+    public void SetSelectedNote_WhenIdIsNull_ClearsSelectedNote()
+    {
+        NoteModel note = TestData.Note(id: 5);
+        _clientState.Notes = TestData.NoteDict(note);
+        _sut.SelectedNote = note;
+
+        _sut.SetSelectedNote(null);
+
+        Assert.That(_sut.SelectedNote, Is.Null);
+    }
+
     // --- DeleteNote tests ---
 
     [Test]

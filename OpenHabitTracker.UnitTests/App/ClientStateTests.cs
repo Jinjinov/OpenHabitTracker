@@ -95,6 +95,105 @@ public class ClientStateTests
         Assert.That(habit.TimesDone![0].HabitId, Is.EqualTo(habitId));
     }
 
+    // --- LoadSettings tests ---
+
+    [Test]
+    public async Task LoadSettings_WhenNoSettingsExist_CreatesDefaultAndCallsAddSettings()
+    {
+        // GetSettings already returns empty in SetUp
+        await _sut.LoadSettings();
+
+        await _dataAccess.Received(1).AddSettings(Arg.Any<SettingsEntity>());
+        Assert.That(_sut.Settings.Id, Is.Not.EqualTo(0));
+    }
+
+    [Test]
+    public async Task LoadSettings_WhenSettingsExist_LoadsFromDataAccess()
+    {
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>(
+            [new SettingsEntity { Id = 99 }]));
+
+        await _sut.LoadSettings();
+
+        Assert.That(_sut.Settings.Id, Is.EqualTo(99));
+    }
+
+    // --- UpdateSettings tests ---
+
+    [Test]
+    public async Task UpdateSettings_WritesCurrentSettingsToDataAccess()
+    {
+        await _sut.LoadSettings();
+        _dataAccess.GetSettings(_sut.Settings.Id).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = _sut.Settings.Id }));
+
+        await _sut.UpdateSettings();
+
+        await _dataAccess.Received(1).UpdateSettings(Arg.Any<SettingsEntity>());
+    }
+
+    // --- LoadCategories tests ---
+
+    [Test]
+    public async Task LoadCategories_PopulatesCategoriesDict()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>(
+            [new CategoryEntity { Id = 1, Title = "Work" }, new CategoryEntity { Id = 2, Title = "Health" }]));
+
+        await _sut.LoadCategories();
+
+        Assert.That(_sut.Categories, Has.Count.EqualTo(2));
+        Assert.That(_sut.Categories![1].Title, Is.EqualTo("Work"));
+    }
+
+    [Test]
+    public async Task LoadCategories_WhenAlreadyLoaded_DoesNotCallDataAccessAgain()
+    {
+        await _sut.LoadCategories();
+        await _sut.LoadCategories();
+
+        await _dataAccess.Received(1).GetCategories();
+    }
+
+    // --- DeleteAllData tests ---
+
+    [Test]
+    public async Task DeleteAllData_CallsDeleteAllUserData()
+    {
+        await _sut.DeleteAllData();
+
+        await _dataAccess.Received(1).DeleteAllUserData();
+    }
+
+    // --- GetUserData tests ---
+
+    [Test]
+    public async Task GetUserData_WithHabitInCategory_PopulatesCategoryHabits()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>(
+            [new CategoryEntity { Id = 1, Title = "Work" }]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
+            [new HabitEntity { Id = 10, CategoryId = 1, Title = "Run" }]));
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
+
+        UserImportExportData result = await _sut.GetUserData();
+
+        CategoryModel category = result.Categories.First(c => c.Id == 1);
+        Assert.That(category.Habits, Is.Not.Null);
+        Assert.That(category.Habits!.Select(h => h.Id), Does.Contain(10L));
+    }
+
+    [Test]
+    public async Task GetUserData_WithUncategorizedHabit_AddsDefaultCategory()
+    {
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
+            [new HabitEntity { Id = 1, CategoryId = 0, Title = "No Category" }]));
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
+
+        UserImportExportData result = await _sut.GetUserData();
+
+        Assert.That(result.Categories.Any(c => c.Id == 0), Is.True);
+    }
+
     [Test]
     public async Task RefreshState_ClearsHabits_Notes_Tasks_Times_Items_Categories_Trash()
     {

@@ -451,6 +451,129 @@ public class HabitServiceTests
         Assert.That(_clientState.TrashedHabits[0], Is.SameAs(habit));
     }
 
+    // --- UpdateHabit tests ---
+
+    [Test]
+    public async Task UpdateHabit_UpdatesEntityInDataAccess()
+    {
+        HabitModel habit = TestData.Habit(id: 1, title: "Old");
+        _clientState.Habits = TestData.HabitDict(habit);
+        _sut.SelectedHabit = habit;
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        await _sut.UpdateHabit();
+
+        await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(e => e.Id == habit.Id));
+    }
+
+    // --- SetStartTime tests ---
+
+    [Test]
+    public async Task SetStartTime_WhenLastTimeInProgress_UpdatesStartedAt()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel inProgress = new() { Id = 5, HabitId = 1, StartedAt = DateTime.Now.AddHours(-1) }; // CompletedAt = null
+        habit.TimesDone = [inProgress];
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTime(inProgress.Id).Returns(Task.FromResult<TimeEntity?>(new TimeEntity { Id = inProgress.Id }));
+
+        DateTime newStart = DateTime.Now.AddHours(-2);
+        await _sut.SetStartTime(habit, newStart);
+
+        Assert.That(inProgress.StartedAt, Is.EqualTo(newStart));
+    }
+
+    [Test]
+    public async Task SetStartTime_WhenLastTimeAlreadyCompleted_DoesNotUpdateStartedAt()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel done = new() { Id = 5, HabitId = 1, StartedAt = DateTime.Now.AddHours(-2), CompletedAt = DateTime.Now.AddHours(-1) };
+        habit.TimesDone = [done];
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        DateTime original = done.StartedAt;
+        await _sut.SetStartTime(habit, DateTime.Now.AddHours(-3));
+
+        Assert.That(done.StartedAt, Is.EqualTo(original));
+    }
+
+    // --- UpdateTimeDone tests ---
+
+    [Test]
+    public async Task UpdateTimeDone_UpdatesEntityInDataAccess()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel time = new() { Id = 5, HabitId = 1, StartedAt = DateTime.Now.AddHours(-1), CompletedAt = DateTime.Now.AddMinutes(-30) };
+        habit.TimesDone = [time];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTime(time.Id).Returns(Task.FromResult<TimeEntity?>(new TimeEntity { Id = time.Id }));
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        await _sut.UpdateTimeDone(habit, time);
+
+        await _dataAccess.Received(1).UpdateTime(Arg.Is<TimeEntity>(e => e.Id == time.Id));
+    }
+
+    // --- LoadTimesDone tests ---
+
+    [Test]
+    public async Task LoadTimesDone_WhenTimesDoneIsNull_LoadsFromDataAccess()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = null;
+        _dataAccess.GetTimes(habit.Id).Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([new TimeEntity { Id = 1, HabitId = 1, StartedAt = DateTime.Now }]));
+
+        await _sut.LoadTimesDone(habit);
+
+        Assert.That(habit.TimesDone, Is.Not.Null);
+        Assert.That(habit.TimesDone, Has.Count.EqualTo(1));
+    }
+
+    [Test]
+    public async Task LoadTimesDone_WhenTimesDoneIsNotNull_DoesNotCallDataAccess()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+
+        await _sut.LoadTimesDone(habit);
+
+        await _dataAccess.DidNotReceive().GetTimes(habit.Id);
+    }
+
+    // --- MarkAsDone additional tests ---
+
+    [Test]
+    public async Task MarkAsDone_WhenLastTimeInProgress_UpdatesLastTimeDoneAt()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel inProgress = new() { Id = 10, HabitId = 1, StartedAt = DateTime.Now.AddMinutes(-5) };
+        habit.TimesDone = [inProgress];
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTime(inProgress.Id).Returns(Task.FromResult<TimeEntity?>(new TimeEntity { Id = inProgress.Id }));
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        DateTime before = DateTime.Now;
+        await _sut.MarkAsDone(habit);
+        DateTime after = DateTime.Now;
+
+        Assert.That(habit.LastTimeDoneAt, Is.InRange(before, after));
+    }
+
+    [Test]
+    public void MarkAsDone_WhenUncheckAllItemsEnabledAndItemsIsNull_DoesNotThrow()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.Items = null;
+        habit.TimesDone = [];
+        habit.TimesDoneByDay = new();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _clientState.Settings.UncheckAllItemsOnHabitDone = true;
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        Assert.DoesNotThrowAsync(() => _sut.MarkAsDone(habit));
+    }
+
     // --- RemoveTimeDone tests ---
 
     [Test]

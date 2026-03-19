@@ -49,6 +49,54 @@ public class TrashTests : BaseTest
     }
 
     [Test]
+    public async Task RestoreHabit_FromTrash_ReappearsInHabitsList()
+    {
+        await NavigateToAsync("[data-main-step-5]");
+
+        await AddItemAsync("Restore Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Restore Habit" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Page.Locator("[data-habits-step-10]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await OpenSidebarAsync("bi-trash");
+
+        await Page.Locator("div.input-group:has(span:text('Restore Habit')) button:has(i.bi-recycle)").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await CloseSidebarAsync();
+        await NavigateToAsync("[data-main-step-5]");
+
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Restore Habit" })).ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task RestoreTask_FromTrash_ReappearsInTasksList()
+    {
+        await NavigateToAsync("[data-main-step-4]");
+
+        await AddItemAsync("Restore Task");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Restore Task" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Page.Locator("[data-tasks-step-9]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await OpenSidebarAsync("bi-trash");
+
+        await Page.Locator("div.input-group:has(span:text('Restore Task')) button:has(i.bi-recycle)").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await CloseSidebarAsync();
+        await NavigateToAsync("[data-main-step-4]");
+
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Restore Task" })).ToBeVisibleAsync();
+    }
+
+    [Test]
     public async Task EmptyTrash_ClearsAllDeletedItems()
     {
         await AddAndDeleteNoteAsync("First Note");

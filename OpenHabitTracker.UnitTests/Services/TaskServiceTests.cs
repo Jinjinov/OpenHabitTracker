@@ -371,6 +371,47 @@ public class TaskServiceTests
         Assert.That(_clientState.TrashedTasks, Has.Count.EqualTo(1));
     }
 
+    // --- UpdateTask tests ---
+
+    [Test]
+    public async Task UpdateTask_UpdatesEntityInDataAccess()
+    {
+        TaskModel task = TestData.Task(id: 1, title: "Old");
+        _clientState.Tasks = TestData.TaskDict(task);
+        _sut.SelectedTask = task;
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        await _sut.UpdateTask();
+
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(e => e.Id == task.Id));
+    }
+
+    // --- AddTask additional tests ---
+
+    [Test]
+    public async Task AddTask_WhenNewTaskIsNull_DoesNothing()
+    {
+        _clientState.Tasks = new();
+        _sut.NewTask = null;
+
+        await _sut.AddTask();
+
+        Assert.That(_clientState.Tasks, Is.Empty);
+    }
+
+    // --- DeleteTask additional tests ---
+
+    [Test]
+    public void DeleteTask_WhenTrashedTasksIsNull_DoesNotThrow()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _clientState.TrashedTasks = null;
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        Assert.DoesNotThrowAsync(() => _sut.DeleteTask(task));
+    }
+
     // --- Start tests ---
 
     [Test]
@@ -386,6 +427,36 @@ public class TaskServiceTests
 
         Assert.That(task.StartedAt, Is.InRange(before, after));
         Assert.That(task.CompletedAt, Is.Null);
+    }
+
+    // --- SetStartTime tests ---
+
+    [Test]
+    public async Task SetStartTime_WhenTaskAlreadyCompleted_DoesNothing()
+    {
+        TaskModel task = TestData.Task(id: 1, completedAt: DateTime.Now.AddMinutes(-5));
+        task.StartedAt = DateTime.Now.AddMinutes(-10);
+        _clientState.Tasks = TestData.TaskDict(task);
+
+        DateTime original = task.StartedAt!.Value;
+        await _sut.SetStartTime(task, DateTime.Now.AddMinutes(-20));
+
+        Assert.That(task.StartedAt, Is.EqualTo(original));
+    }
+
+    [Test]
+    public async Task SetStartTime_WhenTaskInProgress_UpdatesStartedAt()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        task.StartedAt = DateTime.Now.AddHours(-1);
+        task.CompletedAt = null;
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        DateTime newStart = DateTime.Now.AddHours(-2);
+        await _sut.SetStartTime(task, newStart);
+
+        Assert.That(task.StartedAt, Is.EqualTo(newStart));
     }
 
     // --- MarkAsDone tests ---
@@ -414,6 +485,21 @@ public class TaskServiceTests
         await _sut.MarkAsDone(task);
 
         Assert.That(task.CompletedAt, Is.Null);
+    }
+
+    [Test]
+    public async Task MarkAsDone_WhenNotDoneAndNoStartedAt_SetsStartedAt()
+    {
+        TaskModel task = TestData.Task(id: 1, completedAt: null);
+        task.StartedAt = null;
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        DateTime before = DateTime.Now;
+        await _sut.MarkAsDone(task);
+        DateTime after = DateTime.Now;
+
+        Assert.That(task.StartedAt, Is.InRange(before, after));
     }
 
     [Test]
