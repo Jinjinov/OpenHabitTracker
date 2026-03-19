@@ -48,6 +48,16 @@ this is a problem:
     - but only `ClientState.GetUserData()` suffers from it and a `temp fix` is in place
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
+new findings (discovered while planning Category-grouped main list):
+    - CategoryModel.Notes/Tasks/Habits are also never populated at runtime (same root cause)
+      only populated in GetUserData() as a one-off for export — same pattern as Times/Items
+    - ItemService.Initialize() lazy-loads Items per-instance via _dataAccess.GetItems(items.Id)
+      but does NOT store them back into ClientState.Items — orphaned objects, not in the dict
+      same problem as HabitService.LoadTimesDone → _dataAccess.GetTimes(habit.Id)
+    - these 3 issues (Times, Items, CategoryModel lists) must all be solved together
+      solving only CategoryModel.Notes/Tasks/Habits (for grouped view) while leaving Times/Items
+      broken would be inconsistent and pull on the same thread without finishing it
+
 ---------------------------------------------------------------------------------------------------
 
 1, 2, 3 must be done at the same time so there is one new DB migration, not three
