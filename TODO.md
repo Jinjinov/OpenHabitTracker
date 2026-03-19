@@ -181,9 +181,7 @@ SUBMIT MOBILE VIDEO (886x1920) TO:
 ---------------------------------------------------------------------------------------------------
 
 1.
-1a Filter:
-    - Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6x
-1b QueryParameters:
+QueryParameters:
     - `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
     - Currently all records are loaded into memory first, then filtered in C# — the intent is to push filters down to the data layer
     - `_dataAccess` calls would receive query parameters (search term, category, priority, date range) and return only matching records
