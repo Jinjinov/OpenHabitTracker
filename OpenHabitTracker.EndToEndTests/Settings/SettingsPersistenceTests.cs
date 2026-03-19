@@ -82,6 +82,19 @@ public class SettingsPersistenceTests : BaseTest
     }
 
     [Test]
+    public async Task HideCompletedTasks_Toggle_DoesNotCrash()
+    {
+        await OpenSettingsAsync();
+        await Page.Locator("label[for='HideCompletedTasks']").ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
+
+        await Page.Locator("label[for='HideCompletedTasks']").ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
+
+        await Expect(Page.Locator("label[for='HideCompletedTasks']")).ToBeVisibleAsync();
+    }
+
+    [Test]
     public async Task Theme_Change_AppliesColorVariable()
     {
         await OpenSettingsAsync();

@@ -97,6 +97,19 @@ public class TrashTests : BaseTest
     }
 
     [Test]
+    public async Task PermanentDelete_Note_RemovedFromTrash()
+    {
+        await AddAndDeleteNoteAsync("Permanent Delete");
+
+        await OpenSidebarAsync("bi-trash");
+
+        await Page.Locator("button[aria-label='Delete: Permanent Delete']").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "Permanent Delete" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task EmptyTrash_ClearsAllDeletedItems()
     {
         await AddAndDeleteNoteAsync("First Note");

@@ -192,6 +192,96 @@ public class EntityToModelTests
         Assert.That(entity.DoneAt, Is.EqualTo(doneAt));
     }
 
+    // --- Settings ---
+
+    [Test]
+    public void SettingsEntity_ToModel_PreservesAllFields()
+    {
+        SettingsEntity entity = new()
+        {
+            Id = 7, UserId = 2, IsDarkMode = false, Theme = "cerulean",
+            Culture = "de", FirstDayOfWeek = DayOfWeek.Sunday,
+            SelectedRatio = Ratio.ElapsedToDesired, HideCompletedTasks = false,
+            SelectedRatioMin = 75, HorizontalMargin = 2, VerticalMargin = 3
+        };
+
+        SettingsModel model = entity.ToModel();
+
+        Assert.That(model.Id, Is.EqualTo(7));
+        Assert.That(model.UserId, Is.EqualTo(2));
+        Assert.That(model.IsDarkMode, Is.False);
+        Assert.That(model.Theme, Is.EqualTo("cerulean"));
+        Assert.That(model.Culture, Is.EqualTo("de"));
+        Assert.That(model.FirstDayOfWeek, Is.EqualTo(DayOfWeek.Sunday));
+        Assert.That(model.SelectedRatio, Is.EqualTo(Ratio.ElapsedToDesired));
+        Assert.That(model.HideCompletedTasks, Is.False);
+        Assert.That(model.SelectedRatioMin, Is.EqualTo(75));
+        Assert.That(model.HorizontalMargin, Is.EqualTo(2));
+        Assert.That(model.VerticalMargin, Is.EqualTo(3));
+    }
+
+    [Test]
+    public void SettingsModel_ToEntity_PreservesAllFields()
+    {
+        SettingsModel model = new()
+        {
+            Id = 7, UserId = 2, IsDarkMode = false, Theme = "cerulean",
+            Culture = "de", FirstDayOfWeek = DayOfWeek.Sunday,
+            SelectedRatio = Ratio.ElapsedToDesired, HideCompletedTasks = false,
+            SelectedRatioMin = 75, HorizontalMargin = 2, VerticalMargin = 3
+        };
+
+        SettingsEntity entity = model.ToEntity();
+
+        Assert.That(entity.Id, Is.EqualTo(7));
+        Assert.That(entity.UserId, Is.EqualTo(2));
+        Assert.That(entity.IsDarkMode, Is.False);
+        Assert.That(entity.Theme, Is.EqualTo("cerulean"));
+        Assert.That(entity.Culture, Is.EqualTo("de"));
+        Assert.That(entity.FirstDayOfWeek, Is.EqualTo(DayOfWeek.Sunday));
+        Assert.That(entity.SelectedRatio, Is.EqualTo(Ratio.ElapsedToDesired));
+        Assert.That(entity.HideCompletedTasks, Is.False);
+        Assert.That(entity.SelectedRatioMin, Is.EqualTo(75));
+        Assert.That(entity.HorizontalMargin, Is.EqualTo(2));
+        Assert.That(entity.VerticalMargin, Is.EqualTo(3));
+    }
+
+    [Test]
+    public void SettingsEntity_CopyToModel_PreservesSelectedFields()
+    {
+        SettingsEntity entity = new()
+        {
+            Id = 7, IsDarkMode = false, Theme = "cerulean", ShowHelp = false, HideCompletedTasks = false
+        };
+        SettingsModel model = new();
+
+        entity.CopyToModel(model);
+
+        Assert.That(model.Id, Is.EqualTo(7));
+        Assert.That(model.IsDarkMode, Is.False);
+        Assert.That(model.Theme, Is.EqualTo("cerulean"));
+        Assert.That(model.ShowHelp, Is.False);
+        Assert.That(model.HideCompletedTasks, Is.False);
+    }
+
+    [Test]
+    public void SettingsModel_CopyToEntity_PreservesSelectedFields()
+    {
+        SettingsModel model = new()
+        {
+            Id = 7, IsDarkMode = false, Theme = "cerulean", ShowHelp = false, HideCompletedTasks = false
+        };
+        SettingsEntity entity = new();
+
+        model.CopyToEntity(entity);
+
+        Assert.That(entity.Id, Is.EqualTo(7));
+        Assert.That(entity.IsDarkMode, Is.False);
+        Assert.That(entity.Theme, Is.EqualTo("cerulean"));
+        Assert.That(entity.ShowHelp, Is.False);
+        Assert.That(entity.HideCompletedTasks, Is.False);
+    }
+
     // --- Time ---
 
     [Test]
