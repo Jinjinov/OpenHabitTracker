@@ -48,6 +48,8 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 ---------------------------------------------------------------------------------------------------
 
+1, 2, 3 must be done at the same time so there is one new DB migration, not three
+
 1.
 Category-grouped main list (togglable alternative view):
 - applies to Notes, Tasks, and Habits pages
