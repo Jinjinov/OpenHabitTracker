@@ -169,4 +169,76 @@ public class HabitModelTests
 
         Assert.That(habit.TimesDoneByDay![day.Date], Is.Empty);
     }
+
+    // --- OnTimesDoneChanged tests ---
+
+    [Test]
+    public void OnTimesDoneChanged_ZeroEntries_SetsAllAveragesToZero()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone = [];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.AverageInterval, Is.EqualTo(TimeSpan.Zero));
+        Assert.That(habit.TotalTimeSpent, Is.EqualTo(TimeSpan.Zero));
+        Assert.That(habit.AverageTimeSpent, Is.EqualTo(TimeSpan.Zero));
+    }
+
+    [Test]
+    public void OnTimesDoneChanged_OneEntry_SetsAverageIntervalToRepeatInterval()
+    {
+        HabitModel habit = new() { RepeatInterval = 3, RepeatPeriod = Period.Day };
+        habit.TimesDone = [new TimeModel { StartedAt = DateTime.Now }];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.AverageInterval, Is.EqualTo(habit.GetRepeatInterval()));
+    }
+
+    [Test]
+    public void OnTimesDoneChanged_MultipleEntries_ComputesCorrectAverageIntervalAndTotalTimeSpent()
+    {
+        DateTime t1 = new(2025, 1, 1, 8, 0, 0);
+        DateTime t2 = new(2025, 1, 3, 8, 0, 0); // 2 days after t1
+        DateTime t3 = new(2025, 1, 7, 8, 0, 0); // 4 days after t2
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = t1, CompletedAt = t1.AddHours(1) },
+            new TimeModel { StartedAt = t2, CompletedAt = t2.AddHours(2) },
+            new TimeModel { StartedAt = t3, CompletedAt = t3.AddHours(3) },
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        // average interval = (2 days + 4 days) / 2 = 3 days
+        Assert.That(habit.AverageInterval, Is.EqualTo(TimeSpan.FromDays(3)));
+        // total time spent = 1h + 2h + 3h = 6h
+        Assert.That(habit.TotalTimeSpent, Is.EqualTo(TimeSpan.FromHours(6)));
+    }
+
+    // --- ElapsedTime tests ---
+
+    [Test]
+    public void ElapsedTime_WhenNeverDone_IsTimeSinceCreatedAt()
+    {
+        DateTime createdAt = DateTime.Now.AddDays(-5);
+        HabitModel habit = new() { CreatedAt = createdAt, LastTimeDoneAt = null };
+
+        TimeSpan elapsed = habit.ElapsedTime;
+
+        Assert.That(elapsed, Is.EqualTo(DateTime.Now - createdAt).Within(TimeSpan.FromSeconds(1)));
+    }
+
+    [Test]
+    public void ElapsedTime_WhenDone_IsTimeSinceLastTimeDoneAt()
+    {
+        DateTime lastDone = DateTime.Now.AddDays(-2);
+        HabitModel habit = new() { LastTimeDoneAt = lastDone };
+
+        TimeSpan elapsed = habit.ElapsedTime;
+
+        Assert.That(elapsed, Is.EqualTo(DateTime.Now - lastDone).Within(TimeSpan.FromSeconds(1)));
+    }
 }

@@ -70,6 +70,36 @@ public class HabitTests : BaseTest
     }
 
     [Test]
+    public async Task HabitTimer_StartThenStop_ElapsedTimeUpdates()
+    {
+        await AddItemAsync("Timed Habit");
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Timed Habit" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.Locator("button[aria-label='Start']").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
+        await Page.Locator("button[aria-label='Stop']").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Expect(Page.Locator("[data-habits-step-3]")).ToContainTextAsync("0 m");
+    }
+
+    [Test]
+    public async Task Calendar_ClickDayThenIncrease_CountUpdatesInCell()
+    {
+        await AddItemAsync("Calendar Habit");
+        ILocator habitRow = Page.Locator("div.input-group.flex-nowrap").Filter(new LocatorFilterOptions
+        {
+            Has = Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Calendar Habit" })
+        });
+        ILocator todayCell = habitRow.Locator("[data-habits-step-6] button[role='gridcell']").Filter(new LocatorFilterOptions { HasText = $"{DateTime.Today.Day}" }).First;
+        await todayCell.ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await habitRow.Locator("button[aria-label='Increase']").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Expect(todayCell).ToContainTextAsync("(1)");
+    }
+
+    [Test]
     public async Task DeleteHabit_MovesToTrash()
     {
         await AddItemAsync("Trashed Habit");

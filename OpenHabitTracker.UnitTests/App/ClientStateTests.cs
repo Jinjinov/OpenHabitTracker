@@ -194,6 +194,81 @@ public class ClientStateTests
         Assert.That(result.Categories.Any(c => c.Id == 0), Is.True);
     }
 
+    // --- SetUserData tests ---
+
+    [Test]
+    public async Task SetUserData_WithCategoriesNotesTasksHabitsTimesItems_CallsAllAddMethods()
+    {
+        _dataAccess.When(x => x.AddCategories(Arg.Any<IReadOnlyList<CategoryEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 1;
+                foreach (CategoryEntity entity in callInfo.Arg<IReadOnlyList<CategoryEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 10;
+                foreach (HabitEntity entity in callInfo.Arg<IReadOnlyList<HabitEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.When(x => x.AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 20;
+                foreach (NoteEntity entity in callInfo.Arg<IReadOnlyList<NoteEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.When(x => x.AddTasks(Arg.Any<IReadOnlyList<TaskEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 30;
+                foreach (TaskEntity entity in callInfo.Arg<IReadOnlyList<TaskEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.When(x => x.AddItems(Arg.Any<IReadOnlyList<ItemEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 40;
+                foreach (ItemEntity entity in callInfo.Arg<IReadOnlyList<ItemEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.When(x => x.AddTimes(Arg.Any<IReadOnlyList<TimeEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 50;
+                foreach (TimeEntity entity in callInfo.Arg<IReadOnlyList<TimeEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.GetSettings(Arg.Any<long>()).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = 1 }));
+
+        await _sut.LoadSettings();
+
+        UserImportExportData userData = new()
+        {
+            Categories =
+            [
+                new CategoryModel
+                {
+                    Title = "Work",
+                    Notes = [new NoteModel { Title = "Meeting", Content = "Discuss Q3" }],
+                    Tasks = [new TaskModel { Title = "Review PR", Items = [new ItemModel { Title = "Read diff" }] }],
+                    Habits = [new HabitModel { Title = "Exercise", Items = [new ItemModel { Title = "Warm up" }], TimesDone = [new TimeModel { StartedAt = DateTime.Now }] }]
+                }
+            ]
+        };
+
+        await _sut.SetUserData(userData);
+
+        await _dataAccess.Received(1).AddCategories(Arg.Any<IReadOnlyList<CategoryEntity>>());
+        await _dataAccess.Received(1).AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>());
+        await _dataAccess.Received(1).AddTasks(Arg.Any<IReadOnlyList<TaskEntity>>());
+        await _dataAccess.Received(1).AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>());
+        await _dataAccess.Received(1).AddItems(Arg.Is<IReadOnlyList<ItemEntity>>(list => list.Count == 2));
+        await _dataAccess.Received(1).AddTimes(Arg.Is<IReadOnlyList<TimeEntity>>(list => list.Count == 1));
+    }
+
     [Test]
     public async Task RefreshState_ClearsHabits_Notes_Tasks_Times_Items_Categories_Trash()
     {

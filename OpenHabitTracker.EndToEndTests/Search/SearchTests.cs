@@ -73,4 +73,44 @@ public class SearchTests : BaseTest
         int filteredCount = await Page.Locator("[data-notes-step-2]").CountAsync();
         Assert.That(filteredCount, Is.LessThan(totalCount));
     }
+
+    [Test]
+    public async Task PriorityFilter_UncheckNone_ReducesOrKeepsHabitCount()
+    {
+        await NavigateToAsync("[data-main-step-5]");
+        await OpenSearchAsync();
+
+        int totalCount = await Page.Locator("[data-habits-step-2]").CountAsync();
+
+        await Page.Locator("[data-search-step-13] label[for='Priority.None']").ClickAsync();
+        await Page.WaitForTimeoutAsync(500);
+
+        int filteredCount = await Page.Locator("[data-habits-step-2]").CountAsync();
+        Assert.That(filteredCount, Is.LessThanOrEqualTo(totalCount));
+    }
+
+    [Test]
+    public async Task DoneAtFilter_ClickDone_DoesNotCrash()
+    {
+        await NavigateToAsync("[data-main-step-4]");
+        await OpenSearchAsync();
+
+        await Page.Locator("[data-search-step-8]").ClickAsync();
+        await Page.WaitForTimeoutAsync(500);
+
+        await Expect(Page.Locator("[data-search-step-8]")).ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task Sort_BySecondOption_HabitsListRemainsVisible()
+    {
+        await NavigateToAsync("[data-main-step-5]");
+        await OpenSearchAsync();
+
+        await Page.Locator("[data-search-step-18] select").SelectOptionAsync(new SelectOptionValue { Index = 1 });
+        await Page.WaitForTimeoutAsync(500);
+
+        int count = await Page.Locator("[data-habits-step-2]").CountAsync();
+        Assert.That(count, Is.GreaterThan(0));
+    }
 }

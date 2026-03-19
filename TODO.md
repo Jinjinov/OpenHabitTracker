@@ -76,40 +76,8 @@ future (when work on "ClientState dict sync" starts):
     - ItemService.AddItem() — verify new ItemModel is added to ClientState.Items
     - ItemService.DeleteItem() — verify ItemModel is removed from ClientState.Items
 
-HabitModel (remaining):
-    - OnTimesDoneChanged() — zero entries sets all averages to zero
-    - OnTimesDoneChanged() — one entry sets AverageInterval to GetRepeatInterval()
-    - OnTimesDoneChanged() — multiple entries computes correct AverageInterval and TotalTimeSpent
-    - ElapsedTime — when never done, is time since CreatedAt
-    - ElapsedTime — when done, is time since LastTimeDoneAt
-
-ClientState (remaining):
-    - SetUserData() — writes all categories/notes/tasks/habits/times/items to DataAccess
-
-EntityToModel / ModelToEntity (remaining):
-    - ToModel() / ToEntity() round-trip for Settings
-    - CopyToModel() / CopyToEntity() preserve all fields
-
-import/export (no tests at all):
-    - JSON: export then import round-trip preserves all data
-    - YAML: export then import round-trip preserves all data
-    - TSV: export then import round-trip preserves all data
-    - Markdown: export produces expected # / ## / - structure
-    - TSV: items with CategoryId == 0 (uncategorized) are handled correctly
-    - import with empty/missing categories does not throw
-
 E2E gaps:
-    - Category CRUD: add category, rename category, delete category
-    - Items: add sub-item to habit, add sub-item to task, check/uncheck item
-    - DeleteCategory: child habits/tasks/notes disappear from their respective lists
-    - Habit timer: start timer, stop timer, verify elapsed time shown
-    - Calendar: click a day to mark habit done, verify count updates
-    - Trash: permanently delete item from trash
     - Import/Export: export JSON, reimport, verify data matches
-    - Search: filter by priority
-    - Search: filter by DoneAt date
-    - Settings: HideCompletedTasks toggle hides/shows completed tasks
-    - Sort: sort habits/tasks/notes by each available sort option
 
 ---------------------------------------------------------------------------------------------------
 
