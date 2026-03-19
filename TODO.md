@@ -52,6 +52,12 @@ Ididit did not have this problem, `Repository` was the only class with `IDatabas
 
 1, 2, 3 must be done at the same time so there is one new DB migration, not three
 
+0. prerequisite for task 1 (avoids duplicating row HTML between flat and grouped loops):
+- extract HabitRowComponent from the habit row block in Habits.razor
+- extract TaskRowComponent from the task row block in Tasks.razor
+- extract NoteRowComponent from the note row block in Notes.razor
+- both the flat loop and the grouped-view category loop use the same row component
+
 1.
 Category-grouped main list (togglable alternative view):
 - applies to Notes, Tasks, and Habits pages
@@ -61,15 +67,22 @@ Category-grouped main list (togglable alternative view):
   - foreach (TaskModel task in TaskService.GetTasks())
   - foreach (HabitModel habit in HabitService.GetHabits())
 - outer loop: foreach (CategoryModel category in CategoryService.Categories)
-- items with no category (CategoryId == null) appear in an "Uncategorized" bucket rendered at the bottom
+- items with no category (CategoryId == 0, the default long value) appear in an "Uncategorized" bucket rendered at the bottom
 - grouped view respects HiddenCategoryIds and SelectedCategoryId from Settings (same as flat view)
 - inner loop: items filtered+sorted per category
-    use extension methods: 
     `QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);`
-    `category.Notes.FilterNotes(queryParameters)`, 
-    `category.Tasks.FilterTasks(queryParameters)`, 
-    `category.Habits.FilterHabits(queryParameters)`, 
-    NOT category.Notes/Tasks/Habits directly which are unfiltered and unsorted
+    IMPORTANT: CategoryModel.Notes/Tasks/Habits are null at runtime — they are only populated in
+    GetUserData() for export. Two options (pick one):
+    Option A: wire up Notes/Tasks/Habits onto CategoryModel at runtime inside LoadNotes/LoadTasks/LoadHabits
+              (mirrors what GetUserData() already does), then use:
+              `category.Notes.FilterNotes(queryParameters)`, 
+              `category.Tasks.FilterTasks(queryParameters)`, 
+              `category.Habits.FilterHabits(queryParameters)`, 
+    Option B: look up from the flat in-memory dictionaries directly in the grouped-view loop:
+              `ClientState.Notes!.Values.Where(x => x.CategoryId == category.Id).FilterNotes(queryParameters)`
+              `ClientState.Tasks!.Values.Where(x => x.CategoryId == category.Id).FilterTasks(queryParameters)`
+              `ClientState.Habits!.Values.Where(x => x.CategoryId == category.Id).FilterHabits(queryParameters)`
+    Uncategorized bucket uses CategoryId == 0 instead of category.Id
 - category header row (all three pages): category title, collapse/expand (same unicode char as in Search)
 - category header row (Habits only): also and/or toggle button (see task 2), status color
   (green/orange/red, computed solely from CompletionRule — see task 2), LastTimeDoneAt (see task 3)
@@ -154,8 +167,10 @@ Plan:
   second column already exists and is empty in this case — the else branch is a commented out pseudo code stub, replace it with the statistics component
 - mobile: each component renders if (!_showSecondColumn) - currently a similar commented out pseudo code stub
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
-- respect ShowGroupedByCategory (see task 1) - iterate Notes, Tasks, Habits OR ClientData.Categories (already has .Habits/.Tasks/.Notes populated at runtime
-  via ClientState), respect HiddenCategoryIds / SelectedCategoryId from Settings
+- respect ShowGroupedByCategory (see task 1)
+    - false: iterate Notes, Tasks, Habits
+    - true: ClientData.Categories - same Option A/B decision as task 1 applies here: CategoryModel.Notes/Tasks/Habits are null at runtime (see task 1 notes)
+  respect HiddenCategoryIds / SelectedCategoryId from Settings
 - all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
 - new localization strings: "This week", "out of", "overdue", "complete"
 
