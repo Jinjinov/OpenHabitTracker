@@ -61,6 +61,8 @@ Category-grouped main list (togglable alternative view):
   - foreach (TaskModel task in TaskService.GetTasks())
   - foreach (HabitModel habit in HabitService.GetHabits())
 - outer loop: foreach (CategoryModel category in CategoryService.Categories)
+- items with no category (CategoryId == null) appear in an "Uncategorized" bucket rendered at the bottom
+- grouped view respects HiddenCategoryIds and SelectedCategoryId from Settings (same as flat view)
 - inner loop: items filtered+sorted per category
     use extension methods: 
     `QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);`
@@ -69,8 +71,8 @@ Category-grouped main list (togglable alternative view):
     `category.Habits.FilterHabits(queryParameters)`, 
     NOT category.Notes/Tasks/Habits directly which are unfiltered and unsorted
 - category header row (all three pages): category title, collapse/expand (same unicode char as in Search)
-- category header row (Habits only): also and/or toggle button (see task 2), status color,
-  LastTimeDoneAt (see task 3)
+- category header row (Habits only): also and/or toggle button (see task 2), status color
+  (green/orange/red, computed solely from CompletionRule — see task 2), LastTimeDoneAt (see task 3)
 - cross-category sorting still works in flat view; grouped view sorts within each category
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor (not currently injected)
 - all new UI strings (category header labels) must use @Loc["..."] and add translations to json — app has 20 languages
@@ -101,8 +103,8 @@ Plan:
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
-     - show per-category toggle state alongside the green/orange/red aggregate
-     - affects how the category's status color is computed in stats
+     - show per-category CompletionRule state alongside the green/orange/red aggregate (read-only display for now)
+     - CompletionRule is the sole input for computing each category's status color in stats
 
   B. Category-grouped main list (see task 1):
      - and/or toggle button in the category header row
@@ -125,8 +127,7 @@ Plan:
 
   B. Category-grouped main list (see task 1):
      - show LastTimeDoneAt in the category header row
-     - controlled by a new ShowLastTimeDone setting (bool, default true when
-       ShowGroupedByCategory is true)
+     - controlled by a new ShowLastTimeDone setting (bool, default true)
      - persistence chain for ShowLastTimeDone (bool, new SettingsModel/SettingsEntity field):
        - add to SettingsModel and SettingsEntity
        - add mapping in EntityToModel.cs and ModelToEntity.cs
@@ -150,7 +151,7 @@ Plan:
 - wide screens (>= 1280px): each component renders in the else branch inside the second column
   on its respective page when no item is selected (mutually exclusive with the edit component —
   stats disappear when you open a habit/task/note)
-  second column already exists and is empty in this case - uncomment and implement the else branch
+  second column already exists and is empty in this case — the else branch is a pseudo code stub, replace it with the statistics component
 - mobile: each component renders if (!_showSecondColumn)
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
 - respect ShowGroupedByCategory (see task 1) - iterate Notes, Tasks, Habits OR ClientData.Categories (already has .Habits/.Tasks/.Notes populated at runtime
