@@ -113,6 +113,7 @@ add settings to show, hide this extra info
 Plan:
 - "last done for an item" already exists: HabitModel.LastTimeDoneAt (DateTime?)
 - "last done for a category" = max(LastTimeDoneAt) across all habits in that category
+- all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
