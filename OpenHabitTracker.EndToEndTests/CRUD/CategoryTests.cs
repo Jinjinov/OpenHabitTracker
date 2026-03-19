@@ -76,6 +76,7 @@ public class CategoryTests : BaseTest
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Navigate to habits and add a habit (the category selector would need to be set, so just add uncategorized)
+        await CloseSidebarAsync();
         await NavigateToAsync("[data-main-step-5]");
         await AddItemAsync("HabitInTempCat");
 

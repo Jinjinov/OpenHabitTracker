@@ -69,7 +69,7 @@ new findings (discovered while planning Category-grouped main list):
 
 more tests in OpenHabitTracker.EndToEndTests and OpenHabitTracker.UnitTests - specifically:
 
-ClientState dict sync:
+ClientState dict sync (expected to fail until the issue described above is fixed):
     - HabitService.Start() — verify new TimeModel is added to ClientState.Times
     - HabitService.AddTimeDone() — verify new TimeModel is added to ClientState.Times
     - HabitService.RemoveTimeDone() — verify TimeModel is removed from ClientState.Times
