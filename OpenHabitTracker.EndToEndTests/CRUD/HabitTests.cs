@@ -96,16 +96,24 @@ public class HabitTests : BaseTest
     public async Task Calendar_ClickDayThenIncrease_CountUpdatesInCell()
     {
         await AddItemAsync("Calendar Habit");
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Calendar Habit" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // At wide viewports, data-habits-step-6 is a sibling of the habit row, not a child — scope to the page directly
-        ILocator todayCell = Page.Locator("[data-habits-step-6] button[role='gridcell']")
+        // ShowLargeCalendar defaults to true — month calendar is visible in detail view at data-habits-step-13
+        // Clicking a cell in month mode selects it and shows Increase/Decrease buttons (does not directly add)
+        ILocator todayCell = Page.Locator("[data-habits-step-13] button[role='gridcell']")
             .Filter(new LocatorFilterOptions { HasText = $"{DateTime.Today.Day}" })
             .First;
-        await todayCell.ClickAsync(new LocatorClickOptions { Force = true });
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await todayCell.ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
+
+        // Click Increase twice — (N) only renders when N > 1, so two clicks gives (2)
         await Page.Locator("button[aria-label='Increase']").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Expect(todayCell).ToContainTextAsync("(1)");
+        await Page.WaitForTimeoutAsync(300);
+        await Page.Locator("button[aria-label='Increase']").ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
+
+        await Expect(todayCell).ToContainTextAsync("(2)");
     }
 
     [Test]
