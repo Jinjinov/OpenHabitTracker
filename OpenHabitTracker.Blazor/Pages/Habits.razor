@@ -184,6 +184,18 @@
         <GuidedTourComponent TourId="habits" TourSteps="tourSteps" />
     }
 
+    @* @if (!_showSecondColumn)
+    {
+        HabitsStatisticsComponent:
+
+        <p>This week (xx.xx - yy.yy) statistics:</p>
+
+        foreach (CategoryModel category in CategoryService.Categories)
+        {
+
+        }
+    } *@
+
 </div>
 
 @if (_showSecondColumn)
@@ -206,17 +218,6 @@
         } *@
     </div>
 }
-@* else
-{
-    HabitsStatisticsComponent:
-
-    <p>This week (xx.xx - yy.yy) statistics:</p>
-
-    foreach (CategoryModel category in CategoryService.Categories)
-    {
-
-    }
-} *@
 
 @code {
     TourStep[] tourSteps;
