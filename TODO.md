@@ -177,7 +177,7 @@ SUBMIT MOBILE VIDEO (886x1920) TO:
 ---------------------------------------------------------------------------------------------------
 
 1.
-Filter:
+1a Filter:
     - Priority + Category filter blocks — extract to extension methods on `IEnumerable<ContentModel>`; currently repeated 6× across `HabitService`, `NoteService`, `TaskService`, `ClientData`
     - `ClientData` mixes data bag with query/filter/sort logic (SRP) — 40-70 line query methods inside what should be a plain data container
     - Duplicate query logic across `HabitService`, `NoteService`, `TaskService` (SRP) — same filter/sort structure (priority, search, category, date, sort switch) maintained independently in all three
@@ -188,7 +188,7 @@ Filter:
       2. `ClientData.GetNotes/GetTasks/GetHabits(QueryParameters)` keep only the `if (X is null) { /* lazy load */ }` block, then call `Notes.Values.FilterNotes(queryParameters)` / `Tasks.Values.FilterTasks(queryParameters)` / `Habits.Values.FilterHabits(queryParameters)`
       3. `NoteService.GetNotes()` / `TaskService.GetTasks()` / `HabitService.GetHabits()` build a `QueryParameters` from `_clientState.Settings` + `_searchFilterService`, then delegate to `_clientData.GetNotes/GetTasks/GetHabits(queryParameters)` — removing all duplicated filter/sort code from the service layer
       4. "Category-grouped main list" feature (TODO item line 54) can use the same extension methods directly: `category.Notes.FilterNotes(queryParameters)`, `category.Tasks.FilterTasks(queryParameters)`, `category.Habits.FilterHabits(queryParameters)` — no async, no lazy load, data already in memory
-QueryParameters:
+1b QueryParameters:
     - `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
     - Currently all records are loaded into memory first, then filtered in C# — the intent is to push filters down to the data layer
     - `_dataAccess` calls would receive query parameters (search term, category, priority, date range) and return only matching records
