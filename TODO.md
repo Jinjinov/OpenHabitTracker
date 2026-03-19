@@ -6,7 +6,7 @@ find out why `padding-left: 12px !important;` is needed on iOS - why `padding-le
 
 ---------------------------------------------------------------------------------------------------
 
-    fix AppData GetUserData() which calls InitializeContent()
+    fix ClientState GetUserData() which calls InitializeContent()
     search for `// TODO:: remove temp fix`
         `InitializeItems` and `InitializeTimes` have null checks and do not update data when called in GetUserData()
             both load data directly from DB with `_dataAccess.GetTimes()` and `_dataAccess.GetItems()`
@@ -15,9 +15,9 @@ find out why `padding-left: 12px !important;` is needed on iOS - why `padding-le
         user can add or remove Items and Times list
             `DataAccess.AddItem(item);` / `DataAccess.UpdateItem(item);`
             `DataAccess.AddTime(timeEntity);` / `DataAccess.UpdateTime(timeEntity);`
-            the code does not update Items and Times in the AppData
+            the code does not update Items and Times in the ClientState
         so without temp fix, GetUserData() would return Items and Times that were loaded with Initialize()
-    NO!!! - either remove these from class AppData: - NO!!!
+    NO!!! - either remove these from class ClientState: - NO!!!
         public Dictionary<long, TimeModel>? Times { get; set; }
         public Dictionary<long, ItemModel>? Items { get; set; }
     or
@@ -43,7 +43,7 @@ find out why `padding-left: 12px !important;` is needed on iOS - why `padding-le
             make sure that every `DataAccess.Add` and `DataAccess.Update` and `DataAccess.Remove` also updates `Dictionary<long, Model>` in `ClientData`
             private `DataAccess` in `ClientData`
 
-this is a big problem - services use `_dataAccess` on their own, but `AppData` is supposed to represent the current state - as the only source of truth
+this is a big problem - services use `_dataAccess` on their own, but `ClientState` is supposed to represent the current state - as the only source of truth
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
 ---------------------------------------------------------------------------------------------------
