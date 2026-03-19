@@ -100,19 +100,27 @@ public class HabitTests : BaseTest
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // ShowLargeCalendar defaults to true — month calendar is visible in detail view at data-habits-step-13
+        await Expect(Page.Locator("[data-habits-step-13]")).ToBeVisibleAsync();
+
         // Clicking a cell in month mode selects it and shows Increase/Decrease buttons (does not directly add)
-        ILocator todayCell = Page.Locator("[data-habits-step-13] button[role='gridcell']")
+        ILocator gridCells = Page.Locator("[data-habits-step-13] button[role='gridcell']");
+        await Expect(gridCells.First).ToBeVisibleAsync();
+
+        ILocator todayCell = gridCells
             .Filter(new LocatorFilterOptions { HasText = $"{DateTime.Today.Day}" })
             .First;
+        await Expect(todayCell).ToBeVisibleAsync();
+
         await todayCell.ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
+
+        // Clicking a day sets selectedDateTime and shows the Increase/Decrease panel
+        await Expect(Page.Locator("button[aria-label='Decrease']")).ToBeVisibleAsync();
 
         // Click Increase twice — (N) only renders when N > 1, so two clicks gives (2)
         await Page.Locator("button[aria-label='Increase']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
-        await Page.Locator("button[aria-label='Increase']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
+        await Expect(Page.Locator("[data-habits-step-13] span.input-group-text.flex-grow-1")).ToContainTextAsync("1");
 
+        await Page.Locator("button[aria-label='Increase']").ClickAsync();
         await Expect(todayCell).ToContainTextAsync("(2)");
     }
 

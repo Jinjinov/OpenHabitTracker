@@ -67,6 +67,11 @@ new findings (discovered while planning Category-grouped main list):
 
 ---------------------------------------------------------------------------------------------------
 
+WaitForLoadStateAsync(NetworkIdle) is used ~114 times in E2E tests but does nothing in Blazor WASM — 
+all SPA navigation, IndexedDB reads, and component renders are client-side with no network traffic. 
+Legitimate uses are few (e.g. after GotoAsync() for the initial WASM download from IIS). 
+The rest should be replaced with Expect(...).ToBeVisibleAsync() assertions that actually wait for visible state changes, or removed entirely.
+
 more tests in OpenHabitTracker.EndToEndTests and OpenHabitTracker.UnitTests - specifically:
 
 ClientState dict sync (expected to fail until the issue described above is fixed):

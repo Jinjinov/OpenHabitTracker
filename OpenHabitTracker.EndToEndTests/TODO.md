@@ -73,3 +73,11 @@ Existing attributes already usable by tests (do not need to be added):
 - `data-search-step-3` — clear search term button
 - `id="closeSidebar"` — sidebar close button
 
+---
+
+### WaitForLoadStateAsync(NetworkIdle)
+
+Used ~114 times in these tests but does nothing in Blazor WASM — all SPA navigation, IndexedDB reads, and component renders are client-side with no network traffic. 
+Legitimate uses are few (e.g. after GotoAsync() for the initial WASM download from IIS). 
+The rest should be replaced with Expect(...).ToBeVisibleAsync() assertions that actually wait for visible state changes, or removed entirely.
+

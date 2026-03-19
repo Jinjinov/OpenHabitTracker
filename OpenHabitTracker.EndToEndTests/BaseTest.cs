@@ -5,6 +5,11 @@ namespace OpenHabitTracker.EndToEndTests;
 // Prerequisite: start OpenHabitTracker.Blazor.Web at http://localhost before running tests.
 // dotnet run --project OpenHabitTracker.Blazor.Web --configuration Release
 
+// WaitForLoadStateAsync(NetworkIdle)
+// Used ~114 times in these tests but does nothing in Blazor WASM — all SPA navigation, IndexedDB reads, and component renders are client-side with no network traffic.
+// Legitimate uses are few(e.g.after GotoAsync() for the initial WASM download from IIS). 
+// The rest should be replaced with Expect(...).ToBeVisibleAsync() assertions that actually wait for visible state changes, or removed entirely.
+
 public abstract class BaseTest : PlaywrightTest
 {
     protected const string BaseUrl = "http://localhost";
