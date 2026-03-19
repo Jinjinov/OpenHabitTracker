@@ -19,23 +19,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
     public IEnumerable<HabitModel> GetHabits()
     {
-        QueryParameters queryParameters = new()
-        {
-            SearchTerm = _searchFilterService.SearchTerm,
-            MatchCase = _searchFilterService.MatchCase,
-            DoneAtFilter = _searchFilterService.DoneAtFilter,
-            DoneAtCompare = _searchFilterService.DoneAtCompare,
-            ShowOnlyOverSelectedRatioMin = _clientState.Settings.ShowOnlyOverSelectedRatioMin,
-            SelectedRatioMin = _clientState.Settings.SelectedRatioMin,
-            SelectedRatio = _clientState.Settings.SelectedRatio,
-            CategoryFilterDisplay = _clientState.Settings.CategoryFilterDisplay,
-            PriorityFilterDisplay = _clientState.Settings.PriorityFilterDisplay,
-            SelectedCategoryId = _clientState.Settings.SelectedCategoryId,
-            SelectedPriority = _clientState.Settings.SelectedPriority,
-            HiddenCategoryIds = _clientState.Settings.HiddenCategoryIds,
-            ShowPriority = _clientState.Settings.ShowPriority,
-            SortBy = _clientState.Settings.SortBy,
-        };
+        QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);
 
         return Habits!.FilterHabits(queryParameters);
     }

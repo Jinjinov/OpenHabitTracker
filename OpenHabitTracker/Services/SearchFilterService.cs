@@ -1,5 +1,7 @@
 ﻿using HtmlAgilityPack;
 using OpenHabitTracker.Data;
+using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Query;
 using System.Text.RegularExpressions;
 
 namespace OpenHabitTracker.Services;
@@ -17,6 +19,30 @@ public class SearchFilterService : ISearchFilterService
     public DateTime? PlannedAtFilter { get; set; }
 
     public DateCompare PlannedAtCompare { get; set; } = DateCompare.On;
+
+    public QueryParameters GetQueryParameters(SettingsModel settings)
+    {
+        return new()
+        {
+            SearchTerm = SearchTerm,
+            MatchCase = MatchCase,
+            DoneAtFilter = DoneAtFilter,
+            DoneAtCompare = DoneAtCompare,
+            PlannedAtFilter = PlannedAtFilter,
+            PlannedAtCompare = PlannedAtCompare,
+            HideCompletedTasks = settings.HideCompletedTasks,
+            ShowOnlyOverSelectedRatioMin = settings.ShowOnlyOverSelectedRatioMin,
+            SelectedRatioMin = settings.SelectedRatioMin,
+            SelectedRatio = settings.SelectedRatio,
+            CategoryFilterDisplay = settings.CategoryFilterDisplay,
+            PriorityFilterDisplay = settings.PriorityFilterDisplay,
+            SelectedCategoryId = settings.SelectedCategoryId,
+            SelectedPriority = settings.SelectedPriority,
+            HiddenCategoryIds = settings.HiddenCategoryIds,
+            ShowPriority = settings.ShowPriority,
+            SortBy = settings.SortBy,
+        };
+    }
 
     public string MarkSearchResults(string text)
     {
