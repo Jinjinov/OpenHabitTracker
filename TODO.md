@@ -78,8 +78,8 @@ add group "and / or" toggle:
 - one habit/item done -> green
 
 Plan:
-- add AndOrToggle property to CategoryModel (enum: And / Or)
-- full persistence chain (AndOrToggle is a new persisted field, unlike display-only settings):
+- add CompletionRule property to CategoryModel (enum CompletionRule { All, Any })
+- full persistence chain (CompletionRule is a new persisted field, unlike display-only settings):
   - add to CategoryEntity
   - add mapping in EntityToModel.cs and ModelToEntity.cs
   - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
@@ -130,7 +130,7 @@ This week (xx.xx - yy.yy) statistics
 - x out of y groups are green
 
 Plan:
-- implement as 3 reusable components: NoteStatisticsComponent, TaskStatisticsComponent, HabitStatisticsComponent
+- implement as 3 reusable components: NotesStatisticsComponent, TasksStatisticsComponent, HabitsStatisticsComponent
   NOTE: this is separate from the existing ShowHabitStatistics setting, which shows per-habit
   detail stats (time spent, ratios, elapsed) inside HabitComponent when editing a single habit
 - wide screens (>= 1280px): each component renders in the else branch inside the second column
