@@ -4,6 +4,7 @@
 - added arrow key navigation for the calendar
 - added focus management
 - improved keyboard navigation
+- fixed app icon in Linux
 
 # 1.1.6 - Mar 14, 2026
 
