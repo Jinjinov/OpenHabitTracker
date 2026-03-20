@@ -232,5 +232,9 @@
   "done": "klar",
   "planned": "planerad",
   "Last done": "Senast klar",
-  "Total": "Totalt"
+  "on track": "på rätt spår",
+  "due soon": "snart förfallet",
+  "overdue": "försenat",
+  "Total": "Totalt",
+  "Done out of total": "{0} av {1} gjorda"
 }

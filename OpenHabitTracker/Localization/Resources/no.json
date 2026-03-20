@@ -232,5 +232,9 @@
   "done": "ferdig",
   "planned": "planlagt",
   "Last done": "Sist ferdig",
-  "Total": "Totalt"
+  "on track": "på rett spor",
+  "due soon": "snart forfalt",
+  "overdue": "forfalt",
+  "Total": "Totalt",
+  "Done out of total": "{0} av {1} fullført"
 }

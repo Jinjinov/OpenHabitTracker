@@ -232,5 +232,9 @@
   "done": "done",
   "planned": "planned",
   "Last done": "Last done",
-  "Total": "Total"
+  "on track": "on track",
+  "due soon": "due soon",
+  "overdue": "overdue",
+  "Total": "Total",
+  "Done out of total": "{0} out of {1} done"
 }

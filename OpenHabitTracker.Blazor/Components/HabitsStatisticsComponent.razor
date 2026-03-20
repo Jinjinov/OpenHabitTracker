@@ -24,12 +24,12 @@
     {
     <div class="p-2">
         <p class="fw-bold mb-1">@Loc["This week"] (@weekStart.ToShortDateString() – @weekStart.AddDays(6).ToShortDateString())</p>
-        <p class="mb-1">@doneThisWeek @Loc["out of"] @total @Loc["done"]</p>
+        <p class="mb-1">@Loc["Done out of total", doneThisWeek, total]</p>
 
         <div class="d-flex gap-2 mb-2">
-            <span class="badge bg-success-subtle text-success-emphasis">@green</span>
-            <span class="badge bg-warning-subtle text-warning-emphasis">@orange</span>
-            <span class="badge bg-danger-subtle text-danger-emphasis">@red</span>
+            <span class="badge bg-success-subtle text-success-emphasis">@green @Loc["on track"]</span>
+            <span class="badge bg-warning-subtle text-warning-emphasis">@orange @Loc["due soon"]</span>
+            <span class="badge bg-danger-subtle text-danger-emphasis">@red @Loc["overdue"]</span>
         </div>
 
         @if (lastDone is not null)

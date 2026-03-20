@@ -232,5 +232,9 @@
   "done": "klaar",
   "planned": "gepland",
   "Last done": "Laatst klaar",
-  "Total": "Totaal"
+  "on track": "op schema",
+  "due soon": "bijna vervallen",
+  "overdue": "achterstallig",
+  "Total": "Totaal",
+  "Done out of total": "{0} van {1} gedaan"
 }

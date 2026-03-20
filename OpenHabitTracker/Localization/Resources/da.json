@@ -232,5 +232,9 @@
   "done": "færdig",
   "planned": "planlagt",
   "Last done": "Sidst færdig",
-  "Total": "I alt"
+  "on track": "på rette spor",
+  "due soon": "snart forfaldent",
+  "overdue": "forsinket",
+  "Total": "I alt",
+  "Done out of total": "{0} af {1} udført"
 }

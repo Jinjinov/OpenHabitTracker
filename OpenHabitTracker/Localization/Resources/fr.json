@@ -122,7 +122,7 @@
   "Invalid credentials": "Identifiants invalides",
   "Connection error": "Erreur de connexion",
   "Planned": "Prévu",
-  "Done": "Fait",
+  "Done": "Faites",
   "All": "Tout",
   "None": "Aucun",
   "Very low": "Très faible",
@@ -229,8 +229,12 @@
   "This week": "Cette semaine",
   "out of": "sur",
   "Overdue": "En retard",
-  "done": "fait",
-  "planned": "prévu",
+  "done": "faites",
+  "planned": "prévues",
   "Last done": "Dernier fait",
-  "Total": "Total"
+  "on track": "en bonne voie",
+  "due soon": "bientôt dues",
+  "overdue": "en retard",
+  "Total": "Total",
+  "Done out of total": "{0} sur {1} faites"
 }

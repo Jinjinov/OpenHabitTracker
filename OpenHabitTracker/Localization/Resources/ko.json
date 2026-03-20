@@ -232,5 +232,9 @@
   "done": "완료",
   "planned": "예정",
   "Last done": "마지막 완료",
-  "Total": "합계"
+  "on track": "정상 진행",
+  "due soon": "곧 만료",
+  "overdue": "기한 초과",
+  "Total": "합계",
+  "Done out of total": "{1}개 중 {0}개 완료"
 }
