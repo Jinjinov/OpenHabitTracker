@@ -11,7 +11,7 @@ public class CalendarParams
         return new DateTime(day.Year, day.Month, 1);
     }
 
-    private static DateTime GetFirstDayOfWeek(DayOfWeek firstDayOfWeek, DateTime day)
+    public static DateTime GetFirstDayOfWeek(DayOfWeek firstDayOfWeek, DateTime day)
     {
         int diff = -((7 + (day.DayOfWeek - firstDayOfWeek)) % 7);
         return day.AddDays(diff).Date;

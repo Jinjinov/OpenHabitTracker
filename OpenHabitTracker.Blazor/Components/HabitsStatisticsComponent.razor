@@ -9,7 +9,7 @@
 
 @if (_loaded && HabitService.Habits is not null)
 {
-    DateTime weekStart = GetWeekStart();
+    DateTime weekStart = CalendarParams.GetFirstDayOfWeek(ClientState.Settings.FirstDayOfWeek, DateTime.Today);
 
     <div class="p-2">
         <p class="fw-bold mb-1">@Loc["This week"] (@weekStart.ToShortDateString() – @weekStart.AddDays(6).ToShortDateString())</p>
@@ -49,7 +49,7 @@
         if (HabitService.Habits is null)
             return;
 
-        DateTime weekStart = GetWeekStart();
+        DateTime weekStart = CalendarParams.GetFirstDayOfWeek(ClientState.Settings.FirstDayOfWeek, DateTime.Today);
         DateTime weekEnd = weekStart.AddDays(7);
 
         List<HabitModel> habits = HabitService.GetHabits().ToList();
@@ -61,11 +61,4 @@
         _lastDone = habits.Where(h => h.LastTimeDoneAt is not null).Select(h => h.LastTimeDoneAt).Max();
     }
 
-    DateTime GetWeekStart()
-    {
-        DayOfWeek firstDay = ClientState.Settings.FirstDayOfWeek;
-        DateTime today = DateTime.Now.Date;
-        int diff = (7 + (int)(today.DayOfWeek - firstDay)) % 7;
-        return today.AddDays(-diff);
-    }
 }

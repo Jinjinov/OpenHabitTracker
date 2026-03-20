@@ -9,7 +9,7 @@
 
 @if (TaskService.Tasks is not null)
 {
-    DateTime weekStart = GetWeekStart();
+    DateTime weekStart = CalendarParams.GetFirstDayOfWeek(ClientState.Settings.FirstDayOfWeek, DateTime.Today);
 
     List<TaskModel> tasks = TaskService.GetTasks().ToList();
     int total = tasks.Count;
@@ -39,18 +39,11 @@
 }
 
 @code {
-    DateTime GetWeekStart()
-    {
-        DayOfWeek firstDay = ClientState.Settings.FirstDayOfWeek;
-        DateTime today = DateTime.Now.Date;
-        int diff = (7 + (int)(today.DayOfWeek - firstDay)) % 7;
-        return today.AddDays(-diff);
-    }
-
     string FormatTimeSpan(TimeSpan span)
     {
         if (span.TotalHours >= 1)
             return $"{(int)span.TotalHours}h {span.Minutes}m";
+
         return $"{span.Minutes}m";
     }
 }
