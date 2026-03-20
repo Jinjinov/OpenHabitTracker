@@ -218,5 +218,13 @@
   "Sort habits": "Zoraď návyky",
   "Edit item": "Uprav položku",
   "Calendar": "Kalendár",
-  "times done": "krát hotovo"
+  "times done": "krát hotovo",
+
+  "This week": "Tento týždeň",
+  "out of": "z",
+  "Overdue": "Po termíne",
+  "done": "hotovo",
+  "planned": "naplánované",
+  "Last done": "Naposledy hotovo",
+  "Total": "Celkom"
 }

@@ -218,5 +218,13 @@
   "Sort habits": "Sortuj nawyki",
   "Edit item": "Edytuj element",
   "Calendar": "Kalendarz",
-  "times done": "razy wykonano"
+  "times done": "razy wykonano",
+
+  "This week": "W tym tygodniu",
+  "out of": "z",
+  "Overdue": "Zaległe",
+  "done": "gotowe",
+  "planned": "planowane",
+  "Last done": "Ostatnio zrobione",
+  "Total": "Łącznie"
 }

@@ -218,5 +218,13 @@
   "Sort habits": "Razvrsti navade",
   "Edit item": "Uredi element",
   "Calendar": "Koledar",
-  "times done": "krat opravljeno"
+  "times done": "krat opravljeno",
+
+  "This week": "Ta teden",
+  "out of": "od",
+  "Overdue": "Zamuda",
+  "done": "opravljeno",
+  "planned": "načrtovano",
+  "Last done": "Nazadnje opravljeno",
+  "Total": "Skupaj"
 }

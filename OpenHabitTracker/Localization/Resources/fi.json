@@ -218,5 +218,13 @@
   "Sort habits": "Lajittele tavat",
   "Edit item": "Muokkaa kohdetta",
   "Calendar": "Kalenteri",
-  "times done": "kertaa tehty"
+  "times done": "kertaa tehty",
+
+  "This week": "Tällä viikolla",
+  "out of": "/",
+  "Overdue": "Myöhässä",
+  "done": "tehty",
+  "planned": "suunniteltu",
+  "Last done": "Viimeksi tehty",
+  "Total": "Yhteensä"
 }

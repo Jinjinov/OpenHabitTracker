@@ -218,5 +218,13 @@
   "Sort habits": "Trier les habitudes",
   "Edit item": "Modifier l'élément",
   "Calendar": "Calendrier",
-  "times done": "fois fait"
+  "times done": "fois fait",
+
+  "This week": "Cette semaine",
+  "out of": "sur",
+  "Overdue": "En retard",
+  "done": "fait",
+  "planned": "prévu",
+  "Last done": "Dernier fait",
+  "Total": "Total"
 }
