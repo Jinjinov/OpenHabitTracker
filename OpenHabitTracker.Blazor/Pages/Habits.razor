@@ -184,17 +184,10 @@
         <GuidedTourComponent TourId="habits" TourSteps="tourSteps" />
     }
 
-    @* @if (!_showSecondColumn)
+    @if (!_showSecondColumn)
     {
-        HabitsStatisticsComponent:
-
-        <p>This week (xx.xx - yy.yy) statistics:</p>
-
-        foreach (CategoryModel category in CategoryService.Categories)
-        {
-
-        }
-    } *@
+        <HabitsStatisticsComponent />
+    }
 
 </div>
 
@@ -205,17 +198,10 @@
         {
             <HabitComponent Habit="HabitService.SelectedHabit" HabitChanged="StateHasChanged" CloseSelected="CloseSelected" />
         }
-        @* else
+        else
         {
-            HabitsStatisticsComponent:
-
-            <p>This week (xx.xx - yy.yy) statistics:</p>
-
-            foreach (CategoryModel category in CategoryService.Categories)
-            {
-
-            }
-        } *@
+            <HabitsStatisticsComponent />
+        }
     </div>
 }
 

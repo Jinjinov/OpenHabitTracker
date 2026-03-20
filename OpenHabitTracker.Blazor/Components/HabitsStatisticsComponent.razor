@@ -1,0 +1,71 @@
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Services
+
+@inject IHabitService HabitService
+@inject ClientState ClientState
+@inject IStringLocalizer Loc
+
+@if (_loaded && HabitService.Habits is not null)
+{
+    DateTime weekStart = GetWeekStart();
+
+    <div class="p-2">
+        <p class="fw-bold mb-1">@Loc["This week"] (@weekStart.ToShortDateString() – @weekStart.AddDays(6).ToShortDateString())</p>
+        <p class="mb-1">@_doneThisWeek @Loc["out of"] @_total @Loc["complete"]</p>
+
+        <div class="d-flex gap-2 mb-2">
+            <span class="badge bg-success-subtle text-success-emphasis">@_green</span>
+            <span class="badge bg-warning-subtle text-warning-emphasis">@_orange</span>
+            <span class="badge bg-danger-subtle text-danger-emphasis">@_red</span>
+        </div>
+
+        @if (_lastDone is not null)
+        {
+            <p class="mb-0">@Loc["Last done"]: @_lastDone.Value.ToShortDateString()</p>
+        }
+    </div>
+}
+
+@code {
+    bool _loaded;
+    int _total;
+    int _green;
+    int _orange;
+    int _red;
+    int _doneThisWeek;
+    DateTime? _lastDone;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await HabitService.LoadAllTimesDone();
+        ComputeStats();
+        _loaded = true;
+    }
+
+    void ComputeStats()
+    {
+        if (HabitService.Habits is null)
+            return;
+
+        DateTime weekStart = GetWeekStart();
+        DateTime weekEnd = weekStart.AddDays(7);
+
+        List<HabitModel> habits = HabitService.GetHabits().ToList();
+        _total = habits.Count;
+        _green = habits.Count(h => h.GetRatio(ClientState.Settings.SelectedRatio) < 80);
+        _orange = habits.Count(h => { double r = h.GetRatio(ClientState.Settings.SelectedRatio); return r >= 80 && r < 100; });
+        _red = habits.Count(h => h.GetRatio(ClientState.Settings.SelectedRatio) >= 100);
+        _doneThisWeek = habits.Count(h => h.TimesDone?.Any(t => t.StartedAt >= weekStart && t.StartedAt < weekEnd) == true);
+        _lastDone = habits.Where(h => h.LastTimeDoneAt is not null).Select(h => h.LastTimeDoneAt).Max();
+    }
+
+    DateTime GetWeekStart()
+    {
+        DayOfWeek firstDay = ClientState.Settings.FirstDayOfWeek;
+        DateTime today = DateTime.Now.Date;
+        int diff = (7 + (int)(today.DayOfWeek - firstDay)) % 7;
+        return today.AddDays(-diff);
+    }
+}

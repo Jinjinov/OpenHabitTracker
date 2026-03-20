@@ -55,6 +55,36 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         }
     }
 
+    public async Task LoadAllTimesDone()
+    {
+        if (_clientState.Habits is null)
+            return;
+
+        IReadOnlyList<TimeEntity> allTimes = await _clientState.DataAccess.GetTimes();
+
+        Dictionary<long, List<TimeModel>> timesByHabitId = new();
+
+        foreach (TimeEntity time in allTimes)
+        {
+            if (!timesByHabitId.TryGetValue(time.HabitId, out List<TimeModel>? timeList))
+            {
+                timeList = new();
+                timesByHabitId[time.HabitId] = timeList;
+            }
+
+            timeList.Add(time.ToModel());
+        }
+
+        foreach (HabitModel habit in _clientState.Habits.Values)
+        {
+            if (habit.TimesDone is null)
+            {
+                habit.TimesDone = timesByHabitId.TryGetValue(habit.Id, out List<TimeModel>? times) ? times : [];
+                habit.RefreshTimesDoneByDay();
+            }
+        }
+    }
+
     public async Task AddHabit()
     {
         if (_clientState.Habits is null || NewHabit is null)
