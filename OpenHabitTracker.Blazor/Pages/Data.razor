@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<Backup StateChanged=StateChanged StateChangedChanged=StateChangedChanged />
+<Backup StateChanged=StateChanged.Value StateChangedChanged=StateChangedChanged />
 
 @if (AuthFragment.IsAuthAvailable)
 {
@@ -33,7 +33,7 @@
     </div>
 
     <div data-data-step-12>
-        @AuthFragment.GetAuthFragment(StateChanged, StateChangedChanged)
+        @AuthFragment.GetAuthFragment(StateChanged.Value, StateChangedChanged)
     </div>
 }
 
@@ -81,15 +81,15 @@
     }
 
     [Parameter]
-    public bool StateChanged { get; set; }
+    public Ref<bool> StateChanged { get; set; } = new();
 
     [Parameter]
     public EventCallback<bool> StateChangedChanged { get; set; }
 
     async Task OnStateChanged()
     {
-        StateChanged = !StateChanged;
-        await StateChangedChanged.InvokeAsync(StateChanged);
+        StateChanged.Value = !StateChanged.Value;
+        await StateChangedChanged.InvokeAsync(StateChanged.Value);
     }
 
     async Task LoadExamples()

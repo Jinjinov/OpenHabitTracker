@@ -102,7 +102,7 @@
 
             @* Main body column *@
 
-            <CascadingValue Name="StateChanged" Value=@_stateChanged>
+            <CascadingValue Name="StateChanged" Value=@_stateChanged.Value>
                 <CascadingValue Name="WindowDimensions" Value=@_windowDimensions>
                     <CascadingValue Name="DynamicComponentType" Value=@_dynamicComponentType>
                         <CascadingValue Name="ContentDeleted" Value=@_contentDeleted>
@@ -149,7 +149,7 @@
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    private bool _stateChanged;
+    private Ref<bool> _stateChanged = new();
 
     DynamicComponent? dynamicComponent;
 
@@ -240,14 +240,14 @@
         Dictionary<string, object> stateChangedParameters = new()
         {
             { "StateChanged", _stateChanged },
-            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged = val)},
+            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged.Value = val)},
         };
 
         Dictionary<string, object> windowDimensionsParameters = new()
         {
             { "WindowDimensions", _windowDimensions! },
             { "StateChanged", _stateChanged },
-            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged = val)},
+            { "StateChangedChanged", EventCallback.Factory.Create<bool>(this, val => _stateChanged.Value = val)},
         };
 
         _dynamicComponentParametersByName = new()
