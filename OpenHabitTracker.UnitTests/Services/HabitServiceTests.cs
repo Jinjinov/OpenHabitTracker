@@ -613,4 +613,51 @@ public class HabitServiceTests
 
         Assert.That(habit.LastTimeDoneAt, Is.EqualTo(earlier));
     }
+
+    // --- ClientState.Times dict sync tests (expected to fail until sync bug is fixed) ---
+
+    [Test]
+    public async Task Start_AddsNewTimeModel_ToClientStateTimes()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+        habit.TimesDoneByDay = new();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _clientState.Times = new();
+
+        await _sut.Start(habit);
+
+        Assert.That(_clientState.Times, Has.Count.EqualTo(1));
+    }
+
+    [Test]
+    public async Task AddTimeDone_AddsNewTimeModel_ToClientStateTimes()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+        habit.TimesDoneByDay = new();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _clientState.Times = new();
+
+        await _sut.AddTimeDone(habit, DateTime.Now);
+
+        Assert.That(_clientState.Times, Has.Count.EqualTo(1));
+    }
+
+    [Test]
+    public async Task RemoveTimeDone_RemovesTimeModel_FromClientStateTimes()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel time = new() { Id = 10, HabitId = 1, StartedAt = DateTime.Now.AddHours(-1), CompletedAt = DateTime.Now.AddMinutes(-30) };
+        habit.TimesDone = [time];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _clientState.Times = new() { { time.Id, time } };
+
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        await _sut.RemoveTimeDone(habit, time);
+
+        Assert.That(_clientState.Times, Is.Empty);
+    }
 }
