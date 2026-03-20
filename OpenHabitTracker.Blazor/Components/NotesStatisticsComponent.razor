@@ -11,6 +11,8 @@
     List<NoteModel> notes = NoteService.GetNotes().ToList();
     int total = notes.Count;
 
+    @if (total > 0)
+    {
     <div class="p-2">
         <div class="d-flex gap-2 mb-2">
             <span class="badge bg-body-secondary">@Loc["Total"]: @total</span>
@@ -27,4 +29,5 @@
             }
         </div>
     </div>
+    }
 }

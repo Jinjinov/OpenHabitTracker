@@ -21,9 +21,11 @@
         .Where(t => t.CompletedAt is not null && t.StartedAt is not null && t.CompletedAt > t.StartedAt)
         .Sum(t => (t.CompletedAt!.Value - t.StartedAt!.Value).Ticks));
 
+    @if (total > 0)
+    {
     <div class="p-2">
         <p class="fw-bold mb-1">@Loc["This week"] (@weekStart.ToShortDateString() – @weekStart.AddDays(6).ToShortDateString())</p>
-        <p class="mb-1">@completedThisWeek @Loc["complete"] · @plannedThisWeek @Loc["planned"]</p>
+        <p class="mb-1">@completedThisWeek @Loc["done"] · @plannedThisWeek @Loc["planned"]</p>
 
         <div class="d-flex gap-2 mb-2">
             <span class="badge bg-body-secondary">@Loc["Total"]: @total</span>
@@ -36,6 +38,7 @@
             <p class="mb-0">@Loc["Total time spent"]: @FormatTimeSpan(totalTimeSpent)</p>
         }
     </div>
+    }
 }
 
 @code {
