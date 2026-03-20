@@ -177,9 +177,7 @@ This week (xx.xx - yy.yy) statistics
 
 Plan:
 ✓ implement as 3 reusable components: NotesStatisticsComponent, TasksStatisticsComponent, HabitsStatisticsComponent
-✓ wide screens (>= 1280px): each component renders in the else branch inside the second column
-  on its respective page when no item is selected (mutually exclusive with the edit component —
-  stats disappear when you open a habit/task/note)
+✓ wide screens (>= 1280px): each component renders in the else branch inside the second column on its respective page when no item is selected
 ✓ mobile: each component renders if (!_showSecondColumn)
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
 - respect ShowGroupedByCategory (see task 1)
@@ -191,16 +189,12 @@ Plan:
 
 Habits stats:
 - respect ShowGroupedByCategory (see task 1)
-- category title (if ShowGroupedByCategory) | habit count | green/orange/red counts (using existing
-  GetRatio() + SelectedRatio logic) | LastTimeDoneAt of most recent habit
-✓ "this week" aggregate at top: habits done at least once this week (TimesDone entries where
-  StartedAt >= week start) out of total habits; categories fully complete this week (flat list only, no per-category grouping)
+- category title (if ShowGroupedByCategory) | habit count | green/orange/red counts (using existing GetRatio() + SelectedRatio logic) | LastTimeDoneAt of most recent habit
+✓ "this week" aggregate at top: habits done at least once this week out of total habits; categories fully complete this week (flat list only, no per-category grouping)
 
 Tasks stats:
 - respect ShowGroupedByCategory (see task 1)
-- category title (if ShowGroupedByCategory) | total count | done count (CompletedAt != null) |
-  overdue count (PlannedAt < now && CompletedAt == null) | total time spent (sum of
-  CompletedAt - StartedAt across completed tasks)
+- category title (if ShowGroupedByCategory) | total count | done count (CompletedAt != null) | overdue count (PlannedAt < now && CompletedAt == null) | total time spent (sum of CompletedAt - StartedAt across completed tasks)
 ✓ total count | done count (CompletedAt != null) — flat list only, no per-category grouping
 - "this week" aggregate at top: tasks completed this week | tasks planned this week
 
