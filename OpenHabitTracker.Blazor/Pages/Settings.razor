@@ -235,7 +235,7 @@
     }
 
     [Parameter]
-    public bool StateChanged { get; set; }
+    public Ref<bool> StateChanged { get; set; } = new();
 
     [Parameter]
     public EventCallback<bool> StateChangedChanged { get; set; }
@@ -249,8 +249,8 @@
     {
         await ClientState.UpdateSettings();
 
-        StateChanged = !StateChanged;
-        await StateChangedChanged.InvokeAsync(StateChanged);
+        StateChanged.Value = !StateChanged.Value;
+        await StateChangedChanged.InvokeAsync(StateChanged.Value);
     }
 
     async Task SaveIsDarkMode(bool isDarkMode)
