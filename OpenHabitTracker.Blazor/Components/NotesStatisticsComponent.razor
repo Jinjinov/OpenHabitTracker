@@ -15,9 +15,7 @@
     @if (total > 0)
     {
     <div class="p-2">
-        <div class="d-flex gap-2 mb-2">
-            <span class="badge bg-body-secondary">@Loc["Total"]: @total</span>
-        </div>
+            <p class="mb-1">@Loc["Total"]: @total</p>
 
         <div class="d-flex flex-wrap gap-2">
             @foreach (Priority priority in Enum.GetValues<Priority>().Reverse())
@@ -25,7 +23,7 @@
                 int count = notes.Count(n => n.Priority == priority);
                 @if (count > 0)
                 {
-                    <span class="badge bg-body-secondary">@PriorityService.GetPriorityName(priority): @count</span>
+                    <span class="badge bg-body-secondary">@Loc[PriorityService.GetPriorityName(priority)]: @count</span>
                 }
             }
         </div>

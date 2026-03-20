@@ -22,12 +22,12 @@ public class PriorityService : IPriorityService
     {
         return priority switch
         {
-            Priority.None => "None",
-            Priority.VeryLow => "Very Low",
-            Priority.Low => "Low",
-            Priority.Medium => "Medium",
-            Priority.High => "High",
-            Priority.VeryHigh => "Very High",
+            Priority.None => "No priority",
+            Priority.VeryLow => "Very low priority",
+            Priority.Low => "Low priority",
+            Priority.Medium => "Medium priority",
+            Priority.High => "High priority",
+            Priority.VeryHigh => "Very high priority",
             _ => throw new ArgumentOutOfRangeException(nameof(priority)),
         };
     }
