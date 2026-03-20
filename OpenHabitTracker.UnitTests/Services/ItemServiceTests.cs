@@ -160,6 +160,34 @@ public class ItemServiceTests
         await _dataAccess.Received(1).RemoveItem(item.Id);
     }
 
+    // --- ClientState.Items dict sync tests (expected to fail until sync bug is fixed) ---
+
+    [Test]
+    public async Task AddItem_AddsNewItemModel_ToClientStateItems()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.Items = [];
+        _clientState.Items = new();
+        _sut.NewItem = new ItemModel { Title = "Push-ups" };
+
+        await _sut.AddItem(habit);
+
+        Assert.That(_clientState.Items, Has.Count.EqualTo(1));
+    }
+
+    [Test]
+    public async Task DeleteItem_RemovesItemModel_FromClientStateItems()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        ItemModel item = new() { Id = 5, Title = "Step 1" };
+        habit.Items = [item];
+        _clientState.Items = new() { { item.Id, item } };
+
+        await _sut.DeleteItem(habit, item);
+
+        Assert.That(_clientState.Items, Is.Empty);
+    }
+
     // --- SetIsDone tests ---
 
     [Test]
