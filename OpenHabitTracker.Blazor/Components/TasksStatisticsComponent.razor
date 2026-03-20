@@ -42,9 +42,6 @@
 }
 
 @code {
-    [CascadingParameter(Name = "StateChanged")]
-    public bool StateChanged { get; set; }
-
     string FormatTimeSpan(TimeSpan span)
     {
         if (span.TotalHours >= 1)
