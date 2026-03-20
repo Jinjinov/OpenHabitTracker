@@ -31,3 +31,8 @@
     </div>
     }
 }
+
+@code {
+    [CascadingParameter(Name = "StateChanged")]
+    public bool StateChanged { get; set; }
+}
