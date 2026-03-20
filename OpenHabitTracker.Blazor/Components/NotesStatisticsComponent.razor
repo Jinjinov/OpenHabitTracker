@@ -1,0 +1,30 @@
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Services
+
+@inject INoteService NoteService
+@inject IStringLocalizer Loc
+
+@if (NoteService.Notes is not null)
+{
+    List<NoteModel> notes = NoteService.GetNotes().ToList();
+    int total = notes.Count;
+
+    <div class="p-2">
+        <div class="d-flex gap-2 mb-2">
+            <span class="badge bg-body-secondary">@Loc["Total"]: @total</span>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            @foreach (Priority priority in Enum.GetValues<Priority>().Reverse())
+            {
+                int count = notes.Count(n => n.Priority == priority);
+                @if (count > 0)
+                {
+                    <span class="badge bg-body-secondary">@Loc[priority.ToString()]: @count</span>
+                }
+            }
+        </div>
+    </div>
+}

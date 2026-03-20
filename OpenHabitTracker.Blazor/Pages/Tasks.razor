@@ -143,17 +143,10 @@
         <GuidedTourComponent TourId="tasks" TourSteps="tourSteps" />
     }
 
-    @* @if (!_showSecondColumn)
+    @if (!_showSecondColumn)
     {
-        TasksStatisticsComponent:
-
-        <p>This week (xx.xx - yy.yy) statistics:</p>
-
-        foreach (CategoryModel category in CategoryService.Categories)
-        {
-
-        }
-    } *@
+        <TasksStatisticsComponent />
+    }
 
 </div>
 
@@ -164,17 +157,10 @@
         {
             <TaskComponent Task="TaskService.SelectedTask" CloseSelected="CloseSelected" />
         }
-        @* else
+        else
         {
-            TasksStatisticsComponent:
-
-            <p>This week (xx.xx - yy.yy) statistics:</p>
-
-            foreach (CategoryModel category in CategoryService.Categories)
-            {
-
-            }
-        } *@
+            <TasksStatisticsComponent />
+        }
     </div>
 }
 

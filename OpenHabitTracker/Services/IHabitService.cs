@@ -11,6 +11,7 @@ public interface IHabitService
     Task Initialize();
     Task SetSelectedHabit(long? id);
     Task LoadTimesDone(HabitModel? habit);
+    Task LoadAllTimesDone();
     Task AddHabit();
     Task UpdateHabit();
     Task Start(HabitModel habit);

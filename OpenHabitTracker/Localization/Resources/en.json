@@ -218,5 +218,13 @@
   "Sort habits": "Sort habits",
   "Edit item": "Edit item",
   "Calendar": "Calendar",
-  "times done": "times done"
+  "times done": "times done",
+
+  "This week": "This week",
+  "out of": "out of",
+  "Overdue": "Overdue",
+  "complete": "complete",
+  "planned": "planned",
+  "Last done": "Last done",
+  "Total": "Total"
 }
