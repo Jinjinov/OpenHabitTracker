@@ -43,6 +43,12 @@
 @code {
     bool _loaded;
 
+    [CascadingParameter(Name = "StateChanged")]
+    public bool StateChanged { get; set; }
+
+    [Parameter]
+    public bool PageStateChanged { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await HabitService.LoadAllTimesDone();
