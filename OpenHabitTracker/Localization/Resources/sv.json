@@ -218,5 +218,13 @@
   "Sort habits": "Sortera vanor",
   "Edit item": "Redigera objekt",
   "Calendar": "Kalender",
-  "times done": "gånger gjort"
+  "times done": "gånger gjort",
+
+  "This week": "Den här veckan",
+  "out of": "av",
+  "Overdue": "Försenad",
+  "done": "klar",
+  "planned": "planerad",
+  "Last done": "Senast klar",
+  "Total": "Totalt"
 }

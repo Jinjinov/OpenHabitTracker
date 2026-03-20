@@ -218,5 +218,13 @@
   "Sort habits": "Gewohnheiten sortieren",
   "Edit item": "Element bearbeiten",
   "Calendar": "Kalender",
-  "times done": "Mal erledigt"
+  "times done": "Mal erledigt",
+
+  "This week": "Diese Woche",
+  "out of": "von",
+  "Overdue": "Überfällig",
+  "done": "erledigt",
+  "planned": "geplant",
+  "Last done": "Zuletzt erledigt",
+  "Total": "Gesamt"
 }

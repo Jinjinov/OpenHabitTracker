@@ -218,5 +218,13 @@
   "Sort habits": "Sorter vaner",
   "Edit item": "Rediger element",
   "Calendar": "Kalender",
-  "times done": "ganger utført"
+  "times done": "ganger utført",
+
+  "This week": "Denne uken",
+  "out of": "av",
+  "Overdue": "Forsinket",
+  "done": "ferdig",
+  "planned": "planlagt",
+  "Last done": "Sist ferdig",
+  "Total": "Totalt"
 }

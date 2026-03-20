@@ -218,5 +218,13 @@
   "Sort habits": "습관 정렬",
   "Edit item": "항목 편집",
   "Calendar": "달력",
-  "times done": "회 완료"
+  "times done": "회 완료",
+
+  "This week": "이번 주",
+  "out of": "/",
+  "Overdue": "기한 초과",
+  "done": "완료",
+  "planned": "예정",
+  "Last done": "마지막 완료",
+  "Total": "합계"
 }

@@ -218,5 +218,13 @@
   "Sort habits": "习惯排序",
   "Edit item": "编辑项目",
   "Calendar": "日历",
-  "times done": "次完成"
+  "times done": "次完成",
+
+  "This week": "本周",
+  "out of": "/",
+  "Overdue": "已逾期",
+  "done": "已完成",
+  "planned": "已计划",
+  "Last done": "上次完成",
+  "Total": "总计"
 }

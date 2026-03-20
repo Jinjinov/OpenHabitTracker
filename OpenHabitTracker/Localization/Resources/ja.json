@@ -218,5 +218,13 @@
   "Sort habits": "習慣を並べ替え",
   "Edit item": "項目を編集",
   "Calendar": "カレンダー",
-  "times done": "回完了"
+  "times done": "回完了",
+
+  "This week": "今週",
+  "out of": "/",
+  "Overdue": "期限超過",
+  "done": "完了",
+  "planned": "予定",
+  "Last done": "最終完了",
+  "Total": "合計"
 }

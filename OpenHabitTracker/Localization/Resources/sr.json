@@ -218,5 +218,13 @@
   "Sort habits": "Sortiraj navike",
   "Edit item": "Uredi stavku",
   "Calendar": "Kalendar",
-  "times done": "puta gotovo"
+  "times done": "puta gotovo",
+
+  "This week": "Ove nedelje",
+  "out of": "od",
+  "Overdue": "Zakasnelo",
+  "done": "gotovo",
+  "planned": "planirano",
+  "Last done": "Poslednji put gotovo",
+  "Total": "Ukupno"
 }

@@ -218,5 +218,13 @@
   "Sort habits": "Gewoontes sorteren",
   "Edit item": "Item bewerken",
   "Calendar": "Kalender",
-  "times done": "keer gedaan"
+  "times done": "keer gedaan",
+
+  "This week": "Deze week",
+  "out of": "van",
+  "Overdue": "Te laat",
+  "done": "klaar",
+  "planned": "gepland",
+  "Last done": "Laatst klaar",
+  "Total": "Totaal"
 }
