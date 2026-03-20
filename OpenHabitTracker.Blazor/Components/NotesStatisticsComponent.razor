@@ -4,6 +4,7 @@
 @using OpenHabitTracker.Services
 
 @inject INoteService NoteService
+@inject IPriorityService PriorityService
 @inject IStringLocalizer Loc
 
 @if (NoteService.Notes is not null)
@@ -24,7 +25,7 @@
                 int count = notes.Count(n => n.Priority == priority);
                 @if (count > 0)
                 {
-                    <span class="badge bg-body-secondary">@Loc[priority.ToString()]: @count</span>
+                    <span class="badge bg-body-secondary">@PriorityService.GetPriorityName(priority): @count</span>
                 }
             }
         </div>

@@ -17,4 +17,18 @@ public class PriorityService : IPriorityService
             _ => throw new ArgumentOutOfRangeException(nameof(priority)),
         };
     }
+
+    public string GetPriorityName(Priority priority)
+    {
+        return priority switch
+        {
+            Priority.None => "None",
+            Priority.VeryLow => "Very Low",
+            Priority.Low => "Low",
+            Priority.Medium => "Medium",
+            Priority.High => "High",
+            Priority.VeryHigh => "Very High",
+            _ => throw new ArgumentOutOfRangeException(nameof(priority)),
+        };
+    }
 }
