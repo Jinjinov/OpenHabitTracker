@@ -172,46 +172,42 @@ Plan:
 
 4.
 This week (xx.xx - yy.yy) statistics
-- x out of y habits done
+✓ x out of y habits done
 - x out of y groups are green (color) / "complete" (text)
 
 Plan:
-- implement as 3 reusable components: NotesStatisticsComponent, TasksStatisticsComponent, HabitsStatisticsComponent
-  NOTE: this is separate from the existing ShowHabitStatistics setting, which shows per-habit
-  detail stats (time spent, ratios, elapsed) inside HabitComponent when editing a single habit
-- wide screens (>= 1280px): each component renders in the else branch inside the second column
+✓ implement as 3 reusable components: NotesStatisticsComponent, TasksStatisticsComponent, HabitsStatisticsComponent
+✓ wide screens (>= 1280px): each component renders in the else branch inside the second column
   on its respective page when no item is selected (mutually exclusive with the edit component —
   stats disappear when you open a habit/task/note)
-  second column already exists and is empty in this case — the else branch is a commented out pseudo code stub, replace it with the statistics component
-- mobile: each component renders if (!_showSecondColumn) - currently a similar commented out pseudo code stub
+✓ mobile: each component renders if (!_showSecondColumn)
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
 - respect ShowGroupedByCategory (see task 1)
     - false: iterate Notes, Tasks, Habits
     - true: ClientData.Categories - same Option A/B decision as task 1 applies here: CategoryModel.Notes/Tasks/Habits are null at runtime (see task 1 notes)
   respect HiddenCategoryIds / SelectedCategoryId from Settings
-- all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
-- new localization strings: "This week", "out of", "overdue", "complete"
+✓ all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
+✓ new localization strings: "This week", "out of" added; "overdue", "complete" pending (requires task 1)
 
 Habits stats:
 - respect ShowGroupedByCategory (see task 1)
 - category title (if ShowGroupedByCategory) | habit count | green/orange/red counts (using existing
   GetRatio() + SelectedRatio logic) | LastTimeDoneAt of most recent habit
-- "this week" aggregate at top: habits done at least once this week (TimesDone entries where
-  StartedAt >= week start) out of total habits; categories fully complete this week
-- week boundaries: "SettingsModel.FirstDayOfWeek + 7 days" of current week
-- data source: HabitModel.TimesDone (List<TimeModel>, already loaded after Initialize())
-  TimeModel.StartedAt / CompletedAt; HabitModel.TotalTimeSpent / AverageTimeSpent already computed
+✓ "this week" aggregate at top: habits done at least once this week (TimesDone entries where
+  StartedAt >= week start) out of total habits; categories fully complete this week (flat list only, no per-category grouping)
 
 Tasks stats:
 - respect ShowGroupedByCategory (see task 1)
 - category title (if ShowGroupedByCategory) | total count | done count (CompletedAt != null) |
   overdue count (PlannedAt < now && CompletedAt == null) | total time spent (sum of
   CompletedAt - StartedAt across completed tasks)
+✓ total count | done count (CompletedAt != null) — flat list only, no per-category grouping
 - "this week" aggregate at top: tasks completed this week | tasks planned this week
 
 Notes stats:
 - respect ShowGroupedByCategory (see task 1)
 - category title (if ShowGroupedByCategory) | total count | count per Priority
+✓ total count | count per Priority — flat list only, no per-category grouping
 - CreatedAt / UpdatedAt
 
 5.
