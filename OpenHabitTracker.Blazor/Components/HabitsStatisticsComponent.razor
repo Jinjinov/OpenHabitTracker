@@ -34,7 +34,7 @@
 
         @if (lastDone is not null)
         {
-            <p class="mb-0">@Loc["Last done"]: @lastDone.Value.ToShortDateString()</p>
+            <p class="mb-0">@Loc["Last done"]: @lastDone.Value.ToShortDateString() @lastDone.Value.ToString("HH:mm")</p>
         }
     </div>
     }
