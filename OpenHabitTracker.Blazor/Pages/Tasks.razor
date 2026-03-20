@@ -41,7 +41,7 @@
 
                 <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="TaskService.NewTask.Title" placeholder="@Loc["Add new task"]" aria-label="@Loc["Task title"]" aria-required="true" />
 
-                <button class="btn btn-outline-primary" aria-label="@Loc["Save"]" @onclick="TaskService.AddTask" disabled="@string.IsNullOrWhiteSpace(TaskService.NewTask.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Save"]" @onclick="OnAddTask" disabled="@string.IsNullOrWhiteSpace(TaskService.NewTask.Title)"><i class="bi bi-floppy"></i></button>
                 <button class="btn btn-outline-primary" aria-label="@Loc["Close"]" @onclick="() => TaskService.NewTask = null"><i class="bi bi-x-square"></i></button>
             </div>
 
@@ -123,7 +123,7 @@
                             {
                                 <small class="input-group-text bg-transparent" data-tasks-step-3>@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
                             }
-                            <button class="@($"btn {(task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" aria-label="@Loc["Mark as done"]" @onclick="() => TaskService.MarkAsDone(task)" data-tasks-step-4><i class="bi bi-check-square"></i></button>
+                            <button class="@($"btn {(task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" aria-label="@Loc["Mark as done"]" @onclick="() => OnMarkAsDone(task)" data-tasks-step-4><i class="bi bi-check-square"></i></button>
                         </div>
 
                         @if (ClientState.Settings.ShowItemList)
@@ -145,7 +145,7 @@
 
     @if (!_showSecondColumn)
     {
-        <TasksStatisticsComponent />
+        <TasksStatisticsComponent PageStateChanged="_pageStateChanged" />
     }
 
 </div>
@@ -159,7 +159,7 @@
         }
         else
         {
-            <TasksStatisticsComponent />
+            <TasksStatisticsComponent PageStateChanged="_pageStateChanged" />
         }
     </div>
 }
@@ -229,6 +229,7 @@
     bool _shouldFocusEdit;
     bool _prevShowTaskComponent;
     long _lastSelectedId;
+    bool _pageStateChanged;
 
     protected override async Task OnInitializedAsync()
     {
@@ -261,6 +262,18 @@
         {
             await JsInterop.FocusElementById($"task-item-{_lastSelectedId}");
         }
+    }
+
+    async Task OnAddTask()
+    {
+        await TaskService.AddTask();
+        _pageStateChanged = !_pageStateChanged;
+    }
+
+    async Task OnMarkAsDone(TaskModel task)
+    {
+        await TaskService.MarkAsDone(task);
+        _pageStateChanged = !_pageStateChanged;
     }
 
     void AddNew()

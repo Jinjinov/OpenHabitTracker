@@ -41,7 +41,7 @@
 
                 <InputTextImmediate class="form-control" @ref="inputElement" @bind-Value="HabitService.NewHabit.Title" placeholder="@Loc["Add new habit"]" aria-label="@Loc["Habit title"]" aria-required="true" />
 
-                <button class="btn btn-outline-primary" aria-label="@Loc["Save"]" @onclick="HabitService.AddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.NewHabit.Title)"><i class="bi bi-floppy"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Save"]" @onclick="OnAddHabit" disabled="@string.IsNullOrWhiteSpace(HabitService.NewHabit.Title)"><i class="bi bi-floppy"></i></button>
                 <button class="btn btn-outline-primary" aria-label="@Loc["Close"]" @onclick="() => HabitService.NewHabit = null"><i class="bi bi-x-square"></i></button>
             </div>
 
@@ -147,7 +147,7 @@
 
                             @if (!ClientState.Settings.ShowSmallCalendar)
                             {
-                                <button class="btn btn-outline-primary" aria-label="@Loc["Mark as done"]" @onclick="() => HabitService.MarkAsDone(habit)" data-habits-step-4><i class="bi bi-check-square"></i></button>
+                                <button class="btn btn-outline-primary" aria-label="@Loc["Mark as done"]" @onclick="() => OnMarkAsDone(habit)" data-habits-step-4><i class="bi bi-check-square"></i></button>
                             }
                         </div>
 
@@ -162,7 +162,7 @@
                         {
                             <div class="input-group-text bg-transparent p-0 border-0 rounded-0" data-habits-step-6>
                                 <div class="mx-auto">
-                                    <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" />
+                                    <CalendarComponent Habit="habit" HabitChanged="OnHabitChanged" ColumnWidth="columnWidth" />
                                 </div>
                             </div>
                         }
@@ -171,7 +171,7 @@
                     if (_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar)
                     {
                         <div class="d-flex" data-habits-step-6>
-                            <CalendarComponent Habit="habit" HabitChanged="StateHasChanged" ColumnWidth="columnWidth" DisplayBasedOnWidth />
+                            <CalendarComponent Habit="habit" HabitChanged="OnHabitChanged" ColumnWidth="columnWidth" DisplayBasedOnWidth />
                         </div>
                     }
                 }
@@ -186,7 +186,7 @@
 
     @if (!_showSecondColumn)
     {
-        <HabitsStatisticsComponent />
+        <HabitsStatisticsComponent PageStateChanged="_pageStateChanged" />
     }
 
 </div>
@@ -196,11 +196,11 @@
     <div class="col child-column px-0 px-md-1 py-1">
         @if (_showHabitComponent)
         {
-            <HabitComponent Habit="HabitService.SelectedHabit" HabitChanged="StateHasChanged" CloseSelected="CloseSelected" />
+            <HabitComponent Habit="HabitService.SelectedHabit" HabitChanged="OnHabitChanged" CloseSelected="CloseSelected" />
         }
         else
         {
-            <HabitsStatisticsComponent />
+            <HabitsStatisticsComponent PageStateChanged="_pageStateChanged" />
         }
     </div>
 }
@@ -276,6 +276,7 @@
     bool _shouldFocusEdit;
     bool _prevShowHabitComponent;
     long _lastSelectedId;
+    bool _pageStateChanged;
 
     protected override async Task OnInitializedAsync()
     {
@@ -369,6 +370,24 @@
 
             NavigationManager.NavigateTo("/habits");
         }
+    }
+
+    void OnHabitChanged()
+    {
+        _pageStateChanged = !_pageStateChanged;
+        StateHasChanged();
+    }
+
+    async Task OnAddHabit()
+    {
+        await HabitService.AddHabit();
+        _pageStateChanged = !_pageStateChanged;
+    }
+
+    async Task OnMarkAsDone(HabitModel habit)
+    {
+        await HabitService.MarkAsDone(habit);
+        _pageStateChanged = !_pageStateChanged;
     }
 
     string ToHighestValueString(TimeSpan span)
