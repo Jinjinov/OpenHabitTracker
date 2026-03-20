@@ -232,5 +232,9 @@
   "done": "gotowe",
   "planned": "planowane",
   "Last done": "Ostatnio zrobione",
-  "Total": "Łącznie"
+  "on track": "na bieżąco",
+  "due soon": "wkrótce wymagane",
+  "overdue": "zaległe",
+  "Total": "Łącznie",
+  "Done out of total": "{0} z {1} wykonanych"
 }

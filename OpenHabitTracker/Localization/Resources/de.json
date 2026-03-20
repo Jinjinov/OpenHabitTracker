@@ -232,5 +232,9 @@
   "done": "erledigt",
   "planned": "geplant",
   "Last done": "Zuletzt erledigt",
-  "Total": "Gesamt"
+  "on track": "auf Kurs",
+  "due soon": "bald fällig",
+  "overdue": "überfällig",
+  "Total": "Gesamt",
+  "Done out of total": "{0} von {1} erledigt"
 }

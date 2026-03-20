@@ -232,5 +232,9 @@
   "done": "hotovo",
   "planned": "naplánované",
   "Last done": "Naposledy hotovo",
-  "Total": "Celkom"
+  "on track": "na správnej ceste",
+  "due soon": "čoskoro splatné",
+  "overdue": "po termíne",
+  "Total": "Celkom",
+  "Done out of total": "{0} z {1} splnených"
 }

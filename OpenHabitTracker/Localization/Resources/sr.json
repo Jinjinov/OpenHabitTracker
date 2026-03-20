@@ -232,5 +232,9 @@
   "done": "gotovo",
   "planned": "planirano",
   "Last done": "Poslednji put gotovo",
-  "Total": "Ukupno"
+  "on track": "na pravom putu",
+  "due soon": "uskoro dospeva",
+  "overdue": "zakašnjele",
+  "Total": "Ukupno",
+  "Done out of total": "{0} od {1} obavljenih"
 }

@@ -232,5 +232,9 @@
   "done": "fatto",
   "planned": "pianificato",
   "Last done": "Ultimo fatto",
-  "Total": "Totale"
+  "on track": "in linea",
+  "due soon": "in scadenza",
+  "overdue": "scadute",
+  "Total": "Totale",
+  "Done out of total": "{0} su {1} completati"
 }

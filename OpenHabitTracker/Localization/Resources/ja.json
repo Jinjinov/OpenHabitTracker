@@ -232,5 +232,9 @@
   "done": "完了",
   "planned": "予定",
   "Last done": "最終完了",
-  "Total": "合計"
+  "on track": "順調",
+  "due soon": "もうすぐ期限",
+  "overdue": "期限切れ",
+  "Total": "合計",
+  "Done out of total": "{1}件中{0}件完了"
 }

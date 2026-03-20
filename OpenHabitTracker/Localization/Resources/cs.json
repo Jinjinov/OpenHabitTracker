@@ -232,5 +232,9 @@
   "done": "hotovo",
   "planned": "plánováno",
   "Last done": "Naposledy hotovo",
-  "Total": "Celkem"
+  "on track": "na správné cestě",
+  "due soon": "brzy splatné",
+  "overdue": "po termínu",
+  "Total": "Celkem",
+  "Done out of total": "{0} z {1} splněno"
 }

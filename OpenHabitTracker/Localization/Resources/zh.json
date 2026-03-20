@@ -232,5 +232,9 @@
   "done": "已完成",
   "planned": "已计划",
   "Last done": "上次完成",
-  "Total": "总计"
+  "on track": "按时进行",
+  "due soon": "即将到期",
+  "overdue": "已逾期",
+  "Total": "总计",
+  "Done out of total": "{1}个中已完成{0}个"
 }

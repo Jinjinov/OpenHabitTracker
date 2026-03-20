@@ -122,7 +122,7 @@
   "Invalid credentials": "Credenciais inválidas",
   "Connection error": "Erro de ligação",
   "Planned": "Planeado",
-  "Done": "Feito",
+  "Done": "Feitas",
   "All": "Tudo",
   "None": "Nenhum",
   "Very low": "Muito baixa",
@@ -228,9 +228,13 @@
 
   "This week": "Esta semana",
   "out of": "de",
-  "Overdue": "Atrasado",
-  "done": "feito",
-  "planned": "planeado",
+  "Overdue": "Atrasadas",
+  "done": "feitas",
+  "planned": "planeadas",
   "Last done": "Último feito",
-  "Total": "Total"
+  "on track": "em dia",
+  "due soon": "quase vencendo",
+  "overdue": "vencidos",
+  "Total": "Total",
+  "Done out of total": "{0} de {1} feitas"
 }

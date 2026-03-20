@@ -232,5 +232,9 @@
   "done": "tehty",
   "planned": "suunniteltu",
   "Last done": "Viimeksi tehty",
-  "Total": "Yhteensä"
+  "on track": "aikataulussa",
+  "due soon": "erääntymässä",
+  "overdue": "myöhässä",
+  "Total": "Yhteensä",
+  "Done out of total": "{0}/{1} tehty"
 }
