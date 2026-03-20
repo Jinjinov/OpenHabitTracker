@@ -7,13 +7,13 @@
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
 
-@if (_loaded && HabitService.Habits is not null)
+@if (_loaded && _total > 0)
 {
     DateTime weekStart = CalendarParams.GetFirstDayOfWeek(ClientState.Settings.FirstDayOfWeek, DateTime.Today);
 
     <div class="p-2">
         <p class="fw-bold mb-1">@Loc["This week"] (@weekStart.ToShortDateString() – @weekStart.AddDays(6).ToShortDateString())</p>
-        <p class="mb-1">@_doneThisWeek @Loc["out of"] @_total @Loc["complete"]</p>
+        <p class="mb-1">@_doneThisWeek @Loc["out of"] @_total @Loc["done"]</p>
 
         <div class="d-flex gap-2 mb-2">
             <span class="badge bg-success-subtle text-success-emphasis">@_green</span>
