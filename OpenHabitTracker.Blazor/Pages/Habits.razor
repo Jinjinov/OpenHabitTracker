@@ -360,6 +360,8 @@
 
     async Task CloseSelected()
     {
+        _pageStateChanged = !_pageStateChanged;
+
         if (IsEmbedded)
         {
             Id = null;
