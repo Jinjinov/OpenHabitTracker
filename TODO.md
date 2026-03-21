@@ -168,10 +168,12 @@ Dict sync fix: detailed problem description and plan
            (3 types × handful of operations, written once). The consumers are an open set —
            every future feature that works with categories (grouped view, CompletionRule,
            LastTimeDone, stats, cascade delete) gets correct grouped data for free.
-           Option B (query flat dicts by CategoryId in every consumer) scatters the same
-           filtering logic across every consumer and makes DeleteCategory depend on ClientState.
-           DECISION: populate CategoryModel.Notes/Tasks/Habits at runtime (Option A)
-                     and maintain them in every service mutation.
+
+           Option B - (query flat dicts by CategoryId in every consumer) - REJECTED
+           scatters the same filtering logic across every consumer and makes DeleteCategory depend on ClientState.
+
+           DECISION:
+           Option A - populate CategoryModel.Notes/Tasks/Habits at runtime and maintain them in every service mutation.
 
     LAZY LOADING IS KEPT:
         Per-instance lazy loads in services stay exactly as they are — triggered by user interaction,
@@ -223,7 +225,7 @@ Dict sync fix: detailed problem description and plan
                 the lists are guaranteed initialized before any per-item wiring loop runs.
                 this handles first use of the app (DB empty) — without this, category.Notes/Tasks/Habits
                 would stay null for categories that have no items, causing null ref in grouped view
-            OPTION: instead of the initialization loop above, change CategoryModel to use List<T> = new()
+            ALTERNATIVE: instead of the initialization loop above, change CategoryModel to use List<T> = new()
                 instead of List<T>? — all null checks/guards in backup/import/service code would then
                 become unnecessary and could be removed
             in ClientState.LoadNotes(): after loading, for each NoteModel,
@@ -296,7 +298,7 @@ Dict sync fix: detailed problem description and plan
             SetUserData() does NOT call LoadCategories() — it builds dicts directly from imported data,
             so the initialization loop from LoadCategories() does NOT run. Without this, category sub-lists
             would be null and the wiring loop would crash on category.Notes.Add(note).
-            If the OPTION (List<T> = new() in CategoryModel) is chosen, this initialization is unnecessary.
+            If the ALTERNATIVE (List<T> = new() in CategoryModel) is chosen, this initialization is unnecessary.
 
             Also fix GetUserData() for Items (same pattern as existing Times fix):
             GetUserData() nulls Times before LoadTimes() to force full reload for export.
