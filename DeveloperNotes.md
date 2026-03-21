@@ -302,7 +302,11 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
     To build snapcraft.yaml run:
         snapcraft pack --debug
 
-        sudo snap install openhabittracker_1.1.5_amd64.snap --dangerous --devmode
+            on pack error:
+            
+            snapcraft clean openhabittracker
+
+        sudo snap install openhabittracker_1.1.7_amd64.snap --dangerous --devmode
 
         snap list
 
@@ -310,7 +314,7 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
         snapcraft login
 
-        snapcraft upload --release=stable openhabittracker_1.1.5_amd64.snap
+        snapcraft upload --release=stable openhabittracker_1.1.7_amd64.snap
 
         snapcraft status openhabittracker
 
