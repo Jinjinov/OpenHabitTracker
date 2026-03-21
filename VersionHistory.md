@@ -1,5 +1,6 @@
-# 1.1.7
+# 1.1.7 - Mar 21, 2026
 
+- added weekly recap / stats for notes, tasks, habits
 - added arrow key navigation for the menu
 - added arrow key navigation for the calendar
 - added focus management
