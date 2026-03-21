@@ -205,12 +205,33 @@ Dict sync fix: detailed problem description and plan
             - load full Times per-habit on selection for the large calendar
             This requires a DB migration and is tracked separately from Steps 1-4.
 
+            CAUTION — misleading comment in source code:
+            ClientState.GetUserData() has `Times = null; // TODO:: remove temp fix` at the line
+            that nulls Times before LoadTimes(). That line must NOT be removed — nulling Times
+            before LoadTimes() is correct export behavior (forces full reload so partially-lazy-loaded
+            Times don't produce an incomplete export). Only the temp fix lines inside LoadHabits()
+            should be removed. The same pattern applies to Items: GetUserData() should also null Items
+            before LoadItems() (currently missing — see Step 4).
+
     PLAN:
 
         Step 1 — wire CategoryModel sub-lists at runtime (fix D)
+            IMPORTANT: initialize all category sub-lists to empty new() in LoadCategories(),
+                after creating CategoryModel objects from the DB result:
+                foreach category in Categories.Values: category.Notes = new(); category.Tasks = new(); category.Habits = new();
+                place in LoadCategories() because all three Load methods call LoadCategories() first —
+                the lists are guaranteed initialized before any per-item wiring loop runs.
+                this handles first use of the app (DB empty) — without this, category.Notes/Tasks/Habits
+                would stay null for categories that have no items, causing null ref in grouped view
+            OPTION: instead of the initialization loop above, change CategoryModel to use List<T> = new()
+                instead of List<T>? — all null checks/guards in backup/import/service code would then
+                become unnecessary and could be removed
             in ClientState.LoadNotes(): after loading, for each NoteModel,
                 use TryGetValue — skip if CategoryId == 0 (uncategorized, no CategoryModel in dict)
-                add it to category.Notes (initialize list if null)
+                skip if IsDeleted — deleted items belong only in the flat dict (for trash view),
+                    NOT in category sub-lists (runtime view = active items only)
+                    export gets deleted items from the flat dicts directly (see Step 4), not from sub-lists
+                add it to category.Notes
             in ClientState.LoadTasks(): same for TaskModel → category.Tasks
             in ClientState.LoadHabits(): same for HabitModel → category.Habits
             this fixes DeleteCategory cascade — category.Notes/Tasks/Habits will be populated
@@ -227,6 +248,10 @@ Dict sync fix: detailed problem description and plan
                 HabitService.DeleteHabit()  → category.Habits.Remove(habit)
                 TrashService.Restore(HabitModel) → category.Habits.Add(habit)
                 category change (any type)  → remove from old category list, add to new
+            CategoryService.DeleteCategory() cascade — after Step 1, category.Notes/Tasks/Habits are
+            populated, so DeleteCategory will iterate them correctly. But it must also remove each child
+            from the flat ClientState dicts (ClientState.Notes, ClientState.Tasks, ClientState.Habits),
+            not just mark IsDeleted on the model.
 
         Step 2 — register per-instance lazy load results into dicts (fix B)
             lazy loading stays — just add dict registration after each lazy load:
@@ -262,13 +287,23 @@ Dict sync fix: detailed problem description and plan
             SetUserData() adds models to flat dicts but never wires them to category sub-lists.
             After an import, the flat dicts are correct but category sub-lists would be stale.
             Fix: after SetUserData() adds models to the dicts, also wire them to their category
-            sub-lists (same logic as Step 1 — for each imported note/task/habit, add to category list).
+            sub-lists (same logic as Step 1 — for each imported note/task/habit, skip if IsDeleted,
+            skip if CategoryId == 0, then add to category list).
+            NOTE: exported data includes deleted items (full backup) — the IsDeleted skip is required
+            here for the same reason as in Step 1: category sub-lists are the runtime view (active only).
+            IMPORTANT: before the wiring loop, initialize category sub-lists the same way as in
+            LoadCategories(): foreach category in Categories.Values: category.Notes = new(); category.Tasks = new(); category.Habits = new();
+            SetUserData() does NOT call LoadCategories() — it builds dicts directly from imported data,
+            so the initialization loop from LoadCategories() does NOT run. Without this, category sub-lists
+            would be null and the wiring loop would crash on category.Notes.Add(note).
+            If the OPTION (List<T> = new() in CategoryModel) is chosen, this initialization is unnecessary.
 
             Also fix GetUserData() for Items (same pattern as existing Times fix):
             GetUserData() nulls Times before LoadTimes() to force full reload for export.
             Do the same for Items:
                 Items = null;
                 await LoadItems();
+            NOTE: LoadItems() already exists in ClientState.cs line 232 — same null-guard pattern as LoadTimes()
             without this, if Items was partially populated by lazy loads, GetUserData() would
             export incomplete item data
 
@@ -279,12 +314,16 @@ Dict sync fix: detailed problem description and plan
             this enforces the invariant at compile time, not by convention
             NOTE: this is the largest change — Steps 1-4 are safe to do first
 
-        Order: Steps 1-4 are independent and safe to do together in one pass.
+        Order: Steps 1-4 address different root causes and have non-overlapping code changes,
+               but Step 4 MUST be deployed together with Step 1 — Step 4's GetUserData fix exists
+               because of Step 1: once Step 1 wires category sub-lists at runtime, GetUserData()
+               would overwrite them on the next export if Step 4 is not in place.
                Step 5 is a larger refactor, do separately after 1-4 are verified.
 
 ---------------------------------------------------------------------------------------------------
 
 1, 2, 3 must be done at the same time so there is one new DB migration, not three
+(the "remove temp fix" task also requires a DB migration — adding TotalTimeSpent and AverageInterval to HabitEntity — but that is a separate migration done independently of tasks 1/2/3)
 
 0.
 prerequisite for task 1 (avoids duplicating row HTML between flat and grouped loops):
@@ -295,6 +334,8 @@ prerequisite for task 1 (avoids duplicating row HTML between flat and grouped lo
 
 1.
 Category-grouped main list (togglable alternative view):
+prerequisite: Dict sync fix Steps 1-4 must be done first — Task 1 uses category.Notes/Tasks/Habits
+  populated at runtime (Step 1); without it, all category sub-lists are null and grouped view is broken
 - applies to Notes, Tasks, and Habits pages
 - controlled by a new ShowGroupedByCategory setting (bool, default false)
 - replaces the current flat foreach in each page:
@@ -328,7 +369,6 @@ Category-grouped main list (togglable alternative view):
   - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
     and OpenHabitTracker.Blazor.Web/Migrations/
   - export/import: automatically included since full SettingsModel is serialized
-- all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
 - new localization string: "Group by category"
 
 2.
