@@ -7,7 +7,7 @@ find out why `padding-left: 12px !important;` is needed on iOS - why `padding-le
 ---------------------------------------------------------------------------------------------------
 
 Architecture: Identity Map + Repository (what the ideal design should be)
-    Goal: single-user, all-in-memory store for a Blazor WASM app where all data fits in memory.
+    Goal: single-user, all-in-memory store for a Blazor app where all data fits in memory.
     The right pattern is Identity Map + Repository:
 
     One class (AppStore / Repository) that:
