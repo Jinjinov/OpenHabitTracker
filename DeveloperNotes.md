@@ -465,8 +465,8 @@ Docker Hub:
 
     docker login
 
-    docker tag openhabittracker jinjinov/openhabittracker:1.1.6
-    docker push jinjinov/openhabittracker:1.1.6
+    docker tag openhabittracker jinjinov/openhabittracker:1.1.7
+    docker push jinjinov/openhabittracker:1.1.7
 
     docker tag openhabittracker jinjinov/openhabittracker:latest
     docker push jinjinov/openhabittracker:latest
@@ -481,13 +481,13 @@ GitHub Container Registry:
 
     echo <GitHubToken> | docker login ghcr.io -u Jinjinov --password-stdin
 
-    docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:1.1.6
-    docker push ghcr.io/jinjinov/openhabittracker:1.1.6
+    docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:1.1.7
+    docker push ghcr.io/jinjinov/openhabittracker:1.1.7
 
     docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:latest
     docker push ghcr.io/jinjinov/openhabittracker:latest
 
-    https://github.com/users/Jinjinov/packages/container/package/openhabittracker
+    https://github.com/users/Jinjinov/packages/container/package/openhabittracker - gets redirected to:
 
     https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker
 
