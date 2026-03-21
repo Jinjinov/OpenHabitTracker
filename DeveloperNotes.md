@@ -431,6 +431,9 @@ from parent of OpenHabitTracker:
         4.
         update https://github.com/Jinjinov/net.openhabittracker.OpenHabitTracker from https://github.com/flathub/net.openhabittracker.OpenHabitTracker
 
+        5.
+        pull https://github.com/Jinjinov/net.openhabittracker.OpenHabitTracker
+
     https://flathub.org/
     https://github.com/flathub/flathub
 
