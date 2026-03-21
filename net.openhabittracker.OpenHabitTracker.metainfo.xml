@@ -87,6 +87,16 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.1.7" date="2026-03-21">
+      <description>
+        <p>Added weekly recap / stats for notes, tasks, habits</p>
+        <p>Added arrow key navigation for the menu</p>
+        <p>Added arrow key navigation for the calendar</p>
+        <p>Added focus management</p>
+        <p>Improved keyboard navigation</p>
+        <p>Fixed app icon in Linux</p>
+      </description>
+    </release>
     <release version="1.1.6" date="2026-03-11">
       <description>
         <p>Added 16 new languages: French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Slovak, Czech, Croatian, Serbian</p>
