@@ -160,7 +160,7 @@ public class ItemServiceTests
         await _dataAccess.Received(1).RemoveItem(item.Id);
     }
 
-    // --- ClientState.Items dict sync tests (expected to fail until sync bug is fixed) ---
+    // --- ClientState.Items dict sync tests ---
 
     [Test]
     public async Task AddItem_AddsNewItemModel_ToClientStateItems()

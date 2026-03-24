@@ -22,6 +22,10 @@ public class ItemService(ClientState clientState) : IItemService
                 IReadOnlyList<ItemEntity> itms = await _clientState.DataAccess.GetItems(items.Id);
 
                 items.Items = itms.Select(i => i.ToModel()).ToList();
+
+                _clientState.Items ??= new();
+                foreach (ItemModel item in items.Items)
+                    _clientState.Items[item.Id] = item;
             }
         }
 
@@ -44,6 +48,9 @@ public class ItemService(ClientState clientState) : IItemService
         await _clientState.DataAccess.AddItem(item);
 
         NewItem.Id = item.Id;
+
+        _clientState.Items ??= new();
+        _clientState.Items[NewItem.Id] = NewItem;
 
         NewItem = new();
     }
@@ -85,5 +92,7 @@ public class ItemService(ClientState clientState) : IItemService
         items?.Items?.Remove(item);
 
         await _clientState.DataAccess.RemoveItem(item.Id);
+
+        _clientState.Items?.Remove(item.Id);
     }
 }
