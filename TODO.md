@@ -49,7 +49,7 @@ Architecture: Identity Map + Repository (what the ideal design should be)
     - wire sub-collections from flat dicts        CORRECT  in ClientData.GetHabits(), partial in ClientState.LoadHabits()
     - CRUD Add operations update dicts            CORRECT
     - DataAccess private to store                 MISSING  (exposed as public property, services use it directly)
-    - per-instance loads register into dicts      MISSING  (orphaned objects — see bug section below)
+    - per-instance loads register into dicts      CORRECT  (fixed: LoadTimesDone, Initialize, Start, AddTimeDone, AddItem, RemoveTimeDone, DeleteItem)
     - CategoryModel sub-lists wired at runtime    MISSING  (only in GetUserData() for export)
 
     Three violations, all surgical fixes — the architecture is sound, the invariant just isn't enforced consistently.
@@ -107,20 +107,12 @@ this is a problem:
 Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
 new findings (discovered while planning Category-grouped main list):
-    - CategoryModel.Notes/Tasks/Habits are also never populated at runtime (same root cause)
-      only populated in GetUserData() as a one-off for export — same pattern as Times/Items
-    - ItemService.Initialize() lazy-loads Items per-instance via _dataAccess.GetItems(items.Id)
-      but does NOT store them back into ClientState.Items — orphaned objects, not in the dict
-      same problem as HabitService.LoadTimesDone → _dataAccess.GetTimes(habit.Id)
-    - HabitService.RemoveTimeDone() removes from habit.TimesDone but NOT from ClientState.Times
-    - ItemService.DeleteItem() removes from items.Items but NOT from ClientState.Items
+    - CategoryModel.Notes/Tasks/Habits are never populated at runtime
+      only populated in GetUserData() as a one-off for export
     - CategoryService.DeleteCategory() cascade is completely broken:
       iterates category.Notes/Tasks/Habits to mark children IsDeleted=true,
       but those lists are always null at runtime — children are never marked deleted,
       silently left in ClientState.Notes/Tasks/Habits as live items with a dangling CategoryId
-    - these issues (Times, Items, CategoryModel lists) must all be solved together
-      solving only CategoryModel.Notes/Tasks/Habits (for grouped view) while leaving Times/Items
-      broken would be inconsistent and pull on the same thread without finishing it
 
 ---------------------------------------------------------------------------------------------------
 
@@ -129,32 +121,16 @@ Dict sync fix: detailed problem description and plan
     ROOT CAUSE:
         The identity map invariant is not enforced:
         "every Model that exists in memory must be the canonical instance stored in its ClientState dict"
-        Two things break this invariant:
+        Remaining violations:
 
         A. DataAccess is public on ClientState
            Services call _clientState.DataAccess directly for mutations (Add, Update, Remove)
            without always updating the corresponding dict entry.
            This is an enforcement problem — the invariant cannot be violated if DataAccess is private.
 
-        B. Per-instance lazy loads in services create objects outside the dicts
-           HabitService.LoadTimesDone(habit):
-               loads TimeEntity list → creates new TimeModel objects → assigns to habit.TimesDone
-               but NEVER adds them to ClientState.Times
-               → those TimeModel instances are orphaned (not in the dict)
-           ItemService.Initialize(items):
-               loads ItemEntity list → creates new ItemModel objects → assigns to items.Items
-               but NEVER adds them to ClientState.Items
-               → those ItemModel instances are orphaned (not in the dict)
+        B. (FIXED) Per-instance lazy loads / Add / Remove for Times and Items — dict sync gaps fixed.
 
-        C. Remove operations in services don't update dicts
-           HabitService.RemoveTimeDone(habit, timeModel):
-               removes from habit.TimesDone, calls DataAccess.RemoveTime
-               but NEVER removes from ClientState.Times
-           ItemService.DeleteItem(items, item):
-               removes from items.Items, calls DataAccess.RemoveItem
-               but NEVER removes from ClientState.Items
-
-        D. CategoryModel.Notes/Tasks/Habits are never wired at runtime
+        C. CategoryModel.Notes/Tasks/Habits are never wired at runtime
            ClientState.LoadNotes/LoadTasks/LoadHabits never populate CategoryModel sub-lists
            Only GetUserData() does it, as a one-off for export
            → CategoryService.DeleteCategory() cascade is completely broken:
@@ -177,9 +153,7 @@ Dict sync fix: detailed problem description and plan
 
     LAZY LOADING IS KEPT:
         Per-instance lazy loads in services stay exactly as they are — triggered by user interaction,
-        loading only what is needed. The fix is not to remove lazy loading but to enforce the invariant:
-        "if you loaded it, register it in the dict"
-        The dict does not need to be complete — it just needs to contain everything that HAS been loaded.
+        loading only what is needed. Loaded objects are registered in the dict (fixed in B).
 
         WHY Times lazy loading is critical:
         In Ididit (predecessor app), all TimesDone were loaded upfront. After 5 years of daily use
@@ -189,7 +163,7 @@ Dict sync fix: detailed problem description and plan
 
         The temp fix in LoadHabits() calls LoadTimes() (bulk load of ALL times) — this is the WRONG
         direction and reintroduces the exact performance problem lazy loading was meant to solve.
-        However, removing it is NOT part of Steps 1-4. It is a separate, larger task (see below)
+        However, removing it is NOT part of Steps 1-3. It is a separate, larger task (see below)
         because the habit list UI depends on AverageInterval and TotalTimeSpent being computed
         from TimesDone — without them the ratio badges show division-by-zero results.
 
@@ -205,7 +179,7 @@ Dict sync fix: detailed problem description and plan
             - then remove LoadTimes() and the TimesDone wiring from LoadHabits() (remove temp fix)
             - load only last N days of Times at startup for the small calendar display
             - load full Times per-habit on selection for the large calendar
-            This requires a DB migration and is tracked separately from Steps 1-4.
+            This requires a DB migration and is tracked separately from Steps 1-3.
 
             CAUTION — misleading comment in source code:
             ClientState.GetUserData() has `Times = null; // TODO:: remove temp fix` at the line
@@ -213,7 +187,7 @@ Dict sync fix: detailed problem description and plan
             before LoadTimes() is correct export behavior (forces full reload so partially-lazy-loaded
             Times don't produce an incomplete export). Only the temp fix lines inside LoadHabits()
             should be removed. The same pattern applies to Items: GetUserData() should also null Items
-            before LoadItems() (currently missing — see Step 3).
+            before LoadItems() (currently missing — see Step 2).
 
     PLAN:
 
@@ -232,7 +206,7 @@ Dict sync fix: detailed problem description and plan
                 use TryGetValue — skip if CategoryId == 0 (uncategorized, no CategoryModel in dict)
                 skip if IsDeleted — deleted items belong only in the flat dict (for trash view),
                     NOT in category sub-lists (runtime view = active items only)
-                    export gets deleted items from the flat dicts directly (see Step 3), not from sub-lists
+                    export gets deleted items from the flat dicts directly (see Step 2), not from sub-lists
                 add it to category.Notes
             in ClientState.LoadTasks(): same for TaskModel → category.Tasks
             in ClientState.LoadHabits(): same for HabitModel → category.Habits
@@ -255,35 +229,7 @@ Dict sync fix: detailed problem description and plan
             from the flat ClientState dicts (ClientState.Notes, ClientState.Tasks, ClientState.Habits),
             not just mark IsDeleted on the model.
 
-        Step 2.1 — register per-instance lazy load results into dicts (fix B)
-            lazy loading stays — just add dict registration after each lazy load:
-            in HabitService.LoadTimesDone(habit): after assigning habit.TimesDone,
-                initialize ClientState.Times if null, then:
-                foreach (TimeModel time in habit.TimesDone)
-                    _clientState.Times[time.Id] = time;
-            in ItemService.Initialize(items): after assigning items.Items,
-                initialize ClientState.Items if null, then:
-                foreach (ItemModel item in items.Items)
-                    _clientState.Items[item.Id] = item;
-
-        Step 2.2 — register Add results into dicts
-            in HabitService.Start(): after DataAccess.AddTime and setting time.Id,
-                initialize ClientState.Times if null, then:
-                _clientState.Times[timeModel.Id] = timeModel;
-            in HabitService.AddTimeDone(): after DataAccess.AddTime and setting time.Id,
-                initialize ClientState.Times if null, then:
-                _clientState.Times[timeModel.Id] = timeModel;
-            in ItemService.AddItem(): after DataAccess.AddItem and setting item.Id,
-                initialize ClientState.Items if null, then:
-                _clientState.Items[item.Id] = item;
-
-        Step 2.3 — keep Remove operations in sync (fix C)
-            in HabitService.RemoveTimeDone: after DataAccess.RemoveTime,
-                also _clientState.Times?.Remove(timeModel.Id)
-            in ItemService.DeleteItem: after DataAccess.RemoveItem,
-                also _clientState.Items?.Remove(item.Id)
-
-        Step 3 — fix GetUserData() and SetUserData() for category sub-lists
+        Step 2 — fix GetUserData() and SetUserData() for category sub-lists
             GetUserData() assigns category.Notes/Tasks/Habits directly on live runtime CategoryModel
             objects (same instances in ClientState.Categories dict). Currently harmless because those
             lists are null at runtime. After Step 1 they won't be null — GetUserData() would overwrite
@@ -320,18 +266,18 @@ Dict sync fix: detailed problem description and plan
             without this, if Items was partially populated by lazy loads, GetUserData() would
             export incomplete item data
 
-        Step 4 — consider making DataAccess private (fix A, long-term)
+        Step 3 — consider making DataAccess private (fix A, long-term)
             DataAccess is currently public on ClientState so services can reach it directly
             long-term: make it private, add explicit ClientState methods for every operation
             services call ClientState methods → ClientState calls DataAccess + updates dict
             this enforces the invariant at compile time, not by convention
-            NOTE: this is the largest change — Steps 1-3 are safe to do first
+            NOTE: this is the largest change — Steps 1-2 are safe to do first
 
-        Order: Steps 1-3 address different root causes and have non-overlapping code changes,
-               but Step 3 MUST be deployed together with Step 1 — Step 3's GetUserData fix exists
+        Order: Steps 1 and 2 have non-overlapping code changes,
+               but Step 2 MUST be deployed together with Step 1 — Step 2's GetUserData fix exists
                because of Step 1: once Step 1 wires category sub-lists at runtime, GetUserData()
-               would overwrite them on the next export if Step 3 is not in place.
-               Step 4 is a larger refactor, do separately after 1-3 are verified.
+               would overwrite them on the next export if Step 2 is not in place.
+               Step 3 is a larger refactor, do separately after 1 and 2 are verified.
 
 ---------------------------------------------------------------------------------------------------
 
@@ -347,7 +293,7 @@ prerequisite for task 1 (avoids duplicating row HTML between flat and grouped lo
 
 1.
 Category-grouped main list (togglable alternative view):
-prerequisite: Dict sync fix Steps 1-4 must be done first — Task 1 uses category.Notes/Tasks/Habits
+prerequisite: Dict sync fix Steps 1-2 must be done first — Task 1 uses category.Notes/Tasks/Habits
   populated at runtime (Step 1); without it, all category sub-lists are null and grouped view is broken
 - applies to Notes, Tasks, and Habits pages
 - controlled by a new ShowGroupedByCategory setting (bool, default false)
