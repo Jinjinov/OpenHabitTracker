@@ -209,11 +209,14 @@ Dict sync fix: detailed problem description and plan
                 NoteService.AddNote()       → category.Notes.Add(note)
                 TaskService.AddTask()       → category.Tasks.Add(task)
                 HabitService.AddHabit()     → category.Habits.Add(habit)
-                category change (any type)  → remove from old category list, add to new
+                category change (any type)  → ICategoryService.ChangeCategory(ContentModel, long newCategoryId)
+                    implemented in CategoryService; called from CategoryComponent.SaveCategory
+                    remove model from oldCategory sub-list, set model.CategoryId, add to newCategory sub-list
+                    CategoryComponent already depends on ICategoryService — no new dependency needed
             CategoryService.DeleteCategory() cascade — after Step 1, category.Notes/Tasks/Habits are
-            populated, so DeleteCategory will iterate them correctly. But it must also remove each child
-            from the flat ClientState dicts (ClientState.Notes, ClientState.Tasks, ClientState.Habits),
-            not just mark IsDeleted on the model.
+            populated, so DeleteCategory will iterate them correctly. But it must also add non-deleted
+            children to TrashedNotes/TrashedTasks/TrashedHabits (same pattern as DeleteNote/DeleteTask/
+            DeleteHabit), not just mark IsDeleted on the model.
 
         Step 2 — fix SetUserData() wiring and GetUserData() Items
             GetUserData() assigns category.Notes/Tasks/Habits on live CategoryModel objects from flat
