@@ -461,13 +461,6 @@ Notes stats:
 ✓ total count | count per Priority — flat list only, no per-category grouping
 - CreatedAt / UpdatedAt
 
-5.
-SUBMIT DESKTOP VIDEO (1920x1080) TO:
-    - macOS App Store: upload MP4 in App Store Connect
-
-SUBMIT MOBILE VIDEO (886x1920) TO:
-    - iOS App Store: upload MP4 in App Store Connect
-
 ---------------------------------------------------------------------------------------------------
 
 1.
