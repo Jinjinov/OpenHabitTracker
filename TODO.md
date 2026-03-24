@@ -266,6 +266,17 @@ Dict sync fix: detailed problem description and plan
                 foreach (ItemModel item in items.Items)
                     _clientState.Items[item.Id] = item;
 
+        Step 2.5 — register Add results into dicts
+            in HabitService.Start(): after DataAccess.AddTime and setting time.Id,
+                initialize ClientState.Times if null, then:
+                _clientState.Times[timeModel.Id] = timeModel;
+            in HabitService.AddTimeDone(): after DataAccess.AddTime and setting time.Id,
+                initialize ClientState.Times if null, then:
+                _clientState.Times[timeModel.Id] = timeModel;
+            in ItemService.AddItem(): after DataAccess.AddItem and setting item.Id,
+                initialize ClientState.Items if null, then:
+                _clientState.Items[item.Id] = item;
+
         Step 3 — keep Remove operations in sync (fix C)
             in HabitService.RemoveTimeDone: after DataAccess.RemoveTime,
                 also _clientState.Times?.Remove(timeModel.Id)
