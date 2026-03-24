@@ -213,7 +213,7 @@ Dict sync fix: detailed problem description and plan
             before LoadTimes() is correct export behavior (forces full reload so partially-lazy-loaded
             Times don't produce an incomplete export). Only the temp fix lines inside LoadHabits()
             should be removed. The same pattern applies to Items: GetUserData() should also null Items
-            before LoadItems() (currently missing — see Step 4).
+            before LoadItems() (currently missing — see Step 3).
 
     PLAN:
 
@@ -232,7 +232,7 @@ Dict sync fix: detailed problem description and plan
                 use TryGetValue — skip if CategoryId == 0 (uncategorized, no CategoryModel in dict)
                 skip if IsDeleted — deleted items belong only in the flat dict (for trash view),
                     NOT in category sub-lists (runtime view = active items only)
-                    export gets deleted items from the flat dicts directly (see Step 4), not from sub-lists
+                    export gets deleted items from the flat dicts directly (see Step 3), not from sub-lists
                 add it to category.Notes
             in ClientState.LoadTasks(): same for TaskModel → category.Tasks
             in ClientState.LoadHabits(): same for HabitModel → category.Habits
@@ -255,7 +255,7 @@ Dict sync fix: detailed problem description and plan
             from the flat ClientState dicts (ClientState.Notes, ClientState.Tasks, ClientState.Habits),
             not just mark IsDeleted on the model.
 
-        Step 2 — register per-instance lazy load results into dicts (fix B)
+        Step 2.1 — register per-instance lazy load results into dicts (fix B)
             lazy loading stays — just add dict registration after each lazy load:
             in HabitService.LoadTimesDone(habit): after assigning habit.TimesDone,
                 initialize ClientState.Times if null, then:
@@ -266,7 +266,7 @@ Dict sync fix: detailed problem description and plan
                 foreach (ItemModel item in items.Items)
                     _clientState.Items[item.Id] = item;
 
-        Step 2.5 — register Add results into dicts
+        Step 2.2 — register Add results into dicts
             in HabitService.Start(): after DataAccess.AddTime and setting time.Id,
                 initialize ClientState.Times if null, then:
                 _clientState.Times[timeModel.Id] = timeModel;
@@ -277,13 +277,13 @@ Dict sync fix: detailed problem description and plan
                 initialize ClientState.Items if null, then:
                 _clientState.Items[item.Id] = item;
 
-        Step 3 — keep Remove operations in sync (fix C)
+        Step 2.3 — keep Remove operations in sync (fix C)
             in HabitService.RemoveTimeDone: after DataAccess.RemoveTime,
                 also _clientState.Times?.Remove(timeModel.Id)
             in ItemService.DeleteItem: after DataAccess.RemoveItem,
                 also _clientState.Items?.Remove(item.Id)
 
-        Step 4 — fix GetUserData() and SetUserData() for category sub-lists
+        Step 3 — fix GetUserData() and SetUserData() for category sub-lists
             GetUserData() assigns category.Notes/Tasks/Habits directly on live runtime CategoryModel
             objects (same instances in ClientState.Categories dict). Currently harmless because those
             lists are null at runtime. After Step 1 they won't be null — GetUserData() would overwrite
@@ -320,18 +320,18 @@ Dict sync fix: detailed problem description and plan
             without this, if Items was partially populated by lazy loads, GetUserData() would
             export incomplete item data
 
-        Step 5 — consider making DataAccess private (fix A, long-term)
+        Step 4 — consider making DataAccess private (fix A, long-term)
             DataAccess is currently public on ClientState so services can reach it directly
             long-term: make it private, add explicit ClientState methods for every operation
             services call ClientState methods → ClientState calls DataAccess + updates dict
             this enforces the invariant at compile time, not by convention
-            NOTE: this is the largest change — Steps 1-4 are safe to do first
+            NOTE: this is the largest change — Steps 1-3 are safe to do first
 
-        Order: Steps 1-4 address different root causes and have non-overlapping code changes,
-               but Step 4 MUST be deployed together with Step 1 — Step 4's GetUserData fix exists
+        Order: Steps 1-3 address different root causes and have non-overlapping code changes,
+               but Step 3 MUST be deployed together with Step 1 — Step 3's GetUserData fix exists
                because of Step 1: once Step 1 wires category sub-lists at runtime, GetUserData()
-               would overwrite them on the next export if Step 4 is not in place.
-               Step 5 is a larger refactor, do separately after 1-4 are verified.
+               would overwrite them on the next export if Step 3 is not in place.
+               Step 4 is a larger refactor, do separately after 1-3 are verified.
 
 ---------------------------------------------------------------------------------------------------
 
