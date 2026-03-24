@@ -22,10 +22,14 @@ public class NotesStatisticsComponentTests
 
         _noteService = Substitute.For<INoteService>();
 
+        IPriorityService priorityService = Substitute.For<IPriorityService>();
+        priorityService.GetPriorityName(Arg.Any<Priority>()).Returns(callInfo => callInfo.Arg<Priority>().ToString());
+
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
 
         _ctx.Services.AddScoped(_ => _noteService);
+        _ctx.Services.AddScoped(_ => priorityService);
         _ctx.Services.AddSingleton(loc);
     }
 
@@ -65,7 +69,7 @@ public class NotesStatisticsComponentTests
 
         IRenderedComponent<NotesStatisticsComponent> cut = _ctx.Render<NotesStatisticsComponent>();
 
-        Assert.That(cut.Find("span.badge.bg-body-secondary").TextContent, Is.EqualTo("Total: 2"));
+        Assert.That(cut.Find("p.mb-1").TextContent, Is.EqualTo("Total: 2"));
     }
 
     [Test]
@@ -93,7 +97,7 @@ public class NotesStatisticsComponentTests
         IRenderedComponent<NotesStatisticsComponent> firstCut = _ctx.Render<NotesStatisticsComponent>(
             p => p.Add(c => c.PageStateChanged, false));
 
-        Assert.That(firstCut.Find("span.badge.bg-body-secondary").TextContent, Is.EqualTo("Total: 1"));
+        Assert.That(firstCut.Find("p.mb-1").TextContent, Is.EqualTo("Total: 1"));
 
         // Second render: 2 notes — component must not cache from first render
         NoteModel secondNote = TestData.Note(id: 2);
@@ -104,6 +108,6 @@ public class NotesStatisticsComponentTests
         IRenderedComponent<NotesStatisticsComponent> secondCut = _ctx.Render<NotesStatisticsComponent>(
             p => p.Add(c => c.PageStateChanged, true));
 
-        Assert.That(secondCut.Find("span.badge.bg-body-secondary").TextContent, Is.EqualTo("Total: 2"));
+        Assert.That(secondCut.Find("p.mb-1").TextContent, Is.EqualTo("Total: 2"));
     }
 }
