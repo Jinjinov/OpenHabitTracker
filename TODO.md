@@ -56,6 +56,21 @@ Architecture: Identity Map + Repository (what the ideal design should be)
 
 ---------------------------------------------------------------------------------------------------
 
+public DataAccess:
+
+    DataAccess is public on ClientState
+        Services call _clientState.DataAccess directly for mutations (Add, Update, Remove)
+        without always updating the corresponding dict entry.
+        This is an enforcement problem — the invariant cannot be violated if DataAccess is private.
+
+    consider making DataAccess private
+        DataAccess is currently public on ClientState so services can reach it directly
+        long-term: make it private, add explicit ClientState methods for every operation
+        services call ClientState methods → ClientState calls DataAccess + updates dict
+        this enforces the invariant at compile time, not by convention
+
+---------------------------------------------------------------------------------------------------
+
 ClientState dict sync:
     fix `ClientState.GetUserData()` which calls InitializeContent()
     search for `// TODO:: remove temp fix`
@@ -108,55 +123,35 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 
 ---------------------------------------------------------------------------------------------------
 
-Dict sync fix: detailed problem description and plan
+LAZY LOADING:
+    Per-instance lazy loads in services stay exactly as they are — triggered by user interaction,
+    loading only what is needed. Loaded objects are registered in the dict.
 
-    ROOT CAUSE:
-        The identity map invariant is not enforced:
-        "every Model that exists in memory must be the canonical instance stored in its ClientState dict"
-        Remaining violations:
+    WHY Times lazy loading is critical:
+    In Ididit (predecessor app), all TimesDone were loaded upfront. After 5 years of daily use
+    with ~50 habits done 1-2× per day, the Times table grew to ~180,000 records and became slow.
+    Per-habit lazy loading of Times was introduced specifically to solve this.
+    Items are small (handful per habit/task) and not a performance concern.
 
-        A. DataAccess is public on ClientState
-           Services call _clientState.DataAccess directly for mutations (Add, Update, Remove)
-           without always updating the corresponding dict entry.
-           This is an enforcement problem — the invariant cannot be violated if DataAccess is private.
+    The temp fix in LoadHabits() calls LoadTimes() (bulk load of ALL times) — this is the WRONG
+    direction and reintroduces the exact performance problem lazy loading was meant to solve.
 
-    LAZY LOADING IS KEPT:
-        Per-instance lazy loads in services stay exactly as they are — triggered by user interaction,
-        loading only what is needed. Loaded objects are registered in the dict.
+    the habit list UI depends on AverageInterval and TotalTimeSpent being computed
+    from TimesDone — without them the ratio badges show division-by-zero results.
 
-        WHY Times lazy loading is critical:
-        In Ididit (predecessor app), all TimesDone were loaded upfront. After 5 years of daily use
-        with ~50 habits done 1-2× per day, the Times table grew to ~180,000 records and became slow.
-        Per-habit lazy loading of Times was introduced specifically to solve this.
-        Items are small (handful per habit/task) and not a performance concern.
-
-        The temp fix in LoadHabits() calls LoadTimes() (bulk load of ALL times) — this is the WRONG
-        direction and reintroduces the exact performance problem lazy loading was meant to solve.
-        However, removing it is NOT part of Steps 1-2 (done) or Step 3. It is a separate, larger task (see below)
-        because the habit list UI depends on AverageInterval and TotalTimeSpent being computed
-        from TimesDone — without them the ratio badges show division-by-zero results.
-
-        SEPARATE TASK — remove temp fix (prerequisite: persist aggregates to DB):
-            HabitModel computes TotalTimeSpent and AverageInterval in OnTimesDoneChanged()
-            from the full TimesDone list. The habit list renders these via GetRatio() for the
-            ratio badge and elapsed time display. Without TimesDone loaded, they are TimeSpan.Zero
-            and ElapsedTimeToAverageIntervalRatio / AverageIntervalToRepeatIntervalRatio divide by zero.
-            The // TODO:: save it? comments in HabitModel.cs already identify the solution:
-            - add TotalTimeSpent and AverageInterval as persisted fields on HabitEntity
-            - compute and save them on every AddTimeDone, RemoveTimeDone, UpdateTimeDone
-            - once persisted, LoadHabits() can render the full list without loading any Times
-            - then remove LoadTimes() and the TimesDone wiring from LoadHabits() (remove temp fix)
-            - load only last N days of Times at startup for the small calendar display
-            - load full Times per-habit on selection for the large calendar
-            This requires a DB migration and is tracked separately.
-
-    PLAN:
-
-        Step 1 — consider making DataAccess private (fix A, long-term)
-            DataAccess is currently public on ClientState so services can reach it directly
-            long-term: make it private, add explicit ClientState methods for every operation
-            services call ClientState methods → ClientState calls DataAccess + updates dict
-            this enforces the invariant at compile time, not by convention
+    TASK — remove temp fix (prerequisite: persist aggregates to DB):
+        HabitModel computes TotalTimeSpent and AverageInterval in OnTimesDoneChanged()
+        from the full TimesDone list. The habit list renders these via GetRatio() for the
+        ratio badge and elapsed time display. Without TimesDone loaded, they are TimeSpan.Zero
+        and ElapsedTimeToAverageIntervalRatio / AverageIntervalToRepeatIntervalRatio divide by zero.
+        The // TODO:: save it? comments in HabitModel.cs already identify the solution:
+        - add TotalTimeSpent and AverageInterval as persisted fields on HabitEntity
+        - compute and save them on every AddTimeDone, RemoveTimeDone, UpdateTimeDone
+        - once persisted, LoadHabits() can render the full list without loading any Times
+        - then remove LoadTimes() and the TimesDone wiring from LoadHabits() (remove temp fix)
+        - load only last N days of Times at startup for the small calendar display
+        - load full Times per-habit on selection for the large calendar
+        This requires a DB migration
             
 ---------------------------------------------------------------------------------------------------
 
