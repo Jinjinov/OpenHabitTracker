@@ -190,17 +190,17 @@ public class CategoryServiceTests
     }
 
     // --- DeleteCategory bug tests (KNOWN BUG: these tests currently FAIL) ---
-    // The real runtime state has category.Notes/Tasks/Habits == null (only populated in GetUserData for export).
+    // The real runtime state has category.Notes/Tasks/Habits == [] (empty — not yet wired to clientState items).
     // DeleteCategory iterates those lists to cascade IsDeleted, so the cascade silently does nothing at runtime.
     // Children remain in ClientState dicts as live items with a dangling CategoryId.
-    // These tests document the expected behavior and will pass once the bug is fixed.
+    // These tests document the expected behavior and will pass once Step 1 (wiring) is done.
 
     [Test]
-    public async Task DeleteCategory_WithNullNotesList_MarksNotesInClientStateAsDeleted()
+    public async Task DeleteCategory_WithEmptyNotesList_MarksNotesInClientStateAsDeleted()
     {
         NoteModel note = TestData.Note(id: 1, categoryId: 10);
         _clientState.Notes = TestData.NoteDict(note);
-        CategoryModel category = TestData.Category(id: 10); // Notes = null (real runtime state)
+        CategoryModel category = TestData.Category(id: 10); // Notes = [] (empty, not yet wired to clientState)
         _clientState.Categories = TestData.CategoryDict(category);
 
         await _sut.DeleteCategory(category);
@@ -209,11 +209,11 @@ public class CategoryServiceTests
     }
 
     [Test]
-    public async Task DeleteCategory_WithNullTasksList_MarksTasksInClientStateAsDeleted()
+    public async Task DeleteCategory_WithEmptyTasksList_MarksTasksInClientStateAsDeleted()
     {
         TaskModel task = TestData.Task(id: 1, categoryId: 10);
         _clientState.Tasks = TestData.TaskDict(task);
-        CategoryModel category = TestData.Category(id: 10); // Tasks = null (real runtime state)
+        CategoryModel category = TestData.Category(id: 10); // Tasks = [] (empty, not yet wired to clientState)
         _clientState.Categories = TestData.CategoryDict(category);
 
         await _sut.DeleteCategory(category);
@@ -222,11 +222,11 @@ public class CategoryServiceTests
     }
 
     [Test]
-    public async Task DeleteCategory_WithNullHabitsList_MarksHabitsInClientStateAsDeleted()
+    public async Task DeleteCategory_WithEmptyHabitsList_MarksHabitsInClientStateAsDeleted()
     {
         HabitModel habit = TestData.Habit(id: 1, categoryId: 10);
         _clientState.Habits = TestData.HabitDict(habit);
-        CategoryModel category = TestData.Category(id: 10); // Habits = null (real runtime state)
+        CategoryModel category = TestData.Category(id: 10); // Habits = [] (empty, not yet wired to clientState)
         _clientState.Categories = TestData.CategoryDict(category);
 
         await _sut.DeleteCategory(category);

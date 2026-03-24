@@ -65,8 +65,8 @@ public class CategoryTests : BaseTest
         await Expect(Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "ToDelete" })).ToHaveCountAsync(0);
     }
 
-    // KNOWN BUG: DeleteCategory cascade is broken at runtime (category.Notes/Tasks/Habits are null).
-    // This test documents expected behavior and will pass once the bug is fixed.
+    // KNOWN BUG: DeleteCategory cascade is broken at runtime (category.Notes/Tasks/Habits are empty — not yet wired to clientState items).
+    // This test documents expected behavior and will pass once Step 1 (wiring) is done.
     [Test]
     public async Task DeleteCategory_ChildHabitsDisappearFromHabitsList()
     {

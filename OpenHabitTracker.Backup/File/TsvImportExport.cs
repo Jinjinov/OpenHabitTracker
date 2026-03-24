@@ -26,7 +26,7 @@ public class TsvImportExport(ClientState clientState)
 
         foreach (CategoryModel category in userData.Categories)
         {
-            if (category.Notes?.Count > 0)
+            if (category.Notes.Count > 0)
             {
                 foreach (NoteModel note in category.Notes)
                 {
@@ -43,7 +43,7 @@ public class TsvImportExport(ClientState clientState)
                     }
                 }
             }
-            if (category.Tasks?.Count > 0)
+            if (category.Tasks.Count > 0)
             {
                 foreach (TaskModel task in category.Tasks)
                 {
@@ -77,7 +77,7 @@ public class TsvImportExport(ClientState clientState)
                     }
                 }
             }
-            if (category.Habits?.Count > 0)
+            if (category.Habits.Count > 0)
             {
                 foreach (HabitModel habit in category.Habits)
                 {
@@ -151,10 +151,6 @@ public class TsvImportExport(ClientState clientState)
 
                 userData.Categories.Add(category);
             }
-
-            category.Notes ??= [];
-            category.Tasks ??= [];
-            category.Habits ??= [];
 
             ItemsModel? items = null;
 

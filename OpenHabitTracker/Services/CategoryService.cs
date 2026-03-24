@@ -73,41 +73,38 @@ public class CategoryService(ClientState clientState) : ICategoryService
         if (_clientState.Categories is null)
             return;
 
-        if (category.Notes is not null)
-            foreach (NoteModel note in category.Notes)
+        foreach (NoteModel note in category.Notes)
+        {
+            note.CategoryId = 0;
+            note.IsDeleted = true;
+            if (await _clientState.DataAccess.GetNote(note.Id) is NoteEntity noteEntity)
             {
-                note.CategoryId = 0;
-                note.IsDeleted = true;
-                if (await _clientState.DataAccess.GetNote(note.Id) is NoteEntity noteEntity)
-                {
-                    note.CopyToEntity(noteEntity);
-                    await _clientState.DataAccess.UpdateNote(noteEntity);
-                }
+                note.CopyToEntity(noteEntity);
+                await _clientState.DataAccess.UpdateNote(noteEntity);
             }
+        }
 
-        if (category.Tasks is not null)
-            foreach (TaskModel task in category.Tasks)
+        foreach (TaskModel task in category.Tasks)
+        {
+            task.CategoryId = 0;
+            task.IsDeleted = true;
+            if (await _clientState.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
             {
-                task.CategoryId = 0;
-                task.IsDeleted = true;
-                if (await _clientState.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
-                {
-                    task.CopyToEntity(taskEntity);
-                    await _clientState.DataAccess.UpdateTask(taskEntity);
-                }
+                task.CopyToEntity(taskEntity);
+                await _clientState.DataAccess.UpdateTask(taskEntity);
             }
+        }
 
-        if (category.Habits is not null)
-            foreach (HabitModel habit in category.Habits)
+        foreach (HabitModel habit in category.Habits)
+        {
+            habit.CategoryId = 0;
+            habit.IsDeleted = true;
+            if (await _clientState.DataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
             {
-                habit.CategoryId = 0;
-                habit.IsDeleted = true;
-                if (await _clientState.DataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
-                {
-                    habit.CopyToEntity(habitEntity);
-                    await _clientState.DataAccess.UpdateHabit(habitEntity);
-                }
+                habit.CopyToEntity(habitEntity);
+                await _clientState.DataAccess.UpdateHabit(habitEntity);
             }
+        }
 
         _clientState.Categories.Remove(category.Id);
 
