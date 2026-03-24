@@ -54,8 +54,6 @@ Architecture: Identity Map + Repository (what the ideal design should be)
 
     One violation remaining — the architecture is sound, the invariant just isn't enforced consistently.
 
----------------------------------------------------------------------------------------------------
-
 public DataAccess:
 
     DataAccess is public on ClientState
@@ -77,8 +75,6 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
     save AverageInterval
     on Habit Initialize - load only last week (last X days, displayed in small calendar)
     call LoadTimesDone for large calendar
-
----------------------------------------------------------------------------------------------------
 
 LAZY LOADING:
     Per-instance lazy loads in services stay exactly as they are — triggered by user interaction,
@@ -113,7 +109,6 @@ LAZY LOADING:
 ---------------------------------------------------------------------------------------------------
 
 1, 2, 3 must be done at the same time so there is one new DB migration, not three
-(the "remove temp fix" task also requires a DB migration — adding TotalTimeSpent and AverageInterval to HabitEntity — but that is a separate migration done independently of tasks 1/2/3)
 
 0.
 prerequisite for task 1 (avoids duplicating row HTML between flat and grouped loops):
