@@ -614,7 +614,7 @@ public class HabitServiceTests
         Assert.That(habit.LastTimeDoneAt, Is.EqualTo(earlier));
     }
 
-    // --- ClientState.Times dict sync tests (expected to fail until sync bug is fixed) ---
+    // --- ClientState.Times dict sync tests ---
 
     [Test]
     public async Task Start_AddsNewTimeModel_ToClientStateTimes()

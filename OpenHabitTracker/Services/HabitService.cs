@@ -52,6 +52,10 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
             habit.TimesDone = timesDone.Select(t => t.ToModel()).ToList();
 
             habit.RefreshTimesDoneByDay();
+
+            _clientState.Times ??= new();
+            foreach (TimeModel time in habit.TimesDone)
+                _clientState.Times[time.Id] = time;
         }
     }
 
@@ -75,12 +79,17 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
             timeList.Add(time.ToModel());
         }
 
+        _clientState.Times ??= new();
+
         foreach (HabitModel habit in _clientState.Habits.Values)
         {
             if (habit.TimesDone is null)
             {
                 habit.TimesDone = timesByHabitId.TryGetValue(habit.Id, out List<TimeModel>? times) ? times : [];
                 habit.RefreshTimesDoneByDay();
+
+                foreach (TimeModel time in habit.TimesDone)
+                    _clientState.Times[time.Id] = time;
             }
         }
     }
@@ -146,6 +155,9 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         await _clientState.DataAccess.AddTime(timeEntity);
 
         timeModel.Id = timeEntity.Id;
+
+        _clientState.Times ??= new();
+        _clientState.Times[timeModel.Id] = timeModel;
     }
 
     public async Task SetStartTime(HabitModel habit, DateTime startedAt)
@@ -257,6 +269,9 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         timeModel.Id = timeEntity.Id;
 
+        _clientState.Times ??= new();
+        _clientState.Times[timeModel.Id] = timeModel;
+
         if (habit.LastTimeDoneAt is null || habit.LastTimeDoneAt < dateTime)
             await SetLastTimeDone(habit, dateTime);
 
@@ -276,6 +291,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         habit.RemoveTimesDoneByDay(timeModel);
 
         await _clientState.DataAccess.RemoveTime(timeModel.Id);
+
+        _clientState.Times?.Remove(timeModel.Id);
 
         TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault();
 
