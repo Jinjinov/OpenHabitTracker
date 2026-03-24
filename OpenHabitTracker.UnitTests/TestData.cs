@@ -32,4 +32,16 @@ internal static class TestData
 
     internal static Dictionary<long, CategoryModel> CategoryDict(params CategoryModel[] categories) =>
         categories.ToDictionary(c => c.Id);
+
+    internal static TimeModel Time(long id = 1, long habitId = 1) =>
+        new() { Id = id, HabitId = habitId };
+
+    internal static ItemModel Item(long id = 1, long parentId = 1) =>
+        new() { Id = id, ParentId = parentId };
+
+    internal static Dictionary<long, TimeModel> TimeDict(params TimeModel[] times) =>
+        times.ToDictionary(t => t.Id);
+
+    internal static Dictionary<long, ItemModel> ItemDict(params ItemModel[] items) =>
+        items.ToDictionary(i => i.Id);
 }

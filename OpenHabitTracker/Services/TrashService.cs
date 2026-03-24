@@ -98,6 +98,9 @@ public class TrashService(ClientState clientState) : ITrashService
         await DeleteHabit(model.Id);
         _clientState.TrashedHabits?.Remove(model);
         _clientState.Habits?.Remove(model.Id);
+
+        if (model.CategoryId != 0 && _clientState.Categories?.TryGetValue(model.CategoryId, out CategoryModel? habitCategory) == true)
+            habitCategory.Habits.Remove(model);
     }
 
     public async Task Delete(NoteModel model)
@@ -105,6 +108,9 @@ public class TrashService(ClientState clientState) : ITrashService
         await DeleteNote(model.Id);
         _clientState.TrashedNotes?.Remove(model);
         _clientState.Notes?.Remove(model.Id);
+
+        if (model.CategoryId != 0 && _clientState.Categories?.TryGetValue(model.CategoryId, out CategoryModel? noteCategory) == true)
+            noteCategory.Notes.Remove(model);
     }
 
     public async Task Delete(TaskModel model)
@@ -112,10 +118,27 @@ public class TrashService(ClientState clientState) : ITrashService
         await DeleteTask(model.Id);
         _clientState.TrashedTasks?.Remove(model);
         _clientState.Tasks?.Remove(model.Id);
+
+        if (model.CategoryId != 0 && _clientState.Categories?.TryGetValue(model.CategoryId, out CategoryModel? taskCategory) == true)
+            taskCategory.Tasks.Remove(model);
     }
 
     private async Task DeleteHabit(long id)
     {
+        IReadOnlyList<TimeEntity> times = await _clientState.DataAccess.GetTimes(id);
+        foreach (TimeEntity time in times)
+        {
+            await _clientState.DataAccess.RemoveTime(time.Id);
+            _clientState.Times?.Remove(time.Id);
+        }
+
+        IReadOnlyList<ItemEntity> items = await _clientState.DataAccess.GetItems(id);
+        foreach (ItemEntity item in items)
+        {
+            await _clientState.DataAccess.RemoveItem(item.Id);
+            _clientState.Items?.Remove(item.Id);
+        }
+
         await _clientState.DataAccess.RemoveHabit(id);
     }
 
@@ -126,6 +149,13 @@ public class TrashService(ClientState clientState) : ITrashService
 
     private async Task DeleteTask(long id)
     {
+        IReadOnlyList<ItemEntity> items = await _clientState.DataAccess.GetItems(id);
+        foreach (ItemEntity item in items)
+        {
+            await _clientState.DataAccess.RemoveItem(item.Id);
+            _clientState.Items?.Remove(item.Id);
+        }
+
         await _clientState.DataAccess.RemoveTask(id);
     }
 
@@ -133,27 +163,14 @@ public class TrashService(ClientState clientState) : ITrashService
     {
         if (_clientState.TrashedHabits is not null)
             foreach (HabitModel model in _clientState.TrashedHabits.ToList())
-            {
-                await _clientState.DataAccess.RemoveHabit(model.Id);
-                _clientState.Habits?.Remove(model.Id);
-            }
+                await Delete(model);
 
         if (_clientState.TrashedNotes is not null)
             foreach (NoteModel model in _clientState.TrashedNotes.ToList())
-            {
-                await _clientState.DataAccess.RemoveNote(model.Id);
-                _clientState.Notes?.Remove(model.Id);
-            }
+                await Delete(model);
 
         if (_clientState.TrashedTasks is not null)
             foreach (TaskModel model in _clientState.TrashedTasks.ToList())
-            {
-                await _clientState.DataAccess.RemoveTask(model.Id);
-                _clientState.Tasks?.Remove(model.Id);
-            }
-
-        _clientState.TrashedHabits?.Clear();
-        _clientState.TrashedNotes?.Clear();
-        _clientState.TrashedTasks?.Clear();
+                await Delete(model);
     }
 }
