@@ -48,9 +48,9 @@ Architecture: Identity Map + Repository (what the ideal design should be)
     - bulk lazy load with null guards             CORRECT  (if (X is null) pattern)
     - wire sub-collections from flat dicts        CORRECT  (ClientData.GetHabits(), ClientState.LoadNotes/LoadTasks/LoadHabits)
     - CRUD Add operations update dicts            CORRECT
-    - DataAccess private to store                 MISSING  (exposed as public property, services use it directly)
     - per-instance loads register into dicts      CORRECT  (LoadTimesDone, Initialize, Start, AddTimeDone, AddItem, RemoveTimeDone, DeleteItem)
     - CategoryModel sub-lists wired at runtime    CORRECT  (LoadNotes/LoadTasks/LoadHabits + Add mutations + ChangeCategory)
+    - DataAccess private to store                 MISSING  (exposed as public property, services use it directly)
 
     One violation remaining — the architecture is sound, the invariant just isn't enforced consistently.
 
@@ -70,49 +70,6 @@ public DataAccess:
         this enforces the invariant at compile time, not by convention
 
 ---------------------------------------------------------------------------------------------------
-
-ClientState dict sync:
-    fix `ClientState.GetUserData()` which calls InitializeContent()
-    search for `// TODO:: remove temp fix`
-        `InitializeItems` and `InitializeTimes` have null checks and do not update data when called in GetUserData()
-            both load data directly from DB with `_dataAccess.GetTimes()` and `_dataAccess.GetItems()`
-            but HabitService.LoadTimesDone also loads data with `_dataAccess.GetTimes(habit.Id)` - these are not the same objects as in `InitializeTimes`
-            and ItemService.Initialize also loads data with `_dataAccess.GetItems(items.Id)` - these are not the same objects as in `InitializeItems`
-        user can add or remove Items and Times list
-            `DataAccess.AddItem(item);` / `DataAccess.UpdateItem(item);`
-            `DataAccess.AddTime(timeEntity);` / `DataAccess.UpdateTime(timeEntity);`
-            the code does not update Items and Times in the ClientState
-        so without temp fix, GetUserData() would return Items and Times that were loaded with Initialize()
-    either remove these from class ClientState: - NO!!!
-        public Dictionary<long, TimeModel>? Times { get; set; }
-        public Dictionary<long, ItemModel>? Items { get; set; }
-    or
-        make sure that other services update them !!!
-        1.
-            `ToEntity` already exist
-            add `ToModel` and use it for every `Model`
-                models need other models to initialize their `List<>` properties
-                    List<CategoryModel> Categories
-                        List<NoteModel>? Notes
-                        List<TaskModel>? Tasks
-                            List<ItemModel>? Items
-                        List<HabitModel>? Habits
-                            List<ItemModel>? Items
-                            List<TimeModel>? TimesDone
-                provide `ClientData` as input
-                    - if `Model` is not found in the `Dictionary` then use `_dataAccess`
-                    - add it to `Dictionary` in `ClientData`
-        2.
-            make sure that loading an `Entity` with `DataAccess` and creating a `Model` results in storing the `Model` in a `Dictionary` in `ClientData`
-            check for every `new.*Model`
-        3.
-            make sure that every `DataAccess.Add` and `DataAccess.Update` and `DataAccess.Remove` also updates `Dictionary<long, Model>` in `ClientData`
-            private `DataAccess` in `ClientData`
-
-this is a problem:
-    - services use `_dataAccess` on their own, but `ClientState` is supposed to represent the current state as the only source of truth
-    - but only `ClientState.GetUserData()` suffers from it and a `temp fix` is in place
-Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
 
 to remove `// TODO:: remove temp fix` and keep habit ratio in UI:
 call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
