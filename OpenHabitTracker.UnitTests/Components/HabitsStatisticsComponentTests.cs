@@ -35,6 +35,12 @@ public class HabitsStatisticsComponentTests
 
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
+        loc[Arg.Any<string>(), Arg.Any<object[]>()].Returns(callInfo =>
+        {
+            string key = callInfo.Arg<string>();
+            string format = key == "Done out of total" ? "{0} out of {1} done" : key;
+            return new LocalizedString(key, string.Format(format, callInfo.Arg<object[]>()));
+        });
 
         _ctx.Services.AddScoped(_ => _habitService);
         _ctx.Services.AddScoped(_ => _clientState);
