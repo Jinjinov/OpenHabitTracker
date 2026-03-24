@@ -189,6 +189,9 @@ public class ClientState
             foreach (HabitModel habit in Habits.Values) // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
             {
                 habit.RefreshTimesDoneByDay(); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
+
+                if (habit.CategoryId != 0 && Categories!.TryGetValue(habit.CategoryId, out CategoryModel? habitCategory))
+                    habitCategory.Habits.Add(habit);
             }
         }
     }
@@ -206,6 +209,12 @@ public class ClientState
                 m.ContentMarkdown = _markdownToHtml.GetMarkdown(x.Content);
                 return m;
             }).ToDictionary(x => x.Id);
+
+            foreach (NoteModel note in Notes.Values)
+            {
+                if (note.CategoryId != 0 && Categories!.TryGetValue(note.CategoryId, out CategoryModel? noteCategory))
+                    noteCategory.Notes.Add(note);
+            }
         }
     }
 
@@ -217,6 +226,12 @@ public class ClientState
 
             IReadOnlyList<TaskEntity> tasks = await DataAccess.GetTasks();
             Tasks = tasks.Select(x => x.ToModel()).ToDictionary(x => x.Id);
+
+            foreach (TaskModel task in Tasks.Values)
+            {
+                if (task.CategoryId != 0 && Categories!.TryGetValue(task.CategoryId, out CategoryModel? taskCategory))
+                    taskCategory.Tasks.Add(task);
+            }
         }
     }
 
@@ -310,9 +325,10 @@ public class ClientState
 
         // Times, Items inside every task/habit could be more up to date
 
-        Times = null; // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
-
+        Times = null; // needed because lazy load might not load all the times (Habits view was not opened)
         await LoadTimes();
+
+        Items = null; // needed because lazy load might not load all the items (Tasks / Habits view was not opened)
         await LoadItems();
 
         if (Categories is null || Notes is null || Tasks is null || Habits is null || Times is null || Items is null)
@@ -512,5 +528,23 @@ public class ClientState
 
         if (Categories is null) Categories = categories.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in categories.ToDictionary(x => x.Model.Id, x => x.Model)) Categories[pair.Key] = pair.Value;
+
+        foreach (NoteModel note in notes.Select(x => x.Model))
+        {
+            if (note.CategoryId != 0 && Categories.TryGetValue(note.CategoryId, out CategoryModel? noteCategory))
+                noteCategory.Notes.Add(note);
+        }
+
+        foreach (TaskModel task in tasks.Select(x => x.Model))
+        {
+            if (task.CategoryId != 0 && Categories.TryGetValue(task.CategoryId, out CategoryModel? taskCategory))
+                taskCategory.Tasks.Add(task);
+        }
+
+        foreach (HabitModel habit in habits.Select(x => x.Model))
+        {
+            if (habit.CategoryId != 0 && Categories.TryGetValue(habit.CategoryId, out CategoryModel? habitCategory))
+                habitCategory.Habits.Add(habit);
+        }
     }
 }

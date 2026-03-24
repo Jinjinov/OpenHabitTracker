@@ -76,7 +76,11 @@ public class CategoryService(ClientState clientState) : ICategoryService
         foreach (NoteModel note in category.Notes)
         {
             note.CategoryId = 0;
-            note.IsDeleted = true;
+            if (!note.IsDeleted)
+            {
+                note.IsDeleted = true;
+                _clientState.TrashedNotes?.Add(note);
+            }
             if (await _clientState.DataAccess.GetNote(note.Id) is NoteEntity noteEntity)
             {
                 note.CopyToEntity(noteEntity);
@@ -87,7 +91,11 @@ public class CategoryService(ClientState clientState) : ICategoryService
         foreach (TaskModel task in category.Tasks)
         {
             task.CategoryId = 0;
-            task.IsDeleted = true;
+            if (!task.IsDeleted)
+            {
+                task.IsDeleted = true;
+                _clientState.TrashedTasks?.Add(task);
+            }
             if (await _clientState.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
             {
                 task.CopyToEntity(taskEntity);
@@ -98,7 +106,11 @@ public class CategoryService(ClientState clientState) : ICategoryService
         foreach (HabitModel habit in category.Habits)
         {
             habit.CategoryId = 0;
-            habit.IsDeleted = true;
+            if (!habit.IsDeleted)
+            {
+                habit.IsDeleted = true;
+                _clientState.TrashedHabits?.Add(habit);
+            }
             if (await _clientState.DataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
             {
                 habit.CopyToEntity(habitEntity);
@@ -115,6 +127,34 @@ public class CategoryService(ClientState clientState) : ICategoryService
             _clientState.Settings.HiddenCategoryIds.Remove(category.Id);
 
             await UpdateSettings();
+        }
+    }
+
+    public void ChangeCategory(ContentModel model, long newCategoryId)
+    {
+        if (_clientState.Categories is null)
+            return;
+
+        if (model.CategoryId != 0 && _clientState.Categories.TryGetValue(model.CategoryId, out CategoryModel? oldCategory))
+        {
+            if (model is NoteModel note)
+                oldCategory.Notes.Remove(note);
+            else if (model is TaskModel task)
+                oldCategory.Tasks.Remove(task);
+            else if (model is HabitModel habit)
+                oldCategory.Habits.Remove(habit);
+        }
+
+        model.CategoryId = newCategoryId;
+
+        if (newCategoryId != 0 && _clientState.Categories.TryGetValue(newCategoryId, out CategoryModel? newCategory))
+        {
+            if (model is NoteModel addedNote)
+                newCategory.Notes.Add(addedNote);
+            else if (model is TaskModel addedTask)
+                newCategory.Tasks.Add(addedTask);
+            else if (model is HabitModel addedHabit)
+                newCategory.Habits.Add(addedHabit);
         }
     }
 

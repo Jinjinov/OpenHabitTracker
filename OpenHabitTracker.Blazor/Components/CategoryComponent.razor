@@ -33,7 +33,7 @@
         if (Model is null)
             return;
 
-        Model.CategoryId = categoryId;
+        CategoryService.ChangeCategory(Model, categoryId);
 
         await OnChange.InvokeAsync();
     }
