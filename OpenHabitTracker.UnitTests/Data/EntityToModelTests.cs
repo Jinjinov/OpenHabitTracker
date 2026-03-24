@@ -313,4 +313,38 @@ public class EntityToModelTests
         Assert.That(entity.StartedAt, Is.EqualTo(start));
         Assert.That(entity.CompletedAt, Is.EqualTo(end));
     }
+
+    // --- TaskModel.TimeSpent ---
+
+    [Test]
+    public void TaskModel_TimeSpent_WhenStartedAndCompleted_ReturnsCorrectDuration()
+    {
+        DateTime started = new(2025, 1, 1, 10, 0, 0);
+        DateTime completed = new(2025, 1, 1, 11, 30, 0);
+        TaskModel task = new() { StartedAt = started, CompletedAt = completed };
+
+        TimeSpan? result = task.TimeSpent;
+
+        Assert.That(result, Is.EqualTo(TimeSpan.FromMinutes(90)));
+    }
+
+    [Test]
+    public void TaskModel_TimeSpent_WhenStartedAtIsNull_ReturnsNull()
+    {
+        TaskModel task = new() { StartedAt = null, CompletedAt = new DateTime(2025, 1, 1) };
+
+        TimeSpan? result = task.TimeSpent;
+
+        Assert.That(result, Is.Null);
+    }
+
+    [Test]
+    public void TaskModel_TimeSpent_WhenCompletedAtIsNull_ReturnsNull()
+    {
+        TaskModel task = new() { StartedAt = new DateTime(2025, 1, 1), CompletedAt = null };
+
+        TimeSpan? result = task.TimeSpent;
+
+        Assert.That(result, Is.Null);
+    }
 }

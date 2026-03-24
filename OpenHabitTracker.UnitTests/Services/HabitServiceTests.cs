@@ -660,4 +660,196 @@ public class HabitServiceTests
 
         Assert.That(_clientState.Times, Is.Empty);
     }
+
+    // --- SetSelectedHabit tests ---
+
+    [Test]
+    public async Task SetSelectedHabit_WhenIdExists_SetsSelectedHabit()
+    {
+        HabitModel habit = TestData.Habit(id: 5);
+        habit.TimesDone = []; // already loaded — LoadTimesDone will skip DataAccess
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.SetSelectedHabit(5);
+
+        Assert.That(_sut.SelectedHabit, Is.SameAs(habit));
+    }
+
+    [Test]
+    public async Task SetSelectedHabit_WhenIdIsNull_ClearsSelectedHabit()
+    {
+        HabitModel habit = TestData.Habit(id: 5);
+        _clientState.Habits = TestData.HabitDict(habit);
+        _sut.SelectedHabit = habit;
+
+        await _sut.SetSelectedHabit(null);
+
+        Assert.That(_sut.SelectedHabit, Is.Null);
+    }
+
+    [Test]
+    public async Task SetSelectedHabit_WhenIdDoesNotExist_SetsSelectedHabitToNull()
+    {
+        _clientState.Habits = TestData.HabitDict(TestData.Habit(id: 1));
+
+        await _sut.SetSelectedHabit(99);
+
+        Assert.That(_sut.SelectedHabit, Is.Null);
+    }
+
+    [Test]
+    public async Task SetSelectedHabit_WhenHabitSelected_ClearsNewHabit()
+    {
+        HabitModel habit = TestData.Habit(id: 5);
+        habit.TimesDone = [];
+        _clientState.Habits = TestData.HabitDict(habit);
+        _sut.NewHabit = new HabitModel { Title = "draft" };
+
+        await _sut.SetSelectedHabit(5);
+
+        Assert.That(_sut.NewHabit, Is.Null);
+    }
+
+    // --- LoadAllTimesDone tests ---
+
+    [Test]
+    public async Task LoadAllTimesDone_DistributesTimesByHabitId()
+    {
+        HabitModel habit1 = TestData.Habit(id: 1);
+        HabitModel habit2 = TestData.Habit(id: 2);
+        _clientState.Habits = TestData.HabitDict(habit1, habit2);
+        _dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([
+            new TimeEntity { Id = 10, HabitId = 1, StartedAt = DateTime.Now, CompletedAt = DateTime.Now },
+            new TimeEntity { Id = 11, HabitId = 1, StartedAt = DateTime.Now, CompletedAt = DateTime.Now },
+            new TimeEntity { Id = 12, HabitId = 2, StartedAt = DateTime.Now, CompletedAt = DateTime.Now },
+        ]));
+
+        await _sut.LoadAllTimesDone();
+
+        Assert.That(habit1.TimesDone, Has.Count.EqualTo(2));
+        Assert.That(habit2.TimesDone, Has.Count.EqualTo(1));
+    }
+
+    [Test]
+    public async Task LoadAllTimesDone_SkipsHabitsAlreadyLoaded()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [new TimeModel { Id = 99, HabitId = 1 }]; // already loaded
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([
+            new TimeEntity { Id = 10, HabitId = 1, StartedAt = DateTime.Now, CompletedAt = DateTime.Now },
+        ]));
+
+        await _sut.LoadAllTimesDone();
+
+        Assert.That(habit.TimesDone, Has.Count.EqualTo(1));
+        Assert.That(habit.TimesDone[0].Id, Is.EqualTo(99));
+    }
+
+    [Test]
+    public async Task LoadAllTimesDone_WhenHabitHasNoTimes_SetsEmptyList()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([]));
+
+        await _sut.LoadAllTimesDone();
+
+        Assert.That(habit.TimesDone, Is.Not.Null);
+        Assert.That(habit.TimesDone, Is.Empty);
+    }
+
+    [Test]
+    public async Task LoadAllTimesDone_PopulatesClientStateTimes()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([
+            new TimeEntity { Id = 10, HabitId = 1, StartedAt = DateTime.Now, CompletedAt = DateTime.Now },
+        ]));
+
+        await _sut.LoadAllTimesDone();
+
+        Assert.That(_clientState.Times, Contains.Key(10L));
+    }
+
+    [Test]
+    public async Task LoadAllTimesDone_WhenHabitsIsNull_DoesNotCallDataAccess()
+    {
+        _clientState.Habits = null;
+
+        await _sut.LoadAllTimesDone();
+
+        await _dataAccess.DidNotReceive().GetTimes();
+    }
+
+    // --- AddHabit with category tests ---
+
+    [Test]
+    public async Task AddHabit_WithNonZeroCategoryId_AddsToCategory()
+    {
+        CategoryModel category = TestData.Category(id: 10);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.Habits = new();
+        _sut.NewHabit = new HabitModel { Title = "Health", CategoryId = 10 };
+
+        await _sut.AddHabit();
+
+        Assert.That(category.Habits, Has.Count.EqualTo(1));
+        Assert.That(category.Habits[0].Title, Is.EqualTo("Health"));
+    }
+
+    // --- MarkAsDone with UncheckAllItemsOnHabitDone=false ---
+
+    [Test]
+    public async Task MarkAsDone_WhenUncheckAllItemsOnHabitDoneDisabled_DoesNotUncheckItems()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        DateTime checkedAt = DateTime.Now.AddMinutes(-5);
+        ItemModel item = new() { Id = 5, DoneAt = checkedAt };
+        habit.Items = [item];
+        habit.TimesDone = [];
+        habit.TimesDoneByDay = new();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _clientState.Settings.UncheckAllItemsOnHabitDone = false;
+
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        await _sut.MarkAsDone(habit);
+
+        Assert.That(item.DoneAt, Is.EqualTo(checkedAt));
+    }
+
+    // --- AddTimeDone LastTimeDoneAt guard ---
+
+    [Test]
+    public async Task AddTimeDone_WhenDateTimeIsOlderThanLastTimeDoneAt_DoesNotUpdateLastTimeDoneAt()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        DateTime existing = new(2025, 6, 10);
+        DateTime older = new(2025, 6, 1);
+        habit.LastTimeDoneAt = existing;
+        habit.TimesDone = [];
+        habit.TimesDoneByDay = new();
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.AddTimeDone(habit, older);
+
+        Assert.That(habit.LastTimeDoneAt, Is.EqualTo(existing));
+    }
+
+    // --- UpdateHabit when entity not found ---
+
+    [Test]
+    public async Task UpdateHabit_WhenGetHabitReturnsNull_DoesNotCallUpdateHabit()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        _clientState.Habits = TestData.HabitDict(habit);
+        _sut.SelectedHabit = habit;
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(null));
+
+        await _sut.UpdateHabit();
+
+        await _dataAccess.DidNotReceive().UpdateHabit(Arg.Any<HabitEntity>());
+    }
 }

@@ -103,4 +103,37 @@ public class TaskTests : BaseTest
 
         await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "Trashed Task" })).ToBeVisibleAsync();
     }
+
+    [Test]
+    public async Task EditTask_ChangesTitle_NewTitleVisible()
+    {
+        await AddItemAsync("Edit Me");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Edit Me" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Page.Locator("input[aria-label='Task title']").FillAsync("Edited Task");
+        await Page.Locator("input[aria-label='Task title']").BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Page.Locator("[data-tasks-step-10]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Edited Task" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Edit Me" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
+    public async Task AddTask_PersistedAfterReload()
+    {
+        await AddItemAsync("Persistent Task");
+
+        await Page.ReloadAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
+
+        await NavigateToAsync("[data-main-step-4]");
+
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Persistent Task" })).ToBeVisibleAsync();
+    }
 }

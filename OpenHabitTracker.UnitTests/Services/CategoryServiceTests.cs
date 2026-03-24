@@ -51,6 +51,41 @@ public class CategoryServiceTests
         Assert.That(result, Is.EqualTo("99"));
     }
 
+    // --- SetSelectedCategory tests ---
+
+    [Test]
+    public void SetSelectedCategory_WhenIdExists_SetsSelectedCategory()
+    {
+        CategoryModel category = TestData.Category(id: 7, title: "Work");
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        _sut.SetSelectedCategory(7);
+
+        Assert.That(_sut.SelectedCategory, Is.SameAs(category));
+    }
+
+    [Test]
+    public void SetSelectedCategory_WhenIdIsNull_ClearsSelectedCategory()
+    {
+        CategoryModel category = TestData.Category(id: 7);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _sut.SelectedCategory = category;
+
+        _sut.SetSelectedCategory(null);
+
+        Assert.That(_sut.SelectedCategory, Is.Null);
+    }
+
+    [Test]
+    public void SetSelectedCategory_WhenIdDoesNotExist_SetsSelectedCategoryToNull()
+    {
+        _clientState.Categories = TestData.CategoryDict(TestData.Category(id: 1));
+
+        _sut.SetSelectedCategory(99);
+
+        Assert.That(_sut.SelectedCategory, Is.Null);
+    }
+
     // --- AddCategory tests ---
 
     [Test]
