@@ -56,7 +56,6 @@ public DataAccess:
 
     DataAccess is public on ClientState
         Services call _clientState.DataAccess directly for mutations (Add, Update, Remove)
-        without always updating the corresponding dict entry.
         This is an enforcement problem — the invariant cannot be violated if DataAccess is private.
 
     consider making DataAccess private
