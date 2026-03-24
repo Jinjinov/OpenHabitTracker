@@ -69,28 +69,15 @@ public class TrashService(ClientState clientState) : ITrashService
     {
         if (_clientState.TrashedHabits is not null)
             foreach (HabitModel model in _clientState.TrashedHabits.ToList())
-            {
-                model.IsDeleted = false;
-                await RestoreHabit(model.Id);
-            }
+                await Restore(model);
 
         if (_clientState.TrashedNotes is not null)
             foreach (NoteModel model in _clientState.TrashedNotes.ToList())
-            {
-                model.IsDeleted = false;
-                await RestoreNote(model.Id);
-            }
+                await Restore(model);
 
         if (_clientState.TrashedTasks is not null)
             foreach (TaskModel model in _clientState.TrashedTasks.ToList())
-            {
-                model.IsDeleted = false;
-                await RestoreTask(model.Id);
-            }
-
-        _clientState.TrashedHabits?.Clear();
-        _clientState.TrashedNotes?.Clear();
-        _clientState.TrashedTasks?.Clear();
+                await Restore(model);
     }
 
     public async Task Delete(HabitModel model)
