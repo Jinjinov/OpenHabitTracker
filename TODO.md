@@ -128,9 +128,7 @@ Dict sync fix: detailed problem description and plan
            without always updating the corresponding dict entry.
            This is an enforcement problem — the invariant cannot be violated if DataAccess is private.
 
-        B. (FIXED) Per-instance lazy loads / Add / Remove for Times and Items — dict sync gaps fixed.
-
-        C. CategoryModel.Notes/Tasks/Habits are never wired at runtime
+        B. CategoryModel.Notes/Tasks/Habits are never wired at runtime
            ClientState.LoadNotes/LoadTasks/LoadHabits never populate CategoryModel sub-lists
            Only GetUserData() does it, as a one-off for export
            → CategoryService.DeleteCategory() cascade is completely broken:
@@ -191,7 +189,7 @@ Dict sync fix: detailed problem description and plan
 
     PLAN:
 
-        Step 1 — wire CategoryModel sub-lists at runtime (fix C)
+        Step 1 — wire CategoryModel sub-lists at runtime (fix B)
             NOTE: CategoryModel now uses List<T> = new() (done) — no explicit initialization loop
                 needed in LoadCategories() or SetUserData(); all null checks/guards in
                 backup/import/service code have been removed.
