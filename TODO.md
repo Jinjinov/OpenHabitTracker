@@ -191,7 +191,7 @@ Dict sync fix: detailed problem description and plan
 
     PLAN:
 
-        Step 1 — wire CategoryModel sub-lists at runtime (fix D)
+        Step 1 — wire CategoryModel sub-lists at runtime (fix C)
             IMPORTANT: initialize all category sub-lists to empty new() in LoadCategories(),
                 after creating CategoryModel objects from the DB result:
                 foreach category in Categories.Values: category.Notes = new(); category.Tasks = new(); category.Habits = new();
