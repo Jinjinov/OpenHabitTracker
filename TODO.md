@@ -135,9 +135,11 @@ Dict sync fix: detailed problem description and plan
              it iterates category.Notes/Tasks/Habits to mark children IsDeleted,
              but those lists are always empty (not wired to items) → children are never marked deleted,
              silently left as live items in ClientState dicts with a dangling CategoryId
+
            WHY they were left null: populating them at runtime requires every mutation
            (AddNote, DeleteNote, RestoreNote, category change, etc.) to dual-write:
            update the flat dict AND update the category sub-list.
+
            WHY they SHOULD be populated: the mutations that need dual-write are a closed set
            (3 types × handful of operations, written once). The consumers are an open set —
            every future feature that works with categories (grouped view, CompletionRule,
@@ -202,6 +204,7 @@ Dict sync fix: detailed problem description and plan
             in ClientState.LoadTasks(): same for TaskModel → category.Tasks
             in ClientState.LoadHabits(): same for HabitModel → category.Habits
             this fixes DeleteCategory cascade — category.Notes/Tasks/Habits will be populated
+
             IMPORTANT: CategoryId == 0 guard is required everywhere in Step 1 and in all mutations.
             Items with CategoryId == 0 have no CategoryModel in the dict — TryGetValue, not indexer.
             also maintain sub-lists in every service mutation:
@@ -225,11 +228,13 @@ Dict sync fix: detailed problem description and plan
             objects (same instances in ClientState.Categories dict). Currently harmless because those
             lists are null at runtime. After Step 1 they won't be null — GetUserData() would overwrite
             the maintained runtime lists with export-format lists.
+
             Fix: in GetUserData(), do NOT assign to category.Notes/Tasks/Habits on runtime objects.
             Keep building the export hierarchy from the flat dicts (as currently done with
             notesByCategoryId, tasksByCategoryId, habitsByCategoryId) — this correctly includes
             deleted items in the export (full backup). Store results in local variables only,
             never assign back to the live CategoryModel instances.
+
             NOTE: runtime category sub-lists intentionally EXCLUDE deleted items (DeleteNote removes
             them from category.Notes). Export must include deleted items for full backup/restore.
             These are two different views of the data — do not conflate them.
@@ -239,6 +244,7 @@ Dict sync fix: detailed problem description and plan
             Fix: after SetUserData() adds models to the dicts, also wire them to their category
             sub-lists (same logic as Step 1 — for each imported note/task/habit, skip if IsDeleted,
             skip if CategoryId == 0, then add to category list).
+
             NOTE: exported data includes deleted items (full backup) — the IsDeleted skip is required
             here for the same reason as in Step 1: category sub-lists are the runtime view (active only).
             Also fix GetUserData() for Items (same pattern as existing Times fix):
@@ -246,6 +252,7 @@ Dict sync fix: detailed problem description and plan
             Do the same for Items:
                 Items = null;
                 await LoadItems();
+
             NOTE: LoadItems() already exists in ClientState.cs line 232 — same null-guard pattern as LoadTimes()
             without this, if Items was partially populated by lazy loads, GetUserData() would
             export incomplete item data
@@ -255,6 +262,7 @@ Dict sync fix: detailed problem description and plan
             long-term: make it private, add explicit ClientState methods for every operation
             services call ClientState methods → ClientState calls DataAccess + updates dict
             this enforces the invariant at compile time, not by convention
+            
             NOTE: this is the largest change — Steps 1-2 are safe to do first
 
         Order: Steps 1 and 2 have non-overlapping code changes,
