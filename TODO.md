@@ -68,7 +68,7 @@ ClientState dict sync:
             `DataAccess.AddTime(timeEntity);` / `DataAccess.UpdateTime(timeEntity);`
             the code does not update Items and Times in the ClientState
         so without temp fix, GetUserData() would return Items and Times that were loaded with Initialize()
-    NO!!! - either remove these from class ClientState: - NO!!!
+    either remove these from class ClientState: - NO!!!
         public Dictionary<long, TimeModel>? Times { get; set; }
         public Dictionary<long, ItemModel>? Items { get; set; }
     or
@@ -94,17 +94,17 @@ ClientState dict sync:
             make sure that every `DataAccess.Add` and `DataAccess.Update` and `DataAccess.Remove` also updates `Dictionary<long, Model>` in `ClientData`
             private `DataAccess` in `ClientData`
 
+this is a problem:
+    - services use `_dataAccess` on their own, but `ClientState` is supposed to represent the current state as the only source of truth
+    - but only `ClientState.GetUserData()` suffers from it and a `temp fix` is in place
+Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
+
 to remove `// TODO:: remove temp fix` and keep habit ratio in UI:
 call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
     save TotalTimeSpent
     save AverageInterval
     on Habit Initialize - load only last week (last X days, displayed in small calendar)
-    call LoadTimesDone for large calendar            
-
-this is a problem:
-    - services use `_dataAccess` on their own, but `ClientState` is supposed to represent the current state as the only source of truth
-    - but only `ClientState.GetUserData()` suffers from it and a `temp fix` is in place
-Ididit did not have this problem, `Repository` was the only class with `IDatabaseAccess` and represented the current state
+    call LoadTimesDone for large calendar
 
 new findings (discovered while planning Category-grouped main list):
     - CategoryModel.Notes/Tasks/Habits are never populated at runtime
