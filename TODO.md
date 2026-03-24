@@ -49,10 +49,10 @@ Architecture: Identity Map + Repository (what the ideal design should be)
     - wire sub-collections from flat dicts        CORRECT  in ClientData.GetHabits(), partial in ClientState.LoadHabits()
     - CRUD Add operations update dicts            CORRECT
     - DataAccess private to store                 MISSING  (exposed as public property, services use it directly)
-    - per-instance loads register into dicts      CORRECT  (fixed: LoadTimesDone, Initialize, Start, AddTimeDone, AddItem, RemoveTimeDone, DeleteItem)
+    - per-instance loads register into dicts      CORRECT  (LoadTimesDone, Initialize, Start, AddTimeDone, AddItem, RemoveTimeDone, DeleteItem)
     - CategoryModel sub-lists wired at runtime    MISSING  (only in GetUserData() for export)
 
-    Three violations, all surgical fixes — the architecture is sound, the invariant just isn't enforced consistently.
+    Two violations, all surgical fixes — the architecture is sound, the invariant just isn't enforced consistently.
 
 ---------------------------------------------------------------------------------------------------
 
