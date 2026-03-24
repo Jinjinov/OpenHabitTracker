@@ -111,7 +111,7 @@ new findings (discovered while planning Category-grouped main list):
       only populated in GetUserData() as a one-off for export
     - CategoryService.DeleteCategory() cascade is completely broken:
       iterates category.Notes/Tasks/Habits to mark children IsDeleted=true,
-      but those lists are always null at runtime — children are never marked deleted,
+      but those lists are always empty at runtime (not wired to items) — children are never marked deleted,
       silently left in ClientState.Notes/Tasks/Habits as live items with a dangling CategoryId
 
 ---------------------------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ Dict sync fix: detailed problem description and plan
            Only GetUserData() does it, as a one-off for export
            → CategoryService.DeleteCategory() cascade is completely broken:
              it iterates category.Notes/Tasks/Habits to mark children IsDeleted,
-             but those lists are always null → children are never marked deleted,
+             but those lists are always empty (not wired to items) → children are never marked deleted,
              silently left as live items in ClientState dicts with a dangling CategoryId
            WHY they were left null: populating them at runtime requires every mutation
            (AddNote, DeleteNote, RestoreNote, category change, etc.) to dual-write:
@@ -192,16 +192,9 @@ Dict sync fix: detailed problem description and plan
     PLAN:
 
         Step 1 — wire CategoryModel sub-lists at runtime (fix C)
-            IMPORTANT: initialize all category sub-lists to empty new() in LoadCategories(),
-                after creating CategoryModel objects from the DB result:
-                foreach category in Categories.Values: category.Notes = new(); category.Tasks = new(); category.Habits = new();
-                place in LoadCategories() because all three Load methods call LoadCategories() first —
-                the lists are guaranteed initialized before any per-item wiring loop runs.
-                this handles first use of the app (DB empty) — without this, category.Notes/Tasks/Habits
-                would stay null for categories that have no items, causing null ref in grouped view
-            OPTIONALLY: instead of the initialization loop above, change CategoryModel to use List<T> = new()
-                instead of List<T>? — all null checks/guards in backup/import/service code would then
-                become unnecessary and could be removed
+            NOTE: CategoryModel now uses List<T> = new() (done) — no explicit initialization loop
+                needed in LoadCategories() or SetUserData(); all null checks/guards in
+                backup/import/service code have been removed.
             in ClientState.LoadNotes(): after loading, for each NoteModel,
                 use TryGetValue — skip if CategoryId == 0 (uncategorized, no CategoryModel in dict)
                 skip if IsDeleted — deleted items belong only in the flat dict (for trash view),
@@ -250,13 +243,6 @@ Dict sync fix: detailed problem description and plan
             skip if CategoryId == 0, then add to category list).
             NOTE: exported data includes deleted items (full backup) — the IsDeleted skip is required
             here for the same reason as in Step 1: category sub-lists are the runtime view (active only).
-            IMPORTANT: before the wiring loop, initialize category sub-lists the same way as in
-            LoadCategories(): foreach category in Categories.Values: category.Notes = new(); category.Tasks = new(); category.Habits = new();
-            SetUserData() does NOT call LoadCategories() — it builds dicts directly from imported data,
-            so the initialization loop from LoadCategories() does NOT run. Without this, category sub-lists
-            would be null and the wiring loop would crash on category.Notes.Add(note).
-            If the OPTIONALLY (List<T> = new() in CategoryModel) is chosen, this initialization is unnecessary.
-
             Also fix GetUserData() for Items (same pattern as existing Times fix):
             GetUserData() nulls Times before LoadTimes() to force full reload for export.
             Do the same for Items:
