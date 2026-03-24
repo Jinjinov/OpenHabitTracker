@@ -120,8 +120,6 @@ Dict sync fix: detailed problem description and plan
            without always updating the corresponding dict entry.
            This is an enforcement problem — the invariant cannot be violated if DataAccess is private.
 
-        B. CategoryModel.Notes/Tasks/Habits were never wired at runtime — FIXED (Steps 1 and 2)
-
     LAZY LOADING IS KEPT:
         Per-instance lazy loads in services stay exactly as they are — triggered by user interaction,
         loading only what is needed. Loaded objects are registered in the dict.
@@ -154,27 +152,12 @@ Dict sync fix: detailed problem description and plan
 
     PLAN:
 
-        Step 1 — wire CategoryModel sub-lists at runtime (fix B) — DONE
-            LoadNotes/LoadTasks/LoadHabits wire items to category sub-lists after loading.
-            Add mutations (AddNote/AddTask/AddHabit) maintain sub-lists on creation.
-            ICategoryService.ChangeCategory() handles category changes (removes from old, adds to new).
-            DeleteCategory() iterates populated sub-lists and adds non-deleted children to TrashedXxx.
-            SetUserData() wires imported models to category sub-lists after flat dict population.
-
-        Step 2 — fix SetUserData() wiring and GetUserData() Items — DONE
-            SetUserData() now wires imported models to category sub-lists after flat dict population.
-            GetUserData() now nulls Items before LoadItems() (same pattern as Times).
-
-        Step 3 — consider making DataAccess private (fix A, long-term)
+        Step 1 — consider making DataAccess private (fix A, long-term)
             DataAccess is currently public on ClientState so services can reach it directly
             long-term: make it private, add explicit ClientState methods for every operation
             services call ClientState methods → ClientState calls DataAccess + updates dict
             this enforces the invariant at compile time, not by convention
             
-            NOTE: this is the largest change — Steps 1-2 are safe to do first
-
-        Order: Steps 1 and 2 done. Step 3 is a larger refactor, do separately after 1 and 2 are verified in production.
-
 ---------------------------------------------------------------------------------------------------
 
 1, 2, 3 must be done at the same time so there is one new DB migration, not three
