@@ -224,13 +224,6 @@ if (Habits is null)
 
 Times and Items are lazy-loaded per parent (not all at once) because the Times table can grow large (180K+ records in long-running instances).
 
-### Known bugs in state/services
-
-1. **Orphaned Times objects** — HabitService.LoadTimesDone() loads objects not stored in the Times dict
-2. **CategoryModel null sub-lists** — Notes/Tasks/Habits only wired in GetUserData() export path, not during normal load
-3. **Broken DeleteCategory cascade** — does not delete related habits/tasks/notes
-4. **DataAccess is public** — should be private; services currently access it directly (violates Identity Map pattern)
-
 ---
 
 ## Dependency injection wiring
@@ -370,5 +363,3 @@ After login at http://localhost:5000/login:
 
 - Never use `var` — always explicit type
 - Use target-typed `new()`: `List<string> items = new();`
-- Check for existing methods before writing new ones
-- Never make code changes without explaining what and why first, then waiting for confirmation
