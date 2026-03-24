@@ -197,56 +197,36 @@ Dict sync fix: detailed problem description and plan
                 backup/import/service code have been removed.
             in ClientState.LoadNotes(): after loading, for each NoteModel,
                 use TryGetValue — skip if CategoryId == 0 (uncategorized, no CategoryModel in dict)
-                skip if IsDeleted — deleted items belong only in the flat dict (for trash view),
-                    NOT in category sub-lists (runtime view = active items only)
-                    export gets deleted items from the flat dicts directly (see Step 2), not from sub-lists
-                add it to category.Notes
+                add it to category.Notes (include deleted items — FilterNotes excludes them for display)
             in ClientState.LoadTasks(): same for TaskModel → category.Tasks
             in ClientState.LoadHabits(): same for HabitModel → category.Habits
             this fixes DeleteCategory cascade — category.Notes/Tasks/Habits will be populated
 
             IMPORTANT: CategoryId == 0 guard is required everywhere in Step 1 and in all mutations.
             Items with CategoryId == 0 have no CategoryModel in the dict — TryGetValue, not indexer.
-            also maintain sub-lists in every service mutation:
+            also maintain sub-lists in every service mutation (Add only — Delete/Restore leave item in
+            sub-list with IsDeleted flag; FilterNotes/FilterTasks/FilterHabits handle display exclusion):
                 NoteService.AddNote()       → category.Notes.Add(note)
-                NoteService.DeleteNote()    → category.Notes.Remove(note)
-                TrashService.Restore(NoteModel)  → category.Notes.Add(note)
                 TaskService.AddTask()       → category.Tasks.Add(task)
-                TaskService.DeleteTask()    → category.Tasks.Remove(task)
-                TrashService.Restore(TaskModel)  → category.Tasks.Add(task)
                 HabitService.AddHabit()     → category.Habits.Add(habit)
-                HabitService.DeleteHabit()  → category.Habits.Remove(habit)
-                TrashService.Restore(HabitModel) → category.Habits.Add(habit)
                 category change (any type)  → remove from old category list, add to new
             CategoryService.DeleteCategory() cascade — after Step 1, category.Notes/Tasks/Habits are
             populated, so DeleteCategory will iterate them correctly. But it must also remove each child
             from the flat ClientState dicts (ClientState.Notes, ClientState.Tasks, ClientState.Habits),
             not just mark IsDeleted on the model.
 
-        Step 2 — fix GetUserData() and SetUserData() for category sub-lists
-            GetUserData() assigns category.Notes/Tasks/Habits directly on live runtime CategoryModel
-            objects (same instances in ClientState.Categories dict). Currently harmless because those
-            lists are null at runtime. After Step 1 they won't be null — GetUserData() would overwrite
-            the maintained runtime lists with export-format lists.
-
-            Fix: in GetUserData(), do NOT assign to category.Notes/Tasks/Habits on runtime objects.
-            Keep building the export hierarchy from the flat dicts (as currently done with
-            notesByCategoryId, tasksByCategoryId, habitsByCategoryId) — this correctly includes
-            deleted items in the export (full backup). Store results in local variables only,
-            never assign back to the live CategoryModel instances.
-
-            NOTE: runtime category sub-lists intentionally EXCLUDE deleted items (DeleteNote removes
-            them from category.Notes). Export must include deleted items for full backup/restore.
-            These are two different views of the data — do not conflate them.
+        Step 2 — fix SetUserData() wiring and GetUserData() Items
+            GetUserData() assigns category.Notes/Tasks/Habits on live CategoryModel objects from flat
+            dicts (including deleted). After Step 1 sub-lists are also populated with all items
+            (including deleted) — so GetUserData() overwrites them with equivalent content (same model
+            instances, new list objects). This is harmless: no fix needed in GetUserData() for sub-lists.
 
             SetUserData() adds models to flat dicts but never wires them to category sub-lists.
-            After an import, the flat dicts are correct but category sub-lists would be stale.
+            After an import, the flat dicts are correct but category sub-lists would be empty.
             Fix: after SetUserData() adds models to the dicts, also wire them to their category
-            sub-lists (same logic as Step 1 — for each imported note/task/habit, skip if IsDeleted,
-            skip if CategoryId == 0, then add to category list).
+            sub-lists (same logic as Step 1 — for each imported note/task/habit, skip if CategoryId == 0,
+            then add to category list; include deleted items, same as runtime sub-lists).
 
-            NOTE: exported data includes deleted items (full backup) — the IsDeleted skip is required
-            here for the same reason as in Step 1: category sub-lists are the runtime view (active only).
             Also fix GetUserData() for Items (same pattern as existing Times fix):
             GetUserData() nulls Times before LoadTimes() to force full reload for export.
             Do the same for Items:
@@ -265,10 +245,7 @@ Dict sync fix: detailed problem description and plan
             
             NOTE: this is the largest change — Steps 1-2 are safe to do first
 
-        Order: Steps 1 and 2 have non-overlapping code changes,
-               but Step 2 MUST be deployed together with Step 1 — Step 2's GetUserData fix exists
-               because of Step 1: once Step 1 wires category sub-lists at runtime, GetUserData()
-               would overwrite them on the next export if Step 2 is not in place.
+        Order: Steps 1 and 2 have non-overlapping code changes and can be deployed together.
                Step 3 is a larger refactor, do separately after 1 and 2 are verified.
 
 ---------------------------------------------------------------------------------------------------
