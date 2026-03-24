@@ -97,18 +97,21 @@ public class TrashService(ClientState clientState) : ITrashService
     {
         await DeleteHabit(model.Id);
         _clientState.TrashedHabits?.Remove(model);
+        _clientState.Habits?.Remove(model.Id);
     }
 
     public async Task Delete(NoteModel model)
     {
         await DeleteNote(model.Id);
         _clientState.TrashedNotes?.Remove(model);
+        _clientState.Notes?.Remove(model.Id);
     }
 
     public async Task Delete(TaskModel model)
     {
         await DeleteTask(model.Id);
         _clientState.TrashedTasks?.Remove(model);
+        _clientState.Tasks?.Remove(model.Id);
     }
 
     private async Task DeleteHabit(long id)
@@ -128,9 +131,26 @@ public class TrashService(ClientState clientState) : ITrashService
 
     public async Task EmptyTrash()
     {
-        await _clientState.DataAccess.RemoveHabits();
-        await _clientState.DataAccess.RemoveNotes();
-        await _clientState.DataAccess.RemoveTasks();
+        if (_clientState.TrashedHabits is not null)
+            foreach (HabitModel model in _clientState.TrashedHabits.ToList())
+            {
+                await _clientState.DataAccess.RemoveHabit(model.Id);
+                _clientState.Habits?.Remove(model.Id);
+            }
+
+        if (_clientState.TrashedNotes is not null)
+            foreach (NoteModel model in _clientState.TrashedNotes.ToList())
+            {
+                await _clientState.DataAccess.RemoveNote(model.Id);
+                _clientState.Notes?.Remove(model.Id);
+            }
+
+        if (_clientState.TrashedTasks is not null)
+            foreach (TaskModel model in _clientState.TrashedTasks.ToList())
+            {
+                await _clientState.DataAccess.RemoveTask(model.Id);
+                _clientState.Tasks?.Remove(model.Id);
+            }
 
         _clientState.TrashedHabits?.Clear();
         _clientState.TrashedNotes?.Clear();

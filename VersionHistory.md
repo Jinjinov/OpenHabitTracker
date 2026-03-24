@@ -1,3 +1,7 @@
+# 1.1.8
+
+- fixed Empty trash
+
 # 1.1.7 - Mar 21, 2026
 
 - added weekly recap / stats for notes, tasks, habits
