@@ -63,6 +63,9 @@ public class NoteService(ClientState clientState, ISearchFilterService searchFil
 
         _clientState.Notes.Add(NewNote.Id, NewNote);
 
+        if (NewNote.CategoryId != 0 && _clientState.Categories?.TryGetValue(NewNote.CategoryId, out CategoryModel? noteCategory) == true)
+            noteCategory.Notes.Add(NewNote);
+
         NewNote = null;
     }
 

@@ -189,48 +189,134 @@ public class CategoryServiceTests
         await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
     }
 
-    // --- DeleteCategory bug tests (KNOWN BUG: these tests currently FAIL) ---
-    // The real runtime state has category.Notes/Tasks/Habits == [] (empty — not yet wired to clientState items).
-    // DeleteCategory iterates those lists to cascade IsDeleted, so the cascade silently does nothing at runtime.
-    // Children remain in ClientState dicts as live items with a dangling CategoryId.
-    // These tests document the expected behavior and will pass once Step 1 (wiring) is done.
+    // --- DeleteCategory TrashedXxx tests ---
 
     [Test]
-    public async Task DeleteCategory_WithEmptyNotesList_MarksNotesInClientStateAsDeleted()
+    public async Task DeleteCategory_AddsNonDeletedNotes_ToTrashedNotes()
     {
         NoteModel note = TestData.Note(id: 1, categoryId: 10);
-        _clientState.Notes = TestData.NoteDict(note);
-        CategoryModel category = TestData.Category(id: 10); // Notes = [] (empty, not yet wired to clientState)
+        CategoryModel category = TestData.Category(id: 10, notes: [note]);
         _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.TrashedNotes = new();
+        _dataAccess.GetNote(note.Id).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = note.Id }));
 
         await _sut.DeleteCategory(category);
 
-        Assert.That(note.IsDeleted, Is.True);
+        Assert.That(_clientState.TrashedNotes, Contains.Item(note));
     }
 
     [Test]
-    public async Task DeleteCategory_WithEmptyTasksList_MarksTasksInClientStateAsDeleted()
+    public async Task DeleteCategory_DoesNotAddAlreadyDeletedNotes_ToTrashedNotes()
+    {
+        NoteModel note = TestData.Note(id: 1, categoryId: 10, isDeleted: true);
+        CategoryModel category = TestData.Category(id: 10, notes: [note]);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.TrashedNotes = new();
+        _dataAccess.GetNote(note.Id).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = note.Id }));
+
+        await _sut.DeleteCategory(category);
+
+        Assert.That(_clientState.TrashedNotes, Is.Empty);
+    }
+
+    [Test]
+    public async Task DeleteCategory_AddsNonDeletedTasks_ToTrashedTasks()
     {
         TaskModel task = TestData.Task(id: 1, categoryId: 10);
-        _clientState.Tasks = TestData.TaskDict(task);
-        CategoryModel category = TestData.Category(id: 10); // Tasks = [] (empty, not yet wired to clientState)
+        CategoryModel category = TestData.Category(id: 10, tasks: [task]);
         _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.TrashedTasks = new();
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
 
         await _sut.DeleteCategory(category);
 
-        Assert.That(task.IsDeleted, Is.True);
+        Assert.That(_clientState.TrashedTasks, Contains.Item(task));
     }
 
     [Test]
-    public async Task DeleteCategory_WithEmptyHabitsList_MarksHabitsInClientStateAsDeleted()
+    public async Task DeleteCategory_AddsNonDeletedHabits_ToTrashedHabits()
     {
         HabitModel habit = TestData.Habit(id: 1, categoryId: 10);
-        _clientState.Habits = TestData.HabitDict(habit);
-        CategoryModel category = TestData.Category(id: 10); // Habits = [] (empty, not yet wired to clientState)
+        CategoryModel category = TestData.Category(id: 10, habits: [habit]);
         _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.TrashedHabits = new();
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
 
         await _sut.DeleteCategory(category);
 
-        Assert.That(habit.IsDeleted, Is.True);
+        Assert.That(_clientState.TrashedHabits, Contains.Item(habit));
+    }
+
+    // --- ChangeCategory tests ---
+
+    [Test]
+    public void ChangeCategory_MovesNote_BetweenCategorySubLists()
+    {
+        NoteModel note = TestData.Note(id: 1, categoryId: 10);
+        CategoryModel oldCategory = TestData.Category(id: 10, notes: [note]);
+        CategoryModel newCategory = TestData.Category(id: 20);
+        _clientState.Categories = TestData.CategoryDict(oldCategory, newCategory);
+
+        _sut.ChangeCategory(note, 20);
+
+        Assert.That(oldCategory.Notes, Does.Not.Contain(note));
+        Assert.That(newCategory.Notes, Contains.Item(note));
+        Assert.That(note.CategoryId, Is.EqualTo(20L));
+    }
+
+    [Test]
+    public void ChangeCategory_MovesTask_BetweenCategorySubLists()
+    {
+        TaskModel task = TestData.Task(id: 1, categoryId: 10);
+        CategoryModel oldCategory = TestData.Category(id: 10, tasks: [task]);
+        CategoryModel newCategory = TestData.Category(id: 20);
+        _clientState.Categories = TestData.CategoryDict(oldCategory, newCategory);
+
+        _sut.ChangeCategory(task, 20);
+
+        Assert.That(oldCategory.Tasks, Does.Not.Contain(task));
+        Assert.That(newCategory.Tasks, Contains.Item(task));
+        Assert.That(task.CategoryId, Is.EqualTo(20L));
+    }
+
+    [Test]
+    public void ChangeCategory_MovesHabit_BetweenCategorySubLists()
+    {
+        HabitModel habit = TestData.Habit(id: 1, categoryId: 10);
+        CategoryModel oldCategory = TestData.Category(id: 10, habits: [habit]);
+        CategoryModel newCategory = TestData.Category(id: 20);
+        _clientState.Categories = TestData.CategoryDict(oldCategory, newCategory);
+
+        _sut.ChangeCategory(habit, 20);
+
+        Assert.That(oldCategory.Habits, Does.Not.Contain(habit));
+        Assert.That(newCategory.Habits, Contains.Item(habit));
+        Assert.That(habit.CategoryId, Is.EqualTo(20L));
+    }
+
+    [Test]
+    public void ChangeCategory_FromUncategorized_AddsToNewCategory()
+    {
+        NoteModel note = TestData.Note(id: 1, categoryId: 0);
+        CategoryModel newCategory = TestData.Category(id: 20);
+        _clientState.Categories = TestData.CategoryDict(newCategory);
+
+        _sut.ChangeCategory(note, 20);
+
+        Assert.That(newCategory.Notes, Contains.Item(note));
+        Assert.That(note.CategoryId, Is.EqualTo(20L));
+    }
+
+    [Test]
+    public void ChangeCategory_ToUncategorized_RemovesFromOldCategory()
+    {
+        NoteModel note = TestData.Note(id: 1, categoryId: 10);
+        CategoryModel oldCategory = TestData.Category(id: 10, notes: [note]);
+        _clientState.Categories = TestData.CategoryDict(oldCategory);
+
+        _sut.ChangeCategory(note, 0);
+
+        Assert.That(oldCategory.Notes, Does.Not.Contain(note));
+        Assert.That(note.CategoryId, Is.EqualTo(0L));
     }
 }

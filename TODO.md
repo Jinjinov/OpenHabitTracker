@@ -46,13 +46,13 @@ Architecture: Identity Map + Repository (what the ideal design should be)
     - identity map dicts                          CORRECT  (ClientData)
     - per-DataLocation isolation                  CORRECT  (_clientDataByLocation)
     - bulk lazy load with null guards             CORRECT  (if (X is null) pattern)
-    - wire sub-collections from flat dicts        CORRECT  in ClientData.GetHabits(), partial in ClientState.LoadHabits()
+    - wire sub-collections from flat dicts        CORRECT  (ClientData.GetHabits(), ClientState.LoadNotes/LoadTasks/LoadHabits)
     - CRUD Add operations update dicts            CORRECT
     - DataAccess private to store                 MISSING  (exposed as public property, services use it directly)
     - per-instance loads register into dicts      CORRECT  (LoadTimesDone, Initialize, Start, AddTimeDone, AddItem, RemoveTimeDone, DeleteItem)
-    - CategoryModel sub-lists wired at runtime    MISSING  (only in GetUserData() for export)
+    - CategoryModel sub-lists wired at runtime    CORRECT  (LoadNotes/LoadTasks/LoadHabits + Add mutations + ChangeCategory)
 
-    Two violations, all surgical fixes — the architecture is sound, the invariant just isn't enforced consistently.
+    One violation remaining — the architecture is sound, the invariant just isn't enforced consistently.
 
 ---------------------------------------------------------------------------------------------------
 
@@ -106,14 +106,6 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
     on Habit Initialize - load only last week (last X days, displayed in small calendar)
     call LoadTimesDone for large calendar
 
-new findings (discovered while planning Category-grouped main list):
-    - CategoryModel.Notes/Tasks/Habits are never populated at runtime
-      only populated in GetUserData() as a one-off for export
-    - CategoryService.DeleteCategory() cascade is completely broken:
-      iterates category.Notes/Tasks/Habits to mark children IsDeleted=true,
-      but those lists are always empty at runtime (not wired to items) — children are never marked deleted,
-      silently left in ClientState.Notes/Tasks/Habits as live items with a dangling CategoryId
-
 ---------------------------------------------------------------------------------------------------
 
 Dict sync fix: detailed problem description and plan
@@ -128,32 +120,11 @@ Dict sync fix: detailed problem description and plan
            without always updating the corresponding dict entry.
            This is an enforcement problem — the invariant cannot be violated if DataAccess is private.
 
-        B. CategoryModel.Notes/Tasks/Habits are never wired at runtime
-           ClientState.LoadNotes/LoadTasks/LoadHabits never populate CategoryModel sub-lists
-           Only GetUserData() does it, as a one-off for export
-           → CategoryService.DeleteCategory() cascade is completely broken:
-             it iterates category.Notes/Tasks/Habits to mark children IsDeleted,
-             but those lists are always empty (not wired to items) → children are never marked deleted,
-             silently left as live items in ClientState dicts with a dangling CategoryId
-
-           WHY they were left null: populating them at runtime requires every mutation
-           (AddNote, DeleteNote, RestoreNote, category change, etc.) to dual-write:
-           update the flat dict AND update the category sub-list.
-
-           WHY they SHOULD be populated: the mutations that need dual-write are a closed set
-           (3 types × handful of operations, written once). The consumers are an open set —
-           every future feature that works with categories (grouped view, CompletionRule,
-           LastTimeDone, stats, cascade delete) gets correct grouped data for free.
-
-           Option B - (query flat dicts by CategoryId in every consumer) - REJECTED
-           scatters the same filtering logic across every consumer and makes DeleteCategory depend on ClientState.
-
-           DECISION:
-           Option A - populate CategoryModel.Notes/Tasks/Habits at runtime and maintain them in every service mutation.
+        B. CategoryModel.Notes/Tasks/Habits were never wired at runtime — FIXED (Steps 1 and 2)
 
     LAZY LOADING IS KEPT:
         Per-instance lazy loads in services stay exactly as they are — triggered by user interaction,
-        loading only what is needed. Loaded objects are registered in the dict (fixed in B).
+        loading only what is needed. Loaded objects are registered in the dict.
 
         WHY Times lazy loading is critical:
         In Ididit (predecessor app), all TimesDone were loaded upfront. After 5 years of daily use
@@ -163,7 +134,7 @@ Dict sync fix: detailed problem description and plan
 
         The temp fix in LoadHabits() calls LoadTimes() (bulk load of ALL times) — this is the WRONG
         direction and reintroduces the exact performance problem lazy loading was meant to solve.
-        However, removing it is NOT part of Steps 1-3. It is a separate, larger task (see below)
+        However, removing it is NOT part of Steps 1-2 (done) or Step 3. It is a separate, larger task (see below)
         because the habit list UI depends on AverageInterval and TotalTimeSpent being computed
         from TimesDone — without them the ratio badges show division-by-zero results.
 
@@ -179,66 +150,20 @@ Dict sync fix: detailed problem description and plan
             - then remove LoadTimes() and the TimesDone wiring from LoadHabits() (remove temp fix)
             - load only last N days of Times at startup for the small calendar display
             - load full Times per-habit on selection for the large calendar
-            This requires a DB migration and is tracked separately from Steps 1-3.
-
-            CAUTION — misleading comment in source code:
-            ClientState.GetUserData() has `Times = null; // TODO:: remove temp fix` at the line
-            that nulls Times before LoadTimes(). That line must NOT be removed — nulling Times
-            before LoadTimes() is correct export behavior (forces full reload so partially-lazy-loaded
-            Times don't produce an incomplete export). Only the temp fix lines inside LoadHabits()
-            should be removed. The same pattern applies to Items: GetUserData() should also null Items
-            before LoadItems() (currently missing — see Step 2).
+            This requires a DB migration and is tracked separately.
 
     PLAN:
 
-        Step 1 — wire CategoryModel sub-lists at runtime (fix B)
-            NOTE: CategoryModel now uses List<T> = new() (done) — no explicit initialization loop
-                needed in LoadCategories() or SetUserData(); all null checks/guards in
-                backup/import/service code have been removed.
-            in ClientState.LoadNotes(): after loading, for each NoteModel,
-                use TryGetValue — skip if CategoryId == 0 (uncategorized, no CategoryModel in dict)
-                add it to category.Notes (include deleted items — FilterNotes excludes them for display)
-            in ClientState.LoadTasks(): same for TaskModel → category.Tasks
-            in ClientState.LoadHabits(): same for HabitModel → category.Habits
-            this fixes DeleteCategory cascade — category.Notes/Tasks/Habits will be populated
+        Step 1 — wire CategoryModel sub-lists at runtime (fix B) — DONE
+            LoadNotes/LoadTasks/LoadHabits wire items to category sub-lists after loading.
+            Add mutations (AddNote/AddTask/AddHabit) maintain sub-lists on creation.
+            ICategoryService.ChangeCategory() handles category changes (removes from old, adds to new).
+            DeleteCategory() iterates populated sub-lists and adds non-deleted children to TrashedXxx.
+            SetUserData() wires imported models to category sub-lists after flat dict population.
 
-            IMPORTANT: CategoryId == 0 guard is required everywhere in Step 1 and in all mutations.
-            Items with CategoryId == 0 have no CategoryModel in the dict — TryGetValue, not indexer.
-            also maintain sub-lists in every service mutation (Add only — Delete/Restore leave item in
-            sub-list with IsDeleted flag; FilterNotes/FilterTasks/FilterHabits handle display exclusion):
-                NoteService.AddNote()       → category.Notes.Add(note)
-                TaskService.AddTask()       → category.Tasks.Add(task)
-                HabitService.AddHabit()     → category.Habits.Add(habit)
-                category change (any type)  → ICategoryService.ChangeCategory(ContentModel, long newCategoryId)
-                    implemented in CategoryService; called from CategoryComponent.SaveCategory
-                    remove model from oldCategory sub-list, set model.CategoryId, add to newCategory sub-list
-                    CategoryComponent already depends on ICategoryService — no new dependency needed
-            CategoryService.DeleteCategory() cascade — after Step 1, category.Notes/Tasks/Habits are
-            populated, so DeleteCategory will iterate them correctly. But it must also add non-deleted
-            children to TrashedNotes/TrashedTasks/TrashedHabits (same pattern as DeleteNote/DeleteTask/
-            DeleteHabit), not just mark IsDeleted on the model.
-
-        Step 2 — fix SetUserData() wiring and GetUserData() Items
-            GetUserData() assigns category.Notes/Tasks/Habits on live CategoryModel objects from flat
-            dicts (including deleted). After Step 1 sub-lists are also populated with all items
-            (including deleted) — so GetUserData() overwrites them with equivalent content (same model
-            instances, new list objects). This is harmless: no fix needed in GetUserData() for sub-lists.
-
-            SetUserData() adds models to flat dicts but never wires them to category sub-lists.
-            After an import, the flat dicts are correct but category sub-lists would be empty.
-            Fix: after SetUserData() adds models to the dicts, also wire them to their category
-            sub-lists (same logic as Step 1 — for each imported note/task/habit, skip if CategoryId == 0,
-            then add to category list; include deleted items, same as runtime sub-lists).
-
-            Also fix GetUserData() for Items (same pattern as existing Times fix):
-            GetUserData() nulls Times before LoadTimes() to force full reload for export.
-            Do the same for Items:
-                Items = null;
-                await LoadItems();
-
-            NOTE: LoadItems() already exists in ClientState.cs line 232 — same null-guard pattern as LoadTimes()
-            without this, if Items was partially populated by lazy loads, GetUserData() would
-            export incomplete item data
+        Step 2 — fix SetUserData() wiring and GetUserData() Items — DONE
+            SetUserData() now wires imported models to category sub-lists after flat dict population.
+            GetUserData() now nulls Items before LoadItems() (same pattern as Times).
 
         Step 3 — consider making DataAccess private (fix A, long-term)
             DataAccess is currently public on ClientState so services can reach it directly
@@ -248,8 +173,7 @@ Dict sync fix: detailed problem description and plan
             
             NOTE: this is the largest change — Steps 1-2 are safe to do first
 
-        Order: Steps 1 and 2 have non-overlapping code changes and can be deployed together.
-               Step 3 is a larger refactor, do separately after 1 and 2 are verified.
+        Order: Steps 1 and 2 done. Step 3 is a larger refactor, do separately after 1 and 2 are verified in production.
 
 ---------------------------------------------------------------------------------------------------
 

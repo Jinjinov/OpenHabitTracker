@@ -60,6 +60,9 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
         _clientState.Tasks.Add(NewTask.Id, NewTask);
 
+        if (NewTask.CategoryId != 0 && _clientState.Categories?.TryGetValue(NewTask.CategoryId, out CategoryModel? taskCategory) == true)
+            taskCategory.Tasks.Add(NewTask);
+
         NewTask = null;
     }
 
