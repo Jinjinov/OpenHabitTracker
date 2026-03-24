@@ -199,7 +199,7 @@ Dict sync fix: detailed problem description and plan
                 the lists are guaranteed initialized before any per-item wiring loop runs.
                 this handles first use of the app (DB empty) — without this, category.Notes/Tasks/Habits
                 would stay null for categories that have no items, causing null ref in grouped view
-            ALTERNATIVE: instead of the initialization loop above, change CategoryModel to use List<T> = new()
+            OPTIONALLY: instead of the initialization loop above, change CategoryModel to use List<T> = new()
                 instead of List<T>? — all null checks/guards in backup/import/service code would then
                 become unnecessary and could be removed
             in ClientState.LoadNotes(): after loading, for each NoteModel,
@@ -255,7 +255,7 @@ Dict sync fix: detailed problem description and plan
             SetUserData() does NOT call LoadCategories() — it builds dicts directly from imported data,
             so the initialization loop from LoadCategories() does NOT run. Without this, category sub-lists
             would be null and the wiring loop would crash on category.Notes.Add(note).
-            If the ALTERNATIVE (List<T> = new() in CategoryModel) is chosen, this initialization is unnecessary.
+            If the OPTIONALLY (List<T> = new() in CategoryModel) is chosen, this initialization is unnecessary.
 
             Also fix GetUserData() for Items (same pattern as existing Times fix):
             GetUserData() nulls Times before LoadTimes() to force full reload for export.
