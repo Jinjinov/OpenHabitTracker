@@ -28,7 +28,7 @@ internal static class TestData
 
     internal static CategoryModel Category(long id = 1, string title = "Test",
         List<NoteModel>? notes = null, List<TaskModel>? tasks = null, List<HabitModel>? habits = null) =>
-        new() { Id = id, Title = title, Notes = notes, Tasks = tasks, Habits = habits };
+        new() { Id = id, Title = title, Notes = notes ?? new(), Tasks = tasks ?? new(), Habits = habits ?? new() };
 
     internal static Dictionary<long, CategoryModel> CategoryDict(params CategoryModel[] categories) =>
         categories.ToDictionary(c => c.Id);

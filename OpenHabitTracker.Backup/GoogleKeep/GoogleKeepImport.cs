@@ -80,10 +80,6 @@ public class GoogleKeepImport(ClientState clientState)
                 userData.Categories.Add(category);
             }
 
-            category.Notes ??= [];
-            category.Tasks ??= [];
-            category.Habits ??= [];
-
             if (googleKeepNote.ListContent.Count == 0)
             {
                 note = new()

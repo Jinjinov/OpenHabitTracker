@@ -20,55 +20,46 @@ public class MarkdownImportExport(ClientState clientState)
             stringBuilder.AppendLine($"# {category.Title}");
             stringBuilder.AppendLine();
 
-            if (category.Notes is not null)
+            foreach (NoteModel note in category.Notes)
             {
-                foreach (NoteModel note in category.Notes)
-                {
-                    stringBuilder.AppendLine($"## {note.Title}");
-                    stringBuilder.AppendLine();
+                stringBuilder.AppendLine($"## {note.Title}");
+                stringBuilder.AppendLine();
 
-                    stringBuilder.AppendLine(note.Content.Replace("\n", "\n\n"));
-                    stringBuilder.AppendLine();
+                stringBuilder.AppendLine(note.Content.Replace("\n", "\n\n"));
+                stringBuilder.AppendLine();
+            }
+
+            foreach (TaskModel task in category.Tasks)
+            {
+                stringBuilder.AppendLine($"## {task.Title}");
+                stringBuilder.AppendLine();
+
+                if (task.Items is not null)
+                {
+                    foreach (ItemModel item in task.Items)
+                    {
+                        stringBuilder.AppendLine($"- {item.Title}");
+                    }
+
+                    if (task.Items.Count > 0)
+                        stringBuilder.AppendLine();
                 }
             }
 
-            if (category.Tasks is not null)
+            foreach (HabitModel habit in category.Habits)
             {
-                foreach (TaskModel task in category.Tasks)
+                stringBuilder.AppendLine($"## {habit.Title}");
+                stringBuilder.AppendLine();
+
+                if (habit.Items is not null)
                 {
-                    stringBuilder.AppendLine($"## {task.Title}");
-                    stringBuilder.AppendLine();
-
-                    if (task.Items is not null)
+                    foreach (ItemModel item in habit.Items)
                     {
-                        foreach (ItemModel item in task.Items)
-                        {
-                            stringBuilder.AppendLine($"- {item.Title}");
-                        }
-
-                        if (task.Items.Count > 0)
-                            stringBuilder.AppendLine();
+                        stringBuilder.AppendLine($"- {item.Title}");
                     }
-                }
-            }
 
-            if (category.Habits is not null)
-            {
-                foreach (HabitModel habit in category.Habits)
-                {
-                    stringBuilder.AppendLine($"## {habit.Title}");
-                    stringBuilder.AppendLine();
-
-                    if (habit.Items is not null)
-                    {
-                        foreach (ItemModel item in habit.Items)
-                        {
-                            stringBuilder.AppendLine($"- {item.Title}");
-                        }
-
-                        if (habit.Items.Count > 0)
-                            stringBuilder.AppendLine();
-                    }
+                    if (habit.Items.Count > 0)
+                        stringBuilder.AppendLine();
                 }
             }
         }
@@ -100,22 +91,12 @@ public class MarkdownImportExport(ClientState clientState)
 
             if (line.StartsWith("# "))
             {
-                category = new()
-                {
-                    Title = line[2..],
-                    Notes = [],
-                    Tasks = [],
-                    Habits = []
-                };
+                category = new() { Title = line[2..] };
 
                 userData.Categories.Add(category);
 
                 continue;
             }
-
-            category.Notes ??= [];
-            category.Tasks ??= [];
-            category.Habits ??= [];
 
             if (line.StartsWith("## "))
             {

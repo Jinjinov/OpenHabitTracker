@@ -8,9 +8,9 @@ public class CategoryModel
 
     public string Title { get; set; } = string.Empty;
 
-    public List<NoteModel>? Notes { get; set; }
+    public List<NoteModel> Notes { get; set; } = new();
 
-    public List<TaskModel>? Tasks { get; set; }
+    public List<TaskModel> Tasks { get; set; } = new();
 
-    public List<HabitModel>? Habits { get; set; }
+    public List<HabitModel> Habits { get; set; } = new();
 }

@@ -351,9 +351,12 @@ public class ClientState
 
         foreach (CategoryModel category in userData.Categories)
         {
-            category.Notes = notesByCategoryId.GetValueOrDefault(category.Id);
-            category.Tasks = tasksByCategoryId.GetValueOrDefault(category.Id);
-            category.Habits = habitsByCategoryId.GetValueOrDefault(category.Id);
+            if (notesByCategoryId.TryGetValue(category.Id, out List<NoteModel>? notes))
+                category.Notes = notes;
+            if (tasksByCategoryId.TryGetValue(category.Id, out List<TaskModel>? tasks))
+                category.Tasks = tasks;
+            if (habitsByCategoryId.TryGetValue(category.Id, out List<HabitModel>? habits))
+                category.Habits = habits;
         }
 
         // set Items, Times in case the task, habit was not displayed / initialized yet
@@ -425,16 +428,16 @@ public class ClientState
         {
             Model.Id = Entity.Id;
 
-            Model.Notes?.ForEach(x => x.CategoryId = Model.Id);
-            Model.Tasks?.ForEach(x => x.CategoryId = Model.Id);
-            Model.Habits?.ForEach(x => x.CategoryId = Model.Id);
+            Model.Notes.ForEach(x => x.CategoryId = Model.Id);
+            Model.Tasks.ForEach(x => x.CategoryId = Model.Id);
+            Model.Habits.ForEach(x => x.CategoryId = Model.Id);
         }
 
         // add all items to DB, including those from the default category that have CategoryId 0
 
-        List<(NoteModel Model, NoteEntity Entity)> notes = userData.Categories.Where(x => x.Notes is not null).SelectMany(x => x.Notes!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
-        List<(TaskModel Model, TaskEntity Entity)> tasks = userData.Categories.Where(x => x.Tasks is not null).SelectMany(x => x.Tasks!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
-        List<(HabitModel Model, HabitEntity Entity)> habits = userData.Categories.Where(x => x.Habits is not null).SelectMany(x => x.Habits!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(NoteModel Model, NoteEntity Entity)> notes = userData.Categories.SelectMany(x => x.Notes).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(TaskModel Model, TaskEntity Entity)> tasks = userData.Categories.SelectMany(x => x.Tasks).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(HabitModel Model, HabitEntity Entity)> habits = userData.Categories.SelectMany(x => x.Habits).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
         await DataAccess.AddNotes(notes.Select(x => x.Entity).ToList());
         await DataAccess.AddTasks(tasks.Select(x => x.Entity).ToList());

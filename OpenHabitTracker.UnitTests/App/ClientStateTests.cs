@@ -178,8 +178,7 @@ public class ClientStateTests
         UserImportExportData result = await _sut.GetUserData();
 
         CategoryModel category = result.Categories.First(c => c.Id == 1);
-        Assert.That(category.Habits, Is.Not.Null);
-        Assert.That(category.Habits!.Select(h => h.Id), Does.Contain(10L));
+        Assert.That(category.Habits.Select(h => h.Id), Does.Contain(10L));
     }
 
     [Test]
