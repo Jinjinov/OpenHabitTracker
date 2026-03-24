@@ -86,4 +86,18 @@ public class NoteTests : BaseTest
         await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Updated" })).ToBeVisibleAsync();
         await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Original" })).ToHaveCountAsync(0);
     }
+
+    [Test]
+    public async Task AddNote_PersistedAfterReload()
+    {
+        await AddItemAsync("Persistent Note");
+
+        await Page.ReloadAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
+
+        await NavigateToAsync("[data-main-step-3]");
+
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Persistent Note" })).ToBeVisibleAsync();
+    }
 }

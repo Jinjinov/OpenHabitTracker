@@ -128,4 +128,37 @@ public class HabitTests : BaseTest
 
         await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "Trashed Habit" })).ToBeVisibleAsync();
     }
+
+    [Test]
+    public async Task EditHabit_ChangesTitle_NewTitleVisible()
+    {
+        await AddItemAsync("Edit Me");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Edit Me" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Page.Locator("input[aria-label='Habit title']").FillAsync("Edited Habit");
+        await Page.Locator("input[aria-label='Habit title']").BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Page.Locator("[data-habits-step-11]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Edited Habit" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Edit Me" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
+    public async Task AddHabit_PersistedAfterReload()
+    {
+        await AddItemAsync("Persistent Habit");
+
+        await Page.ReloadAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
+
+        await NavigateToAsync("[data-main-step-5]");
+
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Persistent Habit" })).ToBeVisibleAsync();
+    }
 }

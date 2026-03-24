@@ -386,6 +386,53 @@ public class TaskServiceTests
         await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(e => e.Id == task.Id));
     }
 
+    // --- SetSelectedTask tests ---
+
+    [Test]
+    public void SetSelectedTask_WhenIdExists_SetsSelectedTask()
+    {
+        TaskModel task = TestData.Task(id: 5);
+        _clientState.Tasks = TestData.TaskDict(task);
+
+        _sut.SetSelectedTask(5);
+
+        Assert.That(_sut.SelectedTask, Is.SameAs(task));
+    }
+
+    [Test]
+    public void SetSelectedTask_WhenIdIsNull_ClearsSelectedTask()
+    {
+        TaskModel task = TestData.Task(id: 5);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _sut.SelectedTask = task;
+
+        _sut.SetSelectedTask(null);
+
+        Assert.That(_sut.SelectedTask, Is.Null);
+    }
+
+    [Test]
+    public void SetSelectedTask_WhenIdDoesNotExist_SetsSelectedTaskToNull()
+    {
+        _clientState.Tasks = TestData.TaskDict(TestData.Task(id: 1));
+
+        _sut.SetSelectedTask(99);
+
+        Assert.That(_sut.SelectedTask, Is.Null);
+    }
+
+    [Test]
+    public void SetSelectedTask_WhenTaskSelected_ClearsNewTask()
+    {
+        TaskModel task = TestData.Task(id: 5);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _sut.NewTask = new TaskModel { Title = "draft" };
+
+        _sut.SetSelectedTask(5);
+
+        Assert.That(_sut.NewTask, Is.Null);
+    }
+
     // --- AddTask additional tests ---
 
     [Test]
@@ -397,6 +444,20 @@ public class TaskServiceTests
         await _sut.AddTask();
 
         Assert.That(_clientState.Tasks, Is.Empty);
+    }
+
+    [Test]
+    public async Task AddTask_WithNonZeroCategoryId_AddsToCategory()
+    {
+        CategoryModel category = TestData.Category(id: 10);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.Tasks = new();
+        _sut.NewTask = new TaskModel { Title = "Project Task", CategoryId = 10 };
+
+        await _sut.AddTask();
+
+        Assert.That(category.Tasks, Has.Count.EqualTo(1));
+        Assert.That(category.Tasks[0].Title, Is.EqualTo("Project Task"));
     }
 
     // --- DeleteTask additional tests ---
@@ -518,5 +579,20 @@ public class TaskServiceTests
 
         Assert.That(item1.DoneAt, Is.Not.Null);
         Assert.That(item2.DoneAt, Is.Not.Null);
+    }
+
+    // --- UpdateTask when entity not found ---
+
+    [Test]
+    public async Task UpdateTask_WhenGetTaskReturnsNull_DoesNotCallUpdateTask()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _sut.SelectedTask = task;
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(null));
+
+        await _sut.UpdateTask();
+
+        await _dataAccess.DidNotReceive().UpdateTask(Arg.Any<TaskEntity>());
     }
 }

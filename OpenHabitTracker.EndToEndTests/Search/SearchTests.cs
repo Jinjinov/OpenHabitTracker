@@ -90,27 +90,41 @@ public class SearchTests : BaseTest
     }
 
     [Test]
-    public async Task DoneAtFilter_ClickDone_DoesNotCrash()
+    public async Task DoneAtFilter_ClickDone_FiltersToCompletedTasks()
     {
         await NavigateToAsync("[data-main-step-4]");
-        await OpenSearchAsync();
+        int totalCount = await Page.Locator("[data-tasks-step-2]").CountAsync();
+        Assert.That(totalCount, Is.GreaterThan(0));
 
-        await Page.Locator("[data-search-step-8]").ClickAsync();
+        await OpenSearchAsync();
+        await Page.Locator("[data-search-step-8]").ClickAsync(); // Done = today
         await Page.WaitForTimeoutAsync(500);
 
-        await Expect(Page.Locator("[data-search-step-8]")).ToBeVisibleAsync();
+        // Example tasks have no CompletedAt, so filter by today shows fewer than total
+        int doneCount = await Page.Locator("[data-tasks-step-2]").CountAsync();
+        Assert.That(doneCount, Is.LessThan(totalCount));
+
+        // Clear the filter
+        await Page.Locator("[data-search-step-11]").ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
     }
 
     [Test]
-    public async Task Sort_BySecondOption_HabitsListRemainsVisible()
+    public async Task Sort_ByTitle_HabitsListIsInAlphabeticalOrder()
     {
         await NavigateToAsync("[data-main-step-5]");
         await OpenSearchAsync();
 
-        await Page.Locator("[data-search-step-18] select").SelectOptionAsync(new SelectOptionValue { Index = 1 });
+        // data-search-step-20 is the Habits sort select; index 2 = Title
+        await Page.Locator("[data-search-step-20] select").SelectOptionAsync(new SelectOptionValue { Index = 2 });
         await Page.WaitForTimeoutAsync(500);
 
-        int count = await Page.Locator("[data-habits-step-2]").CountAsync();
-        Assert.That(count, Is.GreaterThan(0));
+        ILocator habits = Page.Locator("[data-habits-step-2]");
+        int count = await habits.CountAsync();
+        Assert.That(count, Is.GreaterThan(1));
+
+        string firstTitle = (await habits.Nth(0).TextContentAsync() ?? "").Trim();
+        string secondTitle = (await habits.Nth(1).TextContentAsync() ?? "").Trim();
+        Assert.That(string.Compare(firstTitle, secondTitle, StringComparison.OrdinalIgnoreCase), Is.LessThanOrEqualTo(0));
     }
 }

@@ -56,16 +56,60 @@ public class SettingsPersistenceTests : BaseTest
     }
 
     [Test]
-    public async Task ShowItemList_Toggle_DoesNotCrash()
+    public async Task Language_Change_PersistedAfterReload()
     {
+        await OpenSettingsAsync();
+        await Page.Locator("[data-settings-step-14] select").SelectOptionAsync("de");
+        await Page.WaitForTimeoutAsync(500);
+
+        await Page.ReloadAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
+
+        await Expect(Page.Locator("[data-main-step-3]")).ToHaveAttributeAsync("aria-label", "Notizen");
+
+        // Reset to English to avoid affecting subsequent tests
+        await OpenSettingsAsync();
+        await Page.Locator("[data-settings-step-14] select").SelectOptionAsync("en");
+        await Page.WaitForTimeoutAsync(300);
+    }
+
+    [Test]
+    public async Task ShowItemList_Toggle_HidesAndShowsItems()
+    {
+        await NavigateToAsync("[data-main-step-4]");
+        await AddItemAsync("ShowItemList Test Task");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "ShowItemList Test Task" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Page.Locator("input[aria-label='Add new item']").FillAsync("Test Item");
+        await Page.Locator("button[aria-label='Add']:has(i.bi-plus-square)").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Page.Locator("[data-tasks-step-10]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Items area is visible by default (ShowItemList=true)
+        await Expect(Page.Locator("[data-tasks-step-5]").First).ToBeVisibleAsync();
+
+        // Toggle ShowItemList off
         await OpenSettingsAsync();
         await Page.Locator("label[for='ShowItemList']").ClickAsync();
         await Page.WaitForTimeoutAsync(300);
+        await CloseSidebarAsync();
 
+        // Items area should be hidden
+        await Expect(Page.Locator("[data-tasks-step-5]")).ToHaveCountAsync(0);
+
+        // Toggle ShowItemList back on
+        await OpenSettingsAsync();
         await Page.Locator("label[for='ShowItemList']").ClickAsync();
         await Page.WaitForTimeoutAsync(300);
+        await CloseSidebarAsync();
 
-        await Expect(Page.Locator("label[for='ShowItemList']")).ToBeVisibleAsync();
+        // Items area should be visible again
+        await Expect(Page.Locator("[data-tasks-step-5]").First).ToBeVisibleAsync();
     }
 
     [Test]
@@ -82,25 +126,43 @@ public class SettingsPersistenceTests : BaseTest
     }
 
     [Test]
-    public async Task HideCompletedTasks_Toggle_DoesNotCrash()
+    public async Task HideCompletedTasks_Toggle_HidesAndShowsCompletedTasks()
     {
-        // HideCompletedTasks is in the Search panel under the "Filter by status" section
+        await NavigateToAsync("[data-main-step-4]");
+
+        // Disable HideCompletedTasks so completed tasks remain visible after marking done
         await Page.Locator("[data-main-step-6]").ClickAsync();
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        // Expand the "Filter by status" section if it is folded
         ILocator filterByStatusButton = Page.Locator("button:has(i.bi-filter)").First;
         if (await filterByStatusButton.GetAttributeAsync("aria-expanded") == "false")
             await filterByStatusButton.ClickAsync();
         await Page.WaitForTimeoutAsync(300);
-
         await Page.Locator("label[for='HideCompletedTasks']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await CloseSidebarAsync();
 
+        await AddItemAsync("HideCompleted Test");
+
+        ILocator taskRow = Page.Locator("div.input-group.flex-nowrap")
+            .Filter(new LocatorFilterOptions { Has = Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "HideCompleted Test" }) });
+        await taskRow.Locator("[data-tasks-step-4]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Task should be visible because HideCompletedTasks=false
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "HideCompleted Test" })).ToBeVisibleAsync();
+
+        // Re-enable HideCompletedTasks
+        await Page.Locator("[data-main-step-6]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        if (await filterByStatusButton.GetAttributeAsync("aria-expanded") == "false")
+            await filterByStatusButton.ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
         await Page.Locator("label[for='HideCompletedTasks']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await CloseSidebarAsync();
 
-        await Expect(Page.Locator("label[for='HideCompletedTasks']")).ToBeVisibleAsync();
+        // Task should now be hidden
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "HideCompleted Test" })).ToHaveCountAsync(0);
     }
 
     [Test]
