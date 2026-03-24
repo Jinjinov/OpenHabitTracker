@@ -52,8 +52,6 @@ Architecture: Identity Map + Repository (what the ideal design should be)
     - CategoryModel sub-lists wired at runtime    CORRECT  (LoadNotes/LoadTasks/LoadHabits + Add mutations + ChangeCategory)
     - DataAccess private to store                 MISSING  (exposed as public property, services use it directly)
 
-    One violation remaining — the architecture is sound, the invariant just isn't enforced consistently.
-
 public DataAccess:
 
     DataAccess is public on ClientState
