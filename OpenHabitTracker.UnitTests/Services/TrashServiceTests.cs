@@ -20,7 +20,8 @@ public class TrashServiceTests
     {
         _dataAccess = Substitute.For<IDataAccess>();
         _dataAccess.DataLocation.Returns(DataLocation.Local);
-        _dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([]));
+        _dataAccess.GetTimes(Arg.Any<long?>()).Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([]));
+        _dataAccess.GetItems(Arg.Any<long?>()).Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
 
         MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         MarkdownToHtml markdownToHtml = new(pipeline);
@@ -289,6 +290,266 @@ public class TrashServiceTests
         await _sut.Restore(trashed);
 
         Assert.That(_clientState.TrashedTasks, Is.Empty);
+    }
+
+    // --- Bug 3: orphaned Times and Items after permanent deletion ---
+
+    [Test]
+    public async Task Delete_Habit_RemovesAssociatedTimesFromDataAccess()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [trashed];
+        _dataAccess.GetTimes(1L).Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([new TimeEntity { Id = 10, HabitId = 1 }]));
+
+        await _sut.Delete(trashed);
+
+        await _dataAccess.Received().RemoveTime(10);
+    }
+
+    [Test]
+    public async Task Delete_Habit_RemovesAssociatedTimesFromClientState()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [trashed];
+        _clientState.Times = TestData.TimeDict(TestData.Time(id: 10, habitId: 1));
+        _dataAccess.GetTimes(1L).Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([new TimeEntity { Id = 10, HabitId = 1 }]));
+
+        await _sut.Delete(trashed);
+
+        Assert.That(_clientState.Times, Does.Not.ContainKey(10L));
+    }
+
+    [Test]
+    public async Task Delete_Habit_RemovesAssociatedItemsFromDataAccess()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [trashed];
+        _dataAccess.GetItems(1L).Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([new ItemEntity { Id = 20, ParentId = 1 }]));
+
+        await _sut.Delete(trashed);
+
+        await _dataAccess.Received().RemoveItem(20);
+    }
+
+    [Test]
+    public async Task Delete_Habit_RemovesAssociatedItemsFromClientState()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [trashed];
+        _clientState.Items = TestData.ItemDict(TestData.Item(id: 20, parentId: 1));
+        _dataAccess.GetItems(1L).Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([new ItemEntity { Id = 20, ParentId = 1 }]));
+
+        await _sut.Delete(trashed);
+
+        Assert.That(_clientState.Items, Does.Not.ContainKey(20L));
+    }
+
+    [Test]
+    public async Task Delete_Task_RemovesAssociatedItemsFromDataAccess()
+    {
+        TaskModel trashed = TestData.Task(id: 1, isDeleted: true);
+        _clientState.TrashedTasks = [trashed];
+        _dataAccess.GetItems(1L).Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([new ItemEntity { Id = 20, ParentId = 1 }]));
+
+        await _sut.Delete(trashed);
+
+        await _dataAccess.Received().RemoveItem(20);
+    }
+
+    [Test]
+    public async Task Delete_Task_RemovesAssociatedItemsFromClientState()
+    {
+        TaskModel trashed = TestData.Task(id: 1, isDeleted: true);
+        _clientState.TrashedTasks = [trashed];
+        _clientState.Items = TestData.ItemDict(TestData.Item(id: 20, parentId: 1));
+        _dataAccess.GetItems(1L).Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([new ItemEntity { Id = 20, ParentId = 1 }]));
+
+        await _sut.Delete(trashed);
+
+        Assert.That(_clientState.Items, Does.Not.ContainKey(20L));
+    }
+
+    [Test]
+    public async Task EmptyTrash_RemovesAssociatedTimesForHabitsFromDataAccess()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [trashed];
+        _clientState.TrashedNotes = [];
+        _clientState.TrashedTasks = [];
+        _dataAccess.GetTimes(1L).Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([new TimeEntity { Id = 10, HabitId = 1 }]));
+
+        await _sut.EmptyTrash();
+
+        await _dataAccess.Received().RemoveTime(10);
+    }
+
+    [Test]
+    public async Task EmptyTrash_RemovesAssociatedTimesForHabitsFromClientState()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [trashed];
+        _clientState.TrashedNotes = [];
+        _clientState.TrashedTasks = [];
+        _clientState.Times = TestData.TimeDict(TestData.Time(id: 10, habitId: 1));
+        _dataAccess.GetTimes(1L).Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([new TimeEntity { Id = 10, HabitId = 1 }]));
+
+        await _sut.EmptyTrash();
+
+        Assert.That(_clientState.Times, Does.Not.ContainKey(10L));
+    }
+
+    [Test]
+    public async Task EmptyTrash_RemovesAssociatedItemsForHabitsFromDataAccess()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [trashed];
+        _clientState.TrashedNotes = [];
+        _clientState.TrashedTasks = [];
+        _dataAccess.GetItems(1L).Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([new ItemEntity { Id = 20, ParentId = 1 }]));
+
+        await _sut.EmptyTrash();
+
+        await _dataAccess.Received().RemoveItem(20);
+    }
+
+    [Test]
+    public async Task EmptyTrash_RemovesAssociatedItemsForHabitsFromClientState()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [trashed];
+        _clientState.TrashedNotes = [];
+        _clientState.TrashedTasks = [];
+        _clientState.Items = TestData.ItemDict(TestData.Item(id: 20, parentId: 1));
+        _dataAccess.GetItems(1L).Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([new ItemEntity { Id = 20, ParentId = 1 }]));
+
+        await _sut.EmptyTrash();
+
+        Assert.That(_clientState.Items, Does.Not.ContainKey(20L));
+    }
+
+    [Test]
+    public async Task EmptyTrash_RemovesAssociatedItemsForTasksFromDataAccess()
+    {
+        TaskModel trashed = TestData.Task(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [];
+        _clientState.TrashedNotes = [];
+        _clientState.TrashedTasks = [trashed];
+        _dataAccess.GetItems(1L).Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([new ItemEntity { Id = 20, ParentId = 1 }]));
+
+        await _sut.EmptyTrash();
+
+        await _dataAccess.Received().RemoveItem(20);
+    }
+
+    [Test]
+    public async Task EmptyTrash_RemovesAssociatedItemsForTasksFromClientState()
+    {
+        TaskModel trashed = TestData.Task(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [];
+        _clientState.TrashedNotes = [];
+        _clientState.TrashedTasks = [trashed];
+        _clientState.Items = TestData.ItemDict(TestData.Item(id: 20, parentId: 1));
+        _dataAccess.GetItems(1L).Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([new ItemEntity { Id = 20, ParentId = 1 }]));
+
+        await _sut.EmptyTrash();
+
+        Assert.That(_clientState.Items, Does.Not.ContainKey(20L));
+    }
+
+    // --- Bug 4: stale CategoryModel lists after permanent deletion ---
+
+    [Test]
+    public async Task Delete_Habit_RemovesFromCategoryHabits()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, habits: [trashed]);
+        _clientState.TrashedHabits = [trashed];
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        await _sut.Delete(trashed);
+
+        Assert.That(category.Habits, Does.Not.Contain(trashed));
+    }
+
+    [Test]
+    public async Task Delete_Note_RemovesFromCategoryNotes()
+    {
+        NoteModel trashed = TestData.Note(id: 1, isDeleted: true, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, notes: [trashed]);
+        _clientState.TrashedNotes = [trashed];
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        await _sut.Delete(trashed);
+
+        Assert.That(category.Notes, Does.Not.Contain(trashed));
+    }
+
+    [Test]
+    public async Task Delete_Task_RemovesFromCategoryTasks()
+    {
+        TaskModel trashed = TestData.Task(id: 1, isDeleted: true, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, tasks: [trashed]);
+        _clientState.TrashedTasks = [trashed];
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        await _sut.Delete(trashed);
+
+        Assert.That(category.Tasks, Does.Not.Contain(trashed));
+    }
+
+    [Test]
+    public async Task Delete_Habit_WithCategoryId0_DoesNotThrow()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true, categoryId: 0);
+        _clientState.TrashedHabits = [trashed];
+        _clientState.Categories = new();
+
+        Assert.DoesNotThrowAsync(() => _sut.Delete(trashed));
+    }
+
+    [Test]
+    public async Task EmptyTrash_RemovesHabitFromCategoryHabits()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, habits: [trashed]);
+        _clientState.TrashedHabits = [trashed];
+        _clientState.TrashedNotes = [];
+        _clientState.TrashedTasks = [];
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        await _sut.EmptyTrash();
+
+        Assert.That(category.Habits, Does.Not.Contain(trashed));
+    }
+
+    [Test]
+    public async Task EmptyTrash_RemovesNoteFromCategoryNotes()
+    {
+        NoteModel trashed = TestData.Note(id: 1, isDeleted: true, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, notes: [trashed]);
+        _clientState.TrashedHabits = [];
+        _clientState.TrashedNotes = [trashed];
+        _clientState.TrashedTasks = [];
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        await _sut.EmptyTrash();
+
+        Assert.That(category.Notes, Does.Not.Contain(trashed));
+    }
+
+    [Test]
+    public async Task EmptyTrash_RemovesTaskFromCategoryTasks()
+    {
+        TaskModel trashed = TestData.Task(id: 1, isDeleted: true, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, tasks: [trashed]);
+        _clientState.TrashedHabits = [];
+        _clientState.TrashedNotes = [];
+        _clientState.TrashedTasks = [trashed];
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        await _sut.EmptyTrash();
+
+        Assert.That(category.Tasks, Does.Not.Contain(trashed));
     }
 
     // --- RestoreAll tests ---
