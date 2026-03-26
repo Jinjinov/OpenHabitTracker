@@ -66,7 +66,7 @@ public DataAccess:
 
 ---------------------------------------------------------------------------------------------------
 
-to remove `// TODO:: remove temp fix` and keep habit ratio in UI:
+to lazy load Times / TimesDone and remove `// TODO:: remove temp fix` and keep habit ratio in UI:
 call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
     save TotalTimeSpent
     save AverageInterval
@@ -103,7 +103,9 @@ LAZY LOADING:
         - load full Times per-habit on selection for the large calendar
         This requires a DB migration
 
-BUG — FilterHabits NotOn vs. Before/On/After inconsistency with null TimesDone:
+if this is removed `// TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)`
+and TimesDone are actually lazy loaded, there will be a bug:
+    FilterHabits NotOn vs. Before/On/After inconsistency with null TimesDone:
     File: QueryExtensions.cs, FilterHabits DoneAtCompare block
     When a habit's TimesDone has not been lazy-loaded yet (is null), the four date comparisons behave differently:
         NotOn:          x.TimesDone?.Any(...) != true  →  null != true  →  true   →  habit INCLUDED
