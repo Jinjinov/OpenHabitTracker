@@ -351,4 +351,45 @@ public class NoteServiceTests
         Assert.That(_clientState.TrashedNotes, Has.Count.EqualTo(1));
         Assert.That(_clientState.TrashedNotes[0], Is.SameAs(note));
     }
+
+    // --- GetNotes sort by category ---
+
+    [Test]
+    public void GetNotes_SortByCategory_ReturnsByCategory()
+    {
+        _clientState.Notes = TestData.NoteDict(
+            TestData.Note(id: 1, categoryId: 30),
+            TestData.Note(id: 2, categoryId: 10),
+            TestData.Note(id: 3, categoryId: 20));
+        _clientState.Settings.SortBy[ContentType.Note] = Sort.Category;
+
+        List<NoteModel> result = _sut.GetNotes().ToList();
+
+        Assert.That(result.Select(n => n.CategoryId), Is.EqualTo(new[] { 10L, 20L, 30L }));
+    }
+
+    // --- AddNote with CategoryId=0 ---
+
+    [Test]
+    public async Task AddNote_WithCategoryId0_DoesNotAddToAnyCategory()
+    {
+        CategoryModel category = TestData.Category(id: 10);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.Notes = new();
+        _sut.NewNote = new NoteModel { Title = "Uncategorized", CategoryId = 0 };
+
+        await _sut.AddNote();
+
+        Assert.That(category.Notes, Is.Empty);
+    }
+
+    // --- GetNotes null guard ---
+
+    [Test]
+    public void GetNotes_WhenNotesIsNull_ThrowsArgumentNullException()
+    {
+        _clientState.Notes = null;
+
+        Assert.Throws<ArgumentNullException>(() => _sut.GetNotes().ToList());
+    }
 }

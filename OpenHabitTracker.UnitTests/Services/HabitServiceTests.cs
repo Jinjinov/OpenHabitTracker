@@ -936,4 +936,226 @@ public class HabitServiceTests
 
         await _dataAccess.DidNotReceive().UpdateHabit(Arg.Any<HabitEntity>());
     }
+
+    // --- RemoveTimeDone all-in-progress test ---
+
+    [Test]
+    public async Task RemoveTimeDone_WhenAllRemainingAreInProgress_SetsLastTimeDoneAtToNull()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel completed = new() { Id = 10, HabitId = 1, StartedAt = new DateTime(2025, 1, 1), CompletedAt = new DateTime(2025, 1, 1) };
+        TimeModel inProgress = new() { Id = 11, HabitId = 1, StartedAt = new DateTime(2025, 1, 2) };
+        habit.TimesDone = [completed, inProgress];
+        habit.RefreshTimesDoneByDay();
+        habit.LastTimeDoneAt = new DateTime(2025, 1, 1);
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        await _sut.RemoveTimeDone(habit, completed);
+
+        Assert.That(habit.LastTimeDoneAt, Is.Null);
+    }
+
+    // --- GetHabits sort tests ---
+
+    [Test]
+    public void GetHabits_SortByRepeatInterval_ReturnsShortestFirst()
+    {
+        HabitModel habitShort = TestData.Habit(id: 1);
+        habitShort.RepeatInterval = 1;
+        habitShort.RepeatPeriod = Period.Day;
+        HabitModel habitLong = TestData.Habit(id: 2);
+        habitLong.RepeatInterval = 7;
+        habitLong.RepeatPeriod = Period.Day;
+        _clientState.Habits = TestData.HabitDict(habitLong, habitShort);
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.RepeatInterval;
+
+        List<HabitModel> result = _sut.GetHabits().ToList();
+
+        Assert.That(result[0].Id, Is.EqualTo(1L));
+        Assert.That(result[1].Id, Is.EqualTo(2L));
+    }
+
+    [Test]
+    public void GetHabits_SortByAverageInterval_ReturnsSmallestFirst()
+    {
+        HabitModel habitSmall = TestData.Habit(id: 1);
+        habitSmall.TimesDone = [new TimeModel { StartedAt = new DateTime(2025, 1, 1) }, new TimeModel { StartedAt = new DateTime(2025, 1, 2) }]; // 1-day interval
+        habitSmall.RefreshTimesDoneByDay();
+        HabitModel habitLarge = TestData.Habit(id: 2);
+        habitLarge.TimesDone = [new TimeModel { StartedAt = new DateTime(2025, 1, 1) }, new TimeModel { StartedAt = new DateTime(2025, 1, 4) }]; // 3-day interval
+        habitLarge.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habitLarge, habitSmall);
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.AverageInterval;
+
+        List<HabitModel> result = _sut.GetHabits().ToList();
+
+        Assert.That(result[0].Id, Is.EqualTo(1L));
+        Assert.That(result[1].Id, Is.EqualTo(2L));
+    }
+
+    [Test]
+    public void GetHabits_SortByDuration_ReturnsShortestFirst()
+    {
+        HabitModel habitShort = TestData.Habit(id: 1);
+        habitShort.Duration = new TimeOnly(0, 10, 0); // 10 min
+        HabitModel habitLong = TestData.Habit(id: 2);
+        habitLong.Duration = new TimeOnly(2, 0, 0); // 2 hours
+        _clientState.Habits = TestData.HabitDict(habitLong, habitShort);
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.Duration;
+
+        List<HabitModel> result = _sut.GetHabits().ToList();
+
+        Assert.That(result[0].Id, Is.EqualTo(1L));
+        Assert.That(result[1].Id, Is.EqualTo(2L));
+    }
+
+    [Test]
+    public void GetHabits_SortByElapsedTime_ReturnsOldestFirst()
+    {
+        HabitModel habitOld = TestData.Habit(id: 1);
+        habitOld.LastTimeDoneAt = new DateTime(2025, 1, 1);
+        HabitModel habitRecent = TestData.Habit(id: 2);
+        habitRecent.LastTimeDoneAt = new DateTime(2025, 6, 1);
+        _clientState.Habits = TestData.HabitDict(habitRecent, habitOld);
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.ElapsedTime;
+
+        List<HabitModel> result = _sut.GetHabits().ToList();
+
+        Assert.That(result[0].Id, Is.EqualTo(1L));
+        Assert.That(result[1].Id, Is.EqualTo(2L));
+    }
+
+    [Test]
+    public void GetHabits_SortByTimeSpent_ReturnsLeastFirst()
+    {
+        HabitModel habitLeast = TestData.Habit(id: 1);
+        habitLeast.TimesDone = [new TimeModel { StartedAt = new DateTime(2025, 1, 1, 8, 0, 0), CompletedAt = new DateTime(2025, 1, 1, 9, 0, 0) }]; // 1 hour
+        habitLeast.RefreshTimesDoneByDay();
+        HabitModel habitMost = TestData.Habit(id: 2);
+        habitMost.TimesDone = [new TimeModel { StartedAt = new DateTime(2025, 1, 1, 8, 0, 0), CompletedAt = new DateTime(2025, 1, 1, 11, 0, 0) }]; // 3 hours
+        habitMost.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habitMost, habitLeast);
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.TimeSpent;
+
+        List<HabitModel> result = _sut.GetHabits().ToList();
+
+        Assert.That(result[0].Id, Is.EqualTo(1L));
+        Assert.That(result[1].Id, Is.EqualTo(2L));
+    }
+
+    [Test]
+    public void GetHabits_SortByAverageTimeSpent_ReturnsLeastFirst()
+    {
+        HabitModel habitLeast = TestData.Habit(id: 1);
+        habitLeast.TimesDone = [new TimeModel { StartedAt = new DateTime(2025, 1, 1, 8, 0, 0), CompletedAt = new DateTime(2025, 1, 1, 9, 0, 0) }]; // 1 hour
+        habitLeast.RefreshTimesDoneByDay();
+        HabitModel habitMost = TestData.Habit(id: 2);
+        habitMost.TimesDone = [new TimeModel { StartedAt = new DateTime(2025, 1, 1, 8, 0, 0), CompletedAt = new DateTime(2025, 1, 1, 11, 0, 0) }]; // 3 hours
+        habitMost.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habitMost, habitLeast);
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.AverageTimeSpent;
+
+        List<HabitModel> result = _sut.GetHabits().ToList();
+
+        Assert.That(result[0].Id, Is.EqualTo(1L));
+        Assert.That(result[1].Id, Is.EqualTo(2L));
+    }
+
+    [Test]
+    public void GetHabits_SortBySelectedRatio_ReturnsHighestRatioFirst()
+    {
+        // Higher ratio = done longer ago relative to repeat interval → comes first (descending sort)
+        HabitModel habitHighRatio = TestData.Habit(id: 1);
+        habitHighRatio.RepeatInterval = 1;
+        habitHighRatio.RepeatPeriod = Period.Day;
+        habitHighRatio.LastTimeDoneAt = DateTime.Now.AddDays(-7);
+        HabitModel habitLowRatio = TestData.Habit(id: 2);
+        habitLowRatio.RepeatInterval = 1;
+        habitLowRatio.RepeatPeriod = Period.Day;
+        habitLowRatio.LastTimeDoneAt = DateTime.Now.AddHours(-1);
+        _clientState.Habits = TestData.HabitDict(habitLowRatio, habitHighRatio);
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.SelectedRatio;
+        _clientState.Settings.SelectedRatio = Ratio.ElapsedToDesired;
+
+        List<HabitModel> result = _sut.GetHabits().ToList();
+
+        Assert.That(result[0].Id, Is.EqualTo(1L));
+        Assert.That(result[1].Id, Is.EqualTo(2L));
+    }
+
+    [Test]
+    public void GetHabits_SortByCategory_ReturnsByCategory()
+    {
+        _clientState.Habits = TestData.HabitDict(
+            TestData.Habit(id: 1, categoryId: 30),
+            TestData.Habit(id: 2, categoryId: 10),
+            TestData.Habit(id: 3, categoryId: 20));
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.Category;
+
+        List<HabitModel> result = _sut.GetHabits().ToList();
+
+        Assert.That(result.Select(h => h.CategoryId), Is.EqualTo(new[] { 10L, 20L, 30L }));
+    }
+
+    // --- DeleteHabit soft-delete test ---
+
+    [Test]
+    public async Task DeleteHabit_DoesNotRemoveHabitFromCategoryHabits()
+    {
+        HabitModel habit = TestData.Habit(id: 1, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, habits: [habit]);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        await _sut.DeleteHabit(habit);
+
+        Assert.That(category.Habits, Contains.Item(habit));
+    }
+
+    // --- LoadTimesDone ClientState.Times test ---
+
+    [Test]
+    public async Task LoadTimesDone_PopulatesClientStateTimes()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = null;
+        _clientState.Times = null;
+        _dataAccess.GetTimes(habit.Id).Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([
+            new TimeEntity { Id = 10, HabitId = 1, StartedAt = DateTime.Now },
+            new TimeEntity { Id = 11, HabitId = 1, StartedAt = DateTime.Now.AddDays(-1) },
+        ]));
+
+        await _sut.LoadTimesDone(habit);
+
+        Assert.That(_clientState.Times, Is.Not.Null);
+        Assert.That(_clientState.Times, Contains.Key(10L));
+        Assert.That(_clientState.Times, Contains.Key(11L));
+    }
+
+    // --- AddHabit with CategoryId=0 test ---
+
+    [Test]
+    public async Task AddHabit_WithCategoryId0_DoesNotAddToAnyCategory()
+    {
+        CategoryModel category = TestData.Category(id: 10);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.Habits = new();
+        _sut.NewHabit = new HabitModel { Title = "Uncategorized", CategoryId = 0 };
+
+        await _sut.AddHabit();
+
+        Assert.That(category.Habits, Is.Empty);
+    }
+
+    // --- GetHabits null guard documentation test ---
+
+    [Test]
+    public void GetHabits_WhenHabitsIsNull_ThrowsArgumentNullException()
+    {
+        _clientState.Habits = null;
+
+        Assert.Throws<ArgumentNullException>(() => _sut.GetHabits().ToList());
+    }
 }

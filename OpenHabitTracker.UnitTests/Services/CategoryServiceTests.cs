@@ -392,4 +392,60 @@ public class CategoryServiceTests
         Assert.That(oldCategory.Notes, Does.Not.Contain(note));
         Assert.That(note.CategoryId, Is.EqualTo(0L));
     }
+
+    // --- DeleteCategory SelectedCategoryId tests ---
+
+    [Test]
+    public async Task DeleteCategory_WhenSelectedCategoryIdMatchesDeletedId_ClearsSelectedCategoryId()
+    {
+        CategoryModel category = TestData.Category(id: 5);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.Settings.SelectedCategoryId = 5;
+        _dataAccess.GetSettings(_clientState.Settings.Id).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = _clientState.Settings.Id }));
+
+        await _sut.DeleteCategory(category);
+
+        Assert.That(_clientState.Settings.SelectedCategoryId, Is.Null);
+    }
+
+    [Test]
+    public async Task DeleteCategory_WhenSelectedCategoryIdDoesNotMatch_DoesNotClearIt()
+    {
+        CategoryModel category = TestData.Category(id: 5);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.Settings.SelectedCategoryId = 99;
+
+        await _sut.DeleteCategory(category);
+
+        Assert.That(_clientState.Settings.SelectedCategoryId, Is.EqualTo(99L));
+    }
+
+    // --- ChangeCategory same-id tests ---
+
+    [Test]
+    public void ChangeCategory_WhenNewCategoryIdSameAsOld_NoNetChangeToList()
+    {
+        NoteModel note = TestData.Note(id: 1, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, notes: [note]);
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        _sut.ChangeCategory(note, 10);
+
+        Assert.That(category.Notes, Contains.Item(note));
+        Assert.That(note.CategoryId, Is.EqualTo(10L));
+    }
+
+    // --- ChangeCategory old-category-not-in-dict tests ---
+
+    [Test]
+    public void ChangeCategory_WhenOldCategoryNotInDict_DoesNotThrow()
+    {
+        NoteModel note = TestData.Note(id: 1, categoryId: 10);
+        CategoryModel newCategory = TestData.Category(id: 20);
+        _clientState.Categories = TestData.CategoryDict(newCategory);
+
+        Assert.DoesNotThrow(() => _sut.ChangeCategory(note, 20));
+
+        Assert.That(note.CategoryId, Is.EqualTo(20L));
+    }
 }

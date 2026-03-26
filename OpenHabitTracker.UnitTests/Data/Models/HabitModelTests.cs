@@ -276,6 +276,105 @@ public class HabitModelTests
         Assert.That(habit.TotalTimeSpent, Is.EqualTo(TimeSpan.FromHours(1)));
     }
 
+    // --- AddTimesDoneByDay new-day test ---
+
+    [Test]
+    public void AddTimesDoneByDay_ForNewDay_CreatesNewDayEntry()
+    {
+        HabitModel habit = new();
+        DateTime existingDay = new(2025, 1, 1, 8, 0, 0);
+        TimeModel existing = new() { StartedAt = existingDay };
+        habit.TimesDone = [existing];
+        habit.RefreshTimesDoneByDay();
+
+        DateTime newDay = new(2025, 1, 5, 10, 0, 0);
+        TimeModel newTime = new() { StartedAt = newDay };
+        habit.AddTimesDoneByDay(newTime);
+
+        Assert.That(habit.TimesDoneByDay, Contains.Key(newDay.Date));
+        Assert.That(habit.TimesDoneByDay![newDay.Date], Has.Count.EqualTo(1));
+    }
+
+    // --- AddTimesDoneByDay null guard ---
+
+    [Test]
+    public void AddTimesDoneByDay_WhenTimesDoneByDayIsNull_DoesNotThrow()
+    {
+        HabitModel habit = new();
+        habit.TimesDone = null;
+        // TimesDoneByDay is null because RefreshTimesDoneByDay was not called
+
+        TimeModel time = new() { StartedAt = new DateTime(2025, 1, 1) };
+
+        Assert.DoesNotThrow(() => habit.AddTimesDoneByDay(time));
+    }
+
+    // --- RemoveTimesDoneByDay missing key ---
+
+    [Test]
+    public void RemoveTimesDoneByDay_WhenKeyNotInDict_DoesNotThrow()
+    {
+        HabitModel habit = new();
+        DateTime day = new(2025, 1, 1, 8, 0, 0);
+        habit.TimesDone = [new TimeModel { StartedAt = day }];
+        habit.RefreshTimesDoneByDay();
+
+        TimeModel notPresent = new() { StartedAt = new DateTime(2025, 6, 1) };
+
+        Assert.DoesNotThrow(() => habit.RemoveTimesDoneByDay(notPresent));
+    }
+
+    // --- RefreshTimesDoneByDay with null TimesDone ---
+
+    [Test]
+    public void RefreshTimesDoneByDay_WhenTimesDoneIsNull_SetsTimesDoneByDayToNull()
+    {
+        HabitModel habit = new();
+        habit.TimesDone = null;
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.TimesDoneByDay, Is.Null);
+    }
+
+    // --- RepeatCountReached with RepeatCount=0 ---
+
+    [Test]
+    public void RepeatCountReached_WhenRepeatCountIsZero_ReturnsTrueEvenWithNoTimesDone()
+    {
+        HabitModel habit = new() { RepeatCount = 0, RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone = [];
+
+        Assert.That(habit.RepeatCountReached(DateTime.Now), Is.True);
+    }
+
+    // --- RepeatCountReached upper boundary ---
+
+    [Test]
+    public void RepeatCountReached_WhenDoneExactlyAtUpperBoundary_ReturnsTrue()
+    {
+        HabitModel habit = new() { RepeatCount = 1, RepeatInterval = 1, RepeatPeriod = Period.Day };
+        DateTime date = new(2025, 6, 1, 12, 0, 0);
+        DateTime intervalEnd = date + habit.GetRepeatInterval(); // exactly at upper boundary
+        habit.TimesDone = [new TimeModel { StartedAt = intervalEnd }];
+
+        Assert.That(habit.RepeatCountReached(date), Is.True);
+    }
+
+    // --- GetRatio ElapsedToDesired with zero RepeatInterval ---
+
+    [Test]
+    public void GetRatio_ElapsedToDesired_WhenRepeatIntervalIsZero_ReturnsPositiveInfinity()
+    {
+        HabitModel habit = new() { RepeatInterval = 0, RepeatPeriod = Period.Day };
+        habit.TimesDone = [];
+        habit.RefreshTimesDoneByDay();
+
+        double ratio = habit.GetRatio(Ratio.ElapsedToDesired);
+
+        Assert.That(ratio, Is.EqualTo(double.PositiveInfinity));
+    }
+
     // --- ElapsedTime tests ---
 
     [Test]

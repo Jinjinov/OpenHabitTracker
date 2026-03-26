@@ -657,4 +657,144 @@ public class TaskServiceTests
 
         await _dataAccess.DidNotReceive().UpdateTask(Arg.Any<TaskEntity>());
     }
+
+    // --- GetTasks sort tests ---
+
+    [Test]
+    public void GetTasks_SortByPriority_ReturnsHighestFirst()
+    {
+        _clientState.Tasks = TestData.TaskDict(
+            TestData.Task(id: 1, priority: Priority.Low),
+            TestData.Task(id: 2, priority: Priority.VeryHigh),
+            TestData.Task(id: 3, priority: Priority.Medium));
+        _clientState.Settings.SortBy[ContentType.Task] = Sort.Priority;
+
+        List<TaskModel> result = _sut.GetTasks().ToList();
+
+        Assert.That(result[0].Priority, Is.EqualTo(Priority.VeryHigh));
+        Assert.That(result[1].Priority, Is.EqualTo(Priority.Medium));
+        Assert.That(result[2].Priority, Is.EqualTo(Priority.Low));
+    }
+
+    [Test]
+    public void GetTasks_SortByCategory_ReturnsByCategory()
+    {
+        _clientState.Tasks = TestData.TaskDict(
+            TestData.Task(id: 1, categoryId: 30),
+            TestData.Task(id: 2, categoryId: 10),
+            TestData.Task(id: 3, categoryId: 20));
+        _clientState.Settings.SortBy[ContentType.Task] = Sort.Category;
+
+        List<TaskModel> result = _sut.GetTasks().ToList();
+
+        Assert.That(result.Select(t => t.CategoryId), Is.EqualTo(new[] { 10L, 20L, 30L }));
+    }
+
+    [Test]
+    public void GetTasks_SortByDuration_ReturnsShortestFirst()
+    {
+        TaskModel taskShort = TestData.Task(id: 1);
+        taskShort.Duration = new TimeOnly(0, 30, 0); // 30 min
+        TaskModel taskLong = TestData.Task(id: 2);
+        taskLong.Duration = new TimeOnly(2, 0, 0); // 2 hours
+        _clientState.Tasks = TestData.TaskDict(taskLong, taskShort);
+        _clientState.Settings.SortBy[ContentType.Task] = Sort.Duration;
+
+        List<TaskModel> result = _sut.GetTasks().ToList();
+
+        Assert.That(result[0].Id, Is.EqualTo(1L));
+        Assert.That(result[1].Id, Is.EqualTo(2L));
+    }
+
+    [Test]
+    public void GetTasks_SortByElapsedTime_ReturnsEarliestCompletedAtFirst()
+    {
+        _clientState.Tasks = TestData.TaskDict(
+            TestData.Task(id: 1, completedAt: new DateTime(2025, 6, 1)),
+            TestData.Task(id: 2, completedAt: new DateTime(2025, 1, 1)));
+        _clientState.Settings.SortBy[ContentType.Task] = Sort.ElapsedTime;
+
+        List<TaskModel> result = _sut.GetTasks().ToList();
+
+        Assert.That(result[0].Id, Is.EqualTo(2L));
+        Assert.That(result[1].Id, Is.EqualTo(1L));
+    }
+
+    [Test]
+    public void GetTasks_SortByTimeSpent_ReturnsLeastFirst()
+    {
+        TaskModel taskShort = TestData.Task(id: 1);
+        taskShort.StartedAt = new DateTime(2025, 1, 1, 8, 0, 0);
+        taskShort.CompletedAt = new DateTime(2025, 1, 1, 9, 0, 0); // 1 hour
+        TaskModel taskLong = TestData.Task(id: 2);
+        taskLong.StartedAt = new DateTime(2025, 1, 1, 8, 0, 0);
+        taskLong.CompletedAt = new DateTime(2025, 1, 1, 11, 0, 0); // 3 hours
+        _clientState.Tasks = TestData.TaskDict(taskLong, taskShort);
+        _clientState.Settings.SortBy[ContentType.Task] = Sort.TimeSpent;
+
+        List<TaskModel> result = _sut.GetTasks().ToList();
+
+        Assert.That(result[0].Id, Is.EqualTo(1L));
+        Assert.That(result[1].Id, Is.EqualTo(2L));
+    }
+
+    // --- PlannedAtFilter NotOn with null PlannedAt ---
+
+    [Test]
+    public void GetTasks_PlannedAtFilter_NotOn_WhenPlannedAtIsNull_IncludesTask()
+    {
+        DateTime filterDate = new(2025, 6, 10);
+        _clientState.Tasks = TestData.TaskDict(
+            TestData.Task(id: 1, plannedAt: null),
+            TestData.Task(id: 2, plannedAt: new DateTime(2025, 6, 10)));
+
+        _searchFilterService.PlannedAtFilter = filterDate;
+        _searchFilterService.PlannedAtCompare = DateCompare.NotOn;
+
+        IEnumerable<TaskModel> result = _sut.GetTasks();
+
+        // NotOn: PlannedAt?.Date != filterDate — null != date is true, so task 1 is included
+        Assert.That(result.Select(t => t.Id), Contains.Item(1L));
+        Assert.That(result.Select(t => t.Id), Does.Not.Contain(2L));
+    }
+
+    // --- MarkAsDone with null Items ---
+
+    [Test]
+    public async Task MarkAsDone_WhenItemsIsNull_TaskIsMarkedDone()
+    {
+        TaskModel task = TestData.Task(id: 1, completedAt: null);
+        task.Items = null;
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        await _sut.MarkAsDone(task);
+
+        Assert.That(task.CompletedAt, Is.Not.Null);
+    }
+
+    // --- AddTask with CategoryId=0 ---
+
+    [Test]
+    public async Task AddTask_WithCategoryId0_DoesNotAddToAnyCategory()
+    {
+        CategoryModel category = TestData.Category(id: 10);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.Tasks = new();
+        _sut.NewTask = new TaskModel { Title = "Uncategorized", CategoryId = 0 };
+
+        await _sut.AddTask();
+
+        Assert.That(category.Tasks, Is.Empty);
+    }
+
+    // --- GetTasks null guard ---
+
+    [Test]
+    public void GetTasks_WhenTasksIsNull_ThrowsArgumentNullException()
+    {
+        _clientState.Tasks = null;
+
+        Assert.Throws<ArgumentNullException>(() => _sut.GetTasks().ToList());
+    }
 }

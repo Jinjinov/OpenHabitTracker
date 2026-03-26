@@ -128,4 +128,74 @@ public class SearchFilterServiceTests
 
         Assert.That(_sut.MarkSearchResultsInHtml(html), Is.EqualTo(html));
     }
+
+    // --- MarkSearchResults multiple occurrences ---
+
+    [Test]
+    public void MarkSearchResults_CaseInsensitive_MultipleOccurrences_WrapsAll()
+    {
+        _sut.SearchTerm = "cat";
+        _sut.MatchCase = false;
+
+        string result = _sut.MarkSearchResults("The cat sat on the Cat mat");
+
+        Assert.That(result, Does.Contain("<mark>cat</mark>"));
+        Assert.That(result, Does.Contain("<mark>Cat</mark>"));
+        Assert.That(result.Split("<mark>").Length - 1, Is.EqualTo(2));
+    }
+
+    [Test]
+    public void MarkSearchResults_CaseSensitive_MultipleOccurrences_WrapsAll()
+    {
+        _sut.SearchTerm = "cat";
+        _sut.MatchCase = true;
+
+        string result = _sut.MarkSearchResults("the cat sat on the cat mat");
+
+        Assert.That(result, Does.Contain("<mark>cat</mark>"));
+        Assert.That(result.Split("<mark>").Length - 1, Is.EqualTo(2));
+    }
+
+    // --- GetQueryParameters DoneAt/PlannedAt mapping ---
+
+    [Test]
+    public void GetQueryParameters_MapsDoneAtFilter()
+    {
+        DateTime filterDate = new(2025, 6, 10);
+        _sut.DoneAtFilter = filterDate;
+        _sut.DoneAtCompare = DateCompare.After;
+
+        QueryParameters qp = _sut.GetQueryParameters(new SettingsModel());
+
+        Assert.That(qp.DoneAtFilter, Is.EqualTo(filterDate));
+        Assert.That(qp.DoneAtCompare, Is.EqualTo(DateCompare.After));
+    }
+
+    [Test]
+    public void GetQueryParameters_MapsPlannedAtFilter()
+    {
+        DateTime filterDate = new(2025, 3, 15);
+        _sut.PlannedAtFilter = filterDate;
+        _sut.PlannedAtCompare = DateCompare.Before;
+
+        QueryParameters qp = _sut.GetQueryParameters(new SettingsModel());
+
+        Assert.That(qp.PlannedAtFilter, Is.EqualTo(filterDate));
+        Assert.That(qp.PlannedAtCompare, Is.EqualTo(DateCompare.Before));
+    }
+
+    // --- MarkSearchResultsInHtml case-sensitive multiple occurrences ---
+
+    [Test]
+    public void MarkSearchResultsInHtml_CaseSensitive_MultipleOccurrences_WrapsAll()
+    {
+        _sut.SearchTerm = "cat";
+        _sut.MatchCase = true;
+
+        string html = "<p>the cat sat on the cat mat</p>";
+        string result = _sut.MarkSearchResultsInHtml(html);
+
+        Assert.That(result.Split("<mark>").Length - 1, Is.EqualTo(2));
+        Assert.That(result, Does.Contain("<mark>cat</mark>"));
+    }
 }
