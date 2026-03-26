@@ -71,4 +71,14 @@ public class CalendarServiceTests
 
         Assert.That(first, Is.EqualTo(second));
     }
+
+    [Test]
+    public void GetCalendarDay_NegativeDay_ReturnsDateBeforeStart()
+    {
+        DateTime start = new(2025, 6, 15);
+
+        DateTime result = _sut.GetCalendarDay(start, -7);
+
+        Assert.That(result, Is.EqualTo(new DateTime(2025, 6, 8)));
+    }
 }
