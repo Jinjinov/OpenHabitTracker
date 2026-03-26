@@ -581,6 +581,68 @@ public class TaskServiceTests
         Assert.That(item2.DoneAt, Is.Not.Null);
     }
 
+    // --- MarkAsDone additional tests ---
+
+    [Test]
+    public async Task MarkAsDone_WhenAlreadyDone_ClearsStartedAt()
+    {
+        TaskModel task = TestData.Task(id: 1, completedAt: DateTime.Now.AddMinutes(-5));
+        task.StartedAt = DateTime.Now.AddMinutes(-10);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        await _sut.MarkAsDone(task);
+
+        Assert.That(task.StartedAt, Is.Null);
+    }
+
+    [Test]
+    public async Task MarkAsDone_WhenAlreadyDone_ClearsAllItemsDoneAt()
+    {
+        TaskModel task = TestData.Task(id: 1, completedAt: DateTime.Now.AddMinutes(-5));
+        ItemModel item1 = new() { Id = 10, DoneAt = DateTime.Now.AddMinutes(-5) };
+        ItemModel item2 = new() { Id = 11, DoneAt = DateTime.Now.AddMinutes(-5) };
+        task.Items = [item1, item2];
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+        _dataAccess.GetItem(item1.Id).Returns(Task.FromResult<ItemEntity?>(new ItemEntity { Id = item1.Id }));
+        _dataAccess.GetItem(item2.Id).Returns(Task.FromResult<ItemEntity?>(new ItemEntity { Id = item2.Id }));
+
+        await _sut.MarkAsDone(task);
+
+        Assert.That(item1.DoneAt, Is.Null);
+        Assert.That(item2.DoneAt, Is.Null);
+    }
+
+    [Test]
+    public async Task MarkAsDone_WhenNotDone_WithExistingStartedAt_PreservesStartedAt()
+    {
+        DateTime existingStartedAt = DateTime.Now.AddHours(-2);
+        TaskModel task = TestData.Task(id: 1, completedAt: null);
+        task.StartedAt = existingStartedAt;
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        await _sut.MarkAsDone(task);
+
+        Assert.That(task.StartedAt, Is.EqualTo(existingStartedAt));
+    }
+
+    // --- SetStartTime guard test ---
+
+    [Test]
+    public async Task SetStartTime_WhenTaskNotYetStarted_DoesNothing()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        task.StartedAt = null;
+        task.CompletedAt = null;
+        _clientState.Tasks = TestData.TaskDict(task);
+
+        await _sut.SetStartTime(task, DateTime.Now.AddHours(-1));
+
+        await _dataAccess.DidNotReceive().UpdateTask(Arg.Any<TaskEntity>());
+    }
+
     // --- UpdateTask when entity not found ---
 
     [Test]

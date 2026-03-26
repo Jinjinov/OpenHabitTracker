@@ -218,6 +218,64 @@ public class HabitModelTests
         Assert.That(habit.TotalTimeSpent, Is.EqualTo(TimeSpan.FromHours(6)));
     }
 
+    // --- GetRatio edge-case tests ---
+
+    [Test]
+    public void GetRatio_ElapsedToAverage_WhenNoTimesDone_ReturnsPositiveInfinity()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day, CreatedAt = DateTime.Now.AddDays(-1) };
+        habit.TimesDone = [];
+        habit.RefreshTimesDoneByDay(); // AverageInterval = TimeSpan.Zero
+
+        double ratio = habit.GetRatio(Ratio.ElapsedToAverage);
+
+        Assert.That(ratio, Is.EqualTo(double.PositiveInfinity));
+    }
+
+    [Test]
+    public void GetRatio_AverageToDesired_WhenNoTimesDone_ReturnsZero()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone = [];
+        habit.RefreshTimesDoneByDay(); // AverageInterval = TimeSpan.Zero
+
+        double ratio = habit.GetRatio(Ratio.AverageToDesired);
+
+        Assert.That(ratio, Is.EqualTo(0.0));
+    }
+
+    // --- RepeatCountReached boundary test ---
+
+    [Test]
+    public void RepeatCountReached_WhenDoneExactlyAtWindowBoundary_ReturnsTrue()
+    {
+        HabitModel habit = new() { RepeatCount = 1, RepeatInterval = 1, RepeatPeriod = Period.Day };
+        DateTime date = new(2025, 6, 1, 12, 0, 0);
+        DateTime intervalStart = date - habit.GetRepeatInterval(); // exactly at lower boundary
+        habit.TimesDone = [new TimeModel { StartedAt = intervalStart }];
+
+        Assert.That(habit.RepeatCountReached(date), Is.True);
+    }
+
+    // --- OnTimesDoneChanged in-progress time test ---
+
+    [Test]
+    public void OnTimesDoneChanged_WithInProgressTime_TotalTimeSpentIgnoresInProgressTime()
+    {
+        DateTime t1 = new(2025, 1, 1, 8, 0, 0);
+        DateTime t2 = new(2025, 1, 2, 8, 0, 0);
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = t1, CompletedAt = t1.AddHours(1) }, // 1 hour
+            new TimeModel { StartedAt = t2 },                                // in-progress, contributes 0
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.TotalTimeSpent, Is.EqualTo(TimeSpan.FromHours(1)));
+    }
+
     // --- ElapsedTime tests ---
 
     [Test]

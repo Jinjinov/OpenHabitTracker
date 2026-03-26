@@ -282,6 +282,44 @@ public class CategoryServiceTests
         Assert.That(_clientState.TrashedHabits, Contains.Item(habit));
     }
 
+    // --- GetCategoryTitle null guard test ---
+
+    [Test]
+    public void GetCategoryTitle_WhenCategoriesIsNull_ReturnsIdAsString()
+    {
+        _clientState.Categories = null;
+
+        string result = _sut.GetCategoryTitle(99);
+
+        Assert.That(result, Is.EqualTo("99"));
+    }
+
+    // --- AddCategory guard test ---
+
+    [Test]
+    public async Task AddCategory_WhenCategoriesIsNull_DoesNothing()
+    {
+        _clientState.Categories = null;
+        _sut.NewCategory = new CategoryModel { Title = "Health" };
+
+        await _sut.AddCategory();
+
+        await _dataAccess.DidNotReceive().AddCategory(Arg.Any<CategoryEntity>());
+    }
+
+    // --- UpdateCategory guard test ---
+
+    [Test]
+    public async Task UpdateCategory_WhenSelectedCategoryIsNull_DoesNothing()
+    {
+        _clientState.Categories = [];
+        _sut.SelectedCategory = null;
+
+        await _sut.UpdateCategory("New Title");
+
+        await _dataAccess.DidNotReceive().UpdateCategory(Arg.Any<CategoryEntity>());
+    }
+
     // --- ChangeCategory tests ---
 
     [Test]
