@@ -375,6 +375,18 @@ public class HabitModelTests
         Assert.That(ratio, Is.EqualTo(double.PositiveInfinity));
     }
 
+    // --- GetRatio invalid value ---
+
+    [Test]
+    public void GetRatio_InvalidRatio_ThrowsArgumentOutOfRangeException()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone = [];
+        habit.RefreshTimesDoneByDay();
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => habit.GetRatio((Ratio)99));
+    }
+
     // --- ElapsedTime tests ---
 
     [Test]

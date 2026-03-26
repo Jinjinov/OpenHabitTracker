@@ -435,6 +435,19 @@ public class CategoryServiceTests
         Assert.That(note.CategoryId, Is.EqualTo(10L));
     }
 
+    // --- DeleteCategory DataAccess call test ---
+
+    [Test]
+    public async Task DeleteCategory_CallsRemoveCategoryOnDataAccess()
+    {
+        CategoryModel category = TestData.Category(id: 7);
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        await _sut.DeleteCategory(category);
+
+        await _dataAccess.Received(1).RemoveCategory(category.Id);
+    }
+
     // --- ChangeCategory old-category-not-in-dict tests ---
 
     [Test]
