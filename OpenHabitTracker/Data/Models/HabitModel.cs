@@ -100,6 +100,10 @@ public class HabitModel : ItemsModel
             return false;
 
         TimeSpan repeatInterval = GetRepeatInterval();
+
+        // symmetric window with size 2x repeatInterval:
+        // a calendar cell for a day the habit was done shows green if the surrounding period was satisfying,
+        // including entries later that same week/month
         DateTime intervalStart = date - repeatInterval;
         DateTime intervalEnd = date + repeatInterval;
 

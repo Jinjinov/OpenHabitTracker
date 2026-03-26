@@ -297,7 +297,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         _clientState.Times?.Remove(timeModel.Id);
 
-        TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault();
+        TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault(x => x.CompletedAt != null);
 
         await SetLastTimeDone(habit, last?.CompletedAt);
     }
@@ -316,7 +316,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
             await _clientState.DataAccess.UpdateTime(timeEntity);
         }
 
-        TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault();
+        TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault(x => x.CompletedAt != null);
 
         await SetLastTimeDone(habit, last?.CompletedAt);
     }
