@@ -1,6 +1,7 @@
 # 1.1.8
 
 - fixed Empty trash
+- fixed Rename category
 
 # 1.1.7 - Mar 21, 2026
 

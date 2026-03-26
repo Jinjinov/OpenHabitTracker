@@ -102,7 +102,15 @@ LAZY LOADING:
         - load only last N days of Times at startup for the small calendar display
         - load full Times per-habit on selection for the large calendar
         This requires a DB migration
-            
+
+BUG — FilterHabits NotOn vs. Before/On/After inconsistency with null TimesDone:
+    File: QueryExtensions.cs, FilterHabits DoneAtCompare block
+    When a habit's TimesDone has not been lazy-loaded yet (is null), the four date comparisons behave differently:
+        NotOn:          x.TimesDone?.Any(...) != true  →  null != true  →  true   →  habit INCLUDED
+        Before/On/After: x.TimesDone?.Any(...) == true  →  null == true  →  false  →  habit EXCLUDED
+    Users see different result sets depending on which habits have been selected 
+    (and thus had their TimesDone loaded) in the current session.
+
 ---------------------------------------------------------------------------------------------------
 
 1, 2, 3 must be done at the same time so there is one new DB migration, not three
