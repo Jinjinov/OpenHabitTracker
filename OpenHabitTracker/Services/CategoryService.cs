@@ -134,6 +134,13 @@ public class CategoryService(ClientState clientState) : ICategoryService
 
             await UpdateSettings();
         }
+
+        if (_clientState.Settings.SelectedCategoryId == category.Id)
+        {
+            _clientState.Settings.SelectedCategoryId = null;
+
+            await UpdateSettings();
+        }
     }
 
     public void ChangeCategory(ContentModel model, long newCategoryId)
