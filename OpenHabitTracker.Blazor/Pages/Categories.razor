@@ -60,9 +60,6 @@
     }
 
     [Parameter]
-    public long? Id { get; set; }
-
-    [Parameter]
     public Ref<bool> StateChanged { get; set; } = new();
 
     [Parameter]
@@ -75,11 +72,6 @@
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.Initialize();
-    }
-
-    protected override void OnParametersSet()
-    {
-        CategoryService.SetSelectedCategory(Id);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

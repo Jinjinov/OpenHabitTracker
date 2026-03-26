@@ -38,12 +38,9 @@ public class CategoryTests : BaseTest
         await Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "OldName" }).ClickAsync();
         await Page.WaitForTimeoutAsync(300);
 
-        // Clear and type new title
-        await Page.Locator("input.form-control").Last.ClearAsync();
+        // FillAsync replaces the content; Tab fires onchange before focusout removes the InputText
         await Page.Locator("input.form-control").Last.FillAsync("NewName");
-
-        // Trigger focusout to save
-        await Page.Locator("body").ClickAsync();
+        await Page.Locator("input.form-control").Last.PressAsync("Tab");
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(300);
 
@@ -65,8 +62,6 @@ public class CategoryTests : BaseTest
         await Expect(Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "ToDelete" })).ToHaveCountAsync(0);
     }
 
-    // KNOWN BUG: DeleteCategory cascade is broken at runtime (category.Notes/Tasks/Habits are empty — not yet wired to clientState items).
-    // This test documents expected behavior and will pass once Step 1 (wiring) is done.
     [Test]
     public async Task DeleteCategory_ChildHabitsDisappearFromHabitsList()
     {
@@ -75,10 +70,17 @@ public class CategoryTests : BaseTest
         await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // Navigate to habits and add a habit (the category selector would need to be set, so just add uncategorized)
+        // Navigate to habits and add a habit assigned to TempCategory
         await CloseSidebarAsync();
         await NavigateToAsync("[data-main-step-5]");
-        await AddItemAsync("HabitInTempCat");
+
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("HabitInTempCat");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "TempCategory" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
 
         // Navigate back to categories and delete TempCategory
         await OpenMenuAsync();
@@ -88,7 +90,7 @@ public class CategoryTests : BaseTest
         await Page.Locator("button[aria-label='Delete: TempCategory']").ClickAsync();
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // Navigate back to habits — the habit should be gone (expected behavior, currently fails due to bug)
+        // Navigate back to habits — the habit should be gone (soft-deleted via category cascade)
         await NavigateToAsync("[data-main-step-5]");
 
         await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "HabitInTempCat" })).ToHaveCountAsync(0);
