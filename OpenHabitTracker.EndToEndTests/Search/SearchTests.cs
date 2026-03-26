@@ -22,6 +22,7 @@ public class SearchTests : BaseTest
     [Test]
     public async Task SearchTerm_MatchingTitle_ShowsOnlyMatchingNotes()
     {
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Diet Plan" })).ToBeVisibleAsync();
         int totalCount = await Page.Locator("[data-notes-step-2]").CountAsync();
 
         await OpenSearchAsync();
