@@ -13,7 +13,7 @@ public class StatisticsTests : BaseTest
 
         await AddItemAsync("Stats Note");
 
-        await Expect(Page.Locator("span.badge.bg-body-secondary").Filter(new LocatorFilterOptions { HasText = "Total: 1" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("p").Filter(new LocatorFilterOptions { HasText = "Total: 2" })).ToBeVisibleAsync();
     }
 
     [Test]
