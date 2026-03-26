@@ -788,6 +788,22 @@ public class TaskServiceTests
         Assert.That(category.Tasks, Is.Empty);
     }
 
+    // --- DeleteTask soft-delete design ---
+
+    [Test]
+    public async Task DeleteTask_DoesNotRemoveFromCategoryTasks()
+    {
+        TaskModel task = TestData.Task(id: 1, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, tasks: [task]);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        await _sut.DeleteTask(task);
+
+        Assert.That(category.Tasks, Contains.Item(task));
+    }
+
     // --- GetTasks null guard ---
 
     [Test]

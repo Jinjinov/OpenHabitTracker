@@ -1158,4 +1158,52 @@ public class HabitServiceTests
 
         Assert.Throws<ArgumentNullException>(() => _sut.GetHabits().ToList());
     }
+
+    // --- UpdateTimeDone null guard ---
+
+    [Test]
+    public async Task UpdateTimeDone_WhenTimesDoneByDayIsNull_DoesNotCallUpdateTime()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel time = new() { Id = 5, HabitId = 1, StartedAt = DateTime.Now.AddHours(-1), CompletedAt = DateTime.Now.AddMinutes(-30) };
+        habit.TimesDone = [time];
+        habit.TimesDoneByDay = null; // RefreshTimesDoneByDay not yet called
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.UpdateTimeDone(habit, time);
+
+        await _dataAccess.DidNotReceive().UpdateTime(Arg.Any<TimeEntity>());
+    }
+
+    // --- Start null guard ---
+
+    [Test]
+    public async Task Start_WhenHabitsIsNull_DoesNotAddTime()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+        _clientState.Habits = null;
+
+        await _sut.Start(habit);
+
+        await _dataAccess.DidNotReceive().AddTime(Arg.Any<TimeEntity>());
+    }
+
+    // --- SetStartTime entity-not-found ---
+
+    [Test]
+    public async Task SetStartTime_WhenEntityNotFound_UpdatesModelButDoesNotCallUpdateTime()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel inProgress = new() { Id = 5, HabitId = 1, StartedAt = DateTime.Now.AddHours(-1) }; // CompletedAt = null
+        habit.TimesDone = [inProgress];
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTime(inProgress.Id).Returns(Task.FromResult<TimeEntity?>(null));
+
+        DateTime newStart = DateTime.Now.AddHours(-2);
+        await _sut.SetStartTime(habit, newStart);
+
+        Assert.That(inProgress.StartedAt, Is.EqualTo(newStart));
+        await _dataAccess.DidNotReceive().UpdateTime(Arg.Any<TimeEntity>());
+    }
 }

@@ -46,6 +46,21 @@ public class ItemServiceTests
     }
 
     [Test]
+    public async Task Initialize_WhenItemsIsNull_RegistersItemsInClientStateItems()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.Items = null;
+        _clientState.Items = null;
+        _dataAccess.GetItems(habit.Id).Returns(Task.FromResult<IReadOnlyList<ItemEntity>>(
+            [new ItemEntity { Id = 5, ParentId = habit.Id, Title = "Step 1" }]));
+
+        await _sut.Initialize(habit);
+
+        Assert.That(_clientState.Items, Is.Not.Null);
+        Assert.That(_clientState.Items, Contains.Key(5L));
+    }
+
+    [Test]
     public async Task Initialize_WhenItemsIsNotNull_DoesNotCallDataAccess()
     {
         HabitModel habit = TestData.Habit(id: 1);

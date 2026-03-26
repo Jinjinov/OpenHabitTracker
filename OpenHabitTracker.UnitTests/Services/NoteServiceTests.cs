@@ -383,6 +383,22 @@ public class NoteServiceTests
         Assert.That(category.Notes, Is.Empty);
     }
 
+    // --- DeleteNote soft-delete design ---
+
+    [Test]
+    public async Task DeleteNote_DoesNotRemoveFromCategoryNotes()
+    {
+        NoteModel note = TestData.Note(id: 1, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, notes: [note]);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _clientState.Notes = TestData.NoteDict(note);
+        _dataAccess.GetNote(note.Id).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = note.Id }));
+
+        await _sut.DeleteNote(note);
+
+        Assert.That(category.Notes, Contains.Item(note));
+    }
+
     // --- GetNotes null guard ---
 
     [Test]
