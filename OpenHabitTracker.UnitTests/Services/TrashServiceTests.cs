@@ -552,6 +552,55 @@ public class TrashServiceTests
         Assert.That(category.Tasks, Does.Not.Contain(trashed));
     }
 
+    // --- Delete removes from TrashedXxx lists ---
+
+    [Test]
+    public async Task Delete_Habit_RemovesFromTrashedHabits()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [trashed];
+
+        await _sut.Delete(trashed);
+
+        Assert.That(_clientState.TrashedHabits, Does.Not.Contain(trashed));
+    }
+
+    [Test]
+    public async Task Delete_Note_RemovesFromTrashedNotes()
+    {
+        NoteModel trashed = TestData.Note(id: 1, isDeleted: true);
+        _clientState.TrashedNotes = [trashed];
+
+        await _sut.Delete(trashed);
+
+        Assert.That(_clientState.TrashedNotes, Does.Not.Contain(trashed));
+    }
+
+    [Test]
+    public async Task Delete_Task_RemovesFromTrashedTasks()
+    {
+        TaskModel trashed = TestData.Task(id: 1, isDeleted: true);
+        _clientState.TrashedTasks = [trashed];
+
+        await _sut.Delete(trashed);
+
+        Assert.That(_clientState.TrashedTasks, Does.Not.Contain(trashed));
+    }
+
+    // --- Restore when entity not found in DB ---
+
+    [Test]
+    public async Task Restore_WhenEntityNotFoundInDB_StillSetsIsDeletedFalseOnModel()
+    {
+        HabitModel trashed = TestData.Habit(id: 1, isDeleted: true);
+        _clientState.TrashedHabits = [trashed];
+        _dataAccess.GetHabit(1).Returns(Task.FromResult<HabitEntity?>(null));
+
+        await _sut.Restore(trashed);
+
+        Assert.That(trashed.IsDeleted, Is.False);
+    }
+
     // --- RestoreAll tests ---
 
     [Test]

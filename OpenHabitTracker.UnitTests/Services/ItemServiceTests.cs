@@ -188,6 +188,44 @@ public class ItemServiceTests
         Assert.That(_clientState.Items, Is.Empty);
     }
 
+    // --- UpdateItem guard test ---
+
+    [Test]
+    public async Task UpdateItem_WhenSelectedItemIsNull_DoesNothing()
+    {
+        _sut.SelectedItem = null;
+
+        await _sut.UpdateItem("New Title");
+
+        await _dataAccess.DidNotReceive().UpdateItem(Arg.Any<ItemEntity>());
+    }
+
+    // --- DeleteItem null-safety test ---
+
+    [Test]
+    public void DeleteItem_WhenItemsIsNull_DoesNotThrow()
+    {
+        ItemModel item = new() { Id = 5, Title = "Step" };
+
+        Assert.DoesNotThrowAsync(() => _sut.DeleteItem(null, item));
+    }
+
+    // --- AddItem lazy-init test ---
+
+    [Test]
+    public async Task AddItem_WhenClientStateItemsIsNull_InitializesItemsDict()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.Items = [];
+        _clientState.Items = null;
+        _sut.NewItem = new ItemModel { Title = "Push-ups" };
+
+        await _sut.AddItem(habit);
+
+        Assert.That(_clientState.Items, Is.Not.Null);
+        Assert.That(_clientState.Items, Has.Count.EqualTo(1));
+    }
+
     // --- SetIsDone tests ---
 
     [Test]
@@ -212,5 +250,16 @@ public class ItemServiceTests
         await _sut.SetIsDone(item, false);
 
         Assert.That(item.DoneAt, Is.Null);
+    }
+
+    [Test]
+    public async Task SetIsDone_WhenEntityNotFound_DoesNotCallUpdateItem()
+    {
+        ItemModel item = new() { Id = 5, Title = "Step" };
+        _dataAccess.GetItem(item.Id).Returns(Task.FromResult<ItemEntity?>(null));
+
+        await _sut.SetIsDone(item, true);
+
+        await _dataAccess.DidNotReceive().UpdateItem(Arg.Any<ItemEntity>());
     }
 }

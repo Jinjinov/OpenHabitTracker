@@ -838,6 +838,90 @@ public class HabitServiceTests
         Assert.That(habit.LastTimeDoneAt, Is.EqualTo(existing));
     }
 
+    // --- RemoveTimeDone Bug 1 regression test ---
+
+    [Test]
+    public async Task RemoveTimeDone_WhenLastRemainingTimeIsInProgress_SetsLastTimeDoneAtToLastCompletedTime()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        DateTime day1 = new(2025, 1, 1, 10, 0, 0);
+        DateTime day2 = new(2025, 1, 2, 10, 0, 0);
+        DateTime day3 = new(2025, 1, 3, 10, 0, 0);
+        TimeModel completedA = new() { Id = 10, HabitId = 1, StartedAt = day1, CompletedAt = day1 };
+        TimeModel completedB = new() { Id = 11, HabitId = 1, StartedAt = day2, CompletedAt = day2 };
+        TimeModel inProgress = new() { Id = 12, HabitId = 1, StartedAt = day3 }; // CompletedAt = null
+        habit.TimesDone = [completedA, completedB, inProgress];
+        habit.RefreshTimesDoneByDay();
+        habit.LastTimeDoneAt = day2;
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        await _sut.RemoveTimeDone(habit, completedB);
+
+        // completedB removed; remaining times are completedA and inProgress
+        // last COMPLETED time is completedA → LastTimeDoneAt must equal day1, not null
+        Assert.That(habit.LastTimeDoneAt, Is.EqualTo(day1));
+    }
+
+    // --- UpdateTimeDone LastTimeDoneAt tests ---
+
+    [Test]
+    public async Task UpdateTimeDone_UpdatesLastTimeDoneAt()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        DateTime completedAt = new(2025, 6, 1, 10, 0, 0);
+        TimeModel time = new() { Id = 5, HabitId = 1, StartedAt = completedAt.AddHours(-1), CompletedAt = completedAt };
+        habit.TimesDone = [time];
+        habit.RefreshTimesDoneByDay();
+        habit.LastTimeDoneAt = null;
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTime(time.Id).Returns(Task.FromResult<TimeEntity?>(new TimeEntity { Id = time.Id }));
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        await _sut.UpdateTimeDone(habit, time);
+
+        Assert.That(habit.LastTimeDoneAt, Is.EqualTo(completedAt));
+    }
+
+    [Test]
+    public async Task UpdateTimeDone_WhenLastTimeIsInProgress_SetsLastTimeDoneAtToLastCompletedTime()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        DateTime day1 = new(2025, 1, 1, 10, 0, 0);
+        DateTime day2 = new(2025, 1, 2, 10, 0, 0);
+        TimeModel completed = new() { Id = 10, HabitId = 1, StartedAt = day1, CompletedAt = day1 };
+        TimeModel inProgress = new() { Id = 11, HabitId = 1, StartedAt = day2 }; // CompletedAt = null
+        habit.TimesDone = [completed, inProgress];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTime(inProgress.Id).Returns(Task.FromResult<TimeEntity?>(new TimeEntity { Id = inProgress.Id }));
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        await _sut.UpdateTimeDone(habit, inProgress);
+
+        Assert.That(habit.LastTimeDoneAt, Is.EqualTo(day1));
+    }
+
+    // --- AddTimeDone UncheckAllItems test ---
+
+    [Test]
+    public async Task AddTimeDone_WhenUncheckAllItemsOnHabitDoneEnabled_UnchecksAllItems()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        ItemModel item = new() { Id = 5, DoneAt = DateTime.Now };
+        habit.Items = [item];
+        habit.TimesDone = [];
+        habit.TimesDoneByDay = new();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _clientState.Settings.UncheckAllItemsOnHabitDone = true;
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+        _dataAccess.GetItem(item.Id).Returns(Task.FromResult<ItemEntity?>(new ItemEntity { Id = item.Id }));
+
+        await _sut.AddTimeDone(habit, DateTime.Now);
+
+        Assert.That(item.DoneAt, Is.Null);
+    }
+
     // --- UpdateHabit when entity not found ---
 
     [Test]
