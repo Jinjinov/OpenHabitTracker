@@ -122,6 +122,8 @@ cross-component refresh when toggling collapse in Home.razor (all three pages em
 - toggling collapse in one embedded page does not refresh the others
 - event Action? CategoryChanged approach was rejected — find a different solution
 
+similar problem: editing a note/task/habit in HabitComponent/NoteComponent/TaskComponent (second column, not IsEmbedded) does not immediately refresh the title/content shown in the list in the parent page — same "child updates, parent doesn't know" pattern
+
 1.
 Category-grouped main list (togglable alternative view):
 - applies to Notes, Tasks, and Habits pages
