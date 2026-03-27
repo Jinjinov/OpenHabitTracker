@@ -130,8 +130,6 @@ prerequisite for task 1 (avoids duplicating row HTML between flat and grouped lo
 
 1.
 Category-grouped main list (togglable alternative view):
-prerequisite: Dict sync fix Steps 1-2 must be done first — Task 1 uses category.Notes/Tasks/Habits
-  populated at runtime (Step 1); without it, all category sub-lists are null and grouped view is broken
 - applies to Notes, Tasks, and Habits pages
 - controlled by a new ShowGroupedByCategory setting (bool, default false)
 - replaces the current flat foreach in each page:
@@ -143,16 +141,15 @@ prerequisite: Dict sync fix Steps 1-2 must be done first — Task 1 uses categor
 - grouped view respects HiddenCategoryIds and SelectedCategoryId from Settings (same as flat view)
 - inner loop: items filtered+sorted per category
     `QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);`
-    CategoryModel.Notes/Tasks/Habits are populated at runtime (Option A — see Dict sync fix plan):
+    CategoryModel.Notes/Tasks/Habits are populated at runtime by LoadNotes/LoadTasks/LoadHabits:
               `category.Notes.FilterNotes(queryParameters)`
               `category.Tasks.FilterTasks(queryParameters)`
               `category.Habits.FilterHabits(queryParameters)`
-    Uncategorized bucket: CategoryId == 0 items have no CategoryModel in the dict (see Step 1 guard).
+    Uncategorized bucket: CategoryId == 0 items have no CategoryModel in the dict.
     Render as a hardcoded bucket AFTER the category loop using flat dict with .Where(x => x.CategoryId == 0):
               `ClientState.Notes.Values.Where(x => x.CategoryId == 0).FilterNotes(queryParameters)`
               `ClientState.Tasks.Values.Where(x => x.CategoryId == 0).FilterTasks(queryParameters)`
               `ClientState.Habits.Values.Where(x => x.CategoryId == 0).FilterHabits(queryParameters)`
-    This is the one place where Option B is used — it is an exception, not a contradiction of Option A.
 - category header row (all three pages): category title, collapse/expand (same unicode char as in Search)
 - category header row (Habits only): also and/or toggle button (see task 2), status color
   (green/orange/red, computed solely from CompletionRule — see task 2), LastTimeDoneAt (see task 3)
@@ -165,6 +162,11 @@ prerequisite: Dict sync fix Steps 1-2 must be done first — Task 1 uses categor
   - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
     and OpenHabitTracker.Blazor.Web/Migrations/
   - export/import: automatically included since full SettingsModel is serialized
+- persistence chain for IsCollapsed (bool, new CategoryModel/CategoryEntity field):
+  - add to CategoryModel and CategoryEntity
+  - add mapping in EntityToModel.cs and ModelToEntity.cs
+  - EF migration: same migration as ShowGroupedByCategory, CompletionRule, ShowLastTimeDone
+  - export/import: automatically included since full CategoryModel is serialized
 - new localization string: "Group by category"
 
 2.
@@ -233,7 +235,7 @@ Plan:
 - inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
 - respect ShowGroupedByCategory (see task 1)
     - false: iterate Notes, Tasks, Habits
-    - true: iterate CategoryService.Categories, use category.Notes/Tasks/Habits (populated at runtime — see Dict sync fix plan, Option A decision)
+    - true: iterate CategoryService.Categories, use category.Notes/Tasks/Habits (populated at runtime by LoadNotes/LoadTasks/LoadHabits)
   respect HiddenCategoryIds / SelectedCategoryId from Settings
 ✓ all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
 ✓ new localization strings: "This week", "out of" added; "overdue", "complete" pending (requires task 1)
