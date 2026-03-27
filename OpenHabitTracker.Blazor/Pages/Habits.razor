@@ -125,17 +125,17 @@
                 DateTime? categoryLastDone = group.Habits.Max(h => h.LastTimeDoneAt);
                 int habitCount = group.Habits.Count();
                 int doneThisWeek = group.Habits.Count(h => h.TimesDone?.Any(t => t.StartedAt >= weekStart && t.StartedAt < weekEnd) == true);
-                string lastDoneColor = GetLastDoneColor(group.Category?.CompletionRule ?? CompletionRule.All, doneThisWeek, habitCount);
+                string completionColor = GetCompletionColor(group.Category?.CompletionRule ?? CompletionRule.All, doneThisWeek, habitCount);
                 <button class="btn btn-plain border-0 p-0 text-start my-2 w-100" @onclick="() => OnToggleCollapsed(group.Category)">
                     <small class="d-block"><i class="bi bi-tag" aria-hidden="true"></i> @categoryTitle<i class="@($"bi {foldIcon} mx-1")" aria-hidden="true"></i></small>
                 </button>
                 @if (group.Category is not null)
                 {
-                    <small class="d-block"><span>@Loc["Mark complete when"]</span> <button class="btn btn-outline-secondary btn-sm py-0 px-1" aria-pressed="@(group.Category.CompletionRule == CompletionRule.All)" @onclick="() => OnToggleCompletionRule(group.Category)">@Loc[group.Category.CompletionRule == CompletionRule.All ? "all habits are done" : "any habit is done"]</button></small>
+                    <small class="d-flex align-items-center gap-1"><span>@Loc["Mark complete when"]</span> <button class="btn btn-outline-@completionColor btn-sm py-0 px-1" aria-pressed="@(group.Category.CompletionRule == CompletionRule.All)" @onclick="() => OnToggleCompletionRule(group.Category)">@Loc[group.Category.CompletionRule == CompletionRule.All ? "all habits are done" : "any habit is done"]</button></small>
                 }
                 @if (ClientState.Settings.ShowLastTimeDone && categoryLastDone is not null && group.Category?.IsCollapsed != true)
                 {
-                    <small class="d-block @lastDoneColor">@Loc["Last done"]: @($"{categoryLastDone.Value.ToShortDateString()} {categoryLastDone.Value:HH:mm}")</small>
+                    <small class="d-block">@Loc["Last done"]: @($"{categoryLastDone.Value.ToShortDateString()} {categoryLastDone.Value:HH:mm}")</small>
                 }
             }
 
@@ -430,15 +430,15 @@
             await CategoryService.ToggleCompletionRule(category);
     }
 
-    string GetLastDoneColor(CompletionRule rule, int doneThisWeek, int total)
+    string GetCompletionColor(CompletionRule rule, int doneThisWeek, int total)
     {
         if (rule == CompletionRule.All)
         {
-            if (doneThisWeek == total) return "text-success";
-            if (doneThisWeek > 0) return "text-warning";
-            return "text-danger";
+            if (doneThisWeek == total) return "success";
+            if (doneThisWeek > 0) return "warning";
+            return "danger";
         }
-        return doneThisWeek > 0 ? "text-success" : "text-danger";
+        return doneThisWeek > 0 ? "success" : "danger";
     }
 
     async Task OnMarkAsDone(HabitModel habit)

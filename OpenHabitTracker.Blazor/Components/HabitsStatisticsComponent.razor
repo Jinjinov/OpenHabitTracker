@@ -31,6 +31,7 @@
         @foreach (var group in groups)
         {
             int doneThisWeek = group.Habits.Count(h => h.TimesDone?.Any(t => t.StartedAt >= weekStart && t.StartedAt < weekEnd) == true);
+            string completionColor = GetCompletionColor(group.Category?.CompletionRule ?? CompletionRule.All, doneThisWeek, group.Habits.Count);
             int green = group.Habits.Count(h => h.GetRatio(ClientState.Settings.SelectedRatio) < 80);
             int orange = group.Habits.Count(h => { double r = h.GetRatio(ClientState.Settings.SelectedRatio); return r >= 80 && r < 100; });
             int red = group.Habits.Count(h => h.GetRatio(ClientState.Settings.SelectedRatio) >= 100);
@@ -41,7 +42,7 @@
                 {
                     <small class="fw-semibold d-block">@(group.Category?.Title ?? Loc["Uncategorized"])</small>
                 }
-                <p class="mb-1">@Loc["Done out of total", doneThisWeek, group.Habits.Count]</p>
+                <p class="mb-1 text-@completionColor">@Loc["Done out of total", doneThisWeek, group.Habits.Count]</p>
                 <div class="d-flex gap-2 mb-2">
                     <span class="badge bg-success-subtle text-success-emphasis">@green @Loc["on track"]</span>
                     <span class="badge bg-warning-subtle text-warning-emphasis">@orange @Loc["due soon"]</span>
@@ -102,6 +103,17 @@
             result.Add((null, uncategorized));
 
         return result;
+    }
+
+    string GetCompletionColor(CompletionRule rule, int doneThisWeek, int total)
+    {
+        if (rule == CompletionRule.All)
+        {
+            if (doneThisWeek == total) return "success";
+            if (doneThisWeek > 0) return "warning";
+            return "danger";
+        }
+        return doneThisWeek > 0 ? "success" : "danger";
     }
 
     bool IsComplete(List<HabitModel> habits, CompletionRule rule, DateTime weekStart, DateTime weekEnd)
