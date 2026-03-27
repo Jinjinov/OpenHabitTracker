@@ -240,5 +240,6 @@
   "due soon": "due soon",
   "overdue": "overdue",
   "Total": "Total",
-  "Done out of total": "{0} out of {1} done"
+  "Done out of total": "{0} out of {1} done",
+  "Categories complete": "{0} out of {1} categories complete"
 }
