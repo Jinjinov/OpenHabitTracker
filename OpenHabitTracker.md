@@ -179,7 +179,7 @@ Registered in `OpenHabitTracker/Startup.cs`. All scoped.
 | ItemService | Add/update/delete checklist items, toggle done state (lazy-loaded per parent) |
 | NoteService | Load notes, markdown caching, CRUD |
 | TaskService | Load tasks, manage checklist items, item auto-completion |
-| CategoryService | Load/manage categories (cascade delete is broken — known bug) |
+| CategoryService | Load/manage categories |
 | TrashService | Restore/permanently delete trashed items (soft-delete pattern) |
 | SearchFilterService | Build QueryParameters from SettingsModel |
 | CalendarService | Calendar logic |
