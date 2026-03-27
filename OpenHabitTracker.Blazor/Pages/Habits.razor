@@ -119,8 +119,13 @@
             {
                 string categoryTitle = group.Category?.Title ?? Loc["Uncategorized"];
                 string foldIcon = group.Category?.IsCollapsed == true ? "bi-chevron-right" : "bi-chevron-down";
+                DateTime? categoryLastDone = group.Habits.Max(h => h.LastTimeDoneAt);
                 <button class="btn btn-plain border-0 p-0 text-start my-2 w-100" @onclick="() => OnToggleCollapsed(group.Category)">
-                    <small><i class="bi bi-tag" aria-hidden="true"></i> @categoryTitle<i class="@($"bi {foldIcon} mx-1")" aria-hidden="true"></i></small>
+                    <small class="d-block"><i class="bi bi-tag" aria-hidden="true"></i> @categoryTitle<i class="@($"bi {foldIcon} mx-1")" aria-hidden="true"></i></small>
+                    @if (ClientState.Settings.ShowLastTimeDone && categoryLastDone is not null && group.Category?.IsCollapsed != true)
+                    {
+                        <small class="d-block text-muted">@Loc["Last done"]: @($"{categoryLastDone.Value.ToShortDateString()} {categoryLastDone.Value:HH:mm}")</small>
+                    }
                 </button>
             }
 
