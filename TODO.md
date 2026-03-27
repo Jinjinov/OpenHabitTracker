@@ -126,53 +126,29 @@ similar problem: editing a note/task/habit in HabitComponent/NoteComponent/TaskC
 
 1.
 Category-grouped main list (togglable alternative view):
-- applies to Notes, Tasks, and Habits pages
-- controlled by a new ShowGroupedByCategory setting (bool, default false)
-- replaces the current flat foreach in each page:
-  - foreach (NoteModel note in NoteService.GetNotes())
-  - foreach (TaskModel task in TaskService.GetTasks())
-  - foreach (HabitModel habit in HabitService.GetHabits())
-- outer loop: foreach (CategoryModel category in CategoryService.Categories)
-- items with no category (CategoryId == 0, the default long value) appear in an "Uncategorized" bucket rendered at the bottom
-  - uncategorized bucket has its own header row showing @Loc["Uncategorized"] (new localization string)
-- grouped view respects category filter display mode (same as flat view):
-  - CategoryFilterDisplay == CheckBoxes or RadioButtons: skip categories whose Id is in HiddenCategoryIds — no header rendered
-  - CategoryFilterDisplay == SelectOptions: skip all categories except the one matching SelectedCategoryId — no header rendered for others
-- inner loop: items filtered+sorted per category
-    `QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);`
-    CategoryModel.Notes/Tasks/Habits are populated at runtime by LoadNotes/LoadTasks/LoadHabits:
-              `category.Notes.FilterNotes(queryParameters)`
-              `category.Tasks.FilterTasks(queryParameters)`
-              `category.Habits.FilterHabits(queryParameters)`
-    Uncategorized bucket: CategoryId == 0 items have no CategoryModel in the dict.
-    Render as a hardcoded bucket AFTER the category loop using flat dict with .Where(x => x.CategoryId == 0):
-              `ClientState.Notes.Values.Where(x => x.CategoryId == 0).FilterNotes(queryParameters)`
-              `ClientState.Tasks.Values.Where(x => x.CategoryId == 0).FilterTasks(queryParameters)`
-              `ClientState.Habits.Values.Where(x => x.CategoryId == 0).FilterHabits(queryParameters)`
-- category header row (all three pages): category title, collapse/expand (same unicode char as in Search)
-- category header row (Habits only): also and/or toggle button (see task 2), status color
-  (green/orange/red, computed solely from CompletionRule — see task 2), LastTimeDoneAt (see task 3)
-- cross-category sorting still works in flat view; grouped view sorts within each category
-- inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor (not currently injected)
-- all new UI strings (category header labels) must use @Loc["..."] and add translations to json — app has 20 languages
-- persistence chain for ShowGroupedByCategory (bool, new SettingsModel/SettingsEntity field):
-  - add to SettingsModel and SettingsEntity
-  - add mapping in EntityToModel.cs and ModelToEntity.cs
-  - export/import: automatically included since full SettingsModel is serialized
-- persistence chain for IsCollapsed (bool, new CategoryModel/CategoryEntity field):
-  - add to CategoryModel and CategoryEntity
-  - add mapping in EntityToModel.cs and ModelToEntity.cs
-  - export/import: automatically included since full CategoryModel is serialized
+✓ applies to Notes, Tasks, and Habits pages
+✓ controlled by a new ShowGroupedByCategory setting (bool, default false)
+✓ replaces the current flat foreach in each page (nested foreach + GetHabitGroups/GetTaskGroups/GetNoteGroups)
+✓ outer loop: foreach (CategoryModel category in CategoryService.Categories)
+✓ items with no category appear in an "Uncategorized" bucket rendered at the bottom
+✓ grouped view respects category filter display mode (CheckBoxes/RadioButtons use HiddenCategoryIds; SelectOptions uses SelectedCategoryId)
+✓ inner loop: items filtered+sorted per category using FilterHabits/FilterTasks/FilterNotes(queryParameters)
+✓ category header row (all three pages): category title, collapse/expand
+- category header row (Habits only): and/or toggle button (see task 2), status color (see task 2)
+✓ category header row (Habits only): LastTimeDoneAt (see task 3)
+✓ cross-category sorting still works in flat view; grouped view sorts within each category
+✓ inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
+✓ all new UI strings use @Loc["..."] and added to en.json only — other 19 language JSON files still need translations
+✓ persistence chain for ShowGroupedByCategory: SettingsModel, SettingsEntity, EntityToModel, ModelToEntity
+✓ persistence chain for IsCollapsed: CategoryModel, CategoryEntity, EntityToModel, ModelToEntity
 - EF migration (covers all 4 new fields: ShowGroupedByCategory, ShowLastTimeDone, IsCollapsed, CompletionRule):
   - run after all model/entity changes for tasks 1, 2, 3 are done:
     cd e:/Jinjinov/OpenHabitTracker && dotnet ef migrations add AddGroupedViewSettings --project OpenHabitTracker.EntityFrameworkCore --startup-project OpenHabitTracker.Blazor.Wasm
     cd e:/Jinjinov/OpenHabitTracker && dotnet ef migrations add AddGroupedViewSettings --project OpenHabitTracker.Blazor.Web --startup-project OpenHabitTracker.Blazor.Web
-- Settings.razor: add ShowGroupedByCategory checkbox above "Show help" (step 5 currently) — it is an important setting
-- Settings.razor: add ShowLastTimeDone (task 3) directly below ShowGroupedByCategory — always visible (not conditional on ShowGroupedByCategory)
-- Settings.razor: ShowGroupedByCategory and ShowLastTimeDone (task 3) both need data-settings-step- attributes
-  - all existing data-settings-step- numbers must be re-numbered after the new entries are inserted
-  - guided tour text for each new setting must use @Loc["..."] and be added to all 20 localization JSON files
-- new localization strings: "Group by category", "Uncategorized", "Show last done time" (task 3 — added here to track together)
+✓ Settings.razor: ShowGroupedByCategory checkbox added above "Show help"
+✓ Settings.razor: ShowLastTimeDone directly below ShowGroupedByCategory, always visible
+✓ Settings.razor: data-settings-step- attributes renumbered; guided tour texts added to GuidedTourComponent-en.json only — other 19 language JSON files still need translations
+✓ new localization strings added to en.json: "Group by category", "Uncategorized", "Show last done time"
 
 2.
 add group "and / or" toggle:
@@ -180,15 +156,13 @@ add group "and / or" toggle:
 - one habit/item done -> green (color) / "complete" (text)
 
 Plan:
-- add CompletionRule property to CategoryModel (enum CompletionRule { All, Any })
-- full persistence chain (CompletionRule is a new persisted field, unlike display-only settings):
-  - add to CategoryEntity
-  - add mapping in EntityToModel.cs and ModelToEntity.cs
-  - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
-    and OpenHabitTracker.Blazor.Web/Migrations/
-  - include in all export/import formats: JSON, YAML, TSV, Markdown (Google Keep is import-only)
-- all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
-- new localization strings: "Mark complete when all habits done" / "Mark complete when any habit done"
+✓ add CompletionRule property to CategoryModel (enum CompletionRule { All, Any })
+✓ full persistence chain: CategoryEntity, EntityToModel, ModelToEntity
+- EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
+  and OpenHabitTracker.Blazor.Web/Migrations/
+- include in all export/import formats: JSON, YAML, TSV, Markdown (Google Keep is import-only)
+- all new UI strings must use @Loc["..."] and add translations to all 20 language JSON files
+- new localization strings (not yet added to any JSON file): "Mark complete when all habits done" / "Mark complete when any habit done"
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
@@ -200,33 +174,28 @@ Plan:
 
 3.
 LastDone date: for a group, for the items
-- add date to habit item
-- add date to category
-add settings to show, hide this extra info
+✓ add date to habit item (already existed: ElapsedTime + ratio badge)
+✓ add date to category (max LastTimeDoneAt shown in category header)
+✓ add settings to show, hide this extra info (ShowLastTimeDone)
 
 Plan:
-- "last done for an item" already exists: HabitModel.LastTimeDoneAt (DateTime?)
-- "last done for a category" = max(LastTimeDoneAt) across all habits in that category
-- all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
-- new localization strings: "Last done", "Show last done"
+✓ "last done for an item" already exists: HabitModel.LastTimeDoneAt (DateTime?)
+✓ "last done for a category" = max(LastTimeDoneAt) across all habits in that category
+✓ all new UI strings use @Loc["..."] and added to en.json only — other 19 language JSON files still need translations
+✓ new localization strings added to en.json: "Last done", "Show last done time"
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
      - show LastTimeDoneAt (most recent across all habits)
 
   B. Category-grouped main list (see task 1):
-     - show LastTimeDoneAt in the category header row
-     - controlled by a new ShowLastTimeDone setting (bool, default true)
-     - persistence chain for ShowLastTimeDone (bool, new SettingsModel/SettingsEntity field):
-       - add to SettingsModel and SettingsEntity
-       - add mapping in EntityToModel.cs and ModelToEntity.cs
-       - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
-         and OpenHabitTracker.Blazor.Web/Migrations/
-       - export/import: automatically included since full SettingsModel is serialized
+✓  - show LastTimeDoneAt in the category header row (hidden when collapsed)
+✓  - controlled by ShowLastTimeDone setting (bool, default true)
+✓  - persistence chain: SettingsModel, SettingsEntity, EntityToModel, ModelToEntity
+     - EF migration: covered by task 1 migration above
 
   C. Per-habit in the flat main list:
-     - already shown (ElapsedTime + ratio badge on each habit row)
-     - no change needed
+✓  - already shown (ElapsedTime + ratio badge on each habit row)
 
 4.
 This week (xx.xx - yy.yy) statistics
