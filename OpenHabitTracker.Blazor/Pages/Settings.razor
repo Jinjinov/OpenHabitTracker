@@ -77,51 +77,61 @@
         </div>
 
         <div class="list-group-item" data-settings-step-5>
+            <InputCheckbox id="ShowGroupedByCategory" class="form-check-input me-1" Value="_settings.ShowGroupedByCategory" ValueExpression="() => _settings.ShowGroupedByCategory" ValueChanged="SaveShowGroupedByCategory" />
+            <label for="ShowGroupedByCategory" class="form-check-label stretched-link d-inline">@Loc["Group by category"]</label>
+        </div>
+
+        <div class="list-group-item" data-settings-step-6>
+            <InputCheckbox id="ShowLastTimeDone" class="form-check-input me-1" Value="_settings.ShowLastTimeDone" ValueExpression="() => _settings.ShowLastTimeDone" ValueChanged="SaveShowLastTimeDone" />
+            <label for="ShowLastTimeDone" class="form-check-label stretched-link d-inline">@Loc["Show last done time"]</label>
+        </div>
+
+        <div class="list-group-item" data-settings-step-7>
             <InputCheckbox id="ShowHelp" class="form-check-input me-1" Value="_settings.ShowHelp" ValueExpression="() => _settings.ShowHelp" ValueChanged="SaveShowHelp" />
             <label for="ShowHelp" class="form-check-label stretched-link d-inline">@Loc["Show help"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-6>
+        <div class="list-group-item" data-settings-step-8>
             <InputCheckbox id="ShowPriorityDropdown" class="form-check-input me-1" Value="_settings.ShowPriorityDropdown" ValueExpression="() => _settings.ShowPriorityDropdown" ValueChanged="SaveShowPriorityDropdown" />
             <label for="ShowPriorityDropdown" class="form-check-label stretched-link d-inline">@Loc["Show priority"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-7>
+        <div class="list-group-item" data-settings-step-9>
             <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowItemList" ValueExpression="() => _settings.ShowItemList" ValueChanged="SaveShowItemList" />
             <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show item list"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-8>
+        <div class="list-group-item" data-settings-step-10>
             <InputCheckbox id="ShowSmallCalendar" class="form-check-input me-1" Value="_settings.ShowSmallCalendar" ValueExpression="() => _settings.ShowSmallCalendar" ValueChanged="SaveShowSmallCalendar" />
             <label for="ShowSmallCalendar" class="form-check-label stretched-link d-inline">@Loc["Show small calendar"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-9>
+        <div class="list-group-item" data-settings-step-11>
             <InputCheckbox id="ShowLargeCalendar" class="form-check-input me-1" Value="_settings.ShowLargeCalendar" ValueExpression="() => _settings.ShowLargeCalendar" ValueChanged="SaveShowLargeCalendar" />
             <label for="ShowLargeCalendar" class="form-check-label stretched-link d-inline">@Loc["Show large calendar"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-10>
+        <div class="list-group-item" data-settings-step-12>
             <InputCheckbox id="ShowHabitStatistics" class="form-check-input me-1" Value="_settings.ShowHabitStatistics" ValueExpression="() => _settings.ShowHabitStatistics" ValueChanged="SaveShowHabitStatistics" />
             <label for="ShowHabitStatistics" class="form-check-label stretched-link d-inline">@Loc["Show habit statistics"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-11>
+        <div class="list-group-item" data-settings-step-13>
             <InputCheckbox id="ShowCategory" class="form-check-input me-1" Value="_settings.ShowCategory" ValueExpression="() => _settings.ShowCategory" ValueChanged="SaveShowCategory" />
             <label for="ShowCategory" class="form-check-label stretched-link d-inline">@Loc["Show category"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-12>
+        <div class="list-group-item" data-settings-step-14>
             <InputCheckbox id="ShowColor" class="form-check-input me-1" Value="_settings.ShowColor" ValueExpression="() => _settings.ShowColor" ValueChanged="SaveShowColor" />
             <label for="ShowColor" class="form-check-label stretched-link d-inline">@Loc["Show color"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-13>
+        <div class="list-group-item" data-settings-step-15>
             <InputCheckbox id="ShowCreatedUpdated" class="form-check-input me-1" Value="_settings.ShowCreatedUpdated" ValueExpression="() => _settings.ShowCreatedUpdated" ValueChanged="SaveShowCreatedUpdated" />
             <label for="ShowCreatedUpdated" class="form-check-label stretched-link d-inline">@Loc["Show created & updated"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-14>
+        <div class="list-group-item" data-settings-step-16>
             <small>@Loc["Language"]:</small>
             <InputSelect class="form-select" aria-label="@Loc["Language"]" Value="_settings.Culture" ValueExpression="() => _settings.Culture" TValue="string" ValueChanged="SaveCulture">
                 @foreach ((string key, Localization.Loc loc) in Localization.Loc.Cultures)
@@ -131,7 +141,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-15>
+        <div class="list-group-item" data-settings-step-17>
             <small>@Loc["Week start"]:</small>
             <InputSelect class="form-select" aria-label="@Loc["Week start"]" Value="_settings.FirstDayOfWeek" ValueExpression="() => _settings.FirstDayOfWeek" TValue="DayOfWeek" ValueChanged="SaveFirstDayOfWeek">
                 @foreach (DayOfWeek dayOfWeek in Enum.GetValues<DayOfWeek>())
@@ -141,22 +151,22 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-16>
+        <div class="list-group-item" data-settings-step-18>
             <InputCheckbox id="InsertTabsInNoteContent" class="form-check-input me-1" Value="_settings.InsertTabsInNoteContent" ValueExpression="() => _settings.InsertTabsInNoteContent" ValueChanged="SaveInsertTabsInNoteContent" />
             <label for="InsertTabsInNoteContent" class="form-check-label stretched-link d-inline">@Loc["Insert tabs in note content"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-17>
+        <div class="list-group-item" data-settings-step-19>
             <InputCheckbox id="DisplayNoteContentAsMarkdown" class="form-check-input me-1" Value="_settings.DisplayNoteContentAsMarkdown" ValueExpression="() => _settings.DisplayNoteContentAsMarkdown" ValueChanged="SaveDisplayNoteContentAsMarkdown" />
             <label for="DisplayNoteContentAsMarkdown" class="form-check-label stretched-link d-inline">@Loc["Display note content as Markdown"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-18>
+        <div class="list-group-item" data-settings-step-20>
             <InputCheckbox id="UncheckAllItemsOnHabitDone" class="form-check-input me-1" Value="_settings.UncheckAllItemsOnHabitDone" ValueExpression="() => _settings.UncheckAllItemsOnHabitDone" ValueChanged="SaveUncheckAllItemsOnHabitDone" />
             <label for="UncheckAllItemsOnHabitDone" class="form-check-label stretched-link d-inline">@Loc["Reset habit when it is completed"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-19>
+        <div class="list-group-item" data-settings-step-21>
             <small>@Loc["Display category filter as"]:</small>
             <InputSelect class="form-select" aria-label="@Loc["Display category filter as"]" Value="_settings.CategoryFilterDisplay" ValueExpression="() => _settings.CategoryFilterDisplay" TValue="FilterDisplay" ValueChanged="SaveCategoryFilterDisplay">
                 <option value="@FilterDisplay.CheckBoxes">@Loc["Check boxes"]</option>
@@ -165,7 +175,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-20>
+        <div class="list-group-item" data-settings-step-22>
             <small>@Loc["Display priority filter as"]:</small>
             <InputSelect class="form-select" aria-label="@Loc["Display priority filter as"]" Value="_settings.PriorityFilterDisplay" ValueExpression="() => _settings.PriorityFilterDisplay" TValue="FilterDisplay" ValueChanged="SavePriorityFilterDisplay">
                 <option value="@FilterDisplay.CheckBoxes">@Loc["Check boxes"]</option>
@@ -174,7 +184,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-21>
+        <div class="list-group-item" data-settings-step-23>
             <small>@Loc["Horizontal space"]:</small>
             <InputSelect class="form-select" aria-label="@Loc["Horizontal space"]" Value="_settings.HorizontalMargin" ValueExpression="() => _settings.HorizontalMargin" TValue="int" ValueChanged="SaveHorizontalMargin">
                 @for (int i = 0; i <= 5; i++)
@@ -184,7 +194,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-22>
+        <div class="list-group-item" data-settings-step-24>
             <small>@Loc["Vertical space"]:</small>
             <InputSelect class="form-select" aria-label="@Loc["Vertical space"]" Value="_settings.VerticalMargin" ValueExpression="() => _settings.VerticalMargin" TValue="int" ValueChanged="SaveVerticalMargin">
                 @for (int i = 0; i <= 5; i++)
@@ -209,6 +219,8 @@
         new() { Text = "Choose a theme." },
         new() { Text = "Choose a start page that should open every time you start OpenHabitTracker." },
         new() { Text = "Choose a start sidebar that should open every time you start OpenHabitTracker." },
+        new() { Text = "Group items by category in Notes, Tasks and Habits." },
+        new() { Text = "Show the time each habit was last completed in the category header." },
         new() { Text = "Show help on every page." },
         new() { Text = "Show the priority in Notes, Tasks and Habits." },
         new() { Text = "Show the item list in Tasks and Habits." },
@@ -290,6 +302,20 @@
         _settings.StartSidebar = startSidebar;
 
         await ClientState.UpdateSettings();
+    }
+
+    async Task SaveShowGroupedByCategory(bool show)
+    {
+        _settings.ShowGroupedByCategory = show;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveShowLastTimeDone(bool show)
+    {
+        _settings.ShowLastTimeDone = show;
+
+        await UpdateAndRefresh();
     }
 
     async Task SaveShowHelp(bool show)

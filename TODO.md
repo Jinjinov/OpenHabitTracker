@@ -118,15 +118,9 @@ and TimesDone are actually lazy loaded, there will be a bug:
 1, 2, 3 must be done at the same time so there is one new DB migration, not three
 
 0.
-prerequisite for task 1 (avoids duplicating row HTML between flat and grouped loops):
-- replace the flat foreach in Habits.razor, Tasks.razor, Notes.razor with a nested foreach:
-  - outer loop: foreach (var group in GetHabitGroups()) / GetTaskGroups() / GetNoteGroups()
-  - inner loop: foreach (HabitModel habit in group.Habits) / TaskModel / NoteModel
-  - row HTML stays in the inner loop, written once
-- GetHabitGroups() / GetTaskGroups() / GetNoteGroups() is a method in the @code block:
-  - flat view (ShowGroupedByCategory == false): yields a single (CategoryModel? Category, IEnumerable<...> Items) tuple with Category = null and all items from HabitService.GetHabits() / TaskService.GetTasks() / NoteService.GetNotes()
-  - grouped view (ShowGroupedByCategory == true): yields one tuple per CategoryModel (from CategoryService.Categories), plus a final tuple with Category = null for uncategorized items (CategoryId == 0)
-- category header row is rendered in the outer loop when Category is not null (i.e. grouped view only)
+cross-component refresh when toggling collapse in Home.razor (all three pages embedded)
+- toggling collapse in one embedded page does not refresh the others
+- event Action? CategoryChanged approach was rejected — find a different solution
 
 1.
 Category-grouped main list (togglable alternative view):

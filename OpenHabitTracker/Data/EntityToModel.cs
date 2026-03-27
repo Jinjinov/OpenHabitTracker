@@ -17,6 +17,8 @@ public static class EntityToModel
         model.Id = entity.Id;
         model.UserId = entity.UserId;
         model.Title = entity.Title;
+        model.IsCollapsed = entity.IsCollapsed;
+        model.CompletionRule = entity.CompletionRule;
     }
 
     public static HabitModel ToModel(this HabitEntity entity)
@@ -142,6 +144,8 @@ public static class EntityToModel
         model.ShowCreatedUpdated = entity.ShowCreatedUpdated;
         model.InsertTabsInNoteContent = entity.InsertTabsInNoteContent;
         model.DisplayNoteContentAsMarkdown = entity.DisplayNoteContentAsMarkdown;
+        model.ShowGroupedByCategory = entity.ShowGroupedByCategory;
+        model.ShowLastTimeDone = entity.ShowLastTimeDone;
         model.HideCompletedTasks = entity.HideCompletedTasks;
         model.ShowOnlyOverSelectedRatioMin = entity.ShowOnlyOverSelectedRatioMin;
         model.SelectedRatioMin = entity.SelectedRatioMin;
