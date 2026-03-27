@@ -226,6 +226,10 @@
   "Calendar": "Calendrier",
   "times done": "fois fait",
 
+  "Group by category": "Grouper par catégorie",
+  "Show last done time": "Afficher la dernière heure d'achèvement",
+  "Uncategorized": "Non catégorisé",
+
   "This week": "Cette semaine",
   "out of": "sur",
   "Overdue": "En retard",
@@ -236,5 +240,9 @@
   "due soon": "bientôt dues",
   "overdue": "en retard",
   "Total": "Total",
-  "Done out of total": "{0} sur {1} faites"
+  "Done out of total": "{0} sur {1} faites",
+  "Categories complete": "{0} sur {1} catégories complètes",
+  "Mark complete when": "Marquer comme complet quand",
+  "all habits are done": "toutes les habitudes sont terminées",
+  "any habit is done": "une habitude est terminée"
 }

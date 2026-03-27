@@ -226,6 +226,10 @@
   "Calendar": "Calendario",
   "times done": "volte fatto",
 
+  "Group by category": "Raggruppa per categoria",
+  "Show last done time": "Mostra l'ultima ora di completamento",
+  "Uncategorized": "Non categorizzato",
+
   "This week": "Questa settimana",
   "out of": "su",
   "Overdue": "In ritardo",
@@ -236,5 +240,9 @@
   "due soon": "in scadenza",
   "overdue": "scadute",
   "Total": "Totale",
-  "Done out of total": "{0} su {1} completati"
+  "Done out of total": "{0} su {1} completati",
+  "Categories complete": "{0} su {1} categorie complete",
+  "Mark complete when": "Segna come completo quando",
+  "all habits are done": "tutte le abitudini sono completate",
+  "any habit is done": "un'abitudine è completata"
 }

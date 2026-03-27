@@ -226,6 +226,10 @@
   "Calendar": "カレンダー",
   "times done": "回完了",
 
+  "Group by category": "カテゴリでグループ化",
+  "Show last done time": "最終完了時刻を表示",
+  "Uncategorized": "未分類",
+
   "This week": "今週",
   "out of": "/",
   "Overdue": "期限超過",
@@ -236,5 +240,9 @@
   "due soon": "もうすぐ期限",
   "overdue": "期限切れ",
   "Total": "合計",
-  "Done out of total": "{1}件中{0}件完了"
+  "Done out of total": "{1}件中{0}件完了",
+  "Categories complete": "{1}カテゴリ中{0}個完了",
+  "Mark complete when": "完了条件",
+  "all habits are done": "すべての習慣が完了",
+  "any habit is done": "いずれかの習慣が完了"
 }

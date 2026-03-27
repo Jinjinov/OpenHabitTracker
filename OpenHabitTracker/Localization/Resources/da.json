@@ -226,6 +226,10 @@
   "Calendar": "Kalender",
   "times done": "gange udført",
 
+  "Group by category": "Grupper efter kategori",
+  "Show last done time": "Vis sidst færdig tidspunkt",
+  "Uncategorized": "Ikke kategoriseret",
+
   "This week": "Denne uge",
   "out of": "af",
   "Overdue": "Forsinket",
@@ -236,5 +240,9 @@
   "due soon": "snart forfaldent",
   "overdue": "forsinket",
   "Total": "I alt",
-  "Done out of total": "{0} af {1} udført"
+  "Done out of total": "{0} af {1} udført",
+  "Categories complete": "{0} ud af {1} kategorier fuldført",
+  "Mark complete when": "Marker som fuldført når",
+  "all habits are done": "alle vaner er fuldført",
+  "any habit is done": "en vane er fuldført"
 }

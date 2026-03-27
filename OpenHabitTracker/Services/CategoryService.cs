@@ -155,6 +155,18 @@ public class CategoryService(ClientState clientState) : ICategoryService
         }
     }
 
+    public async Task ToggleCompletionRule(CategoryModel category)
+    {
+        category.CompletionRule = category.CompletionRule == CompletionRule.All ? CompletionRule.Any : CompletionRule.All;
+
+        if (await _clientState.DataAccess.GetCategory(category.Id) is CategoryEntity entity)
+        {
+            entity.CompletionRule = category.CompletionRule;
+
+            await _clientState.DataAccess.UpdateCategory(entity);
+        }
+    }
+
     public void ChangeCategory(ContentModel model, long newCategoryId)
     {
         if (_clientState.Categories is null)

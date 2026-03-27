@@ -226,6 +226,10 @@
   "Calendar": "日历",
   "times done": "次完成",
 
+  "Group by category": "按类别分组",
+  "Show last done time": "显示最后完成时间",
+  "Uncategorized": "未分类",
+
   "This week": "本周",
   "out of": "/",
   "Overdue": "已逾期",
@@ -236,5 +240,9 @@
   "due soon": "即将到期",
   "overdue": "已逾期",
   "Total": "总计",
-  "Done out of total": "{1}个中已完成{0}个"
+  "Done out of total": "{1}个中已完成{0}个",
+  "Categories complete": "{1}个类别中{0}个已完成",
+  "Mark complete when": "完成条件",
+  "all habits are done": "所有习惯已完成",
+  "any habit is done": "任意习惯已完成"
 }
