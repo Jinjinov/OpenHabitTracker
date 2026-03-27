@@ -84,6 +84,8 @@
   "Choose a theme.": "Vælg et tema.",
   "Choose a start page that should open every time you start OpenHabitTracker.": "Vælg en startside der åbner hver gang du starter OpenHabitTracker.",
   "Choose a start sidebar that should open every time you start OpenHabitTracker.": "Vælg et startsidepanel der åbner hver gang du starter OpenHabitTracker.",
+  "Group items by category in Notes, Tasks and Habits.": "Gruppér elementer efter kategori i notater, opgaver og vaner.",
+  "Show the time each habit was last completed in the category header.": "Vis tidspunktet for den seneste fuldførelse af hver vane i kategorioverskriften.",
   "Show help on every page.": "Vis hjælp på alle sider.",
   "Show the priority in Notes, Tasks and Habits.": "Vis prioriteten i notater, opgaver og vaner.",
   "Show the item list in Tasks and Habits.": "Vis elementlisten i opgaver og vaner.",

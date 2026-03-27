@@ -84,6 +84,8 @@
   "Choose a theme.": "Odaberite temu.",
   "Choose a start page that should open every time you start OpenHabitTracker.": "Odaberite početnu stranicu koja će se otvoriti svaki put kada pokrenete OpenHabitTracker.",
   "Choose a start sidebar that should open every time you start OpenHabitTracker.": "Odaberite početnu bočnu traku koja će se otvoriti svaki put kada pokrenete OpenHabitTracker.",
+  "Group items by category in Notes, Tasks and Habits.": "Grupiši stavke po kategorijama u beleškami, zadacima i navikama.",
+  "Show the time each habit was last completed in the category header.": "Prikaži vreme poslednjeg završetka svake navike u zaglavlju kategorije.",
   "Show help on every page.": "Prikaži pomoć na svakoj stranici.",
   "Show the priority in Notes, Tasks and Habits.": "Prikaži prioritet u beleškami, zadacima i navikama.",
   "Show the item list in Tasks and Habits.": "Prikaži listu stavki u zadacima i navikama.",

@@ -84,6 +84,8 @@
   "Choose a theme.": "选择主题。",
   "Choose a start page that should open every time you start OpenHabitTracker.": "选择每次启动OpenHabitTracker时打开的起始页。",
   "Choose a start sidebar that should open every time you start OpenHabitTracker.": "选择每次启动OpenHabitTracker时打开的侧边栏。",
+  "Group items by category in Notes, Tasks and Habits.": "在笔记、任务和习惯中按分类分组显示项目。",
+  "Show the time each habit was last completed in the category header.": "在分类标题中显示每个习惯最后完成的时间。",
   "Show help on every page.": "在每个页面显示帮助。",
   "Show the priority in Notes, Tasks and Habits.": "在笔记、任务和习惯中显示优先级。",
   "Show the item list in Tasks and Habits.": "在任务和习惯中显示项目列表。",

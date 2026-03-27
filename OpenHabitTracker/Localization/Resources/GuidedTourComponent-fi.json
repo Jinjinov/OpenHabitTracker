@@ -84,6 +84,8 @@
   "Choose a theme.": "Valitse teema.",
   "Choose a start page that should open every time you start OpenHabitTracker.": "Valitse aloitussivu, joka avautuu joka kerta kun käynnistät OpenHabitTrackerin.",
   "Choose a start sidebar that should open every time you start OpenHabitTracker.": "Valitse aloituspalkki, joka avautuu joka kerta kun käynnistät OpenHabitTrackerin.",
+  "Group items by category in Notes, Tasks and Habits.": "Ryhmittele kohteet kategorian mukaan muistiinpanoissa, tehtävissä ja tavoissa.",
+  "Show the time each habit was last completed in the category header.": "Näytä aika, jolloin kukin tapa viimeksi suoritettiin, kategorian otsikossa.",
   "Show help on every page.": "Näytä ohje jokaisella sivulla.",
   "Show the priority in Notes, Tasks and Habits.": "Näytä prioriteetti muistiinpanoissa, tehtävissä ja tavoissa.",
   "Show the item list in Tasks and Habits.": "Näytä kohdeluettelo tehtävissä ja tavoissa.",
