@@ -138,7 +138,7 @@ Category-grouped main list (togglable alternative view):
 ✓ category header row (Habits only): LastTimeDoneAt (see task 3)
 ✓ cross-category sorting still works in flat view; grouped view sorts within each category
 ✓ inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
-✓ all new UI strings use @Loc["..."] and added to en.json only — other 19 language JSON files still need translations
+✓ all new UI strings use @Loc["..."] and added to all 20 language JSON files
 ✓ persistence chain for ShowGroupedByCategory: SettingsModel, SettingsEntity, EntityToModel, ModelToEntity
 ✓ persistence chain for IsCollapsed: CategoryModel, CategoryEntity, EntityToModel, ModelToEntity
 - EF migration (covers all 4 new fields: ShowGroupedByCategory, ShowLastTimeDone, IsCollapsed, CompletionRule):
@@ -147,13 +147,13 @@ Category-grouped main list (togglable alternative view):
     cd e:/Jinjinov/OpenHabitTracker && dotnet ef migrations add AddGroupedViewSettings --project OpenHabitTracker.Blazor.Web --startup-project OpenHabitTracker.Blazor.Web
 ✓ Settings.razor: ShowGroupedByCategory checkbox added above "Show help"
 ✓ Settings.razor: ShowLastTimeDone directly below ShowGroupedByCategory, always visible
-✓ Settings.razor: data-settings-step- attributes renumbered; guided tour texts added to GuidedTourComponent-en.json only — other 19 language JSON files still need translations
-✓ new localization strings added to en.json: "Group by category", "Uncategorized", "Show last done time"
+✓ Settings.razor: data-settings-step- attributes renumbered; guided tour texts added to all 20 GuidedTourComponent language JSON files
+✓ new localization strings added to all 20 language JSON files: "Group by category", "Uncategorized", "Show last done time"
 
 2.
 add group "and / or" toggle:
-- all habits/items done -> green (color) / "complete" (text)
-- one habit/item done -> green (color) / "complete" (text)
+✓ all habits/items done -> green (color) / "complete" (text)
+✓ one habit/item done -> green (color) / "complete" (text)
 
 Plan:
 ✓ add CompletionRule property to CategoryModel (enum CompletionRule { All, Any })
@@ -179,18 +179,18 @@ LastDone date: for a group, for the items
 Plan:
 ✓ "last done for an item" already exists: HabitModel.LastTimeDoneAt (DateTime?)
 ✓ "last done for a category" = max(LastTimeDoneAt) across all habits in that category
-✓ all new UI strings use @Loc["..."] and added to en.json only — other 19 language JSON files still need translations
-✓ new localization strings added to en.json: "Last done", "Show last done time"
-- two display locations, both optional and independent:
+✓ all new UI strings use @Loc["..."] and added to all 20 language JSON files
+✓ new localization strings added to all 20 language JSON files: "Last done", "Show last done time"
+✓ two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
-✓    - show LastTimeDoneAt (most recent across all habits) — shown in HabitsStatisticsComponent per group
+✓   - show LastTimeDoneAt (most recent across all habits) — shown in HabitsStatisticsComponent per group
 
   B. Category-grouped main list (see task 1):
 ✓  - show LastTimeDoneAt in the category header row (hidden when collapsed)
 ✓  - controlled by ShowLastTimeDone setting (bool, default true)
 ✓  - persistence chain: SettingsModel, SettingsEntity, EntityToModel, ModelToEntity
-     - EF migration: covered by task 1 migration above
+   - EF migration: covered by task 1 migration above
 
   C. Per-habit in the flat main list:
 ✓  - already shown (ElapsedTime + ratio badge on each habit row)
@@ -207,8 +207,8 @@ Plan:
 ✓ inject ICategoryService into all 3 stats components
 ✓ respect ShowGroupedByCategory: GetHabitGroups/GetTaskGroups/GetNoteGroups in each component (flat = single group, grouped = per category)
 ✓ respect HiddenCategoryIds / SelectedCategoryId from Settings
-✓ all new UI strings use @Loc["..."] and added to en.json only — other 19 language JSON files still need translations
-✓ new localization strings added to en.json: "This week", "out of", "overdue", "Categories complete"
+✓ all new UI strings use @Loc["..."] and added to all 20 language JSON files
+✓ new localization strings added to all 20 language JSON files: "This week", "out of", "overdue", "Categories complete"
 
 Habits stats:
 ✓ respect ShowGroupedByCategory
