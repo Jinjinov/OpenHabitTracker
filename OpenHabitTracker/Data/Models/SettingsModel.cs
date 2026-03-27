@@ -50,6 +50,10 @@ public class SettingsModel
 
     public bool DisplayNoteContentAsMarkdown { get; set; } = true;
 
+    public bool ShowGroupedByCategory { get; set; } = false;
+
+    public bool ShowLastTimeDone { get; set; } = true;
+
     public bool HideCompletedTasks { get; set; } = true;
 
     public bool ShowOnlyOverSelectedRatioMin { get; set; } = false;
@@ -124,6 +128,8 @@ public class SettingsModel
             ShowCreatedUpdated = false,
             InsertTabsInNoteContent = true,
             DisplayNoteContentAsMarkdown = true,
+            ShowGroupedByCategory = false,
+            ShowLastTimeDone = true,
             HideCompletedTasks = true,
             ShowOnlyOverSelectedRatioMin = false,
             SelectedRatioMin = 50,

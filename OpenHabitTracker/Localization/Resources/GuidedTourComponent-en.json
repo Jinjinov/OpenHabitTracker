@@ -84,6 +84,8 @@
   "Choose a theme.": "Choose a theme.",
   "Choose a start page that should open every time you start OpenHabitTracker.": "Choose a start page that should open every time you start OpenHabitTracker.",
   "Choose a start sidebar that should open every time you start OpenHabitTracker.": "Choose a start sidebar that should open every time you start OpenHabitTracker.",
+  "Group items by category in Notes, Tasks and Habits.": "Group items by category in Notes, Tasks and Habits.",
+  "Show the time each habit was last completed in the category header.": "Show the time each habit was last completed in the category header.",
   "Show help on every page.": "Show help on every page.",
   "Show the priority in Notes, Tasks and Habits.": "Show the priority in Notes, Tasks and Habits.",
   "Show the item list in Tasks and Habits.": "Show the item list in Tasks and Habits.",

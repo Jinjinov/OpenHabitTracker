@@ -5,12 +5,14 @@
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Query
 @using OpenHabitTracker.Services
 @using Microsoft.JSInterop
 
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @inject IHabitService HabitService
+@inject ICategoryService CategoryService
 @inject ClientState ClientState
 @inject IJsInterop JsInterop
 @inject ISearchFilterService SearchFilterService
@@ -113,6 +115,17 @@
 
         foreach (var group in GetHabitGroups())
         {
+            @if (ClientState.Settings.ShowGroupedByCategory)
+            {
+                string categoryTitle = group.Category?.Title ?? Loc["Uncategorized"];
+                string foldIcon = group.Category?.IsCollapsed == true ? "bi-chevron-right" : "bi-chevron-down";
+                <button class="btn btn-plain border-0 p-0 text-start my-2 w-100" @onclick="() => OnToggleCollapsed(group.Category)">
+                    <small><i class="bi bi-tag" aria-hidden="true"></i> @categoryTitle<i class="@($"bi {foldIcon} mx-1")" aria-hidden="true"></i></small>
+                </button>
+            }
+
+            @if (group.Category?.IsCollapsed != true)
+            {
             foreach (HabitModel habit in group.Habits)
             {
                 bool showHabitComponent = !_showSecondColumn && habit.Id == Id && HabitService.NewHabit is null;
@@ -178,6 +191,7 @@
                         }
                     }
                 </div>
+            }
             }
         }
     }
@@ -389,6 +403,12 @@
         _pageStateChanged = !_pageStateChanged;
     }
 
+    async Task OnToggleCollapsed(CategoryModel? category)
+    {
+        if (category is not null)
+            await CategoryService.ToggleCollapsed(category);
+    }
+
     async Task OnMarkAsDone(HabitModel habit)
     {
         await HabitService.MarkAsDone(habit);
@@ -397,7 +417,35 @@
 
     IEnumerable<(CategoryModel? Category, IEnumerable<HabitModel> Habits)> GetHabitGroups()
     {
-        yield return (null, HabitService.GetHabits());
+        if (!ClientState.Settings.ShowGroupedByCategory || CategoryService.Categories is null)
+        {
+            yield return (null, HabitService.GetHabits());
+            yield break;
+        }
+
+        QueryParameters queryParameters = SearchFilterService.GetQueryParameters(ClientState.Settings);
+
+        foreach (CategoryModel category in CategoryService.Categories)
+        {
+            if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes || ClientState.Settings.CategoryFilterDisplay == FilterDisplay.RadioButtons)
+            {
+                if (ClientState.Settings.HiddenCategoryIds.Contains(category.Id))
+                    continue;
+            }
+            else if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
+            {
+                if (ClientState.Settings.SelectedCategoryId is not null && ClientState.Settings.SelectedCategoryId != category.Id)
+                    continue;
+            }
+
+            List<HabitModel> habits = category.Habits.FilterHabits(queryParameters).ToList();
+            if (habits.Count > 0)
+                yield return (category, habits);
+        }
+
+        List<HabitModel> uncategorized = ClientState.Habits!.Values.Where(x => x.CategoryId == 0).FilterHabits(queryParameters).ToList();
+        if (uncategorized.Count > 0)
+            yield return (null, uncategorized);
     }
 
     string ToHighestValueString(TimeSpan span)

@@ -143,6 +143,18 @@ public class CategoryService(ClientState clientState) : ICategoryService
         }
     }
 
+    public async Task ToggleCollapsed(CategoryModel category)
+    {
+        category.IsCollapsed = !category.IsCollapsed;
+
+        if (await _clientState.DataAccess.GetCategory(category.Id) is CategoryEntity entity)
+        {
+            entity.IsCollapsed = category.IsCollapsed;
+
+            await _clientState.DataAccess.UpdateCategory(entity);
+        }
+    }
+
     public void ChangeCategory(ContentModel model, long newCategoryId)
     {
         if (_clientState.Categories is null)

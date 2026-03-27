@@ -50,6 +50,10 @@ public class SettingsEntity
 
     public bool DisplayNoteContentAsMarkdown { get; set; } = true;
 
+    public bool ShowGroupedByCategory { get; set; } = false;
+
+    public bool ShowLastTimeDone { get; set; } = true;
+
     public bool HideCompletedTasks { get; set; } = true;
 
     public bool ShowOnlyOverSelectedRatioMin { get; set; } = false;

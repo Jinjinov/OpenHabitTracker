@@ -4,13 +4,16 @@
 @using GTour.Abstractions
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Blazor.Components
+@using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Query
 @using OpenHabitTracker.Services
 @using Microsoft.JSInterop
 
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @inject ITaskService TaskService
+@inject ICategoryService CategoryService
 @inject ClientState ClientState
 @inject ISearchFilterService SearchFilterService
 @inject IStringLocalizer Loc
@@ -103,6 +106,17 @@
 
         foreach (var group in GetTaskGroups())
         {
+            @if (ClientState.Settings.ShowGroupedByCategory)
+            {
+                string categoryTitle = group.Category?.Title ?? Loc["Uncategorized"];
+                string foldIcon = group.Category?.IsCollapsed == true ? "bi-chevron-right" : "bi-chevron-down";
+                <button class="btn btn-plain border-0 p-0 text-start my-2 w-100" @onclick="() => OnToggleCollapsed(group.Category)">
+                    <small><i class="bi bi-tag" aria-hidden="true"></i> @categoryTitle<i class="@($"bi {foldIcon} mx-1")" aria-hidden="true"></i></small>
+                </button>
+            }
+
+            @if (group.Category?.IsCollapsed != true)
+            {
             foreach (TaskModel task in group.Tasks)
             {
                 <div class="@($"my-{ClientState.Settings.VerticalMargin}")">
@@ -137,6 +151,7 @@
                         </div>
                     }
                 </div>
+            }
             }
         }
     }
@@ -275,7 +290,41 @@
 
     IEnumerable<(CategoryModel? Category, IEnumerable<TaskModel> Tasks)> GetTaskGroups()
     {
-        yield return (null, TaskService.GetTasks());
+        if (!ClientState.Settings.ShowGroupedByCategory || CategoryService.Categories is null)
+        {
+            yield return (null, TaskService.GetTasks());
+            yield break;
+        }
+
+        QueryParameters queryParameters = SearchFilterService.GetQueryParameters(ClientState.Settings);
+
+        foreach (CategoryModel category in CategoryService.Categories)
+        {
+            if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes || ClientState.Settings.CategoryFilterDisplay == FilterDisplay.RadioButtons)
+            {
+                if (ClientState.Settings.HiddenCategoryIds.Contains(category.Id))
+                    continue;
+            }
+            else if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
+            {
+                if (ClientState.Settings.SelectedCategoryId is not null && ClientState.Settings.SelectedCategoryId != category.Id)
+                    continue;
+            }
+
+            List<TaskModel> tasks = category.Tasks.FilterTasks(queryParameters).ToList();
+            if (tasks.Count > 0)
+                yield return (category, tasks);
+        }
+
+        List<TaskModel> uncategorized = ClientState.Tasks!.Values.Where(x => x.CategoryId == 0).FilterTasks(queryParameters).ToList();
+        if (uncategorized.Count > 0)
+            yield return (null, uncategorized);
+    }
+
+    async Task OnToggleCollapsed(CategoryModel? category)
+    {
+        if (category is not null)
+            await CategoryService.ToggleCollapsed(category);
     }
 
     async Task OnMarkAsDone(TaskModel task)
