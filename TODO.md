@@ -160,17 +160,15 @@ Plan:
 ✓ full persistence chain: CategoryEntity, EntityToModel, ModelToEntity
 - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
   and OpenHabitTracker.Blazor.Web/Migrations/
-- include in all export/import formats: JSON, YAML, TSV, Markdown (Google Keep is import-only)
 - all new UI strings must use @Loc["..."] and add translations to all 20 language JSON files
 - new localization strings (not yet added to any JSON file): "Mark complete when all habits done" / "Mark complete when any habit done"
-- two display locations, both optional and independent:
-
-  A. Stats panel (second column, see task 4 plan):
-     - show per-category CompletionRule state alongside the green/orange/red aggregate (read-only display for now)
-     - CompletionRule is the sole input for computing each category's status color in stats
-
-  B. Category-grouped main list (see task 1):
-     - and/or toggle button in the category header row
+- one display location: category header row in the grouped main list (Habits only)
+  - and/or toggle button changes CompletionRule between All and Any
+  - meaningful impact: color applied to the "Last done" text in the category header, driven by CompletionRule
+  - CompletionRule.All: green = all done, orange = some done, red = none done
+  - CompletionRule.Any: green = any done, red = none done (no orange — one is enough)
+  - "done this week" = has at least one TimeDone with StartedAt >= weekStart (same as stats)
+  - stats panel already reflects CompletionRule via "x out of y categories complete" — no toggle needed there (stats = read results, not change settings)
 
 3.
 LastDone date: for a group, for the items
@@ -186,7 +184,7 @@ Plan:
 - two display locations, both optional and independent:
 
   A. Stats panel (second column, see task 4 plan):
-     - show LastTimeDoneAt (most recent across all habits)
+✓    - show LastTimeDoneAt (most recent across all habits) — shown in HabitsStatisticsComponent per group
 
   B. Category-grouped main list (see task 1):
 ✓  - show LastTimeDoneAt in the category header row (hidden when collapsed)
@@ -200,36 +198,33 @@ Plan:
 4.
 This week (xx.xx - yy.yy) statistics
 ✓ x out of y habits done
-- x out of y groups are green (color) / "complete" (text)
+✓ x out of y groups are green (color) / "complete" (text) — "x out of y categories complete" in HabitsStatisticsComponent
 
 Plan:
 ✓ implement as 3 reusable components: NotesStatisticsComponent, TasksStatisticsComponent, HabitsStatisticsComponent
 ✓ wide screens (>= 1280px): each component renders in the else branch inside the second column on its respective page when no item is selected
 ✓ mobile: each component renders if (!_showSecondColumn)
-- inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
-- respect ShowGroupedByCategory (see task 1)
-    - false: iterate Notes, Tasks, Habits
-    - true: iterate CategoryService.Categories, use category.Notes/Tasks/Habits (populated at runtime by LoadNotes/LoadTasks/LoadHabits)
-  respect HiddenCategoryIds / SelectedCategoryId from Settings
-✓ all new UI strings must use @Loc["..."] and add translations to json — app has 20 languages
-✓ new localization strings: "This week", "out of" added; "overdue", "complete" pending (requires task 1)
+✓ inject ICategoryService into all 3 stats components
+✓ respect ShowGroupedByCategory: GetHabitGroups/GetTaskGroups/GetNoteGroups in each component (flat = single group, grouped = per category)
+✓ respect HiddenCategoryIds / SelectedCategoryId from Settings
+✓ all new UI strings use @Loc["..."] and added to en.json only — other 19 language JSON files still need translations
+✓ new localization strings added to en.json: "This week", "out of", "overdue", "Categories complete"
 
 Habits stats:
-- respect ShowGroupedByCategory (see task 1)
-- category title (if ShowGroupedByCategory) | habit count | green/orange/red counts (using existing GetRatio() + SelectedRatio logic) | LastTimeDoneAt of most recent habit
-✓ "this week" aggregate at top: habits done at least once this week out of total habits; categories fully complete this week (flat list only, no per-category grouping)
+✓ respect ShowGroupedByCategory
+✓ category title (if ShowGroupedByCategory) | green/orange/red counts | LastTimeDoneAt of most recent habit
+✓ "this week" aggregate at top: habits done at least once this week out of total; categories fully complete this week
+- CompletionRule used for IsComplete() but and/or toggle UI not yet done (see task 2)
 
 Tasks stats:
-- respect ShowGroupedByCategory (see task 1)
-- category title (if ShowGroupedByCategory) | total count | done count (CompletedAt != null) | overdue count (PlannedAt < now && CompletedAt == null) | total time spent (sum of CompletedAt - StartedAt across completed tasks)
-✓ total count | done count (CompletedAt != null) — flat list only, no per-category grouping
-- "this week" aggregate at top: tasks completed this week | tasks planned this week
+✓ respect ShowGroupedByCategory
+✓ category title (if ShowGroupedByCategory) | total count | done count | overdue count | total time spent
+✓ "this week" aggregate at top: tasks completed this week | tasks planned this week
 
 Notes stats:
-- respect ShowGroupedByCategory (see task 1)
-- category title (if ShowGroupedByCategory) | total count | count per Priority
-✓ total count | count per Priority — flat list only, no per-category grouping
-- CreatedAt / UpdatedAt
+✓ respect ShowGroupedByCategory
+✓ category title (if ShowGroupedByCategory) | total count | count per Priority
+✓ CreatedAt / UpdatedAt of most recently created/updated note per group (shown in both flat and grouped)
 
 ---------------------------------------------------------------------------------------------------
 
