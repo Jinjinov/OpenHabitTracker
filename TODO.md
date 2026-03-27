@@ -141,10 +141,7 @@ Category-grouped main list (togglable alternative view):
 ✓ all new UI strings use @Loc["..."] and added to all 20 language JSON files
 ✓ persistence chain for ShowGroupedByCategory: SettingsModel, SettingsEntity, EntityToModel, ModelToEntity
 ✓ persistence chain for IsCollapsed: CategoryModel, CategoryEntity, EntityToModel, ModelToEntity
-- EF migration (covers all 4 new fields: ShowGroupedByCategory, ShowLastTimeDone, IsCollapsed, CompletionRule):
-  - run after all model/entity changes for tasks 1, 2, 3 are done:
-    cd e:/Jinjinov/OpenHabitTracker && dotnet ef migrations add AddGroupedViewSettings --project OpenHabitTracker.EntityFrameworkCore --startup-project OpenHabitTracker.Blazor.Wasm
-    cd e:/Jinjinov/OpenHabitTracker && dotnet ef migrations add AddGroupedViewSettings --project OpenHabitTracker.Blazor.Web --startup-project OpenHabitTracker.Blazor.Web
+✓ EF migration (covers all 4 new fields: ShowGroupedByCategory, ShowLastTimeDone, IsCollapsed, CompletionRule)
 ✓ Settings.razor: ShowGroupedByCategory checkbox added above "Show help"
 ✓ Settings.razor: ShowLastTimeDone directly below ShowGroupedByCategory, always visible
 ✓ Settings.razor: data-settings-step- attributes renumbered; guided tour texts added to all 20 GuidedTourComponent language JSON files
@@ -158,8 +155,7 @@ add group "and / or" toggle:
 Plan:
 ✓ add CompletionRule property to CategoryModel (enum CompletionRule { All, Any })
 ✓ full persistence chain: CategoryEntity, EntityToModel, ModelToEntity
-- EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
-  and OpenHabitTracker.Blazor.Web/Migrations/
+✓ EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/ and OpenHabitTracker.Blazor.Web/Migrations/
 ✓ all new UI strings must use @Loc["..."] and add translations to all 20 language JSON files
 ✓ new localization strings added to all 20 language JSON files: "Mark complete when", "all habits are done", "any habit is done"
 ✓ one display location: category header row in the grouped main list (Habits only)
@@ -190,7 +186,7 @@ Plan:
 ✓  - show LastTimeDoneAt in the category header row (hidden when collapsed)
 ✓  - controlled by ShowLastTimeDone setting (bool, default true)
 ✓  - persistence chain: SettingsModel, SettingsEntity, EntityToModel, ModelToEntity
-   - EF migration: covered by task 1 migration above
+✓  - EF migration: covered by task 1 migration above
 
   C. Per-habit in the flat main list:
 ✓  - already shown (ElapsedTime + ratio badge on each habit row)
