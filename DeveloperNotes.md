@@ -541,3 +541,63 @@ CRF	    Quality	        File size
 63	    Worst	        Very small
 
 ---------------------------------------------------------------------------------------------------
+
+Architecture: Identity Map + Repository (what the ideal design should be)
+    Goal: single-user, all-in-memory store for a Blazor app where all data fits in memory.
+    The right pattern is Identity Map + Repository:
+
+    One class (AppStore / Repository) that:
+    - holds all dictionaries — the identity map: one canonical live object per entity, keyed by id
+    - is the ONLY class that holds a reference to IDataAccess — private, never exposed
+    - every method that touches data does two things atomically: call DataAccess AND update the dict
+    - nested collections (habit.TimesDone, task.Items, category.Notes/Tasks/Habits) are wired
+      at load time by filtering the already-loaded flat dicts
+
+    Lazy loading applies at the collection level AND per-instance for expensive collections:
+    - collection level: `if (Times is null) load all times from DB`
+    - per-instance: load habit.TimesDone only when a habit is selected (see lazy loading note below)
+    - once loaded, objects are the canonical instances stored in the dict
+
+    NOTE on lazy loading — kept intentionally for Times:
+    In the predecessor app (Ididit), all TimesDone were loaded upfront. After 5 years of daily use
+    with ~50 habits done 1-2× per day, the Times table grew to ~180,000 records and the app became
+    slow. OpenHabitTracker introduced per-habit lazy loading of TimesDone specifically to solve this.
+    Items are small (handful of checklist entries per habit/task) and not a concern.
+    The app runs on multiple backends: IndexedDB (Blazor WASM) is slower than SQLite (MAUI, Desktop,
+    Server) — lazy loading Times is most important on WASM but the code path is shared across all.
+
+    Services:
+    - take only the store as dependency
+    - contain only business logic (selection state, UI-triggered operations)
+    - never call IDataAccess directly
+
+    Modern analogy: client-side state store (Redux/Zustand/MobX)
+    - ClientState/ClientData = the store (single source of truth)
+    - services = action handlers
+    - components = readers
+    - the Redux rule applies: only the store mutates state — services reaching for DataAccess
+      directly is the same anti-pattern as mutating Redux state outside a reducer
+
+    Current implementation vs ideal:
+    - identity map dicts                          CORRECT  (ClientData)
+    - per-DataLocation isolation                  CORRECT  (_clientDataByLocation)
+    - bulk lazy load with null guards             CORRECT  (if (X is null) pattern)
+    - wire sub-collections from flat dicts        CORRECT  (ClientData.GetHabits(), ClientState.LoadNotes/LoadTasks/LoadHabits)
+    - CRUD Add operations update dicts            CORRECT
+    - per-instance loads register into dicts      CORRECT  (LoadTimesDone, Initialize, Start, AddTimeDone, AddItem, RemoveTimeDone, DeleteItem)
+    - CategoryModel sub-lists wired at runtime    CORRECT  (LoadNotes/LoadTasks/LoadHabits + Add mutations + ChangeCategory)
+    - DataAccess private to store                 MISSING  (exposed as public property, services use it directly)
+
+public DataAccess:
+
+    DataAccess is public on ClientState
+        Services call _clientState.DataAccess directly for mutations (Add, Update, Remove)
+        This is an enforcement problem — the invariant cannot be violated if DataAccess is private.
+
+    consider making DataAccess private
+        DataAccess is currently public on ClientState so services can reach it directly
+        long-term: make it private, add explicit ClientState methods for every operation
+        services call ClientState methods → ClientState calls DataAccess + updates dict
+        this enforces the invariant at compile time, not by convention
+
+---------------------------------------------------------------------------------------------------

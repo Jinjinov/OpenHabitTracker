@@ -6,66 +6,6 @@ find out why `padding-left: 12px !important;` is needed on iOS - why `padding-le
 
 ---------------------------------------------------------------------------------------------------
 
-Architecture: Identity Map + Repository (what the ideal design should be)
-    Goal: single-user, all-in-memory store for a Blazor app where all data fits in memory.
-    The right pattern is Identity Map + Repository:
-
-    One class (AppStore / Repository) that:
-    - holds all dictionaries — the identity map: one canonical live object per entity, keyed by id
-    - is the ONLY class that holds a reference to IDataAccess — private, never exposed
-    - every method that touches data does two things atomically: call DataAccess AND update the dict
-    - nested collections (habit.TimesDone, task.Items, category.Notes/Tasks/Habits) are wired
-      at load time by filtering the already-loaded flat dicts
-
-    Lazy loading applies at the collection level AND per-instance for expensive collections:
-    - collection level: `if (Times is null) load all times from DB`
-    - per-instance: load habit.TimesDone only when a habit is selected (see lazy loading note below)
-    - once loaded, objects are the canonical instances stored in the dict
-
-    NOTE on lazy loading — kept intentionally for Times:
-    In the predecessor app (Ididit), all TimesDone were loaded upfront. After 5 years of daily use
-    with ~50 habits done 1-2× per day, the Times table grew to ~180,000 records and the app became
-    slow. OpenHabitTracker introduced per-habit lazy loading of TimesDone specifically to solve this.
-    Items are small (handful of checklist entries per habit/task) and not a concern.
-    The app runs on multiple backends: IndexedDB (Blazor WASM) is slower than SQLite (MAUI, Desktop,
-    Server) — lazy loading Times is most important on WASM but the code path is shared across all.
-
-    Services:
-    - take only the store as dependency
-    - contain only business logic (selection state, UI-triggered operations)
-    - never call IDataAccess directly
-
-    Modern analogy: client-side state store (Redux/Zustand/MobX)
-    - ClientState/ClientData = the store (single source of truth)
-    - services = action handlers
-    - components = readers
-    - the Redux rule applies: only the store mutates state — services reaching for DataAccess
-      directly is the same anti-pattern as mutating Redux state outside a reducer
-
-    Current implementation vs ideal:
-    - identity map dicts                          CORRECT  (ClientData)
-    - per-DataLocation isolation                  CORRECT  (_clientDataByLocation)
-    - bulk lazy load with null guards             CORRECT  (if (X is null) pattern)
-    - wire sub-collections from flat dicts        CORRECT  (ClientData.GetHabits(), ClientState.LoadNotes/LoadTasks/LoadHabits)
-    - CRUD Add operations update dicts            CORRECT
-    - per-instance loads register into dicts      CORRECT  (LoadTimesDone, Initialize, Start, AddTimeDone, AddItem, RemoveTimeDone, DeleteItem)
-    - CategoryModel sub-lists wired at runtime    CORRECT  (LoadNotes/LoadTasks/LoadHabits + Add mutations + ChangeCategory)
-    - DataAccess private to store                 MISSING  (exposed as public property, services use it directly)
-
-public DataAccess:
-
-    DataAccess is public on ClientState
-        Services call _clientState.DataAccess directly for mutations (Add, Update, Remove)
-        This is an enforcement problem — the invariant cannot be violated if DataAccess is private.
-
-    consider making DataAccess private
-        DataAccess is currently public on ClientState so services can reach it directly
-        long-term: make it private, add explicit ClientState methods for every operation
-        services call ClientState methods → ClientState calls DataAccess + updates dict
-        this enforces the invariant at compile time, not by convention
-
----------------------------------------------------------------------------------------------------
-
 to lazy load Times / TimesDone and remove `// TODO:: remove temp fix` and keep habit ratio in UI:
 call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it, ...
     save TotalTimeSpent
@@ -76,32 +16,29 @@ call LoadTimesDone on Habit Initialize - sort needs it, every calendar needs it,
 LAZY LOADING:
     Per-instance lazy loads in services stay exactly as they are — triggered by user interaction,
     loading only what is needed. Loaded objects are registered in the dict.
-
     WHY Times lazy loading is critical:
     In Ididit (predecessor app), all TimesDone were loaded upfront. After 5 years of daily use
     with ~50 habits done 1-2× per day, the Times table grew to ~180,000 records and became slow.
     Per-habit lazy loading of Times was introduced specifically to solve this.
     Items are small (handful per habit/task) and not a performance concern.
-
     The temp fix in LoadHabits() calls LoadTimes() (bulk load of ALL times) — this is the WRONG
     direction and reintroduces the exact performance problem lazy loading was meant to solve.
-
     the habit list UI depends on AverageInterval and TotalTimeSpent being computed
     from TimesDone — without them the ratio badges show division-by-zero results.
 
-    TASK — remove temp fix (prerequisite: persist aggregates to DB):
-        HabitModel computes TotalTimeSpent and AverageInterval in OnTimesDoneChanged()
-        from the full TimesDone list. The habit list renders these via GetRatio() for the
-        ratio badge and elapsed time display. Without TimesDone loaded, they are TimeSpan.Zero
-        and ElapsedTimeToAverageIntervalRatio / AverageIntervalToRepeatIntervalRatio divide by zero.
-        The // TODO:: save it? comments in HabitModel.cs already identify the solution:
-        - add TotalTimeSpent and AverageInterval as persisted fields on HabitEntity
-        - compute and save them on every AddTimeDone, RemoveTimeDone, UpdateTimeDone
-        - once persisted, LoadHabits() can render the full list without loading any Times
-        - then remove LoadTimes() and the TimesDone wiring from LoadHabits() (remove temp fix)
-        - load only last N days of Times at startup for the small calendar display
-        - load full Times per-habit on selection for the large calendar
-        This requires a DB migration
+TASK — remove temp fix (prerequisite: persist aggregates to DB):
+    HabitModel computes TotalTimeSpent and AverageInterval in OnTimesDoneChanged()
+    from the full TimesDone list. The habit list renders these via GetRatio() for the
+    ratio badge and elapsed time display. Without TimesDone loaded, they are TimeSpan.Zero
+    and ElapsedTimeToAverageIntervalRatio / AverageIntervalToRepeatIntervalRatio divide by zero.
+    The // TODO:: save it? comments in HabitModel.cs already identify the solution:
+    - add TotalTimeSpent and AverageInterval as persisted fields on HabitEntity
+    - compute and save them on every AddTimeDone, RemoveTimeDone, UpdateTimeDone
+    - once persisted, LoadHabits() can render the full list without loading any Times
+    - then remove LoadTimes() and the TimesDone wiring from LoadHabits() (remove temp fix)
+    - load only last N days of Times at startup for the small calendar display
+    - load full Times per-habit on selection for the large calendar
+    This requires a DB migration
 
 if this is removed `// TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)`
 and TimesDone are actually lazy loaded, there will be a bug:
@@ -115,13 +52,15 @@ and TimesDone are actually lazy loaded, there will be a bug:
 
 ---------------------------------------------------------------------------------------------------
 
+0.
 cross-component refresh when toggling collapse in Home.razor (all three pages embedded)
 - toggling collapse in one embedded page does not refresh the others
 - event Action? CategoryChanged approach was rejected — find a different solution
 
-similar problem: editing a note/task/habit in HabitComponent/NoteComponent/TaskComponent (second column, not IsEmbedded) does not immediately refresh the title/content shown in the list in the parent page — same "child updates, parent doesn't know" pattern
-
----------------------------------------------------------------------------------------------------
+similar problem:
+    editing a note/task/habit in HabitComponent/NoteComponent/TaskComponent (second column, not IsEmbedded) 
+    does not immediately refresh the title/content shown in the list in the parent page
+    same "child updates, parent doesn't know" pattern
 
 1.
 QueryParameters:
@@ -137,8 +76,6 @@ exact repeating reminders, like Google Keep
 drag & drop reorder - manual sort - 1000000 sort index
 - sort categories?
 - sort items?
-
----------------------------------------------------------------------------------------------------
 
 4.
 upgrade to .NET 10
