@@ -40,7 +40,7 @@ TASK — remove temp fix (prerequisite: persist aggregates to DB):
     - load full Times per-habit on selection for the large calendar
     This requires a DB migration
 
-if this is removed `// TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)`
+if you fix this: `// TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)`
 and TimesDone are actually lazy loaded, there will be a bug:
     FilterHabits NotOn vs. Before/On/After inconsistency with null TimesDone:
     File: QueryExtensions.cs, FilterHabits DoneAtCompare block
