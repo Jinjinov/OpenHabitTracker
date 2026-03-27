@@ -53,21 +53,20 @@ and TimesDone are actually lazy loaded, there will be a bug:
 ---------------------------------------------------------------------------------------------------
 
 0.
-cross-component refresh when toggling collapse in Home.razor (all three pages embedded)
-- toggling collapse in one embedded page does not refresh the others
-- event Action? CategoryChanged approach was rejected — find a different solution
+toggle IsCollapsed:
+    cross-component refresh when toggling collapse in Home.razor (all three pages embedded)
+    toggling collapse in one embedded page does not refresh the others
 
-similar problem:
-    editing a note/task/habit in HabitComponent/NoteComponent/TaskComponent (second column, not IsEmbedded) 
+editing a note/task/habit:
+    change in HabitComponent/NoteComponent/TaskComponent (second column, not IsEmbedded) 
     does not immediately refresh the title/content shown in the list in the parent page
-    same "child updates, parent doesn't know" pattern
 
 1.
 QueryParameters:
-    - `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
-    - Currently all records are loaded into memory first, then filtered in C# — the intent is to push filters down to the data layer
-    - `_dataAccess` calls would receive query parameters (search term, category, priority, date range) and return only matching records
-    - This would eliminate the need for large in-memory filter blocks and reduce data transferred from the data source
+    `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
+    Currently all records are loaded into memory first, then filtered in C# — the intent is to push filters down to the data layer
+    `_dataAccess` calls would receive query parameters (search term, category, priority, date range) and return only matching records
+    This would eliminate the need for large in-memory filter blocks and reduce data transferred from the data source
 
 2.
 exact repeating reminders, like Google Keep
