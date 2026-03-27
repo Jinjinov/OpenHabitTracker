@@ -84,6 +84,8 @@
   "Choose a theme.": "Zvolte motiv.",
   "Choose a start page that should open every time you start OpenHabitTracker.": "Zvolte úvodní stránku, která se otevře pokaždé, když spustíte OpenHabitTracker.",
   "Choose a start sidebar that should open every time you start OpenHabitTracker.": "Zvolte úvodní postranní panel, který se otevře pokaždé, když spustíte OpenHabitTracker.",
+  "Group items by category in Notes, Tasks and Habits.": "Seskupit položky podle kategorií v poznámkách, úkolech a návycích.",
+  "Show the time each habit was last completed in the category header.": "Zobrazit čas posledního dokončení každého návyku v záhlaví kategorie.",
   "Show help on every page.": "Zobrazit nápovědu na každé stránce.",
   "Show the priority in Notes, Tasks and Habits.": "Zobrazit prioritu v poznámkách, úkolech a návycích.",
   "Show the item list in Tasks and Habits.": "Zobrazit seznam položek v úkolech a návycích.",

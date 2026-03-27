@@ -84,6 +84,8 @@
   "Choose a theme.": "테마를 선택합니다.",
   "Choose a start page that should open every time you start OpenHabitTracker.": "OpenHabitTracker 시작 시 열릴 시작 페이지를 선택합니다.",
   "Choose a start sidebar that should open every time you start OpenHabitTracker.": "OpenHabitTracker 시작 시 열릴 사이드바를 선택합니다.",
+  "Group items by category in Notes, Tasks and Habits.": "메모, 할 일, 습관에서 항목을 카테고리별로 그룹화합니다.",
+  "Show the time each habit was last completed in the category header.": "카테고리 헤더에 각 습관이 마지막으로 완료된 시간을 표시합니다.",
   "Show help on every page.": "모든 페이지에서 도움말을 표시합니다.",
   "Show the priority in Notes, Tasks and Habits.": "메모, 할 일, 습관에 우선순위를 표시합니다.",
   "Show the item list in Tasks and Habits.": "할 일과 습관에 목록을 표시합니다.",

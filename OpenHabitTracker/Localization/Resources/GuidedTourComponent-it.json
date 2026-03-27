@@ -84,6 +84,8 @@
   "Choose a theme.": "Scegli un tema.",
   "Choose a start page that should open every time you start OpenHabitTracker.": "Scegli una pagina iniziale che si apre ogni volta che avvii OpenHabitTracker.",
   "Choose a start sidebar that should open every time you start OpenHabitTracker.": "Scegli una barra laterale che si apre ogni volta che avvii OpenHabitTracker.",
+  "Group items by category in Notes, Tasks and Habits.": "Raggruppa gli elementi per categoria in note, compiti e abitudini.",
+  "Show the time each habit was last completed in the category header.": "Mostra l'ora dell'ultimo completamento di ogni abitudine nell'intestazione della categoria.",
   "Show help on every page.": "Mostra aiuto su ogni pagina.",
   "Show the priority in Notes, Tasks and Habits.": "Mostra la priorità in note, compiti e abitudini.",
   "Show the item list in Tasks and Habits.": "Mostra la lista in compiti e abitudini.",

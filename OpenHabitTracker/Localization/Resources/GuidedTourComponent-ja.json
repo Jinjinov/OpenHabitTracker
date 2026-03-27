@@ -84,6 +84,8 @@
   "Choose a theme.": "テーマを選択します。",
   "Choose a start page that should open every time you start OpenHabitTracker.": "OpenHabitTracker起動時に開くスタートページを選択します。",
   "Choose a start sidebar that should open every time you start OpenHabitTracker.": "OpenHabitTracker起動時に開くサイドバーを選択します。",
+  "Group items by category in Notes, Tasks and Habits.": "メモ、タスク、習慣のアイテムをカテゴリ別にグループ化します。",
+  "Show the time each habit was last completed in the category header.": "カテゴリヘッダーに各習慣が最後に完了した時刻を表示します。",
   "Show help on every page.": "すべてのページでヘルプを表示します。",
   "Show the priority in Notes, Tasks and Habits.": "メモ、タスク、習慣に優先度を表示します。",
   "Show the item list in Tasks and Habits.": "タスクと習慣に項目リストを表示します。",

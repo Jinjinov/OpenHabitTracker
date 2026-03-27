@@ -84,6 +84,8 @@
   "Choose a theme.": "Een thema kiezen.",
   "Choose a start page that should open every time you start OpenHabitTracker.": "Kies een startpagina die elke keer opent als je OpenHabitTracker start.",
   "Choose a start sidebar that should open every time you start OpenHabitTracker.": "Kies een startzijbalk die elke keer opent als je OpenHabitTracker start.",
+  "Group items by category in Notes, Tasks and Habits.": "Items per categorie groeperen in notities, taken en gewoontes.",
+  "Show the time each habit was last completed in the category header.": "De tijd weergeven waarop elke gewoonte voor het laatst is voltooid in de categoriekoptekst.",
   "Show help on every page.": "Help tonen op elke pagina.",
   "Show the priority in Notes, Tasks and Habits.": "De prioriteit tonen in notities, taken en gewoontes.",
   "Show the item list in Tasks and Habits.": "De itemlijst tonen in taken en gewoontes.",

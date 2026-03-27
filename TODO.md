@@ -134,7 +134,7 @@ Category-grouped main list (togglable alternative view):
 ✓ grouped view respects category filter display mode (CheckBoxes/RadioButtons use HiddenCategoryIds; SelectOptions uses SelectedCategoryId)
 ✓ inner loop: items filtered+sorted per category using FilterHabits/FilterTasks/FilterNotes(queryParameters)
 ✓ category header row (all three pages): category title, collapse/expand
-- category header row (Habits only): and/or toggle button (see task 2), status color (see task 2)
+✓ category header row (Habits only): and/or toggle button (see task 2), status color (see task 2)
 ✓ category header row (Habits only): LastTimeDoneAt (see task 3)
 ✓ cross-category sorting still works in flat view; grouped view sorts within each category
 ✓ inject ICategoryService into Habits.razor, Tasks.razor, Notes.razor
@@ -160,15 +160,15 @@ Plan:
 ✓ full persistence chain: CategoryEntity, EntityToModel, ModelToEntity
 - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
   and OpenHabitTracker.Blazor.Web/Migrations/
-- all new UI strings must use @Loc["..."] and add translations to all 20 language JSON files
-- new localization strings (not yet added to any JSON file): "Mark complete when all habits are done" / "Mark complete when any habit is done"
-- one display location: category header row in the grouped main list (Habits only)
-  - and/or toggle button changes CompletionRule between All and Any
-  - meaningful impact: color applied to the "Last done" text in the category header, driven by CompletionRule
-  - CompletionRule.All: green = all done, orange = some done, red = none done
-  - CompletionRule.Any: green = any done, red = none done (no orange — one is enough)
-  - "done this week" = has at least one TimeDone with StartedAt >= weekStart (same as stats)
-  - stats panel already reflects CompletionRule via "x out of y categories complete" — no toggle needed there (stats = read results, not change settings)
+✓ all new UI strings must use @Loc["..."] and add translations to all 20 language JSON files
+✓ new localization strings added to all 20 language JSON files: "Mark complete when", "all habits are done", "any habit is done"
+✓ one display location: category header row in the grouped main list (Habits only)
+  ✓ and/or toggle button changes CompletionRule between All and Any
+  ✓ meaningful impact: color applied to the toggle button in the category header, driven by CompletionRule
+  ✓ CompletionRule.All: green = all done, orange = some done, red = none done
+  ✓ CompletionRule.Any: green = any done, red = none done (no orange — one is enough)
+  ✓ "done this week" = has at least one TimeDone with StartedAt >= weekStart (same as stats)
+  ✓ stats panel already reflects CompletionRule via "x out of y categories complete" — no toggle needed there (stats = read results, not change settings)
 
 3.
 LastDone date: for a group, for the items
@@ -214,7 +214,7 @@ Habits stats:
 ✓ respect ShowGroupedByCategory
 ✓ category title (if ShowGroupedByCategory) | green/orange/red counts | LastTimeDoneAt of most recent habit
 ✓ "this week" aggregate at top: habits done at least once this week out of total; categories fully complete this week
-- CompletionRule used for IsComplete() but and/or toggle UI not yet done (see task 2)
+✓ CompletionRule used for IsComplete() and and/or toggle UI done (see task 2)
 
 Tasks stats:
 ✓ respect ShowGroupedByCategory
