@@ -226,6 +226,10 @@
   "Calendar": "Kalendár",
   "times done": "krát hotovo",
 
+  "Group by category": "Zoskupiť podľa kategórie",
+  "Show last done time": "Zobraziť čas posledného dokončenia",
+  "Uncategorized": "Bez kategórie",
+
   "This week": "Tento týždeň",
   "out of": "z",
   "Overdue": "Po termíne",
@@ -236,5 +240,9 @@
   "due soon": "čoskoro splatné",
   "overdue": "po termíne",
   "Total": "Celkom",
-  "Done out of total": "{0} z {1} splnených"
+  "Done out of total": "{0} z {1} splnených",
+  "Categories complete": "{0} z {1} kategórií dokončených",
+  "Mark complete when": "Označiť ako dokončené keď",
+  "all habits are done": "všetky návyky sú splnené",
+  "any habit is done": "niektorý návyk je splnený"
 }

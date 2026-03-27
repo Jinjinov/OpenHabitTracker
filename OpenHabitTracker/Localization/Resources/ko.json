@@ -226,6 +226,10 @@
   "Calendar": "달력",
   "times done": "회 완료",
 
+  "Group by category": "카테고리별 그룹화",
+  "Show last done time": "마지막 완료 시간 표시",
+  "Uncategorized": "미분류",
+
   "This week": "이번 주",
   "out of": "/",
   "Overdue": "기한 초과",
@@ -236,5 +240,9 @@
   "due soon": "곧 만료",
   "overdue": "기한 초과",
   "Total": "합계",
-  "Done out of total": "{1}개 중 {0}개 완료"
+  "Done out of total": "{1}개 중 {0}개 완료",
+  "Categories complete": "{1}개 중 {0}개 카테고리 완료",
+  "Mark complete when": "완료 조건",
+  "all habits are done": "모든 습관이 완료됨",
+  "any habit is done": "습관 하나 이상 완료됨"
 }

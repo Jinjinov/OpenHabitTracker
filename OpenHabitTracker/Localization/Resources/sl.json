@@ -226,6 +226,10 @@
   "Calendar": "Koledar",
   "times done": "krat opravljeno",
 
+  "Group by category": "Združi po kategoriji",
+  "Show last done time": "Prikaži čas zadnje izvedbe",
+  "Uncategorized": "Brez kategorije",
+
   "This week": "Ta teden",
   "out of": "od",
   "Overdue": "Zamuda",
@@ -236,5 +240,9 @@
   "due soon": "kmalu zapadle",
   "overdue": "zamujene",
   "Total": "Skupaj",
-  "Done out of total": "{0} od {1} opravljenih"
+  "Done out of total": "{0} od {1} opravljenih",
+  "Categories complete": "{0} od {1} kategorij dokončanih",
+  "Mark complete when": "Označi kot dokončano ko",
+  "all habits are done": "so vse navade opravljene",
+  "any habit is done": "je katera koli navada opravljena"
 }

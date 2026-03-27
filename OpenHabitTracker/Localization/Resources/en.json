@@ -241,5 +241,8 @@
   "overdue": "overdue",
   "Total": "Total",
   "Done out of total": "{0} out of {1} done",
-  "Categories complete": "{0} out of {1} categories complete"
+  "Categories complete": "{0} out of {1} categories complete",
+  "Mark complete when": "Mark complete when",
+  "all habits are done": "all habits are done",
+  "any habit is done": "any habit is done"
 }

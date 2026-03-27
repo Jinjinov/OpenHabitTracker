@@ -14,5 +14,6 @@ public interface ICategoryService
     Task UpdateCategory(string title);
     Task DeleteCategory(CategoryModel category);
     Task ToggleCollapsed(CategoryModel category);
+    Task ToggleCompletionRule(CategoryModel category);
     void ChangeCategory(ContentModel model, long newCategoryId);
 }

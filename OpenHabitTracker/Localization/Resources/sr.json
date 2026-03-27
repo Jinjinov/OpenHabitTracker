@@ -226,6 +226,10 @@
   "Calendar": "Kalendar",
   "times done": "puta gotovo",
 
+  "Group by category": "Grupiši po kategoriji",
+  "Show last done time": "Prikaži poslednje vreme završetka",
+  "Uncategorized": "Bez kategorije",
+
   "This week": "Ove nedelje",
   "out of": "od",
   "Overdue": "Zakasnelo",
@@ -236,5 +240,9 @@
   "due soon": "uskoro dospeva",
   "overdue": "zakašnjele",
   "Total": "Ukupno",
-  "Done out of total": "{0} od {1} obavljenih"
+  "Done out of total": "{0} od {1} obavljenih",
+  "Categories complete": "{0} od {1} kategorija završeno",
+  "Mark complete when": "Označi kao završeno kada",
+  "all habits are done": "su sve navike završene",
+  "any habit is done": "je neka navika završena"
 }

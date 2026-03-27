@@ -161,7 +161,7 @@ Plan:
 - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
   and OpenHabitTracker.Blazor.Web/Migrations/
 - all new UI strings must use @Loc["..."] and add translations to all 20 language JSON files
-- new localization strings (not yet added to any JSON file): "Mark complete when all habits done" / "Mark complete when any habit done"
+- new localization strings (not yet added to any JSON file): "Mark complete when all habits are done" / "Mark complete when any habit is done"
 - one display location: category header row in the grouped main list (Habits only)
   - and/or toggle button changes CompletionRule between All and Any
   - meaningful impact: color applied to the "Last done" text in the category header, driven by CompletionRule

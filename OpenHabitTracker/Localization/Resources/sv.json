@@ -226,6 +226,10 @@
   "Calendar": "Kalender",
   "times done": "gånger gjort",
 
+  "Group by category": "Gruppera efter kategori",
+  "Show last done time": "Visa senast klar tid",
+  "Uncategorized": "Okategoriserad",
+
   "This week": "Den här veckan",
   "out of": "av",
   "Overdue": "Försenad",
@@ -236,5 +240,9 @@
   "due soon": "snart förfallet",
   "overdue": "försenat",
   "Total": "Totalt",
-  "Done out of total": "{0} av {1} gjorda"
+  "Done out of total": "{0} av {1} gjorda",
+  "Categories complete": "{0} av {1} kategorier klara",
+  "Mark complete when": "Markera som klar när",
+  "all habits are done": "alla vanor är klara",
+  "any habit is done": "en vana är klar"
 }

@@ -226,6 +226,10 @@
   "Calendar": "Kalender",
   "times done": "keer gedaan",
 
+  "Group by category": "Groeperen op categorie",
+  "Show last done time": "Laatste voltooiingstijd tonen",
+  "Uncategorized": "Niet gecategoriseerd",
+
   "This week": "Deze week",
   "out of": "van",
   "Overdue": "Te laat",
@@ -236,5 +240,9 @@
   "due soon": "bijna vervallen",
   "overdue": "achterstallig",
   "Total": "Totaal",
-  "Done out of total": "{0} van {1} gedaan"
+  "Done out of total": "{0} van {1} gedaan",
+  "Categories complete": "{0} van {1} categorieën voltooid",
+  "Mark complete when": "Markeer als volledig wanneer",
+  "all habits are done": "alle gewoontes voltooid zijn",
+  "any habit is done": "een gewoonte voltooid is"
 }
