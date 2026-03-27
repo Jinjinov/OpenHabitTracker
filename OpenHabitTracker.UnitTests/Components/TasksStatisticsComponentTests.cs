@@ -35,7 +35,10 @@ public class TasksStatisticsComponentTests
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
 
+        ICategoryService categoryService = Substitute.For<ICategoryService>();
+
         _ctx.Services.AddScoped(_ => _taskService);
+        _ctx.Services.AddScoped(_ => categoryService);
         _ctx.Services.AddScoped(_ => clientState);
         _ctx.Services.AddSingleton(loc);
     }
