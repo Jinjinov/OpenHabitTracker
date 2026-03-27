@@ -4,6 +4,7 @@
 @using OpenHabitTracker.Services
 
 @inject IHabitService HabitService
+@inject ICategoryService CategoryService
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
 
@@ -12,29 +13,45 @@
     DateTime weekStart = CalendarParams.GetFirstDayOfWeek(ClientState.Settings.FirstDayOfWeek, DateTime.Today);
     DateTime weekEnd = weekStart.AddDays(7);
 
-    List<HabitModel> habits = HabitService.GetHabits().ToList();
-    int total = habits.Count;
-    int green = habits.Count(h => h.GetRatio(ClientState.Settings.SelectedRatio) < 80);
-    int orange = habits.Count(h => { double r = h.GetRatio(ClientState.Settings.SelectedRatio); return r >= 80 && r < 100; });
-    int red = habits.Count(h => h.GetRatio(ClientState.Settings.SelectedRatio) >= 100);
-    int doneThisWeek = habits.Count(h => h.TimesDone?.Any(t => t.StartedAt >= weekStart && t.StartedAt < weekEnd) == true);
-    DateTime? lastDone = habits.Where(h => h.LastTimeDoneAt is not null).Select(h => h.LastTimeDoneAt).Max();
+    List<(CategoryModel? Category, List<HabitModel> Habits)> groups = GetHabitGroups();
+    int total = groups.Sum(g => g.Habits.Count);
 
     @if (total > 0)
     {
     <div class="p-2">
         <p class="fw-bold mb-1">@Loc["This week"] (@weekStart.ToShortDateString() – @weekStart.AddDays(6).ToShortDateString())</p>
-        <p class="mb-1">@Loc["Done out of total", doneThisWeek, total]</p>
 
-        <div class="d-flex gap-2 mb-2">
-            <span class="badge bg-success-subtle text-success-emphasis">@green @Loc["on track"]</span>
-            <span class="badge bg-warning-subtle text-warning-emphasis">@orange @Loc["due soon"]</span>
-            <span class="badge bg-danger-subtle text-danger-emphasis">@red @Loc["overdue"]</span>
-        </div>
-
-        @if (lastDone is not null)
+        @if (ClientState.Settings.ShowGroupedByCategory)
         {
-            <p class="mb-0">@Loc["Last done"]: @lastDone.Value.ToShortDateString() @lastDone.Value.ToString("HH:mm")</p>
+            int totalCategories = groups.Count(g => g.Category is not null);
+            int completeCategories = groups.Count(g => g.Category is not null && IsComplete(g.Habits, g.Category.CompletionRule, weekStart, weekEnd));
+            <p class="mb-2">@Loc["Categories complete", completeCategories, totalCategories]</p>
+        }
+
+        @foreach (var group in groups)
+        {
+            int doneThisWeek = group.Habits.Count(h => h.TimesDone?.Any(t => t.StartedAt >= weekStart && t.StartedAt < weekEnd) == true);
+            int green = group.Habits.Count(h => h.GetRatio(ClientState.Settings.SelectedRatio) < 80);
+            int orange = group.Habits.Count(h => { double r = h.GetRatio(ClientState.Settings.SelectedRatio); return r >= 80 && r < 100; });
+            int red = group.Habits.Count(h => h.GetRatio(ClientState.Settings.SelectedRatio) >= 100);
+            DateTime? lastDone = group.Habits.Max(h => h.LastTimeDoneAt);
+
+            <div class="@(ClientState.Settings.ShowGroupedByCategory ? "mb-3" : "")">
+                @if (ClientState.Settings.ShowGroupedByCategory)
+                {
+                    <small class="fw-semibold d-block">@(group.Category?.Title ?? Loc["Uncategorized"])</small>
+                }
+                <p class="mb-1">@Loc["Done out of total", doneThisWeek, group.Habits.Count]</p>
+                <div class="d-flex gap-2 mb-2">
+                    <span class="badge bg-success-subtle text-success-emphasis">@green @Loc["on track"]</span>
+                    <span class="badge bg-warning-subtle text-warning-emphasis">@orange @Loc["due soon"]</span>
+                    <span class="badge bg-danger-subtle text-danger-emphasis">@red @Loc["overdue"]</span>
+                </div>
+                @if (lastDone is not null)
+                {
+                    <p class="mb-0">@Loc["Last done"]: @lastDone.Value.ToShortDateString() @lastDone.Value.ToString("HH:mm")</p>
+                }
+            </div>
         }
     </div>
     }
@@ -55,4 +72,43 @@
         _loaded = true;
     }
 
+    List<(CategoryModel? Category, List<HabitModel> Habits)> GetHabitGroups()
+    {
+        if (!ClientState.Settings.ShowGroupedByCategory || CategoryService.Categories is null)
+            return new List<(CategoryModel?, List<HabitModel>)> { (null, HabitService.GetHabits().ToList()) };
+
+        List<(CategoryModel? Category, List<HabitModel> Habits)> result = new();
+
+        foreach (CategoryModel category in CategoryService.Categories)
+        {
+            if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes || ClientState.Settings.CategoryFilterDisplay == FilterDisplay.RadioButtons)
+            {
+                if (ClientState.Settings.HiddenCategoryIds.Contains(category.Id))
+                    continue;
+            }
+            else if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
+            {
+                if (ClientState.Settings.SelectedCategoryId is not null && ClientState.Settings.SelectedCategoryId != category.Id)
+                    continue;
+            }
+
+            List<HabitModel> habits = category.Habits.ToList();
+            if (habits.Count > 0)
+                result.Add((category, habits));
+        }
+
+        List<HabitModel> uncategorized = ClientState.Habits!.Values.Where(x => x.CategoryId == 0).ToList();
+        if (uncategorized.Count > 0)
+            result.Add((null, uncategorized));
+
+        return result;
+    }
+
+    bool IsComplete(List<HabitModel> habits, CompletionRule rule, DateTime weekStart, DateTime weekEnd)
+    {
+        if (rule == CompletionRule.All)
+            return habits.All(h => h.TimesDone?.Any(t => t.StartedAt >= weekStart && t.StartedAt < weekEnd) == true);
+
+        return habits.Any(h => h.TimesDone?.Any(t => t.StartedAt >= weekStart && t.StartedAt < weekEnd) == true);
+    }
 }

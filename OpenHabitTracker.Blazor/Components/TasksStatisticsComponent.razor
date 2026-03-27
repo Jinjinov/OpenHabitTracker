@@ -4,6 +4,7 @@
 @using OpenHabitTracker.Services
 
 @inject ITaskService TaskService
+@inject ICategoryService CategoryService
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
 
@@ -11,31 +12,40 @@
 {
     DateTime weekStart = CalendarParams.GetFirstDayOfWeek(ClientState.Settings.FirstDayOfWeek, DateTime.Today);
 
-    List<TaskModel> tasks = TaskService.GetTasks().ToList();
-    int total = tasks.Count;
-    int done = tasks.Count(t => t.CompletedAt is not null);
-    int overdue = tasks.Count(t => t.PlannedAt < DateTime.Now && t.CompletedAt is null);
-    int completedThisWeek = tasks.Count(t => t.CompletedAt >= weekStart && t.CompletedAt < weekStart.AddDays(7));
-    int plannedThisWeek = tasks.Count(t => t.PlannedAt >= weekStart && t.PlannedAt < weekStart.AddDays(7));
-    TimeSpan totalTimeSpent = TimeSpan.FromTicks(tasks
-        .Where(t => t.CompletedAt is not null && t.StartedAt is not null && t.CompletedAt > t.StartedAt)
-        .Sum(t => (t.CompletedAt!.Value - t.StartedAt!.Value).Ticks));
+    List<(CategoryModel? Category, List<TaskModel> Tasks)> groups = GetTaskGroups();
+    int total = groups.Sum(g => g.Tasks.Count);
 
     @if (total > 0)
     {
     <div class="p-2">
         <p class="fw-bold mb-1">@Loc["This week"] (@weekStart.ToShortDateString() – @weekStart.AddDays(6).ToShortDateString())</p>
-        <p class="mb-1">@completedThisWeek @Loc["done"] · @plannedThisWeek @Loc["planned"]</p>
 
-        <div class="d-flex gap-2 mb-2">
-            <span class="badge bg-body-secondary">@Loc["Total"]: @total</span>
-            <span class="badge bg-success-subtle text-success-emphasis">@Loc["Done"]: @done</span>
-            <span class="badge bg-danger-subtle text-danger-emphasis">@Loc["Overdue"]: @overdue</span>
-        </div>
-
-        @if (totalTimeSpent > TimeSpan.Zero)
+        @foreach (var group in groups)
         {
-            <p class="mb-0">@Loc["Total time spent"]: @FormatTimeSpan(totalTimeSpent)</p>
+            int done = group.Tasks.Count(t => t.CompletedAt is not null);
+            int overdue = group.Tasks.Count(t => t.PlannedAt < DateTime.Now && t.CompletedAt is null);
+            int completedThisWeek = group.Tasks.Count(t => t.CompletedAt >= weekStart && t.CompletedAt < weekStart.AddDays(7));
+            int plannedThisWeek = group.Tasks.Count(t => t.PlannedAt >= weekStart && t.PlannedAt < weekStart.AddDays(7));
+            TimeSpan totalTimeSpent = TimeSpan.FromTicks(group.Tasks
+                .Where(t => t.CompletedAt is not null && t.StartedAt is not null && t.CompletedAt > t.StartedAt)
+                .Sum(t => (t.CompletedAt!.Value - t.StartedAt!.Value).Ticks));
+
+            <div class="@(ClientState.Settings.ShowGroupedByCategory ? "mb-3" : "")">
+                @if (ClientState.Settings.ShowGroupedByCategory)
+                {
+                    <small class="fw-semibold d-block">@(group.Category?.Title ?? Loc["Uncategorized"])</small>
+                }
+                <p class="mb-1">@completedThisWeek @Loc["done"] · @plannedThisWeek @Loc["planned"]</p>
+                <div class="d-flex gap-2 mb-2">
+                    <span class="badge bg-body-secondary">@Loc["Total"]: @group.Tasks.Count</span>
+                    <span class="badge bg-success-subtle text-success-emphasis">@Loc["Done"]: @done</span>
+                    <span class="badge bg-danger-subtle text-danger-emphasis">@Loc["Overdue"]: @overdue</span>
+                </div>
+                @if (totalTimeSpent > TimeSpan.Zero)
+                {
+                    <p class="mb-0">@Loc["Total time spent"]: @FormatTimeSpan(totalTimeSpent)</p>
+                }
+            </div>
         }
     </div>
     }
@@ -54,5 +64,37 @@
             return $"{(int)span.TotalHours}h {span.Minutes}m";
 
         return $"{span.Minutes}m";
+    }
+
+    List<(CategoryModel? Category, List<TaskModel> Tasks)> GetTaskGroups()
+    {
+        if (!ClientState.Settings.ShowGroupedByCategory || CategoryService.Categories is null)
+            return new List<(CategoryModel?, List<TaskModel>)> { (null, TaskService.GetTasks().ToList()) };
+
+        List<(CategoryModel? Category, List<TaskModel> Tasks)> result = new();
+
+        foreach (CategoryModel category in CategoryService.Categories)
+        {
+            if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes || ClientState.Settings.CategoryFilterDisplay == FilterDisplay.RadioButtons)
+            {
+                if (ClientState.Settings.HiddenCategoryIds.Contains(category.Id))
+                    continue;
+            }
+            else if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
+            {
+                if (ClientState.Settings.SelectedCategoryId is not null && ClientState.Settings.SelectedCategoryId != category.Id)
+                    continue;
+            }
+
+            List<TaskModel> tasks = category.Tasks.ToList();
+            if (tasks.Count > 0)
+                result.Add((category, tasks));
+        }
+
+        List<TaskModel> uncategorized = ClientState.Tasks!.Values.Where(x => x.CategoryId == 0).ToList();
+        if (uncategorized.Count > 0)
+            result.Add((null, uncategorized));
+
+        return result;
     }
 }

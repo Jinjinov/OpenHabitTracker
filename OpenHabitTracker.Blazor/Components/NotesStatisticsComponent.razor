@@ -4,29 +4,50 @@
 @using OpenHabitTracker.Services
 
 @inject INoteService NoteService
+@inject ICategoryService CategoryService
+@inject ClientState ClientState
 @inject IPriorityService PriorityService
 @inject IStringLocalizer Loc
 
 @if (NoteService.Notes is not null)
 {
-    List<NoteModel> notes = NoteService.GetNotes().ToList();
-    int total = notes.Count;
+    List<(CategoryModel? Category, List<NoteModel> Notes)> groups = GetNoteGroups();
+    int total = groups.Sum(g => g.Notes.Count);
 
     @if (total > 0)
     {
     <div class="p-2">
-            <p class="mb-1">@Loc["Total"]: @total</p>
+        @foreach (var group in groups)
+        {
+            DateTime? latestCreated = group.Notes.Max(n => (DateTime?)n.CreatedAt);
+            DateTime? latestUpdated = group.Notes.Max(n => (DateTime?)n.UpdatedAt);
 
-        <div class="d-flex flex-wrap gap-2">
-            @foreach (Priority priority in Enum.GetValues<Priority>().Reverse())
-            {
-                int count = notes.Count(n => n.Priority == priority);
-                @if (count > 0)
+            <div class="@(ClientState.Settings.ShowGroupedByCategory ? "mb-3" : "")">
+                @if (ClientState.Settings.ShowGroupedByCategory)
                 {
-                    <span class="badge bg-body-secondary">@Loc[PriorityService.GetPriorityName(priority)]: @count</span>
+                    <small class="fw-semibold d-block">@(group.Category?.Title ?? Loc["Uncategorized"])</small>
                 }
-            }
-        </div>
+                <p class="mb-1">@Loc["Total"]: @group.Notes.Count</p>
+                <div class="d-flex flex-wrap gap-2 mb-1">
+                    @foreach (Priority priority in Enum.GetValues<Priority>().Reverse())
+                    {
+                        int count = group.Notes.Count(n => n.Priority == priority);
+                        @if (count > 0)
+                        {
+                            <span class="badge bg-body-secondary">@Loc[PriorityService.GetPriorityName(priority)]: @count</span>
+                        }
+                    }
+                </div>
+                @if (latestCreated is not null)
+                {
+                    <small class="text-muted d-block">@Loc["Created"]: @($"{latestCreated.Value.ToShortDateString()} {latestCreated.Value:HH:mm}")</small>
+                }
+                @if (latestUpdated is not null && latestUpdated != latestCreated)
+                {
+                    <small class="text-muted d-block">@Loc["Updated"]: @($"{latestUpdated.Value.ToShortDateString()} {latestUpdated.Value:HH:mm}")</small>
+                }
+            </div>
+        }
     </div>
     }
 }
@@ -37,4 +58,36 @@
 
     [Parameter]
     public bool PageStateChanged { get; set; }
+
+    List<(CategoryModel? Category, List<NoteModel> Notes)> GetNoteGroups()
+    {
+        if (!ClientState.Settings.ShowGroupedByCategory || CategoryService.Categories is null)
+            return new List<(CategoryModel?, List<NoteModel>)> { (null, NoteService.GetNotes().ToList()) };
+
+        List<(CategoryModel? Category, List<NoteModel> Notes)> result = new();
+
+        foreach (CategoryModel category in CategoryService.Categories)
+        {
+            if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes || ClientState.Settings.CategoryFilterDisplay == FilterDisplay.RadioButtons)
+            {
+                if (ClientState.Settings.HiddenCategoryIds.Contains(category.Id))
+                    continue;
+            }
+            else if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
+            {
+                if (ClientState.Settings.SelectedCategoryId is not null && ClientState.Settings.SelectedCategoryId != category.Id)
+                    continue;
+            }
+
+            List<NoteModel> notes = category.Notes.ToList();
+            if (notes.Count > 0)
+                result.Add((category, notes));
+        }
+
+        List<NoteModel> uncategorized = ClientState.Notes!.Values.Where(x => x.CategoryId == 0).ToList();
+        if (uncategorized.Count > 0)
+            result.Add((null, uncategorized));
+
+        return result;
+    }
 }
