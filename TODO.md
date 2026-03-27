@@ -119,10 +119,14 @@ and TimesDone are actually lazy loaded, there will be a bug:
 
 0.
 prerequisite for task 1 (avoids duplicating row HTML between flat and grouped loops):
-- extract HabitRowComponent from the habit row block in Habits.razor
-- extract TaskRowComponent from the task row block in Tasks.razor
-- extract NoteRowComponent from the note row block in Notes.razor
-- both the flat loop and the grouped-view category loop use the same row component
+- replace the flat foreach in Habits.razor, Tasks.razor, Notes.razor with a nested foreach:
+  - outer loop: foreach (var group in GetHabitGroups()) / GetTaskGroups() / GetNoteGroups()
+  - inner loop: foreach (HabitModel habit in group.Habits) / TaskModel / NoteModel
+  - row HTML stays in the inner loop, written once
+- GetHabitGroups() / GetTaskGroups() / GetNoteGroups() is a method in the @code block:
+  - flat view (ShowGroupedByCategory == false): yields a single (CategoryModel? Category, IEnumerable<...> Items) tuple with Category = null and all items from HabitService.GetHabits() / TaskService.GetTasks() / NoteService.GetNotes()
+  - grouped view (ShowGroupedByCategory == true): yields one tuple per CategoryModel (from CategoryService.Categories), plus a final tuple with Category = null for uncategorized items (CategoryId == 0)
+- category header row is rendered in the outer loop when Category is not null (i.e. grouped view only)
 
 1.
 Category-grouped main list (togglable alternative view):
