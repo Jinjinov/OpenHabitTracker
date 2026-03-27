@@ -111,71 +111,74 @@
             }
         </div>
 
-        foreach (HabitModel habit in HabitService.GetHabits())
+        foreach (var group in GetHabitGroups())
         {
-            bool showHabitComponent = !_showSecondColumn && habit.Id == Id && HabitService.NewHabit is null;
+            foreach (HabitModel habit in group.Habits)
+            {
+                bool showHabitComponent = !_showSecondColumn && habit.Id == Id && HabitService.NewHabit is null;
 
-            <div class="@($"my-{ClientState.Settings.VerticalMargin} {(showHabitComponent ? "" : "d-flex")}")">
-                @if (showHabitComponent)
-                {
-                    <HabitComponent Habit="habit" CloseSelected="CloseSelected" />
-                }
-                else
-                {
-                    <div class="@($"w-100 {habit.Color}")">
-                        <div class="input-group flex-nowrap" style="@($"{(_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar ? "height: 50px;" : "")}")">
-
-                            @if (ClientState.Settings.ShowPriorityDropdown)
-                            {
-                                <span class="input-group-text bg-transparent" data-habits-step-1>@PriorityService.GetPriorityTitle(habit.Priority)</span>
-                            }
-
-                            <button id="habit-item-@habit.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(habit.Id)" data-habits-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
-
-                            @{
-                                string color = habit.GetRatio(ClientState.Settings.SelectedRatio) switch
-                                {
-                                    >= 100 => "bg-danger-subtle",
-                                    >= 80 => "bg-warning-subtle",
-                                    _ => "bg-success-subtle"
-                                };
-                            }
-                            <small class="@($"input-group-text {color}")" data-habits-step-3>
-                                @(habit.LastTimeDoneAt is not null ? ToHighestValueString(habit.ElapsedTime) : "⊘")
-                                (@habit.GetRatio(ClientState.Settings.SelectedRatio).ToString("N0")%)
-                            </small>
-
-                            @if (!ClientState.Settings.ShowSmallCalendar)
-                            {
-                                <button class="btn btn-outline-primary" aria-label="@Loc["Mark as done"]" @onclick="() => OnMarkAsDone(habit)" data-habits-step-4><i class="bi bi-check-square"></i></button>
-                            }
-                        </div>
-
-                        @if (ClientState.Settings.ShowItemList)
-                        {
-                            <div data-habits-step-5>
-                                <ItemsComponent Items=habit IsReadOnly=true />
-                            </div>
-                        }
-
-                        @if (!_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar)
-                        {
-                            <div class="input-group-text bg-transparent p-0 border-0 rounded-0" data-habits-step-6>
-                                <div class="mx-auto">
-                                    <CalendarComponent Habit="habit" HabitChanged="OnHabitChanged" ColumnWidth="columnWidth" />
-                                </div>
-                            </div>
-                        }
-
-                    </div>
-                    if (_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar)
+                <div class="@($"my-{ClientState.Settings.VerticalMargin} {(showHabitComponent ? "" : "d-flex")}")">
+                    @if (showHabitComponent)
                     {
-                        <div class="d-flex" data-habits-step-6>
-                            <CalendarComponent Habit="habit" HabitChanged="OnHabitChanged" ColumnWidth="columnWidth" DisplayBasedOnWidth />
-                        </div>
+                        <HabitComponent Habit="habit" CloseSelected="CloseSelected" />
                     }
-                }
-            </div>
+                    else
+                    {
+                        <div class="@($"w-100 {habit.Color}")">
+                            <div class="input-group flex-nowrap" style="@($"{(_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar ? "height: 50px;" : "")}")">
+
+                                @if (ClientState.Settings.ShowPriorityDropdown)
+                                {
+                                    <span class="input-group-text bg-transparent" data-habits-step-1>@PriorityService.GetPriorityTitle(habit.Priority)</span>
+                                }
+
+                                <button id="habit-item-@habit.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(habit.Id)" data-habits-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(habit.Title))</button>
+
+                                @{
+                                    string color = habit.GetRatio(ClientState.Settings.SelectedRatio) switch
+                                    {
+                                        >= 100 => "bg-danger-subtle",
+                                        >= 80 => "bg-warning-subtle",
+                                        _ => "bg-success-subtle"
+                                    };
+                                }
+                                <small class="@($"input-group-text {color}")" data-habits-step-3>
+                                    @(habit.LastTimeDoneAt is not null ? ToHighestValueString(habit.ElapsedTime) : "⊘")
+                                    (@habit.GetRatio(ClientState.Settings.SelectedRatio).ToString("N0")%)
+                                </small>
+
+                                @if (!ClientState.Settings.ShowSmallCalendar)
+                                {
+                                    <button class="btn btn-outline-primary" aria-label="@Loc["Mark as done"]" @onclick="() => OnMarkAsDone(habit)" data-habits-step-4><i class="bi bi-check-square"></i></button>
+                                }
+                            </div>
+
+                            @if (ClientState.Settings.ShowItemList)
+                            {
+                                <div data-habits-step-5>
+                                    <ItemsComponent Items=habit IsReadOnly=true />
+                                </div>
+                            }
+
+                            @if (!_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar)
+                            {
+                                <div class="input-group-text bg-transparent p-0 border-0 rounded-0" data-habits-step-6>
+                                    <div class="mx-auto">
+                                        <CalendarComponent Habit="habit" HabitChanged="OnHabitChanged" ColumnWidth="columnWidth" />
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                        if (_displayBasedOnWidth && ClientState.Settings.ShowSmallCalendar)
+                        {
+                            <div class="d-flex" data-habits-step-6>
+                                <CalendarComponent Habit="habit" HabitChanged="OnHabitChanged" ColumnWidth="columnWidth" DisplayBasedOnWidth />
+                            </div>
+                        }
+                    }
+                </div>
+            }
         }
     }
 
@@ -390,6 +393,11 @@
     {
         await HabitService.MarkAsDone(habit);
         _pageStateChanged = !_pageStateChanged;
+    }
+
+    IEnumerable<(CategoryModel? Category, IEnumerable<HabitModel> Habits)> GetHabitGroups()
+    {
+        yield return (null, HabitService.GetHabits());
     }
 
     string ToHighestValueString(TimeSpan span)
