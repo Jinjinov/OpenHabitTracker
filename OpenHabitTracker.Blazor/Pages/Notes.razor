@@ -77,37 +77,40 @@
             }
         </div>
 
-        foreach (NoteModel note in NoteService.GetNotes())
+        foreach (var group in GetNoteGroups())
         {
-            <div class="@($"my-{ClientState.Settings.VerticalMargin}")">
-                @if (!_showSecondColumn && note.Id == Id && NoteService.NewNote is null)
-                {
-                    <NoteComponent Note="note" CloseSelected="CloseSelected" />
-                }
-                else
-                {
-                    <div class="@note.Color">
-                        <div class="input-group flex-nowrap">
+            foreach (NoteModel note in group.Notes)
+            {
+                <div class="@($"my-{ClientState.Settings.VerticalMargin}")">
+                    @if (!_showSecondColumn && note.Id == Id && NoteService.NewNote is null)
+                    {
+                        <NoteComponent Note="note" CloseSelected="CloseSelected" />
+                    }
+                    else
+                    {
+                        <div class="@note.Color">
+                            <div class="input-group flex-nowrap">
 
-                            @if (ClientState.Settings.ShowPriorityDropdown)
+                                @if (ClientState.Settings.ShowPriorityDropdown)
+                                {
+                                    <span class="input-group-text bg-transparent" data-notes-step-1>@PriorityService.GetPriorityTitle(note.Priority)</span>
+                                }
+
+                                <button id="note-item-@note.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(note.Id)" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
+                            </div>
+
+                            @if (ClientState.Settings.DisplayNoteContentAsMarkdown)
                             {
-                                <span class="input-group-text bg-transparent" data-notes-step-1>@PriorityService.GetPriorityTitle(note.Priority)</span>
+                                <div class="form-control bg-transparent markdown-block-margin" style="min-height: 38px;" data-notes-step-3>@((MarkupString)SearchFilterService.MarkSearchResultsInHtml(note.ContentMarkdown))</div>
                             }
-
-                            <button id="note-item-@note.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(note.Id)" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
+                            else
+                            {
+                                <div class="form-control bg-transparent" style="white-space: pre-wrap; min-height: 38px;" data-notes-step-3>@((MarkupString)SearchFilterService.MarkSearchResults(note.Content))</div>
+                            }
                         </div>
-
-                        @if (ClientState.Settings.DisplayNoteContentAsMarkdown)
-                        {
-                            <div class="form-control bg-transparent markdown-block-margin" style="min-height: 38px;" data-notes-step-3>@((MarkupString)SearchFilterService.MarkSearchResultsInHtml(note.ContentMarkdown))</div>
-                        }
-                        else
-                        {
-                            <div class="form-control bg-transparent" style="white-space: pre-wrap; min-height: 38px;" data-notes-step-3>@((MarkupString)SearchFilterService.MarkSearchResults(note.Content))</div>
-                        }
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            }
         }
     }
 
@@ -228,6 +231,11 @@
         {
             await JsInterop.FocusElementById($"note-item-{_lastSelectedId}");
         }
+    }
+
+    IEnumerable<(CategoryModel? Category, IEnumerable<NoteModel> Notes)> GetNoteGroups()
+    {
+        yield return (null, NoteService.GetNotes());
     }
 
     async Task OnAddNote()
