@@ -138,7 +138,10 @@ Category-grouped main list (togglable alternative view):
   - foreach (HabitModel habit in HabitService.GetHabits())
 - outer loop: foreach (CategoryModel category in CategoryService.Categories)
 - items with no category (CategoryId == 0, the default long value) appear in an "Uncategorized" bucket rendered at the bottom
-- grouped view respects HiddenCategoryIds and SelectedCategoryId from Settings (same as flat view)
+  - uncategorized bucket has its own header row showing @Loc["Uncategorized"] (new localization string)
+- grouped view respects category filter display mode (same as flat view):
+  - CategoryFilterDisplay == CheckBoxes or RadioButtons: skip categories whose Id is in HiddenCategoryIds — no header rendered
+  - CategoryFilterDisplay == SelectOptions: skip all categories except the one matching SelectedCategoryId — no header rendered for others
 - inner loop: items filtered+sorted per category
     `QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);`
     CategoryModel.Notes/Tasks/Habits are populated at runtime by LoadNotes/LoadTasks/LoadHabits:
@@ -159,15 +162,21 @@ Category-grouped main list (togglable alternative view):
 - persistence chain for ShowGroupedByCategory (bool, new SettingsModel/SettingsEntity field):
   - add to SettingsModel and SettingsEntity
   - add mapping in EntityToModel.cs and ModelToEntity.cs
-  - EF migration in both OpenHabitTracker.EntityFrameworkCore/Migrations/
-    and OpenHabitTracker.Blazor.Web/Migrations/
   - export/import: automatically included since full SettingsModel is serialized
 - persistence chain for IsCollapsed (bool, new CategoryModel/CategoryEntity field):
   - add to CategoryModel and CategoryEntity
   - add mapping in EntityToModel.cs and ModelToEntity.cs
-  - EF migration: same migration as ShowGroupedByCategory, CompletionRule, ShowLastTimeDone
   - export/import: automatically included since full CategoryModel is serialized
-- new localization string: "Group by category"
+- EF migration (covers all 4 new fields: ShowGroupedByCategory, ShowLastTimeDone, IsCollapsed, CompletionRule):
+  - run after all model/entity changes for tasks 1, 2, 3 are done:
+    cd e:/Jinjinov/OpenHabitTracker && dotnet ef migrations add AddGroupedViewSettings --project OpenHabitTracker.EntityFrameworkCore --startup-project OpenHabitTracker.Blazor.Wasm
+    cd e:/Jinjinov/OpenHabitTracker && dotnet ef migrations add AddGroupedViewSettings --project OpenHabitTracker.Blazor.Web --startup-project OpenHabitTracker.Blazor.Web
+- Settings.razor: add ShowGroupedByCategory checkbox above "Show help" (step 5 currently) — it is an important setting
+- Settings.razor: add ShowLastTimeDone (task 3) directly below ShowGroupedByCategory — always visible (not conditional on ShowGroupedByCategory)
+- Settings.razor: ShowGroupedByCategory and ShowLastTimeDone (task 3) both need data-settings-step- attributes
+  - all existing data-settings-step- numbers must be re-numbered after the new entries are inserted
+  - guided tour text for each new setting must use @Loc["..."] and be added to all 20 localization JSON files
+- new localization strings: "Group by category", "Uncategorized", "Show last done time" (task 3 — added here to track together)
 
 2.
 add group "and / or" toggle:
