@@ -239,6 +239,12 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CompletionRule")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsCollapsed")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -409,6 +415,9 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.Property<bool>("ShowCreatedUpdated")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("ShowGroupedByCategory")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("ShowHabitStatistics")
                         .HasColumnType("INTEGER");
 
@@ -419,6 +428,9 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowLargeCalendar")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowLastTimeDone")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowOnlyOverSelectedRatioMin")
