@@ -42,7 +42,10 @@ public class HabitsStatisticsComponentTests
             return new LocalizedString(key, string.Format(format, callInfo.Arg<object[]>()));
         });
 
+        ICategoryService categoryService = Substitute.For<ICategoryService>();
+
         _ctx.Services.AddScoped(_ => _habitService);
+        _ctx.Services.AddScoped(_ => categoryService);
         _ctx.Services.AddScoped(_ => _clientState);
         _ctx.Services.AddSingleton(loc);
     }

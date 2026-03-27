@@ -1,7 +1,9 @@
 using Bunit;
+using Markdig;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using NSubstitute;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Blazor.Components;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
@@ -25,11 +27,23 @@ public class NotesStatisticsComponentTests
         IPriorityService priorityService = Substitute.For<IPriorityService>();
         priorityService.GetPriorityName(Arg.Any<Priority>()).Returns(callInfo => callInfo.Arg<Priority>().ToString());
 
+        IDataAccess dataAccess = Substitute.For<IDataAccess>();
+        dataAccess.DataLocation.Returns(DataLocation.Local);
+
+        MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+        MarkdownToHtml markdownToHtml = new(pipeline);
+
+        ClientState clientState = new(new[] { dataAccess }, markdownToHtml);
+
+        ICategoryService categoryService = Substitute.For<ICategoryService>();
+
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
 
         _ctx.Services.AddScoped(_ => _noteService);
         _ctx.Services.AddScoped(_ => priorityService);
+        _ctx.Services.AddScoped(_ => clientState);
+        _ctx.Services.AddScoped(_ => categoryService);
         _ctx.Services.AddSingleton(loc);
     }
 
