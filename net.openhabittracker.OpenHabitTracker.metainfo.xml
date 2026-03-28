@@ -87,6 +87,17 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.1.8" date="2026-03-27">
+      <description>
+        <p>Added category-grouped view for notes, tasks, habits</p>
+        <p>Added "and / or" completion rule per category</p>
+        <p>Added completion status per category group</p>
+        <p>Added last done time per category group</p>
+        <p>Added arrow key navigation for the guided tour</p>
+        <p>Fixed Empty trash</p>
+        <p>Fixed Rename category</p>
+      </description>
+    </release>
     <release version="1.1.7" date="2026-03-21">
       <description>
         <p>Added weekly recap / stats for notes, tasks, habits</p>
