@@ -1,10 +1,11 @@
 - increase version number
 - increase ApplicationVersion
 
+- update VersionHistory.md
+- update net.openhabittracker.OpenHabitTracker.metainfo.xml
+
 - create tag on git
 - update commit hash in net.openhabittracker.OpenHabitTracker.yaml
-
-- update VersionHistory.md
 
 OpenHabitTracker.Web
 - update index.html -> FTP upload to server
