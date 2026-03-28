@@ -3,6 +3,7 @@
 @using GTour.Abstractions
 
 @inject IStringLocalizer<GuidedTourComponent> Loc
+@inject IJsInterop JsInterop
 
 <GuidedTour TourId="@TourId" OverlayEnabled="true" HighlightEnabled="false">
     @for (int i = 0; i < TourSteps.Length; i++)
@@ -13,17 +14,18 @@
             <HeaderContent>
                 <div class="d-flex align-items-center w-100">
                     <small>@step / @TourSteps.Length</small>
-                    <button class="btn btn-outline-secondary p-1 lh-1 ms-auto" aria-label="@Loc["Close tour"]" disabled="@((context as GTourStepComponent)!.IsLastStep)" @onclick="@(() => context.CancelTour())"><small><i class="bi bi-x-lg"></i></small></button>
+                    <button class="btn btn-outline-secondary p-1 lh-1 ms-auto" aria-label="@Loc["Close tour"]" aria-keyshortcuts="Escape" disabled="@((context as GTourStepComponent)!.IsLastStep)" @onclick="@(() => context.CancelTour())"><small><i class="bi bi-x-lg"></i></small></button>
                 </div>
             </HeaderContent>
             <ChildContent>
-                <div style="min-width:100px; max-width:400px;">@Loc[TourSteps[step - 1].Text]</div>
+                <div tabindex="-1" @ref="_contentRefs[step - 1]" @onkeydown="HandleKeyDown" style="min-width:100px; max-width:400px;">@Loc[TourSteps[step - 1].Text]</div>
             </ChildContent>
             <FooterContent>
+                @{ _currentContext = context; _isLastStep = (context as GTourStepComponent)!.IsLastStep; _activeStepIndex = step - 1; }
                 <div>
-                    <button class="btn btn-outline-secondary" aria-label="@Loc["Previous"]" disabled="@((context as GTourStepComponent)!.IsFirstStep)" @onclick="@(() => context.PreviousStep())"><small><i class="bi bi-chevron-double-left"></i></small></button>
-                    <button class="btn btn-outline-secondary" aria-label="@Loc["Next"]" hidden="@((context as GTourStepComponent)!.IsLastStep)" @onclick="@(() => context.NextStep())"><small><i class="bi bi-chevron-double-right"></i></small></button>
-                    <button class="btn btn-outline-secondary" aria-label="@Loc["Complete tour"]" hidden="@(!(context as GTourStepComponent)!.IsLastStep)" @onclick="@(() => context.CompleteTour())"><small><i class="bi bi-check-lg"></i></small></button>
+                    <button class="btn btn-outline-secondary" aria-label="@Loc["Previous"]" aria-keyshortcuts="ArrowLeft ArrowUp" disabled="@((context as GTourStepComponent)!.IsFirstStep)" @onclick="@(() => context.PreviousStep())"><small><i class="bi bi-chevron-double-left"></i></small></button>
+                    <button class="btn btn-outline-secondary" aria-label="@Loc["Next"]" aria-keyshortcuts="ArrowRight ArrowDown" hidden="@((context as GTourStepComponent)!.IsLastStep)" @onclick="@(() => context.NextStep())"><small><i class="bi bi-chevron-double-right"></i></small></button>
+                    <button class="btn btn-outline-secondary" aria-label="@Loc["Complete tour"]" aria-keyshortcuts="Enter" hidden="@(!(context as GTourStepComponent)!.IsLastStep)" @onclick="@(() => context.CompleteTour())"><small><i class="bi bi-check-lg"></i></small></button>
                 </div>
             </FooterContent>
         </GuidedTourStep>
@@ -36,4 +38,41 @@
 
     [Parameter]
     public TourStep[] TourSteps { get; set; } = null!;
+
+    ElementReference[] _contentRefs = Array.Empty<ElementReference>();
+    IGTourStep? _currentContext;
+    bool _isLastStep;
+    int _activeStepIndex = -1;
+
+    protected override void OnInitialized()
+    {
+        _contentRefs = new ElementReference[TourSteps.Length];
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_activeStepIndex >= 0)
+            await JsInterop.FocusElement(_contentRefs[_activeStepIndex]);
+    }
+
+    async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "ArrowRight":
+            case "ArrowDown":
+                if (!_isLastStep) await _currentContext!.NextStep();
+                break;
+            case "ArrowLeft":
+            case "ArrowUp":
+                await _currentContext!.PreviousStep();
+                break;
+            case "Escape":
+                await _currentContext!.CancelTour();
+                break;
+            case "Enter":
+                if (_isLastStep) await _currentContext!.CompleteTour();
+                break;
+        }
+    }
 }
