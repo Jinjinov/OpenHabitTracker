@@ -52,51 +52,6 @@ and TimesDone are actually lazy loaded, there will be a bug:
 
 ---------------------------------------------------------------------------------------------------
 
-GuidedTourComponent keyboard navigation:
-
-GOAL: Allow users to navigate the guided tour entirely with the keyboard.
-  ArrowRight / ArrowDown → Next step
-  ArrowLeft  / ArrowUp  → Previous step
-  Escape                → Close/cancel tour
-  Enter                 → Complete tour (only on last step)
-
-WHY @onkeydown ON BUTTONS/WRAPPER DOESN'T WORK:
-  GTour renders its popover before the tour activates (hidden="@(!IsActive)").
-  The component renders before the user opens the tour, so nothing inside has focus.
-  @onkeydown on buttons or a wrapper div never fires because nothing is focused.
-
-SOLUTION: focus the active step's content div via JsInterop.FocusElement (no new JS needed):
-  GuidedTourStep uses @if (IsActiveStep) — only the active step's content is in the DOM.
-  Put @onkeydown="HandleKeyDown" and tabindex="-1" on the ChildContent div.
-  Use ElementReference[] _contentRefs (size = TourSteps.Length, initialized in OnInitialized).
-  Track _activeStepIndex in the FooterContent template alongside _currentContext.
-  In OnAfterRenderAsync: call JsInterop.FocusElement(_contentRefs[_activeStepIndex]) when tour is active.
-
-Step 1 — ChildContent div: tabindex, ref, onkeydown
-  - <div tabindex="-1" @ref="_contentRefs[step - 1]" @onkeydown="HandleKeyDown" style="min-width:100px; max-width:400px;">
-
-Step 2 — Track current step context and index
-  - Fields: IGTourStep? _currentContext; bool _isLastStep; int _activeStepIndex = -1;
-  - ElementReference[] _contentRefs initialized in OnInitialized: _contentRefs = new ElementReference[TourSteps.Length];
-  - Assign in FooterContent: @{ _currentContext = context; _isLastStep = ...; _activeStepIndex = step - 1; }
-
-Step 3 — OnAfterRenderAsync: focus active content div
-  - if (_activeStepIndex >= 0) await JsInterop.FocusElement(_contentRefs[_activeStepIndex]);
-
-Step 4 — async Task HandleKeyDown(KeyboardEventArgs e)
-  - "ArrowRight" or "ArrowDown" → if (!_isLastStep) await _currentContext!.NextStep()
-  - "ArrowLeft"  or "ArrowUp"  → await _currentContext!.PreviousStep()
-  - "Escape"                   → await _currentContext!.CancelTour()
-  - "Enter"                    → if (_isLastStep) await _currentContext!.CompleteTour()
-
-Step 5 — ARIA: aria-keyshortcuts attributes (already done)
-  - Previous button: aria-keyshortcuts="ArrowLeft ArrowUp"
-  - Next button:     aria-keyshortcuts="ArrowRight ArrowDown"
-  - Close button:    aria-keyshortcuts="Escape"
-  - Complete button: aria-keyshortcuts="Enter"
-
----------------------------------------------------------------------------------------------------
-
 0.
 toggle IsCollapsed:
     cross-component refresh when toggling collapse in Home.razor (all three pages embedded)
