@@ -1,8 +1,8 @@
 # 1.1.8 - Mar 27, 2026
 
-- added category-grouped view for Notes, Tasks, and Habits
-- added "and / or" completion rule per category (all habits done vs. any habit done)
-- added color-coded completion status per category group
+- added category-grouped view for notes, tasks, habits
+- added "and / or" completion rule per category
+- added completion status per category group
 - added last done time per category group
 - fixed Empty trash
 - fixed Rename category
