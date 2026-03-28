@@ -45,7 +45,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
 
         TokenResponse tokenResponse = GetTokenResponse(user.UserName);
 
-        RefreshToken refreshToken = new RefreshToken
+        RefreshToken refreshToken = new()
         {
             Username = user.UserName,
             Token = tokenResponse.RefreshToken,
@@ -71,17 +71,17 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
-        SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(secret));
+        SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha256);
 
-        JwtSecurityToken token = new JwtSecurityToken(
+        JwtSecurityToken token = new(
             issuer: issuer,
             audience: audience,
             claims: claims,
             expires: DateTime.UtcNow.AddDays(1),
             signingCredentials: creds);
 
-        TokenResponse tokenResponse = new TokenResponse
+        TokenResponse tokenResponse = new()
         {
             JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
             RefreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64))
