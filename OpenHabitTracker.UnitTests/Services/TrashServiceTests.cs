@@ -498,7 +498,7 @@ public class TrashServiceTests
     }
 
     [Test]
-    public async Task Delete_Habit_WithCategoryId0_DoesNotThrow()
+    public void Delete_Habit_WithCategoryId0_DoesNotThrow()
     {
         HabitModel trashed = TestData.Habit(id: 1, isDeleted: true, categoryId: 0);
         _clientState.TrashedHabits = [trashed];
@@ -644,7 +644,7 @@ public class TrashServiceTests
     }
 
     [Test]
-    public async Task RestoreAll_WhenTrashedListsAreNull_DoesNotThrow()
+    public void RestoreAll_WhenTrashedListsAreNull_DoesNotThrow()
     {
         _clientState.TrashedHabits = null;
         _clientState.TrashedNotes = null;
