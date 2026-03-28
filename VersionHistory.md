@@ -4,6 +4,7 @@
 - added "and / or" completion rule per category
 - added completion status per category group
 - added last done time per category group
+- added arrow key navigation for the guided tour
 - fixed Empty trash
 - fixed Rename category
 
