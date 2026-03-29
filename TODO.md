@@ -211,7 +211,8 @@ textarea Tabs
     - insert Tabs in multiple rows
 
 TODO:: research:
-Show only habits with ratio `over x%` / `under y%` - currently only `over x%`, also add `under y%`
+Show only habits with ratio `over x%` / `under y%` - currently filter habits with urgency `over x%`, also add `under y%`
+    how useful is it to see habits with urgency `under y%`?
 
 horizontal calendar with vertical weeks
 
