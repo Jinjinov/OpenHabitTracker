@@ -94,6 +94,10 @@ search/filter/sort query parameters in the URL - Web API
 TODO:: research:
 search/filter/sort query parameters in the URL - Blazor
 
+two options:
+    - URL overrides DB settings - but then you lose your saved settings
+    - multiple saved settings, with optional "URL references a preset by name", otherwise the URL params overwrite the "URL settings" saved setting
+
 ---------------------------------------------------------------------------------------------------
 
 3.
