@@ -211,8 +211,8 @@ repeat:
 
 TODO:: research:
 textarea Tabs
-    - make markdown Tabs look the same as in textarea
-    - insert Tabs in multiple rows
+    - make markdown Tabs look the same as in textarea - currently Tabs are ignored in markdown (except under a "- list row")
+    - insert Tabs in multiple rows - currently pressing a Tab just replaces all selected rows with a tab
 
 TODO:: research:
 Show only habits with ratio `over x%` / `under y%` - currently filter habits with urgency `over x%`, also add `under y%`
