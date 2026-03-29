@@ -212,7 +212,8 @@ textarea Tabs
 
 TODO:: research:
 Show only habits with ratio `over x%` / `under y%` - currently filter habits with urgency `over x%`, also add `under y%`
-    how useful is it to see habits with urgency `under y%`?
+    how useful is it to see habits with urgency `under y%` if y is under 100?
+    only real use case: you see all habits with ratio over 120% and then want to see only those with 100% - 120%
 
 horizontal calendar with vertical weeks
 
