@@ -286,7 +286,7 @@ OpenHabitTracker.Blazor.Server:
 ---------------------------------------------------------------------------------------------------
 
 TODO:: research:
-copy Loop Habit Tracker
+copy Loop Habit Tracker UI - all required data is already in the DB
     - History (done count grouped by week, month, quarter, year)
     - Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
     - Best streaks (from date - to date)
