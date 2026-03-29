@@ -53,10 +53,12 @@ and TimesDone are actually lazy loaded, there will be a bug:
 ---------------------------------------------------------------------------------------------------
 
 0.
+TODO:: research:
 toggle IsCollapsed:
     cross-component refresh when toggling collapse in Home.razor (all three pages embedded)
     toggling collapse in one embedded page does not refresh the others
 
+TODO:: research:
 editing a note/task/habit:
     change in HabitComponent/NoteComponent/TaskComponent (second column, not IsEmbedded) 
     does not immediately refresh the title/content shown in the list in the parent page
@@ -85,9 +87,11 @@ upgrade NuGet versions
 ---------------------------------------------------------------------------------------------------
 
 1.
+TODO:: research:
 search/filter/sort query parameters in the URL - Web API
 
 2.
+TODO:: research:
 search/filter/sort query parameters in the URL - Blazor
 
 ---------------------------------------------------------------------------------------------------
@@ -136,6 +140,7 @@ method to copy one db context to another
 ---------------------------------------------------------------------------------------------------
 
 5.
+TODO:: research:
 make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
 
 ---------------------------------------------------------------------------------------------------
@@ -189,39 +194,41 @@ Android: get permission to save SQLite DB in an external folder that can be part
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
-when all habit items are done, habit is done
-when all task items are done, task is done
+when all habit items are done, habit is done automatically ??? pros & cons ?
+when all task items are done, task is done automatically ??? pros & cons ?
 
+TODO:: research:
 repeat:
     add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
-    weekly: which day in week
-    monthly: which day (or week/day - second monday) in month
-    yearly: which day (date) in year
+    - weekly: which day in week
+    - monthly: which day (or week/day - second monday) in month
+    - yearly: which day (date) in year
+        this solves a real problem: you create a habit with 1 week repeat interval on Monday, but you want to repeat the habit every Friday
 
+TODO:: research:
 textarea Tabs
-    make markdown Tabs look the same as in textarea
-    insert Tabs in multiple rows
+    - make markdown Tabs look the same as in textarea
+    - insert Tabs in multiple rows
 
-Show only habits with ratio `over` / `under`
+TODO:: research:
+Show only habits with ratio `over x%` / `under y%` - currently only `over x%`, also add `under y%`
 
 horizontal calendar with vertical weeks
 
 ---------------------------------------------------------------------------------------------------
 
-read Settings from DB before Run() - !!! Transient / Scoped / Singleton !!! - Scoped instances before and after Run() are not the same
+read Settings from DB before Run() - NO!!! - !!! Transient / Scoped / Singleton !!! - Scoped instances before and after Run() are not the same
 
-unify into one property ??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ???
+unify into one property ??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `DateTime? DoneAt` ??? NO!!!
 
 ---------------------------------------------------------------------------------------------------
 
-easy for AI ?
-
+TODO:: research:
 common `Router`
     OpenHabitTracker.Blazor - Routes.razor
     OpenHabitTracker.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
 
-easy for AI ?
-
+TODO:: research:
 OpenHabitTracker.Blazor.Server:
     - @page "/Error"
     - app.UseExceptionHandler("/Error");
@@ -276,11 +283,12 @@ OpenHabitTracker.Blazor.Server:
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
+TODO:: research:
 copy Loop Habit Tracker
-- History (done count grouped by week, month, quarter, year)
-- Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
-- Best streaks (from date - to date)
-- Frequency (by day of the week - continuous calendar, without dates, done count grouped by days of the week)
+    - History (done count grouped by week, month, quarter, year)
+    - Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
+    - Best streaks (from date - to date)
+    - Frequency (by day of the week - continuous calendar, without dates, done count grouped by days of the week)
 
 ---------------------------------------------------------------------------------------------------
 
@@ -293,6 +301,7 @@ sms, message: copy task list with Unicode checkboxes
 
 virtualized container
 
+TODO:: research:
 benchmark: method time & render time
 method trace logging - benchmark method performance
 https://learn.microsoft.com/en-us/aspnet/core/blazor/performance
@@ -342,6 +351,7 @@ accessibility: Silent operations give no screen reader feedback (WCAG 4.1.3):
 
 ---------------------------------------------------------------------------------------------------
 
+TODO:: research:
 add comments to methods - 1. for any open source contributor - 2. for GitHub Copilot
 
 deploy Blazor Server Docker image to Raspberry Pi 5 / Synology NAS DS224+
