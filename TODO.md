@@ -351,8 +351,8 @@ accessibility: Silent operations give no screen reader feedback (WCAG 4.1.3):
 
 ---------------------------------------------------------------------------------------------------
 
-TODO:: research:
 add comments to methods - 1. for any open source contributor - 2. for GitHub Copilot
+    the codebase would need to be stable first; comments on moving targets are maintenance burden
 
 deploy Blazor Server Docker image to Raspberry Pi 5 / Synology NAS DS224+
 
