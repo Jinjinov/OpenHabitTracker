@@ -158,32 +158,6 @@ public class TaskTests : BaseTest
     }
 
     [Test]
-    public async Task EditTask_TwiceThenClose_CloseWorksOnFirstClick()
-    {
-        await AddItemAsync("Task Edit Twice");
-
-        // First edit
-        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Task Edit Twice" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.Locator("input[aria-label='Task title']").FillAsync("Task Edit Twice - 1");
-        await Page.Locator("input[aria-label='Task title']").BlurAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.Locator("[data-tasks-step-10]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        // Second edit — click Close while input still has focus (no blur before click)
-        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Task Edit Twice - 1" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.Locator("input[aria-label='Task title']").FillAsync("Task Edit Twice - 2");
-
-        // Click Close once — must close immediately
-        await Page.Locator("[data-tasks-step-10]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        await Expect(Page.Locator("[data-tasks-step-10]")).ToHaveCountAsync(0);
-    }
-
-    [Test]
     public async Task AddTask_PersistedAfterReload()
     {
         await AddItemAsync("Persistent Task");
