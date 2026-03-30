@@ -601,3 +601,25 @@ public DataAccess:
         this enforces the invariant at compile time, not by convention
 
 ---------------------------------------------------------------------------------------------------
+
+Bug: NoteComponent Close button requires two clicks after editing content with a line added/removed, then scrolling down to the Close button.
+
+Conditions for the bug to trigger:
+- Second edit of the same note (first edit always works)
+- A line is added or removed in the textarea (row count changes)
+- The user scrolls down inside the `.child-column` scroll container to reach the Close button
+- First click does nothing, second click closes
+
+Root cause:
+
+The `calculateAutoHeight` JS function (called via `setCalculateAutoHeight` in `OnAfterRenderAsync`) sets `e.target.style.height = 'auto'` before setting the final height. This temporary collapse causes the browser to reflow the layout and scroll the `.child-column` container upward to keep the focused textarea in view. This scroll happens silently within a single frame — no visible flicker — but it occurs between `pointerdown` and `click`. By the time `click` fires, the Close button has scrolled out from under the cursor and the click lands on the note list behind it.
+
+`window.scrollY` is always 0 because the scroll container is the inner `.child-column` div, not the window.
+
+The intermediate `height = 'auto'` collapse is the standard technique for auto-shrinking textareas (without it, height only grows). The bug appears only on the second edit because the first edit also fires `setCalculateAutoHeight`, but the user hasn't scrolled yet so the scroll reset is a no-op.
+
+Fix (workaround): in `calculateAutoHeight`, save the `.child-column` ancestor's `scrollTop` before setting `height = 'auto'` and restore it immediately after setting the final height. The scroll container stays exactly where the user left it, so `click` fires on the button.
+
+Fix (proper): replace `rows="@(Note.Content.Count(c => c == '\n') + 1)"` and `SetCalculateAutoHeight` entirely with a single CSS property on the textarea: `field-sizing:content`. The browser handles auto-height natively — no JS, no reflow, no scroll side effects. Supported since Chrome 123, Firefox 128, Safari 18 (all mid-2024).
+
+---------------------------------------------------------------------------------------------------
