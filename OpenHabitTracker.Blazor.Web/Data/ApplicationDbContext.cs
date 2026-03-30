@@ -31,6 +31,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     {
         // this is very bad practice and causes many different problems even in long lived DbContext
         // in short lived DbContext this would try to migrate every time DB is used
+        // this could also cause problems for "dotnet ef migrations add"
 
         //Database.EnsureCreated();
         //Database.Migrate();
