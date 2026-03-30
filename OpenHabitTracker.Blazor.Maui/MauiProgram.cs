@@ -91,7 +91,7 @@ public static class MauiProgram
         logger.LogInformation("Initializing database");
 
         IDataAccess dataAccess = mauiApp.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
-        dataAccess.Initialize();
+        dataAccess.Initialize().GetAwaiter().GetResult();
 
         //ClientState clientState = mauiApp.Services.GetRequiredService<ClientState>();
         //clientState.LoadUsers();

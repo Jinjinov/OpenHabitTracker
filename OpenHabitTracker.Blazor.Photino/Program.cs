@@ -65,7 +65,7 @@ public class Program
         logger.LogInformation("Initializing database");
 
         IDataAccess dataAccess = app.Services.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
-        dataAccess.Initialize();
+        dataAccess.Initialize().GetAwaiter().GetResult();
 
         //ClientState clientState = app.Services.GetRequiredService<ClientState>();
         //clientState.LoadUsers();

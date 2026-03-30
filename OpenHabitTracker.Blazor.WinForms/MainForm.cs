@@ -68,7 +68,7 @@ public partial class MainForm : Form
         logger.LogInformation("Initializing database");
 
         IDataAccess dataAccess = serviceProvider.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
-        dataAccess.Initialize();
+        dataAccess.Initialize().GetAwaiter().GetResult();
 
         //ClientState clientState = serviceProvider.GetRequiredService<ClientState>();
         //clientState.LoadUsers();
