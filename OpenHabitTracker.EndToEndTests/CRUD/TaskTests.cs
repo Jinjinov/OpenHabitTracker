@@ -124,6 +124,66 @@ public class TaskTests : BaseTest
     }
 
     [Test]
+    public async Task EditTask_ChangeAllFields_CloseWorksOnFirstClick()
+    {
+        await AddItemAsync("Task To Edit");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Task To Edit" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change title
+        await Page.Locator("input[aria-label='Task title']").FillAsync("Task Edited Title");
+        await Page.Locator("input[aria-label='Task title']").BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change planned at
+        await Page.Locator("[data-tasks-step-12] input").FillAsync("2030-01-15T10:00");
+        await Page.Locator("[data-tasks-step-12] input").BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change duration hours
+        await Page.Locator("select[aria-label='Duration hours']").SelectOptionAsync("1");
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change duration minutes
+        await Page.Locator("select[aria-label='Duration minutes']").SelectOptionAsync("30");
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Click Close once — must close the detail panel immediately (no second click required)
+        await Page.Locator("[data-tasks-step-10]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Expect(Page.Locator("[data-tasks-step-10]")).ToHaveCountAsync(0);
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Task Edited Title" })).ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task EditTask_TwiceThenClose_CloseWorksOnFirstClick()
+    {
+        await AddItemAsync("Task Edit Twice");
+
+        // First edit
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Task Edit Twice" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.Locator("input[aria-label='Task title']").FillAsync("Task Edit Twice - 1");
+        await Page.Locator("input[aria-label='Task title']").BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.Locator("[data-tasks-step-10]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Second edit — click Close while input still has focus (no blur before click)
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Task Edit Twice - 1" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.Locator("input[aria-label='Task title']").FillAsync("Task Edit Twice - 2");
+
+        // Click Close once — must close immediately
+        await Page.Locator("[data-tasks-step-10]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Expect(Page.Locator("[data-tasks-step-10]")).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task AddTask_PersistedAfterReload()
     {
         await AddItemAsync("Persistent Task");
