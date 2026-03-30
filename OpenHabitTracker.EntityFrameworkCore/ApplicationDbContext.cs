@@ -26,6 +26,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
+        // this is very bad practice and causes many different problems even in long lived DbContext
+        // in short lived DbContext this would try to migrate every time DB is used
+
         //Database.EnsureCreated();
         //Database.Migrate();
     }

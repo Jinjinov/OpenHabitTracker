@@ -21,6 +21,10 @@ public abstract class DataAccessBase
 
     public async Task Initialize() => await ExecuteWithDbContext(async dataContext =>
     {
+        // Initialize() is called explicitly at startup to guarantee migration runs early and predictably,
+        // before any Blazor components load. The constructor in DataAccess also calls Migrate() as a safety net
+        // for cases where DI resolves the service before Initialize() is explicitly called.
+
         // Delete any stale migration lock left behind by a previous run that was killed mid-migration.
         // Without this, the app hangs forever on startup trying to acquire a lock that will never be released.
         // Safe because MAUI/desktop apps are single-instance, so there is never a legitimate concurrent migration.
