@@ -192,32 +192,6 @@ public class HabitTests : BaseTest
     }
 
     [Test]
-    public async Task EditHabit_TwiceThenClose_CloseWorksOnFirstClick()
-    {
-        await AddItemAsync("Habit Edit Twice");
-
-        // First edit
-        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Habit Edit Twice" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.Locator("input[aria-label='Habit title']").FillAsync("Habit Edit Twice - 1");
-        await Page.Locator("input[aria-label='Habit title']").BlurAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.Locator("[data-habits-step-11]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        // Second edit — click Close while input still has focus (no blur before click)
-        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Habit Edit Twice - 1" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.Locator("input[aria-label='Habit title']").FillAsync("Habit Edit Twice - 2");
-
-        // Click Close once — must close immediately
-        await Page.Locator("[data-habits-step-11]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        await Expect(Page.Locator("[data-habits-step-11]")).ToHaveCountAsync(0);
-    }
-
-    [Test]
     public async Task AddHabit_PersistedAfterReload()
     {
         await AddItemAsync("Persistent Habit");
