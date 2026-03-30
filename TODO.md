@@ -210,8 +210,12 @@ repeat:
 
 TODO:: research: high priority
 textarea Tabs
-    - make markdown Tabs look the same as in textarea - currently Tabs are ignored in markdown (except under a "- list row")
+    - make markdown Tabs look the same as in textarea
+        - currently Tabs are ignored in markdown (except under a "- list row")
+        - if `DisplayNoteContentAsMarkdown` is `false`, tabs are already displayed properly with `style="white-space: pre-wrap;"`
+        - there is no way to know if user is using tabs to create a code block
     - insert Tabs in multiple rows - currently pressing a Tab just replaces all selected rows with a tab
+    - handle Shift + Tab for one row and for multiple rows
 
 TODO:: research: normal priority (DB migration)
 Show only habits with ratio `over x%` / `under y%` - currently filter habits with urgency `over x%`, also add `under y%`
