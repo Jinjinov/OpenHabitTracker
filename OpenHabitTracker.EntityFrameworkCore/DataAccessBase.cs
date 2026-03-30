@@ -21,6 +21,18 @@ public abstract class DataAccessBase
 
     public async Task Initialize() => await ExecuteWithDbContext(async dataContext =>
     {
+        // Delete any stale migration lock left behind by a previous run that was killed mid-migration.
+        // Without this, the app hangs forever on startup trying to acquire a lock that will never be released.
+        // Safe because MAUI/desktop apps are single-instance, so there is never a legitimate concurrent migration.
+        try
+        {
+            await dataContext.Database.ExecuteSqlRawAsync("DELETE FROM \"__EFMigrationsLock\"");
+        }
+        catch (Exception)
+        {
+            // Table does not exist on a fresh install - that is fine, MigrateAsync will create it.
+        }
+
         await dataContext.Database.MigrateAsync();
     });
 

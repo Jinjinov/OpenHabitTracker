@@ -1,0 +1,79 @@
+<Project>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncFixer" Version="2.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Meziantou.Analyzer" Version="3.0.29">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.22.0.136894">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- TODO comments -->
+    <NoWarn>$(NoWarn);MA0026;S1135</NoWarn>
+    <!-- Commented-out code -->
+    <NoWarn>$(NoWarn);S125</NoWarn>
+    <!-- Method too long (arbitrary line limit) -->
+    <NoWarn>$(NoWarn);MA0051</NoWarn>
+    <!-- Method overloads not adjacent (style) -->
+    <NoWarn>$(NoWarn);S4136</NoWarn>
+    <!-- List<T> instead of IList<T> for fields (style) -->
+    <NoWarn>$(NoWarn);MA0016</NoWarn>
+    <!-- ConfigureAwait(false) - not applicable for Blazor -->
+    <NoWarn>$(NoWarn);MA0004</NoWarn>
+    <!-- Unnecessary async/await wrapper (micro-optimization) -->
+    <NoWarn>$(NoWarn);AsyncFixer01</NoWarn>
+    <!-- Merge nested if statements (style) -->
+    <NoWarn>$(NoWarn);S1066</NoWarn>
+    <!-- DateTime without DateTimeKind - concentrated in test files -->
+    <NoWarn>$(NoWarn);S6562</NoWarn>
+    <!-- Assembly reference conflict in WinForms (WebView2 vs WindowsBase) - pre-existing -->
+    <NoWarn>$(NoWarn);MSB3277</NoWarn>
+    <!-- Unused private members -->
+    <NoWarn>$(NoWarn);S1144</NoWarn>
+    <!-- Regex DoS in test files -->
+    <NoWarn>$(NoWarn);MA0009</NoWarn>
+    <!-- Await X instead (sync methods in async context - theoretical for SQLite, stable for 2 years) -->
+    <NoWarn>$(NoWarn);S6966</NoWarn>
+    <!-- File name must match type name -->
+    <NoWarn>$(NoWarn);MA0048</NoWarn>
+    <!-- Make field readonly -->
+    <NoWarn>$(NoWarn);S2933</NoWarn>
+    <!-- Make method static -->
+    <NoWarn>$(NoWarn);S2325</NoWarn>
+    <!-- Extract nested ternary -->
+    <NoWarn>$(NoWarn);S3358</NoWarn>
+    <!-- Use StringComparison overload -->
+    <NoWarn>$(NoWarn);MA0074</NoWarn>
+    <!-- Use indexer instead of First() -->
+    <NoWarn>$(NoWarn);S6608</NoWarn>
+    <!-- Simplify LINQ -->
+    <NoWarn>$(NoWarn);S3267</NoWarn>
+    <!-- ToString without IFormatProvider -->
+    <NoWarn>$(NoWarn);MA0011</NoWarn>
+    <!-- Remove array creation for params -->
+    <NoWarn>$(NoWarn);S3878</NoWarn>
+    <!-- Rename parameter to match base class -->
+    <NoWarn>$(NoWarn);S927</NoWarn>
+    <!-- Use explicit enum value -->
+    <NoWarn>$(NoWarn);MA0099</NoWarn>
+    <!-- Remove redundant interface from inheritance -->
+    <NoWarn>$(NoWarn);S1939</NoWarn>
+    <!-- Add protected constructor or static keyword -->
+    <NoWarn>$(NoWarn);S1118</NoWarn>
+    <!-- Use opposite operator -->
+    <NoWarn>$(NoWarn);S1940</NoWarn>
+    <!-- Wrong parameter name in ArgumentOutOfRangeException -->
+    <NoWarn>$(NoWarn);S3928;MA0015</NoWarn>
+    <!-- Hard-coded URI -->
+    <NoWarn>$(NoWarn);S1075</NoWarn>
+  </PropertyGroup>
+
+</Project>
