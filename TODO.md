@@ -58,6 +58,8 @@ toggle IsCollapsed:
     cross-component refresh when toggling collapse in Home.razor (all three pages embedded)
     toggling collapse in one embedded page does not refresh the others
 
+    add IsCollapsedChanged parameter and _isCollapsedChanged in Home.razor and force re-render
+
 TODO:: research: low priority - "feature"
 editing a note/task/habit:
     change in HabitComponent/NoteComponent/TaskComponent (second column, not IsEmbedded) 
@@ -87,11 +89,11 @@ upgrade NuGet versions
 ---------------------------------------------------------------------------------------------------
 
 1.
-TODO:: research: normal priority - save/load settings (DB migration)
+TODO:: research: normal priority - add save/load settings (DB migration)
 search/filter/sort query parameters in the URL - Web API
 
 2.
-TODO:: research: normal priority - save/load settings (DB migration)
+TODO:: research: normal priority - add save/load settings (DB migration)
 search/filter/sort query parameters in the URL - Blazor
 
 two options:
