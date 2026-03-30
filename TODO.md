@@ -52,19 +52,13 @@ and TimesDone are actually lazy loaded, there will be a bug:
 
 ---------------------------------------------------------------------------------------------------
 
-high priority bug:
-
-when editing a note, after any actual text change, you have to click Close twice, the first click does nothing
-
----------------------------------------------------------------------------------------------------
-
 0.
-TODO:: research:
+TODO:: research: high priority - BUG
 toggle IsCollapsed:
     cross-component refresh when toggling collapse in Home.razor (all three pages embedded)
     toggling collapse in one embedded page does not refresh the others
 
-TODO:: research:
+TODO:: research: low priority - "feature"
 editing a note/task/habit:
     change in HabitComponent/NoteComponent/TaskComponent (second column, not IsEmbedded) 
     does not immediately refresh the title/content shown in the list in the parent page
@@ -93,11 +87,11 @@ upgrade NuGet versions
 ---------------------------------------------------------------------------------------------------
 
 1.
-TODO:: research:
+TODO:: research: normal priority - save/load settings (DB migration)
 search/filter/sort query parameters in the URL - Web API
 
 2.
-TODO:: research:
+TODO:: research: normal priority - save/load settings (DB migration)
 search/filter/sort query parameters in the URL - Blazor
 
 two options:
@@ -150,7 +144,6 @@ method to copy one db context to another
 ---------------------------------------------------------------------------------------------------
 
 5.
-TODO:: research:
 make every ...Id a required field in EF Core - Debug.Assert(Id != 0) before Add / Update
 
 ---------------------------------------------------------------------------------------------------
@@ -207,7 +200,7 @@ Android: get permission to save SQLite DB in an external folder that can be part
 when all habit items are done, habit is done automatically ??? pros & cons ?
 when all task items are done, task is done automatically ??? pros & cons ?
 
-TODO:: research:
+TODO:: research: normal priority (DB migration)
 repeat:
     add `StartAt` / `PlannedAt` to Habit ? some starting point for repeat interval
     - weekly: which day in week
@@ -215,12 +208,12 @@ repeat:
     - yearly: which day (date) in year
         this solves a real problem: you create a habit with 1 week repeat interval on Monday, but you want to repeat the habit every Friday
 
-TODO:: research:
+TODO:: research: high priority
 textarea Tabs
     - make markdown Tabs look the same as in textarea - currently Tabs are ignored in markdown (except under a "- list row")
     - insert Tabs in multiple rows - currently pressing a Tab just replaces all selected rows with a tab
 
-TODO:: research:
+TODO:: research: normal priority (DB migration)
 Show only habits with ratio `over x%` / `under y%` - currently filter habits with urgency `over x%`, also add `under y%`
     how useful is it to see habits with urgency `under y%` if y is under 100?
     only real use case: you see all habits with ratio over 120% and then want to see only those with 100% - 120%
@@ -235,12 +228,10 @@ unify into one property ??? Task `CompletedAt` / Habit `LastTimeDoneAt` --> `Dat
 
 ---------------------------------------------------------------------------------------------------
 
-TODO:: research:
 common `Router`
     OpenHabitTracker.Blazor - Routes.razor
     OpenHabitTracker.Blazor.Wasm - App.razor - CascadingAuthenticationState, AuthorizeRouteView, NotAuthorized
 
-TODO:: research:
 OpenHabitTracker.Blazor.Server:
     - @page "/Error"
     - app.UseExceptionHandler("/Error");
@@ -295,7 +286,7 @@ OpenHabitTracker.Blazor.Server:
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
 
-TODO:: research:
+TODO:: research: low priority - large feature
 copy Loop Habit Tracker UI - all required data is already in the DB
     - History (done count grouped by week, month, quarter, year)
     - Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
@@ -313,7 +304,6 @@ sms, message: copy task list with Unicode checkboxes
 
 virtualized container
 
-TODO:: research:
 benchmark: method time & render time
 method trace logging - benchmark method performance
 https://learn.microsoft.com/en-us/aspnet/core/blazor/performance
