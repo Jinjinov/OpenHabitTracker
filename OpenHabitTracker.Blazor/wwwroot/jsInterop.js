@@ -54,9 +54,12 @@ export function saveAsFile(filename, bytesBase64) {
 
 function calculateAutoHeight(e) {
     if (e && e.target) {
+        const scrollContainer = e.target.closest('.child-column');
+        const scrollTop = scrollContainer ? scrollContainer.scrollTop : 0;
         e.target.style.height = 'auto';
         e.target.style.height = this.scrollHeight + 'px';
         e.target.style.overflowY = 'hidden';
+        if (scrollContainer) scrollContainer.scrollTop = scrollTop;
     }
 }
 
