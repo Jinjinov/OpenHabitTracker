@@ -88,6 +88,56 @@ public class NoteTests : BaseTest
     }
 
     [Test]
+    public async Task EditNote_ChangeAllFields_CloseWorksOnFirstClick()
+    {
+        await AddItemAsync("Note To Edit");
+
+        await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Note To Edit" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change title
+        await Page.Locator("[data-notes-step-5] input").FillAsync("Note Edited Title");
+        await Page.Locator("[data-notes-step-5] input").BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change content
+        await Page.Locator("[data-notes-step-8] textarea").FillAsync("Note edited content text");
+        await Page.Locator("[data-notes-step-8] textarea").BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Click Close once — must close the detail panel immediately (no second click required)
+        await Page.Locator("[data-notes-step-7]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Expect(Page.Locator("[data-notes-step-7]")).ToHaveCountAsync(0);
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Note Edited Title" })).ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task EditNote_TwiceThenClose_CloseWorksOnFirstClick()
+    {
+        await AddItemAsync("Note Edit Twice");
+
+        // First edit
+        await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Note Edit Twice" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.Locator("[data-notes-step-8] textarea").FillAsync("First edit");
+        await Page.Locator("[data-notes-step-7]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Second edit — click Close while textarea still has focus (no blur before click)
+        await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Note Edit Twice" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.Locator("[data-notes-step-8] textarea").FillAsync("Second edit");
+
+        // Click Close once — must close immediately
+        await Page.Locator("[data-notes-step-7]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Expect(Page.Locator("[data-notes-step-7]")).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task AddNote_PersistedAfterReload()
     {
         await AddItemAsync("Persistent Note");

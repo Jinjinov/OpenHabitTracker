@@ -54,7 +54,7 @@ and TimesDone are actually lazy loaded, there will be a bug:
 
 high priority bug:
 
-when editing a note, after any actual change, you have to click Close twice, the first click does nothing
+when editing a note, after any actual text change, you have to click Close twice, the first click does nothing
 
 ---------------------------------------------------------------------------------------------------
 

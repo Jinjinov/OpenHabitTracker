@@ -149,6 +149,75 @@ public class HabitTests : BaseTest
     }
 
     [Test]
+    public async Task EditHabit_ChangeAllFields_CloseWorksOnFirstClick()
+    {
+        await AddItemAsync("Habit To Edit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Habit To Edit" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change title
+        await Page.Locator("input[aria-label='Habit title']").FillAsync("Habit Edited Title");
+        await Page.Locator("input[aria-label='Habit title']").BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change repeat count (first number input inside data-habits-step-14)
+        await Page.Locator("[data-habits-step-14] input[type='number']").First.FillAsync("3");
+        await Page.Locator("[data-habits-step-14] input[type='number']").First.BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change repeat interval (second number input inside data-habits-step-14)
+        await Page.Locator("[data-habits-step-14] input[type='number']").Last.FillAsync("7");
+        await Page.Locator("[data-habits-step-14] input[type='number']").Last.BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change repeat period (default is Day, switch to Week)
+        await Page.Locator("select[aria-label='Repeat period']").SelectOptionAsync("Week");
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change duration hours
+        await Page.Locator("select[aria-label='Duration hours']").SelectOptionAsync("1");
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Change duration minutes
+        await Page.Locator("select[aria-label='Duration minutes']").SelectOptionAsync("30");
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Click Close once — must close the detail panel immediately (no second click required)
+        await Page.Locator("[data-habits-step-11]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Expect(Page.Locator("[data-habits-step-11]")).ToHaveCountAsync(0);
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Habit Edited Title" })).ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task EditHabit_TwiceThenClose_CloseWorksOnFirstClick()
+    {
+        await AddItemAsync("Habit Edit Twice");
+
+        // First edit
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Habit Edit Twice" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.Locator("input[aria-label='Habit title']").FillAsync("Habit Edit Twice - 1");
+        await Page.Locator("input[aria-label='Habit title']").BlurAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.Locator("[data-habits-step-11]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Second edit — click Close while input still has focus (no blur before click)
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Habit Edit Twice - 1" }).ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.Locator("input[aria-label='Habit title']").FillAsync("Habit Edit Twice - 2");
+
+        // Click Close once — must close immediately
+        await Page.Locator("[data-habits-step-11]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Expect(Page.Locator("[data-habits-step-11]")).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task AddHabit_PersistedAfterReload()
     {
         await AddItemAsync("Persistent Habit");
