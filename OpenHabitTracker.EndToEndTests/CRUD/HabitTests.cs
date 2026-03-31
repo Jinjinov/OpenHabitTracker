@@ -10,7 +10,7 @@ public class HabitTests : BaseTest
     {
         await GotoAsync(); // Load app and allow StartPage redirect to complete
         await Page.Locator("[data-main-step-5]").ClickAsync(); // SPA navigate to /habits (avoids StartPage redirect)
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("button.btn-plain.input-group")).ToBeVisibleAsync();
     }
 
     [Test]
