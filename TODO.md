@@ -207,8 +207,11 @@ repeat:
     - weekly: which day in week
     - monthly: which day (or week/day - second monday) in month
     - yearly: which day (date) in year
+        but this complicates ElapsedTime and is half way to the "exact repeating reminders, like Google Keep" task
 
-    all "Overdue" logic must adapt to StartAt!!! - ElapsedTime is "DateTime.Now - CreatedAt" when LastTimeDoneAt is null
+    all "Overdue" logic must adapt to StartAt! - ElapsedTime is "DateTime.Now - CreatedAt" when LastTimeDoneAt is null
+
+    is it worth it? yes, if `DateTime StartAt` can be reused in the "exact repeating reminders, like Google Keep" task
 
 textarea Tabs
     - make markdown Tabs look the same as in textarea
