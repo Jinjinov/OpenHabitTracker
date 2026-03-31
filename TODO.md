@@ -75,7 +75,7 @@ upgrade NuGet versions
 
 ---------------------------------------------------------------------------------------------------
 
-0.
+1.
 prerequisite:
 TODO:: research: high priority (DB migration)
 save/load settings:
@@ -100,14 +100,6 @@ save/load settings:
     - "URL settings" row: reserved row with Name = "URL", overwritten on each URL param navigation
 
 multiple saved settings, with optional "URL references a preset by name", otherwise the URL params overwrite the "URL settings" saved setting:
-
-1.
-TODO:: research: high priority
-search/filter/sort query parameters in the URL - Web API
-    - QueryController already has POST /api/query/habits|notes|tasks with QueryParameters as [FromBody] - filtering already works
-    - add GET endpoints alongside POST: GET /api/query/habits?SearchTerm=foo&SelectedRatioMin=80&...
-    - ASP.NET Core model binding maps query string params to QueryParameters automatically via [FromQuery]
-    - same QueryParameters class, same filtering logic - no changes to QueryExtensions or ClientData
 
 2.
 TODO:: research: high priority
