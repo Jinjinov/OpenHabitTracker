@@ -38,7 +38,6 @@ public class FocusManagementTests : BaseTest
         await Page.Locator("[data-main-step-1]").ClickAsync();
 
         await Page.Locator("[data-main-step-1]").ClickAsync();
-        await Page.WaitForTimeoutAsync(200);
 
         await Expect(Page.Locator("[data-main-step-1]")).ToBeFocusedAsync();
     }
@@ -49,7 +48,6 @@ public class FocusManagementTests : BaseTest
         await Page.Locator("[data-main-step-6]").ClickAsync();
 
         await Page.Locator("[data-main-step-6]").ClickAsync();
-        await Page.WaitForTimeoutAsync(200);
 
         await Expect(Page.Locator("[data-main-step-6]")).ToBeFocusedAsync();
     }
@@ -58,10 +56,8 @@ public class FocusManagementTests : BaseTest
     public async Task Sidebar_EscapeKey_FocusReturnsToSearchButton()
     {
         await Page.Locator("[data-main-step-6]").ClickAsync();
-        await Page.WaitForTimeoutAsync(200);
 
         await Page.Keyboard.PressAsync("Escape");
-        await Page.WaitForTimeoutAsync(200);
 
         await Expect(Page.Locator("[data-main-step-6]")).ToBeFocusedAsync();
     }
@@ -74,7 +70,6 @@ public class FocusManagementTests : BaseTest
         await Page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Settings" }).ClickAsync();
 
         await Page.Locator("#closeSidebar").ClickAsync();
-        await Page.WaitForTimeoutAsync(200);
 
         await Expect(Page.Locator("[data-main-step-1]")).ToBeFocusedAsync();
     }
@@ -134,7 +129,6 @@ public class FocusManagementTests : BaseTest
         long itemId = long.Parse(url.Split('/').Last());
 
         await Page.Locator("[data-notes-step-7]").ClickAsync();
-        await Page.WaitForTimeoutAsync(200);
 
         await Expect(Page.Locator($"#note-item-{itemId}")).ToBeFocusedAsync();
     }
@@ -151,7 +145,6 @@ public class FocusManagementTests : BaseTest
         long itemId = long.Parse(url.Split('/').Last());
 
         await Page.Locator("[data-tasks-step-10]").ClickAsync();
-        await Page.WaitForTimeoutAsync(200);
 
         await Expect(Page.Locator($"#task-item-{itemId}")).ToBeFocusedAsync();
     }
@@ -168,7 +161,6 @@ public class FocusManagementTests : BaseTest
         long itemId = long.Parse(url.Split('/').Last());
 
         await Page.Locator("[data-habits-step-11]").ClickAsync();
-        await Page.WaitForTimeoutAsync(200);
 
         await Expect(Page.Locator($"#habit-item-{itemId}")).ToBeFocusedAsync();
     }
