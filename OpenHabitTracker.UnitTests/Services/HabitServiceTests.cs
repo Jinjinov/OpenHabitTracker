@@ -785,8 +785,10 @@ public class HabitServiceTests
 
     // --- AddHabit with category tests ---
 
+    // Category assignment is handled by CategoryService.ChangeCategory (called when user selects a category in the UI).
+    // AddHabit must NOT add to category.Habits — doing so would cause a duplicate when ChangeCategory already did it.
     [Test]
-    public async Task AddHabit_WithNonZeroCategoryId_AddsToCategory()
+    public async Task AddHabit_WithNonZeroCategoryId_DoesNotAddToCategory()
     {
         CategoryModel category = TestData.Category(id: 10);
         _clientState.Categories = TestData.CategoryDict(category);
@@ -795,8 +797,7 @@ public class HabitServiceTests
 
         await _sut.AddHabit();
 
-        Assert.That(category.Habits, Has.Count.EqualTo(1));
-        Assert.That(category.Habits[0].Title, Is.EqualTo("Health"));
+        Assert.That(category.Habits, Has.Count.EqualTo(0));
     }
 
     // --- MarkAsDone with UncheckAllItemsOnHabitDone=false ---

@@ -295,8 +295,10 @@ public class NoteServiceTests
 
     // --- AddNote with category tests ---
 
+    // Category assignment is handled by CategoryService.ChangeCategory (called when user selects a category in the UI).
+    // AddNote must NOT add to category.Notes — doing so would cause a duplicate when ChangeCategory already did it.
     [Test]
-    public async Task AddNote_WithNonZeroCategoryId_AddsToCategory()
+    public async Task AddNote_WithNonZeroCategoryId_DoesNotAddToCategory()
     {
         CategoryModel category = TestData.Category(id: 10);
         _clientState.Categories = TestData.CategoryDict(category);
@@ -305,8 +307,7 @@ public class NoteServiceTests
 
         await _sut.AddNote();
 
-        Assert.That(category.Notes, Has.Count.EqualTo(1));
-        Assert.That(category.Notes[0].Title, Is.EqualTo("Work Note"));
+        Assert.That(category.Notes, Has.Count.EqualTo(0));
     }
 
     // --- UpdateNote when entity not found ---

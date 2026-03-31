@@ -446,8 +446,10 @@ public class TaskServiceTests
         Assert.That(_clientState.Tasks, Is.Empty);
     }
 
+    // Category assignment is handled by CategoryService.ChangeCategory (called when user selects a category in the UI).
+    // AddTask must NOT add to category.Tasks — doing so would cause a duplicate when ChangeCategory already did it.
     [Test]
-    public async Task AddTask_WithNonZeroCategoryId_AddsToCategory()
+    public async Task AddTask_WithNonZeroCategoryId_DoesNotAddToCategory()
     {
         CategoryModel category = TestData.Category(id: 10);
         _clientState.Categories = TestData.CategoryDict(category);
@@ -456,8 +458,7 @@ public class TaskServiceTests
 
         await _sut.AddTask();
 
-        Assert.That(category.Tasks, Has.Count.EqualTo(1));
-        Assert.That(category.Tasks[0].Title, Is.EqualTo("Project Task"));
+        Assert.That(category.Tasks, Has.Count.EqualTo(0));
     }
 
     // --- DeleteTask additional tests ---
