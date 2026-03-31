@@ -4,10 +4,12 @@
 
 <PageTitle>OpenHabitTracker</PageTitle>
 
-<Notes IsEmbedded />
-<Tasks IsEmbedded />
-<Habits IsEmbedded />
+<Notes IsEmbedded OnIsCollapsedChanged="OnIsCollapsedChanged" IsCollapsedChanged="_isCollapsedChanged" />
+<Tasks IsEmbedded OnIsCollapsedChanged="OnIsCollapsedChanged" IsCollapsedChanged="_isCollapsedChanged" />
+<Habits IsEmbedded OnIsCollapsedChanged="OnIsCollapsedChanged" IsCollapsedChanged="_isCollapsedChanged" />
 
 @code {
+    bool _isCollapsedChanged;
 
+    void OnIsCollapsedChanged() => _isCollapsedChanged = !_isCollapsedChanged;
 }
