@@ -205,6 +205,7 @@ repeat:
     add `StartAt` to Habit ? some starting point for repeat interval (`PlannedAt` is more appropriate for tasks than habits)
         this solves a real problem: you create a habit with 1 week repeat interval on Monday, but you want to repeat the habit every Friday
     StartAt is optional
+    "Start at" json localization in 20 languages
 
     a date picker is easy, but not very good - better would be:
     - weekly: which day in week
@@ -227,8 +228,8 @@ Show only habits with ratio `over x%` / `under y%` - currently filter habits wit
     how useful is it to see habits with urgency `under y%` if y is under 100?
     only real use case: you see all habits with ratio over 120% and then want to see only those with 100% - 120%
 
-    see SelectedRatioMin and ShowOnlyOverSelectedRatioMin, add SelectedRatioMax - is ShowOnlyOverSelectedRatioMax needed?
-    SelectedRatioMax is optional
+    see SelectedRatioMin and ShowOnlyOverSelectedRatioMin, add SelectedRatioMax and ShowOnlyOverSelectedRatioMax (needed because you need to remember the vaule, setting it to null would lose the value, user would have to use the slider every time)
+    "Show only habits with interval ratio under" and aria label "Maximum interval ratio" json localization in 20 languages
 
 horizontal calendar with vertical weeks
 
