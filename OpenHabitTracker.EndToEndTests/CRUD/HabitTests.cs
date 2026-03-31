@@ -176,7 +176,7 @@ public class HabitTests : BaseTest
         await AddItemAsync("Persistent Habit");
 
         await Page.ReloadAsync();
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
 
         await NavigateToAsync("[data-main-step-5]");
 
