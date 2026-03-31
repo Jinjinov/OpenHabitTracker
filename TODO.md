@@ -52,12 +52,6 @@ and TimesDone are actually lazy loaded, there will be a bug:
 
 ---------------------------------------------------------------------------------------------------
 
-0.
-TODO:: research: low priority - "feature"
-editing a note/task/habit:
-    change in HabitComponent/NoteComponent/TaskComponent (second column, not IsEmbedded) 
-    does not immediately refresh the title/content shown in the list in the parent page
-
 1.
 QueryParameters:
     `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
