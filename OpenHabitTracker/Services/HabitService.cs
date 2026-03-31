@@ -112,8 +112,9 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         _clientState.Habits.Add(NewHabit.Id, NewHabit);
 
-        if (NewHabit.CategoryId != 0 && _clientState.Categories?.TryGetValue(NewHabit.CategoryId, out CategoryModel? habitCategory) == true)
-            habitCategory.Habits.Add(NewHabit);
+        // already added by ChangeCategory in CategoryService:
+        //if (NewHabit.CategoryId != 0 && _clientState.Categories?.TryGetValue(NewHabit.CategoryId, out CategoryModel? habitCategory) == true)
+        //    habitCategory.Habits.Add(NewHabit);
 
         NewHabit = null;
     }
