@@ -81,17 +81,22 @@ upgrade NuGet versions
 
 ---------------------------------------------------------------------------------------------------
 
+0.
+TODO:: research: normal priority (DB migration)
+save/load settings:
+    - add string Name to Settings
+    - add a way to create a new preset
+    - add a way to load a preset
+
+multiple saved settings, with optional "URL references a preset by name", otherwise the URL params overwrite the "URL settings" saved setting:
+
 1.
-TODO:: research: normal priority - add save/load settings (DB migration)
+TODO:: research: normal priority
 search/filter/sort query parameters in the URL - Web API
 
 2.
-TODO:: research: normal priority - add save/load settings (DB migration)
+TODO:: research: normal priority
 search/filter/sort query parameters in the URL - Blazor
-
-two options:
-    - URL overrides DB settings - but then you lose your saved settings
-    - multiple saved settings, with optional "URL references a preset by name", otherwise the URL params overwrite the "URL settings" saved setting
 
 ---------------------------------------------------------------------------------------------------
 
