@@ -178,4 +178,33 @@ public class SettingsPersistenceTests : BaseTest
         string? selected = await Page.Locator("[data-settings-step-2] select").InputValueAsync();
         Assert.That(selected, Is.EqualTo("cerulean"));
     }
+
+    // Regression guard for: settings presets DB migration (adds Name + SelectedSettingsId columns).
+    // LoadSettings() will change to load Settings[0] then Settings[SelectedSettingsId].
+    // The ratio filter is stored in the settings row — it must survive a reload after that change.
+    [Test]
+    public async Task RatioMinFilter_Toggle_PersistedAfterReload()
+    {
+        await NavigateToAsync("[data-main-step-5]"); // habits page — ratio filter is relevant here
+
+        // Open search panel; FilterByStatus section is expanded by default (FoldSection[FilterByStatus]=false)
+        await Page.Locator("[data-main-step-6]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Enable ShowOnlyOverSelectedRatioMin — data-search-step-16 wraps the checkbox + label
+        await Page.Locator("[data-search-step-16] label").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await CloseSidebarAsync();
+
+        await Page.ReloadAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
+
+        await Page.Locator("[data-main-step-6]").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        bool isChecked = await Page.Locator("[data-search-step-16] input[type='checkbox']").IsCheckedAsync();
+        Assert.That(isChecked, Is.True);
+    }
 }

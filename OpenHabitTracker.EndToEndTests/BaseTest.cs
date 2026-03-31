@@ -90,4 +90,24 @@ public abstract class BaseTest : PlaywrightTest
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500); // allow Blazor re-render to propagate
     }
+
+    protected async Task CreateCategoryAsync(string categoryName)
+    {
+        await OpenMenuAsync();
+        await Page.Locator("div[role='menu'] button:has(i.bi-tag)").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(300);
+        await Page.Locator("[data-categories-step-1] input").FillAsync(categoryName);
+        await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await CloseSidebarAsync();
+    }
+
+    protected async Task EnableGroupedByCategoryAsync()
+    {
+        await OpenSidebarAsync("bi-gear");
+        await Page.Locator("label[for='ShowGroupedByCategory']").ClickAsync();
+        await Page.WaitForTimeoutAsync(300);
+        await CloseSidebarAsync();
+    }
 }

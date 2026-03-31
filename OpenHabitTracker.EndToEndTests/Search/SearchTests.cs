@@ -128,4 +128,28 @@ public class SearchTests : BaseTest
         string secondTitle = (await habits.Nth(1).TextContentAsync() ?? "").Trim();
         Assert.That(string.Compare(firstTitle, secondTitle, StringComparison.OrdinalIgnoreCase), Is.LessThanOrEqualTo(0));
     }
+
+    // Regression guard for: urgency range filter DB migration (adds SelectedRatioMax + ShowOnlyOverSelectedRatioMax).
+    // The existing ShowOnlyOverSelectedRatioMin filter must still work after the new max-side companion is added.
+    // A freshly created habit has ratio ≈ 0% (ElapsedTime ≈ 0, RepeatInterval > 0),
+    // so enabling the filter at the default 50% threshold must exclude it.
+    [Test]
+    public async Task RatioMinFilter_Enable_ExcludesHabitsUnderThreshold()
+    {
+        await GotoAsync();
+        await NavigateToAsync("[data-main-step-5]");
+        await AddItemAsync("LowRatio Habit"); // ratio ≈ 0% right after creation
+
+        int countBefore = await Page.Locator("[data-habits-step-2]").CountAsync();
+        Assert.That(countBefore, Is.GreaterThan(0));
+
+        await OpenSearchAsync();
+
+        // data-search-step-16 wraps ShowOnlyOverSelectedRatioMin; default SelectedRatioMin = 50%
+        await Page.Locator("[data-search-step-16] label").ClickAsync();
+        await Page.WaitForTimeoutAsync(500);
+
+        int countAfter = await Page.Locator("[data-habits-step-2]").CountAsync();
+        Assert.That(countAfter, Is.LessThan(countBefore));
+    }
 }

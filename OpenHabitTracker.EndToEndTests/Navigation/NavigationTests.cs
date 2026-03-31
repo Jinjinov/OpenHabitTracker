@@ -65,4 +65,23 @@ public class NavigationTests : BaseTest
 
         Assert.That(Page.Url, Does.EndWith("/notes"));
     }
+
+    // Regression guard for: URL query params feature (serializes QueryParameters to URL).
+    // Normal SPA navigation must not gain query params — the serializer must only activate
+    // when filters are explicitly set, never on a clean page load or standard nav-link click.
+    [Test]
+    public async Task Navigation_BetweenPages_UrlContainsNoQueryParams()
+    {
+        await Page.Locator("[data-main-step-3]").ClickAsync();
+        await Page.WaitForURLAsync(new Regex("/notes"));
+        Assert.That(Page.Url, Does.Not.Contain("?"));
+
+        await Page.Locator("[data-main-step-4]").ClickAsync();
+        await Page.WaitForURLAsync(new Regex("/tasks"));
+        Assert.That(Page.Url, Does.Not.Contain("?"));
+
+        await Page.Locator("[data-main-step-5]").ClickAsync();
+        await Page.WaitForURLAsync(new Regex("/habits"));
+        Assert.That(Page.Url, Does.Not.Contain("?"));
+    }
 }

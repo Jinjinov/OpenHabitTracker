@@ -170,4 +170,24 @@ public class TaskTests : BaseTest
 
         await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Persistent Task" })).ToBeVisibleAsync();
     }
+
+    // Regression guard for: bug where ChangeCategory + AddTask both called taskCategory.Tasks.Add,
+    // causing the task to appear twice in grouped-by-category view.
+    [Test]
+    public async Task AddTask_WithCategory_AppearsExactlyOnce()
+    {
+        await CreateCategoryAsync("TaskOnceCategory");
+        await EnableGroupedByCategoryAsync();
+
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("Once Task");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "TaskOnceCategory" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
+
+        int count = await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Once Task" }).CountAsync();
+        Assert.That(count, Is.EqualTo(1), $"Expected exactly 1 'Once Task' but found {count}");
+    }
 }
