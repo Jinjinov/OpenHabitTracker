@@ -87,16 +87,35 @@ save/load settings:
     - always load last used preset
         - add long SelectedSettingsId to Settings
         - load Settings[0], then Settings[Settings[0].SelectedSettingsId]
+    - add string? Name to SettingsEntity + SettingsModel (null = unnamed/default row)
+    - add long SelectedSettingsId to SettingsEntity + SettingsModel (default = own Id = Settings[0].Id)
+    - Settings[0] is the root row; load Settings[0], then load Settings[Settings[0].SelectedSettingsId]
+    - ClientState.LoadSettings() currently takes settings[0] — extend to also load Settings[SelectedSettingsId]
+    - ClientState.UpdateSettings() uses Settings.Id to fetch and update — no change needed
+    - UI in Settings.razor: preset selector dropdown + icons for create (bi-plus) / rename (bi-pencil) / delete (bi-trash)
+    - on create: AddSettings() new row, set Settings[0].SelectedSettingsId = new row Id, UpdateSettings()
+    - on load: set Settings[0].SelectedSettingsId = selected row Id, UpdateSettings(), reload
+    - on rename: set Name on selected row, UpdateSettings()
+    - on delete: DeleteSettings() selected row, set Settings[0].SelectedSettingsId = Settings[0].Id, reload
+    - "URL settings" row: reserved row with Name = "URL", overwritten on each URL param navigation
 
 multiple saved settings, with optional "URL references a preset by name", otherwise the URL params overwrite the "URL settings" saved setting:
 
 1.
 TODO:: research: high priority
 search/filter/sort query parameters in the URL - Web API
+    - QueryController already has POST /api/query/habits|notes|tasks with QueryParameters as [FromBody] - filtering already works
+    - add GET endpoints alongside POST: GET /api/query/habits?SearchTerm=foo&SelectedRatioMin=80&...
+    - ASP.NET Core model binding maps query string params to QueryParameters automatically via [FromQuery]
+    - same QueryParameters class, same filtering logic - no changes to QueryExtensions or ClientData
 
 2.
 TODO:: research: high priority
 search/filter/sort query parameters in the URL - Blazor
+    - QueryParameters class already exists with all filter/sort fields
+    - serialize QueryParameters to URL query string via NavigationManager
+    - on page load: parse URL params, find or overwrite "URL settings" row, set SelectedSettingsId to it
+    - if URL references a preset by name: find matching Name in Settings rows, set SelectedSettingsId to it
 
 ---------------------------------------------------------------------------------------------------
 
@@ -212,11 +231,16 @@ repeat:
     - monthly: which day (or week/day - second monday) in month
     - yearly: which day (date) in year
         but this complicates ElapsedTime and is half way to the "exact repeating reminders, like Google Keep" task
+        use plain date picker for now, leave day-of-week picker for reminders feature
 
     all "Overdue" logic must adapt to StartAt! - ElapsedTime is "DateTime.Now - CreatedAt" when LastTimeDoneAt is null
         clamp "DateTime.Now - StartAt" to TimeSpan.Zero, safe - there are no divisions by ElapsedTime
+    - add DateTime? StartAt to HabitEntity + HabitModel
+    - change ElapsedTime: LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : TimeSpan.Zero.Max(DateTime.Now - (StartAt ?? CreatedAt))
+    - add date picker for StartAt in HabitComponent.razor
+    - add "Start at" to all 20 localization JSON files
 
-    is it worth it? yes, if `DateTime StartAt` can be reused in the "exact repeating reminders, like Google Keep" task
+    is it worth it? yes, if `DateTime? StartAt` can be reused in the "exact repeating reminders, like Google Keep" task
 
 textarea Tabs
     - make markdown Tabs look the same as in textarea
@@ -229,8 +253,13 @@ Show only habits with ratio `over x%` / `under y%` - currently filter habits wit
     how useful is it to see habits with urgency `under y%` if y is under 100?
     only real use case: you see all habits with ratio over 120% and then want to see only those with 100% - 120%
 
-    see SelectedRatioMin and ShowOnlyOverSelectedRatioMin, add SelectedRatioMax and ShowOnlyOverSelectedRatioMax (needed because you need to remember the vaule, setting it to null would lose the value, user would have to use the slider every time)
-    "Show only habits with interval ratio under" and aria label "Maximum interval ratio" json localization in 20 languages
+    see SelectedRatioMin and ShowOnlyOverSelectedRatioMin, add SelectedRatioMax and ShowOnlyOverSelectedRatioMax (needed because you need to remember the value, setting it to null would lose the value, user would have to use the slider every time)
+    - add int SelectedRatioMax (default 150) + bool ShowOnlyOverSelectedRatioMax (default false) to SettingsEntity + SettingsModel
+    - add ShowOnlyOverSelectedRatioMax + SelectedRatioMax to SearchFilterService.GetQueryParameters()
+    - add ShowOnlyOverSelectedRatioMax + SelectedRatioMax to QueryParameters
+    - add filter condition in QueryExtensions.FilterHabits() mirroring the existing SelectedRatioMin condition
+    - add UI in Search.razor mirroring the existing SelectedRatioMin slider + checkbox
+    - "Show only habits with interval ratio under" and aria label "Maximum interval ratio" json localization in 20 languages
 
 horizontal calendar with vertical weeks
 
