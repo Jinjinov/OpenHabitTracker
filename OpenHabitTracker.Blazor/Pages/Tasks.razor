@@ -223,6 +223,12 @@
     [Parameter]
     public bool IsEmbedded { get; set; }
 
+    [Parameter]
+    public bool IsCollapsedChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnIsCollapsedChanged { get; set; }
+
     [CascadingParameter(Name = "StateChanged")]
     public bool StateChanged { get; set; }
 
@@ -324,7 +330,10 @@
     async Task OnToggleCollapsed(CategoryModel? category)
     {
         if (category is not null)
+        {
             await CategoryService.ToggleCollapsed(category);
+            await OnIsCollapsedChanged.InvokeAsync();
+        }
     }
 
     async Task OnMarkAsDone(TaskModel task)

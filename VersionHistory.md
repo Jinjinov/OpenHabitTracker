@@ -1,6 +1,7 @@
 # 1.2.1
 
 - added Shift+Tab and multi-line Tab
+- fixed collapse toggle not refreshing sibling pages in Home
 
 # 1.2.0 - Mar 30, 2026
 

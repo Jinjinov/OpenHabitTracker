@@ -53,13 +53,6 @@ and TimesDone are actually lazy loaded, there will be a bug:
 ---------------------------------------------------------------------------------------------------
 
 0.
-TODO:: research: high priority - BUG
-toggle IsCollapsed:
-    cross-component refresh when toggling collapse in Home.razor (all three pages embedded)
-    toggling collapse in one embedded page does not refresh the others
-
-    add IsCollapsedChanged parameter and _isCollapsedChanged in Home.razor and force re-render
-
 TODO:: research: low priority - "feature"
 editing a note/task/habit:
     change in HabitComponent/NoteComponent/TaskComponent (second column, not IsEmbedded) 
