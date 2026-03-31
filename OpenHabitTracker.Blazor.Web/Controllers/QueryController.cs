@@ -28,6 +28,17 @@ public class QueryController(IDataAccess dataAccess, MarkdownToHtml markdownToHt
         return Ok(result.ToList());
     }
 
+    [HttpGet("habits")]
+    [EndpointName("HabitsGet")]
+    public async Task<ActionResult<IReadOnlyList<HabitModel>>> HabitsGet([FromQuery] QueryParameters queryParameters)
+    {
+        ClientData clientData = new(_dataAccess, _markdownToHtml);
+
+        IEnumerable<HabitModel> result = await clientData.GetHabits(queryParameters);
+
+        return Ok(result.ToList());
+    }
+
     [HttpPost("notes")]
     [EndpointName("Notes")]
     public async Task<ActionResult<IReadOnlyList<NoteModel>>> Notes([FromBody] QueryParameters queryParameters)
@@ -39,9 +50,31 @@ public class QueryController(IDataAccess dataAccess, MarkdownToHtml markdownToHt
         return Ok(result.ToList());
     }
 
+    [HttpGet("notes")]
+    [EndpointName("NotesGet")]
+    public async Task<ActionResult<IReadOnlyList<NoteModel>>> NotesGet([FromQuery] QueryParameters queryParameters)
+    {
+        ClientData clientData = new(_dataAccess, _markdownToHtml);
+
+        IEnumerable<NoteModel> result = await clientData.GetNotes(queryParameters);
+
+        return Ok(result.ToList());
+    }
+
     [HttpPost("tasks")]
     [EndpointName("Tasks")]
     public async Task<ActionResult<IReadOnlyList<TaskModel>>> Tasks([FromBody] QueryParameters queryParameters)
+    {
+        ClientData clientData = new(_dataAccess, _markdownToHtml);
+
+        IEnumerable<TaskModel> result = await clientData.GetTasks(queryParameters);
+
+        return Ok(result.ToList());
+    }
+
+    [HttpGet("tasks")]
+    [EndpointName("TasksGet")]
+    public async Task<ActionResult<IReadOnlyList<TaskModel>>> TasksGet([FromQuery] QueryParameters queryParameters)
     {
         ClientData clientData = new(_dataAccess, _markdownToHtml);
 
