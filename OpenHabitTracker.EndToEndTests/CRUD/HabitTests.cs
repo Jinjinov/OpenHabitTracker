@@ -204,4 +204,41 @@ public class HabitTests : BaseTest
 
         await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Persistent Habit" })).ToBeVisibleAsync();
     }
+
+    // Regression guard for: bug where ChangeCategory + AddHabit both called habitCategory.Habits.Add,
+    // causing the habit to appear twice in grouped-by-category view.
+    [Test]
+    public async Task AddHabit_WithCategory_AppearsExactlyOnce()
+    {
+        await CreateCategoryAsync("HabitOnceCategory");
+        await EnableGroupedByCategoryAsync();
+
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("Once Habit");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "HabitOnceCategory" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
+
+        int count = await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Once Habit" }).CountAsync();
+        Assert.That(count, Is.EqualTo(1), $"Expected exactly 1 'Once Habit' but found {count}");
+    }
+
+    // Regression guard for: StartAt DB migration (adds DateTime? StartAt to HabitEntity).
+    // ElapsedTime formula changes to: LastTimeDoneAt ?? TimeSpan.Zero.Max(DateTime.Now - (StartAt ?? CreatedAt)).
+    // For a new habit with LastTimeDoneAt=null and StartAt=null, the display must still show ⊘ —
+    // the Habits.razor display checks LastTimeDoneAt (not ElapsedTime) for the ⊘ vs value decision.
+    [Test]
+    public async Task NewHabit_BeforeMarkingDone_ElapsedTimeShowsNoData()
+    {
+        await AddItemAsync("ElapsedTime Test Habit");
+
+        // data-habits-step-3 shows ⊘ when LastTimeDoneAt is null, or elapsed time when not null
+        // It is always rendered in the list row regardless of ShowSmallCalendar setting
+        ILocator habitRow = Page.Locator("div.input-group.flex-nowrap").Filter(
+            new LocatorFilterOptions { Has = Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "ElapsedTime Test Habit" }) });
+
+        await Expect(habitRow.Locator("[data-habits-step-3]")).ToContainTextAsync("⊘");
+    }
 }

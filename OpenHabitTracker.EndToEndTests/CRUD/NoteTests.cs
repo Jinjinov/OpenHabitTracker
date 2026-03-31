@@ -126,4 +126,24 @@ public class NoteTests : BaseTest
 
         await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Persistent Note" })).ToBeVisibleAsync();
     }
+
+    // Regression guard for: bug where ChangeCategory + AddNote both called noteCategory.Notes.Add,
+    // causing the note to appear twice in grouped-by-category view.
+    [Test]
+    public async Task AddNote_WithCategory_AppearsExactlyOnce()
+    {
+        await CreateCategoryAsync("NoteOnceCategory");
+        await EnableGroupedByCategoryAsync();
+
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("Once Note");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "NoteOnceCategory" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await Page.WaitForTimeoutAsync(500);
+
+        int count = await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Once Note" }).CountAsync();
+        Assert.That(count, Is.EqualTo(1), $"Expected exactly 1 'Once Note' but found {count}");
+    }
 }
