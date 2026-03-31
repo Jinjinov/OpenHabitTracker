@@ -182,6 +182,35 @@ public class HabitTests : BaseTest
         await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Persistent Habit" })).ToBeVisibleAsync();
     }
 
+    [Test]
+    public async Task EditHabit_ChangeCategory_HabitMovesToNewGroup()
+    {
+        await CreateCategoryAsync("HabitMoveToCategory");
+        await EnableGroupedByCategoryAsync();
+
+        // Add uncategorized habit — SetUp already navigated to habits
+        await AddItemAsync("Movable Habit");
+
+        // Habit should appear under Uncategorized group
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "Uncategorized" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Habit" })).ToBeVisibleAsync();
+
+        // Open habit and change category
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Habit" }).ClickAsync();
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "HabitMoveToCategory" });
+        await Page.Locator("[data-habits-step-11]").ClickAsync(); // Close
+
+        // Habit must appear under HabitMoveToCategory group
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "HabitMoveToCategory" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Habit" })).ToBeVisibleAsync();
+
+        // Collapse HabitMoveToCategory — habit must disappear (confirms it is in that group)
+        await Page.Locator("button.btn-plain.border-0:has(i.bi-tag)")
+            .Filter(new LocatorFilterOptions { HasText = "HabitMoveToCategory" })
+            .ClickAsync();
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Habit" })).ToHaveCountAsync(0);
+    }
+
     // Regression guard for: bug where ChangeCategory + AddHabit both called habitCategory.Habits.Add,
     // causing the habit to appear twice in grouped-by-category view.
     [Test]

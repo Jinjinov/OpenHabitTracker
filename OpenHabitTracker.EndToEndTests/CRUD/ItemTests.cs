@@ -40,6 +40,30 @@ public class ItemTests : BaseTest
     }
 
     [Test]
+    public async Task DeleteItem_FromHabit_ItemDisappearsFromList()
+    {
+        await GotoAsync();
+        await NavigateToAsync("[data-main-step-5]");
+        await AddItemAsync("Habit For Item Delete");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Habit For Item Delete" }).ClickAsync();
+
+        // Add a sub-item
+        await Page.Locator("input[aria-label='Add new item']").FillAsync("Delete This Habit Item");
+        await Page.Locator("button[aria-label='Add']:has(i.bi-plus-square)").ClickAsync();
+
+        await Expect(Page.Locator("button.input-group-text.flex-grow-1.text-wrap").Filter(new LocatorFilterOptions { HasText = "Delete This Habit Item" })).ToBeVisibleAsync();
+
+        // Delete the sub-item
+        await Page.Locator("div.input-group.flex-nowrap")
+            .Filter(new LocatorFilterOptions { HasText = "Delete This Habit Item" })
+            .Locator("button[aria-label='Delete']")
+            .ClickAsync();
+
+        await Expect(Page.Locator("button.input-group-text.flex-grow-1.text-wrap").Filter(new LocatorFilterOptions { HasText = "Delete This Habit Item" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task DeleteItem_FromTask_ItemDisappearsFromList()
     {
         await GotoAsync();
@@ -61,6 +85,56 @@ public class ItemTests : BaseTest
             .ClickAsync();
 
         await Expect(Page.Locator("button.input-group-text.flex-grow-1.text-wrap").Filter(new LocatorFilterOptions { HasText = "Delete This Item" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
+    public async Task RenameItem_InTask_UpdatesTitle()
+    {
+        await GotoAsync();
+        await NavigateToAsync("[data-main-step-4]");
+        await AddItemAsync("Task For Item Rename");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Task For Item Rename" }).ClickAsync();
+
+        // Add a sub-item
+        await Page.Locator("input[aria-label='Add new item']").FillAsync("Original Item");
+        await Page.Locator("button[aria-label='Add']:has(i.bi-plus-square)").ClickAsync();
+        await Expect(Page.Locator("button.input-group-text.flex-grow-1.text-wrap").Filter(new LocatorFilterOptions { HasText = "Original Item" })).ToBeVisibleAsync();
+
+        // Click the item title button to enter rename mode
+        await Page.Locator("button.input-group-text.flex-grow-1.text-wrap").Filter(new LocatorFilterOptions { HasText = "Original Item" }).ClickAsync();
+        await Expect(Page.Locator("input[aria-label='Edit item']")).ToBeVisibleAsync();
+
+        // Fill new title and Tab to trigger onchange + focusout
+        await Page.Locator("input[aria-label='Edit item']").FillAsync("Renamed Item");
+        await Page.Locator("input[aria-label='Edit item']").PressAsync("Tab");
+
+        await Expect(Page.Locator("button.input-group-text.flex-grow-1.text-wrap").Filter(new LocatorFilterOptions { HasText = "Renamed Item" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("button.input-group-text.flex-grow-1.text-wrap").Filter(new LocatorFilterOptions { HasText = "Original Item" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
+    public async Task Items_PersistedAfterReload()
+    {
+        await GotoAsync();
+        await NavigateToAsync("[data-main-step-4]");
+        await AddItemAsync("Persistent Item Task");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Persistent Item Task" }).ClickAsync();
+
+        await Page.Locator("input[aria-label='Add new item']").FillAsync("Persistent Sub-Item");
+        await Page.Locator("button[aria-label='Add']:has(i.bi-plus-square)").ClickAsync();
+        await Expect(Page.Locator("button.input-group-text.flex-grow-1.text-wrap").Filter(new LocatorFilterOptions { HasText = "Persistent Sub-Item" })).ToBeVisibleAsync();
+
+        await Page.Locator("[data-tasks-step-10]").ClickAsync(); // Close task edit
+
+        await Page.ReloadAsync();
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
+
+        await NavigateToAsync("[data-main-step-4]");
+
+        // In the read-only list view, items render as labels inside data-tasks-step-5
+        await Expect(Page.Locator("[data-tasks-step-5] label").Filter(new LocatorFilterOptions { HasText = "Persistent Sub-Item" })).ToBeVisibleAsync();
     }
 
     [Test]
