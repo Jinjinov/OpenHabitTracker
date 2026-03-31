@@ -41,7 +41,7 @@ public abstract class BaseTest : PlaywrightTest
     {
         await Page.GotoAsync(BaseUrl + "/" + path.TrimStart('/'));
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.WaitForTimeoutAsync(500); // OnAfterRenderAsync completes after NetworkIdle
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync(); // OnAfterRenderAsync completes after NetworkIdle
     }
 
     protected async Task OpenMenuAsync()
@@ -78,7 +78,7 @@ public abstract class BaseTest : PlaywrightTest
     {
         await Page.Locator(dataStepSelector).ClickAsync();
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.WaitForTimeoutAsync(500); // OnAfterRenderAsync completes after NetworkIdle
+        await Expect(Page.Locator("main#main-content")).ToBeVisibleAsync(); // OnAfterRenderAsync completes after NetworkIdle
     }
 
     protected async Task AddItemAsync(string title)
@@ -87,16 +87,14 @@ public abstract class BaseTest : PlaywrightTest
         await Page.Locator("input[aria-required='true']").FillAsync(title);
         await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync(); // wait for Blazor to process oninput before clicking
         await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.WaitForTimeoutAsync(500); // allow Blazor re-render to propagate
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToHaveCountAsync(0); // wait for add form to close
     }
 
     protected async Task CreateCategoryAsync(string categoryName)
     {
         await OpenMenuAsync();
         await Page.Locator("div[role='menu'] button:has(i.bi-tag)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.WaitForTimeoutAsync(300);
+        await Expect(Page.Locator("[data-categories-step-1] input")).ToBeVisibleAsync();
         await Page.Locator("[data-categories-step-1] input").FillAsync(categoryName);
         await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
@@ -107,7 +105,6 @@ public abstract class BaseTest : PlaywrightTest
     {
         await OpenSidebarAsync("bi-gear");
         await Page.Locator("label[for='ShowGroupedByCategory']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
         await CloseSidebarAsync();
     }
 }
