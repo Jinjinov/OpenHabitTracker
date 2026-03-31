@@ -26,7 +26,7 @@ public class SearchTests : BaseTest
 
         await OpenSearchAsync();
         await Page.Locator("[data-search-step-1]").FillAsync("Markdown");
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Diet Plan" })).ToHaveCountAsync(0);
 
         int matchingCount = await Page.Locator("[data-notes-step-2]").CountAsync();
         Assert.That(matchingCount, Is.LessThan(totalCount));
@@ -38,7 +38,6 @@ public class SearchTests : BaseTest
     {
         await OpenSearchAsync();
         await Page.Locator("[data-search-step-1]").FillAsync("xyzzy_no_match_12345");
-        await Page.WaitForTimeoutAsync(500);
 
         await Expect(Page.Locator("[data-notes-step-2]")).ToHaveCountAsync(0);
     }
@@ -48,12 +47,12 @@ public class SearchTests : BaseTest
     {
         await OpenSearchAsync();
         await Page.Locator("[data-search-step-1]").FillAsync("Markdown");
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Diet Plan" })).ToHaveCountAsync(0);
 
         int filteredCount = await Page.Locator("[data-notes-step-2]").CountAsync();
 
         await Page.Locator("[data-search-step-3]").ClickAsync();
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Diet Plan" })).ToBeVisibleAsync();
 
         int restoredCount = await Page.Locator("[data-notes-step-2]").CountAsync();
         Assert.That(restoredCount, Is.GreaterThan(filteredCount));
@@ -68,7 +67,7 @@ public class SearchTests : BaseTest
 
         // Uncheck the first visible category checkbox to hide its items
         await Page.Locator("input[type='checkbox']").First.ClickAsync();
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("[data-notes-step-2]")).Not.ToHaveCountAsync(totalCount);
 
         int filteredCount = await Page.Locator("[data-notes-step-2]").CountAsync();
         Assert.That(filteredCount, Is.LessThan(totalCount));
@@ -83,7 +82,6 @@ public class SearchTests : BaseTest
         int totalCount = await Page.Locator("[data-habits-step-2]").CountAsync();
 
         await Page.Locator("[data-search-step-13] label[for='Priority.None']").ClickAsync();
-        await Page.WaitForTimeoutAsync(500);
 
         int filteredCount = await Page.Locator("[data-habits-step-2]").CountAsync();
         Assert.That(filteredCount, Is.LessThanOrEqualTo(totalCount));
@@ -98,7 +96,7 @@ public class SearchTests : BaseTest
 
         await OpenSearchAsync();
         await Page.Locator("[data-search-step-8]").ClickAsync(); // Done = today
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("[data-tasks-step-2]")).Not.ToHaveCountAsync(totalCount);
 
         // Example tasks have no CompletedAt, so filter by today shows fewer than total
         int doneCount = await Page.Locator("[data-tasks-step-2]").CountAsync();
@@ -106,7 +104,6 @@ public class SearchTests : BaseTest
 
         // Clear the filter
         await Page.Locator("[data-search-step-11]").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
     }
 
     [Test]
@@ -117,7 +114,6 @@ public class SearchTests : BaseTest
 
         // data-search-step-20 is the Habits sort select; index 2 = Title
         await Page.Locator("[data-search-step-20] select").SelectOptionAsync(new SelectOptionValue { Index = 2 });
-        await Page.WaitForTimeoutAsync(500);
 
         ILocator habits = Page.Locator("[data-habits-step-2]");
         int count = await habits.CountAsync();
@@ -146,7 +142,7 @@ public class SearchTests : BaseTest
 
         // data-search-step-16 wraps ShowOnlyOverSelectedRatioMin; default SelectedRatioMin = 50%
         await Page.Locator("[data-search-step-16] label").ClickAsync();
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "LowRatio Habit" })).ToHaveCountAsync(0);
 
         int countAfter = await Page.Locator("[data-habits-step-2]").CountAsync();
         Assert.That(countAfter, Is.LessThan(countBefore));
