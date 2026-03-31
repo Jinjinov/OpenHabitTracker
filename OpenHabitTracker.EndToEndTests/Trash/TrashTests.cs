@@ -90,6 +90,41 @@ public class TrashTests : BaseTest
     }
 
     [Test]
+    public async Task RestoreNote_FromTrash_ReturnsToOriginalCategoryGroup()
+    {
+        await CreateCategoryAsync("RestoreCategory");
+        await EnableGroupedByCategoryAsync();
+
+        // Add a note assigned to RestoreCategory
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("Category Restore Note");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "RestoreCategory" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToHaveCountAsync(0);
+
+        // Delete the note
+        await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Category Restore Note" }).ClickAsync();
+        await Page.Locator("[data-notes-step-6]").ClickAsync();
+
+        // Restore from trash
+        await OpenSidebarAsync("bi-trash");
+        await Page.Locator("div.input-group:has(span:text('Category Restore Note')) button:has(i.bi-recycle)").ClickAsync();
+        await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "Category Restore Note" })).ToHaveCountAsync(0);
+        await CloseSidebarAsync();
+
+        // Note must be visible and in the RestoreCategory group (not uncategorized)
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "RestoreCategory" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Category Restore Note" })).ToBeVisibleAsync();
+
+        // Collapse the category — note must disappear (confirms it is in that group, not uncategorized)
+        await Page.Locator("button.btn-plain.border-0:has(i.bi-tag)")
+            .Filter(new LocatorFilterOptions { HasText = "RestoreCategory" })
+            .ClickAsync();
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Category Restore Note" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task PermanentDelete_Note_RemovedFromTrash()
     {
         await AddAndDeleteNoteAsync("Permanent Delete");

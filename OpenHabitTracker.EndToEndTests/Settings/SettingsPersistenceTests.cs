@@ -152,6 +152,32 @@ public class SettingsPersistenceTests : BaseTest
         await Expect(Page.Locator("[data-settings-step-2] select")).ToHaveValueAsync("cerulean");
     }
 
+    [Test]
+    public async Task ShowCategory_WhenOff_HidesCategorySelectInAddForm()
+    {
+        await NavigateToAsync("[data-main-step-3]");
+
+        // ShowCategory=true by default — category select is visible in the add form
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Expect(Page.Locator("select[aria-label='Category']")).ToBeVisibleAsync();
+        await Page.Locator("button:has(i.bi-x-square)").ClickAsync();
+
+        // Toggle ShowCategory off
+        await OpenSettingsAsync();
+        await Page.Locator("label[for='ShowCategory']").ClickAsync();
+        await CloseSidebarAsync();
+
+        // Category select must be gone from the add form
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Expect(Page.Locator("select[aria-label='Category']")).ToHaveCountAsync(0);
+        await Page.Locator("button:has(i.bi-x-square)").ClickAsync();
+
+        // Restore ShowCategory so other tests are not affected
+        await OpenSettingsAsync();
+        await Page.Locator("label[for='ShowCategory']").ClickAsync();
+        await CloseSidebarAsync();
+    }
+
     // Regression guard for: settings presets DB migration (adds Name + SelectedSettingsId columns).
     // LoadSettings() will change to load Settings[0] then Settings[SelectedSettingsId].
     // The ratio filter is stored in the settings row — it must survive a reload after that change.
