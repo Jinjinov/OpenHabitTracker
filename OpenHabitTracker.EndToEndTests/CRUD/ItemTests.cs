@@ -40,6 +40,30 @@ public class ItemTests : BaseTest
     }
 
     [Test]
+    public async Task DeleteItem_FromTask_ItemDisappearsFromList()
+    {
+        await GotoAsync();
+        await NavigateToAsync("[data-main-step-4]");
+        await AddItemAsync("Task For Item Delete");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Task For Item Delete" }).ClickAsync();
+
+        // Add a sub-item
+        await Page.Locator("input[aria-label='Add new item']").FillAsync("Delete This Item");
+        await Page.Locator("button[aria-label='Add']:has(i.bi-plus-square)").ClickAsync();
+
+        await Expect(Page.Locator("button.input-group-text.flex-grow-1.text-wrap").Filter(new LocatorFilterOptions { HasText = "Delete This Item" })).ToBeVisibleAsync();
+
+        // Delete the sub-item
+        await Page.Locator("div.input-group.flex-nowrap")
+            .Filter(new LocatorFilterOptions { HasText = "Delete This Item" })
+            .Locator("button[aria-label='Delete']")
+            .ClickAsync();
+
+        await Expect(Page.Locator("button.input-group-text.flex-grow-1.text-wrap").Filter(new LocatorFilterOptions { HasText = "Delete This Item" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task CheckAndUncheckItem_TogglesIsDone()
     {
         await GotoAsync();

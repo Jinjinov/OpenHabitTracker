@@ -103,6 +103,28 @@ public class NoteTests : BaseTest
     }
 
     [Test]
+    public async Task EditNote_ContentPersistsAfterReload()
+    {
+        await AddItemAsync("Content Note");
+
+        await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Content Note" }).ClickAsync();
+
+        await Page.Locator("[data-notes-step-8] textarea").FillAsync("Persisted content text");
+        await Page.Locator("[data-notes-step-8] textarea").BlurAsync();
+
+        await Page.Locator("[data-notes-step-7]").ClickAsync(); // Close
+
+        await Page.ReloadAsync();
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
+
+        await NavigateToAsync("[data-main-step-3]");
+
+        await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Content Note" }).ClickAsync();
+
+        await Expect(Page.Locator("[data-notes-step-8] textarea")).ToHaveValueAsync("Persisted content text");
+    }
+
+    [Test]
     public async Task AddNote_PersistedAfterReload()
     {
         await AddItemAsync("Persistent Note");
