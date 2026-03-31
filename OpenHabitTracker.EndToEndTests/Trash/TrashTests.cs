@@ -16,9 +16,7 @@ public class TrashTests : BaseTest
     {
         await AddItemAsync(title);
         await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = title }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.Locator("[data-notes-step-6]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
     }
 
     [Test]
@@ -40,7 +38,6 @@ public class TrashTests : BaseTest
 
         // Individual restore button: button with bi-recycle icon next to "Restore Me" span
         await Page.Locator("div.input-group:has(span:text('Restore Me')) button:has(i.bi-recycle)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "Restore Me" })).ToHaveCountAsync(0);
 
@@ -58,15 +55,12 @@ public class TrashTests : BaseTest
         await AddItemAsync("Restore Habit");
 
         await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Restore Habit" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Page.Locator("[data-habits-step-10]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await OpenSidebarAsync("bi-trash");
 
         await Page.Locator("div.input-group:has(span:text('Restore Habit')) button:has(i.bi-recycle)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await CloseSidebarAsync();
         await NavigateToAsync("[data-main-step-5]");
@@ -82,15 +76,12 @@ public class TrashTests : BaseTest
         await AddItemAsync("Restore Task");
 
         await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Restore Task" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Page.Locator("[data-tasks-step-9]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await OpenSidebarAsync("bi-trash");
 
         await Page.Locator("div.input-group:has(span:text('Restore Task')) button:has(i.bi-recycle)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await CloseSidebarAsync();
         await NavigateToAsync("[data-main-step-4]");
@@ -106,7 +97,6 @@ public class TrashTests : BaseTest
         await OpenSidebarAsync("bi-trash");
 
         await Page.Locator("button[aria-label='Delete: Permanent Delete']").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "Permanent Delete" })).ToHaveCountAsync(0);
 
@@ -126,7 +116,6 @@ public class TrashTests : BaseTest
         await OpenSidebarAsync("bi-trash");
 
         await Page.Locator("[data-trash-step-2]").ClickAsync(); // Empty trash
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "First Note" })).ToHaveCountAsync(0);
         await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "Second Note" })).ToHaveCountAsync(0);
@@ -145,14 +134,11 @@ public class TrashTests : BaseTest
         await NavigateToAsync("[data-main-step-4]");
         await AddItemAsync("RestoreAll Task");
         await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "RestoreAll Task" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.Locator("[data-tasks-step-9]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await OpenSidebarAsync("bi-trash");
 
         await Page.Locator("[data-trash-step-1]").ClickAsync(); // Restore all
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "RestoreAll Note" })).ToHaveCountAsync(0);
         await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "RestoreAll Task" })).ToHaveCountAsync(0);

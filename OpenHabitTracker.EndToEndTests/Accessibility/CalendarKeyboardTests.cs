@@ -10,13 +10,11 @@ public class CalendarKeyboardTests : BaseTest
     {
         await GotoAsync();
         await Page.Locator("[data-main-step-5]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
 
         await AddItemAsync("Keyboard Test Habit");
 
         await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Keyboard Test Habit" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
     }
 

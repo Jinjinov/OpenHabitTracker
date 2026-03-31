@@ -12,7 +12,6 @@ public class CategoryTests : BaseTest
         // Open the menu and navigate to the Categories component
         await OpenMenuAsync();
         await Page.Locator("button:has(i.bi-tag)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
     }
 
@@ -21,7 +20,6 @@ public class CategoryTests : BaseTest
     {
         await Page.Locator("[data-categories-step-1] input").FillAsync("Work");
         await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "Work" })).ToBeVisibleAsync();
     }
@@ -32,7 +30,6 @@ public class CategoryTests : BaseTest
         // Add a category first
         await Page.Locator("[data-categories-step-1] input").FillAsync("OldName");
         await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Click the category title to enter edit mode
         await Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "OldName" }).ClickAsync();
@@ -41,7 +38,6 @@ public class CategoryTests : BaseTest
         // FillAsync replaces the content; Tab fires onchange before focusout removes the InputText
         await Page.Locator("input.form-control").Last.FillAsync("NewName");
         await Page.Locator("input.form-control").Last.PressAsync("Tab");
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(300);
 
         await Expect(Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "NewName" })).ToBeVisibleAsync();
@@ -53,11 +49,9 @@ public class CategoryTests : BaseTest
         // Add a category first
         await Page.Locator("[data-categories-step-1] input").FillAsync("ToDelete");
         await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Delete the category using its aria-label
         await Page.Locator("button[aria-label='Delete: ToDelete']").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "ToDelete" })).ToHaveCountAsync(0);
     }
@@ -68,7 +62,6 @@ public class CategoryTests : BaseTest
         // Add category
         await Page.Locator("[data-categories-step-1] input").FillAsync("TempCategory");
         await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Navigate to habits and add a habit assigned to TempCategory
         await CloseSidebarAsync();
@@ -79,16 +72,13 @@ public class CategoryTests : BaseTest
         await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "TempCategory" });
         await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
         await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
 
         // Navigate back to categories and delete TempCategory
         await OpenMenuAsync();
         await Page.Locator("button:has(i.bi-tag)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Page.Locator("button[aria-label='Delete: TempCategory']").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Navigate back to habits — the habit should be gone (soft-deleted via category cascade)
         await NavigateToAsync("[data-main-step-5]");

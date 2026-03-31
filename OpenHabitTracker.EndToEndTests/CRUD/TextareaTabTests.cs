@@ -14,7 +14,6 @@ public class TextareaTabTests : BaseTest
         await NavigateToAsync("[data-main-step-3]");
         await AddItemAsync("Tab Test Note");
         await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Tab Test Note" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
     }
 
     private async Task SetTextareaValueAsync(string value)
