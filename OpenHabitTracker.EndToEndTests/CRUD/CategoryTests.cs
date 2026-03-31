@@ -12,7 +12,7 @@ public class CategoryTests : BaseTest
         // Open the menu and navigate to the Categories component
         await OpenMenuAsync();
         await Page.Locator("button:has(i.bi-tag)").ClickAsync();
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("[data-categories-step-1] input")).ToBeVisibleAsync();
     }
 
     [Test]
