@@ -152,6 +152,20 @@ public class HomeTests : BaseTest
     }
 
     [Test]
+    public async Task GroupedByCategory_UncategorizedNote_AppearsInUncategorizedGroup()
+    {
+        await GotoAsync();
+        await EnableGroupedByCategoryAsync();
+        await CreateCategoryAsync(CategoryName); // at least one category required for groups to render
+
+        await NavigateToAsync("[data-main-step-3]");
+        await AddItemAsync("Uncategorized Note"); // no category selected → CategoryId = 0
+
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "Uncategorized" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Uncategorized Note" })).ToBeVisibleAsync();
+    }
+
+    [Test]
     public async Task Home_CollapseCategory_PropagatesAcrossAllSections()
     {
         await GotoAsync();

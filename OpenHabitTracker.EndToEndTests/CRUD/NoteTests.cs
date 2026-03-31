@@ -115,6 +115,22 @@ public class NoteTests : BaseTest
         await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Persistent Note" })).ToBeVisibleAsync();
     }
 
+    [Test]
+    public async Task AddNote_WithSpecialCharacters_TitleDisplaysCorrectly()
+    {
+        const string specialTitle = "< > & \" '";
+
+        await AddItemAsync(specialTitle);
+
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = specialTitle })).ToBeVisibleAsync();
+
+        await Page.ReloadAsync();
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
+        await NavigateToAsync("[data-main-step-3]");
+
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = specialTitle })).ToBeVisibleAsync();
+    }
+
     // Regression guard for: bug where ChangeCategory + AddNote both called noteCategory.Notes.Add,
     // causing the note to appear twice in grouped-by-category view.
     [Test]
