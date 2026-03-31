@@ -214,6 +214,7 @@ repeat:
         but this complicates ElapsedTime and is half way to the "exact repeating reminders, like Google Keep" task
 
     all "Overdue" logic must adapt to StartAt! - ElapsedTime is "DateTime.Now - CreatedAt" when LastTimeDoneAt is null
+        clamp "DateTime.Now - StartAt" to TimeSpan.Zero, safe - there are no divisions by ElapsedTime
 
     is it worth it? yes, if `DateTime StartAt` can be reused in the "exact repeating reminders, like Google Keep" task
 
