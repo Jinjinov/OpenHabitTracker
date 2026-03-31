@@ -10,7 +10,6 @@ public class TaskTests : BaseTest
     {
         await GotoAsync(); // Load app and allow StartPage redirect to complete
         await Page.Locator("[data-main-step-4]").ClickAsync(); // SPA navigate to /tasks (avoids StartPage redirect)
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
     }
 
@@ -46,8 +45,6 @@ public class TaskTests : BaseTest
             Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Finish Report" })
                 .Locator("..").Locator("[data-tasks-step-4]")).First.ClickAsync();
 
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
         await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Finish Report" })).ToHaveCountAsync(0);
     }
 
@@ -56,9 +53,7 @@ public class TaskTests : BaseTest
     {
         // Disable HideCompletedTasks (in Search panel, not Settings) so task stays visible after marking done
         await Page.Locator("[data-main-step-6]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.Locator("label[for='HideCompletedTasks']").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await CloseSidebarAsync();
 
         await AddItemAsync("Toggle Task");
@@ -66,11 +61,9 @@ public class TaskTests : BaseTest
         ILocator markDoneButton = Page.Locator("[data-tasks-step-4]").First;
 
         await markDoneButton.ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Expect(markDoneButton).ToHaveClassAsync(new Regex("btn-primary"));
 
         await markDoneButton.ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Expect(markDoneButton).ToHaveClassAsync(new Regex("btn-outline-primary"));
     }
 
@@ -80,10 +73,8 @@ public class TaskTests : BaseTest
         await AddItemAsync("Remove This");
 
         await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Remove This" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Page.Locator("[data-tasks-step-9]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Remove This" })).ToHaveCountAsync(0);
     }
@@ -94,10 +85,8 @@ public class TaskTests : BaseTest
         await AddItemAsync("Trashed Task");
 
         await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Trashed Task" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Page.Locator("[data-tasks-step-9]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await OpenSidebarAsync("bi-trash");
 
@@ -110,14 +99,11 @@ public class TaskTests : BaseTest
         await AddItemAsync("Edit Me");
 
         await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Edit Me" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Page.Locator("input[aria-label='Task title']").FillAsync("Edited Task");
         await Page.Locator("input[aria-label='Task title']").BlurAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Page.Locator("[data-tasks-step-10]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Edited Task" })).ToBeVisibleAsync();
         await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Edit Me" })).ToHaveCountAsync(0);
@@ -129,29 +115,23 @@ public class TaskTests : BaseTest
         await AddItemAsync("Task To Edit");
 
         await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Task To Edit" }).ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Change title
         await Page.Locator("input[aria-label='Task title']").FillAsync("Task Edited Title");
         await Page.Locator("input[aria-label='Task title']").BlurAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Change planned at
         await Page.Locator("[data-tasks-step-12] input").FillAsync("2030-01-15T10:00");
         await Page.Locator("[data-tasks-step-12] input").BlurAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Change duration hours
         await Page.Locator("select[aria-label='Duration hours']").SelectOptionAsync("1");
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Change duration minutes
         await Page.Locator("select[aria-label='Duration minutes']").SelectOptionAsync("30");
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Click Close once — must close the detail panel immediately (no second click required)
         await Page.Locator("[data-tasks-step-10]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("[data-tasks-step-10]")).ToHaveCountAsync(0);
         await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Task Edited Title" })).ToBeVisibleAsync();
@@ -163,7 +143,6 @@ public class TaskTests : BaseTest
         await AddItemAsync("Persistent Task");
 
         await Page.ReloadAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
 
         await NavigateToAsync("[data-main-step-4]");
@@ -184,7 +163,6 @@ public class TaskTests : BaseTest
         await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "TaskOnceCategory" });
         await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
         await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
 
         int count = await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Once Task" }).CountAsync();

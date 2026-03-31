@@ -12,7 +12,6 @@ public class SidebarBehaviorTests : BaseTest
     public async Task MenuToggle_Click_OpensSidebar()
     {
         await Page.Locator("[data-main-step-1]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("div.col-12.col-md-2.child-column")).ToBeVisibleAsync();
     }
@@ -21,10 +20,8 @@ public class SidebarBehaviorTests : BaseTest
     public async Task MenuToggle_ClickTwice_ClosesSidebar()
     {
         await Page.Locator("[data-main-step-1]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Page.Locator("[data-main-step-1]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("div.col-12.col-md-2.child-column")).Not.ToBeVisibleAsync();
     }
@@ -33,11 +30,9 @@ public class SidebarBehaviorTests : BaseTest
     public async Task Sidebar_EscapeKey_ClosesSidebar()
     {
         await Page.Locator("[data-main-step-6]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Page.Locator("#closeSidebar").FocusAsync();
         await Page.Keyboard.PressAsync("Escape");
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("div.col-12.col-md-2.child-column")).Not.ToBeVisibleAsync();
     }
@@ -46,7 +41,6 @@ public class SidebarBehaviorTests : BaseTest
     public async Task SearchToggle_Click_OpensSidebar()
     {
         await Page.Locator("[data-main-step-6]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("#closeSidebar")).ToBeVisibleAsync();
     }
@@ -55,10 +49,8 @@ public class SidebarBehaviorTests : BaseTest
     public async Task SearchToggle_ClickTwice_ClosesSidebar()
     {
         await Page.Locator("[data-main-step-6]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Page.Locator("[data-main-step-6]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page.Locator("div.col-12.col-md-2.child-column")).Not.ToBeVisibleAsync();
     }

@@ -28,7 +28,6 @@ public class BackupTests : BaseTest
 
         // Delete all data
         await Page.Locator("[data-data-step-2]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await CloseSidebarAsync();
 
         await NavigateToAsync("[data-main-step-3]");
@@ -37,7 +36,6 @@ public class BackupTests : BaseTest
         // Import the exported file
         await OpenSidebarAsync("bi-database");
         await Page.Locator("input[type='file'].d-none").SetInputFilesAsync(exportedFilePath);
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(2000); // allow all async DB writes to complete
         await CloseSidebarAsync();
 

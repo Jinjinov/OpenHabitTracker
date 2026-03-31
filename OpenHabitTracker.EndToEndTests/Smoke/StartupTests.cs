@@ -62,7 +62,6 @@ public class StartupTests : BaseTest
     {
         await GotoAsync();
         await Page.ReloadAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
 
         AssertNoJsErrors();

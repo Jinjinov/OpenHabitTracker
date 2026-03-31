@@ -34,9 +34,7 @@ public class StatisticsTests : BaseTest
 
         // Disable HideCompletedTasks so the task stays in the list and Done count is visible after marking done
         await Page.Locator("[data-main-step-6]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.Locator("label[for='HideCompletedTasks']").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await CloseSidebarAsync();
 
         await NavigateToAsync("[data-main-step-4]");
@@ -46,7 +44,6 @@ public class StatisticsTests : BaseTest
         await Expect(Page.Locator("span.badge.bg-success-subtle").Filter(new LocatorFilterOptions { HasText = "Done: 0" })).ToBeVisibleAsync();
 
         await Page.Locator("[data-tasks-step-4]").First.ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
 
         await Expect(Page.Locator("span.badge.bg-success-subtle").Filter(new LocatorFilterOptions { HasText = "Done: 1" })).ToBeVisibleAsync();
@@ -82,7 +79,6 @@ public class StatisticsTests : BaseTest
         ILocator habitRow = Page.Locator("div.input-group.flex-nowrap").Filter(
             new LocatorFilterOptions { Has = Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Done Habit" }) });
         await habitRow.Locator("[data-habits-step-4]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
 
         // "1 out of 1 done" — doneThisWeek=1, total=1

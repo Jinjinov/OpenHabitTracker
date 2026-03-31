@@ -16,7 +16,6 @@ public class SearchTests : BaseTest
     private async Task OpenSearchAsync()
     {
         await Page.Locator("[data-main-step-6]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
     }
 
     [Test]

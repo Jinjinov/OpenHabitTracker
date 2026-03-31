@@ -15,7 +15,6 @@ public class HomeTests : BaseTest
         await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = CategoryName });
         await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
         await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
     }
 
@@ -27,7 +26,6 @@ public class HomeTests : BaseTest
         await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = CategoryName });
         await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
         await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
     }
 
@@ -67,7 +65,6 @@ public class HomeTests : BaseTest
 
         // Step 3b: Click Categories button in menu
         await Page.Locator("div[role='menu'] button:has(i.bi-tag)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(300);
         int countStep3b = await Page.Locator("[data-notes-step-2]").CountAsync();
         int matchingStep3b = await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Collapsible Note" }).CountAsync();
@@ -81,7 +78,6 @@ public class HomeTests : BaseTest
 
         // Step 3d: Click Add category button
         await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         int countStep3d = await Page.Locator("[data-notes-step-2]").CountAsync();
         int matchingStep3d = await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Collapsible Note" }).CountAsync();
         Assert.That(matchingStep3d, Is.EqualTo(0), $"[after clicking Add category] Expected 0 'Collapsible Note' but found {matchingStep3d}. Total notes: {countStep3d}");
@@ -125,13 +121,7 @@ public class HomeTests : BaseTest
         // Step 4f: Click Save — list briefly has 2 "Collapsible Note" elements during Blazor re-render; do not assert count here
         await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
 
-        // Step 4g: Wait for NetworkIdle
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        int countStep4g = await Page.Locator("[data-notes-step-2]").CountAsync();
-        int matchingStep4g = await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Collapsible Note" }).CountAsync();
-        Assert.That(matchingStep4g, Is.EqualTo(1), $"[after WaitForLoadStateAsync(NetworkIdle)] Expected exactly 1 'Collapsible Note' but found {matchingStep4g}. Total notes: {countStep4g}");
-
-        // Step 4h: Wait 500ms
+        // Step 4g: Wait 500ms
         await Page.WaitForTimeoutAsync(500);
         int countStep4h = await Page.Locator("[data-notes-step-2]").CountAsync();
         int matchingStep4h = await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Collapsible Note" }).CountAsync();
@@ -181,7 +171,6 @@ public class HomeTests : BaseTest
 
         // Navigate to Home — [data-main-step-2] is only visible at width >= 1280px (1920px viewport)
         await Page.Locator("[data-main-step-2]").ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(500);
 
         await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Cross Note" })).ToBeVisibleAsync();
