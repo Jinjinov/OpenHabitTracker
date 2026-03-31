@@ -35,10 +35,8 @@ public class SettingsPersistenceTests : BaseTest
         await Page.WaitForTimeoutAsync(300);
 
         await Page.ReloadAsync();
-        await Page.WaitForTimeoutAsync(500);
 
-        string? theme = await Page.Locator("html").GetAttributeAsync("data-bs-theme");
-        Assert.That(theme, Is.EqualTo("light")); // IsDarkMode=true by default, clicking toggles it off
+        await Expect(Page.Locator("html")).ToHaveAttributeAsync("data-bs-theme", "light");
     }
 
     [Test]
@@ -62,7 +60,7 @@ public class SettingsPersistenceTests : BaseTest
         await Page.WaitForTimeoutAsync(500);
 
         await Page.ReloadAsync();
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
 
         await Expect(Page.Locator("[data-main-step-3]")).ToHaveAttributeAsync("aria-label", "Notizen");
 
@@ -186,11 +184,9 @@ public class SettingsPersistenceTests : BaseTest
         await CloseSidebarAsync();
 
         await Page.ReloadAsync();
-        await Page.WaitForTimeoutAsync(500);
 
         await Page.Locator("[data-main-step-6]").ClickAsync();
 
-        bool isChecked = await Page.Locator("[data-search-step-16] input[type='checkbox']").IsCheckedAsync();
-        Assert.That(isChecked, Is.True);
+        await Expect(Page.Locator("[data-search-step-16] input[type='checkbox']")).ToBeCheckedAsync();
     }
 }

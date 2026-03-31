@@ -62,7 +62,7 @@ public class StartupTests : BaseTest
     {
         await GotoAsync();
         await Page.ReloadAsync();
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
 
         AssertNoJsErrors();
         await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();

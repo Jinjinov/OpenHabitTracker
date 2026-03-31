@@ -108,7 +108,7 @@ public class NoteTests : BaseTest
         await AddItemAsync("Persistent Note");
 
         await Page.ReloadAsync();
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
 
         await NavigateToAsync("[data-main-step-3]");
 
