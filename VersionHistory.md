@@ -1,4 +1,4 @@
-# 1.1.9
+# 1.2.0 - Mar 30, 2026
 
 - fixed Edit note
 - fixed DB migration hang
