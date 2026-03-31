@@ -93,6 +93,36 @@ public class CategoryTests : BaseTest
     }
 
     [Test]
+    public async Task DeleteCategory_ChildTasksDisappearFromTasksList()
+    {
+        // Add category
+        await Page.Locator("[data-categories-step-1] input").FillAsync("TempTaskCategory");
+        await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
+
+        // Navigate to tasks and add a task assigned to TempTaskCategory
+        await CloseSidebarAsync();
+        await NavigateToAsync("[data-main-step-4]");
+
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("TaskInTempCat");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "TempTaskCategory" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "TaskInTempCat" })).ToBeVisibleAsync();
+
+        // Navigate back to categories and delete TempTaskCategory
+        await OpenMenuAsync();
+        await Page.Locator("div[role='menu'] button:has(i.bi-tag)").ClickAsync();
+
+        await Page.Locator("button[aria-label='Delete: TempTaskCategory']").ClickAsync();
+
+        // Navigate back to tasks — the task should be gone (soft-deleted via category cascade)
+        await NavigateToAsync("[data-main-step-4]");
+
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "TaskInTempCat" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task DeleteCategory_ChildHabitsDisappearFromHabitsList()
     {
         // Add category

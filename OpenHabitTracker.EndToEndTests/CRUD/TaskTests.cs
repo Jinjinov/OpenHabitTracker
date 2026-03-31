@@ -150,6 +150,35 @@ public class TaskTests : BaseTest
         await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Persistent Task" })).ToBeVisibleAsync();
     }
 
+    [Test]
+    public async Task EditTask_ChangeCategory_TaskMovesToNewGroup()
+    {
+        await CreateCategoryAsync("MoveToCategory");
+        await EnableGroupedByCategoryAsync();
+
+        // Add uncategorized task — SetUp already navigated to tasks
+        await AddItemAsync("Movable Task");
+
+        // Task should appear under Uncategorized group
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "Uncategorized" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Task" })).ToBeVisibleAsync();
+
+        // Open task and change category
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Task" }).ClickAsync();
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "MoveToCategory" });
+        await Page.Locator("[data-tasks-step-10]").ClickAsync(); // Close
+
+        // Task must appear under MoveToCategory group
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "MoveToCategory" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Task" })).ToBeVisibleAsync();
+
+        // Collapse MoveToCategory — task must disappear (confirms it is in that group)
+        await Page.Locator("button.btn-plain.border-0:has(i.bi-tag)")
+            .Filter(new LocatorFilterOptions { HasText = "MoveToCategory" })
+            .ClickAsync();
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Task" })).ToHaveCountAsync(0);
+    }
+
     // Regression guard for: bug where ChangeCategory + AddTask both called taskCategory.Tasks.Add,
     // causing the task to appear twice in grouped-by-category view.
     [Test]
