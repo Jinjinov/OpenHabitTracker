@@ -33,12 +33,11 @@ public class CategoryTests : BaseTest
 
         // Click the category title to enter edit mode
         await Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "OldName" }).ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
+        await Expect(Page.Locator("input.form-control").Last).ToBeVisibleAsync();
 
         // FillAsync replaces the content; Tab fires onchange before focusout removes the InputText
         await Page.Locator("input.form-control").Last.FillAsync("NewName");
         await Page.Locator("input.form-control").Last.PressAsync("Tab");
-        await Page.WaitForTimeoutAsync(300);
 
         await Expect(Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "NewName" })).ToBeVisibleAsync();
     }
@@ -72,7 +71,7 @@ public class CategoryTests : BaseTest
         await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "TempCategory" });
         await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
         await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "HabitInTempCat" })).ToBeVisibleAsync();
 
         // Navigate back to categories and delete TempCategory
         await OpenMenuAsync();
