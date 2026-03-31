@@ -3,6 +3,7 @@
 - added Shift+Tab and multi-line Tab
 - added GET query endpoints with URL filter parameters (Docker/Web API)
 - fixed collapse toggle not refreshing sibling pages in Home
+- fixed new note / task / habit with category appearing twice in grouped view
 
 # 1.2.0 - Mar 30, 2026
 
