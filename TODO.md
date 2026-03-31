@@ -211,7 +211,7 @@ Android: get permission to save SQLite DB in an external folder that can be part
 when all habit items are done, habit is done automatically ??? pros & cons ?
 when all task items are done, task is done automatically ??? pros & cons ?
 
-TODO:: research: normal priority (DB migration)
+TODO:: research: high priority (DB migration)
 repeat:
     add `StartAt` to Habit ? some starting point for repeat interval (`PlannedAt` is more appropriate for tasks than habits)
         this solves a real problem: you create a habit with 1 week repeat interval on Monday, but you want to repeat the habit every Friday
