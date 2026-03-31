@@ -83,7 +83,10 @@ save/load settings:
     - add a way to create a new preset
     - add a way to load a preset
     - add a way to rename a preset
+    - add a way to delete a preset
     - always load last used preset
+        - add long SelectedSettingsId to Settings
+        - load Settings[0], then Settings[Settings[0].SelectedSettingsId]
 
 multiple saved settings, with optional "URL references a preset by name", otherwise the URL params overwrite the "URL settings" saved setting:
 
