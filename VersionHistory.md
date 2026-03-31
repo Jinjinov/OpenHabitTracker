@@ -1,3 +1,8 @@
+# 1.1.9
+
+- fixed Edit note
+- fixed DB migration hang
+
 # 1.1.8 - Mar 27, 2026
 
 - added category-grouped view for notes, tasks, habits
