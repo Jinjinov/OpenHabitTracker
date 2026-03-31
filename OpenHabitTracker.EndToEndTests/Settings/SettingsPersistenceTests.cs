@@ -21,10 +21,8 @@ public class SettingsPersistenceTests : BaseTest
         await OpenSettingsAsync();
 
         await Page.Locator("label[for='IsDarkMode']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
 
-        string? theme = await Page.Locator("html").GetAttributeAsync("data-bs-theme");
-        Assert.That(theme, Is.EqualTo("light")); // IsDarkMode=true by default, clicking toggles it off
+        await Expect(Page.Locator("html")).ToHaveAttributeAsync("data-bs-theme", "light"); // IsDarkMode=true by default, clicking toggles it off
     }
 
     [Test]
@@ -32,7 +30,6 @@ public class SettingsPersistenceTests : BaseTest
     {
         await OpenSettingsAsync();
         await Page.Locator("label[for='IsDarkMode']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
 
         await Page.ReloadAsync();
 
@@ -46,7 +43,6 @@ public class SettingsPersistenceTests : BaseTest
 
         // data-settings-step-16 wraps the language select
         await Page.Locator("[data-settings-step-16] select").SelectOptionAsync("de");
-        await Page.WaitForTimeoutAsync(500);
 
         // After switching to German the Notes nav link aria-label becomes "Notizen"
         await Expect(Page.Locator("[data-main-step-3]")).ToHaveAttributeAsync("aria-label", "Notizen");
@@ -57,17 +53,15 @@ public class SettingsPersistenceTests : BaseTest
     {
         await OpenSettingsAsync();
         await Page.Locator("[data-settings-step-16] select").SelectOptionAsync("de");
-        await Page.WaitForTimeoutAsync(500);
+        await Expect(Page.Locator("[data-main-step-3]")).ToHaveAttributeAsync("aria-label", "Notizen"); // wait for IndexedDB write before reload
 
         await Page.ReloadAsync();
-        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
 
         await Expect(Page.Locator("[data-main-step-3]")).ToHaveAttributeAsync("aria-label", "Notizen");
 
         // Reset to English to avoid affecting subsequent tests
         await OpenSettingsAsync();
         await Page.Locator("[data-settings-step-16] select").SelectOptionAsync("en");
-        await Page.WaitForTimeoutAsync(300);
     }
 
     [Test]
@@ -89,7 +83,6 @@ public class SettingsPersistenceTests : BaseTest
         // Toggle ShowItemList off
         await OpenSettingsAsync();
         await Page.Locator("label[for='ShowItemList']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
         await CloseSidebarAsync();
 
         // Items area should be hidden
@@ -98,7 +91,6 @@ public class SettingsPersistenceTests : BaseTest
         // Toggle ShowItemList back on
         await OpenSettingsAsync();
         await Page.Locator("label[for='ShowItemList']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
         await CloseSidebarAsync();
 
         // Items area should be visible again
@@ -110,10 +102,8 @@ public class SettingsPersistenceTests : BaseTest
     {
         await OpenSettingsAsync();
         await Page.Locator("label[for='ShowCategory']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
 
         await Page.Locator("label[for='ShowCategory']").ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
 
         await Expect(Page.Locator("label[for='ShowCategory']")).ToBeVisibleAsync();
     }
@@ -128,7 +118,6 @@ public class SettingsPersistenceTests : BaseTest
         ILocator filterByStatusButton = Page.Locator("button:has(i.bi-filter)").First;
         if (await filterByStatusButton.GetAttributeAsync("aria-expanded") == "false")
             await filterByStatusButton.ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
         await Page.Locator("label[for='HideCompletedTasks']").ClickAsync();
         await CloseSidebarAsync();
 
@@ -145,7 +134,6 @@ public class SettingsPersistenceTests : BaseTest
         await Page.Locator("[data-main-step-6]").ClickAsync();
         if (await filterByStatusButton.GetAttributeAsync("aria-expanded") == "false")
             await filterByStatusButton.ClickAsync();
-        await Page.WaitForTimeoutAsync(300);
         await Page.Locator("label[for='HideCompletedTasks']").ClickAsync();
         await CloseSidebarAsync();
 
@@ -160,11 +148,8 @@ public class SettingsPersistenceTests : BaseTest
 
         // data-settings-step-2 wraps the theme select
         await Page.Locator("[data-settings-step-2] select").SelectOptionAsync("cerulean");
-        await Page.WaitForTimeoutAsync(500);
 
-        // Verify the select now has "cerulean" selected
-        string? selected = await Page.Locator("[data-settings-step-2] select").InputValueAsync();
-        Assert.That(selected, Is.EqualTo("cerulean"));
+        await Expect(Page.Locator("[data-settings-step-2] select")).ToHaveValueAsync("cerulean");
     }
 
     // Regression guard for: settings presets DB migration (adds Name + SelectedSettingsId columns).
