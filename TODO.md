@@ -82,11 +82,14 @@ upgrade NuGet versions
 ---------------------------------------------------------------------------------------------------
 
 0.
+prerequisite:
 TODO:: research: high priority (DB migration)
 save/load settings:
     - add string Name to Settings
     - add a way to create a new preset
     - add a way to load a preset
+    - add a way to rename a preset
+    - always load last used preset
 
 multiple saved settings, with optional "URL references a preset by name", otherwise the URL params overwrite the "URL settings" saved setting:
 
@@ -203,10 +206,13 @@ when all task items are done, task is done automatically ??? pros & cons ?
 TODO:: research: normal priority (DB migration)
 repeat:
     add `StartAt` to Habit ? some starting point for repeat interval (`PlannedAt` is more appropriate for tasks than habits)
+        this solves a real problem: you create a habit with 1 week repeat interval on Monday, but you want to repeat the habit every Friday
+    StartAt is optional
+
+    a date picker is easy, but not very good - better would be:
     - weekly: which day in week
     - monthly: which day (or week/day - second monday) in month
     - yearly: which day (date) in year
-        this solves a real problem: you create a habit with 1 week repeat interval on Monday, but you want to repeat the habit every Friday
 
     all "Overdue" logic must adapt to StartAt!!! - ElapsedTime is "DateTime.Now - CreatedAt" when LastTimeDoneAt is null
 
@@ -222,6 +228,7 @@ Show only habits with ratio `over x%` / `under y%` - currently filter habits wit
     only real use case: you see all habits with ratio over 120% and then want to see only those with 100% - 120%
 
     see SelectedRatioMin and ShowOnlyOverSelectedRatioMin, add SelectedRatioMax - is ShowOnlyOverSelectedRatioMax needed?
+    SelectedRatioMax is optional
 
 horizontal calendar with vertical weeks
 
