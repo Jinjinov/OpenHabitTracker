@@ -116,11 +116,40 @@ export function handleTabKey(textarea) {
 
                 const start = textarea.selectionStart;
                 const end = textarea.selectionEnd;
+                const value = textarea.value;
+                const selectedText = value.substring(start, end);
 
-                const newValue = textarea.value.substring(0, start) + '\t' + textarea.value.substring(end);
-                textarea.value = newValue;
-
-                textarea.setSelectionRange(start + 1, start + 1);
+                if (event.shiftKey) {
+                    // Shift+Tab: unindent affected lines
+                    const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+                    const lineEnd = end;
+                    const lines = value.substring(lineStart, lineEnd).split('\n');
+                    let removedInFirst = 0;
+                    const newLines = lines.map((line, i) => {
+                        if (line.startsWith('\t')) {
+                            if (i === 0) removedInFirst = 1;
+                            return line.substring(1);
+                        }
+                        return line;
+                    });
+                    const newChunk = newLines.join('\n');
+                    const removed = (lines.join('\n').length) - newChunk.length;
+                    textarea.value = value.substring(0, lineStart) + newChunk + value.substring(lineEnd);
+                    textarea.setSelectionRange(Math.max(lineStart, start - removedInFirst), end - removed);
+                } else if (selectedText.includes('\n')) {
+                    // Tab with multi-line selection: indent each line
+                    const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+                    const lineEnd = end;
+                    const lines = value.substring(lineStart, lineEnd).split('\n');
+                    const newChunk = lines.map(line => '\t' + line).join('\n');
+                    const added = lines.length;
+                    textarea.value = value.substring(0, lineStart) + newChunk + value.substring(lineEnd);
+                    textarea.setSelectionRange(start + 1, end + added);
+                } else {
+                    // Tab with no selection or single-line selection: insert tab at cursor
+                    textarea.value = value.substring(0, start) + '\t' + value.substring(end);
+                    textarea.setSelectionRange(start + 1, start + 1);
+                }
 
                 const inputEvent = new Event('input', { bubbles: true, cancelable: true });
                 textarea.dispatchEvent(inputEvent);
