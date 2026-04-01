@@ -153,6 +153,35 @@ public class NoteTests : BaseTest
         await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = specialTitle })).ToBeVisibleAsync();
     }
 
+    [Test]
+    public async Task EditNote_ChangeCategory_NoteMovesToNewGroup()
+    {
+        await CreateCategoryAsync("NoteMoveToCategory");
+        await EnableGroupedByCategoryAsync();
+
+        // Add uncategorized note — SetUp already navigated to notes
+        await AddItemAsync("Movable Note");
+
+        // Note should appear under Uncategorized group
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "Uncategorized" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Note" })).ToBeVisibleAsync();
+
+        // Open note and change category
+        await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Note" }).ClickAsync();
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "NoteMoveToCategory" });
+        await Page.Locator("[data-notes-step-7]").ClickAsync(); // Close
+
+        // Note must appear under NoteMoveToCategory group
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "NoteMoveToCategory" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Note" })).ToBeVisibleAsync();
+
+        // Collapse NoteMoveToCategory — note must disappear (confirms it is in that group)
+        await Page.Locator("button.btn-plain.border-0:has(i.bi-tag)")
+            .Filter(new LocatorFilterOptions { HasText = "NoteMoveToCategory" })
+            .ClickAsync();
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Movable Note" })).ToHaveCountAsync(0);
+    }
+
     // Regression guard for: bug where ChangeCategory + AddNote both called noteCategory.Notes.Add,
     // causing the note to appear twice in grouped-by-category view.
     [Test]

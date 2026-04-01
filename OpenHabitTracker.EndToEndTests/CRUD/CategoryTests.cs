@@ -130,6 +130,43 @@ public class CategoryTests : BaseTest
     }
 
     [Test]
+    public async Task RenameCategory_UpdatesGroupHeaderInHabitsList()
+    {
+        // SetUp already opened categories sidebar — add the category
+        await Page.Locator("[data-categories-step-1] input").FillAsync("BeforeRenameHabit");
+        await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
+        await CloseSidebarAsync();
+
+        await EnableGroupedByCategoryAsync();
+
+        // Add a habit assigned to the category
+        await NavigateToAsync("[data-main-step-5]");
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("RenameTest Habit");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "BeforeRenameHabit" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToHaveCountAsync(0);
+
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "BeforeRenameHabit" })).ToBeVisibleAsync();
+
+        // Rename the category
+        await OpenMenuAsync();
+        await Page.Locator("div[role='menu'] button:has(i.bi-tag)").ClickAsync();
+        await Expect(Page.Locator("[data-categories-step-1] input")).ToBeVisibleAsync();
+        await Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "BeforeRenameHabit" }).ClickAsync();
+        await Expect(Page.Locator("input.form-control").Last).ToBeVisibleAsync();
+        await Page.Locator("input.form-control").Last.FillAsync("AfterRenameHabit");
+        await Page.Locator("input.form-control").Last.PressAsync("Tab");
+        await Expect(Page.Locator("button.input-group-text.flex-grow-1").Filter(new LocatorFilterOptions { HasText = "AfterRenameHabit" })).ToBeVisibleAsync();
+        await CloseSidebarAsync();
+
+        // Group header in habits list must reflect the rename
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "AfterRenameHabit" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "BeforeRenameHabit" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task DeleteCategory_ChildTasksDisappearFromTasksList()
     {
         // Add category
