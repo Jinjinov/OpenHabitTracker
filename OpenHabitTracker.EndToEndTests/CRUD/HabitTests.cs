@@ -228,6 +228,36 @@ public class HabitTests : BaseTest
         await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Once Habit" })).ToHaveCountAsync(1);
     }
 
+    [Test]
+    public async Task HabitRepeatSettings_PersistedAfterReload()
+    {
+        await AddItemAsync("Repeat Settings Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Repeat Settings Habit" }).ClickAsync();
+
+        // Change repeat count, interval, and period
+        await Page.Locator("[data-habits-step-14] input[type='number']").First.FillAsync("3");
+        await Page.Locator("[data-habits-step-14] input[type='number']").First.BlurAsync();
+
+        await Page.Locator("[data-habits-step-14] input[type='number']").Last.FillAsync("7");
+        await Page.Locator("[data-habits-step-14] input[type='number']").Last.BlurAsync();
+
+        await Page.Locator("select[aria-label='Repeat period']").SelectOptionAsync("Week");
+
+        await Page.Locator("[data-habits-step-11]").ClickAsync(); // Close
+
+        await Page.ReloadAsync();
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
+
+        await NavigateToAsync("[data-main-step-5]");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Repeat Settings Habit" }).ClickAsync();
+
+        await Expect(Page.Locator("[data-habits-step-14] input[type='number']").First).ToHaveValueAsync("3");
+        await Expect(Page.Locator("[data-habits-step-14] input[type='number']").Last).ToHaveValueAsync("7");
+        await Expect(Page.Locator("select[aria-label='Repeat period']")).ToHaveValueAsync("Week");
+    }
+
     // Regression guard for: StartAt DB migration (adds DateTime? StartAt to HabitEntity).
     // ElapsedTime formula changes to: LastTimeDoneAt ?? TimeSpan.Zero.Max(DateTime.Now - (StartAt ?? CreatedAt)).
     // For a new habit with LastTimeDoneAt=null and StartAt=null, the display must still show ⊘ —
