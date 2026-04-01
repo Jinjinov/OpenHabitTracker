@@ -59,6 +59,30 @@ public class SearchTests : BaseTest
     }
 
     [Test]
+    public async Task SearchTerm_MatchingTitle_FiltersTasks()
+    {
+        await NavigateToAsync("[data-main-step-4]");
+
+        // Add a task with a unique searchable prefix so the filter is guaranteed to match exactly this one
+        await AddItemAsync("SearchTarget Task");
+
+        int totalCount = await Page.Locator("[data-tasks-step-2]").CountAsync();
+        Assert.That(totalCount, Is.GreaterThan(1));
+
+        await OpenSearchAsync();
+        await Page.Locator("[data-search-step-1]").FillAsync("SearchTarget");
+
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "SearchTarget Task" })).ToBeVisibleAsync();
+
+        int filteredCount = await Page.Locator("[data-tasks-step-2]").CountAsync();
+        Assert.That(filteredCount, Is.LessThan(totalCount));
+
+        // Clear the search — all tasks reappear
+        await Page.Locator("[data-search-step-3]").ClickAsync();
+        await Expect(Page.Locator("[data-tasks-step-2]")).ToHaveCountAsync(totalCount);
+    }
+
+    [Test]
     public async Task CategoryFilter_HideCategory_ExcludesItsItems()
     {
         await OpenSearchAsync();
