@@ -180,6 +180,20 @@ public class HomeTests : BaseTest
     }
 
     [Test]
+    public async Task GroupedByCategory_UncategorizedHabit_AppearsInUncategorizedGroup()
+    {
+        await GotoAsync();
+        await EnableGroupedByCategoryAsync();
+        await CreateCategoryAsync(CategoryName); // at least one category required for groups to render
+
+        await NavigateToAsync("[data-main-step-5]");
+        await AddItemAsync("Uncategorized Habit"); // no category selected → CategoryId = 0
+
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "Uncategorized" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Uncategorized Habit" })).ToBeVisibleAsync();
+    }
+
+    [Test]
     public async Task Home_CollapseCategory_PropagatesAcrossAllSections()
     {
         await GotoAsync();
