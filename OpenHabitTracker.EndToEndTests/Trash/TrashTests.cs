@@ -125,6 +125,78 @@ public class TrashTests : BaseTest
     }
 
     [Test]
+    public async Task RestoreHabit_FromTrash_ReturnsToOriginalCategoryGroup()
+    {
+        await CreateCategoryAsync("HabitRestoreCategory");
+        await EnableGroupedByCategoryAsync();
+
+        // Navigate to habits and add a habit assigned to HabitRestoreCategory
+        await NavigateToAsync("[data-main-step-5]");
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("Category Restore Habit");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "HabitRestoreCategory" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToHaveCountAsync(0);
+
+        // Delete the habit
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Category Restore Habit" }).ClickAsync();
+        await Page.Locator("[data-habits-step-10]").ClickAsync();
+
+        // Restore from trash
+        await OpenSidebarAsync("bi-trash");
+        await Page.Locator("div.input-group:has(span:text('Category Restore Habit')) button:has(i.bi-recycle)").ClickAsync();
+        await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "Category Restore Habit" })).ToHaveCountAsync(0);
+        await CloseSidebarAsync();
+
+        // Habit must be visible and in the HabitRestoreCategory group (not uncategorized)
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "HabitRestoreCategory" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Category Restore Habit" })).ToBeVisibleAsync();
+
+        // Collapse the category — habit must disappear (confirms it is in that group, not uncategorized)
+        await Page.Locator("button.btn-plain.border-0:has(i.bi-tag)")
+            .Filter(new LocatorFilterOptions { HasText = "HabitRestoreCategory" })
+            .ClickAsync();
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Category Restore Habit" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
+    public async Task RestoreTask_FromTrash_ReturnsToOriginalCategoryGroup()
+    {
+        await CreateCategoryAsync("TaskRestoreCategory");
+        await EnableGroupedByCategoryAsync();
+
+        // Navigate to tasks and add a task assigned to TaskRestoreCategory
+        await NavigateToAsync("[data-main-step-4]");
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("Category Restore Task");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "TaskRestoreCategory" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToHaveCountAsync(0);
+
+        // Delete the task
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Category Restore Task" }).ClickAsync();
+        await Page.Locator("[data-tasks-step-9]").ClickAsync();
+
+        // Restore from trash
+        await OpenSidebarAsync("bi-trash");
+        await Page.Locator("div.input-group:has(span:text('Category Restore Task')) button:has(i.bi-recycle)").ClickAsync();
+        await Expect(Page.Locator("span.input-group-text").Filter(new LocatorFilterOptions { HasText = "Category Restore Task" })).ToHaveCountAsync(0);
+        await CloseSidebarAsync();
+
+        // Task must be visible and in the TaskRestoreCategory group (not uncategorized)
+        await Expect(Page.Locator("button.btn-plain.border-0:has(i.bi-tag)").Filter(new LocatorFilterOptions { HasText = "TaskRestoreCategory" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Category Restore Task" })).ToBeVisibleAsync();
+
+        // Collapse the category — task must disappear (confirms it is in that group, not uncategorized)
+        await Page.Locator("button.btn-plain.border-0:has(i.bi-tag)")
+            .Filter(new LocatorFilterOptions { HasText = "TaskRestoreCategory" })
+            .ClickAsync();
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Category Restore Task" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task PermanentDelete_Note_RemovedFromTrash()
     {
         await AddAndDeleteNoteAsync("Permanent Delete");

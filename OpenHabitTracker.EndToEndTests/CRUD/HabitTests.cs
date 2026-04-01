@@ -229,6 +229,29 @@ public class HabitTests : BaseTest
     }
 
     [Test]
+    public async Task HabitDuration_PersistedAfterReload()
+    {
+        await AddItemAsync("Duration Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Duration Habit" }).ClickAsync();
+
+        await Page.Locator("select[aria-label='Duration hours']").SelectOptionAsync("1");
+        await Page.Locator("select[aria-label='Duration minutes']").SelectOptionAsync("30");
+
+        await Page.Locator("[data-habits-step-11]").ClickAsync(); // Close
+
+        await Page.ReloadAsync();
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
+
+        await NavigateToAsync("[data-main-step-5]");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Duration Habit" }).ClickAsync();
+
+        await Expect(Page.Locator("select[aria-label='Duration hours']")).ToHaveValueAsync("1");
+        await Expect(Page.Locator("select[aria-label='Duration minutes']")).ToHaveValueAsync("30");
+    }
+
+    [Test]
     public async Task HabitRepeatSettings_PersistedAfterReload()
     {
         await AddItemAsync("Repeat Settings Habit");

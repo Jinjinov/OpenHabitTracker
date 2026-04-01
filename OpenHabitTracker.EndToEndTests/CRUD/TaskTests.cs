@@ -151,6 +151,29 @@ public class TaskTests : BaseTest
     }
 
     [Test]
+    public async Task TaskDuration_PersistedAfterReload()
+    {
+        await AddItemAsync("Duration Task");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Duration Task" }).ClickAsync();
+
+        await Page.Locator("select[aria-label='Duration hours']").SelectOptionAsync("2");
+        await Page.Locator("select[aria-label='Duration minutes']").SelectOptionAsync("15");
+
+        await Page.Locator("[data-tasks-step-10]").ClickAsync(); // Close
+
+        await Page.ReloadAsync();
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
+
+        await NavigateToAsync("[data-main-step-4]");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Duration Task" }).ClickAsync();
+
+        await Expect(Page.Locator("select[aria-label='Duration hours']")).ToHaveValueAsync("2");
+        await Expect(Page.Locator("select[aria-label='Duration minutes']")).ToHaveValueAsync("15");
+    }
+
+    [Test]
     public async Task EditTask_PlannedAt_PersistedAfterReload()
     {
         await AddItemAsync("Planned Task");
