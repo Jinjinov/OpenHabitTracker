@@ -77,7 +77,7 @@ upgrade NuGet versions
 
 1.
 prerequisite:
-TODO:: research: high priority (DB migration)
+TODO:: research: normal priority (DB migration)
 save/load settings:
     - add string Name to Settings
     - add a way to create a new preset
@@ -102,7 +102,7 @@ save/load settings:
 multiple saved settings, with optional "URL references a preset by name", otherwise the URL params overwrite the "URL settings" saved setting:
 
 2.
-TODO:: research: high priority
+TODO:: research: normal priority
 search/filter/sort query parameters in the URL - Blazor
     - QueryParameters class already exists with all filter/sort fields
     - serialize QueryParameters to URL query string via NavigationManager
