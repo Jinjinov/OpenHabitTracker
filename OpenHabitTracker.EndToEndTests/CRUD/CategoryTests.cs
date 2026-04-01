@@ -167,6 +167,36 @@ public class CategoryTests : BaseTest
     }
 
     [Test]
+    public async Task DeleteCategory_ChildNotesDisappearFromNotesList()
+    {
+        // Add category
+        await Page.Locator("[data-categories-step-1] input").FillAsync("TempNoteCategory");
+        await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
+
+        // Navigate to notes and add a note assigned to TempNoteCategory
+        await CloseSidebarAsync();
+        await NavigateToAsync("[data-main-step-3]");
+
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("NoteInTempCat");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "TempNoteCategory" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "NoteInTempCat" })).ToBeVisibleAsync();
+
+        // Navigate back to categories and delete TempNoteCategory
+        await OpenMenuAsync();
+        await Page.Locator("div[role='menu'] button:has(i.bi-tag)").ClickAsync();
+
+        await Page.Locator("button[aria-label='Delete: TempNoteCategory']").ClickAsync();
+
+        // Navigate back to notes — the note should be gone (soft-deleted via category cascade)
+        await NavigateToAsync("[data-main-step-3]");
+
+        await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "NoteInTempCat" })).ToHaveCountAsync(0);
+    }
+
+    [Test]
     public async Task DeleteCategory_ChildTasksDisappearFromTasksList()
     {
         // Add category

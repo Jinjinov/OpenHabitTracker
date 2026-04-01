@@ -98,6 +98,30 @@ public class SearchTests : BaseTest
     }
 
     [Test]
+    public async Task SearchTerm_MatchingTitle_FiltersHabits()
+    {
+        await NavigateToAsync("[data-main-step-5]");
+
+        // Add a habit with a unique searchable prefix so the filter is guaranteed to match exactly this one
+        await AddItemAsync("SearchTarget Habit");
+
+        int totalCount = await Page.Locator("[data-habits-step-2]").CountAsync();
+        Assert.That(totalCount, Is.GreaterThan(1));
+
+        await OpenSearchAsync();
+        await Page.Locator("[data-search-step-1]").FillAsync("SearchTarget");
+
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "SearchTarget Habit" })).ToBeVisibleAsync();
+
+        int filteredCount = await Page.Locator("[data-habits-step-2]").CountAsync();
+        Assert.That(filteredCount, Is.LessThan(totalCount));
+
+        // Clear the search — all habits reappear
+        await Page.Locator("[data-search-step-3]").ClickAsync();
+        await Expect(Page.Locator("[data-habits-step-2]")).ToHaveCountAsync(totalCount);
+    }
+
+    [Test]
     public async Task PriorityFilter_UncheckNone_ReducesOrKeepsHabitCount()
     {
         await NavigateToAsync("[data-main-step-5]");

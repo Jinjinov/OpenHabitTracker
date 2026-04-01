@@ -151,6 +151,28 @@ public class TaskTests : BaseTest
     }
 
     [Test]
+    public async Task EditTask_PlannedAt_PersistedAfterReload()
+    {
+        await AddItemAsync("Planned Task");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Planned Task" }).ClickAsync();
+
+        await Page.Locator("[data-tasks-step-12] input").FillAsync("2030-01-15T10:00");
+        await Page.Locator("[data-tasks-step-12] input").BlurAsync();
+
+        await Page.Locator("[data-tasks-step-10]").ClickAsync(); // Close
+
+        await Page.ReloadAsync();
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
+
+        await NavigateToAsync("[data-main-step-4]");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Planned Task" }).ClickAsync();
+
+        await Expect(Page.Locator("[data-tasks-step-12] input")).ToHaveValueAsync("2030-01-15T10:00");
+    }
+
+    [Test]
     public async Task EditTask_ChangeCategory_TaskMovesToNewGroup()
     {
         await CreateCategoryAsync("MoveToCategory");
