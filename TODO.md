@@ -228,7 +228,7 @@ repeat:
     all "Overdue" logic must adapt to StartAt! - ElapsedTime is "DateTime.Now - CreatedAt" when LastTimeDoneAt is null
         clamp "DateTime.Now - StartAt" to TimeSpan.Zero, safe - there are no divisions by ElapsedTime
     - add DateTime? StartAt to HabitEntity + HabitModel
-    - change ElapsedTime: LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : TimeSpan.Zero.Max(DateTime.Now - (StartAt ?? CreatedAt))
+    - change ElapsedTime: LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : new TimeSpan(Math.Max(0L, (DateTime.Now - (StartAt ?? CreatedAt)).Ticks))
     - add date picker for StartAt in HabitComponent.razor
     - add "Start at" to all 20 localization JSON files
 
@@ -245,10 +245,10 @@ Show only habits with ratio `over x%` / `under y%` - currently filter habits wit
     how useful is it to see habits with urgency `under y%` if y is under 100?
     only real use case: you see all habits with ratio over 120% and then want to see only those with 100% - 120%
 
-    see SelectedRatioMin and ShowOnlyOverSelectedRatioMin, add SelectedRatioMax and ShowOnlyOverSelectedRatioMax (needed because you need to remember the value, setting it to null would lose the value, user would have to use the slider every time)
-    - add int SelectedRatioMax (default 150) + bool ShowOnlyOverSelectedRatioMax (default false) to SettingsEntity + SettingsModel
-    - add ShowOnlyOverSelectedRatioMax + SelectedRatioMax to SearchFilterService.GetQueryParameters()
-    - add ShowOnlyOverSelectedRatioMax + SelectedRatioMax to QueryParameters
+    see SelectedRatioMin and ShowOnlyOverSelectedRatioMin, add SelectedRatioMax and ShowOnlyUnderSelectedRatioMax (needed because you need to remember the value, setting it to null would lose the value, user would have to use the slider every time)
+    - add int SelectedRatioMax (default 150) + bool ShowOnlyUnderSelectedRatioMax (default false) to SettingsEntity + SettingsModel
+    - add ShowOnlyUnderSelectedRatioMax + SelectedRatioMax to SearchFilterService.GetQueryParameters()
+    - add ShowOnlyUnderSelectedRatioMax + SelectedRatioMax to QueryParameters
     - add filter condition in QueryExtensions.FilterHabits() mirroring the existing SelectedRatioMin condition
     - add UI in Search.razor mirroring the existing SelectedRatioMin slider + checkbox
     - "Show only habits with interval ratio under" and aria label "Maximum interval ratio" json localization in 20 languages
