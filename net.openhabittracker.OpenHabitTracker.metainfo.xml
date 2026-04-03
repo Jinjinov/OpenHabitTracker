@@ -87,6 +87,19 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.2.1" date="2026-04-04">
+      <description>
+        <p>Added Shift+Tab and multi-line Tab</p>
+        <p>Added GET query endpoints with URL filter parameters (Docker/Web API)</p>
+        <p>Added habit start date</p>
+        <p>Added "under x%" habit interval ratio filter</p>
+        <p>Fixed collapse toggle not refreshing sibling pages in Home</p>
+        <p>Fixed new note / task / habit with category appearing twice in grouped view</p>
+        <p>Fixed Add new habit in PWA</p>
+        <p>Fixed DB migration hang</p>
+        <p>Fixed Edit note</p>
+      </description>
+    </release>
     <release version="1.1.8" date="2026-03-27">
       <description>
         <p>Added category-grouped view for notes, tasks, habits</p>
