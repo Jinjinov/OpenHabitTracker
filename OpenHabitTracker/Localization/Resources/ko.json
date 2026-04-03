@@ -139,6 +139,7 @@
   "Hide completed tasks": "완료된 할 일 숨기기",
   "Habit interval ratio": "습관 간격 비율",
   "Show only habits with interval ratio over": "간격 비율이 이상인 습관만 표시",
+  "Show only habits with interval ratio under": "간격 비율이 이하인 습관만 표시",
 
   "Day": "일",
   "Week": "주",
@@ -217,6 +218,8 @@
   "Duration minutes": "소요 시간(분)",
   "Repeat period": "반복 기간",
   "Minimum interval ratio": "최소 간격 비율",
+  "Maximum interval ratio": "최대 간격 비율",
+  "Start on": "시작일",
   "Planned date comparison": "예정일 비교",
   "Done date comparison": "완료일 비교",
   "Sort notes": "메모 정렬",

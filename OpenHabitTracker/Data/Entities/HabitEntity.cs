@@ -11,4 +11,6 @@ public class HabitEntity : ContentEntity
     public TimeOnly? Duration { get; set; }
 
     public DateTime? LastTimeDoneAt { get; set; }
+
+    public DateTime? StartAt { get; set; }
 }

@@ -45,6 +45,8 @@ public class SearchFilterServiceTests
             HideCompletedTasks = true,
             ShowOnlyOverSelectedRatioMin = true,
             SelectedRatioMin = 75,
+            ShowOnlyUnderSelectedRatioMax = true,
+            SelectedRatioMax = 200,
             SelectedRatio = Ratio.ElapsedToDesired,
             CategoryFilterDisplay = FilterDisplay.CheckBoxes,
             PriorityFilterDisplay = FilterDisplay.SelectOptions,
@@ -55,6 +57,8 @@ public class SearchFilterServiceTests
         Assert.That(qp.HideCompletedTasks, Is.True);
         Assert.That(qp.ShowOnlyOverSelectedRatioMin, Is.True);
         Assert.That(qp.SelectedRatioMin, Is.EqualTo(75));
+        Assert.That(qp.ShowOnlyUnderSelectedRatioMax, Is.True);
+        Assert.That(qp.SelectedRatioMax, Is.EqualTo(200));
         Assert.That(qp.SelectedRatio, Is.EqualTo(Ratio.ElapsedToDesired));
         Assert.That(qp.CategoryFilterDisplay, Is.EqualTo(FilterDisplay.CheckBoxes));
         Assert.That(qp.PriorityFilterDisplay, Is.EqualTo(FilterDisplay.SelectOptions));

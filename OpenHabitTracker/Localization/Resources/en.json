@@ -139,6 +139,7 @@
   "Hide completed tasks": "Hide completed tasks",
   "Habit interval ratio": "Habit interval ratio",
   "Show only habits with interval ratio over": "Show only habits with interval ratio over",
+  "Show only habits with interval ratio under": "Show only habits with interval ratio under",
 
   "Day": "Day",
   "Week": "Week",
@@ -217,6 +218,8 @@
   "Duration minutes": "Duration minutes",
   "Repeat period": "Repeat period",
   "Minimum interval ratio": "Minimum interval ratio",
+  "Maximum interval ratio": "Maximum interval ratio",
+  "Start on": "Start on",
   "Planned date comparison": "Planned date comparison",
   "Done date comparison": "Done date comparison",
   "Sort notes": "Sort notes",

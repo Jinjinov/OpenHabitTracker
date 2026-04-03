@@ -139,6 +139,7 @@
   "Hide completed tasks": "Sakrij dovršene zadatke",
   "Habit interval ratio": "Omjer intervala navike",
   "Show only habits with interval ratio over": "Prikaži samo navike s omjerom intervala iznad",
+  "Show only habits with interval ratio under": "Prikaži samo navike s omjerom intervala ispod",
 
   "Day": "Dan",
   "Week": "Tjedan",
@@ -217,6 +218,8 @@
   "Duration minutes": "Minute trajanja",
   "Repeat period": "Razdoblje ponavljanja",
   "Minimum interval ratio": "Minimalni omjer intervala",
+  "Maximum interval ratio": "Maksimalni omjer intervala",
+  "Start on": "Počinje",
   "Planned date comparison": "Usporedba planiranog datuma",
   "Done date comparison": "Usporedba datuma dovršetka",
   "Sort notes": "Sortiraj bilješke",

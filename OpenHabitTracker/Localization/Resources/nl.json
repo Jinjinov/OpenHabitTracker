@@ -139,6 +139,7 @@
   "Hide completed tasks": "Voltooide taken verbergen",
   "Habit interval ratio": "Gewoonteintervalverhouding",
   "Show only habits with interval ratio over": "Toon alleen gewoontes met intervalverhouding boven",
+  "Show only habits with interval ratio under": "Toon alleen gewoontes met intervalverhouding onder",
 
   "Day": "Dag",
   "Week": "Week",
@@ -217,6 +218,8 @@
   "Duration minutes": "Duur (minuten)",
   "Repeat period": "Herhalingsperiode",
   "Minimum interval ratio": "Minimale intervalverhouding",
+  "Maximum interval ratio": "Maximale intervalverhouding",
+  "Start on": "Start op",
   "Planned date comparison": "Geplande datumvergelijking",
   "Done date comparison": "Voltooiingsdatumvergelijking",
   "Sort notes": "Notities sorteren",

@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
 using OpenHabitTracker.Query;
@@ -32,7 +32,9 @@ public class SearchFilterService : ISearchFilterService
             PlannedAtCompare = PlannedAtCompare,
             HideCompletedTasks = settings.HideCompletedTasks,
             ShowOnlyOverSelectedRatioMin = settings.ShowOnlyOverSelectedRatioMin,
+            ShowOnlyUnderSelectedRatioMax = settings.ShowOnlyUnderSelectedRatioMax,
             SelectedRatioMin = settings.SelectedRatioMin,
+            SelectedRatioMax = settings.SelectedRatioMax,
             SelectedRatio = settings.SelectedRatio,
             CategoryFilterDisplay = settings.CategoryFilterDisplay,
             PriorityFilterDisplay = settings.PriorityFilterDisplay,

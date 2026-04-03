@@ -58,7 +58,11 @@ public class SettingsEntity
 
     public bool ShowOnlyOverSelectedRatioMin { get; set; } = false;
 
+    public bool ShowOnlyUnderSelectedRatioMax { get; set; } = false;
+
     public int SelectedRatioMin { get; set; } = 50;
+
+    public int SelectedRatioMax { get; set; } = 150;
 
     public int HorizontalMargin { get; set; } = 1;
 

@@ -44,6 +44,7 @@ public static class ModelToEntity
         entity.RepeatPeriod = model.RepeatPeriod;
         entity.Duration = model.Duration;
         entity.LastTimeDoneAt = model.LastTimeDoneAt;
+        entity.StartAt = model.StartAt;
     }
 
     public static ItemEntity ToEntity(this ItemModel model)
@@ -148,7 +149,9 @@ public static class ModelToEntity
         entity.ShowLastTimeDone = model.ShowLastTimeDone;
         entity.HideCompletedTasks = model.HideCompletedTasks;
         entity.ShowOnlyOverSelectedRatioMin = model.ShowOnlyOverSelectedRatioMin;
+        entity.ShowOnlyUnderSelectedRatioMax = model.ShowOnlyUnderSelectedRatioMax;
         entity.SelectedRatioMin = model.SelectedRatioMin;
+        entity.SelectedRatioMax = model.SelectedRatioMax;
         entity.HorizontalMargin = model.HorizontalMargin;
         entity.VerticalMargin = model.VerticalMargin;
         entity.CategoryFilterDisplay = model.CategoryFilterDisplay;

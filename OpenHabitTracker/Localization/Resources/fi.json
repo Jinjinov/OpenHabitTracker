@@ -139,6 +139,7 @@
   "Hide completed tasks": "Piilota valmiit tehtävät",
   "Habit interval ratio": "Tapasuhde",
   "Show only habits with interval ratio over": "Näytä vain tavat, joiden suhde ylittää",
+  "Show only habits with interval ratio under": "Näytä vain tavat, joiden suhde alittaa",
 
   "Day": "Päivä",
   "Week": "Viikko",
@@ -217,6 +218,8 @@
   "Duration minutes": "Kesto (minuutit)",
   "Repeat period": "Toistamisjakso",
   "Minimum interval ratio": "Pienin intervallisuhde",
+  "Maximum interval ratio": "Suurin intervallisuhde",
+  "Start on": "Aloita",
   "Planned date comparison": "Suunnitellun päivämäärän vertailu",
   "Done date comparison": "Valmistumispäivän vertailu",
   "Sort notes": "Lajittele muistiinpanot",

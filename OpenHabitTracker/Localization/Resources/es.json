@@ -139,6 +139,7 @@
   "Hide completed tasks": "Ocultar tareas completadas",
   "Habit interval ratio": "Razón de intervalo de hábito",
   "Show only habits with interval ratio over": "Mostrar solo hábitos con una relación de intervalo superior al",
+  "Show only habits with interval ratio under": "Mostrar solo hábitos con una relación de intervalo inferior al",
 
   "Day": "Día",
   "Week": "Semana",
@@ -217,6 +218,8 @@
   "Duration minutes": "Minutos de duración",
   "Repeat period": "Período de repetición",
   "Minimum interval ratio": "Proporción de intervalo mínimo",
+  "Maximum interval ratio": "Proporción de intervalo máximo",
+  "Start on": "Comenzar el",
   "Planned date comparison": "Comparación de fecha planificada",
   "Done date comparison": "Comparación de fecha realizada",
   "Sort notes": "Ordenar notas",
