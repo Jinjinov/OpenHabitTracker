@@ -123,23 +123,25 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
         bool isCompleted = task.CompletedAt != null;
 
-        DateTime? dateTime = isCompleted ? null : DateTime.Now;
+        DateTime now = DateTime.Now;
+        DateTime? dateTime = isCompleted ? null : now;
 
         if (isCompleted)
+        {
             task.StartedAt = null;
-        else
-            task.StartedAt ??= dateTime;
+        }
+        else if (task.StartedAt is null)
+        {
+            DateTime startedAt = task.Duration is TimeOnly duration ? now - duration.ToTimeSpan() : now;
+            task.StartedAt = startedAt < now.Date ? now.Date : startedAt;
+        }
 
         task.CompletedAt = dateTime;
 
         if (await _clientState.DataAccess.GetTask(task.Id) is TaskEntity taskEntity)
         {
-            if (isCompleted)
-                taskEntity.StartedAt = null;
-            else
-                taskEntity.StartedAt ??= dateTime;
-
-            taskEntity.CompletedAt = dateTime;
+            taskEntity.StartedAt = task.StartedAt;
+            taskEntity.CompletedAt = task.CompletedAt;
 
             await _clientState.DataAccess.UpdateTask(taskEntity);
         }

@@ -256,10 +256,15 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
     {
         habit.TimesDone ??= [];
 
+        DateTime startedAt = habit.Duration is TimeOnly duration ? dateTime - duration.ToTimeSpan() : dateTime;
+
+        if (startedAt < dateTime.Date)
+            startedAt = dateTime.Date;
+
         TimeModel timeModel = new()
         {
             HabitId = habit.Id,
-            StartedAt = dateTime,
+            StartedAt = startedAt,
             CompletedAt = dateTime
         };
 
