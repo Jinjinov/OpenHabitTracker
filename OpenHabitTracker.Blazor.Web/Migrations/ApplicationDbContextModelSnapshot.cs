@@ -403,6 +403,9 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.Property<int>("SelectedRatio")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("SelectedRatioMax")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("SelectedRatioMin")
                         .HasColumnType("INTEGER");
 
@@ -434,6 +437,9 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowOnlyOverSelectedRatioMin")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowOnlyUnderSelectedRatioMax")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ShowPriority")
@@ -518,6 +524,9 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
 
                     b.Property<int>("RepeatPeriod")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("StartAt")
+                        .HasColumnType("TEXT");
 
                     b.HasDiscriminator().HasValue("HabitEntity");
                 });
