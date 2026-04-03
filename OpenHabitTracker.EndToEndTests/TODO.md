@@ -125,16 +125,16 @@ or times out.
 Use `Expect(...).ToBeVisibleAsync()` when you need to wait for an element to appear.
 Only use IsVisibleAsync() when you want the current state right now (e.g. an if-branch).
 
-#### Page.RequestFailed
+#### Page.RequestFailed — FIXED
 
 If a .wasm or .js resource fails to load, Blazor silently degrades and tests may still pass
 because their assertions coincidentally match something in the partially loaded DOM.
-Wire up Page.RequestFailed the same way as PageError/Console to catch broken resource loads.
+Wired up in BaseTest.BaseSetUp alongside PageError/Console to catch broken resource loads.
 
-#### #blazor-error-ui
+#### #blazor-error-ui — FIXED
 
 When Blazor crashes hard (unrecoverable error), it makes #blazor-error-ui visible.
-This is an additional signal on top of the console.error handler and can be asserted directly:
+Asserted hidden in BaseTest.BaseTearDown as an additional signal on top of the console.error handler:
 
     await Expect(Page.Locator("#blazor-error-ui")).ToBeHiddenAsync();
 
