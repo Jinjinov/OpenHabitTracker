@@ -3,6 +3,7 @@ using Microsoft.Playwright;
 namespace OpenHabitTracker.EndToEndTests.Smoke;
 
 // Prerequisite: start OpenHabitTracker.Blazor.Web at http://localhost before running tests.
+// See: OpenHabitTracker.EndToEndTests/TODO.md for Playwright quirks and locator guidelines.
 
 [TestFixture]
 public class StartupTests : BaseTest

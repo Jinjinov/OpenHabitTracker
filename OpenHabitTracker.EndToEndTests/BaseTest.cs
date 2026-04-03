@@ -3,12 +3,7 @@ using Microsoft.Playwright;
 namespace OpenHabitTracker.EndToEndTests;
 
 // Prerequisite: start OpenHabitTracker.Blazor.Web at http://localhost before running tests.
-// dotnet run --project OpenHabitTracker.Blazor.Web --configuration Release
-
-// WaitForLoadStateAsync(NetworkIdle)
-// Used ~114 times in these tests but does nothing in Blazor WASM — all SPA navigation, IndexedDB reads, and component renders are client-side with no network traffic.
-// Legitimate uses are few(e.g.after GotoAsync() for the initial WASM download from IIS). 
-// The rest should be replaced with Expect(...).ToBeVisibleAsync() assertions that actually wait for visible state changes, or removed entirely.
+// See: OpenHabitTracker.EndToEndTests/TODO.md for Playwright quirks and locator guidelines.
 
 public abstract class BaseTest : PlaywrightTest
 {
@@ -17,6 +12,8 @@ public abstract class BaseTest : PlaywrightTest
     protected IBrowser Browser = null!;
     protected IBrowserContext Context = null!;
     protected IPage Page = null!;
+
+    private List<string> _browserErrors = new();
 
     [SetUp]
     public async Task BaseSetUp()
@@ -28,13 +25,25 @@ public abstract class BaseTest : PlaywrightTest
             IgnoreHTTPSErrors = true
         });
         Page = await Context.NewPageAsync();
+        Page.PageError += (_, error) => _browserErrors.Add($"PageError: {error}");
+        Page.Console += (_, msg) => { if (msg.Type == "error") _browserErrors.Add($"Console: {msg.Text}"); };
+        Page.RequestFailed += (_, request) => _browserErrors.Add($"RequestFailed: {request.Url}");
     }
 
     [TearDown]
     public async Task BaseTearDown()
     {
-        await Context.CloseAsync();
-        await Browser.CloseAsync();
+        try
+        {
+            await Expect(Page.Locator("#blazor-error-ui")).ToBeHiddenAsync();
+            if (_browserErrors.Count > 0)
+                Assert.Fail("Browser errors during test:\n" + string.Join("\n", _browserErrors));
+        }
+        finally
+        {
+            await Context.CloseAsync();
+            await Browser.CloseAsync();
+        }
     }
 
     protected async Task GotoAsync(string path = "")

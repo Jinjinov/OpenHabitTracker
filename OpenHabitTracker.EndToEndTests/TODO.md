@@ -75,9 +75,66 @@ Existing attributes already usable by tests (do not need to be added):
 
 ---
 
-### WaitForLoadStateAsync(NetworkIdle)
+---
 
-Used ~114 times in these tests but does nothing in Blazor WASM — all SPA navigation, IndexedDB reads, and component renders are client-side with no network traffic. 
-Legitimate uses are few (e.g. after GotoAsync() for the initial WASM download from IIS). 
-The rest should be replaced with Expect(...).ToBeVisibleAsync() assertions that actually wait for visible state changes, or removed entirely.
+### Playwright Quirks
+
+#### WaitForLoadStateAsync(NetworkIdle) — FIXED
+
+Does nothing in Blazor WASM — all SPA navigation, IndexedDB reads, and component renders are
+client-side with no network traffic. Legitimate use is only after GotoAsync() for the initial
+WASM download from IIS. All other occurrences have been replaced with Expect(...).ToBeVisibleAsync()
+assertions or removed entirely.
+
+#### WaitForTimeoutAsync — FIXED
+
+Blind sleep with no knowledge of app state — always flaky. Replaced with Expect(...) assertions
+that actually wait for observable state changes.
+
+#### Browser errors do not fail tests automatically — FIXED
+
+Playwright tests only fail if an assertion fails or the test code throws. Browser-side crashes —
+JS exceptions, Blazor rendering failures, console errors — are completely invisible unless you
+explicitly wire them up.
+
+Blazor WASM does NOT throw rendering exceptions to window.onerror (which Playwright captures
+as Page.PageError). Blazor catches them internally and writes to console.error, then shows
+#blazor-error-ui. All three handlers are wired up in BaseTest.BaseSetUp/BaseTearDown:
+
+    Page.PageError += (_, error) => _browserErrors.Add($"PageError: {error}");
+    Page.Console += (_, msg) => { if (msg.Type == "error") _browserErrors.Add($"Console: {msg.Text}"); };
+    Page.RequestFailed += (_, request) => _browserErrors.Add($"RequestFailed: {request.Url}");
+
+BaseTearDown asserts #blazor-error-ui is hidden, then fails the test if any browser error occurred.
+
+Why only WASM is affected and not MAUI/WPF/Photino: Blazor Hybrid's WebView JS bridge
+serializes an unset ElementReference as null in JS (so guards like `if (element &&` work).
+Blazor WASM passes the raw { __internalId: "" } object, which is truthy but not a DOM element,
+so the guard passes and any subsequent DOM method call (e.g. element.addEventListener) crashes.
+
+#### CountAsync() is not a wait
+
+`await Page.Locator("...").CountAsync()` returns immediately with whatever count exists at
+that millisecond. If the DOM is still updating, the result is wrong and the test is flaky.
+Always use `Expect(...).ToHaveCountAsync(n)` instead — it retries until the condition is met
+or times out.
+
+#### IsVisibleAsync() is not a wait
+
+`await Page.Locator("...").IsVisibleAsync()` is also a snapshot — it does not retry.
+Use `Expect(...).ToBeVisibleAsync()` when you need to wait for an element to appear.
+Only use IsVisibleAsync() when you want the current state right now (e.g. an if-branch).
+
+#### Page.RequestFailed
+
+If a .wasm or .js resource fails to load, Blazor silently degrades and tests may still pass
+because their assertions coincidentally match something in the partially loaded DOM.
+Wire up Page.RequestFailed the same way as PageError/Console to catch broken resource loads.
+
+#### #blazor-error-ui
+
+When Blazor crashes hard (unrecoverable error), it makes #blazor-error-ui visible.
+This is an additional signal on top of the console.error handler and can be asserted directly:
+
+    await Expect(Page.Locator("#blazor-error-ui")).ToBeHiddenAsync();
 
