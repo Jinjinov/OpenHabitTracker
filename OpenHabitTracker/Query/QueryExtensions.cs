@@ -160,6 +160,11 @@ public static class QueryExtensions
             habits = habits.Where(x => x.GetRatio(queryParameters.SelectedRatio) > queryParameters.SelectedRatioMin);
         }
 
+        if (queryParameters.ShowOnlyUnderSelectedRatioMax)
+        {
+            habits = habits.Where(x => x.GetRatio(queryParameters.SelectedRatio) < queryParameters.SelectedRatioMax);
+        }
+
         return queryParameters.SortBy[ContentType.Habit] switch
         {
             Sort.Category => habits.OrderBy(x => x.CategoryId),

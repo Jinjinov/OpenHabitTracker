@@ -139,6 +139,7 @@
   "Hide completed tasks": "隐藏已完成任务",
   "Habit interval ratio": "习惯间隔比率",
   "Show only habits with interval ratio over": "仅显示间隔比率大于",
+  "Show only habits with interval ratio under": "仅显示间隔比率小于",
 
   "Day": "天",
   "Week": "周",
@@ -217,6 +218,8 @@
   "Duration minutes": "时长（分钟）",
   "Repeat period": "重复周期",
   "Minimum interval ratio": "最小间隔比率",
+  "Maximum interval ratio": "最大间隔比率",
+  "Start on": "开始于",
   "Planned date comparison": "计划日期比较",
   "Done date comparison": "完成日期比较",
   "Sort notes": "笔记排序",

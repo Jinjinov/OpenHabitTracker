@@ -48,6 +48,11 @@
             </div>
 
             <div class="input-group">
+                <span class="input-group-text bg-transparent col-4">@Loc["Start on"]</span>
+                <InputDate class="form-control" @bind-Value="HabitService.NewHabit.StartAt" />
+            </div>
+
+            <div class="input-group">
                 <label class="input-group-text bg-transparent" for="countInput">@Loc["Repeat"]</label>
                 <InputNumber class="form-control" id="countInput" @bind-Value="HabitService.NewHabit.RepeatCount" />
 
@@ -257,6 +262,7 @@
             new() { Text = "Close the habit.", Show = () => _showHabitComponent },
             new() { Text = "Habit's items.", Show = () => _showHabitComponent },
             new() { Text = "Click on a day on the large calendar to mark the habit as done.", Show = () => _showHabitComponent && ClientState.Settings.ShowLargeCalendar },
+            new() { Text = "Set the habit's start date. Elapsed time won't count before this date.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's desired repeat interval.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's desired duration.", Show = () => _showHabitComponent },
             new() { Text = "Start the timer to start timing the habit's duration. Stopping the timer completes the habit.", Show = () => _showHabitComponent },

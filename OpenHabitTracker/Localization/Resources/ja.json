@@ -139,6 +139,7 @@
   "Hide completed tasks": "完了済みタスクを非表示",
   "Habit interval ratio": "習慣間隔比率",
   "Show only habits with interval ratio over": "間隔比率が以上の習慣のみ表示",
+  "Show only habits with interval ratio under": "間隔比率が以下の習慣のみ表示",
 
   "Day": "日",
   "Week": "週",
@@ -217,6 +218,8 @@
   "Duration minutes": "所要時間（分）",
   "Repeat period": "繰り返し期間",
   "Minimum interval ratio": "最小間隔比率",
+  "Maximum interval ratio": "最大間隔比率",
+  "Start on": "開始日",
   "Planned date comparison": "予定日の比較",
   "Done date comparison": "完了日の比較",
   "Sort notes": "メモを並べ替え",

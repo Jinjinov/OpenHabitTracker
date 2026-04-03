@@ -257,6 +257,29 @@ public class HabitServiceTests
     }
 
     [Test]
+    public void GetHabits_RatioFilter_ExcludesAboveMax()
+    {
+        // ElapsedToAverage ratio = (DateTime.Now - LastTimeDoneAt) / AverageInterval * 100
+        // Habit done 2 days ago with AverageInterval of 1 day → ratio ≈ 200% → above SelectedRatioMax=150
+        HabitModel habit = TestData.Habit(id: 1);
+        DateTime now = DateTime.Now;
+        TimeModel t1 = new() { StartedAt = now.AddDays(-3) };
+        TimeModel t2 = new() { StartedAt = now.AddDays(-2) };
+        habit.TimesDone = [t1, t2];
+        habit.LastTimeDoneAt = now.AddDays(-2);
+        habit.RefreshTimesDoneByDay(); // computes AverageInterval = ~1 day
+
+        _clientState.Habits = TestData.HabitDict(habit);
+        _clientState.Settings.ShowOnlyUnderSelectedRatioMax = true;
+        _clientState.Settings.SelectedRatioMax = 150;
+        _clientState.Settings.SelectedRatio = Ratio.ElapsedToAverage;
+
+        IEnumerable<HabitModel> result = _sut.GetHabits();
+
+        Assert.That(result, Is.Empty);
+    }
+
+    [Test]
     public void GetHabits_SortByTitle_ReturnsAlphabetically()
     {
         _clientState.Habits = TestData.HabitDict(

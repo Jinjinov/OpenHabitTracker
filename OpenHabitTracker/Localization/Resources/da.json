@@ -139,6 +139,7 @@
   "Hide completed tasks": "Skjul færdige opgaver",
   "Habit interval ratio": "Vaneintervalforhold",
   "Show only habits with interval ratio over": "Vis kun vaner med intervalforhold over",
+  "Show only habits with interval ratio under": "Vis kun vaner med intervalforhold under",
 
   "Day": "Dag",
   "Week": "Uge",
@@ -217,6 +218,8 @@
   "Duration minutes": "Varighed (minutter)",
   "Repeat period": "Gentagelsesperiode",
   "Minimum interval ratio": "Minimum intervalforhold",
+  "Maximum interval ratio": "Maksimum intervalforhold",
+  "Start on": "Start den",
   "Planned date comparison": "Planlagt datosammenligning",
   "Done date comparison": "Færdigdatosammenligning",
   "Sort notes": "Sortér notater",

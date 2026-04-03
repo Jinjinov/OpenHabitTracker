@@ -211,47 +211,16 @@ Android: get permission to save SQLite DB in an external folder that can be part
 when all habit items are done, habit is done automatically ??? pros & cons ?
 when all task items are done, task is done automatically ??? pros & cons ?
 
-TODO:: research: high priority (DB migration)
 repeat:
-    add `StartAt` to Habit ? some starting point for repeat interval (`PlannedAt` is more appropriate for tasks than habits)
-        this solves a real problem: you create a habit with 1 week repeat interval on Monday, but you want to repeat the habit every Friday
-    StartAt is optional
-    "Start at" json localization in 20 languages
-
-    a date picker is easy, but not very good - better would be:
     - weekly: which day in week
     - monthly: which day (or week/day - second monday) in month
     - yearly: which day (date) in year
-        but this complicates ElapsedTime and is half way to the "exact repeating reminders, like Google Keep" task
-        use plain date picker for now, leave day-of-week picker for reminders feature
-
-    all "Overdue" logic must adapt to StartAt! - ElapsedTime is "DateTime.Now - CreatedAt" when LastTimeDoneAt is null
-        clamp "DateTime.Now - StartAt" to TimeSpan.Zero, safe - there are no divisions by ElapsedTime
-    - add DateTime? StartAt to HabitEntity + HabitModel
-    - change ElapsedTime: LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : new TimeSpan(Math.Max(0L, (DateTime.Now - (StartAt ?? CreatedAt)).Ticks))
-    - add date picker for StartAt in HabitComponent.razor
-    - add "Start at" to all 20 localization JSON files
-
-    is it worth it? yes, if `DateTime? StartAt` can be reused in the "exact repeating reminders, like Google Keep" task
 
 textarea Tabs
     - make markdown Tabs look the same as in textarea
         - currently Tabs are ignored in markdown (except under a "- list row")
         - if `DisplayNoteContentAsMarkdown` is `false`, tabs are already displayed properly with `style="white-space: pre-wrap;"`
         - there is no way to know if user is using tabs to create a code block
-
-TODO:: research: high priority (DB migration)
-Show only habits with ratio `over x%` / `under y%` - currently filter habits with urgency `over x%`, also add `under y%`
-    how useful is it to see habits with urgency `under y%` if y is under 100?
-    only real use case: you see all habits with ratio over 120% and then want to see only those with 100% - 120%
-
-    see SelectedRatioMin and ShowOnlyOverSelectedRatioMin, add SelectedRatioMax and ShowOnlyUnderSelectedRatioMax (needed because you need to remember the value, setting it to null would lose the value, user would have to use the slider every time)
-    - add int SelectedRatioMax (default 150) + bool ShowOnlyUnderSelectedRatioMax (default false) to SettingsEntity + SettingsModel
-    - add ShowOnlyUnderSelectedRatioMax + SelectedRatioMax to SearchFilterService.GetQueryParameters()
-    - add ShowOnlyUnderSelectedRatioMax + SelectedRatioMax to QueryParameters
-    - add filter condition in QueryExtensions.FilterHabits() mirroring the existing SelectedRatioMin condition
-    - add UI in Search.razor mirroring the existing SelectedRatioMin slider + checkbox
-    - "Show only habits with interval ratio under" and aria label "Maximum interval ratio" json localization in 20 languages
 
 horizontal calendar with vertical weeks
 

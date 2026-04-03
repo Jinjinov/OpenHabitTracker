@@ -58,7 +58,11 @@ public class SettingsModel
 
     public bool ShowOnlyOverSelectedRatioMin { get; set; } = false;
 
+    public bool ShowOnlyUnderSelectedRatioMax { get; set; } = false;
+
     public int SelectedRatioMin { get; set; } = 50;
+
+    public int SelectedRatioMax { get; set; } = 150;
 
     public int HorizontalMargin { get; set; } = 1;
 
@@ -132,7 +136,9 @@ public class SettingsModel
             ShowLastTimeDone = true,
             HideCompletedTasks = true,
             ShowOnlyOverSelectedRatioMin = false,
+            ShowOnlyUnderSelectedRatioMax = false,
             SelectedRatioMin = 50,
+            SelectedRatioMax = 150,
             HorizontalMargin = 1,
             VerticalMargin = 3,
             CategoryFilterDisplay = FilterDisplay.CheckBoxes,

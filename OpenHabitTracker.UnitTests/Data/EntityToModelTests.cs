@@ -39,11 +39,13 @@ public class EntityToModelTests
     public void HabitEntity_ToModel_PreservesAllFields()
     {
         DateTime now = new(2025, 6, 1, 12, 0, 0);
+        DateTime startAt = new(2025, 1, 1);
         HabitEntity entity = new()
         {
             Id = 1, CategoryId = 2, Priority = Priority.High, IsDeleted = true,
             Title = "Run", RepeatCount = 3, RepeatInterval = 2, RepeatPeriod = Period.Week,
-            LastTimeDoneAt = now, CreatedAt = now.AddDays(-10), UpdatedAt = now.AddDays(-1)
+            LastTimeDoneAt = now, CreatedAt = now.AddDays(-10), UpdatedAt = now.AddDays(-1),
+            StartAt = startAt
         };
 
         HabitModel model = entity.ToModel();
@@ -57,17 +59,19 @@ public class EntityToModelTests
         Assert.That(model.RepeatInterval, Is.EqualTo(2));
         Assert.That(model.RepeatPeriod, Is.EqualTo(Period.Week));
         Assert.That(model.LastTimeDoneAt, Is.EqualTo(now));
+        Assert.That(model.StartAt, Is.EqualTo(startAt));
     }
 
     [Test]
     public void HabitModel_ToEntity_PreservesAllFields()
     {
         DateTime now = new(2025, 6, 1, 12, 0, 0);
+        DateTime startAt = new(2025, 1, 1);
         HabitModel model = new()
         {
             Id = 1, CategoryId = 2, Priority = Priority.High, IsDeleted = true,
             Title = "Run", RepeatCount = 3, RepeatInterval = 2, RepeatPeriod = Period.Week,
-            LastTimeDoneAt = now
+            LastTimeDoneAt = now, StartAt = startAt
         };
 
         HabitEntity entity = model.ToEntity();
@@ -80,6 +84,7 @@ public class EntityToModelTests
         Assert.That(entity.RepeatCount, Is.EqualTo(3));
         Assert.That(entity.RepeatPeriod, Is.EqualTo(Period.Week));
         Assert.That(entity.LastTimeDoneAt, Is.EqualTo(now));
+        Assert.That(entity.StartAt, Is.EqualTo(startAt));
     }
 
     // --- Task ---
@@ -202,7 +207,8 @@ public class EntityToModelTests
             Id = 7, UserId = 2, IsDarkMode = false, Theme = "cerulean",
             Culture = "de", FirstDayOfWeek = DayOfWeek.Sunday,
             SelectedRatio = Ratio.ElapsedToDesired, HideCompletedTasks = false,
-            SelectedRatioMin = 75, HorizontalMargin = 2, VerticalMargin = 3
+            SelectedRatioMin = 75, SelectedRatioMax = 200, ShowOnlyUnderSelectedRatioMax = true,
+            HorizontalMargin = 2, VerticalMargin = 3
         };
 
         SettingsModel model = entity.ToModel();
@@ -216,6 +222,8 @@ public class EntityToModelTests
         Assert.That(model.SelectedRatio, Is.EqualTo(Ratio.ElapsedToDesired));
         Assert.That(model.HideCompletedTasks, Is.False);
         Assert.That(model.SelectedRatioMin, Is.EqualTo(75));
+        Assert.That(model.SelectedRatioMax, Is.EqualTo(200));
+        Assert.That(model.ShowOnlyUnderSelectedRatioMax, Is.True);
         Assert.That(model.HorizontalMargin, Is.EqualTo(2));
         Assert.That(model.VerticalMargin, Is.EqualTo(3));
     }
@@ -228,7 +236,8 @@ public class EntityToModelTests
             Id = 7, UserId = 2, IsDarkMode = false, Theme = "cerulean",
             Culture = "de", FirstDayOfWeek = DayOfWeek.Sunday,
             SelectedRatio = Ratio.ElapsedToDesired, HideCompletedTasks = false,
-            SelectedRatioMin = 75, HorizontalMargin = 2, VerticalMargin = 3
+            SelectedRatioMin = 75, SelectedRatioMax = 200, ShowOnlyUnderSelectedRatioMax = true,
+            HorizontalMargin = 2, VerticalMargin = 3
         };
 
         SettingsEntity entity = model.ToEntity();
@@ -242,6 +251,8 @@ public class EntityToModelTests
         Assert.That(entity.SelectedRatio, Is.EqualTo(Ratio.ElapsedToDesired));
         Assert.That(entity.HideCompletedTasks, Is.False);
         Assert.That(entity.SelectedRatioMin, Is.EqualTo(75));
+        Assert.That(entity.SelectedRatioMax, Is.EqualTo(200));
+        Assert.That(entity.ShowOnlyUnderSelectedRatioMax, Is.True);
         Assert.That(entity.HorizontalMargin, Is.EqualTo(2));
         Assert.That(entity.VerticalMargin, Is.EqualTo(3));
     }

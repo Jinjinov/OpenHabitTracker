@@ -20,7 +20,11 @@ public class QueryParameters
 
     public bool ShowOnlyOverSelectedRatioMin { get; set; }
 
+    public bool ShowOnlyUnderSelectedRatioMax { get; set; }
+
     public int SelectedRatioMin { get; set; } = 50;
+
+    public int SelectedRatioMax { get; set; } = 150;
 
     public Ratio SelectedRatio { get; set; }
 

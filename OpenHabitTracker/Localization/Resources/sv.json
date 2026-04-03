@@ -139,6 +139,7 @@
   "Hide completed tasks": "Dölj avslutade uppgifter",
   "Habit interval ratio": "Vaneintervallförhållande",
   "Show only habits with interval ratio over": "Visa bara vanor med intervallförhållande över",
+  "Show only habits with interval ratio under": "Visa bara vanor med intervallförhållande under",
 
   "Day": "Dag",
   "Week": "Vecka",
@@ -217,6 +218,8 @@
   "Duration minutes": "Varaktighet (minuter)",
   "Repeat period": "Upprepningsperiod",
   "Minimum interval ratio": "Minsta intervallförhållande",
+  "Maximum interval ratio": "Största intervallförhållande",
+  "Start on": "Börjar den",
   "Planned date comparison": "Jämförelse av planerat datum",
   "Done date comparison": "Jämförelse av klardatum",
   "Sort notes": "Sortera anteckningar",

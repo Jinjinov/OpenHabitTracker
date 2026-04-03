@@ -410,4 +410,40 @@ public class HabitModelTests
 
         Assert.That(elapsed, Is.EqualTo(DateTime.Now - lastDone).Within(TimeSpan.FromSeconds(1)));
     }
+
+    // --- ElapsedTime with StartAt tests ---
+
+    [Test]
+    public void ElapsedTime_WhenNeverDone_AndStartAtSet_IsTimeSinceStartAt()
+    {
+        DateTime startAt = DateTime.Now.AddDays(-3);
+        HabitModel habit = new() { CreatedAt = DateTime.Now.AddDays(-10), StartAt = startAt, LastTimeDoneAt = null };
+
+        TimeSpan elapsed = habit.ElapsedTime;
+
+        Assert.That(elapsed, Is.EqualTo(DateTime.Now - startAt).Within(TimeSpan.FromSeconds(1)));
+    }
+
+    [Test]
+    public void ElapsedTime_WhenNeverDone_AndStartAtInFuture_IsZero()
+    {
+        DateTime startAt = DateTime.Now.AddDays(5);
+        HabitModel habit = new() { CreatedAt = DateTime.Now.AddDays(-10), StartAt = startAt, LastTimeDoneAt = null };
+
+        TimeSpan elapsed = habit.ElapsedTime;
+
+        Assert.That(elapsed, Is.EqualTo(TimeSpan.Zero));
+    }
+
+    [Test]
+    public void ElapsedTime_WhenDone_StartAtIsIgnored()
+    {
+        DateTime lastDone = DateTime.Now.AddDays(-1);
+        DateTime startAt = DateTime.Now.AddDays(-10);
+        HabitModel habit = new() { CreatedAt = DateTime.Now.AddDays(-20), StartAt = startAt, LastTimeDoneAt = lastDone };
+
+        TimeSpan elapsed = habit.ElapsedTime;
+
+        Assert.That(elapsed, Is.EqualTo(DateTime.Now - lastDone).Within(TimeSpan.FromSeconds(1)));
+    }
 }

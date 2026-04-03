@@ -10,6 +10,8 @@ public class HabitModel : ItemsModel
 
     public DateTime? LastTimeDoneAt { get; set; }
 
+    public DateTime? StartAt { get; set; }
+
     public List<TimeModel>? TimesDone { get; set; }
 
     internal TimeSpan TotalTimeSpent { get; set; } // TODO:: save it ? (so LoadHabits doesn't need to call RefreshTimesDoneByDay)
@@ -20,7 +22,7 @@ public class HabitModel : ItemsModel
 
     internal int NonZeroRepeatCount => Math.Max(1, RepeatCount);
 
-    internal TimeSpan ElapsedTime => LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : DateTime.Now - CreatedAt;
+    internal TimeSpan ElapsedTime => LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : new TimeSpan(Math.Max(0L, (DateTime.Now - (StartAt ?? CreatedAt)).Ticks));
 
     internal double ElapsedTimeToRepeatIntervalRatio => ElapsedTime / GetRepeatInterval() * 100.0;
 

@@ -160,8 +160,8 @@ public class SearchTests : BaseTest
         await NavigateToAsync("[data-main-step-5]");
         await OpenSearchAsync();
 
-        // data-search-step-20 is the Habits sort select; index 2 = Title
-        await Page.Locator("[data-search-step-20] select").SelectOptionAsync(new SelectOptionValue { Index = 2 });
+        // data-search-step-22 is the Habits sort select; index 2 = Title
+        await Page.Locator("[data-search-step-22] select").SelectOptionAsync(new SelectOptionValue { Index = 2 });
 
         ILocator habits = Page.Locator("[data-habits-step-2]");
         int count = await habits.CountAsync();
@@ -170,6 +170,29 @@ public class SearchTests : BaseTest
         string firstTitle = (await habits.Nth(0).TextContentAsync() ?? "").Trim();
         string secondTitle = (await habits.Nth(1).TextContentAsync() ?? "").Trim();
         Assert.That(string.Compare(firstTitle, secondTitle, StringComparison.OrdinalIgnoreCase), Is.LessThanOrEqualTo(0));
+    }
+
+    // Regression guard for: SelectedRatioMax filter (ShowOnlyUnderSelectedRatioMax).
+    // Setting the slider to 0 means only habits with ratio < 0% pass — none qualify since ratio is non-negative.
+    [Test]
+    public async Task RatioMaxFilter_Enable_ExcludesAllHabitsWhenMaxIsZero()
+    {
+        await GotoAsync();
+        await NavigateToAsync("[data-main-step-5]");
+        await AddItemAsync("MaxFilter Habit");
+
+        int countBefore = await Page.Locator("[data-habits-step-2]").CountAsync();
+        Assert.That(countBefore, Is.GreaterThan(0));
+
+        await OpenSearchAsync();
+
+        // Set SelectedRatioMax slider to 0 via JS (all habits have ratio ≥ 0, so none pass ratio < 0)
+        await Page.Locator("[data-search-step-19]").EvaluateAsync("el => { el.value = '0'; el.dispatchEvent(new Event('input', { bubbles: true })); }");
+
+        // Enable "under x%" filter
+        await Page.Locator("[data-search-step-18] label").ClickAsync();
+
+        await Expect(Page.Locator("[data-habits-step-2]")).ToHaveCountAsync(0);
     }
 
     // Regression guard for: urgency range filter DB migration (adds SelectedRatioMax + ShowOnlyOverSelectedRatioMax).

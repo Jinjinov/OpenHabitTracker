@@ -1,7 +1,9 @@
-# 1.2.1
+# 1.2.1 - Apr 2, 2026
 
 - added Shift+Tab and multi-line Tab
 - added GET query endpoints with URL filter parameters (Docker/Web API)
+- added habit start date
+- added "under x%" habit interval ratio filter
 - fixed collapse toggle not refreshing sibling pages in Home
 - fixed new note / task / habit with category appearing twice in grouped view
 

@@ -93,7 +93,7 @@ public class HabitComponentTests
         // HabitService.Start() is called before the loop begins (mock returns Task.CompletedTask
         // synchronously), so by the time the click task suspends at WaitForNextTickAsync the call
         // is already recorded. TearDown disposes _ctx which disposes _timer, ending the loop.
-        Task _ = cut.Find("[data-habits-step-16] button").ClickAsync(new MouseEventArgs());
+        Task _ = cut.Find("[data-habits-step-17] button").ClickAsync(new MouseEventArgs());
 
         await _habitService.Received(1).Start(_habit);
     }

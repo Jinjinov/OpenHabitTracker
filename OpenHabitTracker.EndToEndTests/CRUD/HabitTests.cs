@@ -145,13 +145,13 @@ public class HabitTests : BaseTest
         await Page.Locator("input[aria-label='Habit title']").FillAsync("Habit Edited Title");
         await Page.Locator("input[aria-label='Habit title']").BlurAsync();
 
-        // Change repeat count (first number input inside data-habits-step-14)
-        await Page.Locator("[data-habits-step-14] input[type='number']").First.FillAsync("3");
-        await Page.Locator("[data-habits-step-14] input[type='number']").First.BlurAsync();
+        // Change repeat count (first number input inside data-habits-step-15)
+        await Page.Locator("[data-habits-step-15] input[type='number']").First.FillAsync("3");
+        await Page.Locator("[data-habits-step-15] input[type='number']").First.BlurAsync();
 
-        // Change repeat interval (second number input inside data-habits-step-14)
-        await Page.Locator("[data-habits-step-14] input[type='number']").Last.FillAsync("7");
-        await Page.Locator("[data-habits-step-14] input[type='number']").Last.BlurAsync();
+        // Change repeat interval (second number input inside data-habits-step-15)
+        await Page.Locator("[data-habits-step-15] input[type='number']").Last.FillAsync("7");
+        await Page.Locator("[data-habits-step-15] input[type='number']").Last.BlurAsync();
 
         // Change repeat period (default is Day, switch to Week)
         await Page.Locator("select[aria-label='Repeat period']").SelectOptionAsync("Week");
@@ -259,11 +259,11 @@ public class HabitTests : BaseTest
         await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Repeat Settings Habit" }).ClickAsync();
 
         // Change repeat count, interval, and period
-        await Page.Locator("[data-habits-step-14] input[type='number']").First.FillAsync("3");
-        await Page.Locator("[data-habits-step-14] input[type='number']").First.BlurAsync();
+        await Page.Locator("[data-habits-step-15] input[type='number']").First.FillAsync("3");
+        await Page.Locator("[data-habits-step-15] input[type='number']").First.BlurAsync();
 
-        await Page.Locator("[data-habits-step-14] input[type='number']").Last.FillAsync("7");
-        await Page.Locator("[data-habits-step-14] input[type='number']").Last.BlurAsync();
+        await Page.Locator("[data-habits-step-15] input[type='number']").Last.FillAsync("7");
+        await Page.Locator("[data-habits-step-15] input[type='number']").Last.BlurAsync();
 
         await Page.Locator("select[aria-label='Repeat period']").SelectOptionAsync("Week");
 
@@ -276,9 +276,32 @@ public class HabitTests : BaseTest
 
         await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Repeat Settings Habit" }).ClickAsync();
 
-        await Expect(Page.Locator("[data-habits-step-14] input[type='number']").First).ToHaveValueAsync("3");
-        await Expect(Page.Locator("[data-habits-step-14] input[type='number']").Last).ToHaveValueAsync("7");
+        await Expect(Page.Locator("[data-habits-step-15] input[type='number']").First).ToHaveValueAsync("3");
+        await Expect(Page.Locator("[data-habits-step-15] input[type='number']").Last).ToHaveValueAsync("7");
         await Expect(Page.Locator("select[aria-label='Repeat period']")).ToHaveValueAsync("Week");
+    }
+
+    [Test]
+    public async Task HabitStartAt_SetDate_PersistedAfterReload()
+    {
+        await AddItemAsync("StartAt Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "StartAt Habit" }).ClickAsync();
+
+        // data-habits-step-14 is the Start on date picker
+        await Page.Locator("[data-habits-step-14] input[type='date']").FillAsync("2026-01-01");
+        await Page.Locator("[data-habits-step-14] input[type='date']").BlurAsync();
+
+        await Page.Locator("[data-habits-step-11]").ClickAsync(); // Close
+
+        await Page.ReloadAsync();
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
+
+        await NavigateToAsync("[data-main-step-5]");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "StartAt Habit" }).ClickAsync();
+
+        await Expect(Page.Locator("[data-habits-step-14] input[type='date']")).ToHaveValueAsync("2026-01-01");
     }
 
     // Regression guard for: StartAt DB migration (adds DateTime? StartAt to HabitEntity).
