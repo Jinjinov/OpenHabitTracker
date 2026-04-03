@@ -88,16 +88,25 @@ public class HabitTests : BaseTest
     public async Task Calendar_ClickDay_ElapsedTimeUpdates()
     {
         await AddItemAsync("Calendar Habit");
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Calendar Habit" })).ToBeVisibleAsync();
 
         // data-habits-step-6 is the small calendar in the list view
+        ILocator calendar = Page.Locator("[data-habits-step-6]");
+        await Expect(calendar).ToBeVisibleAsync();
+
         // In non-month mode, clicking a cell directly calls AddTimeDone (no Increase button needed)
-        ILocator gridCells = Page.Locator("[data-habits-step-6] button[role='gridcell']");
+        ILocator gridCells = calendar.Locator("button[role='gridcell']");
         await Expect(gridCells.First).ToBeVisibleAsync();
 
-        ILocator todayCell = gridCells
-            .Filter(new LocatorFilterOptions { HasText = $"{DateTime.Today.Day}" })
-            .First;
+        // Initial state: no done time yet
+        await Expect(Page.Locator("[data-habits-step-3]")).ToContainTextAsync("⊘");
+
+        // Today is always the last cell — calendar shows last N days ending at today.
+        // Do NOT use .Filter(HasText = "3") — HasText is a substring match and would match
+        // "23", "30", "31" etc. before reaching "3", clicking the wrong day.
+        ILocator todayCell = gridCells.Last;
         await Expect(todayCell).ToBeVisibleAsync();
+        await Expect(todayCell).ToContainTextAsync($"{DateTime.Today.Day}");
 
         await todayCell.ClickAsync(new LocatorClickOptions { Force = true });
 

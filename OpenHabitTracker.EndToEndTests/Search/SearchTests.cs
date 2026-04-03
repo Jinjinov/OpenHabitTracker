@@ -131,6 +131,7 @@ public class SearchTests : BaseTest
         int totalCount = await Page.Locator("[data-habits-step-2]").CountAsync();
 
         await Page.Locator("[data-search-step-13] label[for='Priority.None']").ClickAsync();
+        await Expect(Page.Locator("[data-search-step-13] input[id='Priority.None']")).Not.ToBeCheckedAsync();
 
         int filteredCount = await Page.Locator("[data-habits-step-2]").CountAsync();
         Assert.That(filteredCount, Is.LessThanOrEqualTo(totalCount));
@@ -165,6 +166,7 @@ public class SearchTests : BaseTest
         await Page.Locator("[data-search-step-22] select").SelectOptionAsync(new SelectOptionValue { Index = 2 });
 
         ILocator habits = Page.Locator("[data-habits-step-2]");
+        await Expect(habits.Nth(1)).ToBeVisibleAsync();
         int count = await habits.CountAsync();
         Assert.That(count, Is.GreaterThan(1));
 

@@ -135,6 +135,7 @@
     int _activeDayIndex = 0;
     ElementReference[] _dayCellRefs = Array.Empty<ElementReference>();
     ElementReference _gridRef;
+    bool _scrollKeysPrevented = false;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -190,8 +191,15 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        // Do not use firstRender here. OnParametersSetAsync awaits LoadTimesDone, so Blazor renders
+        // once before TimesDoneByDay is set — the grid div is absent and _gridRef is unset on that
+        // first render. PreventScrollKeys must be deferred until _gridRef.Id is non-null (i.e. the
+        // grid is actually in the DOM), which happens on the subsequent render after data loads.
+        if (!_scrollKeysPrevented && _gridRef.Id is not null)
+        {
+            _scrollKeysPrevented = true;
             await JsInterop.PreventScrollKeys(_gridRef);
+        }
     }
 
     DateTime? selectedDateTime;
