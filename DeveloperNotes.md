@@ -362,9 +362,9 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
         sudo apt update
         sudo apt install flatpak-builder
 
-git rev-parse 1.1.5
+git rev-parse 1.2.1
 
-git ls-remote https://github.com/Jinjinov/OpenHabitTracker.git refs/tags/1.1.5
+git ls-remote https://github.com/Jinjinov/OpenHabitTracker.git refs/tags/1.2.1
 
     flatpak-builder build-dir --user --install-deps-from=flathub --download-only net.openhabittracker.OpenHabitTracker.yaml --force-clean
 
