@@ -1,3 +1,5 @@
+- update "© 2026" if necessary
+
 - increase version number
 - increase ApplicationVersion
 
