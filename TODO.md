@@ -111,7 +111,9 @@ FIX — ResizeObserver:
     2. IAsyncDisposable cleanup — if the user navigates away while a resize callback is in-flight,
        the component is disposed but invokeMethodAsync fires anyway → ObjectDisposedException on
        the .NET side and a JS error. Requires DisposeAsync to disconnect the observer and dispose
-       the DotNetObjectReference. Also wrap invokeMethodAsync in JS try-catch to swallow the race.
+       the DotNetObjectReference. The try-catch in JS must use .catch(() => {}) not a synchronous
+       try-catch block — invokeMethodAsync returns a Promise, so a sync catch doesn't catch async
+       rejections and the ObjectDisposedException still surfaces as an unhandled promise rejection.
 
     3. ResizeObserver availability guard — undefined on iOS < 13.4 and old Android WebViews.
        Without the guard the JS call throws. With it, columnWidth stays 0 and habits don't render
@@ -130,9 +132,8 @@ FIX — ResizeObserver:
                     const w = Math.round(entry.contentRect.width);
                     if (w !== lastWidth) {                      // 1. width-change guard
                         lastWidth = w;
-                        try {                                   // 2. swallow navigation race
-                            dotnetRef.invokeMethodAsync('OnWidthChanged', w);
-                        } catch (e) { }
+                        dotnetRef.invokeMethodAsync('OnWidthChanged', w)  // 2. swallow navigation race
+                            .catch(() => {});                   //    must be .catch, not try-catch (Promise)
                     }
                 }
             });
@@ -149,13 +150,44 @@ FIX — ResizeObserver:
             }
         }
 
-    In Habits.razor:
-        - Remove the columnWidth measurement and StateHasChanged() from OnAfterRenderAsync
-        - On firstRender, call JsInterop.ObserveElementWidth(columnRef, DotNetObjectReference.Create(this))
+    Changes required (verified against current code):
+
+    jsInterop.js — add observeElementWidth and unobserveElementWidth (see snippet above)
+
+    IJsInterop.cs — add two method signatures:
+        ValueTask ObserveElementWidth(ElementReference element, DotNetObjectReference<Habits> dotnetRef);
+        ValueTask UnobserveElementWidth(ElementReference element);
+        (or use object for dotnetRef to keep the interface generic across pages)
+
+    JsInterop.cs — add implementations matching the existing lazy-module pattern
+
+    Habits.razor:
+        - Add @inject IPreRenderService PreRenderService  (consistent with RuntimeClientData pattern)
+        - Add private DotNetObjectReference<Habits>? _dotNetRef;  (must store to dispose in DisposeAsync)
+        - In OnAfterRenderAsync: replace the GetElementDimensions + StateHasChanged block with:
+            if (firstRender && !PreRenderService.IsPreRendering)
+            {
+                _dotNetRef = DotNetObjectReference.Create(this);
+                await JsInterop.ObserveElementWidth(columnRef, _dotNetRef);
+            }
         - Add [JSInvokable] public void OnWidthChanged(int width) { columnWidth = width; StateHasChanged(); }
-        - Implement IAsyncDisposable: call JsInterop.UnobserveElementWidth(columnRef) in DisposeAsync
+        - Implement IAsyncDisposable:
+            public async ValueTask DisposeAsync()
+            {
+                await JsInterop.UnobserveElementWidth(columnRef);
+                _dotNetRef?.Dispose();
+            }
         - Remove the dynamicComponentVisibilityChanged tracking — ResizeObserver fires on sidebar
           toggle automatically because the column reflows when the sidebar appears/disappears
+
+    Notes.razor — no changes needed: confirmed no columnRef, no columnWidth, no CalendarComponent
+    Tasks.razor — no changes needed: confirmed no columnRef, no columnWidth, no CalendarComponent
+
+    Home.razor embeds all three pages simultaneously (IsEmbedded=true). Each component instance
+    has its own columnRef DOM element → own ResizeObserver entry in the Map → no conflict.
+    The _resizeObservers.has(element) guard prevents double-observe if OnAfterRenderAsync fires
+    more than once with firstRender=true (can happen in Blazor Server SSR with prerendering).
+    The IPreRenderService guard is the additional defense already used in RuntimeClientData.
 
     Platform safety summary:
         WASM                      — safe, invokeMethodAsync is in-process, re-renders cheap
