@@ -119,13 +119,25 @@ FIX — ResizeObserver:
        Without the guard the JS call throws. With it, columnWidth stays 0 and habits don't render
        on those devices — same behavior as today, not worse.
 
+    RISK — ElementReference validity during DisposeAsync:
+        When DisposeAsync calls UnobserveElementWidth(columnRef), Blazor must resolve the
+        ElementReference struct to the actual JS DOM element to do the Map lookup. If the DOM
+        element has already been removed by the time DisposeAsync runs, Blazor cannot resolve it
+        and the Map lookup returns undefined — the ResizeObserver is never disconnected and the
+        DotNetObjectReference leaks. In practice Blazor runs DisposeAsync before removing the DOM,
+        so this is likely safe — but the exact ordering is not guaranteed by the framework.
+
+        Safe alternative: key the Map by a string ID instead of the element object. C# generates
+        a GUID at observe-time, stores it as a field, passes it to both observe and unobserve.
+        No DOM resolution needed in unobserve — works regardless of element lifetime.
+
     Add to jsInterop.js:
 
         const _resizeObservers = new Map();
 
-        export function observeElementWidth(element, dotnetRef) {
+        export function observeElementWidth(id, element, dotnetRef) {
             if (typeof ResizeObserver === 'undefined') return;  // 3. old iOS/Android guard
-            if (_resizeObservers.has(element)) return;          // guard against double-observe
+            if (_resizeObservers.has(id)) return;               // guard against double-observe
             let lastWidth = 0;
             const ro = new ResizeObserver(entries => {
                 for (let entry of entries) {
@@ -138,15 +150,15 @@ FIX — ResizeObserver:
                 }
             });
             ro.observe(element);
-            _resizeObservers.set(element, { ro, dotnetRef });
+            _resizeObservers.set(id, { ro, dotnetRef });
         }
 
-        export function unobserveElementWidth(element) {
-            const entry = _resizeObservers.get(element);
+        export function unobserveElementWidth(id) {             // string key — no DOM resolution needed
+            const entry = _resizeObservers.get(id);
             if (entry) {
                 entry.ro.disconnect();
                 entry.dotnetRef.dispose();                      // 2. release .NET GC reference
-                _resizeObservers.delete(element);
+                _resizeObservers.delete(id);
             }
         }
 
@@ -155,8 +167,8 @@ FIX — ResizeObserver:
     jsInterop.js — add observeElementWidth and unobserveElementWidth (see snippet above)
 
     IJsInterop.cs — add two method signatures:
-        ValueTask ObserveElementWidth(ElementReference element, DotNetObjectReference<Habits> dotnetRef);
-        ValueTask UnobserveElementWidth(ElementReference element);
+        ValueTask ObserveElementWidth(string id, ElementReference element, DotNetObjectReference<Habits> dotnetRef);
+        ValueTask UnobserveElementWidth(string id);
         (or use object for dotnetRef to keep the interface generic across pages)
 
     JsInterop.cs — add implementations matching the existing lazy-module pattern
@@ -164,17 +176,18 @@ FIX — ResizeObserver:
     Habits.razor:
         - Add @inject IPreRenderService PreRenderService  (consistent with RuntimeClientData pattern)
         - Add private DotNetObjectReference<Habits>? _dotNetRef;  (must store to dispose in DisposeAsync)
+        - Add private readonly string _observerId = Guid.NewGuid().ToString();  (stable key for Map)
         - In OnAfterRenderAsync: replace the GetElementDimensions + StateHasChanged block with:
             if (firstRender && !PreRenderService.IsPreRendering)
             {
                 _dotNetRef = DotNetObjectReference.Create(this);
-                await JsInterop.ObserveElementWidth(columnRef, _dotNetRef);
+                await JsInterop.ObserveElementWidth(_observerId, columnRef, _dotNetRef);
             }
         - Add [JSInvokable] public void OnWidthChanged(int width) { columnWidth = width; StateHasChanged(); }
         - Implement IAsyncDisposable:
             public async ValueTask DisposeAsync()
             {
-                await JsInterop.UnobserveElementWidth(columnRef);
+                await JsInterop.UnobserveElementWidth(_observerId);  // string key, no DOM needed
                 _dotNetRef?.Dispose();
             }
         - Remove the dynamicComponentVisibilityChanged tracking — ResizeObserver fires on sidebar
