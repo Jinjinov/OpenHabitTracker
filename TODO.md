@@ -97,32 +97,72 @@ WHY the TODO alternatives don't work:
 FIX — ResizeObserver:
     The browser ResizeObserver API fires whenever an observed element's size changes:
     on first observation, on window resize, on zoom, on sidebar open/close.
+
+    No feedback loop risk: OnWidthChanged triggers a re-render which can change the column's
+    height (more/fewer habit rows) but never its width — width is determined by the Bootstrap
+    parent grid, not by content inside. ResizeObserver will not fire on its own callback's side effects.
+
+    Three required safety measures (without these: crash on navigation-during-resize, flood on Blazor Server, crash on old iOS):
+
+    1. Debounce + width-change guard — ResizeObserver fires up to 60x/sec during window drag-resize.
+       On Blazor Server each invokeMethodAsync goes over SignalR, flooding the connection.
+       Only invoke .NET if the width actually changed (columns snap to discrete pixel widths):
+
+    2. IAsyncDisposable cleanup — if the user navigates away while a resize callback is in-flight,
+       the component is disposed but invokeMethodAsync fires anyway → ObjectDisposedException on
+       the .NET side and a JS error. Requires DisposeAsync to disconnect the observer and dispose
+       the DotNetObjectReference. Also wrap invokeMethodAsync in JS try-catch to swallow the race.
+
+    3. ResizeObserver availability guard — undefined on iOS < 13.4 and old Android WebViews.
+       Without the guard the JS call throws. With it, columnWidth stays 0 and habits don't render
+       on those devices — same behavior as today, not worse.
+
     Add to jsInterop.js:
 
         const _resizeObservers = new Map();
 
         export function observeElementWidth(element, dotnetRef) {
+            if (typeof ResizeObserver === 'undefined') return;  // 3. old iOS/Android guard
+            if (_resizeObservers.has(element)) return;          // guard against double-observe
+            let lastWidth = 0;
             const ro = new ResizeObserver(entries => {
                 for (let entry of entries) {
-                    dotnetRef.invokeMethodAsync('OnWidthChanged', Math.round(entry.contentRect.width));
+                    const w = Math.round(entry.contentRect.width);
+                    if (w !== lastWidth) {                      // 1. width-change guard
+                        lastWidth = w;
+                        try {                                   // 2. swallow navigation race
+                            dotnetRef.invokeMethodAsync('OnWidthChanged', w);
+                        } catch (e) { }
+                    }
                 }
             });
             ro.observe(element);
-            _resizeObservers.set(element, ro);
+            _resizeObservers.set(element, { ro, dotnetRef });
         }
 
         export function unobserveElementWidth(element) {
-            const ro = _resizeObservers.get(element);
-            if (ro) { ro.disconnect(); _resizeObservers.delete(element); }
+            const entry = _resizeObservers.get(element);
+            if (entry) {
+                entry.ro.disconnect();
+                entry.dotnetRef.dispose();                      // 2. release .NET GC reference
+                _resizeObservers.delete(element);
+            }
         }
 
     In Habits.razor:
         - Remove the columnWidth measurement and StateHasChanged() from OnAfterRenderAsync
         - On firstRender, call JsInterop.ObserveElementWidth(columnRef, DotNetObjectReference.Create(this))
         - Add [JSInvokable] public void OnWidthChanged(int width) { columnWidth = width; StateHasChanged(); }
-        - Call JsInterop.UnobserveElementWidth(columnRef) in DisposeAsync (implement IAsyncDisposable)
+        - Implement IAsyncDisposable: call JsInterop.UnobserveElementWidth(columnRef) in DisposeAsync
         - Remove the dynamicComponentVisibilityChanged tracking — ResizeObserver fires on sidebar
           toggle automatically because the column reflows when the sidebar appears/disappears
+
+    Platform safety summary:
+        WASM                      — safe, invokeMethodAsync is in-process, re-renders cheap
+        Blazor Server             — safe with width-change guard, SignalR flood avoided
+        MAUI iOS                  — safe for iOS >= 13.4; guard handles older devices
+        MAUI Android              — safe, Chrome WebView supports it since Android 5.0
+        WinForms / WPF / Photino  — safe, WebView2 is Chromium; Photino Linux uses WebKit2GTK >= 2019
 
     The StateHasChanged() call stays in OnWidthChanged — it is still needed because the callback
     arrives from JS outside the Blazor render cycle. But it is now driven by real size changes,
