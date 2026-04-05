@@ -83,8 +83,8 @@ public class ItemService(ClientState clientState) : IItemService
             await _clientState.DataAccess.UpdateItem(itemEntity);
         }
 
-        // TODO:: when all habit items are done, habit is done
-        // TODO:: when all task items are done, task is done
+        // TODO:: when all habit items are done, habit is done automatically ??? pros & cons ?
+        // TODO:: when all task items are done, task is done automatically ??? pros & cons ?
     }
 
     public async Task DeleteItem(ItemsModel? items, ItemModel item)
