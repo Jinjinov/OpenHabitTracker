@@ -174,46 +174,80 @@ FIX — ResizeObserver:
     JsInterop.cs — add implementations matching the existing lazy-module pattern
 
     Habits.razor:
-        - Add @inject IPreRenderService PreRenderService  (consistent with RuntimeClientData pattern)
+        - Add @implements IAsyncDisposable at the top of the file (required for Blazor to call
+          DisposeAsync on component teardown — without this directive the method exists but is
+          never invoked by the framework)
+        - Do NOT add @inject IPreRenderService — OnAfterRenderAsync is never called during SSR
+          prerendering (Microsoft docs: "OnAfterRender and OnAfterRenderAsync aren't called during
+          the prerendering process"). The guard would be redundant. RuntimeClientData uses it
+          because OnInitializedAsync IS called during prerendering — a different lifecycle method.
         - Add private DotNetObjectReference<Habits>? _dotNetRef;  (must store to dispose in DisposeAsync)
         - Add private readonly string _observerId = Guid.NewGuid().ToString();  (stable key for Map)
         - In OnAfterRenderAsync: replace the GetElementDimensions + StateHasChanged block with:
-            if (firstRender && !PreRenderService.IsPreRendering)
+            if (firstRender)
             {
                 _dotNetRef = DotNetObjectReference.Create(this);
                 await JsInterop.ObserveElementWidth(_observerId, columnRef, _dotNetRef);
             }
-        - Add [JSInvokable] public void OnWidthChanged(int width) { columnWidth = width; StateHasChanged(); }
-        - Implement IAsyncDisposable:
+        - Add [JSInvokable] public async Task OnWidthChanged(int width):
+            [JSInvokable]
+            public async Task OnWidthChanged(int width)
+            {
+                columnWidth = width;
+                await InvokeAsync(StateHasChanged);
+            }
+          NOT void — void is wrong for two reasons:
+          (a) On Blazor Server, [JSInvokable] callbacks arrive via SignalR, potentially off the
+              component's synchronization context. InvokeAsync(StateHasChanged) is the safe pattern;
+              calling StateHasChanged() directly can race.
+          (b) void means the JS Promise returned by invokeMethodAsync resolves immediately without
+              waiting for the C# work to complete — errors inside would become unhandled rejections
+              that the .catch(() => {}) in observeElementWidth cannot reliably suppress.
+              Returning Task lets Blazor marshal it as a Promise so the .catch is effective.
+        - Implement IAsyncDisposable — dispose the DotNetObjectReference BEFORE the JS call so it
+          always runs even if the JS call throws (e.g. JSDisconnectedException on circuit teardown):
             public async ValueTask DisposeAsync()
             {
-                await JsInterop.UnobserveElementWidth(_observerId);  // string key, no DOM needed
                 _dotNetRef?.Dispose();
+                try { await JsInterop.UnobserveElementWidth(_observerId); } catch { }
             }
+          The try-catch is needed because JsInterop.UnobserveElementWidth can throw if the JS
+          runtime is already gone (browser tab closed, Blazor Server circuit disconnected).
+          During normal in-app navigation JsInterop is alive (it is scoped to the circuit/session,
+          not the component), so this only matters at app teardown — but at that point the JS
+          context is gone anyway and the cleanup doesn't matter. The try-catch makes it safe and
+          silent in all cases.
+          NOTE: the JS unobserveElementWidth also calls dotnetRef.dispose() — this double-dispose
+          is safe because DotNetObjectReference.Dispose() is idempotent.
         - Remove the dynamicComponentVisibilityChanged tracking — ResizeObserver fires on sidebar
-          toggle automatically because the column reflows when the sidebar appears/disappears
+          toggle automatically because the column reflows when the sidebar appears/disappears.
+          This means removing:
+            • the _dynamicComponentTypeName field declaration
+            • the bool dynamicComponentVisibilityChanged local variable
+            • the _dynamicComponentTypeName = DynamicComponentType?.Name assignment
+            • the || dynamicComponentVisibilityChanged condition in the if statement
 
     Notes.razor — no changes needed: confirmed no columnRef, no columnWidth, no CalendarComponent
     Tasks.razor — no changes needed: confirmed no columnRef, no columnWidth, no CalendarComponent
 
     Home.razor embeds all three pages simultaneously (IsEmbedded=true). Each component instance
     has its own columnRef DOM element → own ResizeObserver entry in the Map → no conflict.
-    The _resizeObservers.has(element) guard prevents double-observe if OnAfterRenderAsync fires
+    The _resizeObservers.has(id) guard prevents double-observe if OnAfterRenderAsync fires
     more than once with firstRender=true (can happen in Blazor Server SSR with prerendering).
-    The IPreRenderService guard is the additional defense already used in RuntimeClientData.
 
     Platform safety summary:
         WASM                      — safe, invokeMethodAsync is in-process, re-renders cheap
-        Blazor Server             — safe with width-change guard, SignalR flood avoided
+        Blazor Server             — safe with width-change guard (SignalR flood avoided) and
+                                    InvokeAsync(StateHasChanged) (synchronization context safe)
         MAUI iOS                  — safe for iOS >= 13.4; guard handles older devices
         MAUI Android              — safe, Chrome WebView supports it since Android 5.0
         WinForms / WPF / Photino  — safe, WebView2 is Chromium; Photino Linux uses WebKit2GTK >= 2019
 
-    The StateHasChanged() call stays in OnWidthChanged — it is still needed because the callback
-    arrives from JS outside the Blazor render cycle. But it is now driven by real size changes,
-    not a one-shot post-render measurement. The columnWidth != 0 guard on line 108 also stays
-    and becomes semantically correct: it means "no measurement received yet" rather than
-    "first render hasn't completed the JS round-trip".
+    The InvokeAsync(StateHasChanged) call stays in OnWidthChanged — it is still needed because
+    the callback arrives from JS outside the Blazor render cycle. But it is now driven by real
+    size changes, not a one-shot post-render measurement. The columnWidth != 0 guard on line 108
+    also stays and becomes semantically correct: it means "no measurement received yet" rather
+    than "first render hasn't completed the JS round-trip".
 
 ---------------------------------------------------------------------------------------------------
 
