@@ -52,6 +52,78 @@ and TimesDone are actually lazy loaded, there will be a bug:
 
 ---------------------------------------------------------------------------------------------------
 
+StateHasChanged() in Habits.razor — double-render and missing resize handling:
+
+WHY the StateHasChanged() exists (OnAfterRenderAsync, firstRender || dynamicComponentVisibilityChanged):
+    Blazor renders the component → DOM appears in browser → JS can now measure the element.
+    JsInterop.GetElementDimensions(columnRef) runs and sets columnWidth.
+    But the already-rendered template skipped the habits list because `columnWidth == 0`
+    (the guard `@if (HabitService.Habits is not null && columnWidth != 0)` on line 108).
+    StateHasChanged() forces a second render with the real columnWidth so CalendarComponent
+    receives a non-zero ColumnWidth and computes `daysInRow = ColumnWidth / 50` correctly.
+    The double-render is structurally unavoidable with this approach — it is the honest
+    consequence of needing a browser measurement before the first meaningful render.
+    The StateHasChanged() is NOT a hack; it is the correct response to that constraint.
+
+THE REAL GAP — window resize is not handled:
+    columnWidth is measured once on firstRender and again when the sidebar opens/closes
+    (tracked via dynamicComponentVisibilityChanged from the DynamicComponentType cascade).
+    Window resize, browser zoom, and mobile orientation changes are NOT handled.
+    After resize, columnWidth stays stale — the calendar shows the wrong number of day cells,
+    overflowing or leaving dead space. This is a real bug, most visible on desktop and MAUI/WPF/WinForms.
+    Main.razor also only calls GetWindowDimensions() on firstRender — _windowDimensions is equally stale.
+
+WHY the TODO alternatives don't work:
+    @media for each day:
+        CSS media queries can show/hide elements but cannot change how many <button> elements
+        Blazor renders. You would need to pre-render all possible daysInRow counts and hide
+        the extras — wasteful DOM and still fragile.
+    Get <body> dimensions once at startup, calculate column width from that:
+        Main.razor already does GetWindowDimensions() on firstRender.
+        Column width != window width: you would need to subtract sidebar (350px when open),
+        Bootstrap column gaps, and HorizontalMargin padding. That math breaks every time layout changes.
+    Don't render habits if columnWidth == 0:
+        Already done — that is exactly what the guard on line 108 does.
+        The guard is necessary and correct; it does not remove the need for StateHasChanged().
+
+FIX — ResizeObserver:
+    The browser ResizeObserver API fires whenever an observed element's size changes:
+    on first observation, on window resize, on zoom, on sidebar open/close.
+    Add to jsInterop.js:
+
+        const _resizeObservers = new Map();
+
+        export function observeElementWidth(element, dotnetRef) {
+            const ro = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    dotnetRef.invokeMethodAsync('OnWidthChanged', Math.round(entry.contentRect.width));
+                }
+            });
+            ro.observe(element);
+            _resizeObservers.set(element, ro);
+        }
+
+        export function unobserveElementWidth(element) {
+            const ro = _resizeObservers.get(element);
+            if (ro) { ro.disconnect(); _resizeObservers.delete(element); }
+        }
+
+    In Habits.razor:
+        - Remove the columnWidth measurement and StateHasChanged() from OnAfterRenderAsync
+        - On firstRender, call JsInterop.ObserveElementWidth(columnRef, DotNetObjectReference.Create(this))
+        - Add [JSInvokable] public void OnWidthChanged(int width) { columnWidth = width; StateHasChanged(); }
+        - Call JsInterop.UnobserveElementWidth(columnRef) in DisposeAsync (implement IAsyncDisposable)
+        - Remove the dynamicComponentVisibilityChanged tracking — ResizeObserver fires on sidebar
+          toggle automatically because the column reflows when the sidebar appears/disappears
+
+    The StateHasChanged() call stays in OnWidthChanged — it is still needed because the callback
+    arrives from JS outside the Blazor render cycle. But it is now driven by real size changes,
+    not a one-shot post-render measurement. The columnWidth != 0 guard on line 108 also stays
+    and becomes semantically correct: it means "no measurement received yet" rather than
+    "first render hasn't completed the JS round-trip".
+
+---------------------------------------------------------------------------------------------------
+
 1.
 QueryParameters:
     `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
