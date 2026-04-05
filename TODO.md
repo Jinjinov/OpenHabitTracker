@@ -82,6 +82,14 @@ WHY the TODO alternatives don't work:
         Main.razor already does GetWindowDimensions() on firstRender.
         Column width != window width: you would need to subtract sidebar (350px when open),
         Bootstrap column gaps, and HorizontalMargin padding. That math breaks every time layout changes.
+    Move the measurement up the hierarchy, before Habits renders for the first time:
+        Main.razor already blocks child rendering until _windowDimensions is set (the
+        `@if (_windowDimensions is not null)` gate). If column width were measured there too,
+        Habits.razor would have a non-zero columnWidth on its very first render — no double-render.
+        The problem: columnRef lives inside Habits.razor, so Main.razor cannot hold a reference to it.
+        You would have to measure the <main> container instead and cascade that width down — close
+        but not the same as the column's clientWidth, which depends on sidebar state, Bootstrap
+        column gaps, and HorizontalMargin padding. That approximation breaks every time layout changes.
     Don't render habits if columnWidth == 0:
         Already done — that is exactly what the guard on line 108 does.
         The guard is necessary and correct; it does not remove the need for StateHasChanged().
