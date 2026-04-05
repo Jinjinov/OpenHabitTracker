@@ -197,9 +197,11 @@ FIX — ResizeObserver:
                 await InvokeAsync(StateHasChanged);
             }
           NOT void — void is wrong for two reasons:
-          (a) On Blazor Server, [JSInvokable] callbacks arrive via SignalR, potentially off the
-              component's synchronization context. InvokeAsync(StateHasChanged) is the safe pattern;
-              calling StateHasChanged() directly can race.
+          (a) InvokeAsync(StateHasChanged) is the correct pattern for callbacks that arrive from
+              outside the Blazor render cycle (timers, events, JS callbacks), as recommended by
+              Microsoft docs. Blazor Server does route [JSInvokable] calls through the circuit's
+              synchronization context, so StateHasChanged() directly is not strictly unsafe there —
+              but InvokeAsync is the defensive, idiomatic pattern regardless of host.
           (b) void means the JS Promise returned by invokeMethodAsync resolves immediately without
               waiting for the C# work to complete — errors inside would become unhandled rejections
               that the .catch(() => {}) in observeElementWidth cannot reliably suppress.
@@ -218,7 +220,9 @@ FIX — ResizeObserver:
           context is gone anyway and the cleanup doesn't matter. The try-catch makes it safe and
           silent in all cases.
           NOTE: the JS unobserveElementWidth also calls dotnetRef.dispose() — this double-dispose
-          is safe because DotNetObjectReference.Dispose() is idempotent.
+          is safe because DotNetObjectReference.Dispose() is idempotent (implementation uses
+          ConcurrentDictionary.TryRemove which silently no-ops on a missing key). Not formally
+          guaranteed by the docs — an implementation detail, but stable in practice.
         - Remove the dynamicComponentVisibilityChanged tracking — ResizeObserver fires on sidebar
           toggle automatically because the column reflows when the sidebar appears/disappears.
           This means removing:
@@ -248,6 +252,22 @@ FIX — ResizeObserver:
     size changes, not a one-shot post-render measurement. The columnWidth != 0 guard on line 108
     also stays and becomes semantically correct: it means "no measurement received yet" rather
     than "first render hasn't completed the JS round-trip".
+
+    DECISION REQUIRED — contentRect.width vs clientWidth:
+        The existing getElementDimensions uses element.clientWidth.
+        The new observeElementWidth uses entry.contentRect.width (then Math.round()).
+        These differ when the column has horizontal padding:
+            clientWidth      = content width + padding  (always integer)
+            contentRect.width = content width only       (can be fractional)
+        The column element is <div class="col child-column px-0 px-md-{HorizontalMargin}">.
+        On screens >= md, Bootstrap px-{n} adds padding. With HorizontalMargin=3 (px-3),
+        that is 16px per side = 32px total.
+        CalendarComponent computes daysInRow = ColumnWidth / 50. Example with 800px column:
+            clientWidth      → 800 → 16 days
+            contentRect.width → 768 → 15 days  (800 - 32px padding)
+        contentRect.width is arguably more correct — it is the width available to the calendar
+        buttons (padding is not usable space). But it is a behavioral change from today.
+        Decide which to use before implementing, then be consistent in the JS snippet.
 
 ---------------------------------------------------------------------------------------------------
 
