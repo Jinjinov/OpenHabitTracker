@@ -15,3 +15,6 @@ https://dev.to/jinjinov/openhabittracker-vs-habitica-loop-habit-tracker-streaks-
 
 Mar 29, 2026
 https://dev.to/jinjinov/how-i-use-the-same-blazor-code-for-wasm-windows-linux-macos-ios-android-without-a-single-if-2bjk
+
+Apr 4, 2026
+https://dev.to/jinjinov/how-i-release-a-blazor-app-to-8-distribution-channels-550f
