@@ -253,6 +253,25 @@ FIX — ResizeObserver:
     also stays and becomes semantically correct: it means "no measurement received yet" rather
     than "first render hasn't completed the JS round-trip".
 
+    KNOWN LIMITATION — Blazor Server circuit reconnection leaks a stale Map entry:
+        If a Blazor Server circuit drops abruptly (network interruption), Blazor may not call
+        DisposeAsync on the old component before the circuit dies. The old _resizeObservers entry
+        is never cleaned up — the old ResizeObserver keeps firing, invokeMethodAsync fails (old
+        circuit is gone), and .catch(() => {}) silently swallows each failure. The stale entry
+        sits in the Map until page reload.
+        Severity: low. The primary deploy target is WASM. On Blazor Server the leak is bounded
+        (one entry per dropped circuit, harmless callbacks, cleared on page reload).
+
+    BEHAVIORAL NOTE — initial width delivery is now asynchronous:
+        Old code: GetElementDimensions is awaited inside OnAfterRenderAsync → columnWidth is set
+        → StateHasChanged() forces re-render, all within one OnAfterRenderAsync invocation.
+        New code: ObserveElementWidth registers the observer, OnAfterRenderAsync returns with
+        columnWidth still 0, then ResizeObserver fires asynchronously in a later task →
+        OnWidthChanged → InvokeAsync(StateHasChanged) → re-render.
+        The double-render still happens but via a different mechanism with an additional async hop.
+        In practice the ResizeObserver fires fast enough that users won't see a flash of missing
+        content. But it is a behavioral difference from today worth being aware of.
+
     DECISION REQUIRED — contentRect.width vs clientWidth:
         The existing getElementDimensions uses element.clientWidth.
         The new observeElementWidth uses entry.contentRect.width (then Math.round()).
