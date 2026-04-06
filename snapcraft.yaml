@@ -14,9 +14,9 @@ description: |
   - Privacy Focused: All user data is stored locally on your device
   - Available on Windows, Linux, Android, iOS, macOS, and as a web app
   - Localized to English, German, Spanish, Slovenian, French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Czech, Slovak, Croatian, Serbian
-  
+
   Key Features:
-  
+
   - Markdown support for notes
   - Use categories and priorities to organize your notes, tasks, and habits
   - Advanced Search, Filter, and Sort
@@ -36,19 +36,26 @@ parts:
     # dotnet-self-contained-runtime-identifier: linux-x64
     dotnet-version: "9.0"
     dotnet-configuration: "Release"
-    dotnet-self-contained: true
     dotnet-build-framework: "net9.0"
     dotnet-verbosity: "normal"
-    override-build: |
-     dotnet publish OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj -c Release -f net9.0 -r linux-x64 -p:PublishSingleFile=true -p:SelfContained=true -o $SNAPCRAFT_PART_INSTALL
-     chmod 0755 $SNAPCRAFT_PART_INSTALL/OpenHT
+    dotnet-project: OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
+    dotnet-properties:
+      PublishSingleFile: "true"
     # build-packages:
     #   - dotnet-sdk-9.0
+    override-build: |
+      craftctl default
+      # Replace content of .desktop file
+      cp net.openhabittracker.OpenHabitTracker.desktop $CRAFT_PART_INSTALL
+      sed -i "s|Exec=OpenHT|Exec=openhabittracker|g" $CRAFT_PART_INSTALL/net.openhabittracker.OpenHabitTracker.desktop
+      sed -i "s|Icon=net.openhabittracker.OpenHabitTracker|Icon=$SNAP/meta/gui/icon.svg|g" \
+        $CRAFT_PART_INSTALL/net.openhabittracker.OpenHabitTracker.desktop
 
 apps:
   openhabittracker:
-    extensions: [gnome]
+    extensions: [ gnome, dotnet9 ]
     command: OpenHT
+    desktop: net.openhabittracker.OpenHabitTracker.desktop
     plugs:
       - hardware-observe
       - home
