@@ -283,7 +283,9 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
     https://snapcraft.io/docs/dotnet-plugin
 
     https://snapcraft.io/docs/gnome-extension
-    extensions: [gnome]
+    extensions: [ gnome, dotnet9 ]
+
+    https://documentation.ubuntu.com/snapcraft/latest/reference/extensions/dotnet-extensions/
 
     https://snapcraft.io/docs/snapcraft-yaml-schema
 
@@ -299,8 +301,10 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
     newgrp lxd
 
+    dotnet9 extension is experimental, SNAPCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS enables it
+
     To build snapcraft.yaml run:
-        snapcraft pack --debug
+        SNAPCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS=1 snapcraft pack --debug
 
             on pack error:
             
