@@ -80,7 +80,7 @@ services:
   openhabittracker:
     image: jinjinov/openhabittracker:latest
     ports:
-      - "5000:8080"
+      - "5050:8080"
     environment:
       - AppSettings__UserName=${APPSETTINGS_USERNAME}
       - AppSettings__Email=${APPSETTINGS_EMAIL}
@@ -90,10 +90,10 @@ services:
       - ./.OpenHabitTracker:/app/.OpenHabitTracker
 ```
 
-After you login at http://localhost:5000/login you can use the same browser tab to access:
-- logs: http://localhost:5000/watchdog
-- OpenAPI json: http://localhost:5000/openapi/v1.json
-- OpenAPI UI: http://localhost:5000/scalar/v1
+After you login at http://localhost:5050/login you can use the same browser tab to access:
+- logs: http://localhost:5050/watchdog
+- OpenAPI json: http://localhost:5050/openapi/v1.json
+- OpenAPI UI: http://localhost:5050/scalar/v1
 
 ## Sync desktop or mobile app with Docker
 
@@ -106,12 +106,12 @@ Choose the platform where you want to host the OpenHabitTracker server:
 1. Open Docker Desktop and make sure it shows **Engine running**
 2. Open a terminal in the folder containing your `.env` and `docker-compose.yml`
 3. Run: `docker-compose up -d`
-4. Open `http://localhost:5000/login` in a browser to confirm the server is running
+4. Open `http://localhost:5050/login` in a browser to confirm the server is running
 5. Find this machine's IP address:
    - Windows: `ipconfig`
    - Mac / Linux: `ifconfig`
 
-**Address:** `http://<this-machine-ip>:5000`
+**Address:** `http://<this-machine-ip>:5050`
 
 #### Linux server
 
@@ -121,7 +121,7 @@ Choose the platform where you want to host the OpenHabitTracker server:
 4. Run: `docker-compose up -d`
 5. Find the server IP: `ifconfig`
 
-**Address:** `http://<server-ip>:5000`
+**Address:** `http://<server-ip>:5050`
 
 #### Synology NAS
 
@@ -132,7 +132,7 @@ Choose the platform where you want to host the OpenHabitTracker server:
 5. Click **Next** → **Done** — the container starts automatically
 6. Find your NAS IP: **Control Panel** → **Network** → **Network Interface**
 
-**Address:** `http://<nas-ip>:5000`
+**Address:** `http://<nas-ip>:5050`
 
 ### Enable sync in OpenHabitTracker
 
