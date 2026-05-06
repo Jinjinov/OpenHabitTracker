@@ -77,6 +77,8 @@ services:
       - ./.OpenHabitTracker:/app/.OpenHabitTracker
 ```
 
+The default port is `5050`. You can change it to `80` to avoid typing the port in the address, or to any other free port if `5050` is already in use - update the port in `docker-compose.yml` accordingly.
+
 After you login at http://localhost:5050/login you can use the same browser tab to access:
 - logs: http://localhost:5050/watchdog
 - OpenAPI json: http://localhost:5050/openapi/v1.json
@@ -100,8 +102,6 @@ Choose the platform where you want to host the OpenHabitTracker server:
 
 <br>
 
-**Address:** `http://<this-machine-ip>:5050`
-
 #### Linux server
 
 1. SSH into your server
@@ -111,8 +111,6 @@ Choose the platform where you want to host the OpenHabitTracker server:
 5. Find the server IP: `ifconfig`
 
 <br>
-
-**Address:** `http://<server-ip>:5050`
 
 #### Synology NAS
 
@@ -125,13 +123,12 @@ Choose the platform where you want to host the OpenHabitTracker server:
 
 <br>
 
-**Address:** `http://<nas-ip>:5050`
-
 ### Enable sync in OpenHabitTracker
 
 1. Open OpenHabitTracker on your device
 2. Open the menu and click **Data**
 3. Scroll down to **Online sync**
-4. Enter the **Address** from your scenario above, plus your **Username** and **Password** from `.env`
-5. Check **Remember me** to stay logged in across app restarts
-6. Click **Log in**
+4. Enter the **Address**: `http://` + the IP from your scenario above + `:5050` or whichever port you chose (omit the port entirely if you chose `80`)
+5. Enter your **Username** and **Password** from `.env`
+6. Check **Remember me** to stay logged in across app restarts
+7. Click **Log in**
