@@ -343,7 +343,7 @@ services:
   openhabittracker:
     image: jinjinov/openhabittracker:latest
     ports:
-      - "5000:8080"
+      - "5050:8080"
     environment:
       - AppSettings__UserName=${APPSETTINGS_USERNAME}
       - AppSettings__Email=${APPSETTINGS_EMAIL}
@@ -353,9 +353,9 @@ services:
       - ./.OpenHabitTracker:/app/.OpenHabitTracker
 ```
 
-After login at http://localhost:5000/login:
-- Logs: http://localhost:5000/watchdog
-- OpenAPI: http://localhost:5000/scalar/v1
+After login at http://localhost:5050/login:
+- Logs: http://localhost:5050/watchdog
+- OpenAPI: http://localhost:5050/scalar/v1
 
 ---
 
