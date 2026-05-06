@@ -117,10 +117,9 @@ Choose the platform where you want to host the OpenHabitTracker server:
 
 1. SSH into your server
 2. Install Docker: `sudo apt update && sudo apt install -y docker.io docker-compose`
-3. Create a folder: `mkdir ~/openhabittracker && cd ~/openhabittracker`
-4. Create the same `.env` and `docker-compose.yml` files as above
-5. Run: `docker-compose up -d`
-6. Find the server IP: `ifconfig`
+3. Open a terminal in the folder containing your `.env` and `docker-compose.yml`
+4. Run: `docker-compose up -d`
+5. Find the server IP: `ifconfig`
 
 **Address:** `http://<server-ip>:5000`
 
