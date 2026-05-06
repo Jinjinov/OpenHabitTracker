@@ -1,3 +1,21 @@
+## Description is updated via repo files
+
+- Flathub - `net.openhabittracker.OpenHabitTracker.metainfo.xml` and `net.openhabittracker.OpenHabitTracker.yaml`
+- Snap Store - `snapcraft.yaml`
+- PWA - `OpenHabitTracker.Web\index.html` for `https://openhabittracker.net/`
+- GitHub Container Registry - `README.md`
+
+## Description must be updated manually via web UI
+
+- Microsoft Store - Partner Center
+- Google Play - Play Console
+- App Store / Mac App Store - App Store Connect
+- Docker Hub - Docker Hub web UI
+
+- APKPure - auto-synced from Google Play
+
+---
+
 - update "© 2026" if necessary
 
 - increase version number
