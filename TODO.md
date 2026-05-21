@@ -292,11 +292,11 @@ FIX — ResizeObserver:
 
 add enum DisplayMetric - new UI: select option
 Count - currently displayed - number of times habit was done in a day - HabitModel.TimesDone.Count - no new UI
-    3x
+    display as `15x`
 Time - display total time habit was done in a day - HabitModel.TimesDone[].CompletedAt - HabitModel.TimesDone[].StartedAt - no new UI
-    0:45
+    display as `0:15`
 Quantity / Amount - add a new `long` property to `TimeModel` - new UI: number imput on done with confirm/cancel
-    (3)
+    display as `(15)`
 
 Plan:
 
@@ -371,6 +371,34 @@ show only not done of highest priority
 TODO:: research: high priority
     - Current streak
     - Best streaks (from date - to date)
+
+Plan:
+    1. HabitModel.cs - add stored fields (computed in OnTimesDoneChanged, same pattern as TotalTimeSpent / AverageInterval):
+        - int CurrentStreak
+            - check if today's bucket is complete: if yes, start counting from today; if no, start from yesterday
+            - walk backwards through consecutive buckets with >= RepeatCount completions
+            - stop at first failing bucket
+        - (int Count, DateTime From, DateTime To)? BestStreak
+            - single pass through all period buckets in chronological order
+            - track longest consecutive run and its start/end dates
+
+    2. Period bucket logic (used by both properties):
+        - RepeatPeriod = Week  -> calendar weeks (Mon-Sun), RepeatInterval = N means every N weeks
+        - RepeatPeriod = Month -> calendar months (1st-last day)
+        - RepeatPeriod = Year  -> calendar years
+        - RepeatPeriod = Day, RepeatInterval = 1 -> each calendar day
+        - RepeatPeriod = Day, RepeatInterval > 1 -> gap-based: streak breaks if gap between consecutive completions > RepeatInterval days
+        - each bucket passes if TimesDoneByDay keys in that range sum to >= RepeatCount completions
+
+    3. HabitComponent.razor - add new <div class="p-1 border rounded-0"> block inside ShowHabitStatistics (at the beginning, before the other stats):
+        - Current streak: N (days/weeks/months/years)
+        - Best streak: N (from date - to date)
+
+    4. Localization - add keys to all 20 JSON files in OpenHabitTracker/Localization/Resources/:
+        - "Current streak"
+        - "Best streak"
+
+---------------------------------------------------------------------------------------------------
 
 TODO:: research: low priority - large feature
 copy Loop Habit Tracker UI - all required data is already in the DB
