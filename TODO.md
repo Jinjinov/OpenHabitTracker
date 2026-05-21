@@ -294,7 +294,51 @@ FIX — ResizeObserver:
 add enum DisplayMetric - new UI: select option
 Count - currently displayed - number of times habit was done in a day - HabitModel.TimesDone.Count - no new UI
 Time - display total time habit was done in a day - HabitModel.TimesDone[].CompletedAt - HabitModel.TimesDone[].StartedAt - no new UI
-Quantity - add a new `long` property to `TimeModel` - new UI: number imput on done with confirm/cancel
+Quantity / Amount - add a new `long` property to `TimeModel` - new UI: number imput on done with confirm/cancel
+
+Plan:
+
+Enum:
+- new file: OpenHabitTracker/Data/DisplayMetric.cs
+- values: Count, Time, Quantity
+- icons: Count = bi-check-square, Time = bi-stopwatch, Quantity = bi-123
+
+Data layer:
+- TimeModel: add `long Quantity { get; set; } = 1` (default 1 so switching DisplayMetric retroactively gives sensible data)
+- TimeEntity: add `long Quantity { get; set; }` (EF Core default 1 via migration)
+- HabitModel: add `DisplayMetric DisplayMetric { get; set; } = DisplayMetric.Count`, add `long QuantityGoal { get; set; }`
+- HabitEntity: add `DisplayMetric DisplayMetric { get; set; }` (stored as int, default 0 = Count), add `long QuantityGoal { get; set; }`
+- EntityToModel.cs: map TimeEntity.Quantity → TimeModel.Quantity and HabitEntity.DisplayMetric → HabitModel.DisplayMetric
+- ModelToEntity.cs: map back
+- Two EF migrations: OpenHabitTracker.EntityFrameworkCore and OpenHabitTracker.Blazor.Web
+
+UI - HabitComponent.razor:
+- add InputSelect for DisplayMetric (same pattern as RepeatPeriod selector)
+- add SaveDisplayMetric() in @code
+- add InputNumber for QuantityGoal, visible only when DisplayMetric == Quantity (same pattern as Duration)
+- add SaveQuantityGoal() in @code
+
+UI - CalendarComponent.razor - calendar cell (50×50px):
+- Count: show (N) if list.Count > 1, green/warning based on RepeatCount threshold (current behavior)
+- Time: show total duration formatted as e.g. "1h 20m", green/warning based on Habit.Duration if set
+- Quantity: show sum of list.Sum(t => t.Quantity), green/warning based on HabitModel.QuantityGoal (0 = no threshold, neutral color)
+
+UI - CalendarComponent.razor - mark done (small calendar, no timer):
+- Quantity mode: show modal asking for quantity before saving the entry
+
+UI - HabitComponent.razor - timer stop:
+- Quantity mode: show modal asking for quantity before saving the entry
+
+UI - CalendarComponent.razor - time list (large calendar, selected day):
+- Count / Time: current behavior (one row per entry: From / to / delete)
+- Quantity: two rows per entry — row 1: From / to / delete, row 2: quantity InputNumber
+
+Localization:
+- add keys to all 20 JSON files in OpenHabitTracker/Localization/Resources/:
+  "DisplayMetric", "Count", "Time", "Quantity", "Quantity goal"
+  (Count and Time may already exist — check before adding)
+
+---------------------------------------------------------------------------------------------------
 
 1.
 QueryParameters:
