@@ -291,10 +291,10 @@ FIX — ResizeObserver:
 ---------------------------------------------------------------------------------------------------
 
 0.
-add enum: - new UI: select option
-count - currently displayed - number of times habit was done in a day - HabitModel.TimesDone.Count - no new UI
-time - display total time habit was done in a day - HabitModel.TimesDone[].CompletedAt - HabitModel.TimesDone[].StartedAt - no new UI
-quantity - add a new `long` property to `TimeModel` - new UI: number imput on done with confirm/cancel
+add enum DisplayMetric - new UI: select option
+Count - currently displayed - number of times habit was done in a day - HabitModel.TimesDone.Count - no new UI
+Time - display total time habit was done in a day - HabitModel.TimesDone[].CompletedAt - HabitModel.TimesDone[].StartedAt - no new UI
+Quantity - add a new `long` property to `TimeModel` - new UI: number imput on done with confirm/cancel
 
 1.
 QueryParameters:
