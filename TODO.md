@@ -388,15 +388,17 @@ Plan:
         - RepeatPeriod = Year  -> calendar years
         - RepeatPeriod = Day, RepeatInterval = 1 -> each calendar day
         - RepeatPeriod = Day, RepeatInterval > 1 -> gap-based: streak breaks if gap between consecutive completions > RepeatInterval days
-        - each bucket passes if TimesDoneByDay keys in that range sum to >= RepeatCount completions
+        - each bucket passes if TimesDoneByDay keys in that range sum to >= NonZeroRepeatCount completions
 
     3. HabitComponent.razor - add new <div class="p-1 border rounded-0"> block inside ShowHabitStatistics (at the beginning, before the other stats):
-        - Current streak: N (days/weeks/months/years)
-        - Best streak: N (from date - to date)
+        - Current streak: N @Loc[Habit.RepeatPeriod.ToString()]   (show 0 if no streak)
+        - Best streak: N @Loc[Habit.RepeatPeriod.ToString()] (from date - to date)   (show 0 if no completions)
+        - unit label reuses existing loc keys "Day" / "Week" / "Month" / "Year" (already in all 20 languages)
 
     4. Localization - add keys to all 20 JSON files in OpenHabitTracker/Localization/Resources/:
         - "Current streak"
         - "Best streak"
+        - no new unit-label keys needed ("Day"/"Week"/"Month"/"Year" already exist)
 
 ---------------------------------------------------------------------------------------------------
 
