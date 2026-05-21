@@ -311,6 +311,21 @@ upgrade to .NET 10
 5.
 upgrade NuGet versions
 
+6.
+show only not done of highest priority
+
+---------------------------------------------------------------------------------------------------
+
+TODO:: research: high priority
+    - Current streak
+    - Best streaks (from date - to date)
+
+TODO:: research: low priority - large feature
+copy Loop Habit Tracker UI - all required data is already in the DB
+    - History (done count grouped by week, month, quarter, year)
+    - Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
+    - Frequency (by day of the week - continuous calendar, without dates, done count grouped by days of the week)
+
 ---------------------------------------------------------------------------------------------------
 
 1.
@@ -526,15 +541,6 @@ OpenHabitTracker.Blazor.Server:
 
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------
-
-TODO:: research: low priority - large feature
-copy Loop Habit Tracker UI - all required data is already in the DB
-    - History (done count grouped by week, month, quarter, year)
-    - Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
-    - Best streaks (from date - to date)
-    - Frequency (by day of the week - continuous calendar, without dates, done count grouped by days of the week)
-
 ---------------------------------------------------------------------------------------------------
 
 ASAP tasks: when, where, contact/company name, address, phone number, working hours, website, email
