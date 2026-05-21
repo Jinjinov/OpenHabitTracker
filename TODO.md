@@ -383,12 +383,15 @@ Plan:
             - track longest consecutive run and its start/end dates
 
     2. Period bucket logic (used by both properties):
-        - RepeatPeriod = Week  -> calendar weeks (Mon-Sun), RepeatInterval = N means every N weeks
-        - RepeatPeriod = Month -> calendar months (1st-last day)
-        - RepeatPeriod = Year  -> calendar years
-        - RepeatPeriod = Day, RepeatInterval = 1 -> each calendar day
-        - RepeatPeriod = Day, RepeatInterval > 1 -> gap-based: streak breaks if gap between consecutive completions > RepeatInterval days
-        - each bucket passes if TimesDoneByDay keys in that range sum to >= NonZeroRepeatCount completions
+        - RepeatInterval = 1 -> calendar windows:
+            - Day   -> each calendar day
+            - Week  -> calendar weeks (Mon-Sun)
+            - Month -> calendar months (1st-last day)
+            - Year  -> calendar years
+        - RepeatInterval > 1 -> gap-based (any period):
+            - streak breaks if gap between consecutive completions > RepeatInterval * period duration
+            - no window alignment needed
+        - each bucket passes if completions in that range >= NonZeroRepeatCount
 
     3. HabitComponent.razor - add new <div class="p-1 border rounded-0"> block inside ShowHabitStatistics (at the beginning, before the other stats):
         - Current streak: N @Loc[Habit.RepeatPeriod.ToString()]   (show 0 if no streak)
