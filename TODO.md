@@ -404,12 +404,13 @@ TODO:: research: high priority
 Plan:
     1. HabitModel.cs - add stored fields (computed in OnTimesDoneChanged, same pattern as TotalTimeSpent / AverageInterval):
         - int CurrentStreak
-            - check if today's bucket is complete: if yes, start counting from today; if no, start from yesterday
-            - walk backwards through consecutive buckets with >= RepeatCount completions
+            - check if today's bucket is complete: if yes, start counting from today; if no, fall back to the previous complete bucket (daily: yesterday, weekly: last week, monthly: last month, yearly: last year)
+            - walk backwards through consecutive passing buckets
             - stop at first failing bucket
-        - (int Count, DateTime From, DateTime To)? BestStreak
+        - (int Count, DateTime From, DateTime To)? BestStreak  (null when no completions)
             - single pass through all period buckets in chronological order
-            - track longest consecutive run and its start/end dates
+            - track longest consecutive run
+            - From = StartedAt of first completion in the best run, To = StartedAt of last completion in the best run
 
     2. Period bucket logic (used by both properties):
         - RepeatInterval = 1 -> calendar windows:
@@ -420,11 +421,12 @@ Plan:
         - RepeatInterval > 1 -> gap-based (any period):
             - streak breaks if gap between consecutive completions > RepeatInterval * period duration
             - no window alignment needed
-        - each bucket passes if completions in that range >= NonZeroRepeatCount
+            - RepeatCount ignored (any single completion within the window counts as a pass)
+        - each calendar-window bucket passes if completions in that range >= NonZeroRepeatCount
 
     3. HabitComponent.razor - add new <div class="p-1 border rounded-0"> block inside ShowHabitStatistics (at the beginning, before the other stats):
         - Current streak: N @Loc[Habit.RepeatPeriod.ToString()]   (show 0 if no streak)
-        - Best streak: N @Loc[Habit.RepeatPeriod.ToString()] (from date - to date)   (show 0 if no completions)
+        - Best streak: N @Loc[Habit.RepeatPeriod.ToString()] (from date - to date)   (BestStreak is null when no completions: show 0)
         - unit label reuses existing loc keys "Day" / "Week" / "Month" / "Year" (already in all 20 languages)
 
     4. Localization - add keys to all 20 JSON files in OpenHabitTracker/Localization/Resources/:
@@ -451,7 +453,7 @@ Plan:
         - RepeatCount=0 (NonZeroRepeatCount=1): one completion per day is enough
 
         BestStreak:
-        - no completions -> Count=0, From/To are default
+        - no completions -> null
         - single completion -> Count=1, From=To=that day
         - best streak in the past, current streak shorter -> BestStreak reflects past run with correct From/To
         - all completions consecutive -> BestStreak.Count == CurrentStreak
