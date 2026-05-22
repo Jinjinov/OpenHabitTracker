@@ -340,6 +340,35 @@ Localization:
   "DisplayMetric", "Count", "Time", "Quantity", "Quantity goal"
   (Count and Time may already exist — check before adding)
 
+Tests:
+
+    EntityToModelTests.cs:
+    - TimeEntity.Quantity → TimeModel.Quantity mapping
+    - TimeModel.Quantity → TimeEntity.Quantity mapping
+    - HabitEntity.DisplayMetric → HabitModel.DisplayMetric mapping
+    - HabitModel.DisplayMetric → HabitEntity.DisplayMetric mapping
+    - HabitEntity.QuantityGoal → HabitModel.QuantityGoal mapping
+    - HabitModel.QuantityGoal → HabitEntity.QuantityGoal mapping
+
+    HabitModelTests.cs:
+    - TimeModel.Quantity default is 1
+    - HabitModel.DisplayMetric default is DisplayMetric.Count
+    - HabitModel.QuantityGoal default is 0
+
+    CalendarComponentTests.cs (bUnit, NSubstitute mocks, CSS selector assertions):
+    - DisplayMetric=Count, two completions on same day: cell shows "(2)"
+    - DisplayMetric=Time, one completion with 15 min duration: cell shows "0:15"
+    - DisplayMetric=Quantity, two completions with Quantity=7 and Quantity=8: cell shows "(15)"
+
+    HabitComponentTests.cs (bUnit):
+    - DisplayMetric InputSelect is rendered
+    - DisplayMetric=Quantity: QuantityGoal InputNumber is visible
+    - DisplayMetric=Count: QuantityGoal InputNumber is not rendered
+
+    HabitTests.cs (E2E, Playwright):
+    - DisplayMetric=Quantity persisted after reload (same pattern as HabitDuration_PersistedAfterReload)
+    - Quantity modal flow: mark done → quantity input appears → enter value → confirm → calendar cell shows sum
+
 ---------------------------------------------------------------------------------------------------
 
 1.
@@ -402,6 +431,40 @@ Plan:
         - "Current streak"
         - "Best streak"
         - no new unit-label keys needed ("Day"/"Week"/"Month"/"Year" already exist)
+
+    5. Tests
+
+        HabitModelTests.cs (NUnit, same style as existing tests: set TimesDone, call RefreshTimesDoneByDay, assert):
+
+        CurrentStreak:
+        - no completions -> 0
+        - done today only -> 1
+        - not done today, done yesterday and day before -> 2 (today does not break streak)
+        - done 5 consecutive days -> 5
+        - done 3 days, gap of 1 day, done 2 more days -> 2 (current streak is the recent run)
+        - weekly (RepeatInterval=1): done this week and last 2 weeks -> 3
+        - weekly: done this week and last week, gap 2 weeks ago -> 2
+        - monthly (RepeatInterval=1): done this month and last 2 months -> 3
+        - gap-based (RepeatInterval=3, Day): completions with gaps <= 3 days -> streak counts correctly
+        - gap-based: one gap > 3 days -> streak resets at that gap
+        - RepeatCount=2: two completions per day -> streak counts; one per day -> streak = 0
+        - RepeatCount=0 (NonZeroRepeatCount=1): one completion per day is enough
+
+        BestStreak:
+        - no completions -> Count=0, From/To are default
+        - single completion -> Count=1, From=To=that day
+        - best streak in the past, current streak shorter -> BestStreak reflects past run with correct From/To
+        - all completions consecutive -> BestStreak.Count == CurrentStreak
+
+        HabitComponentTests.cs (bUnit, NSubstitute mocks, CSS selector assertions):
+        - ShowHabitStatistics=true, CurrentStreak=5: streak block renders "5" and "Day"/"Week"/"Month"/"Year"
+        - ShowHabitStatistics=true, CurrentStreak=0: streak block renders "0"
+        - ShowHabitStatistics=true, BestStreak set: best streak block renders count and From/To dates
+        - ShowHabitStatistics=false: streak block is not rendered
+
+        HabitTests.cs (E2E, Playwright):
+        - enable ShowHabitStatistics, mark habit done today, open habit detail: streak block shows "1" and period label
+        (multi-day streaks not testable in E2E — can't fake past dates without DB manipulation)
 
 ---------------------------------------------------------------------------------------------------
 
