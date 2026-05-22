@@ -408,8 +408,10 @@ Plan:
                 - check if today's bucket is complete: if yes, start counting from today; if no, fall back to the previous bucket (daily: yesterday, weekly: last week, monthly: last month, yearly: last year)
                 - walk backwards through consecutive passing buckets, stop at first failing bucket
             gap-based (RepeatInterval>1):
-                - walk backwards through consecutive completion pairs (ordered by StartedAt)
+                - if gap from last completion to today exceeds RepeatInterval * period duration -> streak = 0
+                - otherwise walk backwards through consecutive completion pairs (ordered by StartedAt)
                 - stop at the first pair whose gap exceeds RepeatInterval * period duration
+                - single completion with gap to today within limit -> streak = 1 (no pairs to walk, but streak is live)
         - (int Count, DateTime From, DateTime To)? BestStreak  (null when no completions)
             calendar-window (RepeatInterval=1):
                 - single forward pass through all calendar buckets from first completion to today
@@ -458,6 +460,9 @@ Plan:
         - monthly (RepeatInterval=1): done 2025-01-15 (Jan), 2024-12-10 (Dec), 2024-11-05 (Nov) -> 3
         - gap-based (RepeatInterval=3, Day): done 2025-01-14, 2025-01-16, 2025-01-18 (gaps of 2 days) -> 3
         - gap-based: done 2025-01-10, 2025-01-15 (gap 5 days > 3), 2025-01-17, 2025-01-19 -> 2
+        - gap-based: single completion 2025-01-19 (gap to today 2025-01-20 = 1 day <= 3) -> 1
+        - gap-based: single completion 2025-01-10 (gap to today 2025-01-20 = 10 days > 3) -> 0
+        - gap-based: last completion 2025-01-10 (gap to today > 3), earlier completions all within 3 days -> 0 (overdue breaks streak)
         - RepeatCount=2: done 2025-01-18 (8am+8pm), 2025-01-19 (9am+9pm), 2025-01-20 (10am+10pm) -> 3
         - RepeatCount=2: done 2025-01-18 (8am only), 2025-01-19 (9am only), 2025-01-20 (10am only) -> 0
         - RepeatCount=0 (NonZeroRepeatCount=1): done 2025-01-20 only -> 1
