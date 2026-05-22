@@ -404,13 +404,21 @@ TODO:: research: high priority
 Plan:
     1. HabitModel.cs - add stored fields (computed in OnTimesDoneChanged, same pattern as TotalTimeSpent / AverageInterval):
         - int CurrentStreak
-            - check if today's bucket is complete: if yes, start counting from today; if no, fall back to the previous complete bucket (daily: yesterday, weekly: last week, monthly: last month, yearly: last year)
-            - walk backwards through consecutive passing buckets
-            - stop at first failing bucket
+            calendar-window (RepeatInterval=1):
+                - check if today's bucket is complete: if yes, start counting from today; if no, fall back to the previous bucket (daily: yesterday, weekly: last week, monthly: last month, yearly: last year)
+                - walk backwards through consecutive passing buckets, stop at first failing bucket
+            gap-based (RepeatInterval>1):
+                - walk backwards through consecutive completion pairs (ordered by StartedAt)
+                - stop at the first pair whose gap exceeds RepeatInterval * period duration
         - (int Count, DateTime From, DateTime To)? BestStreak  (null when no completions)
-            - single pass through all period buckets in chronological order
-            - track longest consecutive run
-            - From = StartedAt of first completion in the best run, To = StartedAt of last completion in the best run
+            calendar-window (RepeatInterval=1):
+                - single forward pass through all calendar buckets from first completion to today
+                - track longest consecutive run of passing buckets
+            gap-based (RepeatInterval>1):
+                - single forward pass through consecutive completion pairs
+                - track longest consecutive run of non-breaking pairs
+            - From = StartedAt of first completion in the best run
+            - To = StartedAt of last completion in the best run
 
     2. Period bucket logic (used by both properties):
         - RepeatInterval = 1 -> calendar windows:
@@ -425,43 +433,45 @@ Plan:
         - each calendar-window bucket passes if completions in that range >= NonZeroRepeatCount
 
     3. HabitComponent.razor - add new <div class="p-1 border rounded-0"> block inside ShowHabitStatistics (at the beginning, before the other stats):
-        - Current streak: N @Loc[Habit.RepeatPeriod.ToString()]   (show 0 if no streak)
-        - Best streak: N @Loc[Habit.RepeatPeriod.ToString()] (from date - to date)   (BestStreak is null when no completions: show 0)
-        - unit label reuses existing loc keys "Day" / "Week" / "Month" / "Year" (already in all 20 languages)
+        - Current streak: N [unit]   (show 0 if no streak)
+        - Best streak: N [unit] (@BestStreak.Value.From - @BestStreak.Value.To, raw DateTime rendering same as LastTimeDoneAt)   (BestStreak is null: show 0, hide date range)
+        - always plural regardless of N — unit via switch:
+            Habit.RepeatPeriod switch { Period.Day => Loc["Days"], Period.Week => Loc["Weeks"], Period.Month => Loc["Months"], Period.Year => Loc["Years"] }
 
     4. Localization - add keys to all 20 JSON files in OpenHabitTracker/Localization/Resources/:
         - "Current streak"
         - "Best streak"
-        - no new unit-label keys needed ("Day"/"Week"/"Month"/"Year" already exist)
+        - "Days", "Weeks", "Months", "Years" (plural forms, correct per language — check if any already exist before adding)
 
     5. Tests
 
         HabitModelTests.cs (NUnit, same style as existing tests: set TimesDone, call RefreshTimesDoneByDay, assert):
 
-        CurrentStreak:
+        CurrentStreak (all tests use fixed dates, "today" = 2025-01-20):
         - no completions -> 0
-        - done today only -> 1
-        - not done today, done yesterday and day before -> 2 (today does not break streak)
-        - done 5 consecutive days -> 5
-        - done 3 days, gap of 1 day, done 2 more days -> 2 (current streak is the recent run)
-        - weekly (RepeatInterval=1): done this week and last 2 weeks -> 3
-        - weekly: done this week and last week, gap 2 weeks ago -> 2
-        - monthly (RepeatInterval=1): done this month and last 2 months -> 3
-        - gap-based (RepeatInterval=3, Day): completions with gaps <= 3 days -> streak counts correctly
-        - gap-based: one gap > 3 days -> streak resets at that gap
-        - RepeatCount=2: two completions per day -> streak counts; one per day -> streak = 0
-        - RepeatCount=0 (NonZeroRepeatCount=1): one completion per day is enough
+        - done 2025-01-20 only -> 1
+        - not done today, done 2025-01-19 and 2025-01-18 -> 2 (today does not break streak)
+        - done 2025-01-16 through 2025-01-20 (5 days) -> 5
+        - done 2025-01-14, 2025-01-15, 2025-01-16, gap on 2025-01-17, done 2025-01-18 and 2025-01-19 -> 2
+        - weekly (RepeatInterval=1): done 2025-01-20 (week 3), 2025-01-15 (week 2), 2025-01-08 (week 1) -> 3
+        - weekly: done 2025-01-20 (week 3), 2025-01-15 (week 2), week 1 skipped -> 2
+        - monthly (RepeatInterval=1): done 2025-01-15 (Jan), 2024-12-10 (Dec), 2024-11-05 (Nov) -> 3
+        - gap-based (RepeatInterval=3, Day): done 2025-01-14, 2025-01-16, 2025-01-18 (gaps of 2 days) -> 3
+        - gap-based: done 2025-01-10, 2025-01-15 (gap 5 days > 3), 2025-01-17, 2025-01-19 -> 2
+        - RepeatCount=2: done 2025-01-18 (8am+8pm), 2025-01-19 (9am+9pm), 2025-01-20 (10am+10pm) -> 3
+        - RepeatCount=2: done 2025-01-18 (8am only), 2025-01-19 (9am only), 2025-01-20 (10am only) -> 0
+        - RepeatCount=0 (NonZeroRepeatCount=1): done 2025-01-20 only -> 1
 
-        BestStreak:
+        BestStreak (all tests use fixed dates):
         - no completions -> null
-        - single completion -> Count=1, From=To=that day
-        - best streak in the past, current streak shorter -> BestStreak reflects past run with correct From/To
-        - all completions consecutive -> BestStreak.Count == CurrentStreak
+        - single completion 2025-01-20 -> Count=1, From=To=2025-01-20
+        - best run: 2025-01-01 through 2025-01-05 (5 days), then gap, then 2025-01-18 through 2025-01-20 (3 days) -> Count=5, From=2025-01-01, To=2025-01-05
+        - 5 consecutive days 2025-01-16 through 2025-01-20, no past longer run -> BestStreak.Count=5, CurrentStreak=5
 
         HabitComponentTests.cs (bUnit, NSubstitute mocks, CSS selector assertions):
-        - ShowHabitStatistics=true, CurrentStreak=5: streak block renders "5" and "Day"/"Week"/"Month"/"Year"
+        - ShowHabitStatistics=true, RepeatPeriod=Day, CurrentStreak=5: streak block renders "5" and "Day"
         - ShowHabitStatistics=true, CurrentStreak=0: streak block renders "0"
-        - ShowHabitStatistics=true, BestStreak set: best streak block renders count and From/To dates
+        - ShowHabitStatistics=true, BestStreak=(Count=3, From=2025-01-01, To=2025-01-03): renders "3" and dates, date range hidden when BestStreak is null
         - ShowHabitStatistics=false: streak block is not rendered
 
         HabitTests.cs (E2E, Playwright):
