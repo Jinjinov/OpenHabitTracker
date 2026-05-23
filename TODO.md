@@ -402,17 +402,21 @@ TODO:: research: high priority
     - Best streaks (from date - to date)
 
 Plan:
-    1. HabitModel.cs - add stored fields (computed in OnTimesDoneChanged, same pattern as TotalTimeSpent / AverageInterval):
-        - int CurrentStreak
+    1. Streak.cs - new file in OpenHabitTracker/Data/:
+        public class Streak { int Count; DateTime From; DateTime To; }
+
+    2. HabitModel.cs - add stored fields (computed in OnTimesDoneChanged, same pattern as TotalTimeSpent / AverageInterval):
+        - Streak? CurrentStreak  (null when no completions)
             calendar-window (RepeatInterval=1):
                 - check if today's bucket is complete: if yes, start counting from today; if no, fall back to the previous bucket (daily: yesterday, weekly: last week, monthly: last month, yearly: last year)
                 - walk backwards through consecutive passing buckets, stop at first failing bucket
+                - From = StartedAt of first completion in the run, To = StartedAt of last completion in the run
             gap-based (RepeatInterval>1):
-                - if gap from last completion to today exceeds RepeatInterval * period duration -> streak = 0
+                - if gap from last completion to today exceeds RepeatInterval * period duration -> null
                 - otherwise walk backwards through consecutive completion pairs (ordered by StartedAt)
                 - stop at the first pair whose gap exceeds RepeatInterval * period duration
-                - single completion with gap to today within limit -> streak = 1 (no pairs to walk, but streak is live)
-        - (int Count, DateTime From, DateTime To)? BestStreak  (null when no completions)
+                - single completion with gap to today within limit -> Count=1, From=To=that completion's StartedAt
+        - Streak? BestStreak  (null when no completions)
             calendar-window (RepeatInterval=1):
                 - single forward pass through all calendar buckets from first completion to today
                 - track longest consecutive run of passing buckets
@@ -422,7 +426,7 @@ Plan:
             - From = StartedAt of first completion in the best run
             - To = StartedAt of last completion in the best run
 
-    2. Period bucket logic (used by both properties):
+    3. Period bucket logic (used by both properties):
         - RepeatInterval = 1 -> calendar windows:
             - Day   -> each calendar day
             - Week  -> calendar weeks (Mon-Sun)
@@ -434,18 +438,18 @@ Plan:
             - RepeatCount ignored (any single completion within the window counts as a pass)
         - each calendar-window bucket passes if completions in that range >= NonZeroRepeatCount
 
-    3. HabitComponent.razor - add new <div class="p-1 border rounded-0"> block inside ShowHabitStatistics (at the beginning, before the other stats):
+    4. HabitComponent.razor - add new <div class="p-1 border rounded-0"> block inside ShowHabitStatistics (at the beginning, before the other stats):
         - Current streak: N [unit]   (show 0 if no streak)
-        - Best streak: N [unit] (@BestStreak.Value.From - @BestStreak.Value.To, raw DateTime rendering same as LastTimeDoneAt)   (BestStreak is null: show 0, hide date range)
+        - Best streak: N [unit] (@BestStreak.From - @BestStreak.To, raw DateTime rendering same as LastTimeDoneAt)   (BestStreak is null: show 0, hide date range)
         - always plural regardless of N — unit via switch:
             Habit.RepeatPeriod switch { Period.Day => Loc["Days"], Period.Week => Loc["Weeks"], Period.Month => Loc["Months"], Period.Year => Loc["Years"] }
 
-    4. Localization - add keys to all 20 JSON files in OpenHabitTracker/Localization/Resources/:
+    5. Localization - add keys to all 20 JSON files in OpenHabitTracker/Localization/Resources/:
         - "Current streak"
         - "Best streak"
         - "Days", "Weeks", "Months", "Years" (plural forms, correct per language — check if any already exist before adding)
 
-    5. Tests
+    6. Tests
 
         HabitModelTests.cs (NUnit, same style as existing tests: set TimesDone, call RefreshTimesDoneByDay, assert):
 
