@@ -279,7 +279,7 @@ public class HabitModel : ItemsModel
         return period switch
         {
             Period.Day => date.Date,
-            Period.Week => date.Date.AddDays(-((int)date.DayOfWeek - 1 + 7) % 7),
+            Period.Week => date.Date.AddDays(-((int)date.DayOfWeek - 1 + 7) % 7), // Monday-first (ISO); SettingsModel.FirstDayOfWeek is intentionally not consulted here
             Period.Month => new DateTime(date.Year, date.Month, 1),
             Period.Year => new DateTime(date.Year, 1, 1),
             _ => throw new ArgumentOutOfRangeException(nameof(period))

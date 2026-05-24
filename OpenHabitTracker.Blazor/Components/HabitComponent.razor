@@ -105,25 +105,15 @@
     @if (ClientState.Settings.ShowHabitStatistics)
     {
         <div class="p-1 border rounded-0">
-            @{
-                string streakUnit = Habit.RepeatPeriod switch
-                {
-                    Period.Day => Loc["Days"],
-                    Period.Week => Loc["Weeks"],
-                    Period.Month => Loc["Months"],
-                    Period.Year => Loc["Years"],
-                    _ => ""
-                };
-            }
             <div>
-                @Loc["Current streak"]: @(Habit.CurrentStreak?.Count ?? 0) @streakUnit
+                @Loc["Current streak"]: @(Habit.CurrentStreak?.Count ?? 0) @StreakUnit(Habit.CurrentStreak?.Count ?? 0)
                 @if (Habit.CurrentStreak is not null)
                 {
                     <span> (@Habit.CurrentStreak.From.ToShortDateString() - @Habit.CurrentStreak.To.ToShortDateString())</span>
                 }
             </div>
             <div>
-                @Loc["Best streak"]: @(Habit.BestStreak?.Count ?? 0) @streakUnit
+                @Loc["Best streak"]: @(Habit.BestStreak?.Count ?? 0) @StreakUnit(Habit.BestStreak?.Count ?? 0)
                 @if (Habit.BestStreak is not null)
                 {
                     <span> (@Habit.BestStreak.From.ToShortDateString() - @Habit.BestStreak.To.ToShortDateString())</span>
@@ -354,6 +344,15 @@
     {
         await HabitService.UpdateHabit();
     }
+
+    string StreakUnit(int count) => Habit.RepeatPeriod switch
+    {
+        Period.Day => count == 1 ? Loc["Day"] : Loc["Days"],
+        Period.Week => count == 1 ? Loc["Week"] : Loc["Weeks"],
+        Period.Month => count == 1 ? Loc["Month"] : Loc["Months"],
+        Period.Year => count == 1 ? Loc["Year"] : Loc["Years"],
+        _ => ""
+    };
 
     string ToReadableString(TimeSpan span)
     {
