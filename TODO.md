@@ -290,6 +290,10 @@ FIX — ResizeObserver:
 
 ---------------------------------------------------------------------------------------------------
 
+TSV export/import is several features behind — Record class missing DisplayMetric, TargetQuantity, and TimesDone/Quantity.
+
+---------------------------------------------------------------------------------------------------
+
 add enum DisplayMetric - new UI: select option
 Count / Repetitions - currently displayed - number of times habit was done in a day - HabitModel.TimesDone.Count - no new UI
     display as `15x`
@@ -326,7 +330,7 @@ UI - Habits.razor (new habit form, lines 35-106):
 
 UI - CalendarComponent.razor - calendar cell (50×50px):
 - Repetitions: show Nx if list.Count > 1, green/warning based on RepeatCount threshold (current behavior)
-- Time: show total duration formatted as e.g. "0:15", green/warning based on Habit.Duration if set
+- Time: show total duration formatted as e.g. "0:15", green if Duration is null, green/warning based on Habit.Duration if set
 - Quantity: show (N) as sum of list.Sum(t => t.Quantity), green/warning based on HabitModel.TargetQuantity (same RepeatCount threshold logic as Repetitions)
 - ariaLabel (currently "X times done"): adapt per DisplayMetric — e.g. "2 repetitions", "0:15", "(42)"
 
@@ -349,11 +353,24 @@ Service layer:
 - IHabitService: add `Task UpdateQuantity(HabitModel habit, TimeModel time)`
 - HabitService: implement UpdateQuantity — persist TimeModel.Quantity to TimeEntity.Quantity
 
+UI - QuantityModalComponent:
+- Bootstrap modal markup (div.modal, div.modal-dialog, div.modal-content) controlled via Blazor state, no JS interop
+- backdrop div with modal-backdrop show — clicks outside do nothing (no @onclick to dismiss)
+- @onclick:stopPropagation on modal content
+- Escape key does nothing
+- contains: InputNumber for quantity, confirm button
+- Path A/A2/B: also shows cancel button (cancel = no entry saved)
+- Path C: no cancel button (entry already saved, user must enter a quantity)
+- confirm: invokes OnConfirm callback with quantity value
+- cancel: invokes OnCancel callback, no entry saved
+- ShowCancel parameter controls whether cancel button is visible
+- embedded in CalendarComponent and HabitComponent
+
 Quantity paths:
 - Path A (click day in small calendar, Quantity mode): modal shown BEFORE CalendarComponent.AddTimeDone → quantity passed to HabitService.AddTimeDone
 - Path A2 (+ button in large calendar, Quantity mode): modal shown BEFORE CalendarComponent.AddToSelectedDay → same flow as Path A
 - Path B (Mark as done button, Quantity mode): modal shown BEFORE HabitService.MarkAsDone → quantity passed as parameter — callers: Habits.razor:461, HabitComponent.razor:25
-- Path C (timer stop, Quantity mode): StopTimer → HabitService.MarkAsDone without quantity → entry completed → modal shown AFTER → UpdateQuantity called on last entry
+- Path C (timer stop, Quantity mode): StopTimer → HabitService.MarkAsDone without quantity → entry completed → modal shown AFTER with no cancel button → UpdateQuantity called on last entry
 - Path D (edit time list, Quantity mode): UpdateQuantity called from new UpdateQuantity handler in CalendarComponent.razor
 
 Localization:
@@ -384,7 +401,7 @@ Tests:
     HabitComponentTests.cs (bUnit):
     - DisplayMetric InputSelect is rendered
     - DisplayMetric=Quantity: TargetQuantity InputNumber is visible
-    - DisplayMetric=Count: QuantityGoal InputNumber is not rendered
+    - DisplayMetric=Repetitions: TargetQuantity InputNumber is not rendered
 
     HabitTests.cs (E2E, Playwright):
     - DisplayMetric=Quantity persisted after reload (same pattern as HabitDuration_PersistedAfterReload)
