@@ -309,7 +309,7 @@ Data layer:
 - TimeModel: add `long Quantity { get; set; } = 1` (default 1 so switching DisplayMetric retroactively gives sensible data)
 - TimeEntity: add `long Quantity { get; set; }` (EF Core default 1 via migration)
 - HabitModel: add `DisplayMetric DisplayMetric { get; set; } = DisplayMetric.Repetitions`, add `long TargetQuantity { get; set; }`
-- HabitEntity: add `DisplayMetric DisplayMetric { get; set; }` (stored as int, default 0 = Repetitions), add `long TargetQuantity { get; set; }`
+- HabitEntity: add `DisplayMetric DisplayMetric { get; set; }`, add `long TargetQuantity { get; set; }`
 - EntityToModel.cs: map TimeEntity.Quantity → TimeModel.Quantity and HabitEntity.DisplayMetric → HabitModel.DisplayMetric
 - ModelToEntity.cs: map back
 - Two EF migrations: OpenHabitTracker.EntityFrameworkCore and OpenHabitTracker.Blazor.Web
@@ -320,15 +320,21 @@ UI - HabitComponent.razor:
 - add InputNumber for TargetQuantity, visible only when DisplayMetric == Quantity (same pattern as Duration)
 - add SaveTargetQuantity() in @code
 
+UI - Habits.razor (new habit form, lines 35-106):
+- add InputSelect for DisplayMetric (same pattern as RepeatPeriod selector on line 62)
+- add InputNumber for TargetQuantity, visible only when NewHabit.DisplayMetric == Quantity (same pattern as Duration on line 70)
+
 UI - CalendarComponent.razor - calendar cell (50×50px):
 - Repetitions: show Nx if list.Count > 1, green/warning based on RepeatCount threshold (current behavior)
 - Time: show total duration formatted as e.g. "0:15", green/warning based on Habit.Duration if set
 - Quantity: show (N) as sum of list.Sum(t => t.Quantity), green/warning based on HabitModel.TargetQuantity (0 = no threshold, neutral color)
 
 UI - CalendarComponent.razor - mark done (small calendar, no timer):
+- Repetitions / Time mode: save entry with Quantity = TargetQuantity
 - Quantity mode: show modal asking for quantity before saving the entry
 
 UI - HabitComponent.razor - timer stop:
+- Repetitions / Time mode: save entry with Quantity = TargetQuantity
 - Quantity mode: show modal asking for quantity before saving the entry
 
 UI - CalendarComponent.razor - time list (large calendar, selected day):
