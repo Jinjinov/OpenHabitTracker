@@ -589,4 +589,229 @@ public class HabitModelTests
         Assert.That(habit.BestStreak?.Count, Is.EqualTo(3));
         Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(1));
     }
+
+    [Test]
+    public void ComputeStreaks_Daily_5ConsecutiveDays_CurrentStreak5()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-4) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-3) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-2) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-1) },
+            new TimeModel { StartedAt = DateTime.Today },
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(5));
+        Assert.That(habit.BestStreak?.Count, Is.EqualTo(5));
+    }
+
+    [Test]
+    public void ComputeStreaks_Daily_GapInMiddle_CurrentStreakIsTrailingRun()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        // done -5, -4, -3, gap on -2, done -1 and today → current streak = 2
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-5) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-4) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-3) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-1) },
+            new TimeModel { StartedAt = DateTime.Today },
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(2));
+        Assert.That(habit.BestStreak?.Count, Is.EqualTo(3));
+    }
+
+    [Test]
+    public void ComputeStreaks_Daily_RepeatCount2_AllDaysMeetCount_CurrentStreak3()
+    {
+        HabitModel habit = new() { RepeatCount = 2, RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-2).AddHours(8) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-2).AddHours(20) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-1).AddHours(9) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-1).AddHours(21) },
+            new TimeModel { StartedAt = DateTime.Today.AddHours(10) },
+            new TimeModel { StartedAt = DateTime.Today.AddHours(22) },
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(3));
+    }
+
+    [Test]
+    public void ComputeStreaks_Daily_RepeatCount2_OnlyOnePerDay_CurrentStreakNull()
+    {
+        HabitModel habit = new() { RepeatCount = 2, RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-2) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-1) },
+            new TimeModel { StartedAt = DateTime.Today },
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak, Is.Null);
+    }
+
+    [Test]
+    public void ComputeStreaks_Daily_RepeatCount0_TreatedAs1_CurrentStreak1()
+    {
+        HabitModel habit = new() { RepeatCount = 0, RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone = [new TimeModel { StartedAt = DateTime.Today }];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(1));
+    }
+
+    [Test]
+    public void ComputeStreaks_Daily_SingleCompletion_BestStreakFromEqualsTo()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        DateTime done = DateTime.Today;
+        habit.TimesDone = [new TimeModel { StartedAt = done }];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.BestStreak?.Count, Is.EqualTo(1));
+        Assert.That(habit.BestStreak?.From, Is.EqualTo(done));
+        Assert.That(habit.BestStreak?.To, Is.EqualTo(done));
+    }
+
+    [Test]
+    public void ComputeStreaks_Daily_BestStreakFromAndTo_MatchFirstAndLastCompletionInRun()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        DateTime first = DateTime.Today.AddDays(-6);
+        DateTime last = DateTime.Today.AddDays(-2);
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = first },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-5) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-4) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-3) },
+            new TimeModel { StartedAt = last },
+            new TimeModel { StartedAt = DateTime.Today },
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.BestStreak?.Count, Is.EqualTo(5));
+        Assert.That(habit.BestStreak?.From, Is.EqualTo(first));
+        Assert.That(habit.BestStreak?.To, Is.EqualTo(last));
+    }
+
+    [Test]
+    public void ComputeStreaks_Daily_DoneYesterdayAndDayBefore_NotToday_CurrentStreak2()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-2) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-1) },
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(2));
+    }
+
+    [Test]
+    public void ComputeStreaks_Weekly_3ConsecutiveWeeks_CurrentStreak3()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Week };
+        // Pick a Wednesday 2, 9, and 16 days ago — each lands in a distinct Mon–Sun bucket.
+        // We go back far enough that all three are in separate past weeks regardless of today's day-of-week.
+        DateTime thisMonday = DateTime.Today.AddDays(-((int)DateTime.Today.DayOfWeek - 1 + 7) % 7);
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = thisMonday.AddDays(-14).AddDays(2) }, // 2 weeks ago
+            new TimeModel { StartedAt = thisMonday.AddDays(-7).AddDays(2) },  // last week
+            new TimeModel { StartedAt = thisMonday.AddDays(2) },              // this week
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(3));
+    }
+
+    [Test]
+    public void ComputeStreaks_Weekly_GapBreaksStreak_CurrentStreak2()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Week };
+        DateTime thisMonday = DateTime.Today.AddDays(-((int)DateTime.Today.DayOfWeek - 1 + 7) % 7);
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = thisMonday.AddDays(-21).AddDays(2) }, // 3 weeks ago — skipped in streak
+            new TimeModel { StartedAt = thisMonday.AddDays(-7).AddDays(2) },  // last week
+            new TimeModel { StartedAt = thisMonday.AddDays(2) },              // this week
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(2));
+    }
+
+    [Test]
+    public void ComputeStreaks_Monthly_3ConsecutiveMonths_CurrentStreak3()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Month };
+        DateTime thisMonthStart = new(DateTime.Today.Year, DateTime.Today.Month, 1);
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = thisMonthStart.AddMonths(-2).AddDays(14) },
+            new TimeModel { StartedAt = thisMonthStart.AddMonths(-1).AddDays(14) },
+            new TimeModel { StartedAt = thisMonthStart.AddDays(14) },
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(3));
+    }
+
+    [Test]
+    public void ComputeStreaks_GapBased_3CompletionsAt2DayIntervals_CurrentStreak3()
+    {
+        HabitModel habit = new() { RepeatInterval = 3, RepeatPeriod = Period.Day };
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-4) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-2) },
+            new TimeModel { StartedAt = DateTime.Today },
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(3));
+    }
+
+    [Test]
+    public void ComputeStreaks_GapBased_GapBreaksMidRun_CurrentStreakIsTrailingRun()
+    {
+        HabitModel habit = new() { RepeatInterval = 3, RepeatPeriod = Period.Day };
+        // -10 to -5: gap of 5 days > 3 → break; -5, -3, -1 are within 3 days of each other
+        habit.TimesDone =
+        [
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-10) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-5) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-3) },
+            new TimeModel { StartedAt = DateTime.Today.AddDays(-1) },
+        ];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(3));
+        Assert.That(habit.BestStreak?.Count, Is.EqualTo(3));
+    }
 }

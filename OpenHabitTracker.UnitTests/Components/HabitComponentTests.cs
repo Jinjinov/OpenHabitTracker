@@ -135,6 +135,19 @@ public class HabitComponentTests
     }
 
     [Test]
+    public void StreakBlock_WhenCurrentStreakNull_Renders0()
+    {
+        _clientState.Settings.ShowHabitStatistics = true;
+        // _habit.CurrentStreak is null by default
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        AngleSharp.Dom.IElement streakBlock = cut.FindAll(".p-1.border.rounded-0")[0];
+        Assert.That(streakBlock.TextContent, Does.Contain("0"));
+    }
+
+    [Test]
     public void StreakBlock_WhenCurrentStreak5_Renders5InStreakBlock()
     {
         _clientState.Settings.ShowHabitStatistics = true;
