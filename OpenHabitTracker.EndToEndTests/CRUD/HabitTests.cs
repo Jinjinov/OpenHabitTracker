@@ -330,4 +330,28 @@ public class HabitTests : BaseTest
 
         await Expect(habitRow.Locator("[data-habits-step-3]")).ToContainTextAsync("⊘");
     }
+
+    [Test]
+    public async Task MarkHabitAsDone_OpenDetail_StreakBlockShows1()
+    {
+        await OpenSidebarAsync("bi-gear");
+        await Page.Locator("label[for='ShowSmallCalendar']").ClickAsync();
+        await Page.Locator("label[for='ShowHabitStatistics']").ClickAsync();
+        await CloseSidebarAsync();
+
+        await AddItemAsync("Streak Test Habit");
+
+        ILocator habitRow = Page.Locator("div.input-group.flex-nowrap").Filter(
+            new LocatorFilterOptions { Has = Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Streak Test Habit" }) });
+
+        await habitRow.Locator("[data-habits-step-4]").ClickAsync();
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Streak Test Habit" }).ClickAsync();
+
+        await Expect(Page.Locator("#habit-component")).ToBeVisibleAsync();
+
+        ILocator streakBlock = Page.Locator("#habit-component div.p-1.border.rounded-0").First;
+        await Expect(streakBlock).ToContainTextAsync("Current streak");
+        await Expect(streakBlock).ToContainTextAsync("1");
+    }
 }

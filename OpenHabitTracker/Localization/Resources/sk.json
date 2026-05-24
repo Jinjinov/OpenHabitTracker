@@ -247,5 +247,12 @@
   "Categories complete": "{0} z {1} kategórií dokončených",
   "Mark complete when": "Označiť ako dokončené keď",
   "all habits are done": "všetky návyky sú splnené",
-  "any habit is done": "niektorý návyk je splnený"
+  "any habit is done": "niektorý návyk je splnený",
+
+  "Current streak": "Aktuálna séria",
+  "Best streak": "Najlepšia séria",
+  "Days": "Dní",
+  "Weeks": "Týždňov",
+  "Months": "Mesiacov",
+  "Years": "Rokov"
 }

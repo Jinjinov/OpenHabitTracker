@@ -247,5 +247,12 @@
   "Categories complete": "{0} van {1} categorieën voltooid",
   "Mark complete when": "Markeer als volledig wanneer",
   "all habits are done": "alle gewoontes voltooid zijn",
-  "any habit is done": "een gewoonte voltooid is"
+  "any habit is done": "een gewoonte voltooid is",
+
+  "Current streak": "Huidige reeks",
+  "Best streak": "Beste reeks",
+  "Days": "Dagen",
+  "Weeks": "Weken",
+  "Months": "Maanden",
+  "Years": "Jaren"
 }

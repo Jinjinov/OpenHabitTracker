@@ -104,6 +104,32 @@
 
     @if (ClientState.Settings.ShowHabitStatistics)
     {
+        <div class="p-1 border rounded-0">
+            @{
+                string streakUnit = Habit.RepeatPeriod switch
+                {
+                    Period.Day => Loc["Days"],
+                    Period.Week => Loc["Weeks"],
+                    Period.Month => Loc["Months"],
+                    Period.Year => Loc["Years"],
+                    _ => ""
+                };
+            }
+            <div>
+                @Loc["Current streak"]: @(Habit.CurrentStreak?.Count ?? 0) @streakUnit
+                @if (Habit.CurrentStreak is not null)
+                {
+                    <span> (@Habit.CurrentStreak.From.ToShortDateString() - @Habit.CurrentStreak.To.ToShortDateString())</span>
+                }
+            </div>
+            <div>
+                @Loc["Best streak"]: @(Habit.BestStreak?.Count ?? 0) @streakUnit
+                @if (Habit.BestStreak is not null)
+                {
+                    <span> (@Habit.BestStreak.From.ToShortDateString() - @Habit.BestStreak.To.ToShortDateString())</span>
+                }
+            </div>
+        </div>
         <div class="p-1 border rounded-0" data-habits-step-18>
             <div>@Loc["Total time spent"]: @ToReadableString(Habit.TotalTimeSpent)</div>
             <div>@Loc["Average time spent"]: @ToReadableString(Habit.AverageTimeSpent)</div>

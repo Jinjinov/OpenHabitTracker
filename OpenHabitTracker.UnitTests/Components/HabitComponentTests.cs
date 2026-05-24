@@ -19,6 +19,7 @@ public class HabitComponentTests
     private BunitContext _ctx = null!;
     private IHabitService _habitService = null!;
     private HabitModel _habit = null!;
+    private ClientState _clientState = null!;
 
     [SetUp]
     public void SetUp()
@@ -33,20 +34,20 @@ public class HabitComponentTests
         MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         MarkdownToHtml markdownToHtml = new(pipeline);
 
-        ClientState clientState = new(new[] { dataAccess }, markdownToHtml);
-        clientState.Settings.ShowHelp = false;
-        clientState.Settings.ShowLargeCalendar = false;
-        clientState.Settings.ShowHabitStatistics = false;
-        clientState.Settings.ShowCategory = false;
-        clientState.Settings.ShowColor = false;
-        clientState.Settings.ShowCreatedUpdated = false;
-        clientState.Settings.ShowPriorityDropdown = false;
+        _clientState = new(new[] { dataAccess }, markdownToHtml);
+        _clientState.Settings.ShowHelp = false;
+        _clientState.Settings.ShowLargeCalendar = false;
+        _clientState.Settings.ShowHabitStatistics = false;
+        _clientState.Settings.ShowCategory = false;
+        _clientState.Settings.ShowColor = false;
+        _clientState.Settings.ShowCreatedUpdated = false;
+        _clientState.Settings.ShowPriorityDropdown = false;
 
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
 
         _ctx.Services.AddScoped(_ => _habitService);
-        _ctx.Services.AddScoped(_ => clientState);
+        _ctx.Services.AddScoped(_ => _clientState);
         _ctx.Services.AddSingleton(loc);
         _ctx.Services.AddSingleton(Substitute.For<IGTourService>());
         _ctx.Services.AddSingleton(Substitute.For<IItemService>());
@@ -107,5 +108,66 @@ public class HabitComponentTests
         await cut.Find("[data-habits-step-10]").ClickAsync(new MouseEventArgs());
 
         await _habitService.Received(1).DeleteHabit(_habit);
+    }
+
+    // --- Streak block tests ---
+
+    [Test]
+    public void StreakBlock_WhenShowHabitStatisticsTrue_RendersCurrentStreakLabel()
+    {
+        _clientState.Settings.ShowHabitStatistics = true;
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        Assert.That(cut.Markup, Does.Contain("Current streak"));
+    }
+
+    [Test]
+    public void StreakBlock_WhenShowHabitStatisticsFalse_NoCurrentStreakLabel()
+    {
+        // ShowHabitStatistics is already false in SetUp
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        Assert.That(cut.Markup, Does.Not.Contain("Current streak"));
+    }
+
+    [Test]
+    public void StreakBlock_WhenCurrentStreak5_Renders5InStreakBlock()
+    {
+        _clientState.Settings.ShowHabitStatistics = true;
+        _habit.CurrentStreak = new Streak { Count = 5, From = DateTime.Today.AddDays(-4), To = DateTime.Today };
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        AngleSharp.Dom.IElement streakBlock = cut.FindAll(".p-1.border.rounded-0")[0];
+        Assert.That(streakBlock.TextContent, Does.Contain("5"));
+    }
+
+    [Test]
+    public void StreakBlock_WhenBestStreakNotNull_RendersBestStreakDateRange()
+    {
+        _clientState.Settings.ShowHabitStatistics = true;
+        _habit.BestStreak = new Streak { Count = 3, From = new DateTime(2025, 1, 1), To = new DateTime(2025, 1, 3) };
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        Assert.That(cut.Markup, Does.Contain("("));
+    }
+
+    [Test]
+    public void StreakBlock_WhenBestStreakNull_NoBestStreakDateRange()
+    {
+        _clientState.Settings.ShowHabitStatistics = true;
+        // _habit.BestStreak is null by default
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        Assert.That(cut.Markup, Does.Not.Contain("("));
     }
 }

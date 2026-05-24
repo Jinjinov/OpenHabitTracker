@@ -247,5 +247,12 @@
   "Categories complete": "{0}/{1} kategoriaa valmis",
   "Mark complete when": "Merkitse valmiiksi kun",
   "all habits are done": "kaikki tavat on tehty",
-  "any habit is done": "jokin tapa on tehty"
+  "any habit is done": "jokin tapa on tehty",
+
+  "Current streak": "Nykyinen sarja",
+  "Best streak": "Paras sarja",
+  "Days": "Päivää",
+  "Weeks": "Viikkoa",
+  "Months": "Kuukautta",
+  "Years": "Vuotta"
 }
