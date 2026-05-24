@@ -350,7 +350,8 @@ Service layer:
 - HabitService: implement UpdateQuantity — persist TimeModel.Quantity to TimeEntity.Quantity
 
 Quantity paths:
-- Path A (click day, no timer, Quantity mode): modal shown BEFORE CalendarComponent.AddTimeDone → quantity passed to HabitService.AddTimeDone
+- Path A (click day in small calendar, Quantity mode): modal shown BEFORE CalendarComponent.AddTimeDone → quantity passed to HabitService.AddTimeDone
+- Path A2 (+ button in large calendar, Quantity mode): modal shown BEFORE CalendarComponent.AddToSelectedDay → same flow as Path A
 - Path B (Mark as done button, Quantity mode): modal shown BEFORE HabitService.MarkAsDone → quantity passed as parameter — callers: Habits.razor:461, HabitComponent.razor:25
 - Path C (timer stop, Quantity mode): StopTimer → HabitService.MarkAsDone without quantity → entry completed → modal shown AFTER → UpdateQuantity called on last entry
 - Path D (edit time list, Quantity mode): UpdateQuantity called from new UpdateQuantity handler in CalendarComponent.razor
@@ -382,7 +383,7 @@ Tests:
 
     HabitComponentTests.cs (bUnit):
     - DisplayMetric InputSelect is rendered
-    - DisplayMetric=Quantity: QuantityGoal InputNumber is visible
+    - DisplayMetric=Quantity: TargetQuantity InputNumber is visible
     - DisplayMetric=Count: QuantityGoal InputNumber is not rendered
 
     HabitTests.cs (E2E, Playwright):
