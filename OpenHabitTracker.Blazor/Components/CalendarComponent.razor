@@ -91,7 +91,7 @@
             foreach (TimeModel time in selectedTimeList)
             {
                 <div class="input-group">
-                    <span class="input-group-text">@Loc["From"]</span>
+                    @* <span class="input-group-text">@Loc["From"]</span> *@
                     <InputDate class="form-control" aria-label="@Loc["From"]" Type="InputDateType.Time" Value="time.StartedAt" ValueExpression="() => time.StartedAt" ValueChanged="(DateTime startedAt) => UpdateStartedAt(time, startedAt)" />
                     <span class="input-group-text">@Loc["to"]</span>
                     <InputDate class="form-control" aria-label="@Loc["to"]" Type="InputDateType.Time" Value="time.CompletedAt" ValueExpression="() => time.CompletedAt" ValueChanged="(DateTime? completedAt) => UpdateCompletedAt(time, completedAt)" />
