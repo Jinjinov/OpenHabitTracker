@@ -310,9 +310,9 @@ Data layer:
 - TimeEntity: add `long Quantity { get; set; }` (EF Core default 1 via migration)
 - HabitModel: add `DisplayMetric DisplayMetric { get; set; } = DisplayMetric.Repetitions`, add `long TargetQuantity { get; set; } = 1`
 - HabitEntity: add `DisplayMetric DisplayMetric { get; set; }`, add `long TargetQuantity { get; set; }`
-- EntityToModel.cs: map TimeEntity.Quantity → TimeModel.Quantity and HabitEntity.DisplayMetric → HabitModel.DisplayMetric
-- ModelToEntity.cs: map back
-- Two EF migrations: OpenHabitTracker.EntityFrameworkCore and OpenHabitTracker.Blazor.Web
+- EntityToModel.cs: map TimeEntity.Quantity → TimeModel.Quantity, HabitEntity.DisplayMetric → HabitModel.DisplayMetric, HabitEntity.TargetQuantity → HabitModel.TargetQuantity
+- ModelToEntity.cs: map back all three
+- Two EF migrations: OpenHabitTracker.EntityFrameworkCore and OpenHabitTracker.Blazor.Web (added manually by user) — TimeEntity.Quantity defaultValue: 1, HabitEntity.TargetQuantity defaultValue: 1, HabitEntity.DisplayMetric defaultValue: 0
 
 UI - HabitComponent.razor:
 - add InputSelect for DisplayMetric (same pattern as RepeatPeriod selector)
@@ -322,12 +322,13 @@ UI - HabitComponent.razor:
 
 UI - Habits.razor (new habit form, lines 35-106):
 - add InputSelect for DisplayMetric (same pattern as RepeatPeriod selector on line 62)
-- add InputNumber for TargetQuantity, visible only when NewHabit.DisplayMetric == Quantity (same pattern as Duration on line 70)
+- add InputNumber for TargetQuantity, visible only when NewHabit.DisplayMetric == Quantity (same pattern as Duration on line 70) — uses @bind-Value directly, saved on Save button click, no separate save method needed
 
 UI - CalendarComponent.razor - calendar cell (50×50px):
 - Repetitions: show Nx if list.Count > 1, green/warning based on RepeatCount threshold (current behavior)
 - Time: show total duration formatted as e.g. "0:15", green/warning based on Habit.Duration if set
 - Quantity: show (N) as sum of list.Sum(t => t.Quantity), green/warning based on HabitModel.TargetQuantity (same RepeatCount threshold logic as Repetitions)
+- ariaLabel (currently "X times done"): adapt per DisplayMetric — e.g. "2 repetitions", "0:15", "(42)"
 
 UI - CalendarComponent.razor - mark done (small calendar, no timer):
 - Repetitions / Time mode: save entry with Quantity = TargetQuantity
@@ -375,7 +376,7 @@ Tests:
     - HabitModel.TargetQuantity default is 1
 
     CalendarComponentTests.cs (bUnit, NSubstitute mocks, CSS selector assertions):
-    - DisplayMetric=Count, two completions on same day: cell shows "(2)"
+    - DisplayMetric=Repetitions, two completions on same day: cell shows "2x"
     - DisplayMetric=Time, one completion with 15 min duration: cell shows "0:15"
     - DisplayMetric=Quantity, two completions with Quantity=7 and Quantity=8: cell shows "(15)"
 
