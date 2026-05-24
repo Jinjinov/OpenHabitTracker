@@ -247,5 +247,12 @@
   "Categories complete": "{1}カテゴリ中{0}個完了",
   "Mark complete when": "完了条件",
   "all habits are done": "すべての習慣が完了",
-  "any habit is done": "いずれかの習慣が完了"
+  "any habit is done": "いずれかの習慣が完了",
+
+  "Current streak": "現在のストリーク",
+  "Best streak": "最高ストリーク",
+  "Days": "日",
+  "Weeks": "週",
+  "Months": "ヶ月",
+  "Years": "年"
 }

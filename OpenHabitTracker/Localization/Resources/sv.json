@@ -247,5 +247,12 @@
   "Categories complete": "{0} av {1} kategorier klara",
   "Mark complete when": "Markera som klar när",
   "all habits are done": "alla vanor är klara",
-  "any habit is done": "en vana är klar"
+  "any habit is done": "en vana är klar",
+
+  "Current streak": "Nuvarande serie",
+  "Best streak": "Bästa serie",
+  "Days": "Dagar",
+  "Weeks": "Veckor",
+  "Months": "Månader",
+  "Years": "År"
 }

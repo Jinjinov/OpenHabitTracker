@@ -247,5 +247,12 @@
   "Categories complete": "{0} od {1} kategorij dokončanih",
   "Mark complete when": "Označi kot dokončano ko",
   "all habits are done": "so vse navade opravljene",
-  "any habit is done": "je katera koli navada opravljena"
+  "any habit is done": "je katera koli navada opravljena",
+
+  "Current streak": "Trenutni niz",
+  "Best streak": "Najboljši niz",
+  "Days": "Dni",
+  "Weeks": "Tednov",
+  "Months": "Mesecev",
+  "Years": "Let"
 }

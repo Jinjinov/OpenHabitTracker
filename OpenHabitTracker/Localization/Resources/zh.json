@@ -247,5 +247,12 @@
   "Categories complete": "{1}个类别中{0}个已完成",
   "Mark complete when": "完成条件",
   "all habits are done": "所有习惯已完成",
-  "any habit is done": "任意习惯已完成"
+  "any habit is done": "任意习惯已完成",
+
+  "Current streak": "当前连续",
+  "Best streak": "最佳连续",
+  "Days": "天",
+  "Weeks": "周",
+  "Months": "月",
+  "Years": "年"
 }

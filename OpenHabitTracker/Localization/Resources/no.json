@@ -247,5 +247,12 @@
   "Categories complete": "{0} av {1} kategorier fullført",
   "Mark complete when": "Merk som fullført når",
   "all habits are done": "alle vaner er fullført",
-  "any habit is done": "en vane er fullført"
+  "any habit is done": "en vane er fullført",
+
+  "Current streak": "Nåværende serie",
+  "Best streak": "Beste serie",
+  "Days": "Dager",
+  "Weeks": "Uker",
+  "Months": "Måneder",
+  "Years": "År"
 }

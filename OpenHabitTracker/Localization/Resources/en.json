@@ -247,5 +247,12 @@
   "Categories complete": "{0} out of {1} categories complete",
   "Mark complete when": "Mark complete when",
   "all habits are done": "all habits are done",
-  "any habit is done": "any habit is done"
+  "any habit is done": "any habit is done",
+
+  "Current streak": "Current streak",
+  "Best streak": "Best streak",
+  "Days": "Days",
+  "Weeks": "Weeks",
+  "Months": "Months",
+  "Years": "Years"
 }

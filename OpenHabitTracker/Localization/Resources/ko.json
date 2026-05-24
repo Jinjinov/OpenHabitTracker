@@ -247,5 +247,12 @@
   "Categories complete": "{1}개 중 {0}개 카테고리 완료",
   "Mark complete when": "완료 조건",
   "all habits are done": "모든 습관이 완료됨",
-  "any habit is done": "습관 하나 이상 완료됨"
+  "any habit is done": "습관 하나 이상 완료됨",
+
+  "Current streak": "현재 연속",
+  "Best streak": "최고 연속",
+  "Days": "일",
+  "Weeks": "주",
+  "Months": "개월",
+  "Years": "년"
 }

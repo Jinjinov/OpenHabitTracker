@@ -247,5 +247,12 @@
   "Categories complete": "{0} sur {1} catégories complètes",
   "Mark complete when": "Marquer comme complet quand",
   "all habits are done": "toutes les habitudes sont terminées",
-  "any habit is done": "une habitude est terminée"
+  "any habit is done": "une habitude est terminée",
+
+  "Current streak": "Série actuelle",
+  "Best streak": "Meilleure série",
+  "Days": "Jours",
+  "Weeks": "Semaines",
+  "Months": "Mois",
+  "Years": "Ans"
 }
