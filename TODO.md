@@ -308,7 +308,7 @@ Enum:
 Data layer:
 - TimeModel: add `long Quantity { get; set; } = 1` (default 1 so switching DisplayMetric retroactively gives sensible data)
 - TimeEntity: add `long Quantity { get; set; }` (EF Core default 1 via migration)
-- HabitModel: add `DisplayMetric DisplayMetric { get; set; } = DisplayMetric.Repetitions`, add `long TargetQuantity { get; set; }`
+- HabitModel: add `DisplayMetric DisplayMetric { get; set; } = DisplayMetric.Repetitions`, add `long TargetQuantity { get; set; } = 1`
 - HabitEntity: add `DisplayMetric DisplayMetric { get; set; }`, add `long TargetQuantity { get; set; }`
 - EntityToModel.cs: map TimeEntity.Quantity → TimeModel.Quantity and HabitEntity.DisplayMetric → HabitModel.DisplayMetric
 - ModelToEntity.cs: map back
@@ -327,7 +327,7 @@ UI - Habits.razor (new habit form, lines 35-106):
 UI - CalendarComponent.razor - calendar cell (50×50px):
 - Repetitions: show Nx if list.Count > 1, green/warning based on RepeatCount threshold (current behavior)
 - Time: show total duration formatted as e.g. "0:15", green/warning based on Habit.Duration if set
-- Quantity: show (N) as sum of list.Sum(t => t.Quantity), green/warning based on HabitModel.TargetQuantity (0 = no threshold, neutral color)
+- Quantity: show (N) as sum of list.Sum(t => t.Quantity), green/warning based on HabitModel.TargetQuantity (same RepeatCount threshold logic as Repetitions)
 
 UI - CalendarComponent.razor - mark done (small calendar, no timer):
 - Repetitions / Time mode: save entry with Quantity = TargetQuantity
@@ -339,7 +339,20 @@ UI - HabitComponent.razor - timer stop:
 
 UI - CalendarComponent.razor - time list (large calendar, selected day):
 - Repetitions / Time: current behavior (one row per entry: From / to / delete)
-- Quantity: two rows per entry — row 1: From / to / delete, row 2: quantity InputNumber
+- Quantity: two rows per entry — row 1: From / to / delete, row 2: quantity InputNumber with UpdateQuantity handler
+
+Service layer:
+- HabitService.AddTimeDone: add `long? quantity = null` parameter — if null, uses habit.TargetQuantity internally
+- HabitService.MarkAsDone: add `long? quantity = null` parameter — passes to AddTimeDone (path 2: no timer), or sets on existing entry (path 1: timer running)
+- IHabitService.AddTimeDone, IHabitService.MarkAsDone: update signatures to match
+- IHabitService: add `Task UpdateQuantity(HabitModel habit, TimeModel time)`
+- HabitService: implement UpdateQuantity — persist TimeModel.Quantity to TimeEntity.Quantity
+
+Quantity paths:
+- Path A (click day, no timer, Quantity mode): modal shown BEFORE CalendarComponent.AddTimeDone → quantity passed to HabitService.AddTimeDone
+- Path B (Mark as done button, Quantity mode): modal shown BEFORE HabitService.MarkAsDone → quantity passed as parameter — callers: Habits.razor:461, HabitComponent.razor:25
+- Path C (timer stop, Quantity mode): StopTimer → HabitService.MarkAsDone without quantity → entry completed → modal shown AFTER → UpdateQuantity called on last entry
+- Path D (edit time list, Quantity mode): UpdateQuantity called from new UpdateQuantity handler in CalendarComponent.razor
 
 Localization:
 - add keys to all 20 JSON files in OpenHabitTracker/Localization/Resources/:
@@ -358,8 +371,8 @@ Tests:
 
     HabitModelTests.cs:
     - TimeModel.Quantity default is 1
-    - HabitModel.DisplayMetric default is DisplayMetric.Count
-    - HabitModel.QuantityGoal default is 0
+    - HabitModel.DisplayMetric default is DisplayMetric.Repetitions
+    - HabitModel.TargetQuantity default is 1
 
     CalendarComponentTests.cs (bUnit, NSubstitute mocks, CSS selector assertions):
     - DisplayMetric=Count, two completions on same day: cell shows "(2)"
