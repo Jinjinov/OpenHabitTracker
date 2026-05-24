@@ -340,7 +340,7 @@ UI - CalendarComponent.razor - mark done (small calendar, no timer):
 
 UI - HabitComponent.razor - timer stop:
 - Repetitions / Time mode: save entry with Quantity = TargetQuantity
-- Quantity mode: show modal asking for quantity before saving the entry
+- Quantity mode: entry already saved by StopTimer — modal shown AFTER, no cancel button, quantity set via UpdateQuantity
 
 UI - CalendarComponent.razor - time list (large calendar, selected day):
 - Repetitions / Time: current behavior (one row per entry: From / to / delete)
@@ -406,6 +406,21 @@ Tests:
     HabitTests.cs (E2E, Playwright):
     - DisplayMetric=Quantity persisted after reload (same pattern as HabitDuration_PersistedAfterReload)
     - Quantity modal flow: mark done → quantity input appears → enter value → confirm → calendar cell shows sum
+
+Guided tour:
+- HabitComponent.razor: add `data-habits-step-17` to new DisplayMetric input group (after Duration step-16)
+- HabitComponent.razor: add `data-habits-step-18` to new TargetQuantity input group (after DisplayMetric)
+- HabitComponent.razor: add `data-habits-step-20` to existing Streak section (currently no attribute, before old step-18)
+- HabitComponent.razor: renumber all following steps — old 17→19, 18→21, 19→22, 20→23, 21→24, 22→25, 23→26, 24→27, 25→28, 26→29
+  (Timer: 17→19; stats: 18-23 → 21-26; category/color/created: 24-26 → 27-29)
+- Habits.razor tourSteps: insert 3 new entries:
+  - after Duration (current index 15): `new() { Text = "Set the habit's display metric.", Show = () => _showHabitComponent }` (step 17)
+  - after DisplayMetric: `new() { Text = "Set the habit's target quantity.", Show = () => _showHabitComponent && HabitService.SelectedHabit?.DisplayMetric == DisplayMetric.Quantity }` (step 18)
+  - after Timer (now step 19): `new() { Text = "Habit's current and best streak.", Show = () => _showHabitComponent }` (step 20)
+- GuidedTourComponent-en.json (+ all 19 other language files in OpenHabitTracker/Localization/Resources/): add 3 keys:
+  "Set the habit's display metric."
+  "Set the habit's target quantity."
+  "Habit's current and best streak."
 
 ---------------------------------------------------------------------------------------------------
 
