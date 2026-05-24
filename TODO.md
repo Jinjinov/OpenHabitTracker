@@ -339,7 +339,7 @@ UI - HabitComponent.razor - timer stop:
 
 UI - CalendarComponent.razor - time list (large calendar, selected day):
 - Repetitions / Time: current behavior (one row per entry: From / to / delete)
-- Quantity: two rows per entry — row 1: From / to / delete, row 2: quantity InputNumber with UpdateQuantity handler
+- Quantity: two rows per entry — row 1: From / to / delete, row 2: quantity InputNumber with UpdateQuantity handler and mb-1 to separate entries
 
 Service layer:
 - HabitService.AddTimeDone: add `long? quantity = null` parameter — if null, uses habit.TargetQuantity internally
