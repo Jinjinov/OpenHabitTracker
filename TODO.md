@@ -364,7 +364,7 @@ UI - QuantityModalComponent:
 - confirm: invokes OnConfirm callback with quantity value
 - cancel: invokes OnCancel callback, no entry saved
 - ShowCancel parameter controls whether cancel button is visible
-- embedded in CalendarComponent and HabitComponent
+- embedded in CalendarComponent, HabitComponent, and Habits.razor
 
 Quantity paths:
 - Path A (click day in small calendar, Quantity mode): modal shown BEFORE CalendarComponent.AddTimeDone → quantity passed to HabitService.AddTimeDone
