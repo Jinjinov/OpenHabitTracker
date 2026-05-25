@@ -246,7 +246,7 @@
         if (_shouldFocusEdit && editOpened)
         {
             _shouldFocusEdit = false;
-            await JsInterop.FocusFirstIn("#note-component");
+            await JsInterop.FocusElementById("note-component");
         }
         else if (editClosed && _lastSelectedId != 0)
         {

@@ -10,7 +10,7 @@
 @inject MarkdownToHtml MarkdownToHtml
 @inject IGTourService GTourService
 
-<div id="note-component" class="@Note.Color" @onkeydown="HandleKeyDown">
+<div id="note-component" class="@Note.Color" role="region" aria-label="@Loc["Edit note"]" tabindex="-1" @onkeydown="HandleKeyDown">
     <div class="input-group flex-nowrap" data-notes-step-5>
         @if (ClientState.Settings.ShowPriorityDropdown)
         {

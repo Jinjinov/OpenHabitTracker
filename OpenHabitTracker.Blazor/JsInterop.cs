@@ -48,12 +48,6 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IJsInterop, IAsyncDisposab
         await module.InvokeVoidAsync("focusElement", element);
     }
 
-    public async ValueTask FocusFirstIn(string cssSelector)
-    {
-        IJSObjectReference module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("focusFirstIn", cssSelector);
-    }
-
     public async ValueTask FocusElementById(string id)
     {
         IJSObjectReference module = await _moduleTask.Value;
