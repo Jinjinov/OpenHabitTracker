@@ -430,16 +430,13 @@ public class HabitTests : BaseTest
     [Test]
     public async Task Calendar_LargeCalendar_IncreaseButton_QuantityMode_CellShowsQuantity()
     {
-        await OpenSidebarAsync("bi-gear");
-        await Page.Locator("label[for='ShowLargeCalendar']").ClickAsync();
-        await CloseSidebarAsync();
-
         await AddItemAsync("Large Cal Quantity Habit");
 
         await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Large Cal Quantity Habit" }).ClickAsync();
         await Page.Locator("select[aria-label='Display']").SelectOptionAsync("Quantity");
 
-        ILocator todayCell = Page.Locator("#habit-component button[role='gridcell'].border-primary-subtle");
+        string todayPrefix = DateTime.Today.ToString("dddd, MMMM d");
+        ILocator todayCell = Page.Locator($"#habit-component button[role='gridcell'][aria-label^='{todayPrefix}']");
         await todayCell.ClickAsync();
 
         await Page.Locator("button[aria-label='Increase']").ClickAsync();
@@ -456,16 +453,13 @@ public class HabitTests : BaseTest
     [Test]
     public async Task LargeCalendar_EditQuantityInTimeList_CellUpdates()
     {
-        await OpenSidebarAsync("bi-gear");
-        await Page.Locator("label[for='ShowLargeCalendar']").ClickAsync();
-        await CloseSidebarAsync();
-
         await AddItemAsync("Time List Quantity Habit");
 
         await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Time List Quantity Habit" }).ClickAsync();
         await Page.Locator("select[aria-label='Display']").SelectOptionAsync("Quantity");
 
-        ILocator todayCell = Page.Locator("#habit-component button[role='gridcell'].border-primary-subtle");
+        string todayPrefix = DateTime.Today.ToString("dddd, MMMM d");
+        ILocator todayCell = Page.Locator($"#habit-component button[role='gridcell'][aria-label^='{todayPrefix}']");
         await todayCell.ClickAsync();
 
         await Page.Locator("button[aria-label='Increase']").ClickAsync();
