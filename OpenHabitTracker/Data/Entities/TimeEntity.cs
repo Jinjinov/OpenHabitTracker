@@ -9,4 +9,6 @@ public class TimeEntity
     public DateTime StartedAt { get; set; }
 
     public DateTime? CompletedAt { get; set; }
+
+    public long Quantity { get; set; }
 }

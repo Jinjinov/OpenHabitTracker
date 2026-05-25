@@ -108,6 +108,43 @@ export function focusElementById(id) {
     document.getElementById(id)?.focus();
 }
 
+let _savedFocusElement = null;
+
+export function saveFocus() {
+    _savedFocusElement = document.activeElement;
+}
+
+export function restoreFocus() {
+    _savedFocusElement?.focus();
+    _savedFocusElement = null;
+}
+
+export function trapFocus(id) {
+    const container = document.getElementById(id);
+    if (!container || container.focusTrapHandlerAdded) return;
+    container.focusTrapHandlerAdded = true;
+    container.addEventListener('keydown', function (event) {
+        if (event.key !== 'Tab') return;
+        const focusable = Array.from(container.querySelectorAll(
+            'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        ));
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey) {
+            if (document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            }
+        } else {
+            if (document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        }
+    });
+}
+
 export function handleTabKey(textarea) {
     if (textarea && !textarea.tabKeyHandlerAdded) {
         textarea.addEventListener('keydown', function (event) {

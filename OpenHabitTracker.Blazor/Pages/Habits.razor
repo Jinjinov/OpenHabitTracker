@@ -87,6 +87,24 @@
                 <span class="input-group-text bg-transparent">min</span>
             </div>
 
+            <div class="input-group">
+                <span class="input-group-text bg-transparent col-4">@Loc["Display"]</span>
+                <InputSelect class="form-select" aria-label="@Loc["Display"]" @bind-Value="HabitService.NewHabit.DisplayMetric">
+                    @foreach (DisplayMetric displayMetric in Enum.GetValues<DisplayMetric>())
+                    {
+                        <option value="@displayMetric">@Loc[displayMetric.ToString()]</option>
+                    }
+                </InputSelect>
+            </div>
+
+            @if (HabitService.NewHabit.DisplayMetric == DisplayMetric.Quantity)
+            {
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent col-4">@Loc["Target quantity"]</span>
+                    <InputNumber class="form-control" aria-label="@Loc["Target quantity"]" @bind-Value="HabitService.NewHabit.TargetQuantity" />
+                </div>
+            }
+
             @if (ClientState.Settings.ShowCategory)
             {
                 <div class="input-group flex-nowrap">
@@ -242,6 +260,8 @@
     </div>
 }
 
+<QuantityModalComponent IsVisible="_showQuantityModal" ShowCancel="true" InitialQuantity="_pendingQuantityHabit?.TargetQuantity ?? 1" OnOK="OnModalConfirm" OnCancel="CancelQuantityModal" />
+
 @code {
     TourStep[] tourSteps;
 
@@ -265,7 +285,10 @@
             new() { Text = "Set the habit's start date. Elapsed time won't count before this date.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's desired repeat interval.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's desired duration.", Show = () => _showHabitComponent },
+            new() { Text = "Set the habit's display metric.", Show = () => _showHabitComponent },
+            new() { Text = "Set the habit's target quantity.", Show = () => _showHabitComponent && HabitService.SelectedHabit?.DisplayMetric == DisplayMetric.Quantity },
             new() { Text = "Start the timer to start timing the habit's duration. Stopping the timer completes the habit.", Show = () => _showHabitComponent },
+            new() { Text = "Habit's current and best streak.", Show = () => _showHabitComponent },
             new() { Text = "Time spent on the habit.", Show = () => _showHabitComponent },
             new() { Text = "The time elapsed since the habit was last completed.", Show = () => _showHabitComponent },
             new() { Text = "Habit's desired repeat interval.", Show = () => _showHabitComponent },
@@ -321,6 +344,8 @@
     bool _prevShowHabitComponent;
     long _lastSelectedId;
     bool _pageStateChanged;
+    bool _showQuantityModal;
+    HabitModel? _pendingQuantityHabit;
 
     protected override async Task OnInitializedAsync()
     {
@@ -458,8 +483,34 @@
 
     async Task OnMarkAsDone(HabitModel habit)
     {
-        await HabitService.MarkAsDone(habit);
-        _pageStateChanged = !_pageStateChanged;
+        if (habit.DisplayMetric == DisplayMetric.Quantity)
+        {
+            _pendingQuantityHabit = habit;
+            _showQuantityModal = true;
+        }
+        else
+        {
+            await HabitService.MarkAsDone(habit);
+            _pageStateChanged = !_pageStateChanged;
+        }
+    }
+
+    async Task OnModalConfirm(long quantity)
+    {
+        if (_pendingQuantityHabit is not null)
+        {
+            await HabitService.MarkAsDone(_pendingQuantityHabit, quantity);
+            _pendingQuantityHabit = null;
+            _pageStateChanged = !_pageStateChanged;
+        }
+
+        _showQuantityModal = false;
+    }
+
+    void CancelQuantityModal()
+    {
+        _pendingQuantityHabit = null;
+        _showQuantityModal = false;
     }
 
     IEnumerable<(CategoryModel? Category, IEnumerable<HabitModel> Habits)> GetHabitGroups()

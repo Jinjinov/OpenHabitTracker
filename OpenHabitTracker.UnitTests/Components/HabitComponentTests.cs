@@ -94,7 +94,7 @@ public class HabitComponentTests
         // HabitService.Start() is called before the loop begins (mock returns Task.CompletedTask
         // synchronously), so by the time the click task suspends at WaitForNextTickAsync the call
         // is already recorded. TearDown disposes _ctx which disposes _timer, ending the loop.
-        Task _ = cut.Find("[data-habits-step-17] button").ClickAsync(new MouseEventArgs());
+        Task _ = cut.Find("[data-habits-step-19] button").ClickAsync(new MouseEventArgs());
 
         await _habitService.Received(1).Start(_habit);
     }
@@ -182,5 +182,40 @@ public class HabitComponentTests
             parameters => parameters.Add(p => p.Habit, _habit));
 
         Assert.That(cut.Markup, Does.Not.Contain("("));
+    }
+
+    // --- DisplayMetric feature tests ---
+
+    [Test]
+    public void DisplayMetric_Select_IsRendered()
+    {
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        AngleSharp.Dom.IElement select = cut.Find("[data-habits-step-17] select");
+
+        Assert.That(select, Is.Not.Null);
+    }
+
+    [Test]
+    public void TargetQuantity_Input_HiddenWhenDisplayMetricIsRepetitions()
+    {
+        // _habit.DisplayMetric is Repetitions by default
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        Assert.That(cut.FindAll("[data-habits-step-18]"), Is.Empty);
+    }
+
+    [Test]
+    public void TargetQuantity_Input_VisibleWhenDisplayMetricIsQuantity()
+    {
+        _habit.DisplayMetric = DisplayMetric.Quantity;
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        Assert.That(cut.Find("[data-habits-step-18]"), Is.Not.Null);
     }
 }

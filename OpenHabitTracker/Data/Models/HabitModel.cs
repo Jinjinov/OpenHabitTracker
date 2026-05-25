@@ -8,6 +8,10 @@ public class HabitModel : ItemsModel
 
     public Period RepeatPeriod { get; set; } = Period.Day;
 
+    public DisplayMetric DisplayMetric { get; set; } = DisplayMetric.Repetitions;
+
+    public long TargetQuantity { get; set; } = 1;
+
     public DateTime? LastTimeDoneAt { get; set; }
 
     public DateTime? StartAt { get; set; }

@@ -187,7 +187,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         }
     }
 
-    public async Task MarkAsDone(HabitModel habit)
+    public async Task MarkAsDone(HabitModel habit, long? quantity = null)
     {
         if (Habits is null)
             return;
@@ -199,10 +199,12 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         if (habit.TimesDone.LastOrDefault() is TimeModel time && time.CompletedAt is null)
         {
             time.CompletedAt = now;
+            time.Quantity = quantity ?? habit.TargetQuantity;
 
             if (await _clientState.DataAccess.GetTime(time.Id) is TimeEntity timeEntity)
             {
                 timeEntity.CompletedAt = now;
+                timeEntity.Quantity = time.Quantity;
                 await _clientState.DataAccess.UpdateTime(timeEntity);
             }
 
@@ -211,7 +213,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         }
         else
         {
-            await AddTimeDone(habit, now);
+            await AddTimeDone(habit, now, quantity);
         }
 
         if (_clientState.Settings.UncheckAllItemsOnHabitDone)
@@ -252,7 +254,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         }
     }
 
-    public async Task AddTimeDone(HabitModel habit, DateTime dateTime)
+    public async Task AddTimeDone(HabitModel habit, DateTime dateTime, long? quantity = null)
     {
         habit.TimesDone ??= [];
 
@@ -265,7 +267,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         {
             HabitId = habit.Id,
             StartedAt = startedAt,
-            CompletedAt = dateTime
+            CompletedAt = dateTime,
+            Quantity = quantity ?? habit.TargetQuantity
         };
 
         habit.TimesDone.Add(timeModel);
@@ -325,6 +328,18 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault(x => x.CompletedAt != null);
 
         await SetLastTimeDone(habit, last?.CompletedAt);
+    }
+
+    public async Task UpdateQuantity(HabitModel habit, TimeModel time)
+    {
+        if (habit.TimesDone is null)
+            return;
+
+        if (await _clientState.DataAccess.GetTime(time.Id) is TimeEntity timeEntity)
+        {
+            timeEntity.Quantity = time.Quantity;
+            await _clientState.DataAccess.UpdateTime(timeEntity);
+        }
     }
 
     public async Task DeleteHabit(HabitModel habit)

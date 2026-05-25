@@ -53,16 +53,47 @@
 
                     if (Habit.TimesDoneByDay.TryGetValue(dateTime, out list) && list.Count > 0)
                     {
-                        if (list.Count > 1)
-                            timesDone = $"({list.Count})";
+                        if (Habit.DisplayMetric == DisplayMetric.Time)
+                        {
+                            TimeSpan totalTime = new TimeSpan(list.Sum(t => t.CompletedAt.HasValue ? t.CompletedAt.Value.Ticks - t.StartedAt.Ticks : 0));
+                            if (totalTime.TotalMinutes >= 1)
+                                timesDone = $"{(int)totalTime.TotalHours}:{totalTime.Minutes:D2}";
 
-                        if ((Habit.RepeatPeriod == Period.Day && list.Count >= Habit.RepeatCount) || (Habit.RepeatPeriod != Period.Day && Habit.RepeatCountReached(dateTime)))
-                            background = "bg-success-subtle";
+                            if (Habit.Duration is null)
+                                background = "bg-success-subtle";
+                            else if (totalTime >= Habit.Duration.Value.ToTimeSpan())
+                                background = "bg-success-subtle";
+                            else
+                                background = "bg-warning-subtle";
+                        }
+                        else if (Habit.DisplayMetric == DisplayMetric.Quantity)
+                        {
+                            long sum = list.Sum(t => t.Quantity);
+                            timesDone = $"({sum})";
+
+                            if (sum >= Habit.TargetQuantity)
+                                background = "bg-success-subtle";
+                            else
+                                background = "bg-warning-subtle";
+                        }
                         else
-                            background = "bg-warning-subtle";
+                        {
+                            if (list.Count > 1)
+                                timesDone = $"{list.Count}x";
+
+                            if ((Habit.RepeatPeriod == Period.Day && list.Count >= Habit.RepeatCount) || (Habit.RepeatPeriod != Period.Day && Habit.RepeatCountReached(dateTime)))
+                                background = "bg-success-subtle";
+                            else
+                                background = "bg-warning-subtle";
+                        }
                     }
 
-                    string ariaLabel = $"{dateTime:dddd, MMMM d} \u2014 {list?.Count ?? 0} {Loc["times done"]}";
+                    string ariaLabel = Habit.DisplayMetric switch
+                    {
+                        DisplayMetric.Time => $"{dateTime:dddd, MMMM d} \u2014 {timesDone}",
+                        DisplayMetric.Quantity => $"{dateTime:dddd, MMMM d} \u2014 {(list is null ? 0 : list.Sum(t => t.Quantity))} {Loc["Quantity"]}",
+                        _ => $"{dateTime:dddd, MMMM d} \u2014 {list?.Count ?? 0} {Loc["times done"]}"
+                    };
 
                     <button class="@($"border {border} {text} d-flex {background}")"
                             role="gridcell"
@@ -97,10 +128,19 @@
                     <InputDate class="form-control" aria-label="@Loc["to"]" Type="InputDateType.Time" Value="time.CompletedAt" ValueExpression="() => time.CompletedAt" ValueChanged="(DateTime? completedAt) => UpdateCompletedAt(time, completedAt)" />
                     <button class="btn btn-outline-primary" aria-label="@Loc["Delete"]" @onclick="() => RemoveTimeDone(time)"><i class="bi bi-trash"></i></button>
                 </div>
+                @if (Habit!.DisplayMetric == DisplayMetric.Quantity)
+                {
+                    <div class="input-group mb-1">
+                        <span class="input-group-text bg-transparent col-4">@Loc["Quantity"]</span>
+                        <InputNumber class="form-control" aria-label="@Loc["Quantity"]" Value="time.Quantity" ValueExpression="() => time.Quantity" ValueChanged="(long quantity) => UpdateQuantity(time, quantity)" />
+                    </div>
+                }
             }
         }
     }
 }
+
+<QuantityModalComponent IsVisible="_showQuantityModal" ShowCancel="true" InitialQuantity="Habit!.TargetQuantity" OnOK="ConfirmQuantity" OnCancel="CancelQuantity" />
 
 @code {
     [EditorRequired]
@@ -205,6 +245,9 @@
     DateTime? selectedDateTime;
     List<TimeModel>? selectedTimeList;
 
+    bool _showQuantityModal = false;
+    DateTime _pendingQuantityDateTime;
+
     async Task RemoveFromSelectedDay()
     {
         await RemoveTimeDone(selectedTimeList);
@@ -212,10 +255,20 @@
 
     async Task AddToSelectedDay()
     {
-        await AddTimeDone(selectedDateTime!.Value);
+        if (Habit!.DisplayMetric == DisplayMetric.Quantity)
+        {
+            if (selectedDateTime!.Value > DateTime.Now)
+                return;
+            _pendingQuantityDateTime = selectedDateTime!.Value;
+            _showQuantityModal = true;
+        }
+        else
+        {
+            await AddTimeDone(selectedDateTime!.Value);
 
-        if (selectedTimeList is null)
-            Habit!.TimesDoneByDay!.TryGetValue(selectedDateTime!.Value, out selectedTimeList);
+            if (selectedTimeList is null)
+                Habit!.TimesDoneByDay!.TryGetValue(selectedDateTime!.Value, out selectedTimeList);
+        }
     }
 
     async Task HandleGridKeyDown(KeyboardEventArgs e)
@@ -314,7 +367,17 @@
         }
         else
         {
-            await AddTimeDone(dateTime);
+            if (Habit!.DisplayMetric == DisplayMetric.Quantity)
+            {
+                if (dateTime > DateTime.Now)
+                    return;
+                _pendingQuantityDateTime = dateTime;
+                _showQuantityModal = true;
+            }
+            else
+            {
+                await AddTimeDone(dateTime);
+            }
         }
     }
 
@@ -347,6 +410,35 @@
     {
         await HabitService.RemoveTimeDone(Habit!, time);
 
+        await HabitChanged.InvokeAsync(Habit);
+    }
+
+    async Task ConfirmQuantity(long quantity)
+    {
+        _showQuantityModal = false;
+
+        DateTime dateTime = _pendingQuantityDateTime;
+        if (dateTime.Date == DateTime.Today)
+            dateTime = DateTime.Now;
+        else if (dateTime.TimeOfDay == TimeSpan.Zero)
+            dateTime = dateTime.AddHours(12);
+
+        await HabitService.AddTimeDone(Habit!, dateTime, quantity);
+        await HabitChanged.InvokeAsync(Habit);
+
+        if (selectedTimeList is null && selectedDateTime.HasValue)
+            Habit!.TimesDoneByDay!.TryGetValue(selectedDateTime.Value, out selectedTimeList);
+    }
+
+    void CancelQuantity()
+    {
+        _showQuantityModal = false;
+    }
+
+    async Task UpdateQuantity(TimeModel time, long quantity)
+    {
+        time.Quantity = quantity;
+        await HabitService.UpdateQuantity(Habit!, time);
         await HabitChanged.InvokeAsync(Habit);
     }
 

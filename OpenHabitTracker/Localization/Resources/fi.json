@@ -254,5 +254,13 @@
   "Days": "Päivää",
   "Weeks": "Viikkoa",
   "Months": "Kuukautta",
-  "Years": "Vuotta"
+  "Years": "Vuotta",
+
+  "Display": "Näyttö",
+  "Repetitions": "Toistot",
+  "Time": "Aika",
+  "Quantity": "Määrä",
+  "Target quantity": "Tavoitemäärä",
+  "OK": "OK",
+  "Cancel": "Peruuta"
 }

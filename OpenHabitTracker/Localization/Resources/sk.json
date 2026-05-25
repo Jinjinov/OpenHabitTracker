@@ -254,5 +254,13 @@
   "Days": "Dní",
   "Weeks": "Týždňov",
   "Months": "Mesiacov",
-  "Years": "Rokov"
+  "Years": "Rokov",
+
+  "Display": "Zobrazenie",
+  "Repetitions": "Opakovania",
+  "Time": "Čas",
+  "Quantity": "Množstvo",
+  "Target quantity": "Cieľové množstvo",
+  "OK": "OK",
+  "Cancel": "Zrušiť"
 }

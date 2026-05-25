@@ -270,4 +270,67 @@ public class CalendarComponentTests
         Assert.That(cells[0].GetAttribute("tabindex"), Is.EqualTo("-1"));
         Assert.That(cells[1].GetAttribute("tabindex"), Is.EqualTo("0"));
     }
+
+    [Test]
+    public void MonthView_Repetitions_CellShowsCountSuffix()
+    {
+        _habit.DisplayMetric = DisplayMetric.Repetitions;
+        _habit.TimesDoneByDay = new Dictionary<DateTime, List<TimeModel>>
+        {
+            [DateTime.Today] = new List<TimeModel>
+            {
+                new TimeModel { StartedAt = DateTime.Today },
+                new TimeModel { StartedAt = DateTime.Today.AddHours(2) }
+            }
+        };
+
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        Assert.That(cut.Markup, Does.Contain("<small>2x</small>"));
+    }
+
+    [Test]
+    public void MonthView_Time_CellShowsFormattedDuration()
+    {
+        _habit.DisplayMetric = DisplayMetric.Time;
+        DateTime start = DateTime.Today.AddHours(9);
+        _habit.TimesDoneByDay = new Dictionary<DateTime, List<TimeModel>>
+        {
+            [DateTime.Today] = new List<TimeModel>
+            {
+                new TimeModel { StartedAt = start, CompletedAt = start.AddMinutes(15) }
+            }
+        };
+
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        Assert.That(cut.Markup, Does.Contain("<small>0:15</small>"));
+    }
+
+    [Test]
+    public void MonthView_Quantity_CellShowsSumInParens()
+    {
+        _habit.DisplayMetric = DisplayMetric.Quantity;
+        _habit.TargetQuantity = 10;
+        _habit.TimesDoneByDay = new Dictionary<DateTime, List<TimeModel>>
+        {
+            [DateTime.Today] = new List<TimeModel>
+            {
+                new TimeModel { StartedAt = DateTime.Today, Quantity = 15 }
+            }
+        };
+
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true));
+
+        Assert.That(cut.Markup, Does.Contain("<small>(15)</small>"));
+    }
 }

@@ -1,0 +1,92 @@
+@using OpenHabitTracker.Data.Models
+
+@inject IStringLocalizer Loc
+@inject IJsInterop JsInterop
+
+@if (IsVisible)
+{
+    <div class="modal-backdrop show" style="z-index: 1050;"></div>
+    <div class="modal show d-block" role="dialog" aria-modal="true" style="z-index: 1055;" @onkeydown="HandleKeyDown" @onkeydown:stopPropagation @onclick:stopPropagation>
+        <div id="quantity-modal" class="modal-dialog modal-sm" @onclick:stopPropagation>
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h5 class="modal-title">@Loc["Quantity"]</h5>
+                    @if (ShowCancel)
+                    {
+                        <button class="btn-close rounded-0" aria-label="@Loc["Cancel"]" @onclick="async () => await OnCancel.InvokeAsync()"></button>
+                    }
+                </div>
+                <div class="modal-body">
+                    <InputNumber id="quantity-modal-input" class="form-control" aria-label="@Loc["Quantity"]" @bind-Value="_quantity" @onkeydown="HandleInputKeyDown" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" @onclick="async () => await OnOK.InvokeAsync(_quantity)">@Loc["OK"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public bool ShowCancel { get; set; }
+
+    [Parameter]
+    public long InitialQuantity { get; set; } = 1;
+
+    [Parameter]
+    public EventCallback<long> OnOK { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    long _quantity;
+    bool _prevIsVisible;
+    bool _needsFocus;
+    bool _needsRestoreFocus;
+
+    protected override void OnParametersSet()
+    {
+        if (IsVisible && !_prevIsVisible)
+        {
+            _quantity = InitialQuantity;
+            _needsFocus = true;
+        }
+        else if (!IsVisible && _prevIsVisible)
+        {
+            _needsRestoreFocus = true;
+        }
+        _prevIsVisible = IsVisible;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_needsFocus)
+        {
+            _needsFocus = false;
+            await JsInterop.SaveFocus();
+            await JsInterop.TrapFocus("quantity-modal");
+            await JsInterop.FocusElementById("quantity-modal-input");
+        }
+        else if (_needsRestoreFocus)
+        {
+            _needsRestoreFocus = false;
+            await JsInterop.RestoreFocus();
+        }
+    }
+
+    async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape" && ShowCancel)
+            await OnCancel.InvokeAsync();
+    }
+
+    async Task HandleInputKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await OnOK.InvokeAsync(_quantity);
+    }
+}

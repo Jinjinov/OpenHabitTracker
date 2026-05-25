@@ -254,5 +254,13 @@
   "Days": "Dagen",
   "Weeks": "Weken",
   "Months": "Maanden",
-  "Years": "Jaren"
+  "Years": "Jaren",
+
+  "Display": "Weergave",
+  "Repetitions": "Herhalingen",
+  "Time": "Tijd",
+  "Quantity": "Hoeveelheid",
+  "Target quantity": "Doelhoeveelheid",
+  "OK": "OK",
+  "Cancel": "Annuleren"
 }

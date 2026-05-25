@@ -814,4 +814,30 @@ public class HabitModelTests
         Assert.That(habit.CurrentStreak?.Count, Is.EqualTo(3));
         Assert.That(habit.BestStreak?.Count, Is.EqualTo(3));
     }
+
+    // --- DisplayMetric feature default value tests ---
+
+    [Test]
+    public void TimeModel_Quantity_DefaultIs1()
+    {
+        TimeModel time = new();
+
+        Assert.That(time.Quantity, Is.EqualTo(1));
+    }
+
+    [Test]
+    public void HabitModel_DisplayMetric_DefaultIsRepetitions()
+    {
+        HabitModel habit = new();
+
+        Assert.That(habit.DisplayMetric, Is.EqualTo(DisplayMetric.Repetitions));
+    }
+
+    [Test]
+    public void HabitModel_TargetQuantity_DefaultIs1()
+    {
+        HabitModel habit = new();
+
+        Assert.That(habit.TargetQuantity, Is.EqualTo(1));
+    }
 }

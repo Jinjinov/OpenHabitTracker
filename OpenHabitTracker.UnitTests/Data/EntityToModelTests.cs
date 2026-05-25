@@ -87,6 +87,46 @@ public class EntityToModelTests
         Assert.That(entity.StartAt, Is.EqualTo(startAt));
     }
 
+    [Test]
+    public void HabitEntity_ToModel_MapsDisplayMetric()
+    {
+        HabitEntity entity = new() { DisplayMetric = DisplayMetric.Quantity };
+
+        HabitModel model = entity.ToModel();
+
+        Assert.That(model.DisplayMetric, Is.EqualTo(DisplayMetric.Quantity));
+    }
+
+    [Test]
+    public void HabitModel_ToEntity_MapsDisplayMetric()
+    {
+        HabitModel model = new() { DisplayMetric = DisplayMetric.Time };
+
+        HabitEntity entity = model.ToEntity();
+
+        Assert.That(entity.DisplayMetric, Is.EqualTo(DisplayMetric.Time));
+    }
+
+    [Test]
+    public void HabitEntity_ToModel_MapsTargetQuantity()
+    {
+        HabitEntity entity = new() { TargetQuantity = 5 };
+
+        HabitModel model = entity.ToModel();
+
+        Assert.That(model.TargetQuantity, Is.EqualTo(5));
+    }
+
+    [Test]
+    public void HabitModel_ToEntity_MapsTargetQuantity()
+    {
+        HabitModel model = new() { TargetQuantity = 5 };
+
+        HabitEntity entity = model.ToEntity();
+
+        Assert.That(entity.TargetQuantity, Is.EqualTo(5));
+    }
+
     // --- Task ---
 
     [Test]
@@ -323,6 +363,28 @@ public class EntityToModelTests
         Assert.That(entity.HabitId, Is.EqualTo(5));
         Assert.That(entity.StartedAt, Is.EqualTo(start));
         Assert.That(entity.CompletedAt, Is.EqualTo(end));
+    }
+
+    [Test]
+    public void TimeEntity_ToModel_MapsQuantity()
+    {
+        DateTime start = new(2025, 6, 1, 8, 0, 0);
+        TimeEntity entity = new() { Id = 20, HabitId = 5, StartedAt = start, Quantity = 7 };
+
+        TimeModel model = entity.ToModel();
+
+        Assert.That(model.Quantity, Is.EqualTo(7));
+    }
+
+    [Test]
+    public void TimeModel_ToEntity_MapsQuantity()
+    {
+        DateTime start = new(2025, 6, 1, 8, 0, 0);
+        TimeModel model = new() { Id = 20, HabitId = 5, StartedAt = start, Quantity = 7 };
+
+        TimeEntity entity = model.ToEntity();
+
+        Assert.That(entity.Quantity, Is.EqualTo(7));
     }
 
     // --- TaskModel.TimeSpent ---

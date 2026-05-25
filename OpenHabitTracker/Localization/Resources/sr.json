@@ -254,5 +254,13 @@
   "Days": "Dana",
   "Weeks": "Nedelja",
   "Months": "Meseci",
-  "Years": "Godina"
+  "Years": "Godina",
+
+  "Display": "Prikaz",
+  "Repetitions": "Ponavljanja",
+  "Time": "Vreme",
+  "Quantity": "Količina",
+  "Target quantity": "Ciljna količina",
+  "OK": "U redu",
+  "Cancel": "Otkaži"
 }

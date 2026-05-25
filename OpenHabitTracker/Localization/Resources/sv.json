@@ -254,5 +254,13 @@
   "Days": "Dagar",
   "Weeks": "Veckor",
   "Months": "Månader",
-  "Years": "År"
+  "Years": "År",
+
+  "Display": "Visning",
+  "Repetitions": "Upprepningar",
+  "Time": "Tid",
+  "Quantity": "Mängd",
+  "Target quantity": "Målmängd",
+  "OK": "OK",
+  "Cancel": "Avbryt"
 }
