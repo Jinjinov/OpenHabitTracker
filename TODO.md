@@ -306,9 +306,9 @@ Focus management workaround (macOS/iOS WebKit bug):
    2. Add to NoteComponent.razor `#note-component` div:  `role="region"` `aria-label="@Loc["Edit note"]"`  `tabindex="-1"`
    3. Add to TaskComponent.razor `#task-component` div:  `role="region"` `aria-label="@Loc["Edit task"]"`  `tabindex="-1"`
    4. Add to Main.razor `#sidebar-container` div: `role="region"` `tabindex="-1"` and dynamic aria-label:
-        `aria-label="@(_dynamicComponentType is not null ? Loc[_titleByTypeName[_dynamicComponentType.Name]] : null)"`
-      - `#sidebar-container` is always in the DOM (outside the `@if (_dynamicComponentType is not null)` block on line 76)
-        so the null guard is required — null aria-label is valid and means the attribute is omitted
+        `aria-label="@Loc[_titleByTypeName[_dynamicComponentType!.Name]]"`
+      - `#sidebar-container` is inside the `@if (_dynamicComponentType is not null)` block on line 76,
+        so `_dynamicComponentType` is guaranteed non-null — no null guard needed
       - use `_titleByTypeName` (already exists) not `_dynamicComponentType.Name` — it has correct display strings
         e.g. "Search, Filter, Sort" instead of "Search", which matches the existing sidebar title `<span>` on line 91
    5. Replace all 4 `FocusFirstIn(...)` calls with `FocusElementById(...)` targeting the container id:
