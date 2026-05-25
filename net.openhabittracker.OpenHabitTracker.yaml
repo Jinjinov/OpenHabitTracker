@@ -17,6 +17,7 @@ finish-args:
   - --socket=fallback-x11
   - --share=ipc
   - --env=DOTNET_ROOT=/app/lib/dotnet
+  - --env=WEBKIT_DISABLE_DMABUF_RENDERER=1
 
 modules:
   - name: dotnet
