@@ -109,8 +109,8 @@ export function focusElementById(id) {
 }
 
 export function focusAndClick(element) {
-    element.focus();
-    setTimeout(() => element.click(), 0);
+    element.focus(); // triggers blur/change on the previously focused input, queuing Blazor events
+    setTimeout(() => element.click(), 0); // deferred so Blazor processes the queued events before the click fires
 }
 
 let _savedFocusElement = null;
