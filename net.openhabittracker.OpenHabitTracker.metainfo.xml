@@ -87,6 +87,12 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.2.2" date="2026-05-25">
+      <description>
+        <p>Added current and best streak in habits</p>
+        <p>Added three habit display modes: Repetitions, Time, Quantity</p>
+      </description>
+    </release>
     <release version="1.2.1" date="2026-04-04">
       <description>
         <p>Added Shift+Tab and multi-line Tab</p>

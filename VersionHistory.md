@@ -1,3 +1,8 @@
+# 1.2.2 - May 25, 2026
+
+- added current and best streak in habits
+- added three habit display modes: Repetitions, Time, Quantity
+
 # 1.2.1 - Apr 4, 2026
 
 - added habit start date
