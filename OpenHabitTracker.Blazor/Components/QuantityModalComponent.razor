@@ -6,11 +6,11 @@
 @if (IsVisible)
 {
     <div class="modal-backdrop show" style="z-index: 1050;"></div>
-    <div class="modal show d-block" role="dialog" aria-modal="true" style="z-index: 1055;" @onkeydown="HandleKeyDown" @onkeydown:stopPropagation @onclick:stopPropagation>
+    <div class="modal show d-block" role="dialog" aria-modal="true" aria-labelledby="quantity-modal-title" style="z-index: 1055;" @onkeydown="HandleKeyDown" @onkeydown:stopPropagation @onclick:stopPropagation>
         <div id="quantity-modal" class="modal-dialog modal-sm" @onclick:stopPropagation>
             <div class="modal-content rounded-0">
                 <div class="modal-header">
-                    <h5 class="modal-title">@Loc["Quantity"]</h5>
+                    <h5 id="quantity-modal-title" class="modal-title">@Loc["Quantity"]</h5>
                     @if (ShowCancel)
                     {
                         <button class="btn-close rounded-0" aria-label="@Loc["Cancel"]" @onclick="async () => await OnCancel.InvokeAsync()"></button>
