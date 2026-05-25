@@ -422,6 +422,12 @@ Guided tour:
   "Set the habit's target quantity."
   "Habit's current and best streak."
 
+QuantityModalComponent design:
+- Header: title "Quantity" + bi-x-lg button (aria-label="Cancel", ShowCancel parameter controls visibility)
+- Body: InputNumber (aria-label="Quantity")
+- Footer: "OK" button (bi-check-lg icon removed — used for mark as done elsewhere; plain text "OK")
+- New localization keys: "OK", "Cancel" — add to all 20 JSON files in OpenHabitTracker/Localization/Resources/
+
 ---------------------------------------------------------------------------------------------------
 
 1.
