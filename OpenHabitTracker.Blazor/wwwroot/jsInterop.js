@@ -108,6 +108,11 @@ export function focusElementById(id) {
     document.getElementById(id)?.focus();
 }
 
+export function focusAndClick(element) {
+    element.focus();
+    setTimeout(() => element.click(), 0);
+}
+
 let _savedFocusElement = null;
 
 export function saveFocus() {

@@ -60,6 +60,12 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IJsInterop, IAsyncDisposab
         await module.InvokeVoidAsync("focusElementById", id);
     }
 
+    public async ValueTask FocusAndClick(ElementReference element)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("focusAndClick", element);
+    }
+
     public async ValueTask TrapFocus(string id)
     {
         IJSObjectReference module = await _moduleTask.Value;
