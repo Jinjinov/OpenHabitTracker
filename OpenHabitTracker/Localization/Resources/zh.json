@@ -254,5 +254,13 @@
   "Days": "天",
   "Weeks": "周",
   "Months": "月",
-  "Years": "年"
+  "Years": "年",
+
+  "Display": "显示",
+  "Repetitions": "重复次数",
+  "Time": "时间",
+  "Quantity": "数量",
+  "Target quantity": "目标数量",
+  "OK": "确定",
+  "Cancel": "取消"
 }

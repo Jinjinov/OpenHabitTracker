@@ -42,6 +42,8 @@ public static class EntityToModel
         model.RepeatCount = entity.RepeatCount;
         model.RepeatInterval = entity.RepeatInterval;
         model.RepeatPeriod = entity.RepeatPeriod;
+        model.DisplayMetric = entity.DisplayMetric;
+        model.TargetQuantity = entity.TargetQuantity;
         model.Duration = entity.Duration;
         model.LastTimeDoneAt = entity.LastTimeDoneAt;
         model.StartAt = entity.StartAt;
@@ -201,5 +203,6 @@ public static class EntityToModel
         model.HabitId = entity.HabitId;
         model.StartedAt = entity.StartedAt;
         model.CompletedAt = entity.CompletedAt;
+        model.Quantity = entity.Quantity;
     }
 }

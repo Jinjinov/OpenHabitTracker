@@ -8,6 +8,10 @@ public class HabitEntity : ContentEntity
 
     public Period RepeatPeriod { get; set; }
 
+    public DisplayMetric DisplayMetric { get; set; }
+
+    public long TargetQuantity { get; set; }
+
     public TimeOnly? Duration { get; set; }
 
     public DateTime? LastTimeDoneAt { get; set; }

@@ -254,5 +254,13 @@
   "Days": "Dni",
   "Weeks": "Tednov",
   "Months": "Mesecev",
-  "Years": "Let"
+  "Years": "Let",
+
+  "Display": "Prikaz",
+  "Repetitions": "Ponovitve",
+  "Time": "Čas",
+  "Quantity": "Količina",
+  "Target quantity": "Ciljna količina",
+  "OK": "V redu",
+  "Cancel": "Prekliči"
 }

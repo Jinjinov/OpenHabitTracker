@@ -254,5 +254,13 @@
   "Days": "Dager",
   "Weeks": "Uker",
   "Months": "Måneder",
-  "Years": "År"
+  "Years": "År",
+
+  "Display": "Visning",
+  "Repetitions": "Gjentagelser",
+  "Time": "Tid",
+  "Quantity": "Mengde",
+  "Target quantity": "Målmengde",
+  "OK": "OK",
+  "Cancel": "Avbryt"
 }

@@ -254,5 +254,13 @@
   "Days": "Dni",
   "Weeks": "Tygodni",
   "Months": "Miesięcy",
-  "Years": "Lat"
+  "Years": "Lat",
+
+  "Display": "Wyświetlanie",
+  "Repetitions": "Powtórzenia",
+  "Time": "Czas",
+  "Quantity": "Ilość",
+  "Target quantity": "Docelowa ilość",
+  "OK": "OK",
+  "Cancel": "Anuluj"
 }
