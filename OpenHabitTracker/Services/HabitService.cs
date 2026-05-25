@@ -46,7 +46,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
     public async Task LoadTimesDone(HabitModel? habit)
     {
-        if (habit is not null && habit.TimesDone is null)
+        if (habit is not null && (habit.TimesDone is null || habit.TimesDoneByDay is null))
         {
             IReadOnlyList<TimeEntity> timesDone = await _clientState.DataAccess.GetTimes(habit.Id);
             habit.TimesDone = timesDone.Select(t => t.ToModel()).ToList();
