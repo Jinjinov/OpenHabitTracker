@@ -1,3 +1,9 @@
+# 1.2.3 - 
+
+- fixed focus issues in macOS, iOS
+- fixed NVIDIA issues in Flatpak
+- added icon in Snap
+
 # 1.2.2 - May 25, 2026
 
 - added current and best streak in habits
