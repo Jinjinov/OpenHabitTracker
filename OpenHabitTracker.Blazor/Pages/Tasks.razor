@@ -280,7 +280,7 @@
         if (_shouldFocusEdit && editOpened)
         {
             _shouldFocusEdit = false;
-            await JsInterop.FocusFirstIn("#task-component");
+            await JsInterop.FocusElementById("task-component");
         }
         else if (editClosed && _lastSelectedId != 0)
         {

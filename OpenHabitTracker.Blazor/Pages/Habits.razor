@@ -396,7 +396,7 @@
         if (_shouldFocusEdit && editOpened)
         {
             _shouldFocusEdit = false;
-            await JsInterop.FocusFirstIn("#habit-component");
+            await JsInterop.FocusElementById("habit-component");
         }
         else if (editClosed && _lastSelectedId != 0)
         {

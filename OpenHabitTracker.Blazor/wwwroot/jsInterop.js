@@ -96,14 +96,6 @@ export function preventScrollKeys(element) {
     }
 }
 
-export function focusFirstIn(selector) {
-    const container = document.querySelector(selector);
-    if (container) {
-        const el = container.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-        el?.focus();
-    }
-}
-
 export function focusElementById(id) {
     document.getElementById(id)?.focus();
 }

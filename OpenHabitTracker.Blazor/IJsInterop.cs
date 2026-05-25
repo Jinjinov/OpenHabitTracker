@@ -9,7 +9,6 @@ public interface IJsInterop
     ValueTask SetLang(string lang);
     ValueTask SetTheme(string theme);
     ValueTask FocusElement(ElementReference element);
-    ValueTask FocusFirstIn(string cssSelector);
     ValueTask FocusElementById(string id);
     ValueTask FocusAndClick(ElementReference element);
     ValueTask TrapFocus(string id);
