@@ -403,4 +403,105 @@ public class HabitTests : BaseTest
 
         await Expect(habitRow.Locator("[data-habits-step-3]")).ToContainTextAsync("0 m");
     }
+
+    // Path A: click day in small calendar (non-month mode) in Quantity mode
+    [Test]
+    public async Task Calendar_SmallCalendar_QuantityMode_ModalAppearsAndCellShowsQuantity()
+    {
+        await AddItemAsync("Small Cal Quantity Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Small Cal Quantity Habit" }).ClickAsync();
+        await Page.Locator("select[aria-label='Display']").SelectOptionAsync("Quantity");
+        await Page.Locator("[data-habits-step-11]").ClickAsync();
+
+        ILocator todayCell = Page.Locator("[data-habits-step-6] button[role='gridcell']").Last;
+
+        await todayCell.ClickAsync(new LocatorClickOptions { Force = true });
+
+        await Expect(Page.Locator("div.modal.show")).ToBeVisibleAsync();
+
+        await Page.Locator("div.modal.show input").FillAsync("3");
+        await Page.Locator("div.modal.show button.btn-primary").ClickAsync();
+
+        await Expect(todayCell).ToContainTextAsync("(3)");
+    }
+
+    // Path A2: + button in large calendar (month mode) in Quantity mode
+    [Test]
+    public async Task Calendar_LargeCalendar_IncreaseButton_QuantityMode_CellShowsQuantity()
+    {
+        await OpenSidebarAsync("bi-gear");
+        await Page.Locator("label[for='ShowLargeCalendar']").ClickAsync();
+        await CloseSidebarAsync();
+
+        await AddItemAsync("Large Cal Quantity Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Large Cal Quantity Habit" }).ClickAsync();
+        await Page.Locator("select[aria-label='Display']").SelectOptionAsync("Quantity");
+
+        ILocator todayCell = Page.Locator("#habit-component button[role='gridcell'].border-primary-subtle");
+        await todayCell.ClickAsync();
+
+        await Page.Locator("button[aria-label='Increase']").ClickAsync();
+
+        await Expect(Page.Locator("div.modal.show")).ToBeVisibleAsync();
+
+        await Page.Locator("div.modal.show input").FillAsync("3");
+        await Page.Locator("div.modal.show button.btn-primary").ClickAsync();
+
+        await Expect(todayCell).ToContainTextAsync("(3)");
+    }
+
+    // Path D: edit quantity in the large calendar time list
+    [Test]
+    public async Task LargeCalendar_EditQuantityInTimeList_CellUpdates()
+    {
+        await OpenSidebarAsync("bi-gear");
+        await Page.Locator("label[for='ShowLargeCalendar']").ClickAsync();
+        await CloseSidebarAsync();
+
+        await AddItemAsync("Time List Quantity Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Time List Quantity Habit" }).ClickAsync();
+        await Page.Locator("select[aria-label='Display']").SelectOptionAsync("Quantity");
+
+        ILocator todayCell = Page.Locator("#habit-component button[role='gridcell'].border-primary-subtle");
+        await todayCell.ClickAsync();
+
+        await Page.Locator("button[aria-label='Increase']").ClickAsync();
+
+        await Page.Locator("div.modal.show input").FillAsync("3");
+        await Page.Locator("div.modal.show button.btn-primary").ClickAsync();
+
+        await Expect(todayCell).ToContainTextAsync("(3)");
+
+        // Edit the quantity in the time list below the calendar
+        await Page.Locator("#habit-component input[aria-label='Quantity']").FillAsync("5");
+        await Page.Locator("#habit-component input[aria-label='Quantity']").BlurAsync();
+
+        await Expect(todayCell).ToContainTextAsync("(5)");
+    }
+
+    // Path C: timer stop in Quantity mode shows modal without cancel button
+    [Test]
+    public async Task Timer_Stop_QuantityMode_ModalHasNoCancelButton()
+    {
+        await AddItemAsync("Timer Quantity Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Timer Quantity Habit" }).ClickAsync();
+        await Page.Locator("select[aria-label='Display']").SelectOptionAsync("Quantity");
+
+        await Page.Locator("button[aria-label='Start']").ClickAsync();
+        await Page.WaitForTimeoutAsync(500);
+        await Page.Locator("button[aria-label='Stop']").ClickAsync();
+
+        await Expect(Page.Locator("div.modal.show")).ToBeVisibleAsync();
+
+        // Timer stop modal has no cancel button (entry already saved, user must enter quantity)
+        await Expect(Page.Locator("div.modal.show button.btn-close")).ToHaveCountAsync(0);
+
+        await Page.Locator("div.modal.show button.btn-primary").ClickAsync();
+
+        await Expect(Page.Locator("button[aria-label='Start']")).ToBeVisibleAsync();
+    }
 }
