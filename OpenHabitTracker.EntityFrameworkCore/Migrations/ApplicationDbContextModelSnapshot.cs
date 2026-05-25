@@ -280,6 +280,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                     b.Property<long>("HabitId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<long>("Quantity")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("TEXT");
 
@@ -320,6 +323,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                 {
                     b.HasBaseType("OpenHabitTracker.Data.Entities.ContentEntity");
 
+                    b.Property<int>("DisplayMetric")
+                        .HasColumnType("INTEGER");
+
                     b.Property<TimeOnly?>("Duration")
                         .HasColumnType("TEXT");
 
@@ -337,6 +343,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime?>("StartAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("TargetQuantity")
+                        .HasColumnType("INTEGER");
 
                     b.HasDiscriminator().HasValue("HabitEntity");
                 });
