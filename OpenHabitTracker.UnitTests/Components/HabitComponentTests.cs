@@ -9,6 +9,7 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Blazor.Components;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Blazor;
 using OpenHabitTracker.Services;
 
 namespace OpenHabitTracker.UnitTests.Components;
@@ -46,6 +47,9 @@ public class HabitComponentTests
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
 
+        IJsInterop jsInterop = Substitute.For<IJsInterop>();
+
+        _ctx.Services.AddScoped(_ => jsInterop);
         _ctx.Services.AddScoped(_ => _habitService);
         _ctx.Services.AddScoped(_ => _clientState);
         _ctx.Services.AddSingleton(loc);
