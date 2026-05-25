@@ -294,40 +294,6 @@ TSV export/import is several features behind — Record class missing DisplayMet
 
 ---------------------------------------------------------------------------------------------------
 
-0.
-Focus management workaround (macOS/iOS WebKit bug):
-   - `focusFirstIn` in jsInterop.js had `select` in its focusable selector
-   - On WebKit (macOS/iOS), programmatic `.focus()` on a `<select>` auto-opens the picker — removed `select` from the selector
-   - Focus now lands on the title `<input>` (second element when priority dropdown is visible, first when not)
-   - This is a temporary fix — UNDO in next version
-
-   Next version — proper solution:
-   1. Add to HabitComponent.razor `#habit-component` div: `role="region"` `aria-label="@Loc["Edit habit"]"` `tabindex="-1"`
-   2. Add to NoteComponent.razor `#note-component` div:  `role="region"` `aria-label="@Loc["Edit note"]"`  `tabindex="-1"`
-   3. Add to TaskComponent.razor `#task-component` div:  `role="region"` `aria-label="@Loc["Edit task"]"`  `tabindex="-1"`
-   4. Add to Main.razor `#sidebar-container` div: `role="region"` `tabindex="-1"` and dynamic aria-label:
-        `aria-label="@Loc[_titleByTypeName[_dynamicComponentType!.Name]]"`
-      - `#sidebar-container` is inside the `@if (_dynamicComponentType is not null)` block on line 76,
-        so `_dynamicComponentType` is guaranteed non-null — no null guard needed
-      - use `_titleByTypeName` (already exists) not `_dynamicComponentType.Name` — it has correct display strings
-        e.g. "Search, Filter, Sort" instead of "Search", which matches the existing sidebar title `<span>` on line 91
-   5. Replace all 4 `FocusFirstIn(...)` calls with `FocusElementById(...)` targeting the container id:
-      - Main.razor:300    FocusFirstIn("#sidebar-container")  → FocusElementById("sidebar-container")
-      - Habits.razor:399  FocusFirstIn("#habit-component")    → FocusElementById("habit-component")
-      - Notes.razor:249   FocusFirstIn("#note-component")     → FocusElementById("note-component")
-      - Tasks.razor:283   FocusFirstIn("#task-component")     → FocusElementById("task-component")
-   6. Delete `FocusFirstIn` entirely — it will have no callers (the `select` selector fix is moot once it's gone):
-      - IJsInterop.cs: remove `ValueTask FocusFirstIn(string cssSelector);`
-      - JsInterop.cs:  remove `FocusFirstIn` method
-      - jsInterop.js:  remove `focusFirstIn` function (including the `select` fix from this version)
-   7. Add localization strings for "Edit habit", "Edit note", "Edit task" to all localization files
-   8. CSS — no change needed: programmatic `.focus()` does not trigger `:focus-visible`, so browsers will not
-      show a focus ring on the container div for sighted users; VoiceOver/screen readers still announce it
-   9. Tests — no change needed: FocusManagementTests.cs checks `activeElement?.closest('#x-component') !== null`
-      which is true whether focus is on the container itself or any child inside it
-   - VoiceOver announces the region on open, user Tabs into whichever child they want
-   - No platform quirks, no assumptions about which child to focus, fully ARIA compliant
-
 1.
 QueryParameters:
     `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
