@@ -322,7 +322,8 @@ public class CalendarComponentTests
         {
             [DateTime.Today] = new List<TimeModel>
             {
-                new TimeModel { StartedAt = DateTime.Today, Quantity = 15 }
+                new TimeModel { StartedAt = DateTime.Today, Quantity = 7 },
+                new TimeModel { StartedAt = DateTime.Today.AddHours(2), Quantity = 8 }
             }
         };
 
