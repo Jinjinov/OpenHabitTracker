@@ -20,7 +20,7 @@
                     <InputNumber id="quantity-modal-input" class="form-control" aria-label="@Loc["Quantity"]" @bind-Value="_quantity" @onkeydown="HandleInputKeyDown" />
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" @onclick="async () => await OnOK.InvokeAsync(_quantity)">@Loc["OK"]</button>
+                    <button id="quantity-modal-ok" class="btn btn-primary" @ref="_okButtonRef" @onclick="async () => await OnOK.InvokeAsync(_quantity)">@Loc["OK"]</button>
                 </div>
             </div>
         </div>
@@ -47,11 +47,13 @@
     bool _prevIsVisible;
     bool _needsFocus;
     bool _needsRestoreFocus;
+    ElementReference _okButtonRef;
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         if (IsVisible && !_prevIsVisible)
         {
+            await JsInterop.SaveFocus();
             _quantity = InitialQuantity;
             _needsFocus = true;
         }
@@ -67,7 +69,6 @@
         if (_needsFocus)
         {
             _needsFocus = false;
-            await JsInterop.SaveFocus();
             await JsInterop.TrapFocus("quantity-modal");
             await JsInterop.FocusElementById("quantity-modal-input");
         }
@@ -87,6 +88,6 @@
     async Task HandleInputKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Enter")
-            await OnOK.InvokeAsync(_quantity);
+            await JsInterop.FocusAndClick(_okButtonRef);
     }
 }
