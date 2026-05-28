@@ -8,7 +8,7 @@ https://pwa.openhabittracker.net
 
 Take Markdown notes, plan tasks, track habits
 
-- Free and Ad-Free
+- Free and Ad-free
 - Open Source
 - Privacy Focused: All user data is stored locally on your device
 - Available on Windows, Linux, Android, iOS, macOS, and as a web app
