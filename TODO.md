@@ -52,7 +52,7 @@ and TimesDone are actually lazy loaded, there will be a bug:
 
 ---------------------------------------------------------------------------------------------------
 
-StateHasChanged() in Habits.razor — double-render and missing resize handling:
+`StateHasChanged()` in `OnAfterRenderAsync(bool firstRender)` in `Habits.razor` — double-render and missing resize handling:
 
 WHY the StateHasChanged() exists (OnAfterRenderAsync, firstRender || dynamicComponentVisibilityChanged):
     Blazor renders the component → DOM appears in browser → JS can now measure the element.
@@ -290,10 +290,6 @@ FIX — ResizeObserver:
 
 ---------------------------------------------------------------------------------------------------
 
-TSV export/import is several features behind — Record class missing DisplayMetric, TargetQuantity, and TimesDone/Quantity.
-
----------------------------------------------------------------------------------------------------
-
 1.
 QueryParameters:
     `ClientData.GetHabits/GetNotes/GetTasks` each have a TODO: "first filter with queryParameters, then use _dataAccess"
@@ -310,17 +306,21 @@ drag & drop reorder - manual sort - 1000000 sort index
 - sort items?
 
 4.
-upgrade to .NET 10
+show only not done of highest priority
 
 5.
-upgrade NuGet versions
-
-6.
-show only not done of highest priority
+TSV export/import is several features behind — Record class missing DisplayMetric, TargetQuantity, and TimesDone/Quantity.
 
 ---------------------------------------------------------------------------------------------------
 
-TODO:: research: low priority - large feature
+1.
+upgrade to .NET 10
+
+2.
+upgrade NuGet versions
+
+3.
+TODO:: research: high priority - large feature
 copy Loop Habit Tracker UI - all required data is already in the DB
     - History (done count grouped by week, month, quarter, year)
     - Calendar (continuous year calendar, no breaks in months: 7 days -> 7 rows (horizontal scroll) or 7 columns (vertical scroll))
@@ -329,8 +329,7 @@ copy Loop Habit Tracker UI - all required data is already in the DB
 ---------------------------------------------------------------------------------------------------
 
 1.
-prerequisite:
-TODO:: research: normal priority (DB migration)
+TODO:: research: low priority (DB migration)
 save/load settings:
     - add string Name to Settings
     - add a way to create a new preset
@@ -355,7 +354,7 @@ save/load settings:
 multiple saved settings, with optional "URL references a preset by name", otherwise the URL params overwrite the "URL settings" saved setting:
 
 2.
-TODO:: research: normal priority
+TODO:: research: low priority
 search/filter/sort query parameters in the URL - Blazor
     - QueryParameters class already exists with all filter/sort fields
     - serialize QueryParameters to URL query string via NavigationManager
