@@ -349,10 +349,12 @@ services:
       - AppSettings__Email=${APPSETTINGS_EMAIL}
       - AppSettings__Password=${APPSETTINGS_PASSWORD}
       - AppSettings__JwtSecret=${APPSETTINGS_JWT_SECRET}
-      - TZ=Europe/Berlin
+      - TZ=Europe/Berlin # replace with your timezone
     volumes:
       - ./.OpenHabitTracker:/app/.OpenHabitTracker
 ```
+
+Timezone strings: [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) (TZ identifier column).
 
 After login at http://localhost:5050/login:
 - Logs: http://localhost:5050/watchdog

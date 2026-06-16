@@ -73,10 +73,12 @@ services:
       - AppSettings__Email=${APPSETTINGS_EMAIL}
       - AppSettings__Password=${APPSETTINGS_PASSWORD}
       - AppSettings__JwtSecret=${APPSETTINGS_JWT_SECRET}
-      - TZ=Europe/Berlin
+      - TZ=Europe/Berlin # replace with your timezone
     volumes:
       - ./.OpenHabitTracker:/app/.OpenHabitTracker
 ```
+
+Timezone strings: [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) (TZ identifier column).
 
 The default port is `5050`. You can change it to `80` to avoid typing the port in the address, or to any other free port if `5050` is already in use - update the port in `docker-compose.yml` accordingly.
 
