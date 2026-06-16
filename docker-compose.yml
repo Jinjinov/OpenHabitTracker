@@ -10,5 +10,6 @@ services:
       - AppSettings__Email=${APPSETTINGS_EMAIL}
       - AppSettings__Password=${APPSETTINGS_PASSWORD}
       - AppSettings__JwtSecret=${APPSETTINGS_JWT_SECRET}
+      - TZ=Europe/Berlin
     volumes:
       - ./.OpenHabitTracker:/app/.OpenHabitTracker
