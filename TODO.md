@@ -2,6 +2,53 @@
 
 ---------------------------------------------------------------------------------------------------
 
+TASK INDEX (July 3, 2026) — one place pointing to everything planned; details live in the named
+files, do not duplicate them here. Context: Fable 5 free until 7.7.2026, usage at 17% of cap.
+
+PLANNED — marketing (Popularity.md appendix A-L; all specs fact-checked against live sources
+July 2, 2026 — see its section J status note):
+    A  in-app review prompt         — Fable, do FIRST; NuGet + trigger design decided, ready to code
+    B  self-hosting store templates — Fable verifies schemas + writes ONE reference template
+                                      (Umbrel first — repo ships AGENTS.md); Sonnet clones the rest
+    C  gh release + IzzyOnDroid     — Sonnet; gh auth works, APK 49-53 MB (shortened history expected)
+    D  localized store listings     — Sonnet; do Automate.md §4 BEFORE D (changes output format)
+    E  SEO comparison pages         — Sonnet; sitemap.xml missing, index.html has no footer yet
+    F  Reddit draft skeletons       — Sonnet; streak nuance + GitHub discussion #16 recorded in F.2
+    G  Product Hunt relaunch prep   — policy verified; *-apple.mp4 videos = ASC previews, reusable
+    H  Microsoft/Blazor pitch draft — zero-#if claim verified true (only #if DEBUG exists)
+    I  selfh.st + Noted.lol pitches — selfh.st submission form confirmed active
+    Execution order and per-task model budget: Popularity.md section J.
+
+PLANNED — release automation (Automate.md §1-§9; specs complete, NO scripts written yet):
+    §1 version bump script          §2 FTP deploy script (layout mapped)    §3 gh release script
+    §4 Play fastlane supply         §5 ASC fastlane deliver                 §6 msstore-cli
+    §7 docker push + description    §8 snap upload                          §9 Flathub semi-auto
+    Credentials READY: ~/.netrc FTP (verified), gh auth (verified), ASC API key (.p8 on Mac mini
+    + DS224+, validated). Still needed at build time: Play service account (§4), Partner Center
+    association (§6). All machine/hosting/signing/versioning facts: Infrastructure.md
+    (zero open questions remain).
+
+NOT PLANNED YET — GitHub state (July 3, 2026):
+    issue #22 max days in small calendar — design discussion active with CallMeHein;
+        session recommendation: keep "Show small calendar" checkbox + dropdown
+        (Auto, 7, 14, 21, 28) instead of a number input — avoids the 0-means-auto trap
+    issue #21 long titles overflow — design discussion active with same user;
+        session recommendation: CSS 2-line clamp (-webkit-line-clamp: 2) + title attribute
+        tooltip; avoid per-item font shrinking (accessibility + needs JS measurement)
+    issue #13 custom themes — open since Feb 2026, unplanned
+    issue #9 always show active timers — open since Aug 2025, unplanned
+    discussion #16 — origin of the 1.2.2 streaks feature (already cited in Popularity.md F.2)
+    NOTE: any new setting from #21/#22 means new keys in ALL 20 localization JSON files.
+
+USER ACTION items:
+    - Domenca support ticket: FTP TLS certificate expired Sep 2025 (ready-to-paste ticket text
+      in Infrastructure.md "Web hosting")
+
+The SECURITY item directly below stays the TOP code priority — fix before the marketing push
+brings users who share backups.
+
+---------------------------------------------------------------------------------------------------
+
 SECURITY: RefreshToken is exported in plain text in JSON/YAML/backup files
 
     ClientState.GetUserData() assembles UserImportExportData with `Settings = Settings` -
