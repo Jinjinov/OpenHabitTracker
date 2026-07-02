@@ -2,6 +2,45 @@
 
 ---------------------------------------------------------------------------------------------------
 
+SECURITY: RefreshToken is exported in plain text in JSON/YAML/backup files
+
+    ClientState.GetUserData() assembles UserImportExportData with `Settings = Settings` -
+    the live SettingsModel, including RefreshToken (SettingsEntity.cs line ~25).
+    No [JsonIgnore] / YamlIgnore filtering exists anywhere on SettingsModel.
+
+    Consequence: any user with online sync enabled who exports a backup gets their
+    server's refresh token written in plain text into the file. If they share the backup
+    (e.g. attach it to a GitHub issue to debug an import problem), they hand out a working
+    credential to their Docker server.
+
+    Mirror problem on import: SetUserData() overwrites the current device's valid
+    RefreshToken with a stale one from the file.
+
+    FIX: blank the token at the assembly point in GetUserData() - put a copy of
+    SettingsModel with RefreshToken = "" into UserImportExportData. One fix covers all
+    four export formats (JSON, YAML, TSV, Markdown); per-serializer ignore attributes
+    would need to be maintained per format. On SetUserData(), do not overwrite the
+    device's RefreshToken from the imported file.
+
+    Fix this BEFORE the marketing push (Popularity.md) brings users who share backups.
+
+DEVICE-SCOPED vs USER-SCOPED data in SettingsEntity - watch list:
+
+    SettingsEntity mixes user-scoped preferences (theme, culture, sort/filter settings -
+    fine to sync/export) with DEVICE-scoped state that must never leave the device:
+        - RefreshToken (auth session for this install - see security item above)
+        - RememberMe (per-device choice)
+        - BaseUrl (arguably user config - borderline, decide when it matters)
+    Anything device-scoped that does not need the DB should use MAUI Preferences
+    (see Popularity.md appendix section A - the in-app review prompt flag ReviewPromptShown
+    uses Preferences for exactly this reason: a synced/exported flag would suppress
+    the second store's review prompt and survive backup-restore when it shouldn't).
+    FUTURE: the planned reminders feature (exact repeating reminders, like Google Keep) -
+    "which device shows notifications" is genuinely device-scoped and will face the
+    same decision. Decide the storage before implementing, not after.
+
+---------------------------------------------------------------------------------------------------
+
 find out why `padding-left: 12px !important;` is needed on iOS - why `padding-left: env(safe-area-inset-left) !important;` doesn't work
 
 ---------------------------------------------------------------------------------------------------
@@ -374,6 +413,11 @@ set `_lastRefreshAt = DateTime.UtcNow;` on local changes, so a local change won'
 Data.razor -> "Online sync" -> "Log in"
 Sync between `DataLocation.Local` and `DataLocation.Remote` in `ClientState.SetDataLocation()`
 method to copy one db context to another
+
+    WARNING (see DEVICE-SCOPED watch list at the top of this file): the generic CopyData
+    below loops over ALL entity types - it would copy SettingsEntity wholesale, including
+    RefreshToken and RememberMe, between contexts/devices. When implementing, exclude
+    SettingsEntity from the copy (or copy it with device-scoped fields blanked).
 
     public void CopyData(DbContext source, DbContext destination)
     {
