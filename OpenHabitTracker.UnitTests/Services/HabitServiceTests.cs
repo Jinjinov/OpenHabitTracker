@@ -558,6 +558,7 @@ public class HabitServiceTests
     {
         HabitModel habit = TestData.Habit(id: 1);
         habit.TimesDone = [];
+        habit.TimesDoneByDay = new();
 
         await _sut.LoadTimesDone(habit);
 
