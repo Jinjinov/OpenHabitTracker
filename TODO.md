@@ -1,51 +1,51 @@
 # TODO:
 
+1. Google Play service account — unblocks Automate §4 and D's locale verification
+2. Partner Center association (msstore reconfigure) — unblocks Automate §6
+
+1. SECURITY RefreshToken plaintext export
+2. Issure #21
+3. Issure #22
+4. Popularity E    — SEO pages + sitemap.xml
+5. Automate §4,5,6 - unblocks D
+6. Popularity D    — 20 listing texts (fastlane layout) + localized Flathub metainfo.xml
+7. Automate §3  — gh-release scripts; §3 unblocks IzzyOnDroid (C)
+8. Popularity C - APK on GitHub releases + IzzyOnDroid
+9. Popularity B - Self-hosting app store templates
+
 ---------------------------------------------------------------------------------------------------
 
-TASK INDEX (July 3, 2026) — one place pointing to everything planned; details live in the named
-files, do not duplicate them here. Context: Fable 5 free until 7.7.2026, usage at 17% of cap.
+TASK INDEX (July 4, 2026) — brief overview ordered by priority; details live in the task plans:
+Popularity.md appendix A-L (marketing), Automate.md §1-§10 (release automation),
+Infrastructure.md (machines/credentials), and the sections below in this file (code).
+Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
 
-PLANNED — marketing (Popularity.md appendix A-L; all specs fact-checked against live sources
-July 2, 2026 — see its section J status note):
-    A  in-app review prompt         — Fable, do FIRST; NuGet + trigger design decided, ready to code
-    B  self-hosting store templates — Fable verifies schemas + writes ONE reference template
-                                      (Umbrel first — repo ships AGENTS.md); Sonnet clones the rest
-    C  gh release + IzzyOnDroid     — Sonnet; gh auth works, APK 49-53 MB (shortened history expected)
-    D  localized store listings     — Sonnet; do Automate.md §4 BEFORE D (changes output format)
-    E  SEO comparison pages         — Sonnet; sitemap.xml missing, index.html has no footer yet
-    F  Reddit draft skeletons       — Sonnet; streak nuance + GitHub discussion #16 recorded in F.2
-    G  Product Hunt relaunch prep   — policy verified; *-apple.mp4 videos = ASC previews, reusable
-    H  Microsoft/Blazor pitch draft — zero-#if claim verified true (only #if DEBUG exists)
-    I  selfh.st + Noted.lol pitches — selfh.st submission form confirmed active
-    Execution order and per-task model budget: Popularity.md section J.
+    1. SECURITY RefreshToken plaintext export — fix FIRST, gates the marketing push (spec below)
+    2. Popularity B    — store templates; Umbrel reference on Fable before 7.7, clones after
+    3. Automate §2+§3  — deploy + gh-release scripts; §3 unblocks IzzyOnDroid (C)
+    4. Popularity E    — SEO pages + sitemap.xml; can go live via §2 from the Linux box
+    5. Popularity D    — 20 listing texts (fastlane layout) + localized Flathub metainfo.xml
+    6. Automate §1, §7-§9 — bump/docker/snap/flathub scripts; exercised at next release
+    7. Popularity F-I drafts + G assets (video cut, image resizes) — text/assets only
 
-PLANNED — release automation (Automate.md §1-§9; specs complete, NO scripts written yet):
-    §1 version bump script          §2 FTP deploy script (layout mapped)    §3 gh release script
-    §4 Play fastlane supply         §5 ASC fastlane deliver                 §6 msstore-cli
-    §7 docker push + description    §8 snap upload                          §9 Flathub semi-auto
-    Credentials READY: ~/.netrc FTP (verified), gh auth (verified), ASC API key (.p8 on Mac mini
-    + DS224+, validated). Still needed at build time: Play service account (§4), Partner Center
-    association (§6). All machine/hosting/signing/versioning facts: Infrastructure.md
-    (zero open questions remain).
+USER — needs websites, accounts, or your voice (ordered by what each unblocks):
+    1. Google Play service account — unblocks Automate §4 and D's locale verification
+    2. Domenca ticket: expired FTP TLS cert (text in Infrastructure.md) — unblocks FTPS deploys
+    3. Codeberg issue for IzzyOnDroid — after C's first GitHub release exists
+    4. Partner Center association (msstore reconfigure) — unblocks Automate §6
+    5. Unraid CA portal submission — after B's template repo exists
+    6. Posting F-I (Reddit, PH, pitches) in your own voice; store-console review clicks
 
-NOT PLANNED YET — GitHub state (July 3, 2026):
-    issue #22 max days in small calendar — design discussion active with CallMeHein;
-        session recommendation: keep "Show small calendar" checkbox + dropdown
-        (Auto, 7, 14, 21, 28) instead of a number input — avoids the 0-means-auto trap
-    issue #21 long titles overflow — design discussion active with same user;
-        session recommendation: CSS 2-line clamp (-webkit-line-clamp: 2) + title attribute
-        tooltip; avoid per-item font shrinking (accessibility + needs JS measurement)
-    issue #13 custom themes — open since Feb 2026, unplanned
-    issue #9 always show active timers — open since Aug 2025, unplanned
-    discussion #16 — origin of the 1.2.2 streaks feature (already cited in Popularity.md F.2)
-    NOTE: any new setting from #21/#22 means new keys in ALL 20 localization JSON files.
+DONE: Popularity A (in-app review prompt) — code-complete, all-platform builds verified;
+prompt itself observable only in store-installed builds (Popularity.md A STATUS).
 
-USER ACTION items:
-    - Domenca support ticket: FTP TLS certificate expired Sep 2025 (ready-to-paste ticket text
-      in Infrastructure.md "Web hosting")
-
-The SECURITY item directly below stays the TOP code priority — fix before the marketing push
-brings users who share backups.
+GITHUB ISSUES (not planned yet; any new setting = new keys in ALL 20 localization JSONs):
+    #22 max days in small calendar — recommendation: keep "Show small calendar" checkbox +
+        dropdown (Auto, 7, 14, 21, 28), avoids the 0-means-auto trap
+    #21 long titles overflow — recommendation: CSS 2-line clamp + title-attribute tooltip;
+        avoid per-item font shrinking
+    #13 custom themes, #9 always-show-active-timers — open, unplanned
+    discussion #16 — origin of the 1.2.2 streaks feature (cited in Popularity.md F.2)
 
 ---------------------------------------------------------------------------------------------------
 
