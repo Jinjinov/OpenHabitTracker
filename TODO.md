@@ -1,51 +1,38 @@
 # TODO:
 
-1. Google Play service account — unblocks Automate §4 and D's locale verification
-2. Partner Center association (msstore reconfigure) — unblocks Automate §6
-
-1. SECURITY RefreshToken plaintext export
-2. Issure #21
-3. Issure #22
-4. Popularity E    — SEO pages + sitemap.xml
-5. Automate §4,5,6 - unblocks D
-6. Popularity D    — 20 listing texts (fastlane layout) + localized Flathub metainfo.xml
-7. Automate §3  — gh-release scripts; §3 unblocks IzzyOnDroid (C)
-8. Popularity C - APK on GitHub releases + IzzyOnDroid
-9. Popularity B - Self-hosting app store templates
-
----------------------------------------------------------------------------------------------------
-
 TASK INDEX (July 4, 2026) — brief overview ordered by priority; details live in the task plans:
 Popularity.md appendix A-L (marketing), Automate.md §1-§10 (release automation),
 Infrastructure.md (machines/credentials), and the sections below in this file (code).
 Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
 
-    1. SECURITY RefreshToken plaintext export — fix FIRST, gates the marketing push (spec below)
-    2. Popularity B    — store templates; Umbrel reference on Fable before 7.7, clones after
-    3. Automate §2+§3  — deploy + gh-release scripts; §3 unblocks IzzyOnDroid (C)
-    4. Popularity E    — SEO pages + sitemap.xml; can go live via §2 from the Linux box
-    5. Popularity D    — 20 listing texts (fastlane layout) + localized Flathub metainfo.xml
-    6. Automate §1, §7-§9 — bump/docker/snap/flathub scripts; exercised at next release
-    7. Popularity F-I drafts + G assets (video cut, image resizes) — text/assets only
-
-USER — needs websites, accounts, or your voice (ordered by what each unblocks):
     1. Google Play service account — unblocks Automate §4 and D's locale verification
-    2. Domenca ticket: expired FTP TLS cert (text in Infrastructure.md) — unblocks FTPS deploys
-    3. Codeberg issue for IzzyOnDroid — after C's first GitHub release exists
-    4. Partner Center association (msstore reconfigure) — unblocks Automate §6
-    5. Unraid CA portal submission — after B's template repo exists
-    6. Posting F-I (Reddit, PH, pitches) in your own voice; store-console review clicks
+       (step-by-step: Automate.md §4 "One-time setup — USER STEPS")
+    2. Partner Center association + msstore-cli — unblocks Automate §6
+       (step-by-step: Automate.md §6 "One-time setup — USER STEPS")
+    later: Domenca ticket (FTP TLS cert, text in Infrastructure.md); Codeberg issue for
+    in your own voice; store-console review clicks; replies to issues #21/#22
+
+    1. SECURITY RefreshToken plaintext export — fix FIRST, gates the marketing push (spec below)
+    2. Issue #21 long titles overflow — CSS 2-line clamp + title-attribute tooltip;
+       avoid per-item font shrinking
+    3. Issue #22 max days in small calendar — "Show small calendar" checkbox + dropdown
+       (Auto, 7, 14, 21, 28), avoids the 0-means-auto trap; new setting = new keys
+       in ALL 20 localization JSONs
+    4. Popularity E    — SEO pages + sitemap.xml
+    5. Automate §4+§5+§6 — Play/ASC/msstore listing upload tooling; §4 gated by USER 1,
+       §6 by USER 2; §4 unblocks D's locale verification
+    6. Popularity D    — 20 listing texts (fastlane layout) + localized Flathub metainfo.xml
+    7. Automate §3     — gh-release script; unblocks C
+    8. Popularity C    — APK on GitHub releases + IzzyOnDroid request draft
+    9. Popularity B    — self-hosting app store templates (Umbrel reference first)
+    later: Automate §1 (bump), §2 (deploy — also how E goes live), §7-§9 (docker/snap/flathub);
+    Popularity F-I drafts + G assets (video cut, image resizes)
 
 DONE: Popularity A (in-app review prompt) — code-complete, all-platform builds verified;
 prompt itself observable only in store-installed builds (Popularity.md A STATUS).
 
-GITHUB ISSUES (not planned yet; any new setting = new keys in ALL 20 localization JSONs):
-    #22 max days in small calendar — recommendation: keep "Show small calendar" checkbox +
-        dropdown (Auto, 7, 14, 21, 28), avoids the 0-means-auto trap
-    #21 long titles overflow — recommendation: CSS 2-line clamp + title-attribute tooltip;
-        avoid per-item font shrinking
-    #13 custom themes, #9 always-show-active-timers — open, unplanned
-    discussion #16 — origin of the 1.2.2 streaks feature (cited in Popularity.md F.2)
+GITHUB ISSUES not planned yet: #13 custom themes, #9 always-show-active-timers;
+discussion #16 — origin of the 1.2.2 streaks feature (cited in Popularity.md F.2).
 
 ---------------------------------------------------------------------------------------------------
 
