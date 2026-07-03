@@ -627,3 +627,146 @@ Fix (workaround): in `calculateAutoHeight`, save the `.child-column` ancestor's 
 Fix (proper): replace `rows="@(Note.Content.Count(c => c == '\n') + 1)"` and `SetCalculateAutoHeight` entirely with a single CSS property on the textarea: `field-sizing:content`. The browser handles auto-height natively — no JS, no reflow, no scroll side effects. Supported since Chrome 123, Firefox 128, Safari 18 (all mid-2024).
 
 ---------------------------------------------------------------------------------------------------
+
+VS 2022 error: "The project doesn't know how to run the profile with name 'Windows Machine' and command 'MsixPackage'."
+
+Longstanding, unresolved, years-old VS bug — reported repeatedly against dotnet/maui since 2022
+(issues #2778, #3725, #4797, #14862, #22167). Every time, the MAUI team closes it saying it's a
+Visual Studio bug, not theirs, and redirects to the VS Feedback tool. No official root cause has
+ever been published. If it happens after a VS update with zero project changes, this is likely it.
+
+Things that do NOT fix it (all tried, all ruled out on this machine):
+- `dotnet workload update` / `dotnet workload repair`
+- confirming Windows 10 SDK (10.0.19041.0) is installed
+- deleting bin/obj and rebuilding
+- adding/changing `<WindowsPackageType>MSIX</WindowsPackageType>` in the csproj
+- Configuration Manager Deploy checkbox / "Create a Windows MSIX package" project property
+- restarting the machine alone
+- Windows Store Apps troubleshooter
+- Controlled Folder Access (check: `Get-MpPreference | Select EnableControlledFolderAccess`)
+- Windows Defender real-time protection (`Set-MpPreference -DisableRealtimeMonitoring $true`)
+- stopping AppXSvc / ClipSVC services
+
+What actually fixed it here: running `chkdsk C: /f` (offline, requires restart). A prior
+`chkdsk C: /scan` (online, no restart needed) had reported "Windows has found problems that must
+be fixed offline" — real NTFS corruption on the drive. After `chkdsk /f` ran at boot and repaired
+it, VS's packaged Windows launch started working again with no other change. NOTE: this was never
+100% proven as the exact mechanism (see the WindowsApps\Deleted tangent below, which was real but
+turned out NOT to be the actual fix — VS worked fine even with an orphaned package folder still
+stuck in that path). If this recurs, try `chkdsk C: /scan` first; if it reports offline problems,
+run `chkdsk C: /f` and restart before trying anything else below.
+
+Diagnostic technique for this class of bug (VS shows only a generic dialog, Build Output is
+empty because the failure happens in VS's launch-profile resolution, before/without MSBuild):
+reproduce the same deployment step directly via CLI to get the real underlying error:
+
+    powershell.exe -NoProfile -Command "Import-Module Appx -UseWindowsPowerShell; Add-AppxPackage -Register '<path>\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\AppxManifest.xml' -ForceApplicationShutdown"
+
+(`Add-AppxPackage` is a Windows PowerShell-only cmdlet — in PowerShell 7/pwsh it needs
+`Import-Module Appx -UseWindowsPowerShell` first, or just use `powershell.exe` directly.)
+
+If that fails, get the detailed AppX deployment event log for the failure's ActivityId (printed
+in the error output):
+
+    Get-AppPackageLog -ActivityID <guid-from-error-output> | Format-List *
+
+Tangent (real bug, found via the above, but NOT the actual fix for the VS error above — kept
+here because it's a genuine, reproducible issue and the diagnostic technique is reusable):
+`Add-AppxPackage -Register` can fail with `0x80070003` because the AppX Deployment Service
+opportunistically tries to garbage-collect ALL orphaned entries under
+`C:\Program Files\WindowsApps\Deleted\` as part of ANY package registration — completely
+unrelated packages included (e.g. an old Windows Terminal auto-update leftover blocked
+registering this app). Log shows: "The last successful state reached was Indexed. Failure
+occurred before reaching the next state Resolved. hr: 0x80070003" plus
+"error 0x12C: Deleting file ... failed" (0x12C / 300 decimal = ERROR_OPLOCK_NOT_GRANTED,
+"the oplock request is denied") for files inside that stuck folder.
+If this happens, check for orphaned folders: `Test-Path "C:\Program Files\WindowsApps\Deleted\<PackageFullName>"`.
+Nothing normal clears a stuck one — tried and failed, in order: take ownership (`takeown /f ... /r /d y`),
+grant Administrators Full Control (`icacls ... /grant Administrators:F /t`), clear read-only/system/hidden
+attributes (`attrib -r -s -h ... /s /d`), delete as SYSTEM via PsExec
+(`psexec -s -i cmd.exe` then `rmdir /s /q`), Controlled Folder Access off, Defender real-time off.
+`handle64.exe` (Sysinternals) found no process holding the file open even when run elevated —
+`net helpmsg 300` = "The oplock request is denied" proves it IS genuinely locked by something,
+just not by anything visible as a normal process handle (kernel filter driver / AppXSvc's own
+internal state, not caught by the AntiVirusProduct WMI check either). The one thing that DID
+clear it: Sysinternals `movefile.exe`, which schedules a delete via
+`PendingFileRenameOperations` to run at the next boot, before any services start:
+
+    Invoke-WebRequest -Uri "https://live.sysinternals.com/movefile.exe" -OutFile "$env:TEMP\movefile.exe" -UseBasicParsing
+    & "$env:TEMP\movefile.exe" "<file1>" ""
+    & "$env:TEMP\movefile.exe" "<file2>" ""    # repeat per file, files BEFORE the folder
+    & "$env:TEMP\movefile.exe" "<the folder itself>" ""
+    # then restart
+
+Even after that specific folder was gone, `Add-AppxPackage -Register` still failed identically —
+just pointing at a DIFFERENT orphaned Windows Terminal version folder next. There can be more than
+one. This whole area may just be permanently messy on a machine that's had years of Windows
+Terminal auto-updates, and none of it may matter for the actual VS bug (see chkdsk note above).
+
+Useful diagnostic tools, none require installation, all official Microsoft/Sysinternals,
+downloaded on demand from `https://live.sysinternals.com/<toolname>.exe`:
+- `handle64.exe -accepteula -nobanner <filename>` — find which process has a file open
+- `PsExec64.exe -accepteula -s -i cmd.exe` — open a shell running as NT AUTHORITY\SYSTEM
+- `movefile.exe <path> ""` — schedule a file/folder for deletion on next boot (empty second arg = delete, not move)
+
+---------------------------------------------------------------------------------------------------
+
+Running / debugging the MAUI Windows app from the CLI, without Visual Studio:
+
+Packaged (MSIX) apps CANNOT be run directly from CLI in one command — this is an official,
+permanent Microsoft limitation, not a bug: "The published app doesn't work if you try to run it
+directly with the executable file out of the publish folder. The way to run the app is to first
+install it through the packaged MSIX file."
+(https://learn.microsoft.com/en-us/dotnet/maui/windows/deployment/publish-cli)
+`dotnet run` / `dotnet build -t:Run` on a packaged project launches the raw loose .exe with no
+package identity, which throws immediately:
+`System.Runtime.InteropServices.COMException (0x80040154): Class not registered (REGDB_E_CLASSNOTREG)`
+at `Microsoft.Windows.ApplicationModel.WindowsAppRuntime.DeploymentManagerCS.AutoInitialize` —
+this is expected/by design for packaged apps run unpackaged, not a sign anything is broken.
+
+Two real CLI options:
+
+1. Packaged, two steps, no csproj changes needed:
+
+    dotnet publish OpenHabitTracker.Blazor.Maui.csproj -f net9.0-windows10.0.19041.0 -c Release -p:RuntimeIdentifierOverride=win10-x64
+
+   then install the resulting .msix from `bin\Release\...\AppPackages\...\` (double-click it, or
+   `Add-AppxPackage -Path <file>.msix`, which requires the package to be signed — the temp/debug
+   signing VS does automatically isn't replicated by plain `dotnet publish` from the CLI).
+
+2. Unpackaged, ONE command, works immediately, no install step, no csproj changes (property
+   override only — does not persist, does not touch the csproj file):
+
+    dotnet run --project OpenHabitTracker.Blazor.Maui.csproj -f net9.0-windows10.0.19041.0 -p:WindowsPackageType=None --no-launch-profile
+
+   Both flags are required:
+   - `-p:WindowsPackageType=None` — overrides packaged mode for just this invocation.
+   - `--no-launch-profile` — skips `Properties/launchSettings.json` entirely, because its
+     `"Windows Machine"` profile has `"commandName": "MsixPackage"`, which is Visual-Studio-only
+     and `dotnet run` doesn't understand it: "The launch profile "(Default)" could not be applied.
+     A usable launch profile could not be located." Without this flag, option 2 fails even though
+     the actual unpackaged run would otherwise work fine.
+
+   To make this permanent (not just a one-off CLI override), see the "Convert a packaged .NET MAUI
+   Windows app to unpackaged" steps in https://learn.microsoft.com/en-us/dotnet/maui/windows/setup
+   — sets `<WindowsPackageType>None</WindowsPackageType>` in the csproj and changes
+   `launchSettings.json` commandName from `MsixPackage` to `Project`. Tradeoff: loses
+   Store-submission packaging and any package-identity-gated WinRT APIs.
+
+For actual breakpoint debugging (not just running) without full Visual Studio: VS Code + the
+official ".NET MAUI" extension (installs C# Dev Kit) supports F5 debugging on Windows/Android/iOS/
+macOS — it automates the same install-then-attach dance VS does internally, so it needs the same
+packaged-app install step under the hood; there's no way around that requirement for a packaged
+app, only automating it away. For unpackaged mode, any debugger can just attach to the process
+started by `dotnet run` directly (e.g. VS Code Run → Attach to Process).
+
+Since MAUI 9, brand NEW projects (scaffolded by the template) default to unpackaged
+(`WindowsPackageType` unset resolves differently for new-project templates than for existing/
+upgraded ones — an EXISTING project that was already packaged before upgrading to net9.0-windows
+stays packaged; nothing flips silently on its own just because the TargetFramework changed).
+Confirmed via a dotnet/maui maintainer (mattleibow, in a related GitHub issue): "I don't think the
+internal defaults have changed in the windows app sdk, so you have to set it. We just switched the
+default in maui templates." — i.e. this is a template-generation-time default, not a build-time
+default, so it never silently affects this project.
+
+---------------------------------------------------------------------------------------------------
