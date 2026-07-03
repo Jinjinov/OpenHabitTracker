@@ -6,6 +6,7 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
+using OpenHabitTracker.Services;
 
 namespace OpenHabitTracker.Blazor.Maui;
 
@@ -72,6 +73,7 @@ public static class MauiProgram
         builder.Services.AddDataAccess(databasePath); // %localappdata%\Packages\...\LocalState - Environment.SpecialFolder.LocalApplicationData - FileSystem.Current.AppDataDirectory
         builder.Services.AddBackup();
         builder.Services.AddBlazor();
+        builder.Services.AddScoped<IAppReview, AppReview>(); // different in Maui
         builder.Services.AddScoped<IOpenFile, OpenFile>(); // different in Maui, WinForms, Wpf
         builder.Services.AddScoped<ISaveFile, SaveFile>(); // different in Maui, WinForms, Wpf
         builder.Services.AddScoped<INavBarFragment, NavBarFragment>(); // different in Wasm

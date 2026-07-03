@@ -9,6 +9,7 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
+using OpenHabitTracker.Services;
 using Photino.Blazor;
 using System;
 using System.Diagnostics;
@@ -42,6 +43,7 @@ public class Program
         builder.Services.AddDataAccess(databasePath);
         builder.Services.AddBackup();
         builder.Services.AddBlazor();
+        builder.Services.AddScoped<IAppReview, AppReview>(); // different in Maui
         builder.Services.AddScoped<IOpenFile, OpenFile>();
         builder.Services.AddScoped<ISaveFile, SaveFile>();
         builder.Services.AddScoped<INavBarFragment, NavBarFragment>();

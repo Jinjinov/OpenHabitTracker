@@ -9,6 +9,7 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
+using OpenHabitTracker.Services;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -39,6 +40,7 @@ public partial class MainForm : Form
         services.AddDataAccess("OpenHT.db");
         services.AddBackup();
         services.AddBlazor();
+        services.AddScoped<IAppReview, AppReview>(); // different in Maui
         services.AddScoped<IOpenFile, OpenFile>();
         services.AddScoped<ISaveFile, SaveFile>();
         services.AddScoped<INavBarFragment, NavBarFragment>();

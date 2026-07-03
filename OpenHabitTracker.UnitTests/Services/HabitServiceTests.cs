@@ -29,7 +29,7 @@ public class HabitServiceTests
         _clientState = new(new[] { _dataAccess }, markdownToHtml);
 
         _searchFilterService = new();
-        _sut = new(_clientState, _searchFilterService);
+        _sut = new(_clientState, _searchFilterService, new AppReview());
     }
 
     [TearDown]

@@ -9,6 +9,7 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Wasm;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.IndexedDB;
+using OpenHabitTracker.Services;
 
 WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -32,6 +33,7 @@ builder.Services.AddServices();
 builder.Services.AddDataAccess();
 builder.Services.AddBackup();
 builder.Services.AddBlazor();
+builder.Services.AddScoped<IAppReview, AppReview>(); // different in Maui
 builder.Services.AddScoped<IOpenFile, OpenFile>();
 builder.Services.AddScoped<ISaveFile, SaveFile>();
 builder.Services.AddScoped<INavBarFragment, OpenHabitTracker.Blazor.Wasm.Layout.NavBarFragment>();

@@ -14,6 +14,7 @@ using OpenHabitTracker.Blazor.Web;
 using OpenHabitTracker.Blazor.Web.Components;
 using OpenHabitTracker.Blazor.Web.Data;
 using OpenHabitTracker.Data;
+using OpenHabitTracker.Services;
 using Scalar.AspNetCore;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -132,6 +133,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddBackup();
 builder.Services.AddBlazor();
+builder.Services.AddScoped<IAppReview, AppReview>(); // different in Maui
 builder.Services.AddScoped<IOpenFile, OpenFile>();
 builder.Services.AddScoped<ISaveFile, SaveFile>();
 builder.Services.AddScoped<INavBarFragment, NavBarFragment>();

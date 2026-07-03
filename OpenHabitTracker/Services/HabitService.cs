@@ -6,10 +6,11 @@ using OpenHabitTracker.Query;
 
 namespace OpenHabitTracker.Services;
 
-public class HabitService(ClientState clientState, ISearchFilterService searchFilterService) : IHabitService
+public class HabitService(ClientState clientState, ISearchFilterService searchFilterService, IAppReview appReview) : IHabitService
 {
     private readonly ClientState _clientState = clientState;
     private readonly ISearchFilterService _searchFilterService = searchFilterService;
+    private readonly IAppReview _appReview = appReview;
 
     public IReadOnlyCollection<HabitModel>? Habits => _clientState.Habits?.Values;
 
@@ -220,6 +221,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         {
             await UncheckAllItems(habit);
         }
+
+        await _appReview.RecordHabitCompletion();
     }
 
     private async Task UncheckAllItems(HabitModel habit)
