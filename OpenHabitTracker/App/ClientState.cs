@@ -340,9 +340,14 @@ public class ClientState
         Dictionary<long, List<TimeModel>> timesByHabitId = Times.Values.GroupBy(x => x.HabitId).ToDictionary(g => g.Key, g => g.ToList());
         Dictionary<long, List<ItemModel>> itemsByParentId = Items.Values.GroupBy(x => x.ParentId).ToDictionary(g => g.Key, g => g.ToList());
 
+        // export a copy of the settings without RefreshToken - it is this device's auth session
+        // and must never leave the device in a backup file (users share backups)
+        SettingsModel settings = Settings.ToEntity().ToModel();
+        settings.RefreshToken = string.Empty;
+
         UserImportExportData userData = new()
         {
-            Settings = Settings,
+            Settings = settings,
             Categories = Categories.Values.ToList()
         };
 
@@ -397,6 +402,10 @@ public class ClientState
     public async Task SetUserData(UserImportExportData userData)
     {
         userData.Settings.UserId = User.Id;
+
+        // keep this device's RefreshToken - the imported file's token is blank or stale
+        // and must not replace a valid session
+        userData.Settings.RefreshToken = Settings.RefreshToken;
 
         if (Settings.Id == 0)
         {

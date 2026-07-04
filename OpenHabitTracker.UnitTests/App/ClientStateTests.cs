@@ -193,7 +193,39 @@ public class ClientStateTests
         Assert.That(result.Categories.Any(c => c.Id == 0), Is.True);
     }
 
+    [Test]
+    public async Task GetUserData_DoesNotExportRefreshToken()
+    {
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>(
+            [new SettingsEntity { Id = 1, RefreshToken = "secret-token" }]));
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
+
+        UserImportExportData result = await _sut.GetUserData();
+
+        Assert.That(result.Settings.RefreshToken, Is.Empty);
+        Assert.That(_sut.Settings.RefreshToken, Is.EqualTo("secret-token"));
+    }
+
     // --- SetUserData tests ---
+
+    [Test]
+    public async Task SetUserData_DoesNotOverwriteDeviceRefreshToken()
+    {
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>(
+            [new SettingsEntity { Id = 1, RefreshToken = "device-token" }]));
+        _dataAccess.GetSettings(Arg.Any<long>()).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = 1 }));
+
+        await _sut.LoadSettings();
+
+        UserImportExportData userData = new()
+        {
+            Settings = new SettingsModel { RefreshToken = "stale-token-from-file" }
+        };
+
+        await _sut.SetUserData(userData);
+
+        Assert.That(_sut.Settings.RefreshToken, Is.EqualTo("device-token"));
+    }
 
     [Test]
     public async Task SetUserData_WithCategoriesNotesTasksHabitsTimesItems_CallsAllAddMethods()

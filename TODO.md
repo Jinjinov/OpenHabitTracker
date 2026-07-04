@@ -9,10 +9,11 @@ Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
        (step-by-step: Automate.md §4 "One-time setup — USER STEPS")
     2. Partner Center association + msstore-cli — unblocks Automate §6
        (step-by-step: Automate.md §6 "One-time setup — USER STEPS")
+
     later: Domenca ticket (FTP TLS cert, text in Infrastructure.md); Codeberg issue for
     in your own voice; store-console review clicks; replies to issues #21/#22
 
-    1. SECURITY RefreshToken plaintext export — fix FIRST, gates the marketing push (spec below)
+    1. SECURITY RefreshToken plaintext export — DONE July 4, 2026 (see spec below for the fix)
     2. Issue #21 long titles overflow — CSS 2-line clamp + title-attribute tooltip;
        avoid per-item font shrinking
     3. Issue #22 max days in small calendar — "Show small calendar" checkbox + dropdown
@@ -20,11 +21,12 @@ Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
        in ALL 20 localization JSONs
     4. Popularity E    — SEO pages + sitemap.xml
     5. Automate §4+§5+§6 — Play/ASC/msstore listing upload tooling; §4 gated by USER 1,
-       §6 by USER 2; §4 unblocks D's locale verification
+       §6 by USER 2; §4 unblocks D's locale verification, all are needed for Popularity D
     6. Popularity D    — 20 listing texts (fastlane layout) + localized Flathub metainfo.xml
     7. Automate §3     — gh-release script; unblocks C
     8. Popularity C    — APK on GitHub releases + IzzyOnDroid request draft
     9. Popularity B    — self-hosting app store templates (Umbrel reference first)
+
     later: Automate §1 (bump), §2 (deploy — also how E goes live), §7-§9 (docker/snap/flathub);
     Popularity F-I drafts + G assets (video cut, image resizes)
 
@@ -37,6 +39,13 @@ discussion #16 — origin of the 1.2.2 streaks feature (cited in Popularity.md F
 ---------------------------------------------------------------------------------------------------
 
 SECURITY: RefreshToken is exported in plain text in JSON/YAML/backup files
+
+    FIXED (July 4, 2026): GetUserData() now exports a copy (Settings.ToEntity().ToModel())
+    with RefreshToken = "" — covers all four file formats AND the cloud-storage backups,
+    which use the same method. SetUserData() now keeps the device's RefreshToken instead
+    of the imported one — also protects Google Keep import / Examples, which call it with
+    a default (blank) SettingsModel and would have wiped the device token.
+    Two regression tests in ClientStateTests. Original analysis kept below.
 
     ClientState.GetUserData() assembles UserImportExportData with `Settings = Settings` -
     the live SettingsModel, including RefreshToken (SettingsEntity.cs line ~25).
