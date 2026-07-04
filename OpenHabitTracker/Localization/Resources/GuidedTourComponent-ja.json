@@ -95,6 +95,7 @@
   "Show the priority in Notes, Tasks and Habits.": "メモ、タスク、習慣に優先度を表示します。",
   "Show the item list in Tasks and Habits.": "タスクと習慣に項目リストを表示します。",
   "Show the small calendar in one line in Habits.": "習慣に小カレンダーを1行で表示します。",
+  "Choose the maximum number of days shown in the small calendar in Habits. Auto shows as many days as fit.": "習慣の小カレンダーに表示する日数の上限を選択します。自動では収まるだけの日数を表示します。",
   "Show the large calendar for the selected Habit.": "選択した習慣の大カレンダーを表示します。",
   "Show the habit statistics.": "習慣統計を表示します。",
   "Show the category in Notes, Tasks and Habits.": "メモ、タスク、習慣にカテゴリを表示します。",

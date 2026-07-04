@@ -82,6 +82,8 @@
   "Show priority": "우선순위 표시",
   "Show item list": "목록 표시",
   "Show small calendar": "소형 달력 표시",
+  "Max days in small calendar": "소형 달력 최대 일수",
+  "Auto": "자동",
   "Show large calendar": "대형 달력 표시",
   "Show habit statistics": "습관 통계 표시",
   "Show category": "카테고리 표시",

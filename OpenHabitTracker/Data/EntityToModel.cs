@@ -140,6 +140,7 @@ public static class EntityToModel
         model.ShowPriorityDropdown = entity.ShowPriorityDropdown;
         model.ShowItemList = entity.ShowItemList;
         model.ShowSmallCalendar = entity.ShowSmallCalendar;
+        model.MaxSmallCalendarDays = entity.MaxSmallCalendarDays;
         model.ShowLargeCalendar = entity.ShowLargeCalendar;
         model.ShowHabitStatistics = entity.ShowHabitStatistics;
         model.ShowCategory = entity.ShowCategory;

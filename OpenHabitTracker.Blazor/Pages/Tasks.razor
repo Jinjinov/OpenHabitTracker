@@ -134,7 +134,7 @@
                                     <span class="input-group-text bg-transparent" data-tasks-step-1>@PriorityService.GetPriorityTitle(task.Priority)</span>
                                 }
 
-                                <button id="task-item-@task.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(task.Id)" data-tasks-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</button>
+                                <button id="task-item-@task.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable d-flex align-items-center" title="@task.Title" @onclick="() => OpenSelected(task.Id)" data-tasks-step-2><span class="title-clamp">@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</span></button>
                                 @if (task.PlannedAt is not null)
                                 {
                                     <small class="input-group-text bg-transparent" data-tasks-step-3>@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>

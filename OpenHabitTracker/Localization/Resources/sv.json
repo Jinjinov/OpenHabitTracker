@@ -82,6 +82,8 @@
   "Show priority": "Visa prioritet",
   "Show item list": "Visa objektlista",
   "Show small calendar": "Visa liten kalender",
+  "Max days in small calendar": "Max antal dagar i liten kalender",
+  "Auto": "Automatiskt",
   "Show large calendar": "Visa stor kalender",
   "Show habit statistics": "Visa vanestatistik",
   "Show category": "Visa kategori",

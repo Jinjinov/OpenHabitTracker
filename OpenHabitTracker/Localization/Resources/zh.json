@@ -82,6 +82,8 @@
   "Show priority": "显示优先级",
   "Show item list": "显示列表",
   "Show small calendar": "显示小日历",
+  "Max days in small calendar": "小日历最大天数",
+  "Auto": "自动",
   "Show large calendar": "显示大日历",
   "Show habit statistics": "显示习惯统计",
   "Show category": "显示分类",

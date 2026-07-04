@@ -36,6 +36,8 @@ public class SettingsModel
 
     public bool ShowSmallCalendar { get; set; } = true;
 
+    public int MaxSmallCalendarDays { get; set; } = 0;
+
     public bool ShowLargeCalendar { get; set; } = true;
 
     public bool ShowHabitStatistics { get; set; } = false;
@@ -125,6 +127,7 @@ public class SettingsModel
             ShowPriorityDropdown = true,
             ShowItemList = true,
             ShowSmallCalendar = true,
+            MaxSmallCalendarDays = 0,
             ShowLargeCalendar = true,
             ShowHabitStatistics = false,
             ShowCategory = true,

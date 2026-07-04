@@ -36,6 +36,8 @@ public class SettingsEntity
 
     public bool ShowSmallCalendar { get; set; } = true;
 
+    public int MaxSmallCalendarDays { get; set; } = 0;
+
     public bool ShowLargeCalendar { get; set; } = true;
 
     public bool ShowHabitStatistics { get; set; } = false;

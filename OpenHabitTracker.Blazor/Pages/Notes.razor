@@ -110,7 +110,7 @@
                                     <span class="input-group-text bg-transparent" data-notes-step-1>@PriorityService.GetPriorityTitle(note.Priority)</span>
                                 }
 
-                                <button id="note-item-@note.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable" @onclick="() => OpenSelected(note.Id)" data-notes-step-2>@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</button>
+                                <button id="note-item-@note.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable d-flex align-items-center" title="@note.Title" @onclick="() => OpenSelected(note.Id)" data-notes-step-2><span class="title-clamp">@((MarkupString)SearchFilterService.MarkSearchResults(note.Title))</span></button>
                             </div>
 
                             @if (ClientState.Settings.DisplayNoteContentAsMarkdown)

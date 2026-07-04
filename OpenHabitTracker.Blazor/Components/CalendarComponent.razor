@@ -168,6 +168,8 @@
 
     int _currentColumnWidth;
 
+    int _currentMaxSmallCalendarDays;
+
     CalendarParams _calendarParams = new();
 
     private readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
@@ -189,22 +191,26 @@
             }
         }
 
-        if (ColumnWidth != 0 && (_currentColumnWidth != ColumnWidth || rowCount == 0))
+        if (ColumnWidth != 0 && (_currentColumnWidth != ColumnWidth || _currentMaxSmallCalendarDays != ClientState.Settings.MaxSmallCalendarDays || rowCount == 0))
         {
             _currentColumnWidth = ColumnWidth;
+            _currentMaxSmallCalendarDays = ClientState.Settings.MaxSmallCalendarDays;
 
             if (DisplayBasedOnWidth)
             {
                 rowCount = 1;
                 daysInRow = (ColumnWidth-350) / 50;
-                _calendarParams.SetCalendarStartByDaysFromToday(-daysInRow + 1);
             }
             else
             {
                 rowCount = 1;
                 daysInRow = ColumnWidth / 50;
-                _calendarParams.SetCalendarStartByDaysFromToday(-daysInRow + 1);
             }
+
+            if (_currentMaxSmallCalendarDays > 0 && daysInRow > _currentMaxSmallCalendarDays)
+                daysInRow = _currentMaxSmallCalendarDays;
+
+            _calendarParams.SetCalendarStartByDaysFromToday(-daysInRow + 1);
         }
 
         int totalCells = rowCount * daysInRow;

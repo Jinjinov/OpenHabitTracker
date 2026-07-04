@@ -82,6 +82,8 @@
   "Show priority": "Näytä prioriteetti",
   "Show item list": "Näytä kohdeluettelo",
   "Show small calendar": "Näytä pieni kalenteri",
+  "Max days in small calendar": "Pienen kalenterin päivien enimmäismäärä",
+  "Auto": "Automaattinen",
   "Show large calendar": "Näytä suuri kalenteri",
   "Show habit statistics": "Näytä tapatilastot",
   "Show category": "Näytä kategoria",

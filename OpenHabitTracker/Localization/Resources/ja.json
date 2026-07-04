@@ -82,6 +82,8 @@
   "Show priority": "優先度を表示",
   "Show item list": "項目リストを表示",
   "Show small calendar": "小カレンダーを表示",
+  "Max days in small calendar": "小カレンダーの最大日数",
+  "Auto": "自動",
   "Show large calendar": "大カレンダーを表示",
   "Show habit statistics": "習慣統計を表示",
   "Show category": "カテゴリを表示",
