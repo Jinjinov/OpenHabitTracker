@@ -1,0 +1,25 @@
+Tome notas em Markdown, planeie tarefas e acompanhe hábitos — com aplicações nativas para Windows, Linux, Android, iOS e macOS, além de uma aplicação web. Gratuito, sem anúncios e open source. Sem conta: todos os dados ficam no seu dispositivo.
+
+HÁBITOS SEM A PRESSÃO DAS SEQUÊNCIAS
+
+Em vez de um contador de sequências, cada hábito tem um intervalo de repetição desejado. A aplicação mostra o atraso de cada hábito como percentagem desse intervalo, para ver sempre o que precisa de atenção primeiro. Falhar um dia não repõe nada a zero. As sequências clássicas também existem — desativadas por predefinição.
+
+NOTAS, TAREFAS E HÁBITOS NUM SÓ LUGAR
+
+• Notas com suporte completo de Markdown
+• Tarefas com subitens, prioridades e datas planeadas
+• Hábitos com intervalos flexíveis, temporizadores, repetições e quantidades
+• Categorias, pesquisa, filtros e ordenação para tudo
+
+OS SEUS DADOS SÃO SEUS
+
+• Todos os dados são guardados localmente no seu dispositivo
+• Exportação e importação: Markdown, JSON, YAML, TSV
+• Importe as suas notas do Google Keep
+• Sincronização opcional: aloje a imagem Docker gratuita no seu próprio servidor e qualquer aplicação, de secretária ou móvel, pode iniciar sessão e sincronizar
+
+FEITA À SUA MEDIDA
+
+• 26 temas com modo escuro e claro
+• Disponível em 20 idiomas
+• Navegação por teclado e suporte para leitores de ecrã

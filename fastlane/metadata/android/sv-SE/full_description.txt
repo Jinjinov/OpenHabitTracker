@@ -1,0 +1,25 @@
+Skriv Markdown-anteckningar, planera uppgifter och följ vanor — med appar för Windows, Linux, Android, iOS och macOS samt en webbapp. Gratis, reklamfri och öppen källkod. Inget konto behövs: all din data stannar på din enhet.
+
+VANOR UTAN STREAK-PRESS
+
+I stället för en streak-räknare har varje vana ett önskat upprepningsintervall. Appen visar hur försenad en vana är som en procentandel av intervallet, så att du alltid ser vad som behöver uppmärksamhet först. En missad dag nollställer ingenting. Klassiska streaks finns också — avstängda som standard.
+
+ANTECKNINGAR, UPPGIFTER OCH VANOR PÅ ETT STÄLLE
+
+• Anteckningar med fullt Markdown-stöd
+• Uppgifter med delmoment, prioriteter och planerade datum
+• Vanor med flexibla intervall, timer, repetitioner och mängder
+• Kategorier, sökning, filter och sortering för allt
+
+DIN DATA ÄR DIN
+
+• All data sparas lokalt på din enhet
+• Export och import: Markdown, JSON, YAML, TSV
+• Importera dina anteckningar från Google Keep
+• Valfri synkronisering: kör den gratis Docker-avbilden på din egen server så kan alla appar, dator eller mobil, logga in och synkronisera
+
+ANPASSAD EFTER DIG
+
+• 26 teman med mörkt och ljust läge
+• Tillgänglig på 20 språk
+• Tangentbordsnavigering och skärmläsarstöd

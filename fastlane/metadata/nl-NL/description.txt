@@ -1,0 +1,25 @@
+Maak Markdown-notities, plan taken en volg gewoontes — met native apps voor Windows, Linux, Android, iOS en macOS, plus een webapp. Gratis, reclamevrij en open source. Geen account nodig: al je gegevens blijven op je apparaat.
+
+GEWOONTES ZONDER STREAK-STRESS
+
+In plaats van een streak-teller heeft elke gewoonte een gewenst herhaalinterval. De app toont hoe achterstallig een gewoonte is als percentage van dat interval, zodat je altijd ziet wat eerst aandacht nodig heeft. Een dag overslaan reset niets. Klassieke streaks zijn er ook — standaard uitgeschakeld.
+
+NOTITIES, TAKEN EN GEWOONTES OP ÉÉN PLEK
+
+• Notities met volledige Markdown-ondersteuning
+• Taken met subitems, prioriteiten en geplande datums
+• Gewoontes met flexibele intervallen, timers, herhalingen en hoeveelheden
+• Categorieën, zoeken, filters en sorteren voor alles
+
+JOUW GEGEVENS BLIJVEN VAN JOU
+
+• Alle gegevens worden lokaal op je apparaat opgeslagen
+• Exporteren en importeren: Markdown, JSON, YAML, TSV
+• Importeer je notities uit Google Keep
+• Optionele synchronisatie: host de gratis Docker-image op je eigen server en elke app, desktop of mobiel, kan inloggen en synchroniseren
+
+HELEMAAL NAAR JOUW HAND
+
+• 26 thema's met donkere en lichte modus
+• Beschikbaar in 20 talen
+• Toetsenbordnavigatie en schermlezerondersteuning

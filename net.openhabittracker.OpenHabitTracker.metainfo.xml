@@ -5,26 +5,270 @@
   <project_license>GPL-3.0-or-later</project_license>
   <name>OpenHabitTracker</name>
   <summary>Take notes, plan tasks, track habits</summary>
+  <summary xml:lang="de">Notizen, Aufgaben und Gewohnheiten</summary>
+  <summary xml:lang="es">Notas, tareas y hábitos</summary>
+  <summary xml:lang="sl">Zapiski, naloge in navade</summary>
+  <summary xml:lang="fr">Notes, tâches et habitudes</summary>
+  <summary xml:lang="pt">Notas, tarefas e hábitos</summary>
+  <summary xml:lang="it">Note, compiti e abitudini</summary>
+  <summary xml:lang="ja">メモ・タスク・習慣管理</summary>
+  <summary xml:lang="zh_CN">笔记、任务与习惯</summary>
+  <summary xml:lang="ko">메모, 할 일, 습관</summary>
+  <summary xml:lang="nl">Notities, taken en gewoontes</summary>
+  <summary xml:lang="da">Noter, opgaver og vaner</summary>
+  <summary xml:lang="no">Notater, oppgaver og vaner</summary>
+  <summary xml:lang="sv">Anteckningar, uppgifter och vanor</summary>
+  <summary xml:lang="fi">Muistiinpanot, tehtävät ja tavat</summary>
+  <summary xml:lang="pl">Notatki, zadania i nawyki</summary>
+  <summary xml:lang="cs">Poznámky, úkoly a návyky</summary>
+  <summary xml:lang="sk">Poznámky, úlohy a návyky</summary>
+  <summary xml:lang="hr">Bilješke, zadaci i navike</summary>
+  <summary xml:lang="sr">Beleške, zadaci i navike</summary>
   <developer id="net.openhabittracker">
     <name>Jinjinov</name>
   </developer>
   <description>
-    <p>OpenHabitTracker is a free, open-source, privacy-focused app to take notes, plan tasks, and track habits.</p>
+    <p>Take Markdown notes, plan tasks, and track habits — with native apps for Windows, Linux, Android, iOS and macOS, plus a web app. Free, ad-free, and open source. No account needed: all your data stays on your device.</p>
+    <p xml:lang="de">Markdown-Notizen schreiben, Aufgaben planen und Gewohnheiten verfolgen — mit nativen Apps für Windows, Linux, Android, iOS und macOS sowie als Web-App. Kostenlos, werbefrei und Open Source. Kein Konto nötig: Alle Daten bleiben auf deinem Gerät.</p>
+    <p xml:lang="es">Toma notas Markdown, planifica tareas y sigue tus hábitos — con aplicaciones nativas para Windows, Linux, Android, iOS y macOS, además de una versión web. Gratis, sin anuncios y de código abierto. Sin cuenta: todos tus datos se quedan en tu dispositivo.</p>
+    <p xml:lang="sl">Piši zapiske v Markdownu, načrtuj naloge in sledi navadam — z izvornimi aplikacijami za Windows, Linux, Android, iOS in macOS ter spletno aplikacijo. Brezplačno, brez oglasov in odprtokodno. Brez računa: vsi podatki ostanejo na tvoji napravi.</p>
+    <p xml:lang="fr">Prenez des notes Markdown, planifiez vos tâches et suivez vos habitudes — avec des applications natives pour Windows, Linux, Android, iOS et macOS, plus une application web. Gratuit, sans publicité et open source. Aucun compte requis : toutes vos données restent sur votre appareil.</p>
+    <p xml:lang="pt">Tome notas em Markdown, planeie tarefas e acompanhe hábitos — com aplicações nativas para Windows, Linux, Android, iOS e macOS, além de uma aplicação web. Gratuito, sem anúncios e open source. Sem conta: todos os dados ficam no seu dispositivo.</p>
+    <p xml:lang="it">Prendi note in Markdown, pianifica i compiti e monitora le abitudini — con app native per Windows, Linux, Android, iOS e macOS, più un'app web. Gratis, senza pubblicità e open source. Nessun account: tutti i dati restano sul tuo dispositivo.</p>
+    <p xml:lang="ja">Markdownでメモを取り、タスクを計画し、習慣を記録できます。Windows、Linux、Android、iOS、macOS向けのネイティブアプリとWebアプリを提供。無料・広告なし・オープンソース。アカウント不要で、データはすべて端末に保存されます。</p>
+    <p xml:lang="zh_CN">用 Markdown 记笔记、规划任务、培养习惯 — 提供 Windows、Linux、Android、iOS、macOS 原生应用及网页版。免费、无广告、开源。无需账户,所有数据保存在你的设备上。</p>
+    <p xml:lang="ko">Markdown으로 메모하고, 할 일을 계획하고, 습관을 기록하세요. Windows, Linux, Android, iOS, macOS용 네이티브 앱과 웹 앱을 제공합니다. 무료, 광고 없음, 오픈소스. 계정이 필요 없으며 모든 데이터는 기기에 저장됩니다.</p>
+    <p xml:lang="nl">Maak Markdown-notities, plan taken en volg gewoontes — met native apps voor Windows, Linux, Android, iOS en macOS, plus een webapp. Gratis, reclamevrij en open source. Geen account nodig: al je gegevens blijven op je apparaat.</p>
+    <p xml:lang="da">Tag Markdown-noter, planlæg opgaver og følg vaner — med native apps til Windows, Linux, Android, iOS og macOS samt en webapp. Gratis, reklamefri og open source. Ingen konto: alle dine data bliver på din enhed.</p>
+    <p xml:lang="no">Ta Markdown-notater, planlegg oppgaver og følg vaner — med native apper for Windows, Linux, Android, iOS og macOS, pluss en webapp. Gratis, reklamefri og åpen kildekode. Ingen konto: alle dataene dine blir på enheten din.</p>
+    <p xml:lang="sv">Skriv Markdown-anteckningar, planera uppgifter och följ vanor — med appar för Windows, Linux, Android, iOS och macOS samt en webbapp. Gratis, reklamfri och öppen källkod. Inget konto behövs: all din data stannar på din enhet.</p>
+    <p xml:lang="fi">Kirjoita Markdown-muistiinpanoja, suunnittele tehtäviä ja seuraa tapoja — natiivisovellukset Windowsille, Linuxille, Androidille, iOS:lle ja macOS:lle sekä verkkosovellus. Ilmainen, mainokseton ja avointa lähdekoodia. Ei tiliä: kaikki tietosi pysyvät laitteellasi.</p>
+    <p xml:lang="pl">Twórz notatki w Markdownie, planuj zadania i śledź nawyki — z natywnymi aplikacjami na Windows, Linux, Android, iOS i macOS oraz aplikacją webową. Za darmo, bez reklam i open source. Bez konta: wszystkie dane zostają na Twoim urządzeniu.</p>
+    <p xml:lang="cs">Pište poznámky v Markdownu, plánujte úkoly a sledujte návyky — s nativními aplikacemi pro Windows, Linux, Android, iOS a macOS a webovou aplikací. Zdarma, bez reklam a open source. Bez účtu: všechna data zůstávají ve vašem zařízení.</p>
+    <p xml:lang="sk">Píšte poznámky v Markdowne, plánujte úlohy a sledujte návyky — s natívnymi aplikáciami pre Windows, Linux, Android, iOS a macOS a webovou aplikáciou. Zadarmo, bez reklám a open source. Bez účtu: všetky dáta zostávajú vo vašom zariadení.</p>
+    <p xml:lang="hr">Pišite Markdown bilješke, planirajte zadatke i pratite navike — s izvornim aplikacijama za Windows, Linux, Android, iOS i macOS te web-aplikacijom. Besplatno, bez oglasa i otvorenog koda. Bez računa: svi podaci ostaju na vašem uređaju.</p>
+    <p xml:lang="sr">Pišite Markdown beleške, planirajte zadatke i pratite navike — sa izvornim aplikacijama za Windows, Linux, Android, iOS i macOS i veb-aplikacijom. Besplatno, bez reklama i otvorenog koda. Bez naloga: svi podaci ostaju na vašem uređaju.</p>
     <ul>
-      <li>Free and Ad-Free</li>
-      <li>Open Source</li>
-      <li>Privacy Focused: All user data is stored locally on your device</li>
-      <li>Available on Windows, Linux, Android, iOS, macOS, and as a web app</li>
-      <li>Localized to English, German, Spanish, Slovenian, French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Czech, Slovak, Croatian, Serbian</li>
-    </ul>
-    <p>Key features:</p>
-    <ul>
-      <li>Markdown support for notes</li>
-      <li>Use categories and priorities to organize your notes, tasks, and habits</li>
-      <li>Advanced Search, Filter, and Sort</li>
-      <li>Data Export/Import: JSON, YAML, TSV, Markdown</li>
+      <li>Notes with full Markdown support</li>
+      <li xml:lang="de">Notizen mit voller Markdown-Unterstützung</li>
+      <li xml:lang="es">Notas con soporte completo de Markdown</li>
+      <li xml:lang="sl">Zapiski s polno podporo za Markdown</li>
+      <li xml:lang="fr">Notes avec prise en charge complète de Markdown</li>
+      <li xml:lang="pt">Notas com suporte completo de Markdown</li>
+      <li xml:lang="it">Note con pieno supporto Markdown</li>
+      <li xml:lang="ja">Markdown完全対応のメモ</li>
+      <li xml:lang="zh_CN">完整支持 Markdown 的笔记</li>
+      <li xml:lang="ko">Markdown을 완벽 지원하는 메모</li>
+      <li xml:lang="nl">Notities met volledige Markdown-ondersteuning</li>
+      <li xml:lang="da">Noter med fuld Markdown-understøttelse</li>
+      <li xml:lang="no">Notater med full Markdown-støtte</li>
+      <li xml:lang="sv">Anteckningar med fullt Markdown-stöd</li>
+      <li xml:lang="fi">Muistiinpanot täydellä Markdown-tuella</li>
+      <li xml:lang="pl">Notatki z pełną obsługą Markdown</li>
+      <li xml:lang="cs">Poznámky s plnou podporou Markdownu</li>
+      <li xml:lang="sk">Poznámky s plnou podporou Markdownu</li>
+      <li xml:lang="hr">Bilješke s punom podrškom za Markdown</li>
+      <li xml:lang="sr">Beleške s punom podrškom za Markdown</li>
+      <li>Tasks with sub-items, priorities and planned dates</li>
+      <li xml:lang="de">Aufgaben mit Unterpunkten, Prioritäten und Terminen</li>
+      <li xml:lang="es">Tareas con subelementos, prioridades y fechas planificadas</li>
+      <li xml:lang="sl">Naloge s podtočkami, prioritetami in načrtovanimi datumi</li>
+      <li xml:lang="fr">Tâches avec sous-éléments, priorités et dates planifiées</li>
+      <li xml:lang="pt">Tarefas com subitens, prioridades e datas planeadas</li>
+      <li xml:lang="it">Compiti con sotto-elementi, priorità e date pianificate</li>
+      <li xml:lang="ja">サブ項目・優先度・予定日を設定できるタスク</li>
+      <li xml:lang="zh_CN">支持子项、优先级和计划日期的任务</li>
+      <li xml:lang="ko">하위 항목, 우선순위, 계획 날짜가 있는 할 일</li>
+      <li xml:lang="nl">Taken met subitems, prioriteiten en geplande datums</li>
+      <li xml:lang="da">Opgaver med underpunkter, prioriteter og planlagte datoer</li>
+      <li xml:lang="no">Oppgaver med underpunkter, prioriteter og planlagte datoer</li>
+      <li xml:lang="sv">Uppgifter med delmoment, prioriteter och planerade datum</li>
+      <li xml:lang="fi">Tehtävät alakohtineen, prioriteetteineen ja suunniteltuine päivineen</li>
+      <li xml:lang="pl">Zadania z podpunktami, priorytetami i planowanymi datami</li>
+      <li xml:lang="cs">Úkoly s podúkoly, prioritami a plánovanými daty</li>
+      <li xml:lang="sk">Úlohy s podúlohami, prioritami a plánovanými dátumami</li>
+      <li xml:lang="hr">Zadaci s podstavkama, prioritetima i planiranim datumima</li>
+      <li xml:lang="sr">Zadaci s podstavkama, prioritetima i planiranim datumima</li>
+      <li>Habits with flexible intervals, timers, repetitions and quantities</li>
+      <li xml:lang="de">Gewohnheiten mit flexiblen Intervallen, Timern, Wiederholungen und Mengen</li>
+      <li xml:lang="es">Hábitos con intervalos flexibles, temporizadores, repeticiones y cantidades</li>
+      <li xml:lang="sl">Navade s prilagodljivimi intervali, časovniki, ponovitvami in količinami</li>
+      <li xml:lang="fr">Habitudes avec intervalles flexibles, minuteurs, répétitions et quantités</li>
+      <li xml:lang="pt">Hábitos com intervalos flexíveis, temporizadores, repetições e quantidades</li>
+      <li xml:lang="it">Abitudini con intervalli flessibili, timer, ripetizioni e quantità</li>
+      <li xml:lang="ja">柔軟な間隔・タイマー・回数・数量に対応した習慣</li>
+      <li xml:lang="zh_CN">支持灵活间隔、计时器、次数和数量的习惯</li>
+      <li xml:lang="ko">유연한 간격, 타이머, 횟수, 수량을 지원하는 습관</li>
+      <li xml:lang="nl">Gewoontes met flexibele intervallen, timers, herhalingen en hoeveelheden</li>
+      <li xml:lang="da">Vaner med fleksible intervaller, timere, gentagelser og mængder</li>
+      <li xml:lang="no">Vaner med fleksible intervaller, tidtakere, repetisjoner og mengder</li>
+      <li xml:lang="sv">Vanor med flexibla intervall, timer, repetitioner och mängder</li>
+      <li xml:lang="fi">Tavat joustavilla väleillä, ajastimilla, toistoilla ja määrillä</li>
+      <li xml:lang="pl">Nawyki z elastycznymi odstępami, minutnikami, powtórzeniami i ilościami</li>
+      <li xml:lang="cs">Návyky s flexibilními intervaly, časovači, opakováními a množstvími</li>
+      <li xml:lang="sk">Návyky s flexibilnými intervalmi, časovačmi, opakovaniami a množstvami</li>
+      <li xml:lang="hr">Navike s fleksibilnim intervalima, tajmerima, ponavljanjima i količinama</li>
+      <li xml:lang="sr">Navike s fleksibilnim intervalima, tajmerima, ponavljanjima i količinama</li>
+      <li>Categories, search, filters and sorting across everything</li>
+      <li xml:lang="de">Kategorien, Suche, Filter und Sortierung für alles</li>
+      <li xml:lang="es">Categorías, búsqueda, filtros y ordenación para todo</li>
+      <li xml:lang="sl">Kategorije, iskanje, filtri in razvrščanje za vse</li>
+      <li xml:lang="fr">Catégories, recherche, filtres et tri pour tout</li>
+      <li xml:lang="pt">Categorias, pesquisa, filtros e ordenação para tudo</li>
+      <li xml:lang="it">Categorie, ricerca, filtri e ordinamento per tutto</li>
+      <li xml:lang="ja">カテゴリ、検索、フィルター、並べ替え</li>
+      <li xml:lang="zh_CN">分类、搜索、筛选和排序</li>
+      <li xml:lang="ko">카테고리, 검색, 필터, 정렬</li>
+      <li xml:lang="nl">Categorieën, zoeken, filters en sorteren voor alles</li>
+      <li xml:lang="da">Kategorier, søgning, filtre og sortering af alt</li>
+      <li xml:lang="no">Kategorier, søk, filtre og sortering av alt</li>
+      <li xml:lang="sv">Kategorier, sökning, filter och sortering för allt</li>
+      <li xml:lang="fi">Kategoriat, haku, suodattimet ja lajittelu kaikelle</li>
+      <li xml:lang="pl">Kategorie, wyszukiwanie, filtry i sortowanie wszystkiego</li>
+      <li xml:lang="cs">Kategorie, hledání, filtry a řazení pro všechno</li>
+      <li xml:lang="sk">Kategórie, hľadanie, filtre a triedenie pre všetko</li>
+      <li xml:lang="hr">Kategorije, pretraživanje, filtri i sortiranje za sve</li>
+      <li xml:lang="sr">Kategorije, pretraga, filteri i sortiranje za sve</li>
+      <li>All data is stored locally on your device</li>
+      <li xml:lang="de">Alle Daten werden lokal auf deinem Gerät gespeichert</li>
+      <li xml:lang="es">Todos los datos se guardan localmente en tu dispositivo</li>
+      <li xml:lang="sl">Vsi podatki so shranjeni lokalno na tvoji napravi</li>
+      <li xml:lang="fr">Toutes les données sont stockées localement sur votre appareil</li>
+      <li xml:lang="pt">Todos os dados são guardados localmente no seu dispositivo</li>
+      <li xml:lang="it">Tutti i dati sono salvati localmente sul tuo dispositivo</li>
+      <li xml:lang="ja">すべてのデータは端末内にローカル保存</li>
+      <li xml:lang="zh_CN">所有数据本地保存在你的设备上</li>
+      <li xml:lang="ko">모든 데이터는 기기에 로컬로 저장됩니다</li>
+      <li xml:lang="nl">Alle gegevens worden lokaal op je apparaat opgeslagen</li>
+      <li xml:lang="da">Alle data gemmes lokalt på din enhed</li>
+      <li xml:lang="no">Alle data lagres lokalt på enheten din</li>
+      <li xml:lang="sv">All data sparas lokalt på din enhet</li>
+      <li xml:lang="fi">Kaikki tiedot tallennetaan paikallisesti laitteellesi</li>
+      <li xml:lang="pl">Wszystkie dane są zapisywane lokalnie na Twoim urządzeniu</li>
+      <li xml:lang="cs">Všechna data se ukládají lokálně ve vašem zařízení</li>
+      <li xml:lang="sk">Všetky dáta sa ukladajú lokálne vo vašom zariadení</li>
+      <li xml:lang="hr">Svi podaci spremaju se lokalno na vašem uređaju</li>
+      <li xml:lang="sr">Svi podaci se čuvaju lokalno na vašem uređaju</li>
+      <li>Export and import: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="de">Export und Import: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="es">Exporta e importa: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="sl">Izvoz in uvoz: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="fr">Export et import : Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="pt">Exportação e importação: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="it">Esporta e importa: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="ja">エクスポート/インポート:Markdown、JSON、YAML、TSV</li>
+      <li xml:lang="zh_CN">导出/导入:Markdown、JSON、YAML、TSV</li>
+      <li xml:lang="ko">내보내기/가져오기: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="nl">Exporteren en importeren: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="da">Eksport og import: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="no">Eksport og import: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="sv">Export och import: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="fi">Vienti ja tuonti: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="pl">Eksport i import: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="cs">Export a import: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="sk">Export a import: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="hr">Izvoz i uvoz: Markdown, JSON, YAML, TSV</li>
+      <li xml:lang="sr">Izvoz i uvoz: Markdown, JSON, YAML, TSV</li>
       <li>Import your notes from Google Keep</li>
-      <li>Available in 26 themes with Dark and Light modes</li>
+      <li xml:lang="de">Importiere deine Notizen aus Google Keep</li>
+      <li xml:lang="es">Importa tus notas desde Google Keep</li>
+      <li xml:lang="sl">Uvozi zapiske iz Google Keep</li>
+      <li xml:lang="fr">Importez vos notes depuis Google Keep</li>
+      <li xml:lang="pt">Importe as suas notas do Google Keep</li>
+      <li xml:lang="it">Importa le tue note da Google Keep</li>
+      <li xml:lang="ja">Google Keepからメモをインポート</li>
+      <li xml:lang="zh_CN">从 Google Keep 导入笔记</li>
+      <li xml:lang="ko">Google Keep에서 메모 가져오기</li>
+      <li xml:lang="nl">Importeer je notities uit Google Keep</li>
+      <li xml:lang="da">Importér dine noter fra Google Keep</li>
+      <li xml:lang="no">Importer notatene dine fra Google Keep</li>
+      <li xml:lang="sv">Importera dina anteckningar från Google Keep</li>
+      <li xml:lang="fi">Tuo muistiinpanosi Google Keepistä</li>
+      <li xml:lang="pl">Importuj notatki z Google Keep</li>
+      <li xml:lang="cs">Import poznámek z Google Keep</li>
+      <li xml:lang="sk">Import poznámok z Google Keep</li>
+      <li xml:lang="hr">Uvezite bilješke iz Google Keepa</li>
+      <li xml:lang="sr">Uvezite beleške iz Google Keepa</li>
+      <li>Optional sync: host the free Docker image on your own server and every app, desktop or mobile, can log in and sync</li>
+      <li xml:lang="de">Optionale Synchronisierung: Hoste das kostenlose Docker-Image auf deinem eigenen Server — jede App, ob Desktop oder Mobil, kann sich anmelden und synchronisieren</li>
+      <li xml:lang="es">Sincronización opcional: aloja la imagen Docker gratuita en tu propio servidor y cualquier aplicación, de escritorio o móvil, puede iniciar sesión y sincronizarse</li>
+      <li xml:lang="sl">Neobvezna sinhronizacija: gosti brezplačno sliko Docker na svojem strežniku in vsaka aplikacija, namizna ali mobilna, se lahko prijavi in sinhronizira</li>
+      <li xml:lang="fr">Synchronisation optionnelle : hébergez l'image Docker gratuite sur votre propre serveur et chaque application, bureau ou mobile, peut se connecter et se synchroniser</li>
+      <li xml:lang="pt">Sincronização opcional: aloje a imagem Docker gratuita no seu próprio servidor e qualquer aplicação, de secretária ou móvel, pode iniciar sessão e sincronizar</li>
+      <li xml:lang="it">Sincronizzazione opzionale: ospita l'immagine Docker gratuita sul tuo server e ogni app, desktop o mobile, può accedere e sincronizzarsi</li>
+      <li xml:lang="ja">任意の同期:無料のDockerイメージを自分のサーバーでホストすれば、デスクトップ版もモバイル版もログインして同期できます</li>
+      <li xml:lang="zh_CN">可选同步:在自己的服务器上运行免费 Docker 镜像,桌面和移动端应用都能登录同步</li>
+      <li xml:lang="ko">선택적 동기화: 무료 Docker 이미지를 내 서버에 올리면 데스크톱과 모바일 앱 모두 로그인하여 동기화할 수 있습니다</li>
+      <li xml:lang="nl">Optionele synchronisatie: host de gratis Docker-image op je eigen server en elke app, desktop of mobiel, kan inloggen en synchroniseren</li>
+      <li xml:lang="da">Valgfri synkronisering: host det gratis Docker-image på din egen server, og alle apps, desktop eller mobil, kan logge ind og synkronisere</li>
+      <li xml:lang="no">Valgfri synkronisering: kjør det gratis Docker-imaget på din egen server, og alle appene, desktop eller mobil, kan logge inn og synkronisere</li>
+      <li xml:lang="sv">Valfri synkronisering: kör den gratis Docker-avbilden på din egen server så kan alla appar, dator eller mobil, logga in och synkronisera</li>
+      <li xml:lang="fi">Valinnainen synkronointi: aja ilmainen Docker-levykuva omalla palvelimellasi, niin jokainen sovellus, työpöytä tai mobiili, voi kirjautua ja synkronoida</li>
+      <li xml:lang="pl">Opcjonalna synchronizacja: uruchom darmowy obraz Dockera na własnym serwerze, a każda aplikacja, desktopowa czy mobilna, może się zalogować i synchronizować</li>
+      <li xml:lang="cs">Volitelná synchronizace: provozujte bezplatný Docker image na vlastním serveru a každá aplikace, desktopová i mobilní, se může přihlásit a synchronizovat</li>
+      <li xml:lang="sk">Voliteľná synchronizácia: prevádzkujte bezplatný Docker image na vlastnom serveri a každá aplikácia, desktopová aj mobilná, sa môže prihlásiť a synchronizovať</li>
+      <li xml:lang="hr">Neobavezna sinkronizacija: pokrenite besplatni Docker image na vlastitom poslužitelju i svaka aplikacija, stolna ili mobilna, može se prijaviti i sinkronizirati</li>
+      <li xml:lang="sr">Opciona sinhronizacija: pokrenite besplatni Docker image na sopstvenom serveru i svaka aplikacija, desktop ili mobilna, može da se prijavi i sinhronizuje</li>
+      <li>26 themes with dark and light mode</li>
+      <li xml:lang="de">26 Themes mit Dunkel- und Hellmodus</li>
+      <li xml:lang="es">26 temas con modo oscuro y claro</li>
+      <li xml:lang="sl">26 tem s temnim in svetlim načinom</li>
+      <li xml:lang="fr">26 thèmes avec mode sombre et clair</li>
+      <li xml:lang="pt">26 temas com modo escuro e claro</li>
+      <li xml:lang="it">26 temi con modalità scura e chiara</li>
+      <li xml:lang="ja">ダーク/ライト対応の26種類のテーマ</li>
+      <li xml:lang="zh_CN">26 款主题,支持深色和浅色模式</li>
+      <li xml:lang="ko">다크/라이트 모드를 지원하는 26가지 테마</li>
+      <li xml:lang="nl">26 thema's met donkere en lichte modus</li>
+      <li xml:lang="da">26 temaer med mørk og lys tilstand</li>
+      <li xml:lang="no">26 temaer med mørk og lys modus</li>
+      <li xml:lang="sv">26 teman med mörkt och ljust läge</li>
+      <li xml:lang="fi">26 teemaa tummalla ja vaalealla tilalla</li>
+      <li xml:lang="pl">26 motywów z trybem ciemnym i jasnym</li>
+      <li xml:lang="cs">26 motivů s tmavým a světlým režimem</li>
+      <li xml:lang="sk">26 tém s tmavým a svetlým režimom</li>
+      <li xml:lang="hr">26 tema s tamnim i svijetlim načinom</li>
+      <li xml:lang="sr">26 tema s tamnim i svetlim režimom</li>
+      <li>Available in 20 languages</li>
+      <li xml:lang="de">Verfügbar in 20 Sprachen</li>
+      <li xml:lang="es">Disponible en 20 idiomas</li>
+      <li xml:lang="sl">Na voljo v 20 jezikih</li>
+      <li xml:lang="fr">Disponible en 20 langues</li>
+      <li xml:lang="pt">Disponível em 20 idiomas</li>
+      <li xml:lang="it">Disponibile in 20 lingue</li>
+      <li xml:lang="ja">20言語に対応</li>
+      <li xml:lang="zh_CN">支持 20 种语言</li>
+      <li xml:lang="ko">20개 언어 지원</li>
+      <li xml:lang="nl">Beschikbaar in 20 talen</li>
+      <li xml:lang="da">Fås på 20 sprog</li>
+      <li xml:lang="no">Tilgjengelig på 20 språk</li>
+      <li xml:lang="sv">Tillgänglig på 20 språk</li>
+      <li xml:lang="fi">Saatavilla 20 kielellä</li>
+      <li xml:lang="pl">Dostępna w 20 językach</li>
+      <li xml:lang="cs">K dispozici ve 20 jazycích</li>
+      <li xml:lang="sk">K dispozícii v 20 jazykoch</li>
+      <li xml:lang="hr">Dostupno na 20 jezika</li>
+      <li xml:lang="sr">Dostupno na 20 jezika</li>
+      <li>Keyboard navigation and screen reader support</li>
+      <li xml:lang="de">Tastaturnavigation und Screenreader-Unterstützung</li>
+      <li xml:lang="es">Navegación por teclado y soporte para lectores de pantalla</li>
+      <li xml:lang="sl">Navigacija s tipkovnico in podpora bralnikom zaslona</li>
+      <li xml:lang="fr">Navigation au clavier et prise en charge des lecteurs d'écran</li>
+      <li xml:lang="pt">Navegação por teclado e suporte para leitores de ecrã</li>
+      <li xml:lang="it">Navigazione da tastiera e supporto per screen reader</li>
+      <li xml:lang="ja">キーボード操作とスクリーンリーダーに対応</li>
+      <li xml:lang="zh_CN">支持键盘操作和屏幕阅读器</li>
+      <li xml:lang="ko">키보드 탐색 및 스크린 리더 지원</li>
+      <li xml:lang="nl">Toetsenbordnavigatie en schermlezerondersteuning</li>
+      <li xml:lang="da">Tastaturnavigation og skærmlæserunderstøttelse</li>
+      <li xml:lang="no">Tastaturnavigasjon og skjermleserstøtte</li>
+      <li xml:lang="sv">Tangentbordsnavigering och skärmläsarstöd</li>
+      <li xml:lang="fi">Näppäimistönavigointi ja ruudunlukijatuki</li>
+      <li xml:lang="pl">Nawigacja klawiaturą i obsługa czytników ekranu</li>
+      <li xml:lang="cs">Ovládání klávesnicí a podpora čteček obrazovky</li>
+      <li xml:lang="sk">Ovládanie klávesnicou a podpora čítačiek obrazovky</li>
+      <li xml:lang="hr">Navigacija tipkovnicom i podrška za čitače zaslona</li>
+      <li xml:lang="sr">Navigacija tastaturom i podrška za čitače ekrana</li>
     </ul>
   </description>
   <launchable type="desktop-id">net.openhabittracker.OpenHabitTracker.desktop</launchable>

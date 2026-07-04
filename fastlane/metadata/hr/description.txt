@@ -1,0 +1,25 @@
+Pišite Markdown bilješke, planirajte zadatke i pratite navike — s izvornim aplikacijama za Windows, Linux, Android, iOS i macOS te web-aplikacijom. Besplatno, bez oglasa i otvorenog koda. Bez računa: svi podaci ostaju na vašem uređaju.
+
+NAVIKE BEZ PRITISKA NIZOVA
+
+Umjesto brojača nizova, svaka navika ima željeni interval ponavljanja. Aplikacija prikazuje koliko navika kasni kao postotak tog intervala, pa uvijek vidite što prvo treba pažnju. Propušten dan ništa ne poništava. Klasični nizovi također postoje — isključeni prema zadanim postavkama.
+
+BILJEŠKE, ZADACI I NAVIKE NA JEDNOM MJESTU
+
+• Bilješke s punom podrškom za Markdown
+• Zadaci s podstavkama, prioritetima i planiranim datumima
+• Navike s fleksibilnim intervalima, tajmerima, ponavljanjima i količinama
+• Kategorije, pretraživanje, filtri i sortiranje za sve
+
+VAŠI PODACI SU VAŠI
+
+• Svi podaci spremaju se lokalno na vašem uređaju
+• Izvoz i uvoz: Markdown, JSON, YAML, TSV
+• Uvezite bilješke iz Google Keepa
+• Neobavezna sinkronizacija: pokrenite besplatni Docker image na vlastitom poslužitelju i svaka aplikacija, stolna ili mobilna, može se prijaviti i sinkronizirati
+
+PRILAGOĐENO VAMA
+
+• 26 tema s tamnim i svijetlim načinom
+• Dostupno na 20 jezika
+• Navigacija tipkovnicom i podrška za čitače zaslona

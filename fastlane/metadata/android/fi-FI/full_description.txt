@@ -1,0 +1,25 @@
+Kirjoita Markdown-muistiinpanoja, suunnittele tehtäviä ja seuraa tapoja — natiivisovellukset Windowsille, Linuxille, Androidille, iOS:lle ja macOS:lle sekä verkkosovellus. Ilmainen, mainokseton ja avointa lähdekoodia. Ei tiliä: kaikki tietosi pysyvät laitteellasi.
+
+TAVAT ILMAN PUTKIPAINETTA
+
+Putkilaskurin sijaan jokaisella tavalla on haluttu toistoväli. Sovellus näyttää prosentteina, kuinka myöhässä tapa on suhteessa väliinsä, joten näet aina, mikä kaipaa huomiota ensin. Väliin jäänyt päivä ei nollaa mitään. Perinteiset putket ovat myös saatavilla — oletuksena pois päältä.
+
+MUISTIINPANOT, TEHTÄVÄT JA TAVAT YHDESSÄ PAIKASSA
+
+• Muistiinpanot täydellä Markdown-tuella
+• Tehtävät alakohtineen, prioriteetteineen ja suunniteltuine päivineen
+• Tavat joustavilla väleillä, ajastimilla, toistoilla ja määrillä
+• Kategoriat, haku, suodattimet ja lajittelu kaikelle
+
+TIETOSI OVAT SINUN
+
+• Kaikki tiedot tallennetaan paikallisesti laitteellesi
+• Vienti ja tuonti: Markdown, JSON, YAML, TSV
+• Tuo muistiinpanosi Google Keepistä
+• Valinnainen synkronointi: aja ilmainen Docker-levykuva omalla palvelimellasi, niin jokainen sovellus, työpöytä tai mobiili, voi kirjautua ja synkronoida
+
+MUKAUTUU SINUUN
+
+• 26 teemaa tummalla ja vaalealla tilalla
+• Saatavilla 20 kielellä
+• Näppäimistönavigointi ja ruudunlukijatuki

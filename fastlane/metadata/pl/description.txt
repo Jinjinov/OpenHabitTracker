@@ -1,0 +1,25 @@
+Twórz notatki w Markdownie, planuj zadania i śledź nawyki — z natywnymi aplikacjami na Windows, Linux, Android, iOS i macOS oraz aplikacją webową. Za darmo, bez reklam i open source. Bez konta: wszystkie dane zostają na Twoim urządzeniu.
+
+NAWYKI BEZ PRESJI SERII
+
+Zamiast licznika serii każdy nawyk ma pożądany odstęp powtarzania. Aplikacja pokazuje, jak bardzo nawyk jest zaległy, jako procent tego odstępu — zawsze widzisz, co wymaga uwagi w pierwszej kolejności. Opuszczony dzień niczego nie zeruje. Klasyczne serie też są dostępne — domyślnie wyłączone.
+
+NOTATKI, ZADANIA I NAWYKI W JEDNYM MIEJSCU
+
+• Notatki z pełną obsługą Markdown
+• Zadania z podpunktami, priorytetami i planowanymi datami
+• Nawyki z elastycznymi odstępami, minutnikami, powtórzeniami i ilościami
+• Kategorie, wyszukiwanie, filtry i sortowanie wszystkiego
+
+TWOJE DANE SĄ TWOJE
+
+• Wszystkie dane są zapisywane lokalnie na Twoim urządzeniu
+• Eksport i import: Markdown, JSON, YAML, TSV
+• Importuj notatki z Google Keep
+• Opcjonalna synchronizacja: uruchom darmowy obraz Dockera na własnym serwerze, a każda aplikacja, desktopowa czy mobilna, może się zalogować i synchronizować
+
+DOPASOWANA DO CIEBIE
+
+• 26 motywów z trybem ciemnym i jasnym
+• Dostępna w 20 językach
+• Nawigacja klawiaturą i obsługa czytników ekranu

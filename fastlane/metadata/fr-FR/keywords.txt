@@ -1,0 +1,1 @@
+habitudes,habitude,suivi,tracker,tâches,notes,markdown,routine,objectifs,journal

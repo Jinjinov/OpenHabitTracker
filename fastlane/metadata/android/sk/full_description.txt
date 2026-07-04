@@ -1,0 +1,25 @@
+Píšte poznámky v Markdowne, plánujte úlohy a sledujte návyky — s natívnymi aplikáciami pre Windows, Linux, Android, iOS a macOS a webovou aplikáciou. Zadarmo, bez reklám a open source. Bez účtu: všetky dáta zostávajú vo vašom zariadení.
+
+NÁVYKY BEZ TLAKU SÉRIÍ
+
+Namiesto počítadla sérií má každý návyk požadovaný interval opakovania. Aplikácia zobrazuje, ako veľmi je návyk po termíne, ako percento tohto intervalu — vždy vidíte, čo potrebuje pozornosť ako prvé. Vynechaný deň nič nevynuluje. Klasické série sú k dispozícii tiež — predvolene vypnuté.
+
+POZNÁMKY, ÚLOHY A NÁVYKY NA JEDNOM MIESTE
+
+• Poznámky s plnou podporou Markdownu
+• Úlohy s podúlohami, prioritami a plánovanými dátumami
+• Návyky s flexibilnými intervalmi, časovačmi, opakovaniami a množstvami
+• Kategórie, hľadanie, filtre a triedenie pre všetko
+
+VAŠE DÁTA SÚ VAŠE
+
+• Všetky dáta sa ukladajú lokálne vo vašom zariadení
+• Export a import: Markdown, JSON, YAML, TSV
+• Import poznámok z Google Keep
+• Voliteľná synchronizácia: prevádzkujte bezplatný Docker image na vlastnom serveri a každá aplikácia, desktopová aj mobilná, sa môže prihlásiť a synchronizovať
+
+PRISPÔSOBÍ SA VÁM
+
+• 26 tém s tmavým a svetlým režimom
+• K dispozícii v 20 jazykoch
+• Ovládanie klávesnicou a podpora čítačiek obrazovky

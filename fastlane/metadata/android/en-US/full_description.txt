@@ -1,0 +1,25 @@
+Take Markdown notes, plan tasks, and track habits — with native apps for Windows, Linux, Android, iOS and macOS, plus a web app. Free, ad-free, and open source. No account needed: all your data stays on your device.
+
+HABITS WITHOUT STREAK GUILT
+
+Instead of a streak counter, every habit has a desired repeat interval. The app shows how overdue each habit is as a percentage of that interval, so you always see what needs attention first. Missing a day never resets anything. Classic streaks are available too — off by default.
+
+NOTES, TASKS AND HABITS IN ONE PLACE
+
+• Notes with full Markdown support
+• Tasks with sub-items, priorities and planned dates
+• Habits with flexible intervals, timers, repetitions and quantities
+• Categories, search, filters and sorting across everything
+
+YOUR DATA STAYS YOURS
+
+• All data is stored locally on your device
+• Export and import: Markdown, JSON, YAML, TSV
+• Import your notes from Google Keep
+• Optional sync: host the free Docker image on your own server and every app, desktop or mobile, can log in and sync
+
+MADE TO FIT YOU
+
+• 26 themes with dark and light mode
+• Available in 20 languages
+• Keyboard navigation and screen reader support

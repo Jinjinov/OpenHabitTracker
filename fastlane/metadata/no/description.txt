@@ -1,0 +1,25 @@
+Ta Markdown-notater, planlegg oppgaver og følg vaner — med native apper for Windows, Linux, Android, iOS og macOS, pluss en webapp. Gratis, reklamefri og åpen kildekode. Ingen konto: alle dataene dine blir på enheten din.
+
+VANER UTEN STREAK-PRESS
+
+I stedet for en streak-teller har hver vane et ønsket gjentakelsesintervall. Appen viser hvor forsinket en vane er som en prosentandel av intervallet, slik at du alltid ser hva som trenger oppmerksomhet først. En glemt dag nullstiller ingenting. Klassiske streaks finnes også — avslått som standard.
+
+NOTATER, OPPGAVER OG VANER PÅ ETT STED
+
+• Notater med full Markdown-støtte
+• Oppgaver med underpunkter, prioriteter og planlagte datoer
+• Vaner med fleksible intervaller, tidtakere, repetisjoner og mengder
+• Kategorier, søk, filtre og sortering av alt
+
+DATAENE DINE ER DINE
+
+• Alle data lagres lokalt på enheten din
+• Eksport og import: Markdown, JSON, YAML, TSV
+• Importer notatene dine fra Google Keep
+• Valgfri synkronisering: kjør det gratis Docker-imaget på din egen server, og alle appene, desktop eller mobil, kan logge inn og synkronisere
+
+TILPASSET DEG
+
+• 26 temaer med mørk og lys modus
+• Tilgjengelig på 20 språk
+• Tastaturnavigasjon og skjermleserstøtte

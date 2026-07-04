@@ -1,0 +1,2 @@
+• Added current and best streak in habits
+• Added three habit display modes: Repetitions, Time, Quantity

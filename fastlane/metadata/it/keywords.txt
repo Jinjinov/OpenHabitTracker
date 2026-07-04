@@ -1,0 +1,1 @@
+abitudini,abitudine,tracker,compiti,attività,note,markdown,routine,obiettivi
