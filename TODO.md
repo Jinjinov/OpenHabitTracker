@@ -32,7 +32,7 @@ Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
        §6 by USER 2; §4 unblocks D's locale verification, all are needed for Popularity D
     6. Popularity D    — TEXTS DONE July 4, 2026 (fastlane/ 20 Play + 18 Apple locales,
        metainfo.xml localized, Automation/sync-listings.py; see Popularity.md D STATUS).
-       Remaining: your proofread of sl/hr/sr/en/de/es + uploads via §4/§5/§6
+       Proofread waived — pre-7.7 Fable review session covers it. Remaining: uploads via §4/§5/§6
     7. Automate §3     — gh-release script; unblocks C
     8. Popularity C    — APK on GitHub releases + IzzyOnDroid request draft
     9. Popularity B    — self-hosting app store templates (Umbrel reference first)
