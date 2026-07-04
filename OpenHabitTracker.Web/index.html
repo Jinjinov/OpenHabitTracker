@@ -109,6 +109,24 @@
       function redditVisit() {
         gtag('event', 'oht_reddit_visit', {'transport': 'beacon'});
       }
+      function loopComparisonVisit() {
+        gtag('event', 'oht_loop_comparison_visit', {'transport': 'beacon'});
+      }
+      function googleKeepComparisonVisit() {
+        gtag('event', 'oht_google_keep_comparison_visit', {'transport': 'beacon'});
+      }
+      function habiticaComparisonVisit() {
+        gtag('event', 'oht_habitica_comparison_visit', {'transport': 'beacon'});
+      }
+      function streaksComparisonVisit() {
+        gtag('event', 'oht_streaks_comparison_visit', {'transport': 'beacon'});
+      }
+      function everydayComparisonVisit() {
+        gtag('event', 'oht_everyday_comparison_visit', {'transport': 'beacon'});
+      }
+      function fullComparisonVisit() {
+        gtag('event', 'oht_full_comparison_visit', {'transport': 'beacon'});
+      }
     </script>
 
     <style>
@@ -216,6 +234,7 @@
         <a class="nav-link d-none d-sm-block" href="#downloads">Downloads</a>
         <a class="nav-link d-none d-lg-block" href="#videos">Videos</a>
         <a class="nav-link d-none d-lg-block" href="#screenshots">Screenshots</a>
+        <a class="nav-link d-none d-md-block" href="#compare">Compare</a>
         <a class="nav-link" href="#about">About</a>
       </nav>
 
@@ -736,6 +755,18 @@
             </div>
 
           </div>
+
+          <h3 id="compare" class="card-title mt-5">Compare</h3>
+
+          <h4 class="card-subtitle my-3 text-muted">How <span class="caveat large">OpenHabitTracker</span> stacks up against the alternatives:</h4>
+          <ul>
+            <li><a href="habit-tracker-comparison.html" onclick="fullComparisonVisit()">Habit tracker comparison: OpenHabitTracker vs Habitica, Loop, Streaks and Everyday</a></li>
+            <li><a href="loop-habit-tracker-alternative.html" onclick="loopComparisonVisit()">Loop Habit Tracker for iPhone and desktop - an open source alternative</a></li>
+            <li><a href="google-keep-alternative.html" onclick="googleKeepComparisonVisit()">An open source Google Keep alternative with built-in Keep import</a></li>
+            <li><a href="habitica-alternative.html" onclick="habiticaComparisonVisit()">A Habitica alternative without the RPG</a></li>
+            <li><a href="streaks-alternative.html" onclick="streaksComparisonVisit()">Streaks app for Android, Windows and Linux - an open source alternative</a></li>
+            <li><a href="everyday-alternative.html" onclick="everydayComparisonVisit()">An Everyday alternative with unlimited free habits</a></li>
+          </ul>
 
           <h3 id="about" class="card-title mt-5">About</h3>
 

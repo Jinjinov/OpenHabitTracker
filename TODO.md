@@ -10,6 +10,12 @@ Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
     2. Partner Center association + msstore-cli — unblocks Automate §6
        (step-by-step: Automate.md §6 "One-time setup — USER STEPS")
 
+    3. AFTER the next web deploy: set canonical_url on the dev.to comparison article
+       (dev.to post settings / front matter) to
+       https://openhabittracker.net/habit-tracker-comparison.html — transfers the article's
+       SEO credit to the site copy; without it Google treats the two as duplicates and
+       ranks dev.to
+
     later: Domenca ticket (FTP TLS cert, text in Infrastructure.md); Codeberg issue for
     in your own voice; store-console review clicks; replies to issues #21/#22
 
@@ -19,7 +25,9 @@ Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
     3. Issue #22 max days in small calendar — "Show small calendar" checkbox + dropdown
        (Auto, 7, 14, 21, 28), avoids the 0-means-auto trap; new setting = new keys
        in ALL 20 localization JSONs
-    4. Popularity E    — SEO pages + sitemap.xml
+    4. Popularity E    — DONE July 4, 2026 (files; live with next web deploy — see
+       Popularity.md E STATUS): 5 comparison pages (Loop, Keep, Habitica, Streaks, Everyday),
+       sitemap.xml, robots.txt ×3, Compare section with per-link analytics
     5. Automate §4+§5+§6 — Play/ASC/msstore listing upload tooling; §4 gated by USER 1,
        §6 by USER 2; §4 unblocks D's locale verification, all are needed for Popularity D
     6. Popularity D    — 20 listing texts (fastlane layout) + localized Flathub metainfo.xml

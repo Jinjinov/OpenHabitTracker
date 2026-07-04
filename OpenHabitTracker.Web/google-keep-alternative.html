@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="theme-color" content="#FFFFFF">
+    <meta name="application-name" content="OpenHabitTracker">
+    <meta name="description" content="Free, open source Google Keep alternative with built-in Keep import. Markdown notes, tasks and habits - no account, your data stays on your device.">
+
+    <link rel="canonical" href="https://openhabittracker.net/google-keep-alternative.html">
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="OpenHabitTracker" />
+    <meta property="og:title" content="Open Source Google Keep Alternative - OpenHabitTracker" />
+    <meta property="og:description" content="Free, open source Google Keep alternative with built-in Keep import. Markdown notes, tasks and habits - no account, your data stays on your device." />
+    <meta property="og:image" content="https://openhabittracker.net/icons/thumbnail.png" />
+    <meta property="og:url" content="https://openhabittracker.net/google-keep-alternative.html" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@dzindzinovic">
+    <meta name="twitter:title" content="Open Source Google Keep Alternative - OpenHabitTracker">
+    <meta name="twitter:description" content="Free, open source Google Keep alternative with built-in Keep import. Markdown notes, tasks and habits - no account, your data stays on your device.">
+    <meta name="twitter:image" content="https://openhabittracker.net/icons/thumbnail.png">
+
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.css">
+
+    <title>Open Source Google Keep Alternative - OpenHabitTracker</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RMDS3FFLKW"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-RMDS3FFLKW');
+    </script>
+    <script>
+      function onlineAppUsage() {
+        gtag('event', 'oht_online_app_usage', {'transport': 'beacon'});
+      }
+      function microsoftStoreVisit() {
+        gtag('event', 'oht_microsoft_store_visit', {'transport': 'beacon'});
+      }
+      function flathubStoreVisit() {
+        gtag('event', 'oht_flathub_store_visit', {'transport': 'beacon'});
+      }
+      function snapStoreVisit() {
+        gtag('event', 'oht_snap_store_visit', {'transport': 'beacon'});
+      }
+      function googleStoreVisit() {
+        gtag('event', 'oht_google_store_visit', {'transport': 'beacon'});
+      }
+      function iosStoreVisit() {
+        gtag('event', 'oht_ios_store_visit', {'transport': 'beacon'});
+      }
+      function macosStoreVisit() {
+        gtag('event', 'oht_macos_store_visit', {'transport': 'beacon'});
+      }
+      function gitHubVisit() {
+        gtag('event', 'oht_github_visit', {'transport': 'beacon'});
+      }
+      function redditVisit() {
+        gtag('event', 'oht_reddit_visit', {'transport': 'beacon'});
+      }
+    </script>
+
+    <style>
+      html {
+        scroll-padding-top: 40px;
+      }
+      .caveat {
+        font-family: 'Caveat', cursive;
+      }
+      .large {
+        font-size: 1.5em;
+      }
+      .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+    </style>
+
+  </head>
+  <body class="position-relative">
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol id="check2" viewBox="0 0 16 16">
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+      </symbol>
+      <symbol id="circle-half" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+      </symbol>
+      <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+      </symbol>
+      <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+      </symbol>
+    </svg>
+
+    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+      <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
+              id="bd-theme"
+              type="button"
+              aria-expanded="false"
+              data-bs-toggle="dropdown"
+              aria-label="Toggle theme (auto)">
+        <svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#circle-half"></use></svg>
+        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#sun-fill"></use></svg>
+            Light
+            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#moon-stars-fill"></use></svg>
+            Dark
+            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#circle-half"></use></svg>
+            Auto
+            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <main class="container-xl mt-4">
+
+      <div class="text-center mb-4">
+        <p class="mb-1"><a href="index.html" class="caveat large text-decoration-none">OpenHabitTracker</a></p>
+        <h1 class="display-5">An open source Google Keep alternative with built-in Keep import</h1>
+        <p class="lead">Leave Keep without leaving your notes behind</p>
+        <hr class="my-4">
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+
+          <p>Google Keep is genuinely good at what it does - which is exactly why leaving it is hard. Most "Keep alternatives" fail at the same hurdle: your years of notes are stuck in Google's export format, and retyping them is not going to happen.</p>
+
+          <p><span class="caveat large">OpenHabitTracker</span> is a free, open source note-taking app with a <b>built-in Google Keep import</b>. Export your notes with Google Takeout, pick the file in the app, and your notes, checklists, labels and colors come along.</p>
+
+          <h2 class="card-title mt-5 fs-3">How the Google Keep import works</h2>
+
+          <ol>
+            <li>Go to <a href="https://takeout.google.com" rel="nofollow">takeout.google.com</a>, click "Deselect all", then select only <b>Keep</b> and create the export</li>
+            <li>Download the resulting ZIP file - no need to unpack it</li>
+            <li>In OpenHabitTracker, open <b>Data</b> and choose <b>Import your notes from Google Keep</b>, then pick the ZIP</li>
+          </ol>
+
+          <p>What carries over:</p>
+
+          <ul>
+            <li><b>Text notes</b> become notes, with their created and edited dates preserved</li>
+            <li><b>Checklist notes</b> become tasks - every checkbox item comes along, including its checked state</li>
+            <li><b>Labels</b> become categories</li>
+            <li><b>Note colors</b> are mapped to theme background colors</li>
+            <li><b>Trashed notes</b> land in the trash, not in your active notes</li>
+          </ul>
+
+          <h2 class="card-title mt-5 fs-3">Google Keep vs OpenHabitTracker</h2>
+
+          <div class="table-responsive">
+            <table class="table table-striped align-middle">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Google Keep</th>
+                  <th scope="col">OpenHabitTracker</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Price</th><td>free</td><td>free</td></tr>
+                <tr><th scope="row">Open source</th><td>❌</td><td>✅ GPL-3.0</td></tr>
+                <tr><th scope="row">Account required</th><td>✅ Google account</td><td>❌ no account</td></tr>
+                <tr><th scope="row">Where your data lives</th><td>Google's servers</td><td>on your device</td></tr>
+                <tr><th scope="row">Notes</th><td>✅ plain text</td><td>✅ Markdown - headings, lists, tables, code</td></tr>
+                <tr><th scope="row">Checklists</th><td>✅</td><td>✅ tasks with sub-items</td></tr>
+                <tr><th scope="row">Habit tracking</th><td>❌</td><td>✅</td></tr>
+                <tr><th scope="row">Labels / categories</th><td>✅ labels</td><td>✅ categories</td></tr>
+                <tr><th scope="row">Note colors</th><td>✅</td><td>✅</td></tr>
+                <tr><th scope="row">Reminders / notifications</th><td>✅</td><td>❌ overdue habits are highlighted instead</td></tr>
+                <tr><th scope="row">Collaboration / sharing</th><td>✅</td><td>❌</td></tr>
+                <tr><th scope="row">Images, drawings, audio</th><td>✅</td><td>❌ text only</td></tr>
+                <tr><th scope="row">Native desktop app</th><td>❌ browser only</td><td>✅ Windows, macOS, Linux</td></tr>
+                <tr><th scope="row">Mobile apps</th><td>✅ Android, iOS</td><td>✅ Android, iOS</td></tr>
+                <tr><th scope="row">Sync</th><td>✅ Google cloud</td><td>✅ optional self-hosted server (Docker)</td></tr>
+                <tr><th scope="row">Export your data</th><td>Google Takeout</td><td>Markdown, JSON, YAML, TSV - any time</td></tr>
+                <tr><th scope="row">Languages</th><td>many</td><td>20</td></tr>
+                <tr><th scope="row">Themes</th><td>light / dark</td><td>26 themes, dark and light</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="card-title mt-5 fs-3">What you give up, honestly</h2>
+
+          <p>If your Keep usage leans on <b>reminders and notifications</b>, <b>shared notes</b>, or <b>photos, drawings and voice memos</b>, OpenHabitTracker is not a drop-in replacement - it is a text-first app and it does not send notifications. The closest thing to a reminder is visual: habits past their repeat interval are highlighted as overdue in the habit list.</p>
+
+          <p>What you get in exchange: your notes in portable Markdown on your own device, no account, a real desktop app on Windows, macOS and Linux, tasks and habit tracking in the same place, and - if you want sync - a <a href="index.html#sync">self-hosted Docker server</a> under your control instead of someone else's cloud.</p>
+
+          <h2 class="card-title mt-5 fs-3">Screenshots</h2>
+
+          <div class="d-flex flex-wrap">
+
+            <div class="card m-2" style="width: 25rem;">
+              <a href="images/desktop_3_notes.png">
+                <img src="images/desktop_3_notes.png" class="card-img-top" alt="OpenHabitTracker notes overview on desktop with colored notes in categories" loading="lazy">
+              </a>
+              <div class="card-body">
+                <p class="card-text">Notes on desktop - colors and categories, like Keep</p>
+              </div>
+            </div>
+
+            <div class="card m-2" style="width: 25rem;">
+              <a href="images/phone_3_markdown.png">
+                <img src="images/phone_3_markdown.png" class="card-img-top" alt="OpenHabitTracker Markdown note on a phone" loading="lazy">
+              </a>
+              <div class="card-body">
+                <p class="card-text">Markdown notes on a phone</p>
+              </div>
+            </div>
+
+            <div class="card m-2" style="width: 25rem;">
+              <a href="images/desktop_8_backup.png">
+                <img src="images/desktop_8_backup.png" class="card-img-top" alt="OpenHabitTracker data page with Google Keep import and export formats" loading="lazy">
+              </a>
+              <div class="card-body">
+                <p class="card-text">The Data page - Google Keep import and open export formats</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 class="card-title mt-5 fs-3">Try it without installing anything</h2>
+
+          <p><a href="https://pwa.openhabittracker.net" onclick="onlineAppUsage()" class="btn btn-primary">Use <span class="caveat large">OpenHabitTracker </span> in your browser</a></p>
+
+          <p>The PWA works offline and keeps all data on your device. Or get the native app:</p>
+
+          <p><i class="fab fa-android"></i> Android - Google Play:<br><a href="https://play.google.com/store/apps/details?id=net.openhabittracker" onclick="googleStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on Google Play"><img src="icons/Google.svg" style="height:64px;" alt="Google Play badge"></a></p>
+          <p><i class="fab fa-apple"></i> iOS - App Store:<br><a href="https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=iphone" onclick="iosStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on iOS App Store"><img src="icons/AppStore.svg" style="height:64px;" alt="App Store badge"></a></p>
+          <p><i class="fab fa-microsoft"></i> Windows - Microsoft Store:<br><a href="https://apps.microsoft.com/detail/9mwzmlxzzllr" onclick="microsoftStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on Microsoft Store"><img src="icons/Microsoft.svg" style="height:64px;" alt="Microsoft Store badge"></a></p>
+          <p><i class="fab fa-apple"></i> macOS - Mac App Store:<br><a href="https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=mac" onclick="macosStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on Mac App Store"><img src="icons/MacAppStore.svg" style="height:64px;" alt="Mac App Store badge"></a></p>
+          <p><i class="fab fa-linux"></i> Linux - Flathub:<br><a href="https://flathub.org/apps/net.openhabittracker.OpenHabitTracker" onclick="flathubStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on Flathub"><img src="icons/Flathub.svg" style="height:64px;" alt="Flathub badge"></a></p>
+          <p><i class="fab fa-linux"></i> Linux - Snap Store:<br><a href="https://snapcraft.io/openhabittracker" onclick="snapStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on Snap Store"><img src="icons/SnapStore.svg" style="height:64px;" alt="Snap Store badge"></a></p>
+
+          <p>Questions? The source is on <a href="https://github.com/Jinjinov/OpenHabitTracker" onclick="gitHubVisit()">GitHub</a> and the community is on <a href="https://www.reddit.com/r/OpenHabitTracker" onclick="redditVisit()">Reddit</a>.</p>
+
+        </div>
+      </div>
+
+      <footer class="text-center my-4">
+        <p>
+          <a href="index.html" class="text-decoration-none">Home</a> ·
+          <a href="habit-tracker-comparison.html" class="text-decoration-none">Full 5-app comparison</a> ·
+          <a href="loop-habit-tracker-alternative.html" class="text-decoration-none">Loop alternative</a> ·
+          <a href="habitica-alternative.html" class="text-decoration-none">Habitica alternative</a> ·
+          <a href="streaks-alternative.html" class="text-decoration-none">Streaks alternative</a> ·
+          <a href="everyday-alternative.html" class="text-decoration-none">Everyday alternative</a> ·
+          <a href="privacy-policy.html" class="text-decoration-none">Privacy policy</a>
+        </p>
+      </footer>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+    <script src="js/color-modes.js"></script>
+    <script type="module" src="js/cookieconsent-config.js"></script>
+  </body>
+</html>
