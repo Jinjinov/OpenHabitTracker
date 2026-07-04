@@ -12,12 +12,12 @@ Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
 
     3. Generate EF migrations on the Windows PC — AddMaxSmallCalendarDays in BOTH projects
        (OpenHabitTracker.EntityFrameworkCore/Migrations and OpenHabitTracker.Blazor.Web/Migrations;
-       local dotnet-ef tool manifest is in Blazor.Web/.config) — commit d21b850 has the entity
-       change, the app won't start against an existing DB until the migration exists
+       local dotnet-ef tool manifest is in Blazor.Web/.config)
     4. Run the e2e suite against a live app at http://localhost (port 80 is privileged on the
        Linux box; dev profile is :5260) — 3 new tests: 2x MaxSmallCalendarDays in
        SettingsPersistenceTests, 1x long-title clamp in HabitTests; also verifies the
-       data-settings-step-16 → 17 locator fix; the 4 test files are uncommitted, commit after green
+       data-settings-step-16 → 17 locator fix
+
     5. AFTER the next web deploy: set canonical_url on the dev.to comparison article
        (dev.to post settings / front matter) to
        https://openhabittracker.net/habit-tracker-comparison.html — transfers the article's
@@ -29,13 +29,11 @@ Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
 
     1. SECURITY RefreshToken plaintext export — DONE July 4, 2026 (see spec below for the fix)
     2. Issue #21 long titles overflow — DONE July 4, 2026 (commit d21b850): CSS 2-line clamp
-       .title-clamp + title-attribute tooltip on Habits/Tasks/Notes title buttons;
-       e2e regression test uncommitted (USER 4)
+       .title-clamp + title-attribute tooltip on Habits/Tasks/Notes title buttons
     3. Issue #22 max days in small calendar — DONE July 4, 2026 (commit d21b850):
        MaxSmallCalendarDays setting, select Auto + 1-31 as new data-settings-step-11
        (steps 12-25 renumbered), kept "Show small calendar" checkbox, cap in
-       CalendarComponent; all 40 locale JSONs updated; EF migrations pending (USER 3),
-       e2e tests uncommitted (USER 4)
+       CalendarComponent; all 40 locale JSONs updated; EF migrations pending (USER 3)
     4. Popularity E    — DONE July 4, 2026 (files; live with next web deploy — see
        Popularity.md E STATUS): 5 comparison pages (Loop, Keep, Habitica, Streaks, Everyday),
        sitemap.xml, robots.txt ×3, Compare section with per-link analytics
