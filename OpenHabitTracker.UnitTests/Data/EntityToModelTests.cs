@@ -248,7 +248,7 @@ public class EntityToModelTests
             Culture = "de", FirstDayOfWeek = DayOfWeek.Sunday,
             SelectedRatio = Ratio.ElapsedToDesired, HideCompletedTasks = false,
             SelectedRatioMin = 75, SelectedRatioMax = 200, ShowOnlyUnderSelectedRatioMax = true,
-            HorizontalMargin = 2, VerticalMargin = 3
+            HorizontalMargin = 2, VerticalMargin = 3, MaxSmallCalendarDays = 9
         };
 
         SettingsModel model = entity.ToModel();
@@ -266,6 +266,7 @@ public class EntityToModelTests
         Assert.That(model.ShowOnlyUnderSelectedRatioMax, Is.True);
         Assert.That(model.HorizontalMargin, Is.EqualTo(2));
         Assert.That(model.VerticalMargin, Is.EqualTo(3));
+        Assert.That(model.MaxSmallCalendarDays, Is.EqualTo(9));
     }
 
     [Test]
@@ -277,7 +278,7 @@ public class EntityToModelTests
             Culture = "de", FirstDayOfWeek = DayOfWeek.Sunday,
             SelectedRatio = Ratio.ElapsedToDesired, HideCompletedTasks = false,
             SelectedRatioMin = 75, SelectedRatioMax = 200, ShowOnlyUnderSelectedRatioMax = true,
-            HorizontalMargin = 2, VerticalMargin = 3
+            HorizontalMargin = 2, VerticalMargin = 3, MaxSmallCalendarDays = 9
         };
 
         SettingsEntity entity = model.ToEntity();
@@ -295,6 +296,7 @@ public class EntityToModelTests
         Assert.That(entity.ShowOnlyUnderSelectedRatioMax, Is.True);
         Assert.That(entity.HorizontalMargin, Is.EqualTo(2));
         Assert.That(entity.VerticalMargin, Is.EqualTo(3));
+        Assert.That(entity.MaxSmallCalendarDays, Is.EqualTo(9));
     }
 
     [Test]

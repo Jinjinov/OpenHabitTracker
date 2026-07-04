@@ -42,8 +42,8 @@ public class SettingsPersistenceTests : BaseTest
     {
         await OpenSettingsAsync();
 
-        // data-settings-step-16 wraps the language select
-        await Page.Locator("[data-settings-step-16] select").SelectOptionAsync("de");
+        // data-settings-step-17 wraps the language select
+        await Page.Locator("[data-settings-step-17] select").SelectOptionAsync("de");
 
         // After switching to German the Notes nav link aria-label becomes "Notizen"
         await Expect(Page.Locator("[data-main-step-3]")).ToHaveAttributeAsync("aria-label", "Notizen");
@@ -53,7 +53,7 @@ public class SettingsPersistenceTests : BaseTest
     public async Task Language_Change_PersistedAfterReload()
     {
         await OpenSettingsAsync();
-        await Page.Locator("[data-settings-step-16] select").SelectOptionAsync("de");
+        await Page.Locator("[data-settings-step-17] select").SelectOptionAsync("de");
         await Expect(Page.Locator("[data-main-step-3]")).ToHaveAttributeAsync("aria-label", "Notizen"); // wait for IndexedDB write before reload
 
         await Page.ReloadAsync();
@@ -62,7 +62,7 @@ public class SettingsPersistenceTests : BaseTest
 
         // Reset to English to avoid affecting subsequent tests
         await OpenSettingsAsync();
-        await Page.Locator("[data-settings-step-16] select").SelectOptionAsync("en");
+        await Page.Locator("[data-settings-step-17] select").SelectOptionAsync("en");
     }
 
     [Test]
@@ -176,6 +176,51 @@ public class SettingsPersistenceTests : BaseTest
         // Restore ShowCategory so other tests are not affected
         await OpenSettingsAsync();
         await Page.Locator("label[for='ShowCategory']").ClickAsync();
+        await CloseSidebarAsync();
+    }
+
+    [Test]
+    public async Task MaxSmallCalendarDays_Change_LimitsSmallCalendarCells()
+    {
+        await NavigateToAsync("[data-main-step-5]");
+        await AddItemAsync("MaxDays Habit");
+
+        await OpenSettingsAsync();
+        // data-settings-step-11 wraps the max small calendar days select
+        await Page.Locator("[data-settings-step-11] select").SelectOptionAsync("3");
+        await CloseSidebarAsync();
+
+        // Scope to the calendar belonging to our habit — other tests' habits may share the page
+        ILocator calendar = Page.Locator("div.w-100:has([data-habits-step-2]:has-text('MaxDays Habit')) + div[data-habits-step-6]");
+        await Expect(calendar.Locator("div[role='grid'] button")).ToHaveCountAsync(3);
+
+        // Reset to Auto so other tests see the default dynamic width
+        await OpenSettingsAsync();
+        await Page.Locator("[data-settings-step-11] select").SelectOptionAsync("0");
+        await CloseSidebarAsync();
+    }
+
+    [Test]
+    public async Task MaxSmallCalendarDays_PersistedAfterReload()
+    {
+        await NavigateToAsync("[data-main-step-5]");
+        await AddItemAsync("MaxDays Reload Habit");
+
+        await OpenSettingsAsync();
+        await Page.Locator("[data-settings-step-11] select").SelectOptionAsync("3");
+        await CloseSidebarAsync();
+
+        // Waiting for the capped calendar guarantees the settings write completed before reload
+        ILocator calendar = Page.Locator("div.w-100:has([data-habits-step-2]:has-text('MaxDays Reload Habit')) + div[data-habits-step-6]");
+        await Expect(calendar.Locator("div[role='grid'] button")).ToHaveCountAsync(3);
+
+        await Page.ReloadAsync();
+
+        await OpenSettingsAsync();
+        await Expect(Page.Locator("[data-settings-step-11] select")).ToHaveValueAsync("3");
+
+        // Reset to Auto so other tests see the default dynamic width
+        await Page.Locator("[data-settings-step-11] select").SelectOptionAsync("0");
         await CloseSidebarAsync();
     }
 

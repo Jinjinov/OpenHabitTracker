@@ -21,6 +21,7 @@ public class CalendarComponentTests
     private ICalendarService _calendarService = null!;
     private IJsInterop _jsInterop = null!;
     private HabitModel _habit = null!;
+    private ClientState _clientState = null!;
 
     [SetUp]
     public void SetUp()
@@ -37,7 +38,7 @@ public class CalendarComponentTests
         MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         MarkdownToHtml markdownToHtml = new(pipeline);
 
-        ClientState clientState = new(new[] { dataAccess }, markdownToHtml);
+        _clientState = new(new[] { dataAccess }, markdownToHtml);
 
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
@@ -46,7 +47,7 @@ public class CalendarComponentTests
 
         _ctx.Services.AddScoped(_ => _calendarService);
         _ctx.Services.AddScoped(_ => Substitute.For<IHabitService>());
-        _ctx.Services.AddScoped(_ => clientState);
+        _ctx.Services.AddScoped(_ => _clientState);
         _ctx.Services.AddSingleton(loc);
         _ctx.Services.AddScoped(_ => _jsInterop);
 
@@ -71,6 +72,55 @@ public class CalendarComponentTests
         IReadOnlyList<IElement> dayCells = cut.FindAll("div.d-flex > button");
 
         Assert.That(dayCells, Has.Count.EqualTo(7));
+    }
+
+    [Test]
+    public void WeekView_MaxSmallCalendarDays_CapsDayCells()
+    {
+        _clientState.Settings.MaxSmallCalendarDays = 5;
+
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, false)
+                .Add(p => p.ColumnWidth, 350));
+
+        IReadOnlyList<IElement> dayCells = cut.FindAll("div.d-flex > button");
+
+        Assert.That(dayCells, Has.Count.EqualTo(5));
+    }
+
+    [Test]
+    public void WeekView_MaxSmallCalendarDaysOverWidth_ShowsOnlyDaysThatFit()
+    {
+        _clientState.Settings.MaxSmallCalendarDays = 31;
+
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, false)
+                .Add(p => p.ColumnWidth, 350));
+
+        IReadOnlyList<IElement> dayCells = cut.FindAll("div.d-flex > button");
+
+        Assert.That(dayCells, Has.Count.EqualTo(7));
+    }
+
+    [Test]
+    public void WidthBasedView_MaxSmallCalendarDays_CapsDayCells()
+    {
+        _clientState.Settings.MaxSmallCalendarDays = 5;
+
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, false)
+                .Add(p => p.DisplayBasedOnWidth, true)
+                .Add(p => p.ColumnWidth, 850));
+
+        IReadOnlyList<IElement> dayCells = cut.FindAll("div.d-flex > button");
+
+        Assert.That(dayCells, Has.Count.EqualTo(5));
     }
 
     [Test]

@@ -498,4 +498,28 @@ public class HabitTests : BaseTest
 
         await Expect(Page.Locator("button[aria-label='Start']")).ToBeVisibleAsync();
     }
+
+    // Regression guard for issue #21: long titles used to overflow the fixed-height habit row
+    [Test]
+    public async Task AddHabit_LongTitle_ClampedToRowWithFullTitleInTooltip()
+    {
+        string longTitle = "Long Title Habit " + string.Join(" ", Enumerable.Repeat("overflow", 30));
+
+        await AddItemAsync(longTitle);
+
+        ILocator titleButton = Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Long Title Habit" });
+        await Expect(titleButton).ToBeVisibleAsync();
+
+        // The full title stays available as a native tooltip
+        await Expect(titleButton).ToHaveAttributeAsync("title", longTitle);
+
+        // The clamped text must not spill below its row
+        ILocator row = Page.Locator("div.input-group.flex-nowrap").Filter(new LocatorFilterOptions { Has = titleButton });
+        LocatorBoundingBoxResult? rowBox = await row.BoundingBoxAsync();
+        LocatorBoundingBoxResult? titleBox = await titleButton.Locator("span.title-clamp").BoundingBoxAsync();
+
+        Assert.That(rowBox, Is.Not.Null);
+        Assert.That(titleBox, Is.Not.Null);
+        Assert.That(titleBox!.Y + titleBox.Height, Is.LessThanOrEqualTo(rowBox!.Y + rowBox.Height + 1));
+    }
 }
