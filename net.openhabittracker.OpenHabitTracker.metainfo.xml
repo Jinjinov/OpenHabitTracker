@@ -28,26 +28,26 @@
     <name>Jinjinov</name>
   </developer>
   <description>
-    <p>Take Markdown notes, plan tasks, and track habits — with native apps for Windows, Linux, Android, iOS and macOS, plus a web app. Free, ad-free, and open source. No account needed: all your data stays on your device.</p>
-    <p xml:lang="de">Markdown-Notizen schreiben, Aufgaben planen und Gewohnheiten verfolgen — mit nativen Apps für Windows, Linux, Android, iOS und macOS sowie als Web-App. Kostenlos, werbefrei und Open Source. Kein Konto nötig: Alle Daten bleiben auf deinem Gerät.</p>
-    <p xml:lang="es">Toma notas Markdown, planifica tareas y sigue tus hábitos — con aplicaciones nativas para Windows, Linux, Android, iOS y macOS, además de una versión web. Gratis, sin anuncios y de código abierto. Sin cuenta: todos tus datos se quedan en tu dispositivo.</p>
-    <p xml:lang="sl">Piši zapiske v Markdownu, načrtuj naloge in sledi navadam — z izvornimi aplikacijami za Windows, Linux, Android, iOS in macOS ter spletno aplikacijo. Brezplačno, brez oglasov in odprtokodno. Brez računa: vsi podatki ostanejo na tvoji napravi.</p>
-    <p xml:lang="fr">Prenez des notes Markdown, planifiez vos tâches et suivez vos habitudes — avec des applications natives pour Windows, Linux, Android, iOS et macOS, plus une application web. Gratuit, sans publicité et open source. Aucun compte requis : toutes vos données restent sur votre appareil.</p>
-    <p xml:lang="pt">Tome notas em Markdown, planeie tarefas e acompanhe hábitos — com aplicações nativas para Windows, Linux, Android, iOS e macOS, além de uma aplicação web. Gratuito, sem anúncios e open source. Sem conta: todos os dados ficam no seu dispositivo.</p>
-    <p xml:lang="it">Prendi note in Markdown, pianifica i compiti e monitora le abitudini — con app native per Windows, Linux, Android, iOS e macOS, più un'app web. Gratis, senza pubblicità e open source. Nessun account: tutti i dati restano sul tuo dispositivo.</p>
+    <p>Take Markdown notes, plan tasks, and track habits - with native apps for Windows, Linux, Android, iOS and macOS, plus a web app. Free, ad-free, and open source. No account needed: all your data stays on your device.</p>
+    <p xml:lang="de">Markdown-Notizen schreiben, Aufgaben planen und Gewohnheiten verfolgen - mit nativen Apps für Windows, Linux, Android, iOS und macOS sowie als Web-App. Kostenlos, werbefrei und Open Source. Kein Konto nötig: Alle Daten bleiben auf deinem Gerät.</p>
+    <p xml:lang="es">Toma notas Markdown, planifica tareas y sigue tus hábitos - con aplicaciones nativas para Windows, Linux, Android, iOS y macOS, además de una versión web. Gratis, sin anuncios y de código abierto. Sin cuenta: todos tus datos se quedan en tu dispositivo.</p>
+    <p xml:lang="sl">Piši zapiske v Markdownu, načrtuj naloge in sledi navadam - z izvornimi aplikacijami za Windows, Linux, Android, iOS in macOS ter spletno aplikacijo. Brezplačno, brez oglasov in odprtokodno. Brez računa: vsi podatki ostanejo na tvoji napravi.</p>
+    <p xml:lang="fr">Prenez des notes Markdown, planifiez vos tâches et suivez vos habitudes - avec des applications natives pour Windows, Linux, Android, iOS et macOS, plus une application web. Gratuit, sans publicité et open source. Aucun compte requis : toutes vos données restent sur votre appareil.</p>
+    <p xml:lang="pt">Tome notas em Markdown, planeie tarefas e acompanhe hábitos - com aplicações nativas para Windows, Linux, Android, iOS e macOS, além de uma aplicação web. Gratuito, sem anúncios e open source. Sem conta: todos os dados ficam no seu dispositivo.</p>
+    <p xml:lang="it">Prendi note in Markdown, pianifica i compiti e monitora le abitudini - con app native per Windows, Linux, Android, iOS e macOS, più un'app web. Gratis, senza pubblicità e open source. Nessun account: tutti i dati restano sul tuo dispositivo.</p>
     <p xml:lang="ja">Markdownでメモを取り、タスクを計画し、習慣を記録できます。Windows、Linux、Android、iOS、macOS向けのネイティブアプリとWebアプリを提供。無料・広告なし・オープンソース。アカウント不要で、データはすべて端末に保存されます。</p>
-    <p xml:lang="zh_CN">用 Markdown 记笔记、规划任务、培养习惯 — 提供 Windows、Linux、Android、iOS、macOS 原生应用及网页版。免费、无广告、开源。无需账户,所有数据保存在你的设备上。</p>
+    <p xml:lang="zh_CN">用 Markdown 记笔记、规划任务、培养习惯,提供 Windows、Linux、Android、iOS、macOS 原生应用及网页版。免费、无广告、开源。无需账户,所有数据保存在你的设备上。</p>
     <p xml:lang="ko">Markdown으로 메모하고, 할 일을 계획하고, 습관을 기록하세요. Windows, Linux, Android, iOS, macOS용 네이티브 앱과 웹 앱을 제공합니다. 무료, 광고 없음, 오픈소스. 계정이 필요 없으며 모든 데이터는 기기에 저장됩니다.</p>
-    <p xml:lang="nl">Maak Markdown-notities, plan taken en volg gewoontes — met native apps voor Windows, Linux, Android, iOS en macOS, plus een webapp. Gratis, reclamevrij en open source. Geen account nodig: al je gegevens blijven op je apparaat.</p>
-    <p xml:lang="da">Tag Markdown-noter, planlæg opgaver og følg vaner — med native apps til Windows, Linux, Android, iOS og macOS samt en webapp. Gratis, reklamefri og open source. Ingen konto: alle dine data bliver på din enhed.</p>
-    <p xml:lang="no">Ta Markdown-notater, planlegg oppgaver og følg vaner — med native apper for Windows, Linux, Android, iOS og macOS, pluss en webapp. Gratis, reklamefri og åpen kildekode. Ingen konto: alle dataene dine blir på enheten din.</p>
-    <p xml:lang="sv">Skriv Markdown-anteckningar, planera uppgifter och följ vanor — med appar för Windows, Linux, Android, iOS och macOS samt en webbapp. Gratis, reklamfri och öppen källkod. Inget konto behövs: all din data stannar på din enhet.</p>
-    <p xml:lang="fi">Kirjoita Markdown-muistiinpanoja, suunnittele tehtäviä ja seuraa tapoja — natiivisovellukset Windowsille, Linuxille, Androidille, iOS:lle ja macOS:lle sekä verkkosovellus. Ilmainen, mainokseton ja avointa lähdekoodia. Ei tiliä: kaikki tietosi pysyvät laitteellasi.</p>
-    <p xml:lang="pl">Twórz notatki w Markdownie, planuj zadania i śledź nawyki — z natywnymi aplikacjami na Windows, Linux, Android, iOS i macOS oraz aplikacją webową. Za darmo, bez reklam i open source. Bez konta: wszystkie dane zostają na Twoim urządzeniu.</p>
-    <p xml:lang="cs">Pište poznámky v Markdownu, plánujte úkoly a sledujte návyky — s nativními aplikacemi pro Windows, Linux, Android, iOS a macOS a webovou aplikací. Zdarma, bez reklam a open source. Bez účtu: všechna data zůstávají ve vašem zařízení.</p>
-    <p xml:lang="sk">Píšte poznámky v Markdowne, plánujte úlohy a sledujte návyky — s natívnymi aplikáciami pre Windows, Linux, Android, iOS a macOS a webovou aplikáciou. Zadarmo, bez reklám a open source. Bez účtu: všetky dáta zostávajú vo vašom zariadení.</p>
-    <p xml:lang="hr">Pišite Markdown bilješke, planirajte zadatke i pratite navike — s izvornim aplikacijama za Windows, Linux, Android, iOS i macOS te web-aplikacijom. Besplatno, bez oglasa i otvorenog koda. Bez računa: svi podaci ostaju na vašem uređaju.</p>
-    <p xml:lang="sr">Pišite Markdown beleške, planirajte zadatke i pratite navike — sa izvornim aplikacijama za Windows, Linux, Android, iOS i macOS i veb-aplikacijom. Besplatno, bez reklama i otvorenog koda. Bez naloga: svi podaci ostaju na vašem uređaju.</p>
+    <p xml:lang="nl">Maak Markdown-notities, plan taken en volg gewoontes - met native apps voor Windows, Linux, Android, iOS en macOS, plus een webapp. Gratis, reclamevrij en open source. Geen account nodig: al je gegevens blijven op je apparaat.</p>
+    <p xml:lang="da">Tag Markdown-noter, planlæg opgaver og følg vaner - med native apps til Windows, Linux, Android, iOS og macOS samt en webapp. Gratis, reklamefri og open source. Ingen konto: alle dine data bliver på din enhed.</p>
+    <p xml:lang="no">Ta Markdown-notater, planlegg oppgaver og følg vaner - med native apper for Windows, Linux, Android, iOS og macOS, pluss en webapp. Gratis, reklamefri og åpen kildekode. Ingen konto: alle dataene dine blir på enheten din.</p>
+    <p xml:lang="sv">Skriv Markdown-anteckningar, planera uppgifter och följ vanor - med appar för Windows, Linux, Android, iOS och macOS samt en webbapp. Gratis, reklamfri och öppen källkod. Inget konto behövs: all din data stannar på din enhet.</p>
+    <p xml:lang="fi">Kirjoita Markdown-muistiinpanoja, suunnittele tehtäviä ja seuraa tapoja - natiivisovellukset Windowsille, Linuxille, Androidille, iOS:lle ja macOS:lle sekä verkkosovellus. Ilmainen, mainokseton ja avointa lähdekoodia. Ei tiliä: kaikki tietosi pysyvät laitteellasi.</p>
+    <p xml:lang="pl">Twórz notatki w Markdownie, planuj zadania i śledź nawyki - z natywnymi aplikacjami na Windows, Linux, Android, iOS i macOS oraz aplikacją webową. Za darmo, bez reklam i open source. Bez konta: wszystkie dane zostają na Twoim urządzeniu.</p>
+    <p xml:lang="cs">Pište poznámky v Markdownu, plánujte úkoly a sledujte návyky - s nativními aplikacemi pro Windows, Linux, Android, iOS a macOS a webovou aplikací. Zdarma, bez reklam a open source. Bez účtu: všechna data zůstávají ve vašem zařízení.</p>
+    <p xml:lang="sk">Píšte poznámky v Markdowne, plánujte úlohy a sledujte návyky - s natívnymi aplikáciami pre Windows, Linux, Android, iOS a macOS a webovou aplikáciou. Zadarmo, bez reklám a open source. Bez účtu: všetky dáta zostávajú vo vašom zariadení.</p>
+    <p xml:lang="hr">Pišite Markdown bilješke, planirajte zadatke i pratite navike - s izvornim aplikacijama za Windows, Linux, Android, iOS i macOS te web-aplikacijom. Besplatno, bez oglasa i otvorenog koda. Bez računa: svi podaci ostaju na vašem uređaju.</p>
+    <p xml:lang="sr">Pišite Markdown beleške, planirajte zadatke i pratite navike - sa izvornim aplikacijama za Windows, Linux, Android, iOS i macOS i veb-aplikacijom. Besplatno, bez reklama i otvorenog koda. Bez naloga: svi podaci ostaju na vašem uređaju.</p>
     <ul>
       <li>Notes with full Markdown support</li>
       <li xml:lang="de">Notizen mit voller Markdown-Unterstützung</li>
@@ -69,66 +69,86 @@
       <li xml:lang="sk">Poznámky s plnou podporou Markdownu</li>
       <li xml:lang="hr">Bilješke s punom podrškom za Markdown</li>
       <li xml:lang="sr">Beleške s punom podrškom za Markdown</li>
-      <li>Tasks with sub-items, priorities and planned dates</li>
-      <li xml:lang="de">Aufgaben mit Unterpunkten, Prioritäten und Terminen</li>
-      <li xml:lang="es">Tareas con subelementos, prioridades y fechas planificadas</li>
-      <li xml:lang="sl">Naloge s podtočkami, prioritetami in načrtovanimi datumi</li>
-      <li xml:lang="fr">Tâches avec sous-éléments, priorités et dates planifiées</li>
-      <li xml:lang="pt">Tarefas com subitens, prioridades e datas planeadas</li>
-      <li xml:lang="it">Compiti con sotto-elementi, priorità e date pianificate</li>
-      <li xml:lang="ja">サブ項目・優先度・予定日を設定できるタスク</li>
-      <li xml:lang="zh_CN">支持子项、优先级和计划日期的任务</li>
-      <li xml:lang="ko">하위 항목, 우선순위, 계획 날짜가 있는 할 일</li>
-      <li xml:lang="nl">Taken met subitems, prioriteiten en geplande datums</li>
-      <li xml:lang="da">Opgaver med underpunkter, prioriteter og planlagte datoer</li>
-      <li xml:lang="no">Oppgaver med underpunkter, prioriteter og planlagte datoer</li>
-      <li xml:lang="sv">Uppgifter med delmoment, prioriteter och planerade datum</li>
-      <li xml:lang="fi">Tehtävät alakohtineen, prioriteetteineen ja suunniteltuine päivineen</li>
-      <li xml:lang="pl">Zadania z podpunktami, priorytetami i planowanymi datami</li>
-      <li xml:lang="cs">Úkoly s podúkoly, prioritami a plánovanými daty</li>
-      <li xml:lang="sk">Úlohy s podúlohami, prioritami a plánovanými dátumami</li>
-      <li xml:lang="hr">Zadaci s podstavkama, prioritetima i planiranim datumima</li>
-      <li xml:lang="sr">Zadaci s podstavkama, prioritetima i planiranim datumima</li>
-      <li>Habits with flexible intervals, timers, repetitions and quantities</li>
-      <li xml:lang="de">Gewohnheiten mit flexiblen Intervallen, Timern, Wiederholungen und Mengen</li>
-      <li xml:lang="es">Hábitos con intervalos flexibles, temporizadores, repeticiones y cantidades</li>
-      <li xml:lang="sl">Navade s prilagodljivimi intervali, časovniki, ponovitvami in količinami</li>
-      <li xml:lang="fr">Habitudes avec intervalles flexibles, minuteurs, répétitions et quantités</li>
-      <li xml:lang="pt">Hábitos com intervalos flexíveis, temporizadores, repetições e quantidades</li>
-      <li xml:lang="it">Abitudini con intervalli flessibili, timer, ripetizioni e quantità</li>
-      <li xml:lang="ja">柔軟な間隔・タイマー・回数・数量に対応した習慣</li>
-      <li xml:lang="zh_CN">支持灵活间隔、计时器、次数和数量的习惯</li>
-      <li xml:lang="ko">유연한 간격, 타이머, 횟수, 수량을 지원하는 습관</li>
-      <li xml:lang="nl">Gewoontes met flexibele intervallen, timers, herhalingen en hoeveelheden</li>
-      <li xml:lang="da">Vaner med fleksible intervaller, timere, gentagelser og mængder</li>
-      <li xml:lang="no">Vaner med fleksible intervaller, tidtakere, repetisjoner og mengder</li>
-      <li xml:lang="sv">Vanor med flexibla intervall, timer, repetitioner och mängder</li>
-      <li xml:lang="fi">Tavat joustavilla väleillä, ajastimilla, toistoilla ja määrillä</li>
-      <li xml:lang="pl">Nawyki z elastycznymi odstępami, minutnikami, powtórzeniami i ilościami</li>
-      <li xml:lang="cs">Návyky s flexibilními intervaly, časovači, opakováními a množstvími</li>
-      <li xml:lang="sk">Návyky s flexibilnými intervalmi, časovačmi, opakovaniami a množstvami</li>
-      <li xml:lang="hr">Navike s fleksibilnim intervalima, tajmerima, ponavljanjima i količinama</li>
-      <li xml:lang="sr">Navike s fleksibilnim intervalima, tajmerima, ponavljanjima i količinama</li>
-      <li>Categories, search, filters and sorting across everything</li>
-      <li xml:lang="de">Kategorien, Suche, Filter und Sortierung für alles</li>
-      <li xml:lang="es">Categorías, búsqueda, filtros y ordenación para todo</li>
-      <li xml:lang="sl">Kategorije, iskanje, filtri in razvrščanje za vse</li>
-      <li xml:lang="fr">Catégories, recherche, filtres et tri pour tout</li>
-      <li xml:lang="pt">Categorias, pesquisa, filtros e ordenação para tudo</li>
-      <li xml:lang="it">Categorie, ricerca, filtri e ordinamento per tutto</li>
-      <li xml:lang="ja">カテゴリ、検索、フィルター、並べ替え</li>
-      <li xml:lang="zh_CN">分类、搜索、筛选和排序</li>
-      <li xml:lang="ko">카테고리, 검색, 필터, 정렬</li>
-      <li xml:lang="nl">Categorieën, zoeken, filters en sorteren voor alles</li>
-      <li xml:lang="da">Kategorier, søgning, filtre og sortering af alt</li>
-      <li xml:lang="no">Kategorier, søk, filtre og sortering av alt</li>
-      <li xml:lang="sv">Kategorier, sökning, filter och sortering för allt</li>
-      <li xml:lang="fi">Kategoriat, haku, suodattimet ja lajittelu kaikelle</li>
-      <li xml:lang="pl">Kategorie, wyszukiwanie, filtry i sortowanie wszystkiego</li>
-      <li xml:lang="cs">Kategorie, hledání, filtry a řazení pro všechno</li>
-      <li xml:lang="sk">Kategórie, hľadanie, filtre a triedenie pre všetko</li>
-      <li xml:lang="hr">Kategorije, pretraživanje, filtri i sortiranje za sve</li>
-      <li xml:lang="sr">Kategorije, pretraga, filteri i sortiranje za sve</li>
+      <li>Tasks with planned dates, duration and time tracking</li>
+      <li xml:lang="de">Aufgaben mit Terminen, Dauer und Zeiterfassung</li>
+      <li xml:lang="es">Tareas con fechas planificadas, duración y registro de tiempo</li>
+      <li xml:lang="sl">Naloge z načrtovanimi datumi, trajanjem in merjenjem časa</li>
+      <li xml:lang="fr">Tâches avec dates planifiées, durée et suivi du temps</li>
+      <li xml:lang="pt">Tarefas com datas planeadas, duração e registo de tempo</li>
+      <li xml:lang="it">Compiti con date pianificate, durata e tracciamento del tempo</li>
+      <li xml:lang="ja">予定日・所要時間・時間記録に対応したタスク</li>
+      <li xml:lang="zh_CN">支持计划日期、时长和时间记录的任务</li>
+      <li xml:lang="ko">계획 날짜, 소요 시간, 시간 기록을 지원하는 할 일</li>
+      <li xml:lang="nl">Taken met geplande datums, duur en tijdregistratie</li>
+      <li xml:lang="da">Opgaver med planlagte datoer, varighed og tidsregistrering</li>
+      <li xml:lang="no">Oppgaver med planlagte datoer, varighet og tidsregistrering</li>
+      <li xml:lang="sv">Uppgifter med planerade datum, varaktighet och tidsregistrering</li>
+      <li xml:lang="fi">Tehtävät suunnitelluilla päivillä, kestolla ja ajanseurannalla</li>
+      <li xml:lang="pl">Zadania z planowanymi datami, czasem trwania i rejestracją czasu</li>
+      <li xml:lang="cs">Úkoly s plánovanými daty, dobou trvání a měřením času</li>
+      <li xml:lang="sk">Úlohy s plánovanými dátumami, trvaním a meraním času</li>
+      <li xml:lang="hr">Zadaci s planiranim datumima, trajanjem i praćenjem vremena</li>
+      <li xml:lang="sr">Zadaci s planiranim datumima, trajanjem i praćenjem vremena</li>
+      <li>Habits with flexible repeat intervals - track repetitions, time or quantity</li>
+      <li xml:lang="de">Gewohnheiten mit flexiblen Wiederholungsintervallen - erfasst als Wiederholungen, Zeit oder Menge</li>
+      <li xml:lang="es">Hábitos con intervalos de repetición flexibles - registra repeticiones, tiempo o cantidad</li>
+      <li xml:lang="sl">Navade s prilagodljivimi intervali ponavljanja - beleži ponovitve, čas ali količino</li>
+      <li xml:lang="fr">Habitudes avec intervalles de répétition flexibles - suivies en répétitions, temps ou quantité</li>
+      <li xml:lang="pt">Hábitos com intervalos de repetição flexíveis - registados como repetições, tempo ou quantidade</li>
+      <li xml:lang="it">Abitudini con intervalli di ripetizione flessibili - registrate come ripetizioni, tempo o quantità</li>
+      <li xml:lang="ja">柔軟な繰り返し間隔を持つ習慣(回数・時間・数量で記録)</li>
+      <li xml:lang="zh_CN">重复间隔灵活的习惯,可按次数、时间或数量记录</li>
+      <li xml:lang="ko">유연한 반복 간격의 습관, 횟수·시간·수량으로 기록</li>
+      <li xml:lang="nl">Gewoontes met flexibele herhaalintervallen - bijgehouden als herhalingen, tijd of hoeveelheid</li>
+      <li xml:lang="da">Vaner med fleksible gentagelsesintervaller - registreret som gentagelser, tid eller mængde</li>
+      <li xml:lang="no">Vaner med fleksible gjentakelsesintervaller - registrert som repetisjoner, tid eller mengde</li>
+      <li xml:lang="sv">Vanor med flexibla upprepningsintervall - registrerade som repetitioner, tid eller mängd</li>
+      <li xml:lang="fi">Tavat joustavilla toistoväleillä - kirjaa toistoina, aikana tai määränä</li>
+      <li xml:lang="pl">Nawyki z elastycznymi odstępami powtarzania - zapisywane jako powtórzenia, czas lub ilość</li>
+      <li xml:lang="cs">Návyky s flexibilními intervaly opakování - zaznamenávané jako opakování, čas nebo množství</li>
+      <li xml:lang="sk">Návyky s flexibilnými intervalmi opakovania - zaznamenávané ako opakovania, čas alebo množstvo</li>
+      <li xml:lang="hr">Navike s fleksibilnim intervalima ponavljanja - bilježe se kao ponavljanja, vrijeme ili količina</li>
+      <li xml:lang="sr">Navike s fleksibilnim intervalima ponavljanja - beleže se kao ponavljanja, vreme ili količina</li>
+      <li>Checklist sub-items on both tasks and habits</li>
+      <li xml:lang="de">Checklisten-Unterpunkte für Aufgaben und Gewohnheiten</li>
+      <li xml:lang="es">Sublistas de verificación en tareas y hábitos</li>
+      <li xml:lang="sl">Kontrolni seznami s podtočkami pri nalogah in navadah</li>
+      <li xml:lang="fr">Sous-éléments de type checklist pour les tâches et les habitudes</li>
+      <li xml:lang="pt">Subitens de lista de verificação em tarefas e hábitos</li>
+      <li xml:lang="it">Sotto-elementi checklist per compiti e abitudini</li>
+      <li xml:lang="ja">タスクにも習慣にも使えるチェックリスト項目</li>
+      <li xml:lang="zh_CN">任务和习惯都支持清单子项</li>
+      <li xml:lang="ko">할 일과 습관 모두에서 쓰는 체크리스트 하위 항목</li>
+      <li xml:lang="nl">Checklist-subitems voor taken én gewoontes</li>
+      <li xml:lang="da">Tjekliste-underpunkter på både opgaver og vaner</li>
+      <li xml:lang="no">Sjekkliste-underpunkter på både oppgaver og vaner</li>
+      <li xml:lang="sv">Checklistor med delmoment på både uppgifter och vanor</li>
+      <li xml:lang="fi">Tarkistuslistan alakohdat sekä tehtävissä että tavoissa</li>
+      <li xml:lang="pl">Podpunkty listy kontrolnej w zadaniach i nawykach</li>
+      <li xml:lang="cs">Podúkoly (checklisty) u úkolů i návyků</li>
+      <li xml:lang="sk">Podúlohy (checklisty) pri úlohách aj návykoch</li>
+      <li xml:lang="hr">Podstavke popisa (checkliste) na zadacima i navikama</li>
+      <li xml:lang="sr">Podstavke liste (čekliste) na zadacima i navikama</li>
+      <li>Categories, colors, priorities, search, filters and sorting - for notes, tasks and habits</li>
+      <li xml:lang="de">Kategorien, Farben, Prioritäten, Suche, Filter und Sortierung - für Notizen, Aufgaben und Gewohnheiten</li>
+      <li xml:lang="es">Categorías, colores, prioridades, búsqueda, filtros y ordenación - para notas, tareas y hábitos</li>
+      <li xml:lang="sl">Kategorije, barve, prioritete, iskanje, filtri in razvrščanje - za zapiske, naloge in navade</li>
+      <li xml:lang="fr">Catégories, couleurs, priorités, recherche, filtres et tri - pour les notes, les tâches et les habitudes</li>
+      <li xml:lang="pt">Categorias, cores, prioridades, pesquisa, filtros e ordenação - para notas, tarefas e hábitos</li>
+      <li xml:lang="it">Categorie, colori, priorità, ricerca, filtri e ordinamento - per note, compiti e abitudini</li>
+      <li xml:lang="ja">カテゴリ・色・優先度・検索・フィルター・並べ替えをメモ・タスク・習慣すべてで</li>
+      <li xml:lang="zh_CN">分类、颜色、优先级、搜索、筛选和排序,笔记、任务、习惯通用</li>
+      <li xml:lang="ko">카테고리, 색상, 우선순위, 검색, 필터, 정렬을 메모·할 일·습관 모두에</li>
+      <li xml:lang="nl">Categorieën, kleuren, prioriteiten, zoeken, filters en sorteren - voor notities, taken en gewoontes</li>
+      <li xml:lang="da">Kategorier, farver, prioriteter, søgning, filtre og sortering - for noter, opgaver og vaner</li>
+      <li xml:lang="no">Kategorier, farger, prioriteter, søk, filtre og sortering - for notater, oppgaver og vaner</li>
+      <li xml:lang="sv">Kategorier, färger, prioriteter, sökning, filter och sortering - för anteckningar, uppgifter och vanor</li>
+      <li xml:lang="fi">Kategoriat, värit, prioriteetit, haku, suodattimet ja lajittelu - muistiinpanoille, tehtäville ja tavoille</li>
+      <li xml:lang="pl">Kategorie, kolory, priorytety, wyszukiwanie, filtry i sortowanie - dla notatek, zadań i nawyków</li>
+      <li xml:lang="cs">Kategorie, barvy, priority, hledání, filtry a řazení - pro poznámky, úkoly i návyky</li>
+      <li xml:lang="sk">Kategórie, farby, priority, hľadanie, filtre a triedenie - pre poznámky, úlohy aj návyky</li>
+      <li xml:lang="hr">Kategorije, boje, prioriteti, pretraživanje, filtri i sortiranje - za bilješke, zadatke i navike</li>
+      <li xml:lang="sr">Kategorije, boje, prioriteti, pretraga, filteri i sortiranje - za beleške, zadatke i navike</li>
       <li>All data is stored locally on your device</li>
       <li xml:lang="de">Alle Daten werden lokal auf deinem Gerät gespeichert</li>
       <li xml:lang="es">Todos los datos se guardan localmente en tu dispositivo</li>
@@ -190,7 +210,7 @@
       <li xml:lang="hr">Uvezite bilješke iz Google Keepa</li>
       <li xml:lang="sr">Uvezite beleške iz Google Keepa</li>
       <li>Optional sync: host the free Docker image on your own server and every app, desktop or mobile, can log in and sync</li>
-      <li xml:lang="de">Optionale Synchronisierung: Hoste das kostenlose Docker-Image auf deinem eigenen Server — jede App, ob Desktop oder Mobil, kann sich anmelden und synchronisieren</li>
+      <li xml:lang="de">Optionale Synchronisierung: Hoste das kostenlose Docker-Image auf deinem eigenen Server - jede App, ob Desktop oder Mobil, kann sich anmelden und synchronisieren</li>
       <li xml:lang="es">Sincronización opcional: aloja la imagen Docker gratuita en tu propio servidor y cualquier aplicación, de escritorio o móvil, puede iniciar sesión y sincronizarse</li>
       <li xml:lang="sl">Neobvezna sinhronizacija: gosti brezplačno sliko Docker na svojem strežniku in vsaka aplikacija, namizna ali mobilna, se lahko prijavi in sinhronizira</li>
       <li xml:lang="fr">Synchronisation optionnelle : hébergez l'image Docker gratuite sur votre propre serveur et chaque application, bureau ou mobile, peut se connecter et se synchroniser</li>
@@ -229,6 +249,26 @@
       <li xml:lang="sk">26 tém s tmavým a svetlým režimom</li>
       <li xml:lang="hr">26 tema s tamnim i svijetlim načinom</li>
       <li xml:lang="sr">26 tema s tamnim i svetlim režimom</li>
+      <li>Customizable UI - show or hide almost every element</li>
+      <li xml:lang="de">Anpassbare Oberfläche - fast jedes Element lässt sich ein- oder ausblenden</li>
+      <li xml:lang="es">Interfaz personalizable - muestra u oculta casi cualquier elemento</li>
+      <li xml:lang="sl">Prilagodljiv vmesnik - skoraj vsak element lahko skriješ ali pokažeš</li>
+      <li xml:lang="fr">Interface personnalisable - affichez ou masquez presque chaque élément</li>
+      <li xml:lang="pt">Interface personalizável - mostre ou oculte quase todos os elementos</li>
+      <li xml:lang="it">Interfaccia personalizzabile - mostra o nascondi quasi ogni elemento</li>
+      <li xml:lang="ja">カスタマイズ可能なUI(ほぼすべての要素を表示/非表示)</li>
+      <li xml:lang="zh_CN">可定制界面,几乎每个元素都能显示或隐藏</li>
+      <li xml:lang="ko">커스터마이징 가능한 UI, 거의 모든 요소를 표시하거나 숨길 수 있음</li>
+      <li xml:lang="nl">Aanpasbare interface - toon of verberg bijna elk element</li>
+      <li xml:lang="da">Tilpasselig brugerflade - vis eller skjul næsten alle elementer</li>
+      <li xml:lang="no">Tilpassbart grensesnitt - vis eller skjul nesten alle elementer</li>
+      <li xml:lang="sv">Anpassningsbart gränssnitt - visa eller dölj nästan varje element</li>
+      <li xml:lang="fi">Mukautettava käyttöliittymä - näytä tai piilota lähes jokainen elementti</li>
+      <li xml:lang="pl">Konfigurowalny interfejs - pokaż lub ukryj niemal każdy element</li>
+      <li xml:lang="cs">Přizpůsobitelné rozhraní - téměř každý prvek lze zobrazit nebo skrýt</li>
+      <li xml:lang="sk">Prispôsobiteľné rozhranie - takmer každý prvok možno zobraziť alebo skryť</li>
+      <li xml:lang="hr">Prilagodljivo sučelje - prikažite ili sakrijte gotovo svaki element</li>
+      <li xml:lang="sr">Prilagodljiv interfejs - prikažite ili sakrijte gotovo svaki element</li>
       <li>Available in 20 languages</li>
       <li xml:lang="de">Verfügbar in 20 Sprachen</li>
       <li xml:lang="es">Disponible en 20 idiomas</li>

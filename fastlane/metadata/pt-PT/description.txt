@@ -1,15 +1,16 @@
-Tome notas em Markdown, planeie tarefas e acompanhe hábitos — com aplicações nativas para Windows, Linux, Android, iOS e macOS, além de uma aplicação web. Gratuito, sem anúncios e open source. Sem conta: todos os dados ficam no seu dispositivo.
+Tome notas em Markdown, planeie tarefas e acompanhe hábitos - com aplicações nativas para Windows, Linux, Android, iOS e macOS, além de uma aplicação web. Gratuito, sem anúncios e open source. Sem conta: todos os dados ficam no seu dispositivo.
 
 HÁBITOS SEM A PRESSÃO DAS SEQUÊNCIAS
 
-Em vez de um contador de sequências, cada hábito tem um intervalo de repetição desejado. A aplicação mostra o atraso de cada hábito como percentagem desse intervalo, para ver sempre o que precisa de atenção primeiro. Falhar um dia não repõe nada a zero. As sequências clássicas também existem — desativadas por predefinição.
+Em vez de um contador de sequências, cada hábito tem um intervalo de repetição desejado. A aplicação mostra o atraso de cada hábito como percentagem desse intervalo, para ver sempre o que precisa de atenção primeiro. Falhar um dia não repõe nada a zero. As sequências clássicas também existem - desativadas por predefinição.
 
 NOTAS, TAREFAS E HÁBITOS NUM SÓ LUGAR
 
 • Notas com suporte completo de Markdown
-• Tarefas com subitens, prioridades e datas planeadas
-• Hábitos com intervalos flexíveis, temporizadores, repetições e quantidades
-• Categorias, pesquisa, filtros e ordenação para tudo
+• Tarefas com datas planeadas, duração e registo de tempo
+• Hábitos com intervalos de repetição flexíveis - registados como repetições, tempo ou quantidade
+• Subitens de lista de verificação em tarefas e hábitos
+• Categorias, cores, prioridades, pesquisa, filtros e ordenação - para notas, tarefas e hábitos
 
 OS SEUS DADOS SÃO SEUS
 
@@ -21,5 +22,6 @@ OS SEUS DADOS SÃO SEUS
 FEITA À SUA MEDIDA
 
 • 26 temas com modo escuro e claro
+• Interface personalizável - mostre ou oculte quase todos os elementos
 • Disponível em 20 idiomas
 • Navegação por teclado e suporte para leitores de ecrã

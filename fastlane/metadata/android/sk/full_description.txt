@@ -1,15 +1,16 @@
-Píšte poznámky v Markdowne, plánujte úlohy a sledujte návyky — s natívnymi aplikáciami pre Windows, Linux, Android, iOS a macOS a webovou aplikáciou. Zadarmo, bez reklám a open source. Bez účtu: všetky dáta zostávajú vo vašom zariadení.
+Píšte poznámky v Markdowne, plánujte úlohy a sledujte návyky - s natívnymi aplikáciami pre Windows, Linux, Android, iOS a macOS a webovou aplikáciou. Zadarmo, bez reklám a open source. Bez účtu: všetky dáta zostávajú vo vašom zariadení.
 
 NÁVYKY BEZ TLAKU SÉRIÍ
 
-Namiesto počítadla sérií má každý návyk požadovaný interval opakovania. Aplikácia zobrazuje, ako veľmi je návyk po termíne, ako percento tohto intervalu — vždy vidíte, čo potrebuje pozornosť ako prvé. Vynechaný deň nič nevynuluje. Klasické série sú k dispozícii tiež — predvolene vypnuté.
+Namiesto počítadla sérií má každý návyk požadovaný interval opakovania. Aplikácia zobrazuje, ako veľmi je návyk po termíne, ako percento tohto intervalu - vždy vidíte, čo potrebuje pozornosť ako prvé. Vynechaný deň nič nevynuluje. Klasické série sú k dispozícii tiež - predvolene vypnuté.
 
 POZNÁMKY, ÚLOHY A NÁVYKY NA JEDNOM MIESTE
 
 • Poznámky s plnou podporou Markdownu
-• Úlohy s podúlohami, prioritami a plánovanými dátumami
-• Návyky s flexibilnými intervalmi, časovačmi, opakovaniami a množstvami
-• Kategórie, hľadanie, filtre a triedenie pre všetko
+• Úlohy s plánovanými dátumami, trvaním a meraním času
+• Návyky s flexibilnými intervalmi opakovania - zaznamenávané ako opakovania, čas alebo množstvo
+• Podúlohy (checklisty) pri úlohách aj návykoch
+• Kategórie, farby, priority, hľadanie, filtre a triedenie - pre poznámky, úlohy aj návyky
 
 VAŠE DÁTA SÚ VAŠE
 
@@ -21,5 +22,6 @@ VAŠE DÁTA SÚ VAŠE
 PRISPÔSOBÍ SA VÁM
 
 • 26 tém s tmavým a svetlým režimom
+• Prispôsobiteľné rozhranie - takmer každý prvok možno zobraziť alebo skryť
 • K dispozícii v 20 jazykoch
 • Ovládanie klávesnicou a podpora čítačiek obrazovky

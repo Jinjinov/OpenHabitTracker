@@ -1,15 +1,16 @@
-Skriv Markdown-anteckningar, planera uppgifter och följ vanor — med appar för Windows, Linux, Android, iOS och macOS samt en webbapp. Gratis, reklamfri och öppen källkod. Inget konto behövs: all din data stannar på din enhet.
+Skriv Markdown-anteckningar, planera uppgifter och följ vanor - med appar för Windows, Linux, Android, iOS och macOS samt en webbapp. Gratis, reklamfri och öppen källkod. Inget konto behövs: all din data stannar på din enhet.
 
 VANOR UTAN STREAK-PRESS
 
-I stället för en streak-räknare har varje vana ett önskat upprepningsintervall. Appen visar hur försenad en vana är som en procentandel av intervallet, så att du alltid ser vad som behöver uppmärksamhet först. En missad dag nollställer ingenting. Klassiska streaks finns också — avstängda som standard.
+I stället för en streak-räknare har varje vana ett önskat upprepningsintervall. Appen visar hur försenad en vana är som en procentandel av intervallet, så att du alltid ser vad som behöver uppmärksamhet först. En missad dag nollställer ingenting. Klassiska streaks finns också - avstängda som standard.
 
 ANTECKNINGAR, UPPGIFTER OCH VANOR PÅ ETT STÄLLE
 
 • Anteckningar med fullt Markdown-stöd
-• Uppgifter med delmoment, prioriteter och planerade datum
-• Vanor med flexibla intervall, timer, repetitioner och mängder
-• Kategorier, sökning, filter och sortering för allt
+• Uppgifter med planerade datum, varaktighet och tidsregistrering
+• Vanor med flexibla upprepningsintervall - registrerade som repetitioner, tid eller mängd
+• Checklistor med delmoment på både uppgifter och vanor
+• Kategorier, färger, prioriteter, sökning, filter och sortering - för anteckningar, uppgifter och vanor
 
 DIN DATA ÄR DIN
 
@@ -21,5 +22,6 @@ DIN DATA ÄR DIN
 ANPASSAD EFTER DIG
 
 • 26 teman med mörkt och ljust läge
+• Anpassningsbart gränssnitt - visa eller dölj nästan varje element
 • Tillgänglig på 20 språk
 • Tangentbordsnavigering och skärmläsarstöd

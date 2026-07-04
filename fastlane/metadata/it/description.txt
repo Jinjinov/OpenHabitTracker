@@ -1,15 +1,16 @@
-Prendi note in Markdown, pianifica i compiti e monitora le abitudini — con app native per Windows, Linux, Android, iOS e macOS, più un'app web. Gratis, senza pubblicità e open source. Nessun account: tutti i dati restano sul tuo dispositivo.
+Prendi note in Markdown, pianifica i compiti e monitora le abitudini - con app native per Windows, Linux, Android, iOS e macOS, più un'app web. Gratis, senza pubblicità e open source. Nessun account: tutti i dati restano sul tuo dispositivo.
 
 ABITUDINI SENZA L'ANSIA DELLE STREAK
 
-Invece di un contatore di streak, ogni abitudine ha un intervallo di ripetizione desiderato. L'app mostra il ritardo di ogni abitudine come percentuale di quell'intervallo, così vedi sempre cosa richiede attenzione per prima. Saltare un giorno non azzera nulla. Le streak classiche ci sono comunque — disattivate per impostazione predefinita.
+Invece di un contatore di streak, ogni abitudine ha un intervallo di ripetizione desiderato. L'app mostra il ritardo di ogni abitudine come percentuale di quell'intervallo, così vedi sempre cosa richiede attenzione per prima. Saltare un giorno non azzera nulla. Le streak classiche ci sono comunque - disattivate per impostazione predefinita.
 
 NOTE, COMPITI E ABITUDINI IN UN UNICO POSTO
 
 • Note con pieno supporto Markdown
-• Compiti con sotto-elementi, priorità e date pianificate
-• Abitudini con intervalli flessibili, timer, ripetizioni e quantità
-• Categorie, ricerca, filtri e ordinamento per tutto
+• Compiti con date pianificate, durata e tracciamento del tempo
+• Abitudini con intervalli di ripetizione flessibili - registrate come ripetizioni, tempo o quantità
+• Sotto-elementi checklist per compiti e abitudini
+• Categorie, colori, priorità, ricerca, filtri e ordinamento - per note, compiti e abitudini
 
 I TUOI DATI SONO TUOI
 
@@ -21,5 +22,6 @@ I TUOI DATI SONO TUOI
 SU MISURA PER TE
 
 • 26 temi con modalità scura e chiara
+• Interfaccia personalizzabile - mostra o nascondi quasi ogni elemento
 • Disponibile in 20 lingue
 • Navigazione da tastiera e supporto per screen reader

@@ -1,15 +1,16 @@
-Toma notas Markdown, planifica tareas y sigue tus hábitos — con aplicaciones nativas para Windows, Linux, Android, iOS y macOS, además de una versión web. Gratis, sin anuncios y de código abierto. Sin cuenta: todos tus datos se quedan en tu dispositivo.
+Toma notas Markdown, planifica tareas y sigue tus hábitos - con aplicaciones nativas para Windows, Linux, Android, iOS y macOS, además de una versión web. Gratis, sin anuncios y de código abierto. Sin cuenta: todos tus datos se quedan en tu dispositivo.
 
 HÁBITOS SIN LA PRESIÓN DE LAS RACHAS
 
-En lugar de un contador de rachas, cada hábito tiene un intervalo de repetición deseado. La aplicación muestra qué tan atrasado va cada hábito como porcentaje de ese intervalo, para que siempre veas qué necesita atención primero. Saltarte un día no reinicia nada. Las rachas clásicas también existen — desactivadas por defecto.
+En lugar de un contador de rachas, cada hábito tiene un intervalo de repetición deseado. La aplicación muestra qué tan atrasado va cada hábito como porcentaje de ese intervalo, para que siempre veas qué necesita atención primero. Saltarte un día no reinicia nada. Las rachas clásicas también existen - desactivadas por defecto.
 
 NOTAS, TAREAS Y HÁBITOS EN UN SOLO LUGAR
 
 • Notas con soporte completo de Markdown
-• Tareas con subelementos, prioridades y fechas planificadas
-• Hábitos con intervalos flexibles, temporizadores, repeticiones y cantidades
-• Categorías, búsqueda, filtros y ordenación para todo
+• Tareas con fechas planificadas, duración y registro de tiempo
+• Hábitos con intervalos de repetición flexibles - registra repeticiones, tiempo o cantidad
+• Sublistas de verificación en tareas y hábitos
+• Categorías, colores, prioridades, búsqueda, filtros y ordenación - para notas, tareas y hábitos
 
 TUS DATOS SON TUYOS
 
@@ -21,5 +22,6 @@ TUS DATOS SON TUYOS
 HECHA A TU MEDIDA
 
 • 26 temas con modo oscuro y claro
+• Interfaz personalizable - muestra u oculta casi cualquier elemento
 • Disponible en 20 idiomas
 • Navegación por teclado y soporte para lectores de pantalla

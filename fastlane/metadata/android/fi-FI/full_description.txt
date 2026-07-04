@@ -1,15 +1,16 @@
-Kirjoita Markdown-muistiinpanoja, suunnittele tehtäviä ja seuraa tapoja — natiivisovellukset Windowsille, Linuxille, Androidille, iOS:lle ja macOS:lle sekä verkkosovellus. Ilmainen, mainokseton ja avointa lähdekoodia. Ei tiliä: kaikki tietosi pysyvät laitteellasi.
+Kirjoita Markdown-muistiinpanoja, suunnittele tehtäviä ja seuraa tapoja - natiivisovellukset Windowsille, Linuxille, Androidille, iOS:lle ja macOS:lle sekä verkkosovellus. Ilmainen, mainokseton ja avointa lähdekoodia. Ei tiliä: kaikki tietosi pysyvät laitteellasi.
 
 TAVAT ILMAN PUTKIPAINETTA
 
-Putkilaskurin sijaan jokaisella tavalla on haluttu toistoväli. Sovellus näyttää prosentteina, kuinka myöhässä tapa on suhteessa väliinsä, joten näet aina, mikä kaipaa huomiota ensin. Väliin jäänyt päivä ei nollaa mitään. Perinteiset putket ovat myös saatavilla — oletuksena pois päältä.
+Putkilaskurin sijaan jokaisella tavalla on haluttu toistoväli. Sovellus näyttää prosentteina, kuinka myöhässä tapa on suhteessa väliinsä, joten näet aina, mikä kaipaa huomiota ensin. Väliin jäänyt päivä ei nollaa mitään. Perinteiset putket ovat myös saatavilla - oletuksena pois päältä.
 
 MUISTIINPANOT, TEHTÄVÄT JA TAVAT YHDESSÄ PAIKASSA
 
 • Muistiinpanot täydellä Markdown-tuella
-• Tehtävät alakohtineen, prioriteetteineen ja suunniteltuine päivineen
-• Tavat joustavilla väleillä, ajastimilla, toistoilla ja määrillä
-• Kategoriat, haku, suodattimet ja lajittelu kaikelle
+• Tehtävät suunnitelluilla päivillä, kestolla ja ajanseurannalla
+• Tavat joustavilla toistoväleillä - kirjaa toistoina, aikana tai määränä
+• Tarkistuslistan alakohdat sekä tehtävissä että tavoissa
+• Kategoriat, värit, prioriteetit, haku, suodattimet ja lajittelu - muistiinpanoille, tehtäville ja tavoille
 
 TIETOSI OVAT SINUN
 
@@ -21,5 +22,6 @@ TIETOSI OVAT SINUN
 MUKAUTUU SINUUN
 
 • 26 teemaa tummalla ja vaalealla tilalla
+• Mukautettava käyttöliittymä - näytä tai piilota lähes jokainen elementti
 • Saatavilla 20 kielellä
 • Näppäimistönavigointi ja ruudunlukijatuki

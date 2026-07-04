@@ -1,25 +1,27 @@
-Markdown-Notizen schreiben, Aufgaben planen und Gewohnheiten verfolgen — mit nativen Apps für Windows, Linux, Android, iOS und macOS sowie als Web-App. Kostenlos, werbefrei und Open Source. Kein Konto nötig: Alle Daten bleiben auf deinem Gerät.
+Markdown-Notizen schreiben, Aufgaben planen und Gewohnheiten verfolgen - mit nativen Apps für Windows, Linux, Android, iOS und macOS sowie als Web-App. Kostenlos, werbefrei und Open Source. Kein Konto nötig: Alle Daten bleiben auf deinem Gerät.
 
 GEWOHNHEITEN OHNE STREAK-DRUCK
 
-Statt eines Streak-Zählers hat jede Gewohnheit ein Wunschintervall. Die App zeigt als Prozentwert, wie überfällig eine Gewohnheit im Verhältnis zu ihrem Intervall ist — so siehst du immer, was zuerst Aufmerksamkeit braucht. Ein verpasster Tag setzt nichts zurück. Klassische Streaks gibt es auch — standardmäßig ausgeschaltet.
+Statt eines Streak-Zählers hat jede Gewohnheit ein Wunschintervall. Die App zeigt als Prozentwert, wie überfällig eine Gewohnheit im Verhältnis zu ihrem Intervall ist - so siehst du immer, was zuerst Aufmerksamkeit braucht. Ein verpasster Tag setzt nichts zurück. Klassische Streaks gibt es auch - standardmäßig ausgeschaltet.
 
 NOTIZEN, AUFGABEN UND GEWOHNHEITEN AN EINEM ORT
 
 • Notizen mit voller Markdown-Unterstützung
-• Aufgaben mit Unterpunkten, Prioritäten und Terminen
-• Gewohnheiten mit flexiblen Intervallen, Timern, Wiederholungen und Mengen
-• Kategorien, Suche, Filter und Sortierung für alles
+• Aufgaben mit Terminen, Dauer und Zeiterfassung
+• Gewohnheiten mit flexiblen Wiederholungsintervallen - erfasst als Wiederholungen, Zeit oder Menge
+• Checklisten-Unterpunkte für Aufgaben und Gewohnheiten
+• Kategorien, Farben, Prioritäten, Suche, Filter und Sortierung - für Notizen, Aufgaben und Gewohnheiten
 
 DEINE DATEN GEHÖREN DIR
 
 • Alle Daten werden lokal auf deinem Gerät gespeichert
 • Export und Import: Markdown, JSON, YAML, TSV
 • Importiere deine Notizen aus Google Keep
-• Optionale Synchronisierung: Hoste das kostenlose Docker-Image auf deinem eigenen Server — jede App, ob Desktop oder Mobil, kann sich anmelden und synchronisieren
+• Optionale Synchronisierung: Hoste das kostenlose Docker-Image auf deinem eigenen Server - jede App, ob Desktop oder Mobil, kann sich anmelden und synchronisieren
 
 PASST SICH DIR AN
 
 • 26 Themes mit Dunkel- und Hellmodus
+• Anpassbare Oberfläche - fast jedes Element lässt sich ein- oder ausblenden
 • Verfügbar in 20 Sprachen
 • Tastaturnavigation und Screenreader-Unterstützung

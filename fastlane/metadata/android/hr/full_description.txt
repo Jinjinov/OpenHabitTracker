@@ -1,15 +1,16 @@
-Pišite Markdown bilješke, planirajte zadatke i pratite navike — s izvornim aplikacijama za Windows, Linux, Android, iOS i macOS te web-aplikacijom. Besplatno, bez oglasa i otvorenog koda. Bez računa: svi podaci ostaju na vašem uređaju.
+Pišite Markdown bilješke, planirajte zadatke i pratite navike - s izvornim aplikacijama za Windows, Linux, Android, iOS i macOS te web-aplikacijom. Besplatno, bez oglasa i otvorenog koda. Bez računa: svi podaci ostaju na vašem uređaju.
 
 NAVIKE BEZ PRITISKA NIZOVA
 
-Umjesto brojača nizova, svaka navika ima željeni interval ponavljanja. Aplikacija prikazuje koliko navika kasni kao postotak tog intervala, pa uvijek vidite što prvo treba pažnju. Propušten dan ništa ne poništava. Klasični nizovi također postoje — isključeni prema zadanim postavkama.
+Umjesto brojača nizova, svaka navika ima željeni interval ponavljanja. Aplikacija prikazuje koliko navika kasni kao postotak tog intervala, pa uvijek vidite što prvo treba pažnju. Propušten dan ništa ne poništava. Klasični nizovi također postoje - isključeni prema zadanim postavkama.
 
 BILJEŠKE, ZADACI I NAVIKE NA JEDNOM MJESTU
 
 • Bilješke s punom podrškom za Markdown
-• Zadaci s podstavkama, prioritetima i planiranim datumima
-• Navike s fleksibilnim intervalima, tajmerima, ponavljanjima i količinama
-• Kategorije, pretraživanje, filtri i sortiranje za sve
+• Zadaci s planiranim datumima, trajanjem i praćenjem vremena
+• Navike s fleksibilnim intervalima ponavljanja - bilježe se kao ponavljanja, vrijeme ili količina
+• Podstavke popisa (checkliste) na zadacima i navikama
+• Kategorije, boje, prioriteti, pretraživanje, filtri i sortiranje - za bilješke, zadatke i navike
 
 VAŠI PODACI SU VAŠI
 
@@ -21,5 +22,6 @@ VAŠI PODACI SU VAŠI
 PRILAGOĐENO VAMA
 
 • 26 tema s tamnim i svijetlim načinom
+• Prilagodljivo sučelje - prikažite ili sakrijte gotovo svaki element
 • Dostupno na 20 jezika
 • Navigacija tipkovnicom i podrška za čitače zaslona

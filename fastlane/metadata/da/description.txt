@@ -1,15 +1,16 @@
-Tag Markdown-noter, planlæg opgaver og følg vaner — med native apps til Windows, Linux, Android, iOS og macOS samt en webapp. Gratis, reklamefri og open source. Ingen konto: alle dine data bliver på din enhed.
+Tag Markdown-noter, planlæg opgaver og følg vaner - med native apps til Windows, Linux, Android, iOS og macOS samt en webapp. Gratis, reklamefri og open source. Ingen konto: alle dine data bliver på din enhed.
 
 VANER UDEN STREAK-PRES
 
-I stedet for en streak-tæller har hver vane et ønsket gentagelsesinterval. Appen viser, hvor forsinket en vane er, som en procentdel af intervallet, så du altid kan se, hvad der først kræver opmærksomhed. En misset dag nulstiller ingenting. Klassiske streaks findes også — slået fra som standard.
+I stedet for en streak-tæller har hver vane et ønsket gentagelsesinterval. Appen viser, hvor forsinket en vane er, som en procentdel af intervallet, så du altid kan se, hvad der først kræver opmærksomhed. En misset dag nulstiller ingenting. Klassiske streaks findes også - slået fra som standard.
 
 NOTER, OPGAVER OG VANER ET SAMLET STED
 
 • Noter med fuld Markdown-understøttelse
-• Opgaver med underpunkter, prioriteter og planlagte datoer
-• Vaner med fleksible intervaller, timere, gentagelser og mængder
-• Kategorier, søgning, filtre og sortering af alt
+• Opgaver med planlagte datoer, varighed og tidsregistrering
+• Vaner med fleksible gentagelsesintervaller - registreret som gentagelser, tid eller mængde
+• Tjekliste-underpunkter på både opgaver og vaner
+• Kategorier, farver, prioriteter, søgning, filtre og sortering - for noter, opgaver og vaner
 
 DINE DATA ER DINE
 
@@ -21,5 +22,6 @@ DINE DATA ER DINE
 TILPASSET DIG
 
 • 26 temaer med mørk og lys tilstand
+• Tilpasselig brugerflade - vis eller skjul næsten alle elementer
 • Fås på 20 sprog
 • Tastaturnavigation og skærmlæserunderstøttelse
