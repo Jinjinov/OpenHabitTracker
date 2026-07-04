@@ -1,5 +1,8 @@
 # 1.2.3 - 
 
+- added "Max days in small calendar" setting
+- added in-app review prompt
+- fixed long titles overflowing in Notes, Tasks, Habits
 - fixed focus issues in macOS, iOS
 - fixed NVIDIA issues in Flatpak
 - added icon in Snap
