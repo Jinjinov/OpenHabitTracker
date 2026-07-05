@@ -341,7 +341,7 @@ public class ClientState
         Dictionary<long, List<ItemModel>> itemsByParentId = Items.Values.GroupBy(x => x.ParentId).ToDictionary(g => g.Key, g => g.ToList());
 
         // export a copy of the settings without RefreshToken - it is this device's auth session
-        // and must never leave the device in a backup file (users share backups)
+        // and must never leave the device in a backup file
         SettingsModel settings = Settings.ToEntity().ToModel();
         settings.RefreshToken = string.Empty;
 

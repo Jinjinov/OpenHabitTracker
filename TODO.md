@@ -3,16 +3,14 @@
 TASK INDEX (July 4, 2026) — brief overview ordered by priority; details live in the task plans:
 Popularity.md appendix A-L (marketing), Automate.md §1-§10 (release automation),
 Infrastructure.md (machines/credentials), and the sections below in this file (code).
-Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
 
+USER:
     1. Google Play service account — unblocks Automate §4 and D's locale verification
        (step-by-step: Automate.md §4 "One-time setup — USER STEPS")
+
     2. Partner Center association + msstore-cli — unblocks Automate §6
        (step-by-step: Automate.md §6 "One-time setup — USER STEPS")
 
-    3. Generate EF migrations on the Windows PC — AddMaxSmallCalendarDays in BOTH projects
-       (OpenHabitTracker.EntityFrameworkCore/Migrations and OpenHabitTracker.Blazor.Web/Migrations;
-       local dotnet-ef tool manifest is in Blazor.Web/.config)
     4. Run the e2e suite against a live app at http://localhost (port 80 is privileged on the
        Linux box; dev profile is :5260) — 3 new tests: 2x MaxSmallCalendarDays in
        SettingsPersistenceTests, 1x long-title clamp in HabitTests; also verifies the
@@ -25,25 +23,23 @@ Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
        ranks dev.to
 
     later: Domenca ticket (FTP TLS cert, text in Infrastructure.md); Codeberg issue for
-    in your own voice; store-console review clicks; replies to issues #21/#22
+    in your own voice; store-console review clicks
 
-    1. SECURITY RefreshToken plaintext export — DONE July 4, 2026 (see spec below for the fix)
-    2. Issue #21 long titles overflow — DONE July 4, 2026 (commit d21b850): CSS 2-line clamp
-       .title-clamp + title-attribute tooltip on Habits/Tasks/Notes title buttons
-    3. Issue #22 max days in small calendar — DONE July 4, 2026 (commit d21b850):
-       MaxSmallCalendarDays setting, select Auto + 1-31 as new data-settings-step-11
-       (steps 12-25 renumbered), kept "Show small calendar" checkbox, cap in
-       CalendarComponent; all 40 locale JSONs updated; EF migrations pending (USER 3)
     4. Popularity E    — DONE July 4, 2026 (files; live with next web deploy — see
        Popularity.md E STATUS): 5 comparison pages (Loop, Keep, Habitica, Streaks, Everyday),
        sitemap.xml, robots.txt ×3, Compare section with per-link analytics
+
     5. Automate §4+§5+§6 — Play/ASC/msstore listing upload tooling; §4 gated by USER 1,
        §6 by USER 2; §4 unblocks D's locale verification, all are needed for Popularity D
+
     6. Popularity D    — TEXTS DONE July 4, 2026 (fastlane/ 20 Play + 18 Apple locales,
        metainfo.xml localized, Automation/sync-listings.py; see Popularity.md D STATUS).
        Proofread waived — pre-7.7 Fable review session covers it. Remaining: uploads via §4/§5/§6
+
     7. Automate §3     — gh-release script; unblocks C
+
     8. Popularity C    — APK on GitHub releases + IzzyOnDroid request draft
+
     9. Popularity B    — self-hosting app store templates (Umbrel reference first)
 
     later: Automate §1 (bump), §2 (deploy — also how E goes live), §7-§9 (docker/snap/flathub);
@@ -52,39 +48,7 @@ Fable 5 free until 7.7.2026; per-task model budget: Popularity.md section J.
 DONE: Popularity A (in-app review prompt) — code-complete, all-platform builds verified;
 prompt itself observable only in store-installed builds (Popularity.md A STATUS).
 
-GITHUB ISSUES not planned yet: #13 custom themes, #9 always-show-active-timers;
-discussion #16 — origin of the 1.2.2 streaks feature (cited in Popularity.md F.2).
-
 ---------------------------------------------------------------------------------------------------
-
-SECURITY: RefreshToken is exported in plain text in JSON/YAML/backup files
-
-    FIXED (July 4, 2026): GetUserData() now exports a copy (Settings.ToEntity().ToModel())
-    with RefreshToken = "" — covers all four file formats AND the cloud-storage backups,
-    which use the same method. SetUserData() now keeps the device's RefreshToken instead
-    of the imported one — also protects Google Keep import / Examples, which call it with
-    a default (blank) SettingsModel and would have wiped the device token.
-    Two regression tests in ClientStateTests. Original analysis kept below.
-
-    ClientState.GetUserData() assembles UserImportExportData with `Settings = Settings` -
-    the live SettingsModel, including RefreshToken (SettingsEntity.cs line ~25).
-    No [JsonIgnore] / YamlIgnore filtering exists anywhere on SettingsModel.
-
-    Consequence: any user with online sync enabled who exports a backup gets their
-    server's refresh token written in plain text into the file. If they share the backup
-    (e.g. attach it to a GitHub issue to debug an import problem), they hand out a working
-    credential to their Docker server.
-
-    Mirror problem on import: SetUserData() overwrites the current device's valid
-    RefreshToken with a stale one from the file.
-
-    FIX: blank the token at the assembly point in GetUserData() - put a copy of
-    SettingsModel with RefreshToken = "" into UserImportExportData. One fix covers all
-    four export formats (JSON, YAML, TSV, Markdown); per-serializer ignore attributes
-    would need to be maintained per format. On SetUserData(), do not overwrite the
-    device's RefreshToken from the imported file.
-
-    Fix this BEFORE the marketing push (Popularity.md) brings users who share backups.
 
 DEVICE-SCOPED vs USER-SCOPED data in SettingsEntity - watch list:
 
