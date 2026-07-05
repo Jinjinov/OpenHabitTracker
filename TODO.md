@@ -73,13 +73,16 @@ HANGING (started, NOT 100% done):
          Microsoft Store-installed build, so this leg alone waits for the next store release.
        Details: Popularity.md A STATUS + as-built item 5.
 
-    7. Automate 3 - gh-release script (USER go, then one command).
+    7. Automate 3 - gh-release script (DEFERRED to the 1.2.3 release - decided July 5, 2026).
        Automation/github-release.ps1 written + previewed July 5, 2026: all guards pass,
        notes pulled from VersionHistory.md, and the SHIPPED 1.2.2 APK downloaded from the
        website to Automation/artifacts/shipped-1.2.2.apk (the MAUI bin APK is a July 3
        post-release build - do not attach it; details in Automate.md section 3 STATUS).
-       Remaining (USER, public action):
-       `Automation\github-release.ps1 1.2.2 Automation\artifacts\shipped-1.2.2.apk -Commit`
+       DECIDED July 5, 2026: skip the 1.2.2 backfill - the FIRST GitHub release ships with
+       1.2.3, same release cycle as the multi-arch image + Umbrel digest pin;
+       shipped-1.2.2.apk stays unused, the 1.2.3 run attaches that release's own APK.
+       Remaining (USER, at the 1.2.3 release):
+       `Automation\github-release.ps1 1.2.3 <path-to-1.2.3-apk> -Commit`
        creates the GitHub release IzzyOnDroid needs; unblocks item 8.
 
     8. Popularity C - IzzyOnDroid inclusion request (USER).
@@ -88,7 +91,8 @@ HANGING (started, NOT 100% done):
        issue #344), and that the app is not yet listed (package URL 404s).
        All fields prefilled, including the AI-assistance disclosure - review the flagged
        decision in the draft header before filing.
-       Remaining (USER): run item 7's -Commit command first (the request links the release),
+       Remaining (USER): run item 7's -Commit command first (the request links the release -
+       now AT THE 1.2.3 RELEASE, per item 7's July 5, 2026 defer decision),
        read the policy in full, then file at codeberg.org/IzzyOnDroid/repodata/issues/new
        with title "[AppRequest] OpenHabitTracker".
 
