@@ -17,8 +17,11 @@ HANGING (started, NOT 100% done):
        because `web` is the safest target (static site, no secrets - the appsettings.json
        risk exists only on the Blazor.Web target) and success is externally verifiable
        by fetching https://openhabittracker.net.
-       Steps: write the WinSCP-script variant per Automate.md section 2, `--dry-run` first
-       (must list exactly the changed files), user reviews, then the real `web` deploy.
+       DONE July 5, 2026: Automation/deploy.ps1 written; `web` preview ran against the live
+       FTP and listed exactly the E files as new/changed (plus one-time same-size
+       timestamp-only re-uploads from the fresh git checkout - harmless).
+       Remaining (USER): review the preview, run `Automation\deploy.ps1 web -Commit`,
+       verify https://openhabittracker.net.
        Then: set canonical_url on the dev.to comparison article
        (dev.to post settings / front matter) to
        https://openhabittracker.net/habit-tracker-comparison.html -
@@ -66,15 +69,26 @@ HANGING (started, NOT 100% done):
          Microsoft Store-installed build, so this leg alone waits for the next store release.
        Details: Popularity.md A STATUS + as-built item 5.
 
+    7. Automate 3 - gh-release script (USER go, then one command).
+       Automation/github-release.ps1 written + previewed July 5, 2026: all guards pass,
+       notes pulled from VersionHistory.md, and the SHIPPED 1.2.2 APK downloaded from the
+       website to Automation/artifacts/shipped-1.2.2.apk (the MAUI bin APK is a July 3
+       post-release build - do not attach it; details in Automate.md section 3 STATUS).
+       Remaining (USER, public action):
+       `Automation\github-release.ps1 1.2.2 Automation\artifacts\shipped-1.2.2.apk -Commit`
+       creates the GitHub release IzzyOnDroid needs; unblocks item 8.
+
 NOT STARTED (the queue, in dependency order):
 
-
-       then the Codeberg inclusion issue (USER).
+       release with the APK; then the Codeberg inclusion issue (USER).
 
        then the Unraid CA portal submission (USER).
 
-    later: Automate 1 (bump script), 2's remaining targets (wasm/server/photino/wpf/apk/pkg -
-    after the `web` target proves itself in item 1), 7-9 (docker/snap/flathub);
+    later: first REAL runs of the remaining Automation scripts when the next release needs
+    them - all were written + dry-run July 5, 2026 (Automate.md per-section STATUS lines):
+    bump-version.ps1 (worktree-tested), deploy.ps1's non-web targets, deploy-pkg.sh (Mac,
+    needs one-time ~/.netrc there), docker-release.ps1 (plan-tested, docker-pushrm
+    installed), snap-release.sh + flathub-update.sh (UNTESTED, need the Kubuntu box);
     Popularity F-I drafts + G assets (video cut, image resizes);
     Domenca ticket (FTP TLS cert, text in Infrastructure.md);
     posting F-I in your own voice; store-console review clicks.
