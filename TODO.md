@@ -11,12 +11,7 @@ USER:
     2. Partner Center association + msstore-cli — unblocks Automate §6
        (step-by-step: Automate.md §6 "One-time setup — USER STEPS")
 
-    4. Run the e2e suite against a live app at http://localhost (port 80 is privileged on the
-       Linux box; dev profile is :5260) — 3 new tests: 2x MaxSmallCalendarDays in
-       SettingsPersistenceTests, 1x long-title clamp in HabitTests; also verifies the
-       data-settings-step-16 → 17 locator fix
-
-    5. AFTER the next web deploy: set canonical_url on the dev.to comparison article
+    3. AFTER the next web deploy: set canonical_url on the dev.to comparison article
        (dev.to post settings / front matter) to
        https://openhabittracker.net/habit-tracker-comparison.html — transfers the article's
        SEO credit to the site copy; without it Google treats the two as duplicates and
