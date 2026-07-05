@@ -10,11 +10,15 @@ Infrastructure.md (machines/credentials), and the sections below in this file (c
 fable 
 HANGING (started, NOT 100% done):
 
-    1. Popularity E - SEO pages (USER).
        Files committed July 4, 2026 (5 comparison pages, sitemap.xml, robots.txt x3,
        Compare section with per-link analytics), but NOT LIVE.
-       Remaining: one FTP upload of OpenHabitTracker.Web/ via WinSCP
-       (the Automate 2 deploy script is NOT needed for this).
+       Remaining: deploy via the Automate 2 deploy script's `web` target -
+       decided July 5, 2026: this deploy IS the first test of that script,
+       because `web` is the safest target (static site, no secrets - the appsettings.json
+       risk exists only on the Blazor.Web target) and success is externally verifiable
+       by fetching https://openhabittracker.net.
+       Steps: write the WinSCP-script variant per Automate.md section 2, `--dry-run` first
+       (must list exactly the changed files), user reviews, then the real `web` deploy.
        Then: set canonical_url on the dev.to comparison article
        (dev.to post settings / front matter) to
        https://openhabittracker.net/habit-tracker-comparison.html -
@@ -69,7 +73,8 @@ NOT STARTED (the queue, in dependency order):
 
        then the Unraid CA portal submission (USER).
 
-    later: Automate 1 (bump script), 2 (deploy script), 7-9 (docker/snap/flathub);
+    later: Automate 1 (bump script), 2's remaining targets (wasm/server/photino/wpf/apk/pkg -
+    after the `web` target proves itself in item 1), 7-9 (docker/snap/flathub);
     Popularity F-I drafts + G assets (video cut, image resizes);
     Domenca ticket (FTP TLS cert, text in Infrastructure.md);
     posting F-I in your own voice; store-console review clicks.
