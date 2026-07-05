@@ -7,7 +7,7 @@ HANGING comes first (ordered by shortest path to done), then NOT STARTED.
 Details live in the task plans:
 Popularity.md appendix A-L (marketing), Automate.md sections 1-10 (release automation),
 Infrastructure.md (machines/credentials), and the sections below in this file (code).
-fable 
+ 
 HANGING (started, NOT 100% done):
 
        Files committed July 4, 2026 (5 comparison pages, sitemap.xml, robots.txt x3,

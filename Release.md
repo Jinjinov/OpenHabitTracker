@@ -35,6 +35,16 @@ OpenHabitTracker.Blazor.Maui
     dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-windows10.0.19041.0 -p:SelfContained=true -p:PublishAppxPackage=true
 - publish and upload to Google Play Store + apk FTP upload to server
     dotnet publish -c Release -f:net9.0-android /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=IdiditGoogleStore.keystore /p:AndroidSigningStorePass=******** /p:AndroidSigningKeyAlias=IdiditGooglePlay /p:AndroidSigningKeyPass==********
+    - create GitHub release with attached apk:
+        - Web UI
+            - "Draft a new release"
+            - "Choose a tag"
+            - Title: "Version 1.2.2" Notes: paste the matching entry from VersionHistory.md
+            - Drag and drop the APK into the assets area
+            - "Publish release"
+        - CLI:
+            gh release create 1.2.2 --title "Version 1.2.2" --notes "<paste from VersionHistory.md>"
+            gh release upload 1.2.2 <path-to-apk>
 - publish and upload to Apple App Store
     dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-ios -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64 -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
 - publish and upload to Apple Mac App Store + pkg FTP upload to server
