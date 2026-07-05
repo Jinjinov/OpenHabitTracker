@@ -116,10 +116,12 @@ NOT STARTED (the queue, in dependency order):
     posting F-I in your own voice; store-console review clicks.
 
 NOTE: everything in HANGING is Sonnet-grade mechanical work (Popularity.md section J).
-Item 9's Fable-grade part (store research + schema verification) is DONE July 5, 2026;
-the remaining item 9 artifacts are mostly Sonnet-grade cloning of the verified specs.
-The Umbrel reference template is the one piece left where Fable still adds value
-before access ends July 7, 2026.
+Item 9's Fable-grade part (store research + schema verification) is DONE July 5, 2026.
+BUDGET FLIP (July 5, 2026: weekly quota reset at 18:00 with 18% used;
+Fable access ends July 7, 2026 EOD): rationing is superseded -
+run everything still open on Fable while it lasts
+(item 9 artifacts, then Popularity F-I drafts, then the final review pass);
+details in the UPDATE block at the top of Popularity.md section J.
 
 ---------------------------------------------------------------------------------------------------
 
