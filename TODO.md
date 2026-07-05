@@ -78,9 +78,17 @@ HANGING (started, NOT 100% done):
        `Automation\github-release.ps1 1.2.2 Automation\artifacts\shipped-1.2.2.apk -Commit`
        creates the GitHub release IzzyOnDroid needs; unblocks item 8.
 
-NOT STARTED (the queue, in dependency order):
+    8. Popularity C - IzzyOnDroid inclusion request (USER).
+       Draft DONE July 5, 2026: drafts/izzyondroid-app-request.md (gitignored).
+       Researched live: inclusion policy, the AppRequest template fields (mirrored from
+       issue #344), and that the app is not yet listed (package URL 404s).
+       All fields prefilled, including the AI-assistance disclosure - review the flagged
+       decision in the draft header before filing.
+       Remaining (USER): run item 7's -Commit command first (the request links the release),
+       read the policy in full, then file at codeberg.org/IzzyOnDroid/repodata/issues/new
+       with title "[AppRequest] OpenHabitTracker".
 
-       release with the APK; then the Codeberg inclusion issue (USER).
+NOT STARTED (the queue, in dependency order):
 
        then the Unraid CA portal submission (USER).
 
