@@ -40,11 +40,15 @@ HANGING (started, NOT 100% done):
        precheck, metadata upload (exact commands: Automate.md section 5).
 
     4. Automate 6 - msstore-cli setup (USER).
-       First attempt dead-ended in Microsoft's billing-enrollment flow;
-       the corrected path (steps a-e in Automate.md section 6) is documented, not executed.
-       Remaining: create the bare Entra tenant, associate it in Partner Center,
-       create the Entra app, msstore reconfigure.
-       Known risk: the issue #79 tenant bug can block this from Microsoft's side.
+       TENANT DONE July 5, 2026 - via the ORIGINAL billing-enrollment flow after all
+       (business name + payment card, employees = 1); the corrected path failed live
+       with AADSTS16000 and a disabled "Create" tenant button
+       (full account in Automate.md section 6, EXECUTED block).
+       USER reports setup complete.
+       Remaining: verify on the Windows PC with `msstore info` + `msstore apps list`,
+       run whatever of steps c-e / 2-3 is still missing, then the one listings-only
+       dry cycle (get -> updateMetadata -> publish).
+       Known risk: the issue #79 tenant bug can still appear at reconfigure time.
 
     5. Popularity D - localized store listings (finishes via items 2, 3, 4).
        All 20-language texts done and committed July 4, 2026
