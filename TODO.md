@@ -88,22 +88,38 @@ HANGING (started, NOT 100% done):
        read the policy in full, then file at codeberg.org/IzzyOnDroid/repodata/issues/new
        with title "[AppRequest] OpenHabitTracker".
 
-NOT STARTED (the queue, in dependency order):
+       RESEARCH DONE July 5, 2026 (Fable session): execution-ready specs for every store
+       are in Popularity.md section B - Unraid, TrueNAS (added), Umbrel, CasaOS,
+       PaaS tier (Coolify/Dokploy/CapRover), PikaPods (email pitch, 20% revenue share).
+       Runtipi DROPPED (official store closed to new apps).
+       Audience shares estimated; CHECK THE DOOR FIRST rule added to the B ground rules;
+       H/I channel lists audited the same day ("This Week in .NET" was dead since 2017).
+       ALSO DONE July 5, 2026: Dockerfile + Automation/docker-release.ps1 rewritten for
+       multi-arch (amd64+arm64 buildx cross-compile, preview verified) - Umbrel requires
+       arm64; first real multi-arch push ships with 1.2.3 (decided: no 1.2.2 overwrite).
+       (local ci.py test on the Linux PC), Umbrel fork branch (digest placeholder until
+       1.2.3), CasaOS folder, Coolify/Dokploy/CapRover templates, PikaPods email draft.
+       Remaining (USER): the submissions - Unraid portal, the PRs, the PikaPods email;
+       execution order in the Popularity.md B audience estimate.
 
-       then the Unraid CA portal submission (USER).
+NOT STARTED (the queue, in dependency order):
 
     later: first REAL runs of the remaining Automation scripts when the next release needs
     them - all were written + dry-run July 5, 2026 (Automate.md per-section STATUS lines):
     bump-version.ps1 (worktree-tested), deploy.ps1's non-web targets, deploy-pkg.sh (Mac,
     needs one-time ~/.netrc there), docker-release.ps1 (plan-tested, docker-pushrm
-    installed), snap-release.sh + flathub-update.sh (UNTESTED, need the Kubuntu box);
+    installed; REWRITTEN July 5, 2026 for multi-arch amd64+arm64 buildx, preview
+    re-verified - first buildx -Commit run at 1.2.3, prints the digest Umbrel pins),
+    snap-release.sh + flathub-update.sh (UNTESTED, need the Kubuntu box);
     Popularity F-I drafts + G assets (video cut, image resizes);
     Domenca ticket (FTP TLS cert, text in Infrastructure.md);
     posting F-I in your own voice; store-console review clicks.
 
-NOTE: everything in HANGING is Sonnet-grade mechanical work (Popularity.md section J);
-only item 9 needs Fable, and Fable access ends July 7, 2026 -
-it is the one item allowed to jump ahead of HANGING.
+NOTE: everything in HANGING is Sonnet-grade mechanical work (Popularity.md section J).
+Item 9's Fable-grade part (store research + schema verification) is DONE July 5, 2026;
+the remaining item 9 artifacts are mostly Sonnet-grade cloning of the verified specs.
+The Umbrel reference template is the one piece left where Fable still adds value
+before access ends July 7, 2026.
 
 ---------------------------------------------------------------------------------------------------
 
