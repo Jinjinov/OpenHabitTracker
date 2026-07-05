@@ -1,47 +1,73 @@
 # TODO:
 
-TASK INDEX (July 4, 2026) — brief overview ordered by priority; details live in the task plans:
-Popularity.md appendix A-L (marketing), Automate.md §1-§10 (release automation),
+TASK INDEX (July 5, 2026) - grouped by completion state.
+RULE: a task is DONE only at 100%.
+Anything started but not 100% complete is HANGING and therefore NOT done - no exceptions.
+HANGING comes first (ordered by shortest path to done), then NOT STARTED.
+Details live in the task plans:
+Popularity.md appendix A-L (marketing), Automate.md sections 1-10 (release automation),
 Infrastructure.md (machines/credentials), and the sections below in this file (code).
+fable 
+HANGING (started, NOT 100% done):
 
-USER:
-    1. Google Play service account — unblocks Automate §4 and D's locale verification
-       (step-by-step: Automate.md §4 "One-time setup — USER STEPS")
-
-    2. Partner Center association + msstore-cli — unblocks Automate §6
-       (step-by-step: Automate.md §6 "One-time setup — USER STEPS")
-
-    3. AFTER the next web deploy: set canonical_url on the dev.to comparison article
+    1. Popularity E - SEO pages (USER).
+       Files committed July 4, 2026 (5 comparison pages, sitemap.xml, robots.txt x3,
+       Compare section with per-link analytics), but NOT LIVE.
+       Remaining: one FTP upload of OpenHabitTracker.Web/ via WinSCP
+       (the Automate 2 deploy script is NOT needed for this).
+       Then: set canonical_url on the dev.to comparison article
        (dev.to post settings / front matter) to
-       https://openhabittracker.net/habit-tracker-comparison.html — transfers the article's
-       SEO credit to the site copy; without it Google treats the two as duplicates and
-       ranks dev.to
+       https://openhabittracker.net/habit-tracker-comparison.html -
+       without it Google treats the two copies as duplicates and ranks dev.to.
 
-    later: Domenca ticket (FTP TLS cert, text in Infrastructure.md); Codeberg issue for
-    in your own voice; store-console review clicks
+       Service account created and invited, key downloaded -
+       but the key still sits in Downloads and fastlane is not installed.
+       Remaining: move the key to Automation/secrets/play-service-account.json,
+       install fastlane, run validate_play_store_json_key, run supply init
+       (init also settles D's open locale-code questions: pt-PT vs pt-BR etc.),
+       then one listings-only upload.
 
-    4. Popularity E    — DONE July 4, 2026 (files; live with next web deploy — see
-       Popularity.md E STATUS): 5 comparison pages (Loop, Keep, Habitica, Streaks, Everyday),
-       sitemap.xml, robots.txt ×3, Compare section with per-link analytics
+    3. Automate 5 - App Store metadata tooling (USER, on the Mac mini).
+       The .p8 API key exists (Mac mini + Synology); nothing executed yet.
+       Remaining: copy the .p8 to Automation/secrets/, install fastlane, deliver init,
+       precheck, metadata upload (exact commands: Automate.md section 5).
 
-    5. Automate §4+§5+§6 — Play/ASC/msstore listing upload tooling; §4 gated by USER 1,
-       §6 by USER 2; §4 unblocks D's locale verification, all are needed for Popularity D
+    4. Automate 6 - msstore-cli setup (USER).
+       First attempt dead-ended in Microsoft's billing-enrollment flow;
+       the corrected path (steps a-e in Automate.md section 6) is documented, not executed.
+       Remaining: create the bare Entra tenant, associate it in Partner Center,
+       create the Entra app, msstore reconfigure.
+       Known risk: the issue #79 tenant bug can block this from Microsoft's side.
 
-    6. Popularity D    — TEXTS DONE July 4, 2026 (fastlane/ 20 Play + 18 Apple locales,
-       metainfo.xml localized, Automation/sync-listings.py; see Popularity.md D STATUS).
-       Proofread waived — pre-7.7 Fable review session covers it. Remaining: uploads via §4/§5/§6
+    5. Popularity D - localized store listings (finishes via items 2, 3, 4).
+       All 20-language texts done and committed July 4, 2026
+       (fastlane/ 20 Play + 18 Apple locales, metainfo.xml, Automation/sync-listings.py);
+       translations written by Fable itself, no further check needed.
+       Remaining: the uploads - Play via item 2, Apple via item 3, Microsoft via item 4.
+       Flathub needs nothing (localized metainfo.xml ships with the next Flatpak release);
+       IzzyOnDroid reads the committed fastlane folder for free once listed there.
 
-    7. Automate §3     — gh-release script; unblocks C
+    6. Popularity A - in-app review prompt (blocked until the next store release).
+       Code-complete, all-platform builds verified.
+       Remaining: observe the prompt once in a store-installed build -
+       impossible before the next store release cycle, so nothing can be done today
+       (per-platform verification steps: Popularity.md A STATUS).
 
-    8. Popularity C    — APK on GitHub releases + IzzyOnDroid request draft
+NOT STARTED (the queue, in dependency order):
 
-    9. Popularity B    — self-hosting app store templates (Umbrel reference first)
 
-    later: Automate §1 (bump), §2 (deploy — also how E goes live), §7-§9 (docker/snap/flathub);
-    Popularity F-I drafts + G assets (video cut, image resizes)
+       then the Codeberg inclusion issue (USER).
 
-DONE: Popularity A (in-app review prompt) — code-complete, all-platform builds verified;
-prompt itself observable only in store-installed builds (Popularity.md A STATUS).
+       then the Unraid CA portal submission (USER).
+
+    later: Automate 1 (bump script), 2 (deploy script), 7-9 (docker/snap/flathub);
+    Popularity F-I drafts + G assets (video cut, image resizes);
+    Domenca ticket (FTP TLS cert, text in Infrastructure.md);
+    posting F-I in your own voice; store-console review clicks.
+
+NOTE: everything in HANGING is Sonnet-grade mechanical work (Popularity.md section J);
+only item 9 needs Fable, and Fable access ends July 7, 2026 -
+it is the one item allowed to jump ahead of HANGING.
 
 ---------------------------------------------------------------------------------------------------
 
