@@ -47,11 +47,20 @@ HANGING (started, NOT 100% done):
        Flathub needs nothing (localized metainfo.xml ships with the next Flatpak release);
        IzzyOnDroid reads the committed fastlane folder for free once listed there.
 
-    6. Popularity A - in-app review prompt (blocked until the next store release).
+    6. Popularity A - in-app review prompt (USER - verification pending).
        Code-complete, all-platform builds verified.
-       Remaining: observe the prompt once in a store-installed build -
-       impossible before the next store release cycle, so nothing can be done today
-       (per-platform verification steps: Popularity.md A STATUS).
+       Remaining: observe the prompt once per store; each store has its own path:
+       - iOS/macCatalyst: plain dev/debug build on simulator or device -
+         SKStoreReviewController shows the real dialog in development builds
+         (suppressed in TestFlight); complete a habit 10 times, no code change needed.
+       - Android, option 1 (temporary code change): pass isTestOrDebugMode: true inside
+         #if ANDROID in OpenHabitTracker.Blazor.Maui/AppReview.cs to get the
+         FakeReviewManager dialog in a debug/sideloaded build - do NOT ship that.
+       - Android, option 2 (test/internal release): install via Play Internal App Sharing -
+         the real Play dialog appears without a production release.
+       - Windows: no debug or test path - the dialog appears only in a
+         Microsoft Store-installed build, so this leg alone waits for the next store release.
+       Details: Popularity.md A STATUS + as-built item 5.
 
 NOT STARTED (the queue, in dependency order):
 
