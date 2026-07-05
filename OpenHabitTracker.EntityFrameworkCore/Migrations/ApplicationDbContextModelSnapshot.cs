@@ -168,6 +168,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                     b.Property<bool>("IsDarkMode")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("MaxSmallCalendarDays")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("PriorityFilterDisplay")
                         .HasColumnType("INTEGER");
 
