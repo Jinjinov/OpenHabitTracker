@@ -123,6 +123,39 @@ NOT STARTED (the queue, in dependency order):
     Domenca ticket (FTP TLS cert, text in Infrastructure.md);
     posting F-I in your own voice; store-console review clicks.
 
+HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
+
+    USER, independent of everything else:
+    - Item 1 (Popularity E): Automation\deploy.ps1 web -Commit, verify https://openhabittracker.net,
+      then set canonical_url on the dev.to comparison article.
+      Highest-leverage single action on this list, takes minutes.
+    - Item 6 (Popularity A) iOS leg: complete a habit 10 times in a dev build on the Mac -
+      SKStoreReviewController shows the dialog in development builds.
+    - (Popularity C) Review the AI-disclosure framing in drafts/izzyondroid-app-request.md
+      (read now, file at 1.2.3).
+    - Optional: the Domenca FTP TLS ticket (text in Infrastructure.md).
+
+    USER, the three store-tooling setups - together they unblock item 5 (Popularity D):
+      item 3 (Automate 5, Mac mini),
+      item 4 (Automate 6, verify msstore info + apps list).
+    - Side effect: once item 2 works, the Android leg of item 6 is one
+      Internal App Sharing upload away.
+
+    - Item 9 (Popularity B) artifacts, ALL of them: Unraid template repo, TrueNAS app files,
+      CasaOS folder, Coolify/Dokploy/CapRover templates, PikaPods email draft,
+      Umbrel fork branch (placeholder digest until 1.2.3).
+    - Popularity F drafts: the r/selfhosted post (the #1-impact action in the whole plan;
+      posting does NOT depend on 1.2.3, but should follow item 1 so the compare pages
+      are live to link), then the anti-streak post.
+    - Popularity G/H/I drafts: PH assets, Microsoft pitch,
+      selfh.st / Noted.lol / MariusHosting pitches.
+    - Final Fable review pass over everything produced.
+
+    THEN the 1.2.3 release unlocks the whole deferred bucket in one cycle:
+    multi-arch push + Umbrel digest pin + Umbrel PR, GitHub release (item 7),
+    IzzyOnDroid filing (item 8), Flathub metainfo ships, Windows review-prompt
+    observation (item 6).
+
 NOTE: everything in HANGING is Sonnet-grade mechanical work (Popularity.md section J).
 Item 9's Fable-grade part (store research + schema verification) is DONE July 5, 2026.
 BUDGET FLIP (July 5, 2026: weekly quota reset at 18:00 with 18% used;
