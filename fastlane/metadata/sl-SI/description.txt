@@ -1,0 +1,27 @@
+Piši zapiske v Markdownu, načrtuj naloge in sledi navadam - z izvornimi aplikacijami za Windows, Linux, Android, iOS in macOS ter spletno aplikacijo. Brezplačno, brez oglasov in odprtokodno. Brez računa: vsi podatki ostanejo na tvoji napravi.
+
+NAVADE BREZ PRITISKA NIZOV
+
+Namesto števca nizov ima vsaka navada želeni interval ponavljanja. Aplikacija prikaže, koliko je navada zapadla, kot odstotek tega intervala, zato vedno vidiš, kaj najprej potrebuje pozornost. Izpuščen dan ne ponastavi ničesar. Na voljo so tudi klasični nizi - privzeto izklopljeni.
+
+ZAPISKI, NALOGE IN NAVADE NA ENEM MESTU
+
+• Zapiski s polno podporo za Markdown
+• Naloge z načrtovanimi datumi, trajanjem in merjenjem časa
+• Navade s prilagodljivimi intervali ponavljanja - beleži ponovitve, čas ali količino
+• Kontrolni seznami s podtočkami pri nalogah in navadah
+• Kategorije, barve, prioritete, iskanje, filtri in razvrščanje - za zapiske, naloge in navade
+
+TVOJI PODATKI SO TVOJI
+
+• Vsi podatki so shranjeni lokalno na tvoji napravi
+• Izvoz in uvoz: Markdown, JSON, YAML, TSV
+• Uvozi zapiske iz Google Keep
+• Neobvezna sinhronizacija: gosti brezplačno sliko Docker na svojem strežniku in vsaka aplikacija, namizna ali mobilna, se lahko prijavi in sinhronizira
+
+PRILAGOJENO TEBI
+
+• 26 tem s temnim in svetlim načinom
+• Prilagodljiv vmesnik - skoraj vsak element lahko skriješ ali pokažeš
+• Na voljo v 20 jezikih
+• Navigacija s tipkovnico in podpora bralnikom zaslona

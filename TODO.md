@@ -46,14 +46,21 @@ HANGING (started, NOT 100% done):
        for BOTH platforms (GOTCHA: silently exits 0 without --force when
        non-interactive), live listing is en-US only on both platforms (like Play),
        downloads saved to gitignored drafts/asc-listing-live-1.2.2/{ios,osx},
-       all 18 committed locales are valid ASC codes and pass the char limits
+       all committed locales are valid ASC codes and pass the char limits
        (local script; ASC has no --validate_only), android/ subfolder confirmed
        skipped by deliver, precheck PASSED (needs --include_in_app_purchases false
        with API-key auth).
        CORRECTION: iOS and macOS are ONE ASC app record with two platform metadata
        sets, not separate apps as Automate.md section 5 assumed.
-       ALSO DONE same session: ~/.netrc prepared on the Mac mini for deploy-pkg.sh
-       (placeholders - USER fills in the FTP credentials from KWallet/Plesk).
+       CORRECTION 2 (July 6, 2026, user challenged the sl/sr claim): Slovenian IS
+       supported by ASC as sl-SI (Serbian genuinely is not) - the July 4 assumption
+       in sync-listings.py was half wrong. FIXED: fastlane/metadata/sl-SI/ added
+       (Apple-only fields hand-authored, description synced from android/sl),
+       sync-listings.py corrected, all 19 Apple locales validated
+       (details in Automate.md section 5 CORRECTED note).
+       ALSO DONE same session: ~/.netrc on the Mac mini for deploy-pkg.sh -
+       USER filled the credentials, VERIFIED with a read-only FTP listing of
+       /httpdocs/download/ (deploy-pkg.sh ready; NAS relay obsolete).
        Remaining: ONLY the real metadata upload, ios + osx (exact command in
        Automate.md section 5 STATUS).
        The hold condition is now MET: items 2, 3, 4 are all verified - the
@@ -78,7 +85,8 @@ HANGING (started, NOT 100% done):
 
     5. Popularity D - localized store listings (finishes via items 2, 3, 4).
        All 20-language texts done and committed July 4, 2026
-       (fastlane/ 20 Play + 18 Apple locales, metainfo.xml, Automation/sync-listings.py);
+       (fastlane/ 20 Play + 19 Apple locales - sl-SI added July 6, 2026 after the ASC
+       "no Slovenian" assumption proved wrong, metainfo.xml, Automation/sync-listings.py);
        translations written by Fable itself, no further check needed.
        Remaining: the uploads - Play via item 2, Apple via item 3, Microsoft via item 4.
        Flathub needs nothing (localized metainfo.xml ships with the next Flatpak release);
@@ -155,7 +163,7 @@ NOT STARTED (the queue, in dependency order):
     later: first REAL runs of the remaining Automation scripts when the next release needs
     them - all were written + dry-run July 5, 2026 (Automate.md per-section STATUS lines):
     bump-version.ps1 (worktree-tested), deploy.ps1's non-web targets, deploy-pkg.sh (Mac,
-    needs one-time ~/.netrc there), docker-release.ps1 (plan-tested, docker-pushrm
+    ~/.netrc DONE + FTP-verified July 6, 2026), docker-release.ps1 (plan-tested, docker-pushrm
     installed; REWRITTEN July 5, 2026 for multi-arch amd64+arm64 buildx, preview
     re-verified - first buildx -Commit run at 1.2.3, prints the digest Umbrel pins),
     snap-release.sh + flathub-update.sh (UNTESTED, need the Kubuntu box);

@@ -1,0 +1,1 @@
+Sledi navadam brez pritiska nizov, načrtuj naloge in piši zapiske v Markdownu - na vsaki napravi, brez računa. Izbirna sinhronizacija prek lastnega strežnika.
