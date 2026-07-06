@@ -151,12 +151,16 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
 
     - DONE July 6, 2026: item 9 (Popularity B) artifacts, all stores
       (see item 9 + Popularity.md B STATUS).
-    - Popularity F drafts: the r/selfhosted post (the #1-impact action in the whole plan;
-      posting does NOT depend on 1.2.3, but should follow item 1 so the compare pages
-      are live to link), then the anti-streak post.
-    - Popularity G/H/I drafts: PH assets, Microsoft pitch,
-      selfh.st / Noted.lol / MariusHosting pitches.
-    - Final Fable review pass over everything produced.
+    - DONE July 6, 2026: Popularity F drafts - drafts/reddit-selfhosted.md +
+      drafts/reddit-anti-streak.md (rewrite in own voice; post r/selfhosted after item 1,
+      one sub per week, reply to comments for 24h).
+    - DONE July 6, 2026: Popularity G/H/I drafts - drafts/producthunt-assets.md
+      (text assets; gallery images + 30s video cut stay in the "later" bucket),
+      drafts/microsoft-pitch.md (fill the two dev.to URLs before sending),
+      drafts/newsletter-pitches.md (send spaced apart, door-check each).
+    - DONE July 6, 2026: final review pass - 3 factual fixes applied
+      (Umbrel reminders claim, TrueNAS run_as risk note, MariusHosting walkthrough source).
+    the TrueNAS ci.py test (Linux PC) and the Umbrel digest fill (at 1.2.3).
 
     THEN the 1.2.3 release unlocks the whole deferred bucket in one cycle:
     multi-arch push + Umbrel digest pin + Umbrel PR, GitHub release (item 7),
