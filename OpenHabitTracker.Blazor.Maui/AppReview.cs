@@ -18,6 +18,22 @@ public class AppReview : IAppReview
     // "played with the examples" burst from triggering the once-ever prompt
     private const int ActiveDaysTarget = 5;
 
+    // store identifiers for the write-a-review deep link
+    private const string AndroidPackageName = "net.openhabittracker";
+    private const string AppleAppId = "6654885470";
+    private const string WindowsProductId = "9MWZMLXZZLLR";
+
+    public bool IsSupported => true;
+
+    public async Task RateOnStore()
+    {
+        // the user is rating on their own - never show the automatic prompt again
+        Preferences.Default.Set(PromptShownKey, true);
+
+        // deep link to the store's write-a-review page - guaranteed UI, unlike the quota-limited in-app dialog
+        await MainThread.InvokeOnMainThreadAsync(() => AppRating.Default.PerformRatingOnStoreAsync(packageName: AndroidPackageName, applicationId: AppleAppId, productId: WindowsProductId));
+    }
+
     public async Task RecordEngagement(EngagementKind kind)
     {
         if (Preferences.Default.Get(PromptShownKey, false))

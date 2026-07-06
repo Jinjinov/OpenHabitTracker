@@ -111,6 +111,17 @@ HANGING (started, NOT 100% done):
        while imports, sync, examples seeding, edits, removals, item toggles
        and task un-done never count.
        12 new unit tests (479 total pass); Photino/Wasm/Web + iOS sim builds verified.
+       VERIFIED July 6, 2026: macCatalyst debug build shows the dialog end to end
+       (user-observed in a Rider run); Windows debug build reaches the Store sign-in;
+       iOS simulator trigger fires (flag flips) but the sheet render is sim-flaky.
+       DONE + VERIFIED July 6, 2026: "Rate this app" button in About.razor
+       (user-decided: the native dialog's "Not Now" is a one-way door, since the
+       prompt shows once ever; details in Popularity.md A REDESIGN item 8) -
+       uses PerformRatingOnStoreAsync (store deep link, not the quota-limited
+       dialog), IAppReview regains IsSupported, button MAUI-only,
+       manual use also sets ReviewPromptShown, "Rate this app" string x 20 files,
+       Apple numeric app id 6654885470 via iTunes lookup;
+       user-verified on macCatalyst: button opens the Mac App Store review page.
        Remaining: observe the dialog once per store; each store has its own path:
        - Any platform, quick local check: seed the counters, then one completion
          triggers the dialog (dev builds show it), e.g. on the iOS simulator:
@@ -124,8 +135,11 @@ HANGING (started, NOT 100% done):
          FakeReviewManager dialog in a debug/sideloaded build - do NOT ship that.
        - Android, option 2 (test/internal release): install via Play Internal App Sharing -
          the real Play dialog appears without a production release.
-       - Windows: no debug or test path - the dialog appears only in a
-         Microsoft Store-installed build, so this leg alone waits for the next store release.
+       - Windows: VERIFIED July 6, 2026 in a plain debug build - the July 3 "no debug
+         path, needs a Store install" claim was WRONG (third disproven absence claim):
+         with the day gate commented out, 10 completions brought up the Microsoft Store
+         sign-in dialog, proving the whole trigger path; only the final star-rating step
+         needs a Store-installed build.
        Details: Popularity.md A STATUS + as-built + REDESIGN block.
 
     7. Automate 3 - gh-release script (DEFERRED to the 1.2.3 release - decided July 5, 2026).

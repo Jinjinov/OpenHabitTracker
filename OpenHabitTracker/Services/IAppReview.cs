@@ -8,5 +8,9 @@ public enum EngagementKind
 
 public interface IAppReview
 {
+    bool IsSupported { get; }
+
     Task RecordEngagement(EngagementKind kind);
+
+    Task RateOnStore();
 }

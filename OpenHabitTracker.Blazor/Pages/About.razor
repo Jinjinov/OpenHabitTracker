@@ -1,5 +1,8 @@
+@using OpenHabitTracker.Services
+
 @inject IStringLocalizer Loc
 @inject ILinkAttributeService LinkAttributeService
+@inject IAppReview AppReview
 
 <div @ref="WrapperElement" class="px-0 px-md-1">
     <div class="my-1">
@@ -9,6 +12,11 @@
         <span>@Loc["Version"] 1.2.2</span>
 
         <p><a href="https://openhabittracker.net">https://openhabittracker.net</a></p>
+
+        @if (AppReview.IsSupported)
+        {
+            <p><button class="btn btn-outline-primary" @onclick="() => AppReview.RateOnStore()"><i class="bi bi-star" aria-hidden="true"></i> @Loc["Rate this app"]</button></p>
+        }
 
         <h2 class="h5">@Loc["Take Markdown notes, plan tasks, track habits"]:</h2>
 
