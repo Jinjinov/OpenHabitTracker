@@ -112,6 +112,12 @@ HANGING (started, NOT 100% done):
        with a SUBMIT-HOWTO.md per store; PikaPods email at drafts/pikapods-pitch.md.
        Staging decision July 6, 2026: no new repos, no forks of our own repos,
        no lasting branches - their repos get forked only at submission time.
+       VERIFIED July 6, 2026 (Windows session, second pass): TrueNAS render with their
+       real library PASSED (rendered-reference.yaml saved; run_as-less questions.yaml
+       confirmed fine); Coolify SERVICE_PASSWORD_64_ confirmed; Dokploy helpers confirmed
+       and the blueprint CORRECTED to the real [config.env] wiring;
+       Microsoft pitch URLs filled.
+       (render already proven; their hash step needs a Linux filesystem - renameat2);
        fill the Umbrel digest at the 1.2.3 release.
        Remaining (USER): the submissions - Unraid portal (ready NOW),
        PikaPods email (NOW), CasaOS/Coolify/Dokploy/CapRover PRs (ready NOW,
@@ -160,7 +166,8 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
       drafts/newsletter-pitches.md (send spaced apart, door-check each).
     - DONE July 6, 2026: final review pass - 3 factual fixes applied
       (Umbrel reminders claim, TrueNAS run_as risk note, MariusHosting walkthrough source).
-    the TrueNAS ci.py test (Linux PC) and the Umbrel digest fill (at 1.2.3).
+    the TrueNAS full ci.py deploy test (Linux PC only - Windows already proved the
+    render on July 6) and the Umbrel digest fill (at 1.2.3).
 
     THEN the 1.2.3 release unlocks the whole deferred bucket in one cycle:
     multi-arch push + Umbrel digest pin + Umbrel PR, GitHub release (item 7),
