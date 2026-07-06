@@ -1,0 +1,12 @@
+<CommunityApplications>
+  <!-- Unraid Community Apps repository profile - scanned by ca.unraid.net -->
+  <Profile>
+    Unraid templates for [OpenHabitTracker](https://openhabittracker.net) - take Markdown notes, plan tasks, track habits.
+    Free, ad-free, open source (GPL-3.0), no account required.
+    The Docker image is the self-hosted sync server: native apps for Windows, Linux, Android, iOS and macOS log into it and sync.
+    Maintained by the app author in the app's own repository.
+  </Profile>
+  <Icon>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/icons/icon-512.png</Icon>
+  <WebPage>https://openhabittracker.net</WebPage>
+  <Forum>https://github.com/Jinjinov/OpenHabitTracker/discussions</Forum>
+</CommunityApplications>

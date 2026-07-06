@@ -1,0 +1,41 @@
+<Container version="2">
+  <Name>openhabittracker</Name>
+  <Repository>jinjinov/openhabittracker:latest</Repository>
+  <Registry>https://hub.docker.com/r/jinjinov/openhabittracker</Registry>
+  <Network>bridge</Network>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+
+  <Icon>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/icons/icon-512.png</Icon>
+
+  <!-- The port in the WebUI entry always refers to the container port -->
+  <WebUI>http://[IP]:[PORT:8080]</WebUI>
+
+  <Overview>Take Markdown notes, plan tasks and track habits - free, ad-free, open source, no account, all data on your server. This container is the self-hosted sync server: native apps for Windows, Linux, Android, iOS and macOS log into it and sync. Single user; log in at /login with the credentials you set below. Includes a REST API with OpenAPI UI at /scalar/v1. Habits show how overdue you are instead of guilt-driven streaks.</Overview>
+
+  <Support>https://github.com/Jinjinov/OpenHabitTracker/issues</Support>
+  <Project>https://openhabittracker.net</Project>
+
+  <TemplateURL>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/templates/openhabittracker.xml</TemplateURL>
+  <ReadMe>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/README.md</ReadMe>
+
+  <Category>Productivity:</Category>
+  <ExtraSearchTerms>habit tracker todo task notes markdown journal selfhosted sync</ExtraSearchTerms>
+  <License>GPLv3</License>
+  <Date>2026-07-06</Date>
+  <MinVer>6.1</MinVer>
+
+  <Screenshot>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/images/desktop_7_habits.png</Screenshot>
+  <Screenshot>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/images/desktop_5_tasks.png</Screenshot>
+  <Screenshot>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/images/desktop_3_notes.png</Screenshot>
+
+  <Requires>A password and a JWT secret must be set before the first start.</Requires>
+
+  <Config Name="WebUI Port" Target="8080" Default="5050" Mode="tcp" Description="Host port for the web interface." Type="Port" Display="always" Required="true" Mask="false"/>
+  <Config Name="Appdata" Target="/app/.OpenHabitTracker" Default="/mnt/user/appdata/openhabittracker" Mode="rw" Description="SQLite data: notes, tasks, habits, settings." Type="Path" Display="always" Required="true" Mask="false"/>
+  <Config Name="Username" Target="AppSettings__UserName" Default="admin" Description="Login username for the single user." Type="Variable" Display="always" Required="true" Mask="false"/>
+  <Config Name="Email" Target="AppSettings__Email" Default="admin@example.com" Description="Login email for the single user." Type="Variable" Display="always" Required="true" Mask="false"/>
+  <Config Name="Password" Target="AppSettings__Password" Default="" Description="Login password for the single user." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="JWT Secret" Target="AppSettings__JwtSecret" Default="" Description="Secret used to sign login tokens. Generate one in the Unraid terminal with: openssl rand -base64 32" Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Timezone" Target="TZ" Default="Etc/UTC" Description="tz database name, e.g. Europe/Berlin - sets the day boundary for habit tracking." Type="Variable" Display="always" Required="false" Mask="false"/>
+</Container>
