@@ -170,8 +170,31 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
       drafts/newsletter-pitches.md (send spaced apart, door-check each).
     - DONE July 6, 2026: final review pass - 3 factual fixes applied
       (Umbrel reminders claim, TrueNAS run_as risk note, MariusHosting walkthrough source).
-    the TrueNAS full ci.py deploy test (Linux PC only - Windows already proved the
-    render on July 6) and the Umbrel digest fill (at 1.2.3).
+
+    FABLE ENDGAME (July 6, 2026, 38% quota used; access ends July 7, 2026 EOD) -
+    the remaining Fable-grade work, in order:
+    
+    1. Automate 4 (item 2) - THIS Windows PC, with USER:
+       move the Play key to Automation/secrets/, install fastlane,
+       validate_play_store_json_key, supply init (settles D's locale codes),
+       one listings-only upload.
+    2. Automate 6 verify (item 4) - THIS Windows PC, with USER:
+       msstore info + msstore apps list, run whatever of steps c-e / 2-3 is missing;
+       if the issue #79 tenant bug bites, debug it while Fable is still available.
+    3. TrueNAS full ci.py deploy test - LINUX PC (same account, same weekly quota):
+       open a Fable session there before July 7 EOD;
+       the render is already proven (July 6, Windows), only deploy + health + login
+       remain, then the USER PR.
+    4. Automate 5 (item 3) - MAC MINI, with USER in a VS Code Fable session
+       (added July 6, 2026 - Fable is account-wide, the Mac counts):
+       copy the .p8 to Automation/secrets/, install fastlane, deliver init,
+       precheck, metadata upload (exact commands: Automate.md section 5).
+       simulator build (dotnet build -t:Run -f net9.0-ios), USER completes a habit
+       10 times to observe the SKStoreReviewController dialog.
+
+    SKIPPED for Fable (decided July 6, 2026): PH gallery resizes + the 30s video cut -
+    they stay in the "later" bucket (mechanical, any model, any time).
+    Blocked regardless of quota: Umbrel digest (at 1.2.3), USER submissions and rewrites.
 
     THEN the 1.2.3 release unlocks the whole deferred bucket in one cycle:
     multi-arch push + Umbrel digest pin + Umbrel PR, GitHub release (item 7),
