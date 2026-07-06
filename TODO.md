@@ -29,12 +29,16 @@ HANGING (started, NOT 100% done):
 
        DONE July 6, 2026: key moved to Automation/secrets/play-service-account.json,
        fastlane 2.237.0 installed on Windows (works fine, no Linux/Mac fallback needed),
-       validate_play_store_json_key passed.
+       validate_play_store_json_key passed, supply init ran (live listing is en-US only),
+       en-US/video.txt added, validate_only PASSED for all 20 locales -
+       locale codes confirmed, no folder renames needed (D's pt-PT question resolved).
        Permission lesson: the July 4 least-privilege invite was not enough for supply init;
        fixed July 6 by adding "View app information (read-only)" +
        "Release apps to testing tracks" (details in Automate.md section 4).
-       Remaining: retry supply init (settles D's open locale-code questions:
-       pt-PT vs pt-BR etc.), then one listings-only upload.
+       Remaining: ONLY the real listings-only upload (exact command in Automate.md
+       section 4 STATUS) - ON HOLD until items 3 and 4 are verified too
+       (decided July 6, 2026: no live store updates until all 3 stores are ready,
+       then upload everywhere together).
 
     3. Automate 5 - App Store metadata tooling (USER, on the Mac mini).
        The .p8 API key exists (Mac mini + Synology); nothing executed yet.
@@ -46,11 +50,17 @@ HANGING (started, NOT 100% done):
        (business name + payment card, employees = 1); the corrected path failed live
        with AADSTS16000 and a disabled "Create" tenant button
        (full account in Automate.md section 6, EXECUTED block).
-       USER reports setup complete.
-       Remaining: verify on the Windows PC with `msstore info` + `msstore apps list`,
-       run whatever of steps c-e / 2-3 is still missing, then the one listings-only
-       dry cycle (get -> updateMetadata -> publish).
-       Known risk: the issue #79 tenant bug can still appear at reconfigure time.
+       SETUP COMPLETE July 6, 2026: msstore-cli 0.3.7.5 installed, Entra app
+       "msstore-automation" created, reconfigure ran (issue #79 did NOT appear),
+       msstore info + apps list verified - OpenHabitTracker ProductId 9MWZMLXZZLLR
+       (IDs recorded in Automate.md section 6, EXECUTED July 6 block).
+       ALSO DONE July 6, 2026: submission JSON downloaded (drafts/msstore-submission-1.2.2.json,
+       gitignored) and Automation/msstore-listings.ps1 written + preview-tested
+       (20 locales, Description + Features only, one updateMetadata call per locale
+       because of the 32k command-line limit; full findings in Automate.md section 6).
+       Remaining: the one listings-only dry cycle (msstore-listings.ps1 -Commit, then
+       manual submission publish) - ON HOLD until items 2, 3, 4 are all verified
+       (then upload everywhere together).
 
     5. Popularity D - localized store listings (finishes via items 2, 3, 4).
        All 20-language texts done and committed July 4, 2026
