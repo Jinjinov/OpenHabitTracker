@@ -105,9 +105,17 @@ HANGING (started, NOT 100% done):
        ALSO DONE July 5, 2026: Dockerfile + Automation/docker-release.ps1 rewritten for
        multi-arch (amd64+arm64 buildx cross-compile, preview verified) - Umbrel requires
        arm64; first real multi-arch push ships with 1.2.3 (decided: no 1.2.2 overwrite).
-       (local ci.py test on the Linux PC), Umbrel fork branch (digest placeholder until
-       1.2.3), CasaOS folder, Coolify/Dokploy/CapRover templates, PikaPods email draft.
-       Remaining (USER): the submissions - Unraid portal, the PRs, the PikaPods email;
+       ARTIFACTS DONE July 6, 2026 (all YAML validated; details in Popularity.md B STATUS):
+       Unraid's PERMANENT files committed to the main repo (ca_profile.xml +
+       templates/openhabittracker.xml - the app repo IS the template repo);
+       everything else staged one-time in gitignored drafts/store-templates/<store>/
+       with a SUBMIT-HOWTO.md per store; PikaPods email at drafts/pikapods-pitch.md.
+       Staging decision July 6, 2026: no new repos, no forks of our own repos,
+       no lasting branches - their repos get forked only at submission time.
+       fill the Umbrel digest at the 1.2.3 release.
+       Remaining (USER): the submissions - Unraid portal (ready NOW),
+       PikaPods email (NOW), CasaOS/Coolify/Dokploy/CapRover PRs (ready NOW,
+       door-check CasaOS first), TrueNAS PR after the local test, Umbrel PR at 1.2.3;
        execution order in the Popularity.md B audience estimate.
 
 NOT STARTED (the queue, in dependency order):
@@ -141,9 +149,8 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
     - Side effect: once item 2 works, the Android leg of item 6 is one
       Internal App Sharing upload away.
 
-    - Item 9 (Popularity B) artifacts, ALL of them: Unraid template repo, TrueNAS app files,
-      CasaOS folder, Coolify/Dokploy/CapRover templates, PikaPods email draft,
-      Umbrel fork branch (placeholder digest until 1.2.3).
+    - DONE July 6, 2026: item 9 (Popularity B) artifacts, all stores
+      (see item 9 + Popularity.md B STATUS).
     - Popularity F drafts: the r/selfhosted post (the #1-impact action in the whole plan;
       posting does NOT depend on 1.2.3, but should follow item 1 so the compare pages
       are live to link), then the anti-streak post.
