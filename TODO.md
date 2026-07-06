@@ -92,7 +92,7 @@ HANGING (started, NOT 100% done):
        Flathub needs nothing (localized metainfo.xml ships with the next Flatpak release);
        IzzyOnDroid reads the committed fastlane folder for free once listed there.
 
-    6. Popularity A - in-app review prompt (USER - verification pending).
+    6. Popularity A - in-app review prompt (DONE - verification complete July 6, 2026).
        REDESIGNED July 6, 2026 (Mac mini Fable session) after live simulator testing
        found the July 3 build could NEVER fire in production:
        only HabitService.MarkAsDone counted, but both check-square buttons are hidden
@@ -122,25 +122,30 @@ HANGING (started, NOT 100% done):
        manual use also sets ReviewPromptShown, "Rate this app" string x 20 files,
        Apple numeric app id 6654885470 via iTunes lookup;
        user-verified on macCatalyst: button opens the Mac App Store review page.
-       Remaining: observe the dialog once per store; each store has its own path:
-       - Any platform, quick local check: seed the counters, then one completion
-         triggers the dialog (dev builds show it), e.g. on the iOS simulator:
-         xcrun simctl spawn <udid> defaults write net.openhabittracker
-         ReviewPromptEngagementPoints -int 29 (and ReviewPromptActiveDays -int 5),
-         restart the app, complete anything once.
-       - iOS/macCatalyst: SKStoreReviewController shows the real dialog in
-         development builds (suppressed in TestFlight); no code change needed.
-       - Android, option 1 (temporary code change): pass isTestOrDebugMode: true inside
-         #if ANDROID in OpenHabitTracker.Blazor.Maui/AppReview.cs to get the
-         FakeReviewManager dialog in a debug/sideloaded build - do NOT ship that.
-       - Android, option 2 (test/internal release): install via Play Internal App Sharing -
-         the real Play dialog appears without a production release.
+       Per-store verification results:
+       - macCatalyst: VERIFIED July 6, 2026 end to end - dialog rendered, user-observed.
        - Windows: VERIFIED July 6, 2026 in a plain debug build - the July 3 "no debug
          path, needs a Store install" claim was WRONG (third disproven absence claim):
          with the day gate commented out, 10 completions brought up the Microsoft Store
          sign-in dialog, proving the whole trigger path; only the final star-rating step
          needs a Store-installed build.
-       Details: Popularity.md A STATUS + as-built + REDESIGN block.
+       - iOS: trigger VERIFIED July 6, 2026 on the simulator (flag flips);
+         the sheet render is sim-flaky, and macCatalyst proves the same
+         SKStoreReviewController path anyway.
+       - Android: trigger VERIFIED July 6, 2026 (Windows session, emulator debug build,
+         day gate + isTestOrDebugMode temporarily edited, then reverted):
+         10 completions = 30 points, ReviewPromptShown flipped (read via adb run-as),
+         no exceptions.
+         GOTCHA: FakeReviewManager shows NO UI by design - the July 3 "FakeReviewManager
+         dialog" claim was wrong; debug verification on Android is silent,
+         read the preferences.
+       DECIDED July 6, 2026 (user): NO Internal App Sharing round - Play refuses to
+       publish a version code that went through internal testing (user hit this before),
+       and the plugin (MAUI-specific, net9 targets, popular) makes trimming/packaging
+       risk negligible.
+       Nothing left to test before production; the real Play dialog and the Windows
+       star-rating step are production observations, not tasks.
+       Details: Popularity.md A STATUS + as-built + REDESIGN block (items 7 and 9).
 
     7. Automate 3 - gh-release script (DEFERRED to the 1.2.3 release - decided July 5, 2026).
        Automation/github-release.ps1 written + previewed July 5, 2026: all guards pass,
@@ -217,9 +222,8 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
     - Item 1 (Popularity E): Automation\deploy.ps1 web -Commit, verify https://openhabittracker.net,
       then set canonical_url on the dev.to comparison article.
       Highest-leverage single action on this list, takes minutes.
-    - Item 6 (Popularity A) iOS leg: seed the engagement counters on the simulator,
-      then one completion in a dev build shows the SKStoreReviewController dialog
-      (exact commands in item 6; the trigger changed July 6, 2026).
+    - Item 6 (Popularity A): DONE - verification completed July 6, 2026
+      (all four legs; Android closed out on the emulator, no Internal App Sharing needed).
     - (Popularity C) Review the AI-disclosure framing in drafts/izzyondroid-app-request.md
       (read now, file at 1.2.3).
     - Optional: the Domenca FTP TLS ticket (text in Infrastructure.md).
@@ -227,8 +231,8 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
     USER, the three store-tooling setups - together they unblock item 5 (Popularity D):
       item 3 (Automate 5, Mac mini),
       item 4 (Automate 6, verify msstore info + apps list).
-    - Side effect: once item 2 works, the Android leg of item 6 is one
-      Internal App Sharing upload away.
+    - Side effect: OBSOLETE July 6, 2026 - item 6's Android leg was closed out
+      on the emulator instead; no Internal App Sharing round needed.
 
     - DONE July 6, 2026: item 9 (Popularity B) artifacts, all stores
       (see item 9 + Popularity.md B STATUS).
@@ -269,7 +273,8 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
 
     ENDGAME STATUS (July 6, 2026, Mac mini session): steps 1, 2 and 4 are DONE
     (items 2, 4, 3 all verified; step 4's piggyback simulator leg skipped by user
-    call - open for any future Mac session; bonus: Mac ~/.netrc done and
+    call, then MOOT July 6, 2026 - item 6 verification closed on all four legs;
+    bonus: Mac ~/.netrc done and
     FTP-verified, sl-SI Apple locale added after the ASC assumption proved wrong).
     Remaining Fable-grade: step 3 (TrueNAS ci.py deploy test, Linux PC) and -
     USER-gated - the now-unblocked together-upload to Play + Apple + Microsoft,
@@ -285,8 +290,9 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
 
     THEN the 1.2.3 release unlocks the whole deferred bucket in one cycle:
     multi-arch push + Umbrel digest pin + Umbrel PR, GitHub release (item 7),
-    IzzyOnDroid filing (item 8), Flathub metainfo ships, Windows review-prompt
-    observation (item 6).
+    IzzyOnDroid filing (item 8), Flathub metainfo ships, and the first chance to see
+    the real Play dialog and the Windows star-rating step in the wild
+    (item 6 is DONE - these are production observations, not tasks).
 
 NOTE: everything in HANGING is Sonnet-grade mechanical work (Popularity.md section J).
 Item 9's Fable-grade part (store research + schema verification) is DONE July 5, 2026.
