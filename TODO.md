@@ -158,8 +158,12 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
     - DONE July 6, 2026: item 9 (Popularity B) artifacts, all stores
       (see item 9 + Popularity.md B STATUS).
     - DONE July 6, 2026: Popularity F drafts - drafts/reddit-selfhosted.md +
-      drafts/reddit-anti-streak.md (rewrite in own voice; post r/selfhosted after item 1,
-      one sub per week, reply to comments for 24h).
+      drafts/reddit-anti-streak.md + drafts/reddit-dotnet.md (added after the Reddit
+      data CORRECTION - see Popularity.md "What the Reddit history proves":
+      the June audit's PullPush scores were ingestion-time artifacts; the r/selfhosted
+      brand-title post was actually the account's TOP post at 182 pts, and r/dotnet
+      never saw OpenHabitTracker). Rewrite in own voice; post r/selfhosted after
+      item 1, one sub per week, reply to comments for 24h.
     - DONE July 6, 2026: Popularity G/H/I drafts - drafts/producthunt-assets.md
       (text assets; gallery images + 30s video cut stay in the "later" bucket),
       drafts/microsoft-pitch.md (fill the two dev.to URLs before sending),
