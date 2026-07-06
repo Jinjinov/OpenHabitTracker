@@ -27,12 +27,14 @@ HANGING (started, NOT 100% done):
        https://openhabittracker.net/habit-tracker-comparison.html -
        without it Google treats the two copies as duplicates and ranks dev.to.
 
-       Service account created and invited, key downloaded -
-       but the key still sits in Downloads and fastlane is not installed.
-       Remaining: move the key to Automation/secrets/play-service-account.json,
-       install fastlane, run validate_play_store_json_key, run supply init
-       (init also settles D's open locale-code questions: pt-PT vs pt-BR etc.),
-       then one listings-only upload.
+       DONE July 6, 2026: key moved to Automation/secrets/play-service-account.json,
+       fastlane 2.237.0 installed on Windows (works fine, no Linux/Mac fallback needed),
+       validate_play_store_json_key passed.
+       Permission lesson: the July 4 least-privilege invite was not enough for supply init;
+       fixed July 6 by adding "View app information (read-only)" +
+       "Release apps to testing tracks" (details in Automate.md section 4).
+       Remaining: retry supply init (settles D's open locale-code questions:
+       pt-PT vs pt-BR etc.), then one listings-only upload.
 
     3. Automate 5 - App Store metadata tooling (USER, on the Mac mini).
        The .p8 API key exists (Mac mini + Synology); nothing executed yet.
