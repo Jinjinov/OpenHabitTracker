@@ -36,14 +36,28 @@ HANGING (started, NOT 100% done):
        fixed July 6 by adding "View app information (read-only)" +
        "Release apps to testing tracks" (details in Automate.md section 4).
        Remaining: ONLY the real listings-only upload (exact command in Automate.md
-       section 4 STATUS) - ON HOLD until items 3 and 4 are verified too
-       (decided July 6, 2026: no live store updates until all 3 stores are ready,
-       then upload everywhere together).
+       section 4 STATUS) - hold condition MET July 6, 2026 (items 3 and 4 both
+       verified); upload everywhere together whenever the USER says go.
 
-    3. Automate 5 - App Store metadata tooling (USER, on the Mac mini).
-       The .p8 API key exists (Mac mini + Synology); nothing executed yet.
-       Remaining: copy the .p8 to Automation/secrets/, install fastlane, deliver init,
-       precheck, metadata upload (exact commands: Automate.md section 5).
+    3. Automate 5 - App Store metadata tooling (Mac mini).
+       DONE July 6, 2026 (Mac mini Fable session): .p8 copied to
+       Automation/secrets/asc-api-key.p8 (+ asc-env.sh and asc-api-key.json, all
+       gitignored), fastlane 2.237.0 via Homebrew, deliver download_metadata verified
+       for BOTH platforms (GOTCHA: silently exits 0 without --force when
+       non-interactive), live listing is en-US only on both platforms (like Play),
+       downloads saved to gitignored drafts/asc-listing-live-1.2.2/{ios,osx},
+       all 18 committed locales are valid ASC codes and pass the char limits
+       (local script; ASC has no --validate_only), android/ subfolder confirmed
+       skipped by deliver, precheck PASSED (needs --include_in_app_purchases false
+       with API-key auth).
+       CORRECTION: iOS and macOS are ONE ASC app record with two platform metadata
+       sets, not separate apps as Automate.md section 5 assumed.
+       ALSO DONE same session: ~/.netrc prepared on the Mac mini for deploy-pkg.sh
+       (placeholders - USER fills in the FTP credentials from KWallet/Plesk).
+       Remaining: ONLY the real metadata upload, ios + osx (exact command in
+       Automate.md section 5 STATUS).
+       The hold condition is now MET: items 2, 3, 4 are all verified - the
+       together-upload to Play + Apple + Microsoft can run whenever the USER says go.
 
     4. Automate 6 - msstore-cli setup (USER).
        TENANT DONE July 5, 2026 - via the ORIGINAL billing-enrollment flow after all
@@ -59,8 +73,8 @@ HANGING (started, NOT 100% done):
        (20 locales, Description + Features only, one updateMetadata call per locale
        because of the 32k command-line limit; full findings in Automate.md section 6).
        Remaining: the one listings-only dry cycle (msstore-listings.ps1 -Commit, then
-       manual submission publish) - ON HOLD until items 2, 3, 4 are all verified
-       (then upload everywhere together).
+       manual submission publish) - hold condition MET July 6, 2026 (items 2 and 3
+       both verified); upload everywhere together whenever the USER says go.
 
     5. Popularity D - localized store listings (finishes via items 2, 3, 4).
        All 20-language texts done and committed July 4, 2026
