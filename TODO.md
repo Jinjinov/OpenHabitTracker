@@ -315,6 +315,23 @@ DEVICE-SCOPED vs USER-SCOPED data in SettingsEntity - watch list:
 
 ---------------------------------------------------------------------------------------------------
 
+Found July 6, 2026 while mapping habit completion paths (review prompt bug hunt):
+
+    1. Redundant double UncheckAllItems: HabitService.MarkAsDone's add-new branch calls
+       AddTimeDone, and BOTH methods run the UncheckAllItemsOnHabitDone block, so items
+       are unchecked twice on that path. Idempotent, harmless, but redundant - fold the
+       block into one place when touching HabitService next.
+
+    2. UX decision worth making consciously: with default settings there is NO one-tap
+       "mark as done" button anywhere - the habit list button renders only when
+       ShowSmallCalendar is false and the habit detail button only when ShowLargeCalendar
+       is false (both default true). Completing a habit means tapping a calendar day cell,
+       which is not an obvious "done" affordance for new users. This same hiding is what
+       masked the review prompt bug. Options if ever revisited: always show the check
+       button, or make the today cell visually inviting as the primary action.
+       
+---------------------------------------------------------------------------------------------------
+
 find out why `padding-left: 12px !important;` is needed on iOS - why `padding-left: env(safe-area-inset-left) !important;` doesn't work
 
 ---------------------------------------------------------------------------------------------------
