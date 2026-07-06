@@ -151,11 +151,16 @@ HANGING (started, NOT 100% done):
        confirmed fine); Coolify SERVICE_PASSWORD_64_ confirmed; Dokploy helpers confirmed
        and the blueprint CORRECTED to the real [config.env] wiring;
        Microsoft pitch URLs filled.
-       (render already proven; their hash step needs a Linux filesystem - renameat2);
-       fill the Umbrel digest at the 1.2.3 release.
+       DONE July 6, 2026 (Linux PC Fable session): TrueNAS full ci.py deploy test
+       PASSED - Docker 29.1.3 installed on the Kubuntu box that day, container
+       healthy, login page 200, REST login + authenticated /api/query/habits 200,
+       generate_metadata.py + git diff --check clean, teardown done;
+       generated artifacts copied back into drafts (folder is PR-ready,
+       version auto-bumped to 1.0.1 - normal; details in Popularity.md B STATUS
+       and the TrueNAS SUBMIT-HOWTO).
        Remaining (USER): the submissions - Unraid portal (ready NOW),
        PikaPods email (NOW), CasaOS/Coolify/Dokploy/CapRover PRs (ready NOW,
-       door-check CasaOS first), TrueNAS PR after the local test, Umbrel PR at 1.2.3;
+       door-check CasaOS first), TrueNAS PR (ready NOW), Umbrel PR at 1.2.3;
        execution order in the Popularity.md B audience estimate.
 
 NOT STARTED (the queue, in dependency order):
@@ -233,6 +238,10 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
     Remaining Fable-grade: step 3 (TrueNAS ci.py deploy test, Linux PC) and -
     USER-gated - the now-unblocked together-upload to Play + Apple + Microsoft,
     worth doing while Fable is still around to debug surprises.
+    STEP 3 DONE July 6, 2026 (Linux PC Fable session): TrueNAS ci.py deploy test
+    passed end to end, drafts folder now PR-ready (see item 9).
+    ALL FOUR ENDGAME STEPS ARE NOW DONE - the only Fable-worthy work left is the
+    USER-gated together-upload to the three stores.
 
     SKIPPED for Fable (decided July 6, 2026): PH gallery resizes + the 30s video cut -
     they stay in the "later" bucket (mechanical, any model, any time).
