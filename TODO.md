@@ -226,6 +226,14 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
        simulator build (dotnet build -t:Run -f net9.0-ios), USER completes a habit
        10 times to observe the SKStoreReviewController dialog.
 
+    ENDGAME STATUS (July 6, 2026, Mac mini session): steps 1, 2 and 4 are DONE
+    (items 2, 4, 3 all verified; step 4's piggyback simulator leg skipped by user
+    call - open for any future Mac session; bonus: Mac ~/.netrc done and
+    FTP-verified, sl-SI Apple locale added after the ASC assumption proved wrong).
+    Remaining Fable-grade: step 3 (TrueNAS ci.py deploy test, Linux PC) and -
+    USER-gated - the now-unblocked together-upload to Play + Apple + Microsoft,
+    worth doing while Fable is still around to debug surprises.
+
     SKIPPED for Fable (decided July 6, 2026): PH gallery resizes + the 30s video cut -
     they stay in the "later" bucket (mechanical, any model, any time).
     Blocked regardless of quota: Umbrel digest (at 1.2.3), USER submissions and rewrites.
