@@ -6,11 +6,12 @@ using OpenHabitTracker.Query;
 
 namespace OpenHabitTracker.Services;
 
-public class NoteService(ClientState clientState, ISearchFilterService searchFilterService, MarkdownToHtml markdownToHtml) : INoteService
+public class NoteService(ClientState clientState, ISearchFilterService searchFilterService, MarkdownToHtml markdownToHtml, IAppReview appReview) : INoteService
 {
     private readonly ClientState _clientState = clientState;
     private readonly ISearchFilterService _searchFilterService = searchFilterService;
     private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
+    private readonly IAppReview _appReview = appReview;
 
     public IReadOnlyCollection<NoteModel>? Notes => _clientState.Notes?.Values;
 
@@ -68,6 +69,8 @@ public class NoteService(ClientState clientState, ISearchFilterService searchFil
         //    noteCategory.Notes.Add(NewNote);
 
         NewNote = null;
+
+        await _appReview.RecordEngagement(EngagementKind.ContentCreated);
     }
 
     public async Task UpdateNote()

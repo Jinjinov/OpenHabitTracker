@@ -14,6 +14,7 @@ public class HabitServiceTests
     private IDataAccess _dataAccess = null!;
     private ClientState _clientState = null!;
     private SearchFilterService _searchFilterService = null!;
+    private IAppReview _appReview = null!;
     private HabitService _sut = null!;
 
     [SetUp]
@@ -29,7 +30,8 @@ public class HabitServiceTests
         _clientState = new(new[] { _dataAccess }, markdownToHtml);
 
         _searchFilterService = new();
-        _sut = new(_clientState, _searchFilterService, new AppReview());
+        _appReview = Substitute.For<IAppReview>();
+        _sut = new(_clientState, _searchFilterService, _appReview);
     }
 
     [TearDown]
@@ -1230,5 +1232,84 @@ public class HabitServiceTests
 
         Assert.That(inProgress.StartedAt, Is.EqualTo(newStart));
         await _dataAccess.DidNotReceive().UpdateTime(Arg.Any<TimeEntity>());
+    }
+
+    // --- IAppReview engagement tests ---
+    // every path that records a completion must count exactly once (review prompt trigger)
+
+    [Test]
+    public async Task MarkAsDone_WhenLastTimeInProgress_RecordsExactlyOneCompletedEngagement()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel inProgress = new() { Id = 10, HabitId = 1, StartedAt = DateTime.Now.AddMinutes(-5) };
+        habit.TimesDone = [inProgress];
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTime(inProgress.Id).Returns(Task.FromResult<TimeEntity?>(new TimeEntity { Id = inProgress.Id }));
+
+        await _sut.MarkAsDone(habit);
+
+        await _appReview.Received(1).RecordEngagement(EngagementKind.Completed);
+        await _appReview.Received(1).RecordEngagement(Arg.Any<EngagementKind>());
+    }
+
+    [Test]
+    public async Task MarkAsDone_WhenNewEntryAdded_RecordsExactlyOneCompletedEngagement()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.MarkAsDone(habit);
+
+        await _appReview.Received(1).RecordEngagement(EngagementKind.Completed);
+        await _appReview.Received(1).RecordEngagement(Arg.Any<EngagementKind>());
+    }
+
+    [Test]
+    public async Task AddTimeDone_OnPastDate_RecordsOneCompletedEngagement()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.AddTimeDone(habit, DateTime.Now.AddDays(-3)); // calendar backfill counts too
+
+        await _appReview.Received(1).RecordEngagement(EngagementKind.Completed);
+    }
+
+    [Test]
+    public async Task AddHabit_RecordsOneContentCreatedEngagement()
+    {
+        _clientState.Habits = new();
+        _sut.NewHabit = new HabitModel { Title = "New Habit" };
+
+        await _sut.AddHabit();
+
+        await _appReview.Received(1).RecordEngagement(EngagementKind.ContentCreated);
+    }
+
+    [Test]
+    public async Task RemoveTimeDone_RecordsNoEngagement()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel done = new() { Id = 10, HabitId = 1, StartedAt = DateTime.Now.AddHours(-1), CompletedAt = DateTime.Now };
+        habit.TimesDone = [done];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.RemoveTimeDone(habit, done);
+
+        await _appReview.DidNotReceive().RecordEngagement(Arg.Any<EngagementKind>());
+    }
+
+    [Test]
+    public async Task Start_RecordsNoEngagement()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.Start(habit); // starting a timer is not a completion
+
+        await _appReview.DidNotReceive().RecordEngagement(Arg.Any<EngagementKind>());
     }
 }

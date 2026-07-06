@@ -15,6 +15,7 @@ public class NoteServiceTests
     private ClientState _clientState = null!;
     private SearchFilterService _searchFilterService = null!;
     private MarkdownToHtml _markdownToHtml = null!;
+    private IAppReview _appReview = null!;
     private NoteService _sut = null!;
 
     [SetUp]
@@ -29,7 +30,8 @@ public class NoteServiceTests
         _clientState = new(new[] { _dataAccess }, _markdownToHtml);
 
         _searchFilterService = new();
-        _sut = new(_clientState, _searchFilterService, _markdownToHtml);
+        _appReview = Substitute.For<IAppReview>();
+        _sut = new(_clientState, _searchFilterService, _markdownToHtml, _appReview);
     }
 
     [TearDown]
@@ -408,5 +410,33 @@ public class NoteServiceTests
         _clientState.Notes = null;
 
         Assert.Throws<ArgumentNullException>(() => _sut.GetNotes().ToList());
+    }
+
+    // --- IAppReview engagement tests ---
+    // creating a note counts toward the review prompt; editing does not
+
+    [Test]
+    public async Task AddNote_RecordsOneContentCreatedEngagement()
+    {
+        _clientState.Notes = new();
+        _sut.NewNote = new NoteModel { Title = "Note", Content = "" };
+
+        await _sut.AddNote();
+
+        await _appReview.Received(1).RecordEngagement(EngagementKind.ContentCreated);
+        await _appReview.Received(1).RecordEngagement(Arg.Any<EngagementKind>());
+    }
+
+    [Test]
+    public async Task UpdateNote_RecordsNoEngagement()
+    {
+        NoteModel note = TestData.Note(id: 1);
+        _clientState.Notes = TestData.NoteDict(note);
+        _sut.SelectedNote = note;
+        _dataAccess.GetNote(note.Id).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = note.Id }));
+
+        await _sut.UpdateNote();
+
+        await _appReview.DidNotReceive().RecordEngagement(Arg.Any<EngagementKind>());
     }
 }

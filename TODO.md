@@ -93,11 +93,32 @@ HANGING (started, NOT 100% done):
        IzzyOnDroid reads the committed fastlane folder for free once listed there.
 
     6. Popularity A - in-app review prompt (USER - verification pending).
-       Code-complete, all-platform builds verified.
-       Remaining: observe the prompt once per store; each store has its own path:
-       - iOS/macCatalyst: plain dev/debug build on simulator or device -
-         SKStoreReviewController shows the real dialog in development builds
-         (suppressed in TestFlight); complete a habit 10 times, no code change needed.
+       REDESIGNED July 6, 2026 (Mac mini Fable session) after live simulator testing
+       found the July 3 build could NEVER fire in production:
+       only HabitService.MarkAsDone counted, but both check-square buttons are hidden
+       with default settings (list button behind !ShowSmallCalendar, detail button
+       behind !ShowLargeCalendar, both default true),
+       so every real completion went through the uncounted calendar AddTimeDone path.
+       The "calendar taps don't count" exclusion was a July 3 model decision
+       that was never consulted with the user - process lesson recorded in memory.
+       NEW TRIGGER (user-approved July 6, 2026): device-local engagement points
+       in MAUI Preferences - habit or task completion = 3 points,
+       note/task/habit created = 1 point,
+       prompt once ever at >= 30 points AND >= 5 distinct active days
+       (the day gate blocks a day-one "played with Load examples" burst).
+       Hooks are service-level, so every UI path counts
+       (both calendars, check buttons, timer stop, quantity modals)
+       while imports, sync, examples seeding, edits, removals, item toggles
+       and task un-done never count.
+       12 new unit tests (479 total pass); Photino/Wasm/Web + iOS sim builds verified.
+       Remaining: observe the dialog once per store; each store has its own path:
+       - Any platform, quick local check: seed the counters, then one completion
+         triggers the dialog (dev builds show it), e.g. on the iOS simulator:
+         xcrun simctl spawn <udid> defaults write net.openhabittracker
+         ReviewPromptEngagementPoints -int 29 (and ReviewPromptActiveDays -int 5),
+         restart the app, complete anything once.
+       - iOS/macCatalyst: SKStoreReviewController shows the real dialog in
+         development builds (suppressed in TestFlight); no code change needed.
        - Android, option 1 (temporary code change): pass isTestOrDebugMode: true inside
          #if ANDROID in OpenHabitTracker.Blazor.Maui/AppReview.cs to get the
          FakeReviewManager dialog in a debug/sideloaded build - do NOT ship that.
@@ -105,7 +126,7 @@ HANGING (started, NOT 100% done):
          the real Play dialog appears without a production release.
        - Windows: no debug or test path - the dialog appears only in a
          Microsoft Store-installed build, so this leg alone waits for the next store release.
-       Details: Popularity.md A STATUS + as-built item 5.
+       Details: Popularity.md A STATUS + as-built + REDESIGN block.
 
     7. Automate 3 - gh-release script (DEFERRED to the 1.2.3 release - decided July 5, 2026).
        Automation/github-release.ps1 written + previewed July 5, 2026: all guards pass,
@@ -182,8 +203,9 @@ HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
     - Item 1 (Popularity E): Automation\deploy.ps1 web -Commit, verify https://openhabittracker.net,
       then set canonical_url on the dev.to comparison article.
       Highest-leverage single action on this list, takes minutes.
-    - Item 6 (Popularity A) iOS leg: complete a habit 10 times in a dev build on the Mac -
-      SKStoreReviewController shows the dialog in development builds.
+    - Item 6 (Popularity A) iOS leg: seed the engagement counters on the simulator,
+      then one completion in a dev build shows the SKStoreReviewController dialog
+      (exact commands in item 6; the trigger changed July 6, 2026).
     - (Popularity C) Review the AI-disclosure framing in drafts/izzyondroid-app-request.md
       (read now, file at 1.2.3).
     - Optional: the Domenca FTP TLS ticket (text in Infrastructure.md).

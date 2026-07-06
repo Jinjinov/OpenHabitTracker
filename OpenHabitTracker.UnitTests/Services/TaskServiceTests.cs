@@ -14,6 +14,7 @@ public class TaskServiceTests
     private IDataAccess _dataAccess = null!;
     private ClientState _clientState = null!;
     private SearchFilterService _searchFilterService = null!;
+    private IAppReview _appReview = null!;
     private TaskService _sut = null!;
 
     [SetUp]
@@ -31,7 +32,8 @@ public class TaskServiceTests
         _clientState.Settings = new SettingsModel { HideCompletedTasks = false };
 
         _searchFilterService = new();
-        _sut = new(_clientState, _searchFilterService);
+        _appReview = Substitute.For<IAppReview>();
+        _sut = new(_clientState, _searchFilterService, _appReview);
     }
 
     [TearDown]
@@ -813,5 +815,44 @@ public class TaskServiceTests
         _clientState.Tasks = null;
 
         Assert.Throws<ArgumentNullException>(() => _sut.GetTasks().ToList());
+    }
+
+    // --- IAppReview engagement tests ---
+    // MarkAsDone toggles - only the transition to done may count (review prompt trigger)
+
+    [Test]
+    public async Task MarkAsDone_WhenNotCompleted_RecordsExactlyOneCompletedEngagement()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        await _sut.MarkAsDone(task);
+
+        await _appReview.Received(1).RecordEngagement(EngagementKind.Completed);
+        await _appReview.Received(1).RecordEngagement(Arg.Any<EngagementKind>());
+    }
+
+    [Test]
+    public async Task MarkAsDone_WhenAlreadyCompleted_RecordsNoEngagement()
+    {
+        TaskModel task = TestData.Task(id: 1, completedAt: DateTime.Now.AddHours(-1));
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        await _sut.MarkAsDone(task); // un-done is not an engagement
+
+        await _appReview.DidNotReceive().RecordEngagement(Arg.Any<EngagementKind>());
+    }
+
+    [Test]
+    public async Task AddTask_RecordsOneContentCreatedEngagement()
+    {
+        _clientState.Tasks = new();
+        _sut.NewTask = new TaskModel { Title = "New Task" };
+
+        await _sut.AddTask();
+
+        await _appReview.Received(1).RecordEngagement(EngagementKind.ContentCreated);
     }
 }

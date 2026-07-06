@@ -6,20 +6,37 @@ namespace OpenHabitTracker.Blazor.Maui;
 public class AppReview : IAppReview
 {
     // State is device-local (Preferences, not the synced database) on purpose:
-    // a review is wanted once per store, so each device counts its own completions.
-    private const string CompletionCountKey = "ReviewPromptCompletionCount";
+    // a review is wanted once per store, so each device counts its own engagement.
+    private const string EngagementPointsKey = "ReviewPromptEngagementPoints";
+    private const string ActiveDaysKey = "ReviewPromptActiveDays";
+    private const string LastActiveDayKey = "ReviewPromptLastActiveDay";
     private const string PromptShownKey = "ReviewPromptShown";
-    private const int CompletionCountTarget = 10;
 
-    public async Task RecordHabitCompletion()
+    // 10 habit/task completions, or 30 notes/tasks/habits created, or any mix
+    private const int EngagementPointsTarget = 30;
+    // distinct local dates with at least one engagement event - keeps a day-one
+    // "played with the examples" burst from triggering the once-ever prompt
+    private const int ActiveDaysTarget = 5;
+
+    public async Task RecordEngagement(EngagementKind kind)
     {
         if (Preferences.Default.Get(PromptShownKey, false))
             return;
 
-        int completionCount = Preferences.Default.Get(CompletionCountKey, 0) + 1;
-        Preferences.Default.Set(CompletionCountKey, completionCount);
+        DateTime today = DateTime.Today;
+        int activeDays = Preferences.Default.Get(ActiveDaysKey, 0);
 
-        if (completionCount < CompletionCountTarget)
+        if (Preferences.Default.Get(LastActiveDayKey, DateTime.MinValue) != today)
+        {
+            activeDays++;
+            Preferences.Default.Set(LastActiveDayKey, today);
+            Preferences.Default.Set(ActiveDaysKey, activeDays);
+        }
+
+        int points = Preferences.Default.Get(EngagementPointsKey, 0) + (kind == EngagementKind.Completed ? 3 : 1);
+        Preferences.Default.Set(EngagementPointsKey, points);
+
+        if (points < EngagementPointsTarget || activeDays < ActiveDaysTarget)
             return;
 
         Preferences.Default.Set(PromptShownKey, true);

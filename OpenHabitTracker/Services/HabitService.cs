@@ -118,6 +118,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         //    habitCategory.Habits.Add(NewHabit);
 
         NewHabit = null;
+
+        await _appReview.RecordEngagement(EngagementKind.ContentCreated);
     }
 
     public async Task UpdateHabit()
@@ -211,18 +213,18 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
             if (habit.LastTimeDoneAt is null || habit.LastTimeDoneAt < now)
                 await SetLastTimeDone(habit, now);
+
+            await _appReview.RecordEngagement(EngagementKind.Completed);
         }
         else
         {
-            await AddTimeDone(habit, now, quantity);
+            await AddTimeDone(habit, now, quantity); // records the engagement itself
         }
 
         if (_clientState.Settings.UncheckAllItemsOnHabitDone)
         {
             await UncheckAllItems(habit);
         }
-
-        await _appReview.RecordHabitCompletion();
     }
 
     private async Task UncheckAllItems(HabitModel habit)
@@ -294,6 +296,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         {
             await UncheckAllItems(habit);
         }
+
+        await _appReview.RecordEngagement(EngagementKind.Completed);
     }
 
     public async Task RemoveTimeDone(HabitModel habit, TimeModel timeModel)

@@ -6,10 +6,11 @@ using OpenHabitTracker.Query;
 
 namespace OpenHabitTracker.Services;
 
-public class TaskService(ClientState clientState, ISearchFilterService searchFilterService) : ITaskService
+public class TaskService(ClientState clientState, ISearchFilterService searchFilterService, IAppReview appReview) : ITaskService
 {
     private readonly ClientState _clientState = clientState;
     private readonly ISearchFilterService _searchFilterService = searchFilterService;
+    private readonly IAppReview _appReview = appReview;
 
     public IReadOnlyCollection<TaskModel>? Tasks => _clientState.Tasks?.Values;
 
@@ -65,6 +66,8 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
         //    taskCategory.Tasks.Add(NewTask);
 
         NewTask = null;
+
+        await _appReview.RecordEngagement(EngagementKind.ContentCreated);
     }
 
     public async Task UpdateTask()
@@ -145,6 +148,10 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
             await _clientState.DataAccess.UpdateTask(taskEntity);
         }
+
+        // MarkAsDone toggles - only the transition to done is an engagement event
+        if (!isCompleted)
+            await _appReview.RecordEngagement(EngagementKind.Completed);
 
         if (task.Items is null)
             return;
