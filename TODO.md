@@ -1,306 +1,75 @@
 # TODO:
 
-TASK INDEX (July 5, 2026) - grouped by completion state.
-RULE: a task is DONE only at 100%.
-Anything started but not 100% complete is HANGING and therefore NOT done - no exceptions.
-HANGING comes first (ordered by shortest path to done), then NOT STARTED.
+Task index, grouped by completion state.
+Rule: a task is done only at 100%.
+Anything started but not 100% complete is hanging and therefore not done - no exceptions.
+Hanging first (ordered by shortest path to done), then not started.
 Details live in the task plans:
 Popularity.md appendix A-L (marketing), Automate.md sections 1-10 (release automation),
-Infrastructure.md (machines/credentials), and the sections below in this file (code).
- 
-HANGING (started, NOT 100% done):
+Infrastructure.md (machines/hosting/signing), and the sections below in this file (code).
 
-       Files committed July 4, 2026 (5 comparison pages, sitemap.xml, robots.txt x3,
-       Compare section with per-link analytics), but NOT LIVE.
-       Remaining: deploy via the Automate 2 deploy script's `web` target -
-       decided July 5, 2026: this deploy IS the first test of that script,
-       because `web` is the safest target (static site, no secrets - the appsettings.json
-       risk exists only on the Blazor.Web target) and success is externally verifiable
-       by fetching https://openhabittracker.net.
-       DONE July 5, 2026: Automation/deploy.ps1 written; `web` preview ran against the live
-       FTP and listed exactly the E files as new/changed (plus one-time same-size
-       timestamp-only re-uploads from the fresh git checkout - harmless).
-       Remaining (USER): review the preview, run `Automation\deploy.ps1 web -Commit`,
-       verify https://openhabittracker.net.
-       Then: set canonical_url on the dev.to comparison article
-       (dev.to post settings / front matter) to
-       https://openhabittracker.net/habit-tracker-comparison.html -
-       without it Google treats the two copies as duplicates and ranks dev.to.
+HANGING (started, not 100% done):
 
-       DONE July 6, 2026: key moved to Automation/secrets/play-service-account.json,
-       fastlane 2.237.0 installed on Windows (works fine, no Linux/Mac fallback needed),
-       validate_play_store_json_key passed, supply init ran (live listing is en-US only),
-       en-US/video.txt added, validate_only PASSED for all 20 locales -
-       locale codes confirmed, no folder renames needed (D's pt-PT question resolved).
-       Permission lesson: the July 4 least-privilege invite was not enough for supply init;
-       fixed July 6 by adding "View app information (read-only)" +
-       "Release apps to testing tracks" (details in Automate.md section 4).
-       Remaining: ONLY the real listings-only upload (exact command in Automate.md
-       section 4 STATUS) - hold condition MET July 6, 2026 (items 3 and 4 both
-       verified); upload everywhere together whenever the USER says go.
+    1. Popularity E - SEO pages: committed (5 comparison pages, sitemap.xml, robots.txt x3,
+       Compare section with per-link analytics) but not live.
+       Remaining (USER): run `Automation\deploy.ps1 web -Commit` (doubles as the deploy
+       script's first real test - web is the safest target and success is externally
+       verifiable), verify https://openhabittracker.net, then set canonical_url on the
+       dev.to comparison article to https://openhabittracker.net/habit-tracker-comparison.html
+       (without it Google treats the two copies as duplicates and ranks dev.to).
+       Highest-leverage item on this list, takes minutes.
 
-    3. Automate 5 - App Store metadata tooling (Mac mini).
-       DONE July 6, 2026 (Mac mini Fable session): .p8 copied to
-       Automation/secrets/asc-api-key.p8 (+ asc-env.sh and asc-api-key.json, all
-       gitignored), fastlane 2.237.0 via Homebrew, deliver download_metadata verified
-       for BOTH platforms (GOTCHA: silently exits 0 without --force when
-       non-interactive), live listing is en-US only on both platforms (like Play),
-       downloads saved to gitignored drafts/asc-listing-live-1.2.2/{ios,osx},
-       all committed locales are valid ASC codes and pass the char limits
-       (local script; ASC has no --validate_only), android/ subfolder confirmed
-       skipped by deliver, precheck PASSED (needs --include_in_app_purchases false
-       with API-key auth).
-       CORRECTION: iOS and macOS are ONE ASC app record with two platform metadata
-       sets, not separate apps as Automate.md section 5 assumed.
-       CORRECTION 2 (July 6, 2026, user challenged the sl/sr claim): Slovenian IS
-       supported by ASC as sl-SI (Serbian genuinely is not) - the July 4 assumption
-       in sync-listings.py was half wrong. FIXED: fastlane/metadata/sl-SI/ added
-       (Apple-only fields hand-authored, description synced from android/sl),
-       sync-listings.py corrected, all 19 Apple locales validated
-       (details in Automate.md section 5 CORRECTED note).
-       ALSO DONE same session: ~/.netrc on the Mac mini for deploy-pkg.sh -
-       USER filled the credentials, VERIFIED with a read-only FTP listing of
-       /httpdocs/download/ (deploy-pkg.sh ready; NAS relay obsolete).
-       Remaining: ONLY the real metadata upload, ios + osx (exact command in
-       Automate.md section 5 STATUS).
-       The hold condition is now MET: items 2, 3, 4 are all verified - the
-       together-upload to Play + Apple + Microsoft can run whenever the USER says go.
+    2. Popularity D - localized store listings: all texts committed
+       (20 Play + 19 Apple locales + localized metainfo.xml), all three store tooling
+       setups verified.
+       Remaining (USER says go, then upload to all three stores together):
+       - Play: the listings-only fastlane supply run (command in Automate.md section 4)
+       - Apple: fastlane deliver for ios + osx (Automate.md section 5)
+       - Microsoft: msstore-listings.ps1 -Commit + manual submission publish (Automate.md section 6)
+       Flathub needs nothing (the localized metainfo.xml ships with the next Flatpak release);
+       IzzyOnDroid reads the committed fastlane folder for free once listed.
 
-    4. Automate 6 - msstore-cli setup (USER).
-       TENANT DONE July 5, 2026 - via the ORIGINAL billing-enrollment flow after all
-       (business name + payment card, employees = 1); the corrected path failed live
-       with AADSTS16000 and a disabled "Create" tenant button
-       (full account in Automate.md section 6, EXECUTED block).
-       SETUP COMPLETE July 6, 2026: msstore-cli 0.3.7.5 installed, Entra app
-       "msstore-automation" created, reconfigure ran (issue #79 did NOT appear),
-       msstore info + apps list verified - OpenHabitTracker ProductId 9MWZMLXZZLLR
-       (IDs recorded in Automate.md section 6, EXECUTED July 6 block).
-       ALSO DONE July 6, 2026: submission JSON downloaded (drafts/msstore-submission-1.2.2.json,
-       gitignored) and Automation/msstore-listings.ps1 written + preview-tested
-       (20 locales, Description + Features only, one updateMetadata call per locale
-       because of the 32k command-line limit; full findings in Automate.md section 6).
-       Remaining: the one listings-only dry cycle (msstore-listings.ps1 -Commit, then
-       manual submission publish) - hold condition MET July 6, 2026 (items 2 and 3
-       both verified); upload everywhere together whenever the USER says go.
-
-    5. Popularity D - localized store listings (finishes via items 2, 3, 4).
-       All 20-language texts done and committed July 4, 2026
-       (fastlane/ 20 Play + 19 Apple locales - sl-SI added July 6, 2026 after the ASC
-       "no Slovenian" assumption proved wrong, metainfo.xml, Automation/sync-listings.py);
-       translations written by Fable itself, no further check needed.
-       Remaining: the uploads - Play via item 2, Apple via item 3, Microsoft via item 4.
-       Flathub needs nothing (localized metainfo.xml ships with the next Flatpak release);
-       IzzyOnDroid reads the committed fastlane folder for free once listed there.
-
-    6. Popularity A - in-app review prompt (DONE - verification complete July 6, 2026).
-       REDESIGNED July 6, 2026 (Mac mini Fable session) after live simulator testing
-       found the July 3 build could NEVER fire in production:
-       only HabitService.MarkAsDone counted, but both check-square buttons are hidden
-       with default settings (list button behind !ShowSmallCalendar, detail button
-       behind !ShowLargeCalendar, both default true),
-       so every real completion went through the uncounted calendar AddTimeDone path.
-       The "calendar taps don't count" exclusion was a July 3 model decision
-       that was never consulted with the user - process lesson recorded in memory.
-       NEW TRIGGER (user-approved July 6, 2026): device-local engagement points
-       in MAUI Preferences - habit or task completion = 3 points,
-       note/task/habit created = 1 point,
-       prompt once ever at >= 30 points AND >= 5 distinct active days
-       (the day gate blocks a day-one "played with Load examples" burst).
-       Hooks are service-level, so every UI path counts
-       (both calendars, check buttons, timer stop, quantity modals)
-       while imports, sync, examples seeding, edits, removals, item toggles
-       and task un-done never count.
-       12 new unit tests (479 total pass); Photino/Wasm/Web + iOS sim builds verified.
-       VERIFIED July 6, 2026: macCatalyst debug build shows the dialog end to end
-       (user-observed in a Rider run); Windows debug build reaches the Store sign-in;
-       iOS simulator trigger fires (flag flips) but the sheet render is sim-flaky.
-       DONE + VERIFIED July 6, 2026: "Rate this app" button in About.razor
-       (user-decided: the native dialog's "Not Now" is a one-way door, since the
-       prompt shows once ever; details in Popularity.md A REDESIGN item 8) -
-       uses PerformRatingOnStoreAsync (store deep link, not the quota-limited
-       dialog), IAppReview regains IsSupported, button MAUI-only,
-       manual use also sets ReviewPromptShown, "Rate this app" string x 20 files,
-       Apple numeric app id 6654885470 via iTunes lookup;
-       user-verified on macCatalyst: button opens the Mac App Store review page.
-       Per-store verification results:
-       - macCatalyst: VERIFIED July 6, 2026 end to end - dialog rendered, user-observed.
-       - Windows: VERIFIED July 6, 2026 in a plain debug build - the July 3 "no debug
-         path, needs a Store install" claim was WRONG (third disproven absence claim):
-         with the day gate commented out, 10 completions brought up the Microsoft Store
-         sign-in dialog, proving the whole trigger path; only the final star-rating step
-         needs a Store-installed build.
-       - iOS: trigger VERIFIED July 6, 2026 on the simulator (flag flips);
-         the sheet render is sim-flaky, and macCatalyst proves the same
-         SKStoreReviewController path anyway.
-       - Android: trigger VERIFIED July 6, 2026 (Windows session, emulator debug build,
-         day gate + isTestOrDebugMode temporarily edited, then reverted):
-         10 completions = 30 points, ReviewPromptShown flipped (read via adb run-as),
-         no exceptions.
-         GOTCHA: FakeReviewManager shows NO UI by design - the July 3 "FakeReviewManager
-         dialog" claim was wrong; debug verification on Android is silent,
-         read the preferences.
-       DECIDED July 6, 2026 (user): NO Internal App Sharing round - Play refuses to
-       publish a version code that went through internal testing (user hit this before),
-       and the plugin (MAUI-specific, net9 targets, popular) makes trimming/packaging
-       risk negligible.
-       Nothing left to test before production; the real Play dialog and the Windows
-       star-rating step are production observations, not tasks.
-       Details: Popularity.md A STATUS + as-built + REDESIGN block (items 7 and 9).
-
-    7. Automate 3 - gh-release script (DEFERRED to the 1.2.3 release - decided July 5, 2026).
-       Automation/github-release.ps1 written + previewed July 5, 2026: all guards pass,
-       notes pulled from VersionHistory.md, and the SHIPPED 1.2.2 APK downloaded from the
-       website to Automation/artifacts/shipped-1.2.2.apk (the MAUI bin APK is a July 3
-       post-release build - do not attach it; details in Automate.md section 3 STATUS).
-       DECIDED July 5, 2026: skip the 1.2.2 backfill - the FIRST GitHub release ships with
-       1.2.3, same release cycle as the multi-arch image + Umbrel digest pin;
-       shipped-1.2.2.apk stays unused, the 1.2.3 run attaches that release's own APK.
+    3. Automate 3 - GitHub release (deferred to 1.2.3; no 1.2.2 backfill).
        Remaining (USER, at the 1.2.3 release):
-       `Automation\github-release.ps1 1.2.3 <path-to-1.2.3-apk> -Commit`
-       creates the GitHub release IzzyOnDroid needs; unblocks item 8.
+       `Automation\github-release.ps1 1.2.3 <path-to-1.2.3-apk> -Commit` -
+       creates the GitHub release IzzyOnDroid needs; unblocks item 4.
 
-    8. Popularity C - IzzyOnDroid inclusion request (USER).
-       Draft DONE July 5, 2026: drafts/izzyondroid-app-request.md (gitignored).
-       Researched live: inclusion policy, the AppRequest template fields (mirrored from
-       issue #344), and that the app is not yet listed (package URL 404s).
-       All fields prefilled, including the AI-assistance disclosure - review the flagged
-       decision in the draft header before filing.
-       Remaining (USER): run item 7's -Commit command first (the request links the release -
-       now AT THE 1.2.3 RELEASE, per item 7's July 5, 2026 defer decision),
-       read the policy in full, then file at codeberg.org/IzzyOnDroid/repodata/issues/new
-       with title "[AppRequest] OpenHabitTracker".
+    4. Popularity C - IzzyOnDroid inclusion request: draft ready at
+       drafts/izzyondroid-app-request.md, all fields prefilled.
+       Remaining (USER, after item 3): review the AI-disclosure framing in the draft header,
+       read the inclusion policy in full, then file at
+       codeberg.org/IzzyOnDroid/repodata/issues/new with title "[AppRequest] OpenHabitTracker".
 
-       RESEARCH DONE July 5, 2026 (Fable session): execution-ready specs for every store
-       are in Popularity.md section B - Unraid, TrueNAS (added), Umbrel, CasaOS,
-       PaaS tier (Coolify/Dokploy/CapRover), PikaPods (email pitch, 20% revenue share).
-       Runtipi DROPPED (official store closed to new apps).
-       Audience shares estimated; CHECK THE DOOR FIRST rule added to the B ground rules;
-       H/I channel lists audited the same day ("This Week in .NET" was dead since 2017).
-       ALSO DONE July 5, 2026: Dockerfile + Automation/docker-release.ps1 rewritten for
-       multi-arch (amd64+arm64 buildx cross-compile, preview verified) - Umbrel requires
-       arm64; first real multi-arch push ships with 1.2.3 (decided: no 1.2.2 overwrite).
-       ARTIFACTS DONE July 6, 2026 (all YAML validated; details in Popularity.md B STATUS):
-       Unraid's PERMANENT files committed to the main repo (ca_profile.xml +
-       templates/openhabittracker.xml - the app repo IS the template repo);
-       everything else staged one-time in gitignored drafts/store-templates/<store>/
-       with a SUBMIT-HOWTO.md per store; PikaPods email at drafts/pikapods-pitch.md.
-       Staging decision July 6, 2026: no new repos, no forks of our own repos,
-       no lasting branches - their repos get forked only at submission time.
-       VERIFIED July 6, 2026 (Windows session, second pass): TrueNAS render with their
-       real library PASSED (rendered-reference.yaml saved; run_as-less questions.yaml
-       confirmed fine); Coolify SERVICE_PASSWORD_64_ confirmed; Dokploy helpers confirmed
-       and the blueprint CORRECTED to the real [config.env] wiring;
-       Microsoft pitch URLs filled.
-       DONE July 6, 2026 (Linux PC Fable session): TrueNAS full ci.py deploy test
-       PASSED - Docker 29.1.3 installed on the Kubuntu box that day, container
-       healthy, login page 200, REST login + authenticated /api/query/habits 200,
-       generate_metadata.py + git diff --check clean, teardown done;
-       generated artifacts copied back into drafts (folder is PR-ready,
-       version auto-bumped to 1.0.1 - normal; details in Popularity.md B STATUS
-       and the TrueNAS SUBMIT-HOWTO).
-       Remaining (USER): the submissions - Unraid portal (ready NOW),
-       PikaPods email (NOW), CasaOS/Coolify/Dokploy/CapRover PRs (ready NOW,
-       door-check CasaOS first), TrueNAS PR (ready NOW), Umbrel PR at 1.2.3;
-       execution order in the Popularity.md B audience estimate.
+    5. Popularity B - self-hosting store templates: all artifacts ready.
+       Unraid files are committed to the main repo (ca_profile.xml + templates/openhabittracker.xml);
+       everything else is staged in gitignored drafts/store-templates/<store>/ with a
+       SUBMIT-HOWTO.md per store; PikaPods email at drafts/pikapods-pitch.md.
+       TrueNAS passed the full ci.py deploy test and is PR-ready.
+       (docker-release.ps1 prints it; docker buildx imagetools inspect also works).
+       Remaining (USER): the submissions - Unraid portal, PikaPods email, TrueNAS PR,
+       CasaOS (door check first) / Coolify / Dokploy / CapRover PRs, Umbrel PR;
+       execution order in Popularity.md B.
 
-NOT STARTED (the queue, in dependency order):
+DONE (recent, for context):
 
-    later: first REAL runs of the remaining Automation scripts when the next release needs
-    them - all were written + dry-run July 5, 2026 (Automate.md per-section STATUS lines):
-    bump-version.ps1 (worktree-tested), deploy.ps1's non-web targets, deploy-pkg.sh (Mac,
-    ~/.netrc DONE + FTP-verified July 6, 2026), docker-release.ps1 (plan-tested, docker-pushrm
-    installed; REWRITTEN July 5, 2026 for multi-arch amd64+arm64 buildx, preview
-    re-verified - first buildx -Commit run at 1.2.3, prints the digest Umbrel pins),
-    snap-release.sh + flathub-update.sh (UNTESTED, need the Kubuntu box);
-    Popularity F-I drafts + G assets (video cut, image resizes);
-    Domenca ticket (FTP TLS cert, text in Infrastructure.md);
-    posting F-I in your own voice; store-console review clicks.
+    Popularity A - in-app review prompt + "Rate this app" button: implemented and verified
+    on all four platforms (design, gotchas and verification results in Popularity.md A).
+    The real Play dialog and the Windows star-rating step are production observations, not tasks.
 
-HOW TO PROCEED (July 5, 2026) - the pre-1.2.3 sequencing at a glance:
+NOT STARTED (the queue):
 
-    USER, independent of everything else:
-    - Item 1 (Popularity E): Automation\deploy.ps1 web -Commit, verify https://openhabittracker.net,
-      then set canonical_url on the dev.to comparison article.
-      Highest-leverage single action on this list, takes minutes.
-    - Item 6 (Popularity A): DONE - verification completed July 6, 2026
-      (all four legs; Android closed out on the emulator, no Internal App Sharing needed).
-    - (Popularity C) Review the AI-disclosure framing in drafts/izzyondroid-app-request.md
-      (read now, file at 1.2.3).
-    - Optional: the Domenca FTP TLS ticket (text in Infrastructure.md).
+    - First real runs of the remaining Automation scripts at the next release:
+      bump-version.ps1, deploy.ps1 non-web targets, deploy-pkg.sh,
+      snap-release.sh + flathub-update.sh (both still need their first run on the Kubuntu box).
+    - Popularity F-I: rewrite the drafts in your own voice and post/send them
+      (one sub per week, reply to comments for 24h, door-check each pitch target).
+    - Popularity G assets: gallery image resizes (1270x760) + the 30s video cut.
+    - Domenca ticket for the expired FTP TLS cert (Infrastructure.md).
+    - Store-console review clicks after the together-upload.
 
-    USER, the three store-tooling setups - together they unblock item 5 (Popularity D):
-      item 3 (Automate 5, Mac mini),
-      item 4 (Automate 6, verify msstore info + apps list).
-    - Side effect: OBSOLETE July 6, 2026 - item 6's Android leg was closed out
-      on the emulator instead; no Internal App Sharing round needed.
-
-    - DONE July 6, 2026: item 9 (Popularity B) artifacts, all stores
-      (see item 9 + Popularity.md B STATUS).
-    - DONE July 6, 2026: Popularity F drafts - drafts/reddit-selfhosted.md +
-      drafts/reddit-anti-streak.md + drafts/reddit-dotnet.md (added after the Reddit
-      data CORRECTION - see Popularity.md "What the Reddit history proves":
-      the June audit's PullPush scores were ingestion-time artifacts; the r/selfhosted
-      brand-title post was actually the account's TOP post at 182 pts, and r/dotnet
-      never saw OpenHabitTracker). Rewrite in own voice; post r/selfhosted after
-      item 1, one sub per week, reply to comments for 24h.
-    - DONE July 6, 2026: Popularity G/H/I drafts - drafts/producthunt-assets.md
-      (text assets; gallery images + 30s video cut stay in the "later" bucket),
-      drafts/microsoft-pitch.md (fill the two dev.to URLs before sending),
-      drafts/newsletter-pitches.md (send spaced apart, door-check each).
-    - DONE July 6, 2026: final review pass - 3 factual fixes applied
-      (Umbrel reminders claim, TrueNAS run_as risk note, MariusHosting walkthrough source).
-
-    FABLE ENDGAME (July 6, 2026, 38% quota used; access ends July 7, 2026 EOD) -
-    the remaining Fable-grade work, in order:
-    
-    1. Automate 4 (item 2) - THIS Windows PC, with USER:
-       move the Play key to Automation/secrets/, install fastlane,
-       validate_play_store_json_key, supply init (settles D's locale codes),
-       one listings-only upload.
-    2. Automate 6 verify (item 4) - THIS Windows PC, with USER:
-       msstore info + msstore apps list, run whatever of steps c-e / 2-3 is missing;
-       if the issue #79 tenant bug bites, debug it while Fable is still available.
-    3. TrueNAS full ci.py deploy test - LINUX PC (same account, same weekly quota):
-       open a Fable session there before July 7 EOD;
-       the render is already proven (July 6, Windows), only deploy + health + login
-       remain, then the USER PR.
-    4. Automate 5 (item 3) - MAC MINI, with USER in a VS Code Fable session
-       (added July 6, 2026 - Fable is account-wide, the Mac counts):
-       copy the .p8 to Automation/secrets/, install fastlane, deliver init,
-       precheck, metadata upload (exact commands: Automate.md section 5).
-       simulator build (dotnet build -t:Run -f net9.0-ios), USER completes a habit
-       10 times to observe the SKStoreReviewController dialog.
-
-    ENDGAME STATUS (July 6, 2026, Mac mini session): steps 1, 2 and 4 are DONE
-    (items 2, 4, 3 all verified; step 4's piggyback simulator leg skipped by user
-    call, then MOOT July 6, 2026 - item 6 verification closed on all four legs;
-    bonus: Mac ~/.netrc done and
-    FTP-verified, sl-SI Apple locale added after the ASC assumption proved wrong).
-    Remaining Fable-grade: step 3 (TrueNAS ci.py deploy test, Linux PC) and -
-    USER-gated - the now-unblocked together-upload to Play + Apple + Microsoft,
-    worth doing while Fable is still around to debug surprises.
-    STEP 3 DONE July 6, 2026 (Linux PC Fable session): TrueNAS ci.py deploy test
-    passed end to end, drafts folder now PR-ready (see item 9).
-    ALL FOUR ENDGAME STEPS ARE NOW DONE - the only Fable-worthy work left is the
-    USER-gated together-upload to the three stores.
-
-    SKIPPED for Fable (decided July 6, 2026): PH gallery resizes + the 30s video cut -
-    they stay in the "later" bucket (mechanical, any model, any time).
-    Blocked regardless of quota: Umbrel digest (at 1.2.3), USER submissions and rewrites.
-
-    THEN the 1.2.3 release unlocks the whole deferred bucket in one cycle:
-    multi-arch push + Umbrel digest pin + Umbrel PR, GitHub release (item 7),
-    IzzyOnDroid filing (item 8), Flathub metainfo ships, and the first chance to see
-    the real Play dialog and the Windows star-rating step in the wild
-    (item 6 is DONE - these are production observations, not tasks).
-
-NOTE: everything in HANGING is Sonnet-grade mechanical work (Popularity.md section J).
-Item 9's Fable-grade part (store research + schema verification) is DONE July 5, 2026.
-BUDGET FLIP (July 5, 2026: weekly quota reset at 18:00 with 18% used;
-Fable access ends July 7, 2026 EOD): rationing is superseded -
-run everything still open on Fable while it lasts
-(item 9 artifacts, then Popularity F-I drafts, then the final review pass);
-details in the UPDATE block at the top of Popularity.md section J.
+    The 1.2.3 release unlocks in one cycle: Umbrel digest pin + Umbrel PR,
+    GitHub release (item 3), IzzyOnDroid filing (item 4), Flathub localized metainfo,
+    and the first chance to see the real Play dialog in the wild.
 
 ---------------------------------------------------------------------------------------------------
 
@@ -308,20 +77,20 @@ DEVICE-SCOPED vs USER-SCOPED data in SettingsEntity - watch list:
 
     SettingsEntity mixes user-scoped preferences (theme, culture, sort/filter settings -
     fine to sync/export) with DEVICE-scoped state that must never leave the device:
-        - RefreshToken (auth session for this install - see security item above)
+        - RefreshToken (auth session for this install)
         - RememberMe (per-device choice)
         - BaseUrl (arguably user config - borderline, decide when it matters)
     Anything device-scoped that does not need the DB should use MAUI Preferences
-    (see Popularity.md appendix section A - the in-app review prompt flag ReviewPromptShown
-    uses Preferences for exactly this reason: a synced/exported flag would suppress
-    the second store's review prompt and survive backup-restore when it shouldn't).
+    (see Popularity.md appendix section A - the review prompt flags use Preferences for
+    exactly this reason: a synced/exported flag would suppress the second store's review
+    prompt and survive backup-restore when it shouldn't).
     FUTURE: the planned reminders feature (exact repeating reminders, like Google Keep) -
     "which device shows notifications" is genuinely device-scoped and will face the
     same decision. Decide the storage before implementing, not after.
 
 ---------------------------------------------------------------------------------------------------
 
-Found July 6, 2026 while mapping habit completion paths (review prompt bug hunt):
+Found July 2026 while mapping habit completion paths:
 
     1. Redundant double UncheckAllItems: HabitService.MarkAsDone's add-new branch calls
        AddTimeDone, and BOTH methods run the UncheckAllItemsOnHabitDone block, so items
@@ -335,7 +104,7 @@ Found July 6, 2026 while mapping habit completion paths (review prompt bug hunt)
        which is not an obvious "done" affordance for new users. This same hiding is what
        masked the review prompt bug. Options if ever revisited: always show the check
        button, or make the today cell visually inviting as the primary action.
-       
+
 ---------------------------------------------------------------------------------------------------
 
 find out why `padding-left: 12px !important;` is needed on iOS - why `padding-left: env(safe-area-inset-left) !important;` doesn't work

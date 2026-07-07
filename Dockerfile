@@ -3,7 +3,7 @@
 # and cross-compiles for the target architecture ($TARGETARCH: amd64/arm64) - no emulation
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG TARGETARCH
-LABEL org.opencontainers.image.source https://github.com/Jinjinov/OpenHabitTracker
+LABEL org.opencontainers.image.source=https://github.com/Jinjinov/OpenHabitTracker
 
 WORKDIR /src
 
