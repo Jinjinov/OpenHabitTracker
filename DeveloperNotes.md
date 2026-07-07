@@ -496,3 +496,33 @@ default in maui templates." — i.e. this is a template-generation-time default,
 default, so it never silently affects this project.
 
 ---------------------------------------------------------------------------------------------------
+
+Line endings - the repo is LF everywhere:
+
+The git blobs were always LF; the CRLF working trees on Windows came from Git for Windows'
+system-level core.autocrlf=true, an installer default nobody chose.
+The fix has three parts:
+- .gitattributes with `* text=auto eol=lf` forces LF checkout on all machines and overrides
+  autocrlf (binaries are auto-detected and untouched).
+- .editorconfig already had end_of_line = lf, so editors write LF for new lines -
+  before the fix, git and the editors fought each other (that is where mixed-ending files came from).
+- `git config --global core.autocrlf false` stops the conversion in other repos on the machine
+  (global config beats system config, no admin needed).
+
+Why LF matters: bash scripts genuinely fail with CRLF -
+the shebang becomes `#!/bin/bash<CR>` ("bad interpreter") and every line's trailing CR
+produces "command not found" errors.
+Windows tooling has handled LF for years: VS 2022, VS Code, even Notepad since 2018.
+PowerShell .ps1 files are fine with LF
+(only Authenticode-signed scripts care about exact bytes; this repo does not sign).
+Visual Studio opens an LF .sln without complaint.
+
+Exception to know about: .bat and .cmd files DO want CRLF -
+cmd.exe can skip goto labels and misparse multi-line commands in LF-only batch files.
+This repo has none; if one is ever added, give it a `*.bat text eol=crlf` line in .gitattributes.
+
+Recipe to refresh a working tree after changing .gitattributes (clean tree required):
+`git rm --cached -r . && git reset --hard` -
+only line endings change when the blobs are already LF.
+
+---------------------------------------------------------------------------------------------------
