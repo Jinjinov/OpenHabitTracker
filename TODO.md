@@ -10,16 +10,7 @@ Infrastructure.md (machines/hosting/signing), and the sections below in this fil
 
 HANGING (started, not 100% done):
 
-    1. Popularity E - SEO pages: committed (5 comparison pages, sitemap.xml, robots.txt x3,
-       Compare section with per-link analytics) but not live.
-       Remaining (USER): run `Automation\deploy.ps1 web -Commit` (doubles as the deploy
-       script's first real test - web is the safest target and success is externally
-       verifiable), verify https://openhabittracker.net, then set canonical_url on the
-       dev.to comparison article to https://openhabittracker.net/habit-tracker-comparison.html
-       (without it Google treats the two copies as duplicates and ranks dev.to).
-       Highest-leverage item on this list, takes minutes.
-
-    2. Popularity D - localized store listings: all texts committed
+    1. Popularity D - localized store listings: all texts committed
        (20 Play + 19 Apple locales + localized metainfo.xml), all three store tooling
        setups verified.
        Remaining (USER says go, then upload to all three stores together):
@@ -29,18 +20,18 @@ HANGING (started, not 100% done):
        Flathub needs nothing (the localized metainfo.xml ships with the next Flatpak release);
        IzzyOnDroid reads the committed fastlane folder for free once listed.
 
-    3. Automate 3 - GitHub release (deferred to 1.2.3; no 1.2.2 backfill).
+    2. Automate 3 - GitHub release (deferred to 1.2.3; no 1.2.2 backfill).
        Remaining (USER, at the 1.2.3 release):
        `Automation\github-release.ps1 1.2.3 <path-to-1.2.3-apk> -Commit` -
        creates the GitHub release IzzyOnDroid needs; unblocks item 4.
 
-    4. Popularity C - IzzyOnDroid inclusion request: draft ready at
+    3. Popularity C - IzzyOnDroid inclusion request: draft ready at
        drafts/izzyondroid-app-request.md, all fields prefilled.
        Remaining (USER, after item 3): review the AI-disclosure framing in the draft header,
        read the inclusion policy in full, then file at
        codeberg.org/IzzyOnDroid/repodata/issues/new with title "[AppRequest] OpenHabitTracker".
 
-    5. Popularity B - self-hosting store templates: all artifacts ready.
+    4. Popularity B - self-hosting store templates: all artifacts ready.
        Unraid files are committed to the main repo (ca_profile.xml + templates/openhabittracker.xml);
        everything else is staged in gitignored drafts/store-templates/<store>/ with a
        SUBMIT-HOWTO.md per store; PikaPods email at drafts/pikapods-pitch.md.
@@ -51,6 +42,11 @@ HANGING (started, not 100% done):
        execution order in Popularity.md B.
 
 DONE (recent, for context):
+
+    Popularity E - SEO pages: live since July 7, 2026 - deployed with deploy.ps1's first real
+    `web -Commit` run (script verified in production), screenshot sections redesigned the same
+    day (Desktop: one full-width shot; Phone: three cards; never mix orientations in one row),
+    canonical_url set on the dev.to comparison article.
 
     Popularity A - in-app review prompt + "Rate this app" button: implemented and verified
     on all four platforms (design, gotchas and verification results in Popularity.md A).
