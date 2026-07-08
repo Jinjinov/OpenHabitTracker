@@ -26,7 +26,7 @@ run on macOS:
 
 dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-maccatalyst -p:MtouchLink=SdkOnly -p:CreatePackage=true -p:EnableCodeSigning=true -p:EnablePackageSigning=true -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.macos" -p:CodesignEntitlements="Platforms\MacCatalyst\Entitlements.plist" -p:PackageSigningKey="3rd Party Mac Developer Installer: Urban Dzindzinovic (53V66WG4KU)"
 
-OpenHabitTracker/OpenHabitTracker.Blazor.Maui/bin/Release/net9.0-maccatalyst/publish/OpenHT-1.1.5.pkg
+OpenHabitTracker/OpenHabitTracker.Blazor.Maui/bin/Release/net9.0-maccatalyst/publish/OpenHT-1.9.9.pkg
 
 ---------------------------------------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
             
             snapcraft clean openhabittracker
 
-        sudo snap install openhabittracker_1.1.7_amd64.snap --dangerous --devmode
+        sudo snap install openhabittracker_1.9.9_amd64.snap --dangerous --devmode
 
         snap list
 
@@ -86,7 +86,7 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
         snapcraft login
 
-        snapcraft upload --release=stable openhabittracker_1.1.7_amd64.snap
+        snapcraft upload --release=stable openhabittracker_1.9.9_amd64.snap
 
         snapcraft status openhabittracker
 
@@ -134,9 +134,9 @@ Flatpak: Preinstalled on Fedora, available for other distros but not preinstalle
         sudo apt update
         sudo apt install flatpak-builder
 
-git rev-parse 1.2.1
+git rev-parse 1.9.9
 
-git ls-remote https://github.com/Jinjinov/OpenHabitTracker.git refs/tags/1.2.1
+git ls-remote https://github.com/Jinjinov/OpenHabitTracker.git refs/tags/1.9.9
 
     flatpak-builder build-dir --user --install-deps-from=flathub --download-only net.openhabittracker.OpenHabitTracker.yaml --force-clean
 
@@ -244,8 +244,8 @@ Docker Hub:
 
     docker login
 
-    docker tag openhabittracker jinjinov/openhabittracker:1.2.1
-    docker push jinjinov/openhabittracker:1.2.1
+    docker tag openhabittracker jinjinov/openhabittracker:1.9.9
+    docker push jinjinov/openhabittracker:1.9.9
 
     docker tag openhabittracker jinjinov/openhabittracker:latest
     docker push jinjinov/openhabittracker:latest
@@ -260,8 +260,8 @@ GitHub Container Registry:
 
     echo <GitHubToken> | docker login ghcr.io -u Jinjinov --password-stdin
 
-    docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:1.2.1
-    docker push ghcr.io/jinjinov/openhabittracker:1.2.1
+    docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:1.9.9
+    docker push ghcr.io/jinjinov/openhabittracker:1.9.9
 
     docker tag openhabittracker ghcr.io/jinjinov/openhabittracker:latest
     docker push ghcr.io/jinjinov/openhabittracker:latest

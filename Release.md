@@ -39,12 +39,12 @@ OpenHabitTracker.Blazor.Maui
         - Web UI
             - "Draft a new release"
             - "Choose a tag"
-            - Title: "Version 1.2.2" Notes: paste the matching entry from VersionHistory.md
+            - Title: "Version 1.9.9" Notes: paste the matching entry from VersionHistory.md
             - Drag and drop the APK into the assets area
             - "Publish release"
         - CLI:
-            gh release create 1.2.2 --title "Version 1.2.2" --notes "<paste from VersionHistory.md>"
-            gh release upload 1.2.2 <path-to-apk>
+            gh release create 1.9.9 --title "Version 1.9.9" --notes "<paste from VersionHistory.md>"
+            gh release upload 1.9.9 <path-to-apk>
 - publish and upload to Apple App Store
     dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-ios -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64 -p:CodesignKey="Apple Distribution: Urban Dzindzinovic (53V66WG4KU)" -p:CodesignProvision="openhabittracker.ios"
 - publish and upload to Apple Mac App Store + pkg FTP upload to server (pkg FTP upload: use `deploy-pkg.sh`)
