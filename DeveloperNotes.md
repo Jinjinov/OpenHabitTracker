@@ -526,3 +526,49 @@ Recipe to refresh a working tree after changing .gitattributes (clean tree requi
 only line endings change when the blobs are already LF.
 
 ---------------------------------------------------------------------------------------------------
+
+Guided tour (GTour) crash in Blazor Server / Docker only - diagnosed July 8, 2026, NOT yet fixed:
+
+Clicking a Help button (any of the 13 `StartTour` methods: Main.razor and 12 pages/components,
+each `await GTourService.StartTour(tourId)`) throws in the Docker (Blazor Server) build:
+`InvalidOperationException: The current thread is not associated with the Dispatcher.`
+at `ComponentBase.StateHasChanged` -> `GTourComponent.set_IsActive` -> `CancelTour` -> ... ->
+`Main.StartTour` <- `CallStateHasChangedOnAsyncCompletion`.
+
+Root cause: the GTour NuGet library calls `StateHasChanged()` directly (no `InvokeAsync`).
+Blazor Server asserts `StateHasChanged` runs on the render Dispatcher and throws off it.
+WASM has no dispatcher enforcement, so the PWA works. It is a timing race: the tour start
+arrives as an async continuation, and whether it resumes on the Dispatcher depends on whether
+the awaited work completed synchronously - local VS Debug (fast, in-process) stays on the
+Dispatcher, Docker (Release, real SignalR/JS-interop latency) resumes on a thread-pool thread.
+Same binary, different scheduling - "works in VS, fails in the container".
+
+Fix (not applied): wrap the call in all 13 `StartTour` methods -
+`await InvokeAsync(() => GTourService.StartTour(tourId));` - which marshals GTour's StateHasChanged
+onto the Dispatcher. No-op cost on WASM/MAUI. Fixing only Main.razor moves the crash to the next
+page's Help button, so all 13 need it. Deferred to its own session.
+
+---------------------------------------------------------------------------------------------------
+
+Release-note and store-listing text conventions (settled July 8, 2026):
+
+Every release-note / listing bullet is sentence case (capitalize the first word) - the English
+store convention (Microsoft, Google and AP style guides all capitalize list items, even fragments).
+Mid-sentence proper nouns keep their case ("macOS, iOS"). The bullet CHARACTER differs by medium
+but the case does not:
+
+- VersionHistory.md: `- ` (standard Markdown), capitalized. This is the single source.
+- OpenHabitTracker.Web/index.html: `<li>` (renders the browser's disc `*`), capitalized.
+- fastlane store descriptions + the Play changelog (changelogs/*.txt): literal `*` bullet, capitalized.
+- metainfo.xml: AppStream markup, `<p>` paragraphs (no bullet character), capitalized.
+
+bump-version.ps1 copies the VersionHistory.md items VERBATIM into index.html, metainfo.xml and the
+Play changelog (no case transform), so keep VersionHistory.md capitalized and the rest follows.
+
+AppStream metainfo.xml rules (freedesktop spec + Flathub quality guidelines): `<description>`
+(app and per-`<release>`) allows only `<p>`, `<ul>`, `<ol>`, `<li>`, and inline `<em>`/`<code>` -
+never a literal bullet character; lists are `<ul><li>`, the software center draws the bullet.
+Flathub prefers a few `<p>` paragraphs or a short list for release notes over long bullet lists,
+~2-3 sentences. All 12 release entries use `<p>` (1.1.0 was the lone `<ul><li>` outlier, converted).
+
+---------------------------------------------------------------------------------------------------

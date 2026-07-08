@@ -11,12 +11,14 @@ Infrastructure.md (machines/hosting/signing), and the sections below in this fil
 HANGING (started, not 100% done):
 
     1. Popularity D - localized store listings: all texts committed
-       (20 Play + 19 Apple locales + localized metainfo.xml), all three store tooling
-       setups verified.
-       Remaining (USER says go, then upload to all three stores together):
-       - Play: the listings-only fastlane supply run (command in Automate.md section 4)
-       - Apple: fastlane deliver for ios + osx (Automate.md section 5)
-       - Microsoft: msstore-listings.ps1 -Commit + manual submission publish (Automate.md section 6)
+       (20 Play + 19 Apple locales + localized metainfo.xml).
+       Done with the 1.2.3 release (July 8, 2026):
+       - Play: 20 locales uploaded via `play-listings.ps1 -Commit`, staged under Managed publishing.
+       - Microsoft: 20 locales imported via `build-msstore-listing-csv.py` + Partner Center CSV import
+         (the msstore-listings.ps1 -Commit CLI path failed against the web-UI draft - Automate.md section 6).
+       Remaining:
+       - Apple: `fastlane deliver` for ios + osx into the 1.2.3 version (Automate.md section 5).
+       - Publish clicks: Play "roll out to production", Microsoft `submission publish` (both staged/imported, not live).
        Flathub needs nothing (the localized metainfo.xml ships with the next Flatpak release);
        IzzyOnDroid reads the committed fastlane folder for free once listed.
 
