@@ -1,0 +1,4 @@
+• Aggiunta l'impostazione «Max giorni nel calendario piccolo»
+• Aggiunta la richiesta di valutazione dell'app
+• Corretto il traboccamento dei titoli lunghi in Note, Compiti e Abitudini
+• Corretti problemi di focus su macOS e iOS

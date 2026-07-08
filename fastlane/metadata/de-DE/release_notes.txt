@@ -1,0 +1,4 @@
+• Einstellung „Max. Tage im kleinen Kalender" hinzugefügt
+• Bewertungsaufforderung in der App hinzugefügt
+• Überlaufen langer Titel in Notizen, Aufgaben und Gewohnheiten behoben
+• Fokusprobleme unter macOS und iOS behoben

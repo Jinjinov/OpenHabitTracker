@@ -1,0 +1,4 @@
+• Adicionada a definição «Máx. de dias no calendário pequeno»
+• Adicionado pedido de avaliação da aplicação
+• Corrigido o transbordo de títulos longos em Notas, Tarefas e Hábitos
+• Corrigidos problemas de foco no macOS e iOS

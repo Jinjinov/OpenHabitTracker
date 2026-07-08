@@ -1,0 +1,4 @@
+• Lagt til innstillingen «Maks antall dager i liten kalender»
+• Lagt til forespørsel om å vurdere appen
+• Fikset lange titler som flyter over i Notater, Oppgaver og Vaner
+• Fikset fokusproblemer i macOS og iOS

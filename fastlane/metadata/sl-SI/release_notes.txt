@@ -1,0 +1,4 @@
+• Dodana nastavitev „Največ dni v majhnem koledarju"
+• Dodan poziv za oceno aplikacije
+• Odpravljeno prelivanje dolgih naslovov v Zapiskih, Nalogah in Navadah
+• Odpravljene težave s fokusom v macOS in iOS
