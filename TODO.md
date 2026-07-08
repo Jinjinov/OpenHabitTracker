@@ -23,11 +23,11 @@ HANGING (started, not 100% done):
     2. Automate 3 - GitHub release (deferred to 1.2.3; no 1.2.2 backfill).
        Remaining (USER, at the 1.2.3 release):
        `Automation\github-release.ps1 1.2.3 <path-to-1.2.3-apk> -Commit` -
-       creates the GitHub release IzzyOnDroid needs; unblocks item 4.
+       creates the GitHub release IzzyOnDroid needs; unblocks item 3.
 
     3. Popularity C - IzzyOnDroid inclusion request: draft ready at
        drafts/izzyondroid-app-request.md, all fields prefilled.
-       Remaining (USER, after item 3): review the AI-disclosure framing in the draft header,
+       Remaining (USER, after item 2): review the AI-disclosure framing in the draft header,
        read the inclusion policy in full, then file at
        codeberg.org/IzzyOnDroid/repodata/issues/new with title "[AppRequest] OpenHabitTracker".
 
@@ -64,7 +64,7 @@ NOT STARTED (the queue):
     - Store-console review clicks after the together-upload.
 
     The 1.2.3 release unlocks in one cycle: Umbrel digest pin + Umbrel PR,
-    GitHub release (item 3), IzzyOnDroid filing (item 4), Flathub localized metainfo,
+    GitHub release (item 2), IzzyOnDroid filing (item 3), Flathub localized metainfo,
     and the first chance to see the real Play dialog in the wild.
 
 ---------------------------------------------------------------------------------------------------
