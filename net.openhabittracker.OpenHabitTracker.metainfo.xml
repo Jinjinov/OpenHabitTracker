@@ -371,6 +371,16 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.2.3" date="2026-07-07">
+      <description>
+        <p>Added "Max days in small calendar" setting</p>
+        <p>Added in-app review prompt</p>
+        <p>Fixed long titles overflowing in Notes, Tasks, Habits</p>
+        <p>Fixed focus issues in macOS, iOS</p>
+        <p>Fixed NVIDIA issues in Flatpak</p>
+        <p>Added icon in Snap</p>
+      </description>
+    </release>
     <release version="1.2.2" date="2026-05-25">
       <description>
         <p>Added current and best streak in habits</p>
