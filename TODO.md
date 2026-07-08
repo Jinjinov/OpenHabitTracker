@@ -16,9 +16,14 @@ HANGING (started, not 100% done):
        - Play: 20 locales uploaded via `play-listings.ps1 -Commit`, staged under Managed publishing.
        - Microsoft: 20 locales imported via `build-msstore-listing-csv.py` + Partner Center CSV import
          (the msstore-listings.ps1 -Commit CLI path failed against the web-UI draft - Automate.md section 6).
+       - Apple: 19 locales uploaded via `fastlane deliver` for ios + osx into the 1.2.3 version;
+         release_notes.txt + support_url.txt added for all 19 (ASC requires both per locale, no
+         fallback - Automate.md section 5).
        Remaining:
-       - Apple: `fastlane deliver` for ios + osx into the 1.2.3 version (Automate.md section 5).
+       - Apple: Transporter ipa/pkg upload into 1.2.3, then Submit for Review.
        - Publish clicks: Play "roll out to production", Microsoft `submission publish` (both staged/imported, not live).
+       (translate + strip Snap/Flatpak) -> android changelogs -> scripts derive Apple + Microsoft
+       (Popularity.md section D; Automate.md sections 4, 5, 6).
        Flathub needs nothing (the localized metainfo.xml ships with the next Flatpak release);
        IzzyOnDroid reads the committed fastlane folder for free once listed.
 
