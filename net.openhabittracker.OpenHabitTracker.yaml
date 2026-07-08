@@ -31,7 +31,7 @@ modules:
       - type: git
         url: https://github.com/Jinjinov/OpenHabitTracker.git
         tag: 1.2.3
-        commit: dc9937996f68d9bee832d9ea33d001a84585351e
+        commit: abe41b3e0a8a11719ec71d2248f8aa2ad40c2428
       - ./nuget-sources.json
     build-options:
       arch:
