@@ -461,12 +461,9 @@
     </release>
     <release version="1.1.0" date="2025-01-13">
       <description>
-        <p>Improved UI:</p>
-        <ul>
-          <li>display a welcome note instead of examples when user opens the app for the first time</li>
-          <li>added a lot of new icons</li>
-          <li>completely new Help screen</li>
-        </ul>
+        <p>Display a welcome note instead of examples when user opens the app for the first time</p>
+        <p>Added a lot of new icons</p>
+        <p>Completely new Help screen</p>
       </description>
     </release>
     <release version="1.0.0" date="2024-12-31">
