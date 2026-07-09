@@ -1,4 +1,4 @@
 • Pridané nastavenie „Max. počet dní v malom kalendári"
 • Pridaná výzva na ohodnotenie aplikácie
 • Opravené pretekanie dlhých názvov v Poznámkach, Úlohách a Návykoch
-• Opravené problémy so zameraním v systémoch macOS a iOS
+• Opravené problémy so zameraním

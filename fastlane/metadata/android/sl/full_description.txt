@@ -1,4 +1,4 @@
-Piši zapiske v Markdownu, načrtuj naloge in sledi navadam - z izvornimi aplikacijami za Windows, Linux, Android, iOS in macOS ter spletno aplikacijo. Brezplačno, brez oglasov in odprtokodno. Brez računa: vsi podatki ostanejo na tvoji napravi.
+Piši zapiske, načrtuj naloge in sledi navadam - z izvornimi aplikacijami na vseh tvojih napravah ter spletno aplikacijo. Brezplačno, brez oglasov in odprtokodno. Brez računa: vsi podatki ostanejo na tvoji napravi.
 
 NAVADE BREZ PRITISKA NIZOV
 
@@ -17,7 +17,7 @@ TVOJI PODATKI SO TVOJI
 • Vsi podatki so shranjeni lokalno na tvoji napravi
 • Izvoz in uvoz: Markdown, JSON, YAML, TSV
 • Uvozi zapiske iz Google Keep
-• Neobvezna sinhronizacija: gosti brezplačno sliko Docker na svojem strežniku in vsaka aplikacija, namizna ali mobilna, se lahko prijavi in sinhronizira
+• Neobvezna sinhronizacija: gosti sliko Docker na svojem strežniku in vsaka aplikacija, namizna ali mobilna, se lahko prijavi in sinhronizira
 
 PRILAGOJENO TEBI
 

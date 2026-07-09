@@ -1,4 +1,4 @@
-Tag Markdown-noter, planlæg opgaver og følg vaner - med native apps til Windows, Linux, Android, iOS og macOS samt en webapp. Gratis, reklamefri og open source. Ingen konto: alle dine data bliver på din enhed.
+Tag noter, planlæg opgaver og følg vaner - med native apps på alle dine enheder samt en webapp. Gratis, reklamefri og open source. Ingen konto: alle dine data bliver på din enhed.
 
 VANER UDEN STREAK-PRES
 
@@ -17,7 +17,7 @@ DINE DATA ER DINE
 • Alle data gemmes lokalt på din enhed
 • Eksport og import: Markdown, JSON, YAML, TSV
 • Importér dine noter fra Google Keep
-• Valgfri synkronisering: host det gratis Docker-image på din egen server, og alle apps, desktop eller mobil, kan logge ind og synkronisere
+• Valgfri synkronisering: host Docker-imaget på din egen server, og alle apps, desktop eller mobil, kan logge ind og synkronisere
 
 TILPASSET DIG
 

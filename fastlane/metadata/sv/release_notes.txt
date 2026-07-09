@@ -1,4 +1,4 @@
 • Lade till inställningen "Max antal dagar i liten kalender"
 • Lade till en begäran om att betygsätta appen
 • Åtgärdade långa titlar som svämmade över i Anteckningar, Uppgifter och Vanor
-• Åtgärdade fokusproblem i macOS och iOS
+• Åtgärdade fokusproblem

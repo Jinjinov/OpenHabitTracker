@@ -1,4 +1,4 @@
 • Dodana postavka „Maks. broj dana u malom kalendaru"
 • Dodan zahtjev za ocjenu aplikacije
 • Ispravljeno prelijevanje dugih naslova u Bilješkama, Zadacima i Navikama
-• Ispravljeni problemi s fokusom na macOS-u i iOS-u
+• Ispravljeni problemi s fokusom

@@ -1,4 +1,4 @@
 • Dodano ustawienie „Maks. liczba dni w małym kalendarzu"
 • Dodano prośbę o ocenę aplikacji
 • Naprawiono przepełnianie długich tytułów w Notatkach, Zadaniach i Nawykach
-• Naprawiono problemy z fokusem w macOS i iOS
+• Naprawiono problemy z fokusem

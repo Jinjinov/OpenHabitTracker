@@ -1,4 +1,4 @@
 • Añadido el ajuste «Máx. días en calendario pequeño»
 • Añadida solicitud de valoración de la app
 • Corregido el desbordamiento de títulos largos en Notas, Tareas y Hábitos
-• Corregidos problemas de foco en macOS e iOS
+• Corregidos problemas de foco

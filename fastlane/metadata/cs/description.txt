@@ -1,4 +1,4 @@
-Pište poznámky v Markdownu, plánujte úkoly a sledujte návyky - s nativními aplikacemi pro Windows, Linux, Android, iOS a macOS a webovou aplikací. Zdarma, bez reklam a open source. Bez účtu: všechna data zůstávají ve vašem zařízení.
+Pište poznámky, plánujte úkoly a sledujte návyky - s nativními aplikacemi na všech vašich zařízeních a webovou aplikací. Zdarma, bez reklam a open source. Bez účtu: všechna data zůstávají ve vašem zařízení.
 
 NÁVYKY BEZ TLAKU SÉRIÍ
 
@@ -17,7 +17,7 @@ VAŠE DATA JSOU VAŠE
 • Všechna data se ukládají lokálně ve vašem zařízení
 • Export a import: Markdown, JSON, YAML, TSV
 • Import poznámek z Google Keep
-• Volitelná synchronizace: provozujte bezplatný Docker image na vlastním serveru a každá aplikace, desktopová i mobilní, se může přihlásit a synchronizovat
+• Volitelná synchronizace: provozujte Docker image na vlastním serveru a každá aplikace, desktopová i mobilní, se může přihlásit a synchronizovat
 
 PŘIZPŮSOBÍ SE VÁM
 

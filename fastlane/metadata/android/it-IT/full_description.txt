@@ -1,4 +1,4 @@
-Prendi note in Markdown, pianifica i compiti e monitora le abitudini - con app native per Windows, Linux, Android, iOS e macOS, più un'app web. Gratis, senza pubblicità e open source. Nessun account: tutti i dati restano sul tuo dispositivo.
+Prendi note, pianifica i compiti e monitora le abitudini - con app native su tutti i tuoi dispositivi, più un'app web. Gratis, senza pubblicità e open source. Nessun account: tutti i dati restano sul tuo dispositivo.
 
 ABITUDINI SENZA L'ANSIA DELLE STREAK
 
@@ -17,7 +17,7 @@ I TUOI DATI SONO TUOI
 • Tutti i dati sono salvati localmente sul tuo dispositivo
 • Esporta e importa: Markdown, JSON, YAML, TSV
 • Importa le tue note da Google Keep
-• Sincronizzazione opzionale: ospita l'immagine Docker gratuita sul tuo server e ogni app, desktop o mobile, può accedere e sincronizzarsi
+• Sincronizzazione opzionale: ospita l'immagine Docker sul tuo server e ogni app, desktop o mobile, può accedere e sincronizzarsi
 
 SU MISURA PER TE
 

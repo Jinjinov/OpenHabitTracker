@@ -1,4 +1,4 @@
-Prenez des notes Markdown, planifiez vos tâches et suivez vos habitudes - avec des applications natives pour Windows, Linux, Android, iOS et macOS, plus une application web. Gratuit, sans publicité et open source. Aucun compte requis : toutes vos données restent sur votre appareil.
+Prenez des notes, planifiez vos tâches et suivez vos habitudes - avec des applications natives sur tous vos appareils, plus une application web. Gratuit, sans publicité et open source. Aucun compte requis : toutes vos données restent sur votre appareil.
 
 DES HABITUDES SANS LA PRESSION DES SÉRIES
 
@@ -17,7 +17,7 @@ VOS DONNÉES VOUS APPARTIENNENT
 • Toutes les données sont stockées localement sur votre appareil
 • Export et import : Markdown, JSON, YAML, TSV
 • Importez vos notes depuis Google Keep
-• Synchronisation optionnelle : hébergez l'image Docker gratuite sur votre propre serveur et chaque application, bureau ou mobile, peut se connecter et se synchroniser
+• Synchronisation optionnelle : hébergez l'image Docker sur votre propre serveur et chaque application, bureau ou mobile, peut se connecter et se synchroniser
 
 À VOTRE IMAGE
 

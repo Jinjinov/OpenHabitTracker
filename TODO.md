@@ -10,47 +10,52 @@ Infrastructure.md (machines/hosting/signing), and the sections below in this fil
 
 ---------------------------------------------------------------------------------------------------
 
-APPLE METADATA REJECTION - 1.2.3 (Guideline 2.3.10 / 2.3) - found July 9, 2026:
+APPLE METADATA REJECTION - 1.2.3 (Guideline 2.3.10 / 2.3) - fixed and resubmitted July 9, 2026:
 
-App Review rejected 1.2.3 for macOS and iOS - the description names other platforms.
-Submission ID 238aa48a-dbb5-4341-96b8-518bd3aea756.
-- macOS listing (2.3.10): flagged "Android".
-- iOS listing (2.3): flagged "iOS".
-Cause: the FIRST sentence of fastlane/metadata/android/<locale>/full_description.txt -
-"... with native apps for Windows, Linux, Android, iOS and macOS, plus a web app." -
-is copied verbatim into the Apple description.txt by sync-listings.py.
-Apple forbids naming other (or your own) platforms in the App Store description.
+App Review rejected 1.2.3 for macOS and iOS because the listing named platforms.
+Submission IDs: macOS 238aa48a-dbb5-4341-96b8-518bd3aea756, iOS c4ab64e9-7aa3-40b5-b88e-70c5c05ca13d.
+- Both listings, 2.3.10 (third-party platforms): flagged "Android", "remove Android references".
+- macOS listing also, 2.3 (irrelevant metadata): flagged "iOS".
 
-Unblock 1.2.3 now (recommended, do in ASC): reply to App Review that 1.2.3 is a bug-fix update
-(long titles, focus, NVIDIA, review prompt) and ask them to approve as-is - the email offers exactly
-this ("eligible to be resolved on your next update ... you do not need to resubmit").
-Then land the fix below at 1.2.4. Alternative: fix now, fastlane deliver, resubmit 1.2.3.
+KEY LEARNING: Apple flags any platform name that is not the listing's own platform, INCLUDING Apple's
+own other platforms. "iOS" on the macOS listing was rejected under 2.3, not only the third-party names
+under 2.3.10. So a macOS listing may not name iOS/Android/Windows/Linux, and an iOS listing may not name
+macOS/Android/Windows/Linux. Play and Microsoft do not enforce this.
+Scan EVERY Apple-bound field, not just the description: the July 9 scan found platform names in
+description.txt line 1 AND release_notes.txt line 4 ("Fixed focus issues in macOS, iOS");
+keywords, promotional_text, subtitle, name were clean.
+NOT platforms, NOT flagged, kept: "Google Keep" and "Docker" are third-party product names describing
+real interop (import, self-host) - Apple allows these; watch for a future flag.
 
-Decision: OPTION A - one shared text, no platform names. This changes the shared source, so Play and
-Microsoft lose the explicit platform names too (accepted - the cross-platform message stays via
-"all your devices"). The named-platform list is NOT kept anywhere.
+Cause: the shared fastlane/metadata/android/<locale>/full_description.txt first sentence
+("... native apps for Windows, Linux, Android, iOS and macOS ...") is copied verbatim into the Apple
+description.txt by sync-listings.py; the release_notes focus line named macOS and iOS too.
 
-The fix (at 1.2.4, or now if resubmitting 1.2.3):
+Fix applied (Option A - one shared text, no platform names anywhere; Play and Microsoft lose the names
+too, the cross-platform message stays via "all your devices"; the named-platform list is not kept):
+- full_description line 1, all 20 locales: dropped the platform list and "Markdown"; new opening
+  "Take notes, plan tasks, and track habits - native apps on all your devices, plus a web app."
+  (restores the motto; "Markdown" survives in bullet 9 and the export bullet).
+- full_description Docker line, all 20 locales: dropped "free" (redundant with open-source + own server).
+- release_notes line 4, all 19 Apple locales: "Fixed focus issues" (was "... in macOS, iOS").
+- Apple description.txt mirrored directly from the edited full_description; release_notes edited in place.
+- fastlane deliver ios + osx uploaded all 19 into the rejected (editable) 1.2.3 version, then resubmitted.
 
-1. Rewrite the FIRST sentence of fastlane/metadata/android/<locale>/full_description.txt in ALL 20
-   locales - drop the platform-name list, keep the cross-platform pitch without naming any platform.
-   English draft (refine, then translate to the other 19; keep full_description 500-4000 chars):
-     "Take Markdown notes, plan tasks, and track habits - native apps on all your devices, plus a
-     web app and optional self-hosted sync. Free, ad-free, and open source. No account needed:
-     all your data stays on your device."
-   Popularity.md D). Do NOT write Windows / Linux / Android / iOS / macOS anywhere in the text.
-   "Docker" (in the self-host bullet) was NOT flagged - keep it, but watch for a future flag.
-2. Run: python3 Automation/sync-listings.py
-   Re-derives the Apple description.txt and the metainfo.xml intro (Flathub) and validates every
-   char limit - must print OK before continuing.
-3. Re-upload per store (bundle into 1.2.4 for all four, for consistency):
-   - Apple [Mac mini]: fastlane deliver (Automate.md section 5 command), then Submit for Review.
-   - Play [Windows]: play-listings.ps1 -Commit.
-   - Microsoft [Windows]: build-msstore-listing-csv.py + Partner Center Import (Automate.md section 6).
-   - Flathub: ships with the next Flatpak (metainfo already updated by step 2).
+A metadata rejection leaves the version EDITABLE ("Rejected" state): edit the metadata and resubmit the
+SAME binary - no new build, no new upload (Automate.md section 5).
 
-Cross-machine: steps 1-2 are repo edits (any machine); Apple deliver + resubmit on the Mac mini;
-Play/MS re-upload on Windows. Push from Windows, pull on the Mac mini, continue Apple there.
+Why NOT sync-listings.py for this hotfix: it derives en-US release_notes from
+android/en-US/changelogs/23.txt (the raw 6-line changelog, with platform names + Flatpak/Snap), which
+would re-introduce the problem. Direct edit + mirror was used instead.
+
+Remaining:
+- metainfo.xml still names platforms in its intro (Flathub only, no platform restriction) - fix at 1.2.4
+  when sync-listings.py regenerates it (skipped here to avoid the clobber above).
+- Play + Microsoft listings still carry the old platform-named description (staged, not published):
+  refresh from the fixed source before the publish clicks so the named version never goes live.
+- zh-CN full_description was padded to 506 chars after the platform list was removed (Chinese is dense;
+  sync-listings.py enforces a self-imposed 500 floor, not a store rule).
+- Commit the 58 changed fastlane files with the 1.2.3 metadata fix.
 
 ---------------------------------------------------------------------------------------------------
 
@@ -66,8 +71,9 @@ HANGING (started, not 100% done):
          release_notes.txt + support_url.txt added for all 19 (ASC requires both per locale, no
          fallback - Automate.md section 5).
        Remaining:
-       - Apple: 1.2.3 binary was uploaded and submitted, then REJECTED on metadata (2.3.10 -
-         description names platforms). See the Apple metadata rejection block near the top of this file.
+       - Apple: 1.2.3 was REJECTED on metadata (platform names in description + release notes),
+         then FIXED and RESUBMITTED July 9 (metadata rejection = editable version, same binary);
+         awaiting re-review. See the Apple metadata rejection block near the top of this file.
        - Publish clicks: Play "roll out to production", Microsoft `submission publish` (both staged/imported, not live).
        (translate + strip Snap/Flatpak) -> android changelogs -> scripts derive Apple + Microsoft
        (Popularity.md section D; Automate.md sections 4, 5, 6).

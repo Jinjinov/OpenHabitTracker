@@ -1,4 +1,4 @@
-Maak Markdown-notities, plan taken en volg gewoontes - met native apps voor Windows, Linux, Android, iOS en macOS, plus een webapp. Gratis, reclamevrij en open source. Geen account nodig: al je gegevens blijven op je apparaat.
+Maak notities, plan taken en volg gewoontes - met native apps op al je apparaten, plus een webapp. Gratis, reclamevrij en open source. Geen account nodig: al je gegevens blijven op je apparaat.
 
 GEWOONTES ZONDER STREAK-STRESS
 
@@ -17,7 +17,7 @@ JOUW GEGEVENS BLIJVEN VAN JOU
 • Alle gegevens worden lokaal op je apparaat opgeslagen
 • Exporteren en importeren: Markdown, JSON, YAML, TSV
 • Importeer je notities uit Google Keep
-• Optionele synchronisatie: host de gratis Docker-image op je eigen server en elke app, desktop of mobiel, kan inloggen en synchroniseren
+• Optionele synchronisatie: host de Docker-image op je eigen server en elke app, desktop of mobiel, kan inloggen en synchroniseren
 
 HELEMAAL NAAR JOUW HAND
 

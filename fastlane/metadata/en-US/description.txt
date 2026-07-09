@@ -1,4 +1,4 @@
-Take Markdown notes, plan tasks, and track habits - with native apps for Windows, Linux, Android, iOS and macOS, plus a web app. Free, ad-free, and open source. No account needed: all your data stays on your device.
+Take notes, plan tasks, and track habits - native apps on all your devices, plus a web app. Free, ad-free, and open source. No account needed: all your data stays on your device.
 
 HABITS WITHOUT STREAK GUILT
 
@@ -17,7 +17,7 @@ YOUR DATA STAYS YOURS
 • All data is stored locally on your device
 • Export and import: Markdown, JSON, YAML, TSV
 • Import your notes from Google Keep
-• Optional sync: host the free Docker image on your own server and every app, desktop or mobile, can log in and sync
+• Optional sync: host the Docker image on your own server and every app, desktop or mobile, can log in and sync
 
 MADE TO FIT YOU
 

@@ -1,4 +1,4 @@
-Markdown-Notizen schreiben, Aufgaben planen und Gewohnheiten verfolgen - mit nativen Apps für Windows, Linux, Android, iOS und macOS sowie als Web-App. Kostenlos, werbefrei und Open Source. Kein Konto nötig: Alle Daten bleiben auf deinem Gerät.
+Notizen schreiben, Aufgaben planen und Gewohnheiten verfolgen - mit nativen Apps auf allen deinen Geräten sowie einer Web-App. Kostenlos, werbefrei und Open Source. Kein Konto nötig: Alle Daten bleiben auf deinem Gerät.
 
 GEWOHNHEITEN OHNE STREAK-DRUCK
 
@@ -17,7 +17,7 @@ DEINE DATEN GEHÖREN DIR
 • Alle Daten werden lokal auf deinem Gerät gespeichert
 • Export und Import: Markdown, JSON, YAML, TSV
 • Importiere deine Notizen aus Google Keep
-• Optionale Synchronisierung: Hoste das kostenlose Docker-Image auf deinem eigenen Server - jede App, ob Desktop oder Mobil, kann sich anmelden und synchronisieren
+• Optionale Synchronisierung: Hoste das Docker-Image auf deinem eigenen Server - jede App, ob Desktop oder Mobil, kann sich anmelden und synchronisieren
 
 PASST SICH DIR AN
 

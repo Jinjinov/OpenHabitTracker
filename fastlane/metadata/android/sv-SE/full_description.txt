@@ -1,4 +1,4 @@
-Skriv Markdown-anteckningar, planera uppgifter och följ vanor - med appar för Windows, Linux, Android, iOS och macOS samt en webbapp. Gratis, reklamfri och öppen källkod. Inget konto behövs: all din data stannar på din enhet.
+Skriv anteckningar, planera uppgifter och följ vanor - med appar på alla dina enheter samt en webbapp. Gratis, reklamfri och öppen källkod. Inget konto behövs: all din data stannar på din enhet.
 
 VANOR UTAN STREAK-PRESS
 
@@ -17,7 +17,7 @@ DIN DATA ÄR DIN
 • All data sparas lokalt på din enhet
 • Export och import: Markdown, JSON, YAML, TSV
 • Importera dina anteckningar från Google Keep
-• Valfri synkronisering: kör den gratis Docker-avbilden på din egen server så kan alla appar, dator eller mobil, logga in och synkronisera
+• Valfri synkronisering: kör Docker-avbilden på din egen server så kan alla appar, dator eller mobil, logga in och synkronisera
 
 ANPASSAD EFTER DIG
 

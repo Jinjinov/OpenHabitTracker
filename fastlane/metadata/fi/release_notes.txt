@@ -1,4 +1,4 @@
 • Lisätty asetus "Pienen kalenterin päivien enimmäismäärä"
 • Lisätty sovelluksen arviointipyyntö
 • Korjattu pitkien otsikoiden ylivuoto kohteissa Muistiinpanot, Tehtävät ja Tavat
-• Korjattu kohdistusongelmia macOS- ja iOS-järjestelmissä
+• Korjattu kohdistusongelmia

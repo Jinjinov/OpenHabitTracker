@@ -1,4 +1,4 @@
 • Ajout du paramètre « Max. de jours dans le petit calendrier »
 • Ajout d'une invitation à noter l'application
 • Correction du débordement des titres longs dans Notes, Tâches et Habitudes
-• Correction de problèmes de focus sur macOS et iOS
+• Correction de problèmes de focus

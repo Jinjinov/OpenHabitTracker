@@ -1,4 +1,4 @@
-Twórz notatki w Markdownie, planuj zadania i śledź nawyki - z natywnymi aplikacjami na Windows, Linux, Android, iOS i macOS oraz aplikacją webową. Za darmo, bez reklam i open source. Bez konta: wszystkie dane zostają na Twoim urządzeniu.
+Twórz notatki, planuj zadania i śledź nawyki - z natywnymi aplikacjami na wszystkich Twoich urządzeniach oraz aplikacją webową. Za darmo, bez reklam i open source. Bez konta: wszystkie dane zostają na Twoim urządzeniu.
 
 NAWYKI BEZ PRESJI SERII
 
@@ -17,7 +17,7 @@ TWOJE DANE SĄ TWOJE
 • Wszystkie dane są zapisywane lokalnie na Twoim urządzeniu
 • Eksport i import: Markdown, JSON, YAML, TSV
 • Importuj notatki z Google Keep
-• Opcjonalna synchronizacja: uruchom darmowy obraz Dockera na własnym serwerze, a każda aplikacja, desktopowa czy mobilna, może się zalogować i synchronizować
+• Opcjonalna synchronizacja: uruchom obraz Dockera na własnym serwerze, a każda aplikacja, desktopowa czy mobilna, może się zalogować i synchronizować
 
 DOPASOWANA DO CIEBIE
 

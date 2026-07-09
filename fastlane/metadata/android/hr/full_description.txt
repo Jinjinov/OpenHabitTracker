@@ -1,4 +1,4 @@
-Pišite Markdown bilješke, planirajte zadatke i pratite navike - s izvornim aplikacijama za Windows, Linux, Android, iOS i macOS te web-aplikacijom. Besplatno, bez oglasa i otvorenog koda. Bez računa: svi podaci ostaju na vašem uređaju.
+Pišite bilješke, planirajte zadatke i pratite navike - s izvornim aplikacijama na svim vašim uređajima te web-aplikacijom. Besplatno, bez oglasa i otvorenog koda. Bez računa: svi podaci ostaju na vašem uređaju.
 
 NAVIKE BEZ PRITISKA NIZOVA
 
@@ -17,7 +17,7 @@ VAŠI PODACI SU VAŠI
 • Svi podaci spremaju se lokalno na vašem uređaju
 • Izvoz i uvoz: Markdown, JSON, YAML, TSV
 • Uvezite bilješke iz Google Keepa
-• Neobavezna sinkronizacija: pokrenite besplatni Docker image na vlastitom poslužitelju i svaka aplikacija, stolna ili mobilna, može se prijaviti i sinkronizirati
+• Neobavezna sinkronizacija: pokrenite Docker image na vlastitom poslužitelju i svaka aplikacija, stolna ili mobilna, može se prijaviti i sinkronizirati
 
 PRILAGOĐENO VAMA
 

@@ -1,4 +1,4 @@
 • Instelling "Max. dagen in kleine kalender" toegevoegd
 • Verzoek om de app te beoordelen toegevoegd
 • Overlopen van lange titels in Notities, Taken en Gewoontes opgelost
-• Focusproblemen in macOS en iOS opgelost
+• Focusproblemen opgelost
