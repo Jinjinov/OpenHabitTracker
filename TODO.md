@@ -8,6 +8,52 @@ Details live in the task plans:
 Popularity.md appendix A-L (marketing), Automate.md sections 1-10 (release automation),
 Infrastructure.md (machines/hosting/signing), and the sections below in this file (code).
 
+---------------------------------------------------------------------------------------------------
+
+APPLE METADATA REJECTION - 1.2.3 (Guideline 2.3.10 / 2.3) - found July 9, 2026:
+
+App Review rejected 1.2.3 for macOS and iOS - the description names other platforms.
+Submission ID 238aa48a-dbb5-4341-96b8-518bd3aea756.
+- macOS listing (2.3.10): flagged "Android".
+- iOS listing (2.3): flagged "iOS".
+Cause: the FIRST sentence of fastlane/metadata/android/<locale>/full_description.txt -
+"... with native apps for Windows, Linux, Android, iOS and macOS, plus a web app." -
+is copied verbatim into the Apple description.txt by sync-listings.py.
+Apple forbids naming other (or your own) platforms in the App Store description.
+
+Unblock 1.2.3 now (recommended, do in ASC): reply to App Review that 1.2.3 is a bug-fix update
+(long titles, focus, NVIDIA, review prompt) and ask them to approve as-is - the email offers exactly
+this ("eligible to be resolved on your next update ... you do not need to resubmit").
+Then land the fix below at 1.2.4. Alternative: fix now, fastlane deliver, resubmit 1.2.3.
+
+Decision: OPTION A - one shared text, no platform names. This changes the shared source, so Play and
+Microsoft lose the explicit platform names too (accepted - the cross-platform message stays via
+"all your devices"). The named-platform list is NOT kept anywhere.
+
+The fix (at 1.2.4, or now if resubmitting 1.2.3):
+
+1. Rewrite the FIRST sentence of fastlane/metadata/android/<locale>/full_description.txt in ALL 20
+   locales - drop the platform-name list, keep the cross-platform pitch without naming any platform.
+   English draft (refine, then translate to the other 19; keep full_description 500-4000 chars):
+     "Take Markdown notes, plan tasks, and track habits - native apps on all your devices, plus a
+     web app and optional self-hosted sync. Free, ad-free, and open source. No account needed:
+     all your data stays on your device."
+   Popularity.md D). Do NOT write Windows / Linux / Android / iOS / macOS anywhere in the text.
+   "Docker" (in the self-host bullet) was NOT flagged - keep it, but watch for a future flag.
+2. Run: python3 Automation/sync-listings.py
+   Re-derives the Apple description.txt and the metainfo.xml intro (Flathub) and validates every
+   char limit - must print OK before continuing.
+3. Re-upload per store (bundle into 1.2.4 for all four, for consistency):
+   - Apple [Mac mini]: fastlane deliver (Automate.md section 5 command), then Submit for Review.
+   - Play [Windows]: play-listings.ps1 -Commit.
+   - Microsoft [Windows]: build-msstore-listing-csv.py + Partner Center Import (Automate.md section 6).
+   - Flathub: ships with the next Flatpak (metainfo already updated by step 2).
+
+Cross-machine: steps 1-2 are repo edits (any machine); Apple deliver + resubmit on the Mac mini;
+Play/MS re-upload on Windows. Push from Windows, pull on the Mac mini, continue Apple there.
+
+---------------------------------------------------------------------------------------------------
+
 HANGING (started, not 100% done):
 
     1. Popularity D - localized store listings: all texts committed
@@ -20,7 +66,8 @@ HANGING (started, not 100% done):
          release_notes.txt + support_url.txt added for all 19 (ASC requires both per locale, no
          fallback - Automate.md section 5).
        Remaining:
-       - Apple: Transporter ipa/pkg upload into 1.2.3, then Submit for Review.
+       - Apple: 1.2.3 binary was uploaded and submitted, then REJECTED on metadata (2.3.10 -
+         description names platforms). See the Apple metadata rejection block near the top of this file.
        - Publish clicks: Play "roll out to production", Microsoft `submission publish` (both staged/imported, not live).
        (translate + strip Snap/Flatpak) -> android changelogs -> scripts derive Apple + Microsoft
        (Popularity.md section D; Automate.md sections 4, 5, 6).
