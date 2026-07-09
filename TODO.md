@@ -61,18 +61,14 @@ Remaining:
 
 HANGING (started, not 100% done):
 
-    1. Automate 3 - GitHub release (deferred to 1.2.3; no 1.2.2 backfill).
-       Remaining (USER, at the 1.2.3 release):
-       `Automation\github-release.ps1 1.2.3 <path-to-1.2.3-apk> -Commit` -
-       creates the GitHub release IzzyOnDroid needs; unblocks item 2.
-
-    2. Popularity C - IzzyOnDroid inclusion request: draft ready at
-       drafts/izzyondroid-app-request.md, all fields prefilled.
-       Remaining (USER, after item 1): review the AI-disclosure framing in the draft header,
+    1. Popularity C - IzzyOnDroid inclusion request: draft ready at
+       drafts/izzyondroid-app-request.md, all fields prefilled. Now unblocked
+       (the GitHub release it depends on is done - see DONE below).
+       Remaining (USER): review the AI-disclosure framing in the draft header,
        read the inclusion policy in full, then file at
        codeberg.org/IzzyOnDroid/repodata/issues/new with title "[AppRequest] OpenHabitTracker".
 
-    3. Popularity B - self-hosting store templates: all artifacts ready.
+    2. Popularity B - self-hosting store templates: all artifacts ready.
        Unraid files are committed to the main repo (ca_profile.xml + templates/openhabittracker.xml);
        everything else is staged in gitignored drafts/store-templates/<store>/ with a
        SUBMIT-HOWTO.md per store; PikaPods email at drafts/pikapods-pitch.md.
@@ -83,6 +79,12 @@ HANGING (started, not 100% done):
        execution order in Popularity.md B.
 
 DONE (recent, for context):
+
+    1.2.3 release publish - 100% done on every channel: Play, Microsoft and Apple
+    (section D below), GitHub release + APK (Automate 3), Flathub, Snap, Docker, and the
+    non-web deploy targets all had their first real run (bump-version.ps1, deploy.ps1
+    non-web targets, deploy-pkg.sh, snap-release.sh, flathub-update.sh). Unblocks the
+    IzzyOnDroid filing above.
 
     Popularity D - localized store listings: all texts committed
     (20 Play + 19 Apple locales + localized metainfo.xml), and all three stores are live
@@ -103,19 +105,30 @@ DONE (recent, for context):
     on all four platforms (design, gotchas and verification results in Popularity.md A).
     The real Play dialog and the Windows star-rating step are production observations, not tasks.
 
-NOT STARTED (the queue):
+NOT STARTED (the queue, one-time):
 
-    - First real runs of the remaining Automation scripts at the next release:
-      bump-version.ps1, deploy.ps1 non-web targets, deploy-pkg.sh,
-      snap-release.sh + flathub-update.sh (both still need their first run on the Kubuntu box).
-    - Popularity F-I: rewrite the drafts in your own voice and post/send them
-      (one sub per week, reply to comments for 24h, door-check each pitch target).
-    - Popularity G assets: gallery image resizes (1270x760) + the 30s video cut.
+    - Popularity I - newsletter/blog pitches: rewrite the drafts in your own voice and send
+      (selfh.st, Noted.lol, MariusHosting, the podcast), each after its own door check.
+    - Popularity G assets (one-time prep, unblocks the recurring item below): gallery image
+      resizes (1270x760) + the 30s video cut.
     - Domenca ticket for the expired FTP TLS cert (Infrastructure.md).
 
-    The 1.2.3 release unlocks in one cycle: Umbrel digest pin + Umbrel PR,
-    GitHub release (item 1), IzzyOnDroid filing (item 2), Flathub localized metainfo,
-    and the first chance to see the real Play dialog in the wild.
+    Now unlocked by the 1.2.3 release publish: Umbrel digest pin + Umbrel PR, IzzyOnDroid
+    filing (item 1 above), Flathub localized metainfo, and the first chance to see the real
+    Play dialog in the wild.
+
+RECURRING (no terminal "done" state - see Popularity.md J; track as next-eligible-window,
+not as a checkbox):
+
+    - Popularity F - Reddit: one sub per week max, one good post per community per year,
+      sustained over years. Next up: the r/selfhosted sequel (drafts/reddit-selfhosted.md) -
+      leave a decent interval after the June 2026 r/selfhosted display-modes post (15 pts).
+    - Popularity G - Product Hunt: relaunch-eligible every 6+ months after a significant
+      product update. First relaunch (with 1.2.3+) still needs the assets above;
+      no further relaunch until the next major update past that.
+    - Popularity H - Microsoft pitch: most channels are one-shot (a single PR, a single email),
+      but the .NET Conf CFP reopens every November and the community standup recurs monthly -
+      revisit those two whenever there is new material worth pitching.
 
 ---------------------------------------------------------------------------------------------------
 
