@@ -86,9 +86,13 @@ Snap: Preinstalled on Ubuntu and derivatives, available for other distros but no
 
         snapcraft login
 
+        snapcraft whoami
+
         snapcraft upload --release=stable openhabittracker_1.9.9_amd64.snap
 
         snapcraft status openhabittracker
+
+        snapcraft revisions openhabittracker
 
     https://snapcraft.io/docs/registering-your-app-name
     https://snapcraft.io/account
@@ -205,6 +209,10 @@ from parent of OpenHabitTracker:
 
         5.
         pull https://github.com/Jinjinov/net.openhabittracker.OpenHabitTracker
+
+    flatpak remote-info --user flathub net.openhabittracker.OpenHabitTracker
+
+    flatpak remote-ls --user flathub | grep openhabittracker
 
     https://flathub.org/
     https://github.com/flathub/flathub
