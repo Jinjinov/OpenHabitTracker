@@ -61,12 +61,15 @@ Remaining:
 
 HANGING (started, not 100% done):
 
-    1. Popularity C - IzzyOnDroid inclusion request: draft ready at
-       drafts/izzyondroid-app-request.md, all fields prefilled. Now unblocked
-       (the GitHub release it depends on is done - see DONE below).
-       Remaining (USER): review the AI-disclosure framing in the draft header,
-       read the inclusion policy in full, then file at
-       codeberg.org/IzzyOnDroid/repodata/issues/new with title "[AppRequest] OpenHabitTracker".
+    1. Popularity C - IzzyOnDroid inclusion request: FILED July 9, 2026 as AppRequest
+       issue codeberg.org/IzzyOnDroid/repodata/issues/356 ("[AppRequest] OpenHabitTracker").
+       Open with labels app-request, needs/apk-scan, needs/on-device-test; no reviewer
+       comments yet as of July 9.
+       Category set to Time (+ Writing, Office) - IzzyOnDroid/F-Droid has no "Productivity".
+       Not-already-listed re-verified July 9 (index URL still 404).
+       Remaining: respond to reviewer labels/questions (needs/apk-scan, needs/on-device-test);
+       the ~50 MB APK is over the 30 MB reservation, disclosed in the request.
+       Done when the app appears in the IzzyOnDroid index.
 
     2. Popularity B - self-hosting store templates: all artifacts ready.
        Unraid files are committed to the main repo (ca_profile.xml + templates/openhabittracker.xml);
