@@ -61,37 +61,18 @@ Remaining:
 
 HANGING (started, not 100% done):
 
-    1. Popularity D - localized store listings: all texts committed
-       (20 Play + 19 Apple locales + localized metainfo.xml).
-       Done with the 1.2.3 release (July 8, 2026):
-       - Play: 20 locales uploaded via `play-listings.ps1 -Commit`, staged under Managed publishing.
-       - Microsoft: 20 locales imported via `build-msstore-listing-csv.py` + Partner Center CSV import
-         (the msstore-listings.ps1 -Commit CLI path failed against the web-UI draft - Automate.md section 6).
-       - Apple: 19 locales uploaded via `fastlane deliver` for ios + osx into the 1.2.3 version;
-         release_notes.txt + support_url.txt added for all 19 (ASC requires both per locale, no
-         fallback - Automate.md section 5).
-       Remaining:
-       - Apple: 1.2.3 was REJECTED on metadata (platform names in description + release notes),
-         then FIXED and RESUBMITTED July 9 (metadata rejection = editable version, same binary);
-         awaiting re-review. See the Apple metadata rejection block near the top of this file.
-       - Publish clicks: Play "roll out to production", Microsoft `submission publish` (both staged/imported, not live).
-       (translate + strip Snap/Flatpak) -> android changelogs -> scripts derive Apple + Microsoft
-       (Popularity.md section D; Automate.md sections 4, 5, 6).
-       Flathub needs nothing (the localized metainfo.xml ships with the next Flatpak release);
-       IzzyOnDroid reads the committed fastlane folder for free once listed.
-
-    2. Automate 3 - GitHub release (deferred to 1.2.3; no 1.2.2 backfill).
+    1. Automate 3 - GitHub release (deferred to 1.2.3; no 1.2.2 backfill).
        Remaining (USER, at the 1.2.3 release):
        `Automation\github-release.ps1 1.2.3 <path-to-1.2.3-apk> -Commit` -
-       creates the GitHub release IzzyOnDroid needs; unblocks item 3.
+       creates the GitHub release IzzyOnDroid needs; unblocks item 2.
 
-    3. Popularity C - IzzyOnDroid inclusion request: draft ready at
+    2. Popularity C - IzzyOnDroid inclusion request: draft ready at
        drafts/izzyondroid-app-request.md, all fields prefilled.
-       Remaining (USER, after item 2): review the AI-disclosure framing in the draft header,
+       Remaining (USER, after item 1): review the AI-disclosure framing in the draft header,
        read the inclusion policy in full, then file at
        codeberg.org/IzzyOnDroid/repodata/issues/new with title "[AppRequest] OpenHabitTracker".
 
-    4. Popularity B - self-hosting store templates: all artifacts ready.
+    3. Popularity B - self-hosting store templates: all artifacts ready.
        Unraid files are committed to the main repo (ca_profile.xml + templates/openhabittracker.xml);
        everything else is staged in gitignored drafts/store-templates/<store>/ with a
        SUBMIT-HOWTO.md per store; PikaPods email at drafts/pikapods-pitch.md.
@@ -102,6 +83,16 @@ HANGING (started, not 100% done):
        execution order in Popularity.md B.
 
 DONE (recent, for context):
+
+    Popularity D - localized store listings: all texts committed
+    (20 Play + 19 Apple locales + localized metainfo.xml), and all three stores are live
+    as of July 9, 2026 - Play published, Microsoft submission published, Apple's 1.2.3
+    (fixed and resubmitted after the metadata rejection above) uploaded via Transporter and
+    Submitted for Review.
+    (translate + strip Snap/Flatpak) -> android changelogs -> scripts derive Apple + Microsoft
+    (Popularity.md section D; Automate.md sections 4, 5, 6).
+    Flathub needs nothing (the localized metainfo.xml ships with the next Flatpak release);
+    IzzyOnDroid reads the committed fastlane folder for free once listed.
 
     Popularity E - SEO pages: live since July 7, 2026 - deployed with deploy.ps1's first real
     `web -Commit` run (script verified in production), screenshot sections redesigned the same
@@ -121,10 +112,9 @@ NOT STARTED (the queue):
       (one sub per week, reply to comments for 24h, door-check each pitch target).
     - Popularity G assets: gallery image resizes (1270x760) + the 30s video cut.
     - Domenca ticket for the expired FTP TLS cert (Infrastructure.md).
-    - Store-console review clicks after the together-upload.
 
     The 1.2.3 release unlocks in one cycle: Umbrel digest pin + Umbrel PR,
-    GitHub release (item 2), IzzyOnDroid filing (item 3), Flathub localized metainfo,
+    GitHub release (item 1), IzzyOnDroid filing (item 2), Flathub localized metainfo,
     and the first chance to see the real Play dialog in the wild.
 
 ---------------------------------------------------------------------------------------------------
