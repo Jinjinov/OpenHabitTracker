@@ -63,12 +63,14 @@ HANGING (started, not 100% done):
 
     1. Popularity C - IzzyOnDroid inclusion request: FILED July 9, 2026 as AppRequest
        issue codeberg.org/IzzyOnDroid/repodata/issues/356 ("[AppRequest] OpenHabitTracker").
-       Open with labels app-request, needs/apk-scan, needs/on-device-test; no reviewer
-       comments yet as of July 9.
+       Open with labels app-request, needs/apk-scan, needs/on-device-test.
        Category set to Time (+ Writing, Office) - IzzyOnDroid/F-Droid has no "Productivity".
        Not-already-listed re-verified July 9 (index URL still 404).
-       Remaining: respond to reviewer labels/questions (needs/apk-scan, needs/on-device-test);
-       the ~50 MB APK is over the 30 MB reservation, disclosed in the request.
+       Izzy flagged the ~52 MB APK as over the 30 MB reservation (the only blocker).
+       Fixed: direct APK is now arm64-only + wwwroot hygiene = 26.5 MB, under the limit
+       (DeveloperNotes.md "Android APK size" / "Web asset hygiene").
+       Replaced the 1.2.3 release APK asset with the 26.5 MB arm64 build and replied on #356 (July 10, 2026).
+       Remaining: await Izzy's apk-scan / on-device-test and listing.
        Done when the app appears in the IzzyOnDroid index.
 
     2. Popularity B - self-hosting store templates: all artifacts ready.
