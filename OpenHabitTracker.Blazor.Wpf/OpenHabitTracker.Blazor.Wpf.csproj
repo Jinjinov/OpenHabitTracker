@@ -7,6 +7,9 @@
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+
+    <!-- WebView reads assets from disk; it never serves the .br/.gz precompressed copies. Stop emitting them. -->
+    <CompressionEnabled>false</CompressionEnabled>
   </PropertyGroup>
 
   <ItemGroup>

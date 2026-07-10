@@ -39,6 +39,9 @@ run on Android emulator:
 F-Droid
     not possible: https://forum.f-droid.org/t/why-isnt-c-net-maui-supported/24842
 
+IzzyOnDroid
+    reads the APK from GitHub releases - 30 MB APK limit - the APK is arm64-only to fit
+
 APKPure
     https://apkpure.com/submit-apk
     https://developer.apkpure.com/

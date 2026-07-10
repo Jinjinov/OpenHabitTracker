@@ -6,6 +6,9 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+
+    <!-- WebView reads assets from disk; it never serves the .br/.gz precompressed copies. Stop emitting them. -->
+    <CompressionEnabled>false</CompressionEnabled>
   </PropertyGroup>
 
   <ItemGroup>

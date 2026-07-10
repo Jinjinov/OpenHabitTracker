@@ -572,3 +572,71 @@ Flathub prefers a few `<p>` paragraphs or a short list for release notes over lo
 ~2-3 sentences. All 12 release entries use `<p>` (1.1.0 was the lone `<ul><li>` outlier, converted).
 
 ---------------------------------------------------------------------------------------------------
+
+Web asset hygiene - the shared wwwroot ships files no runtime loads:
+
+The OpenHabitTracker.Blazor library wwwroot is copied into every host under
+`_content/OpenHabitTracker.Blazor/`, so trimming it shrinks every platform at once:
+the Android APK, the iOS/macOS packages, the Windows MSIX, the Photino/WPF/WinForms bundles,
+and the Wasm/PWA download.
+
+Categories that ship but are never loaded at runtime in a packaged or WebView host:
+- Source maps (`.map`): fetched only when browser devtools are open, never in a packaged app.
+- Precompressed copies (`.br`/`.gz`): only an HTTP server doing content-encoding negotiation
+  serves these; a WebView reads files off disk and never selects them.
+- Non-minified `bootstrap.css` per theme: the theme switcher only ever loads `.min.css`
+  (`jsInterop.js` SetTheme sets the `#theme-link` href to
+  `_content/OpenHabitTracker.Blazor/bootstrap/${theme}/bootstrap.min.css`).
+- The `bootstrap/js/` folder: no host loads it locally; the Web site index.html uses the jsDelivr CDN.
+- Legacy font formats (`.eot`, `.ttf`, `.woff`, and SVG fonts): every target engine reads `.woff2`
+  (iOS 15+, Android 7+ WebView, WebView2, WebKit2GTK).
+
+The `.br`/`.gz` copies are the one case that needs care.
+The browser and server hosts (Wasm/PWA, and Blazor Server in Docker) serve them over HTTP,
+so they must keep compression.
+The WebView hosts (MAUI, Photino, WPF, WinForms) read assets from disk and never serve them,
+so the copies are dead weight there.
+They originate in the shared library's own build (`CompressionEnabled` defaults to true for net6+),
+so a consumer copies them in even with its own compression disabled -
+setting `CompressionEnabled=false` only in a host project does nothing on its own.
+Set `<CompressionEnabled>false</CompressionEnabled>` in the shared library and in each WebView host
+(MAUI, Photino, WPF, WinForms): the library then ships no compressed copies, and the WebView hosts
+do not re-create them.
+The Wasm/PWA and Blazor Server hosts keep compression because each re-compresses the resolved
+static assets at its own publish.
+This is verified: with the shared library's compression off, the Wasm publish still regenerates
+the `.br`/`.gz` (292 files), so the PWA and the web server are unaffected.
+
+Gotcha: `CompressionEnabled=false` is honored, but an incremental build does not delete a compressed
+copy that already exists in a project's `bin`/`obj`, and the static web asset manifest keeps pointing
+at it - so the packaged output looks unchanged (a byte-identical APK, which is how this was first missed).
+Delete `bin`/`obj` and rebuild to flush stale compressed copies before measuring.
+
+The file deletions (maps, non-min css, unused js, legacy fonts) are safe on every host,
+because a deleted map or non-min css was dead on the web server too.
+
+When removing the legacy font files, the `@font-face` blocks in `app.css` must list only `woff2`.
+Otherwise a Chromium WebView selects the first supported format in the list
+(`woff` before `woff2`) and then 404s on the deleted file.
+
+---------------------------------------------------------------------------------------------------
+
+Android APK size - composition and the arm64-only direct APK:
+
+The default .NET Android Release build produces a universal APK with two ABIs,
+`arm64-v8a` and `x86_64` (the 32-bit `armeabi-v7a` and `x86` are already excluded).
+Native code for both ABIs dominates the APK, and profiled AOT (`libaot-*.so`, on by default
+for Release) sits on top of the IL assembly blob.
+`x86_64` is emulator-only weight - every real Android device is `arm64-v8a`.
+
+An arm64-only APK is roughly half the size (about 52 MB to about 26 MB as of 1.2.3).
+It exists for the one channel with a hard size limit: IzzyOnDroid caps APKs at 30 MB
+(Popularity.md section C), and the arm64-only APK clears it.
+The two outputs come from two publishes distinguished by `AndroidPackageFormat`:
+the default (`aab`) keeps both ABIs, and `-p:AndroidPackageFormat=apk` restricts to `android-arm64`
+via a csproj condition (commands in Release.md and Automation/Release.md).
+The Google Play AAB keeps both ABIs (Play splits per device, so arm64 users still download an
+arm64-sized artifact and x86_64 / ChromeOS coverage is preserved), and the website keeps the
+universal APK. Only the GitHub release / IzzyOnDroid APK is arm64-only.
+
+---------------------------------------------------------------------------------------------------

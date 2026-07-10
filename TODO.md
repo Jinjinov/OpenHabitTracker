@@ -85,11 +85,14 @@ HANGING (started, not 100% done):
        `Automation\github-release.ps1 1.2.3 <path-to-1.2.3-apk> -Commit` -
        creates the GitHub release IzzyOnDroid needs; unblocks item 3.
 
-    3. Popularity C - IzzyOnDroid inclusion request: draft ready at
-       drafts/izzyondroid-app-request.md, all fields prefilled.
-       Remaining (USER, after item 2): review the AI-disclosure framing in the draft header,
-       read the inclusion policy in full, then file at
-       codeberg.org/IzzyOnDroid/repodata/issues/new with title "[AppRequest] OpenHabitTracker".
+    3. Popularity C - IzzyOnDroid inclusion request: filed, then rejected on size.
+       Izzy commented on the APK size directly and confirmed it as the only reason.
+       The ~52 MB universal APK exceeds IzzyOnDroid's 30 MB limit.
+       Fix in progress (Tier 1): arm64-only direct APK + shared wwwroot hygiene brings it to
+       about 26 MB (DeveloperNotes.md "Android APK size" and "Web asset hygiene").
+       Remaining (USER): ship the sub-30 MB APK in a new GitHub release, then reply / resubmit at
+       codeberg.org/IzzyOnDroid/repodata (title "[AppRequest] OpenHabitTracker");
+       review the AI-disclosure framing in the draft header and read the inclusion policy first.
 
     4. Popularity B - self-hosting store templates: all artifacts ready.
        Unraid files are committed to the main repo (ca_profile.xml + templates/openhabittracker.xml);

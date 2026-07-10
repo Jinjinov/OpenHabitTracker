@@ -34,7 +34,13 @@ OpenHabitTracker.Blazor.Maui
 - publish and upload to Windows Store
     dotnet publish OpenHabitTracker.Blazor.Maui.csproj -c:Release -f:net9.0-windows10.0.19041.0 -p:SelfContained=true -p:PublishAppxPackage=true
 - publish and upload to Google Play Store + apk FTP upload to server (apk FTP upload: use `deploy.ps1 apk`)
+    Two publishes: the AAB for Play keeps both ABIs; the direct APK is arm64-only.
+    -p:AndroidPackageFormat=apk triggers the arm64-only condition in the csproj.
+    Run the AAB publish first (it also emits a dual-ABI apk), then the APK publish (overwrites the apk with the arm64-only one).
+    AAB (Google Play, both ABIs + APK for website):
     dotnet publish -c Release -f:net9.0-android /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=IdiditGoogleStore.keystore /p:AndroidSigningStorePass=******** /p:AndroidSigningKeyAlias=IdiditGooglePlay /p:AndroidSigningKeyPass==********
+    APK (GitHub release / IzzyOnDroid, arm64-only, under 30 MB):
+    dotnet publish -c Release -f:net9.0-android -p:AndroidPackageFormat=apk /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=IdiditGoogleStore.keystore /p:AndroidSigningStorePass=******** /p:AndroidSigningKeyAlias=IdiditGooglePlay /p:AndroidSigningKeyPass==********
     - create GitHub release with attached apk: (use `github-release.ps1`)
         - Web UI
             - "Draft a new release"
