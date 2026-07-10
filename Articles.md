@@ -1,3 +1,13 @@
+## Writing style
+
+- Structure: `###` headers for sections, no `---` dividers between them.
+  Fold related details into the section where they belong.
+  Several similar things get a consistent internal rhythm - same pattern and detail per item.
+- Tone: matter-of-fact, respects the reader's intelligence. No padding, no over-explaining the obvious.
+- Editing: apply the intent of an edit and fix the surrounding flow - never mechanical, never left broken.
+
+---
+
 Aug 31, 2024
 https://dev.to/jinjinov/introducing-openhabittracker-a-free-open-source-and-privacy-focused-habit-tracker-316j
 

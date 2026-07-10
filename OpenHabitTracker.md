@@ -265,6 +265,8 @@ Missing keys show as `❗ KeyName ❗` in Debug, fall back to key name in Releas
 **When adding localization keys:** add to ALL 20 JSON files in `OpenHabitTracker/Localization/Resources/`.
 Just add the keys - no JsonStringLocalizer, fallback, or missing-key analysis is needed.
 
+Quality bar for all 20 locales: consistency with neighboring keys in `OpenHabitTracker/Localization/Resources/` per language.
+
 **Grammatical gender note:** "habit" in Slovenian is "navada" (feminine) — use correct gender agreement.
 
 ---
