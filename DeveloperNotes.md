@@ -642,3 +642,30 @@ arm64-sized artifact and x86_64 / ChromeOS coverage is preserved), and the websi
 universal APK. Only the GitHub release / IzzyOnDroid APK is arm64-only.
 
 ---------------------------------------------------------------------------------------------------
+
+iOS simulator forensics (MAUI app, bundle id net.openhabittracker, app name OpenHT):
+
+- Data container: `xcrun simctl get_app_container <udid> net.openhabittracker data` -
+  SQLite DB at `Library/OpenHT.db`, Preferences at `Library/Preferences/net.openhabittracker.plist`.
+  The container path changes on every reinstall (each `dotnet build -t:Run` redeploy),
+  not on relaunch - re-resolve it before reading.
+- `xcrun simctl spawn <udid> defaults read net.openhabittracker` says "domain does not exist"
+  even when the plist exists, because it cannot see the app sandbox.
+  Read the plist file directly with `plutil -p`.
+- Editing the plist from outside: terminate the app and kill the simulator runtime's cfprefsd first,
+  or its in-memory cache clobbers the edit on the next app write.
+  The sim's cfprefsd binary path contains "simruntime", not the device UDID - match accordingly.
+  Cleanest counter reset: `xcrun simctl uninstall`.
+- Proving whether code executed:
+  `xcrun simctl spawn <udid> log stream --level debug --predicate 'processImagePath CONTAINS "OpenHT"'`
+  logs every NSUserDefaults read as "found no value for key X" -
+  the absence of an expected key read proves a code path never ran.
+- Verifying which code is deployed: the main assembly in the bundle is `OpenHT.dll`
+  (csproj AssemblyName), not OpenHabitTracker.Blazor.Maui.dll.
+  `strings OpenHT.dll | grep <MethodName>` shows type and member names (UTF-8 heap)
+  but not C# string literals (UTF-16, invisible to plain `strings`).
+- macCatalyst: the container at `~/Library/Containers/net.openhabittracker/` is TCC-protected
+  from direct reads, but `defaults read net.openhabittracker` on the host Mac works -
+  it goes through cfprefsd, which handles the sandbox redirect.
+
+---------------------------------------------------------------------------------------------------
