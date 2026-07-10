@@ -270,6 +270,8 @@ CRF	    Quality	        File size
 40–50	Acceptable	    Small
 63	    Worst	        Very small
 
+Never use Playwright's built-in video recording - it records VP8 and the quality is not acceptable.
+
 ---------------------------------------------------------------------------------------------------
 
 Architecture: Identity Map + Repository (what the ideal design should be)

@@ -70,7 +70,14 @@ HANGING (started, not 100% done):
        Fixed: direct APK is now arm64-only + wwwroot hygiene = 26.5 MB, under the limit
        (DeveloperNotes.md "Android APK size" / "Web asset hygiene").
        Replaced the 1.2.3 release APK asset with the 26.5 MB arm64 build and replied on #356 (July 10, 2026).
-       Remaining: await Izzy's apk-scan / on-device-test and listing.
+       Izzy's quick scan (reply on #356, July 10, 2026) passed license, size (25.3 MB) and permissions.
+       Remaining blockers (detail in Popularity.md C "Quick-scan findings"):
+       - fastlane images: icon, featureGraphic and 8 screenshots copied into
+         fastlane/metadata/android/en-US/images/ - USER commits, pushes, replies on #356.
+       - 3 offending libraries (GMS, Play Core, Play In-App Reviews), all from
+         Plugin.Maui.AppRating - plan: a FossBuild property strips the plugin from the
+         direct APK (proposed, not implemented).
+       - AI policy question: which code is LLM-written and how it gets in - USER answers on #356.
        Done when the app appears in the IzzyOnDroid index.
 
     2. Popularity B - self-hosting store templates: all artifacts ready.
@@ -489,6 +496,32 @@ TSV export/import is several features behind — Record class missing DisplayMet
 
 1.
 upgrade to .NET 10
+The reason to stay on 9 was Snap and Flatpak; both support 10 now (checked July 10, 2026):
+- snapcraft has a dotnet10 extension for core24, same family as the dotnet9 one in snapcraft.yaml;
+  the dotnet9 extension needed SNAPCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS (snap-release.sh) -
+  check whether dotnet10 still needs the flag.
+- Flathub has org.freedesktop.Sdk.Extension.dotnet10 on branch 25.08,
+  which matches the GNOME 49 runtime already in net.openhabittracker.OpenHabitTracker.yaml.
+Reasons to upgrade: .NET 9 (STS) support ends November 10, 2026;
+.NET 10 is LTS, supported until November 2028.
+Ubuntu noble packages dotnet-sdk-10.0,
+which helps the IzzyOnDroid FOSS-build story (Popularity.md C "Quick-scan findings").
+Scope: every csproj TargetFramework,
+snapcraft.yaml (dotnet-version, dotnet-build-framework, dotnet9 extension),
+the Flatpak manifest (dotnet9 sdk extension and net9.0 paths),
+Automation (deploy.ps1 net9.0 output paths, snap-release.sh and flathub-update.sh comments),
+and the net9.0-* commands in Publish.md, Release.md and DeveloperNotes.md.
+NuGet packages (checked July 10, 2026): nothing blocks net10.
+- Must move together with the TFM: CommunityToolkit.Maui.Core to 14.x (majors track MAUI),
+  NSwag.MSBuild to 14.7.1+ and $(NSwagExe_Net90) to $(NSwagExe_Net100) in the ApiClient csproj,
+  all Microsoft 9.0.x framework packages to 10.0.x.
+- No net10 target but compatible as-is (netstandard/older TFM): Dropbox.Api, NextcloudApi,
+  HtmlAgilityPack, Box.Sdk.Gen, Google.Apis.Drive.v3, CsvHelper, NSubstitute, NUnit and its
+  adapter/analyzers, coverlet, Test.Sdk, Playwright, STGTour.GTour, DnetIndexedDb, WatchDog.NET.
+- Watch list: Photino.Blazor tops out at net9.0 (consumed fine by net10),
+  Plugin.Maui.AppRating tops out at net9.0-android (platform-TFM fallback applies;
+  the FossBuild flavor drops it from the IzzyOnDroid APK anyway).
+- Markdig latest is 1.3.2, a new major from the pinned 0.42.0 - read the changelog when bumping.
 
 2.
 upgrade NuGet versions
