@@ -249,6 +249,14 @@ new Go tool:
     docker compose build
     docker compose up -d
 
+multi-arch build:
+    one-time per machine:
+    docker buildx create --name multiarch --driver docker-container
+
+    docker buildx build --builder multiarch --platform linux/amd64,linux/arm64 -t jinjinov/openhabittracker:1.2.3 -t jinjinov/openhabittracker:latest -t ghcr.io/jinjinov/openhabittracker:1.2.3 -t ghcr.io/jinjinov/openhabittracker:latest --push .
+
+    docker buildx imagetools inspect jinjinov/openhabittracker:1.2.3
+
 DO NOT RUN DOCKER IMAGE FROM THE UI, BECAUSE docker-compose.yml IS NOT USED!!!
 
 Docker Hub:

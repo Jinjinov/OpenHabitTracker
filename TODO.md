@@ -78,7 +78,10 @@ HANGING (started, not 100% done):
        everything else is staged in gitignored drafts/store-templates/<store>/ with a
        SUBMIT-HOWTO.md per store; PikaPods email at drafts/pikapods-pitch.md.
        TrueNAS passed the full ci.py deploy test and is PR-ready.
-       (docker-release.ps1 prints it; docker buildx imagetools inspect also works).
+       DONE July 10, 2026: 1.2.3 re-pushed as true multi-arch (the release-day hand push
+       was amd64-only - docker push cannot produce a manifest list, only buildx can);
+       Umbrel digest filled and their lint passed (0 errors; exports.sh file-mode note
+       in the Umbrel SUBMIT-HOWTO); CasaOS bumped to 1.2.3 with amd64 + arm64.
        Remaining (USER): the submissions - Unraid portal, PikaPods email, TrueNAS PR,
        CasaOS (door check first) / Coolify / Dokploy / CapRover PRs, Umbrel PR;
        execution order in Popularity.md B.
