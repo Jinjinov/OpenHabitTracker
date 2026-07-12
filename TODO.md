@@ -61,26 +61,7 @@ Remaining:
 
 HANGING (started, not 100% done):
 
-    1. Popularity C - IzzyOnDroid inclusion request: FILED July 9, 2026 as AppRequest
-       issue codeberg.org/IzzyOnDroid/repodata/issues/356 ("[AppRequest] OpenHabitTracker").
-       Open with labels app-request, needs/apk-scan, needs/on-device-test.
-       Category set to Time (+ Writing, Office) - IzzyOnDroid/F-Droid has no "Productivity".
-       Not-already-listed re-verified July 9 (index URL still 404).
-       Izzy flagged the ~52 MB APK as over the 30 MB reservation (the only blocker).
-       Fixed: direct APK is now arm64-only + wwwroot hygiene = 26.5 MB, under the limit
-       (DeveloperNotes.md "Android APK size" / "Web asset hygiene").
-       Replaced the 1.2.3 release APK asset with the 26.5 MB arm64 build and replied on #356 (July 10, 2026).
-       Izzy's quick scan (reply on #356, July 10, 2026) passed license, size (25.3 MB) and permissions.
-       Remaining blockers (detail in Popularity.md C "Quick-scan findings"):
-       - fastlane images: icon, featureGraphic and 8 screenshots copied into
-         fastlane/metadata/android/en-US/images/ - USER commits, pushes, replies on #356.
-       - 3 offending libraries (GMS, Play Core, Play In-App Reviews), all from
-         Plugin.Maui.AppRating - plan: a FossBuild property strips the plugin from the
-         direct APK (proposed, not implemented).
-       - AI policy question: which code is LLM-written and how it gets in - USER answers on #356.
-       Done when the app appears in the IzzyOnDroid index.
-
-    2. Popularity B - self-hosting store templates: all artifacts ready.
+    1. Popularity B - self-hosting store templates: all artifacts ready.
        Unraid files are committed to the main repo (ca_profile.xml + templates/openhabittracker.xml);
        everything else is staged in gitignored drafts/store-templates/<store>/ with a
        SUBMIT-HOWTO.md per store; PikaPods email at drafts/pikapods-pitch.md.
@@ -98,8 +79,7 @@ DONE (recent, for context):
     1.2.3 release publish - 100% done on every channel: Play, Microsoft and Apple
     (section D below), GitHub release + APK (Automate 3), Flathub, Snap, Docker, and the
     non-web deploy targets all had their first real run (bump-version.ps1, deploy.ps1
-    non-web targets, deploy-pkg.sh, snap-release.sh, flathub-update.sh). Unblocks the
-    IzzyOnDroid filing above.
+    non-web targets, deploy-pkg.sh, snap-release.sh, flathub-update.sh).
 
     Popularity D - localized store listings: all texts committed
     (20 Play + 19 Apple locales + localized metainfo.xml), and all three stores are live
@@ -108,8 +88,7 @@ DONE (recent, for context):
     Submitted for Review.
     (translate + strip Snap/Flatpak) -> android changelogs -> scripts derive Apple + Microsoft
     (Popularity.md section D; Automate.md sections 4, 5, 6).
-    Flathub needs nothing (the localized metainfo.xml ships with the next Flatpak release);
-    IzzyOnDroid reads the committed fastlane folder for free once listed.
+    Flathub needs nothing (the localized metainfo.xml ships with the next Flatpak release).
 
     Popularity E - SEO pages: live since July 7, 2026 - deployed with deploy.ps1's first real
     `web -Commit` run (script verified in production), screenshot sections redesigned the same
@@ -128,9 +107,8 @@ NOT STARTED (the queue, one-time):
       resizes (1270x760) + the 30s video cut.
     - Domenca ticket for the expired FTP TLS cert (Infrastructure.md).
 
-    Now unlocked by the 1.2.3 release publish: Umbrel digest pin + Umbrel PR, IzzyOnDroid
-    filing (item 1 above), Flathub localized metainfo, and the first chance to see the real
-    Play dialog in the wild.
+    Now unlocked by the 1.2.3 release publish: Umbrel digest pin + Umbrel PR, 
+    Flathub localized metainfo, and the first chance to see the real Play dialog in the wild.
 
 RECURRING (no terminal "done" state - see Popularity.md J; track as next-eligible-window,
 not as a checkbox):
@@ -504,8 +482,7 @@ The reason to stay on 9 was Snap and Flatpak; both support 10 now (checked July 
   which matches the GNOME 49 runtime already in net.openhabittracker.OpenHabitTracker.yaml.
 Reasons to upgrade: .NET 9 (STS) support ends November 10, 2026;
 .NET 10 is LTS, supported until November 2028.
-Ubuntu noble packages dotnet-sdk-10.0,
-which helps the IzzyOnDroid FOSS-build story (Popularity.md C "Quick-scan findings").
+Ubuntu noble packages dotnet-sdk-10.0.
 Scope: every csproj TargetFramework,
 snapcraft.yaml (dotnet-version, dotnet-build-framework, dotnet9 extension),
 the Flatpak manifest (dotnet9 sdk extension and net9.0 paths),
@@ -519,8 +496,7 @@ NuGet packages (checked July 10, 2026): nothing blocks net10.
   HtmlAgilityPack, Box.Sdk.Gen, Google.Apis.Drive.v3, CsvHelper, NSubstitute, NUnit and its
   adapter/analyzers, coverlet, Test.Sdk, Playwright, STGTour.GTour, DnetIndexedDb, WatchDog.NET.
 - Watch list: Photino.Blazor tops out at net9.0 (consumed fine by net10),
-  Plugin.Maui.AppRating tops out at net9.0-android (platform-TFM fallback applies;
-  the FossBuild flavor drops it from the IzzyOnDroid APK anyway).
+  Plugin.Maui.AppRating tops out at net9.0-android (platform-TFM fallback applies.
 - Markdig latest is 1.3.2, a new major from the pinned 0.42.0 - read the changelog when bumping.
 
 2.

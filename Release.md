@@ -39,7 +39,7 @@ OpenHabitTracker.Blazor.Maui
     Run the AAB publish first (it also emits a dual-ABI apk), then the APK publish (overwrites the apk with the arm64-only one).
     AAB (Google Play, both ABIs + APK for website):
     dotnet publish -c Release -f:net9.0-android /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=IdiditGoogleStore.keystore /p:AndroidSigningStorePass=******** /p:AndroidSigningKeyAlias=IdiditGooglePlay /p:AndroidSigningKeyPass==********
-    APK (GitHub release / IzzyOnDroid, arm64-only, under 30 MB):
+    APK (GitHub release, arm64-only, under 30 MB):
     dotnet publish -c Release -f:net9.0-android -p:AndroidPackageFormat=apk /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=IdiditGoogleStore.keystore /p:AndroidSigningStorePass=******** /p:AndroidSigningKeyAlias=IdiditGooglePlay /p:AndroidSigningKeyPass==********
     - create GitHub release with attached apk: (use `github-release.ps1`)
         - Web UI

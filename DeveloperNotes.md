@@ -632,14 +632,12 @@ for Release) sits on top of the IL assembly blob.
 `x86_64` is emulator-only weight - every real Android device is `arm64-v8a`.
 
 An arm64-only APK is roughly half the size (about 52 MB to about 26 MB as of 1.2.3).
-It exists for the one channel with a hard size limit: IzzyOnDroid caps APKs at 30 MB
-(Popularity.md section C), and the arm64-only APK clears it.
 The two outputs come from two publishes distinguished by `AndroidPackageFormat`:
 the default (`aab`) keeps both ABIs, and `-p:AndroidPackageFormat=apk` restricts to `android-arm64`
 via a csproj condition (commands in Release.md and Automation/Release.md).
 The Google Play AAB keeps both ABIs (Play splits per device, so arm64 users still download an
 arm64-sized artifact and x86_64 / ChromeOS coverage is preserved), and the website keeps the
-universal APK. Only the GitHub release / IzzyOnDroid APK is arm64-only.
+universal APK. Only the GitHub release APK is arm64-only.
 
 ---------------------------------------------------------------------------------------------------
 
