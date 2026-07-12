@@ -23,8 +23,7 @@
         <Nullable>enable</Nullable>
 
         <!-- Blazor Hybrid WebView reads static assets from disk; it never serves the .br/.gz
-             precompressed copies the static web asset pipeline generates. Stop emitting them
-             (DeveloperNotes.md "Web asset hygiene"). -->
+             precompressed copies the static web asset pipeline generates. Stop emitting them. -->
         <CompressionEnabled>false</CompressionEnabled>
 
         <!-- Model building is not supported when publishing with NativeAOT. Use a compiled model -->
@@ -71,8 +70,7 @@
 
     <!-- The direct-download APK is arm64-only (every real Android device is arm64-v8a); the
          Google Play AAB keeps both ABIs because Play splits per device. AndroidPackageFormat=apk
-         is passed only on the direct APK publish, so this never touches the AAB
-         (Release.md, Automation/Release.md; DeveloperNotes.md "Android APK size"). -->
+         is passed only on the direct APK publish, so this never touches the AAB. -->
     <PropertyGroup Condition="'$(AndroidPackageFormat)' == 'apk'">
         <RuntimeIdentifiers>android-arm64</RuntimeIdentifiers>
     </PropertyGroup>
