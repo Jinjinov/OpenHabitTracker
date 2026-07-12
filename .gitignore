@@ -12,8 +12,5 @@ Package.StoreAssociation.xml
 OpenHT.db*
 watchlogs*.db
 *.snap
-Automation/secrets/
-Automation/logs/
-Automation/artifacts/
 fastlane/*.json
 *.p8

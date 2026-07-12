@@ -21,7 +21,6 @@
 **/OpenHabitTracker.IndexedDB
 **/OpenHabitTracker.Web
 .editorconfig
-DeveloperNotes.md
 flathub.json
 flatpak-dotnet-generator.py
 LICENSE
@@ -33,4 +32,3 @@ nuget.config
 nuget-sources.json
 README.md
 snapcraft.yaml
-TODO.md
