@@ -11,7 +11,7 @@
   <!-- The port in the WebUI entry always refers to the container port -->
   <WebUI>http://[IP]:[PORT:8080]</WebUI>
 
-  <Overview>Take Markdown notes, plan tasks and track habits - free, ad-free, open source, no account, all data on your server. This container is the self-hosted sync server: native apps for Windows, Linux, Android, iOS and macOS log into it and sync. Single user; log in at /login with the credentials you set below. Includes a REST API with OpenAPI UI at /scalar/v1. Habits show how overdue you are instead of guilt-driven streaks.</Overview>
+  <Overview>Take notes, plan tasks and track habits - free, ad-free, open source, no account, all data on your server. This container is the self-hosted sync server: native apps for Windows, Linux, Android, iOS and macOS log into it and sync. Single user; log in at /login with the credentials you set below. Includes a REST API with OpenAPI UI at /scalar/v1. Habits show how overdue you are instead of guilt-driven streaks.</Overview>
 
   <Support>https://github.com/Jinjinov/OpenHabitTracker/issues</Support>
   <Project>https://openhabittracker.net</Project>

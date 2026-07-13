@@ -6,7 +6,7 @@ https://openhabittracker.net
 
 https://pwa.openhabittracker.net
 
-Take Markdown notes, plan tasks, track habits
+Take notes, plan tasks, track habits
 
 - Free and Ad-free
 - Open Source
