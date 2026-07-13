@@ -57,7 +57,7 @@
 
     private async Task StartTour(string tourId)
     {
-        await GTourService.StartTour(tourId);
+        await InvokeAsync(() => GTourService.StartTour(tourId));
     }
 
     [Parameter]

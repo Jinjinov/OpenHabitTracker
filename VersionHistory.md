@@ -1,3 +1,7 @@
+# 1.2.4 - 
+
+- Fixed guided tour
+
 # 1.2.3 - Jul 7, 2026
 
 - Added "Max days in small calendar" setting
