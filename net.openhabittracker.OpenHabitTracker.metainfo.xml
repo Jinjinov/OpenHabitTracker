@@ -28,26 +28,26 @@
     <name>Jinjinov</name>
   </developer>
   <description>
-    <p>Take notes, plan tasks, and track habits - with native apps for Windows, Linux, Android, iOS and macOS, plus a web app. Free, ad-free, and open source. No account needed: all your data stays on your device.</p>
-    <p xml:lang="de">Notizen schreiben, Aufgaben planen und Gewohnheiten verfolgen - mit nativen Apps für Windows, Linux, Android, iOS und macOS sowie als Web-App. Kostenlos, werbefrei und Open Source. Kein Konto nötig: Alle Daten bleiben auf deinem Gerät.</p>
-    <p xml:lang="es">Toma notas, planifica tareas y sigue tus hábitos - con aplicaciones nativas para Windows, Linux, Android, iOS y macOS, además de una versión web. Gratis, sin anuncios y de código abierto. Sin cuenta: todos tus datos se quedan en tu dispositivo.</p>
-    <p xml:lang="sl">Piši zapiske, načrtuj naloge in sledi navadam - z izvornimi aplikacijami za Windows, Linux, Android, iOS in macOS ter spletno aplikacijo. Brezplačno, brez oglasov in odprtokodno. Brez računa: vsi podatki ostanejo na tvoji napravi.</p>
-    <p xml:lang="fr">Prenez des notes, planifiez vos tâches et suivez vos habitudes - avec des applications natives pour Windows, Linux, Android, iOS et macOS, plus une application web. Gratuit, sans publicité et open source. Aucun compte requis : toutes vos données restent sur votre appareil.</p>
-    <p xml:lang="pt">Tome notas, planeie tarefas e acompanhe hábitos - com aplicações nativas para Windows, Linux, Android, iOS e macOS, além de uma aplicação web. Gratuito, sem anúncios e open source. Sem conta: todos os dados ficam no seu dispositivo.</p>
-    <p xml:lang="it">Prendi note, pianifica i compiti e monitora le abitudini - con app native per Windows, Linux, Android, iOS e macOS, più un'app web. Gratis, senza pubblicità e open source. Nessun account: tutti i dati restano sul tuo dispositivo.</p>
-    <p xml:lang="ja">メモを取り、タスクを計画し、習慣を記録できます。Windows、Linux、Android、iOS、macOS向けのネイティブアプリとWebアプリを提供。無料・広告なし・オープンソース。アカウント不要で、データはすべて端末に保存されます。</p>
-    <p xml:lang="zh_CN">记笔记、规划任务、培养习惯,提供 Windows、Linux、Android、iOS、macOS 原生应用及网页版。免费、无广告、开源。无需账户,所有数据保存在你的设备上。</p>
-    <p xml:lang="ko">메모하고, 할 일을 계획하고, 습관을 기록하세요. Windows, Linux, Android, iOS, macOS용 네이티브 앱과 웹 앱을 제공합니다. 무료, 광고 없음, 오픈소스. 계정이 필요 없으며 모든 데이터는 기기에 저장됩니다.</p>
-    <p xml:lang="nl">Maak notities, plan taken en volg gewoontes - met native apps voor Windows, Linux, Android, iOS en macOS, plus een webapp. Gratis, reclamevrij en open source. Geen account nodig: al je gegevens blijven op je apparaat.</p>
-    <p xml:lang="da">Tag noter, planlæg opgaver og følg vaner - med native apps til Windows, Linux, Android, iOS og macOS samt en webapp. Gratis, reklamefri og open source. Ingen konto: alle dine data bliver på din enhed.</p>
-    <p xml:lang="no">Ta notater, planlegg oppgaver og følg vaner - med native apper for Windows, Linux, Android, iOS og macOS, pluss en webapp. Gratis, reklamefri og åpen kildekode. Ingen konto: alle dataene dine blir på enheten din.</p>
-    <p xml:lang="sv">Skriv anteckningar, planera uppgifter och följ vanor - med appar för Windows, Linux, Android, iOS och macOS samt en webbapp. Gratis, reklamfri och öppen källkod. Inget konto behövs: all din data stannar på din enhet.</p>
-    <p xml:lang="fi">Kirjoita muistiinpanoja, suunnittele tehtäviä ja seuraa tapoja - natiivisovellukset Windowsille, Linuxille, Androidille, iOS:lle ja macOS:lle sekä verkkosovellus. Ilmainen, mainokseton ja avointa lähdekoodia. Ei tiliä: kaikki tietosi pysyvät laitteellasi.</p>
-    <p xml:lang="pl">Twórz notatki, planuj zadania i śledź nawyki - z natywnymi aplikacjami na Windows, Linux, Android, iOS i macOS oraz aplikacją webową. Za darmo, bez reklam i open source. Bez konta: wszystkie dane zostają na Twoim urządzeniu.</p>
-    <p xml:lang="cs">Pište poznámky, plánujte úkoly a sledujte návyky - s nativními aplikacemi pro Windows, Linux, Android, iOS a macOS a webovou aplikací. Zdarma, bez reklam a open source. Bez účtu: všechna data zůstávají ve vašem zařízení.</p>
-    <p xml:lang="sk">Píšte poznámky, plánujte úlohy a sledujte návyky - s natívnymi aplikáciami pre Windows, Linux, Android, iOS a macOS a webovou aplikáciou. Zadarmo, bez reklám a open source. Bez účtu: všetky dáta zostávajú vo vašom zariadení.</p>
-    <p xml:lang="hr">Pišite bilješke, planirajte zadatke i pratite navike - s izvornim aplikacijama za Windows, Linux, Android, iOS i macOS te web-aplikacijom. Besplatno, bez oglasa i otvorenog koda. Bez računa: svi podaci ostaju na vašem uređaju.</p>
-    <p xml:lang="sr">Pišite beleške, planirajte zadatke i pratite navike - sa izvornim aplikacijama za Windows, Linux, Android, iOS i macOS i veb-aplikacijom. Besplatno, bez reklama i otvorenog koda. Bez naloga: svi podaci ostaju na vašem uređaju.</p>
+    <p>Take notes, plan tasks, and track habits - native apps on all your devices, plus a web app. Free, ad-free, and open source. No account needed: all your data stays on your device.</p>
+    <p xml:lang="de">Notizen schreiben, Aufgaben planen und Gewohnheiten verfolgen - mit nativen Apps auf allen deinen Geräten sowie einer Web-App. Kostenlos, werbefrei und Open Source. Kein Konto nötig: Alle Daten bleiben auf deinem Gerät.</p>
+    <p xml:lang="es">Toma notas, planifica tareas y sigue tus hábitos - con aplicaciones nativas en todos tus dispositivos, además de una versión web. Gratis, sin anuncios y de código abierto. Sin cuenta: todos tus datos se quedan en tu dispositivo.</p>
+    <p xml:lang="sl">Piši zapiske, načrtuj naloge in sledi navadam - z izvornimi aplikacijami na vseh tvojih napravah ter spletno aplikacijo. Brezplačno, brez oglasov in odprtokodno. Brez računa: vsi podatki ostanejo na tvoji napravi.</p>
+    <p xml:lang="fr">Prenez des notes, planifiez vos tâches et suivez vos habitudes - avec des applications natives sur tous vos appareils, plus une application web. Gratuit, sans publicité et open source. Aucun compte requis : toutes vos données restent sur votre appareil.</p>
+    <p xml:lang="pt">Tome notas, planeie tarefas e acompanhe hábitos - com aplicações nativas em todos os seus dispositivos, além de uma aplicação web. Gratuito, sem anúncios e open source. Sem conta: todos os dados ficam no seu dispositivo.</p>
+    <p xml:lang="it">Prendi note, pianifica i compiti e monitora le abitudini - con app native su tutti i tuoi dispositivi, più un'app web. Gratis, senza pubblicità e open source. Nessun account: tutti i dati restano sul tuo dispositivo.</p>
+    <p xml:lang="ja">メモを取り、タスクを計画し、習慣を記録できます。すべての端末向けのネイティブアプリとWebアプリを提供。無料・広告なし・オープンソース。アカウント不要で、データはすべて端末に保存されます。</p>
+    <p xml:lang="zh_CN">记笔记、规划任务、培养习惯,在你的所有设备上都有原生应用,还有网页版。免费、无广告、开源。无需账户,所有数据都保存在你自己的设备上。</p>
+    <p xml:lang="ko">메모하고, 할 일을 계획하고, 습관을 기록하세요. 모든 기기용 네이티브 앱과 웹 앱을 제공합니다. 무료, 광고 없음, 오픈소스. 계정이 필요 없으며 모든 데이터는 기기에 저장됩니다.</p>
+    <p xml:lang="nl">Maak notities, plan taken en volg gewoontes - met native apps op al je apparaten, plus een webapp. Gratis, reclamevrij en open source. Geen account nodig: al je gegevens blijven op je apparaat.</p>
+    <p xml:lang="da">Tag noter, planlæg opgaver og følg vaner - med native apps på alle dine enheder samt en webapp. Gratis, reklamefri og open source. Ingen konto: alle dine data bliver på din enhed.</p>
+    <p xml:lang="no">Ta notater, planlegg oppgaver og følg vaner - med native apper på alle enhetene dine, pluss en webapp. Gratis, reklamefri og åpen kildekode. Ingen konto: alle dataene dine blir på enheten din.</p>
+    <p xml:lang="sv">Skriv anteckningar, planera uppgifter och följ vanor - med appar på alla dina enheter samt en webbapp. Gratis, reklamfri och öppen källkod. Inget konto behövs: all din data stannar på din enhet.</p>
+    <p xml:lang="fi">Kirjoita muistiinpanoja, suunnittele tehtäviä ja seuraa tapoja - natiivisovellukset kaikille laitteillesi sekä verkkosovellus. Ilmainen, mainokseton ja avointa lähdekoodia. Ei tiliä: kaikki tietosi pysyvät laitteellasi.</p>
+    <p xml:lang="pl">Twórz notatki, planuj zadania i śledź nawyki - z natywnymi aplikacjami na wszystkich Twoich urządzeniach oraz aplikacją webową. Za darmo, bez reklam i open source. Bez konta: wszystkie dane zostają na Twoim urządzeniu.</p>
+    <p xml:lang="cs">Pište poznámky, plánujte úkoly a sledujte návyky - s nativními aplikacemi na všech vašich zařízeních a webovou aplikací. Zdarma, bez reklam a open source. Bez účtu: všechna data zůstávají ve vašem zařízení.</p>
+    <p xml:lang="sk">Píšte poznámky, plánujte úlohy a sledujte návyky - s natívnymi aplikáciami na všetkých vašich zariadeniach a webovou aplikáciou. Zadarmo, bez reklám a open source. Bez účtu: všetky dáta zostávajú vo vašom zariadení.</p>
+    <p xml:lang="hr">Pišite bilješke, planirajte zadatke i pratite navike - s izvornim aplikacijama na svim vašim uređajima te web-aplikacijom. Besplatno, bez oglasa i otvorenog koda. Bez računa: svi podaci ostaju na vašem uređaju.</p>
+    <p xml:lang="sr">Pišite beleške, planirajte zadatke i pratite navike - sa izvornim aplikacijama na svim vašim uređajima i veb-aplikacijom. Besplatno, bez reklama i otvorenog koda. Bez naloga: svi podaci ostaju na vašem uređaju.</p>
     <ul>
       <li>Notes with full Markdown support</li>
       <li xml:lang="de">Notizen mit voller Markdown-Unterstützung</li>
@@ -217,12 +217,12 @@
       <li xml:lang="pt">Sincronização opcional: aloje a imagem Docker no seu próprio servidor e qualquer aplicação, de secretária ou móvel, pode iniciar sessão e sincronizar</li>
       <li xml:lang="it">Sincronizzazione opzionale: ospita l'immagine Docker sul tuo server e ogni app, desktop o mobile, può accedere e sincronizzarsi</li>
       <li xml:lang="ja">任意の同期:Dockerイメージを自分のサーバーでホストすれば、デスクトップ版もモバイル版もログインして同期できます</li>
-      <li xml:lang="zh_CN">可选同步:在自己的服务器上运行Docker 镜像,桌面和移动端应用都能登录同步</li>
+      <li xml:lang="zh_CN">可选同步:在自己的服务器上运行 Docker 镜像,桌面和移动端应用都能登录同步</li>
       <li xml:lang="ko">선택적 동기화: Docker 이미지를 내 서버에 올리면 데스크톱과 모바일 앱 모두 로그인하여 동기화할 수 있습니다</li>
       <li xml:lang="nl">Optionele synchronisatie: host de Docker-image op je eigen server en elke app, desktop of mobiel, kan inloggen en synchroniseren</li>
-      <li xml:lang="da">Valgfri synkronisering: host det Docker-image på din egen server, og alle apps, desktop eller mobil, kan logge ind og synkronisere</li>
-      <li xml:lang="no">Valgfri synkronisering: kjør det Docker-imaget på din egen server, og alle appene, desktop eller mobil, kan logge inn og synkronisere</li>
-      <li xml:lang="sv">Valfri synkronisering: kör den Docker-avbilden på din egen server så kan alla appar, dator eller mobil, logga in och synkronisera</li>
+      <li xml:lang="da">Valgfri synkronisering: host Docker-imaget på din egen server, og alle apps, desktop eller mobil, kan logge ind og synkronisere</li>
+      <li xml:lang="no">Valgfri synkronisering: kjør Docker-imaget på din egen server, og alle appene, desktop eller mobil, kan logge inn og synkronisere</li>
+      <li xml:lang="sv">Valfri synkronisering: kör Docker-avbilden på din egen server så kan alla appar, dator eller mobil, logga in och synkronisera</li>
       <li xml:lang="fi">Valinnainen synkronointi: aja Docker-levykuva omalla palvelimellasi, niin jokainen sovellus, työpöytä tai mobiili, voi kirjautua ja synkronoida</li>
       <li xml:lang="pl">Opcjonalna synchronizacja: uruchom obraz Dockera na własnym serwerze, a każda aplikacja, desktopowa czy mobilna, może się zalogować i synchronizować</li>
       <li xml:lang="cs">Volitelná synchronizace: provozujte Docker image na vlastním serveru a každá aplikace, desktopová i mobilní, se může přihlásit a synchronizovat</li>

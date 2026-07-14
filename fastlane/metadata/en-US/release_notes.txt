@@ -1,4 +1,6 @@
 • Added "Max days in small calendar" setting
 • Added in-app review prompt
 • Fixed long titles overflowing in Notes, Tasks, Habits
-• Fixed focus issues
+• Fixed focus issues in macOS, iOS
+• Fixed NVIDIA issues in Flatpak
+• Added icon in Snap
