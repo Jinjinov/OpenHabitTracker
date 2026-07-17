@@ -93,6 +93,16 @@
         <PackageReference Include="Plugin.Maui.AppRating" Version="1.2.3" />
     </ItemGroup>
 
+    <!-- CVE-2025-6965 override: EF Core Sqlite still pins the vulnerable 2.1.11 native SQLite builds;
+         the desktop lib is pinned in OpenHabitTracker.EntityFrameworkCore, the platform libs here;
+         remove when Microsoft.EntityFrameworkCore.Sqlite references 2.1.12+ itself -->
+    <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+        <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.android" Version="2.1.12" />
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+        <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.ios" Version="2.1.12" />
+    </ItemGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\OpenHabitTracker.Blazor.Auth\OpenHabitTracker.Blazor.Auth.csproj" />
         <ProjectReference Include="..\OpenHabitTracker.EntityFrameworkCore\OpenHabitTracker.EntityFrameworkCore.csproj" />
