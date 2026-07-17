@@ -163,6 +163,8 @@ public class TaskTests : BaseTest
 
         await Page.Locator("[data-tasks-step-10]").ClickAsync(); // Close
 
+        await WaitForIndexedDbAsync("TaskEntity", "tasks => tasks.some(task => (task.duration ?? task.Duration) != null)"); // wait for the IndexedDB write before reload
+
         await Page.ReloadAsync();
         await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
 
@@ -185,6 +187,8 @@ public class TaskTests : BaseTest
         await Page.Locator("[data-tasks-step-12] input").BlurAsync();
 
         await Page.Locator("[data-tasks-step-10]").ClickAsync(); // Close
+
+        await WaitForIndexedDbAsync("TaskEntity", "tasks => tasks.some(task => (task.plannedAt ?? task.PlannedAt) != null)"); // wait for the IndexedDB write before reload
 
         await Page.ReloadAsync();
         await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();

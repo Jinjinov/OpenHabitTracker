@@ -185,6 +185,8 @@ public class ItemTests : BaseTest
         await checkbox.CheckAsync();
         await Expect(checkbox).ToBeCheckedAsync();
 
+        await WaitForIndexedDbAsync("ItemEntity", "items => items.some(item => (item.doneAt ?? item.DoneAt) != null)"); // wait for the IndexedDB write before reload
+
         await Page.ReloadAsync();
         await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
 

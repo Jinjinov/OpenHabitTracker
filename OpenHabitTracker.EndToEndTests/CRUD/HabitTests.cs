@@ -250,6 +250,8 @@ public class HabitTests : BaseTest
 
         await Page.Locator("[data-habits-step-11]").ClickAsync(); // Close
 
+        await WaitForIndexedDbAsync("HabitEntity", "habits => habits.some(habit => (habit.duration ?? habit.Duration) != null)"); // wait for the IndexedDB write before reload
+
         await Page.ReloadAsync();
         await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
 
@@ -279,6 +281,8 @@ public class HabitTests : BaseTest
 
         await Page.Locator("[data-habits-step-11]").ClickAsync(); // Close
 
+        await WaitForIndexedDbAsync("HabitEntity", "habits => habits.some(habit => (habit.repeatCount ?? habit.RepeatCount) == 3 && (habit.repeatInterval ?? habit.RepeatInterval) == 7)"); // wait for the IndexedDB write before reload
+
         await Page.ReloadAsync();
         await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
 
@@ -303,6 +307,8 @@ public class HabitTests : BaseTest
         await Page.Locator("[data-habits-step-14] input[type='date']").BlurAsync();
 
         await Page.Locator("[data-habits-step-11]").ClickAsync(); // Close
+
+        await WaitForIndexedDbAsync("HabitEntity", "habits => habits.some(habit => (habit.startAt ?? habit.StartAt) != null)"); // wait for the IndexedDB write before reload
 
         await Page.ReloadAsync();
         await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
@@ -367,6 +373,8 @@ public class HabitTests : BaseTest
         await Page.Locator("input[aria-label='Target quantity']").BlurAsync();
 
         await Page.Locator("[data-habits-step-11]").ClickAsync();
+
+        await WaitForIndexedDbAsync("HabitEntity", "habits => habits.some(habit => (habit.targetQuantity ?? habit.TargetQuantity) == 5)"); // wait for the IndexedDB write before reload
 
         await Page.ReloadAsync();
         await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();

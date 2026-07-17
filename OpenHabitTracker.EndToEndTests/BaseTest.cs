@@ -116,4 +116,32 @@ public abstract class BaseTest : PlaywrightTest
         await Page.Locator("label[for='ShowGroupedByCategory']").ClickAsync();
         await CloseSidebarAsync();
     }
+
+    // Field edits and toggles save to IndexedDB asynchronously while the DOM already shows the
+    // new value, so no UI assertion can synchronize with persistence - a reload during the write
+    // discards it. Polls the store until the predicate over its full content returns true;
+    // call before ReloadAsync in every test that mutates data without a post-save UI change.
+    // Property names are camelCased by the JS interop serializer; keep a PascalCase fallback.
+    protected async Task WaitForIndexedDbAsync(string storeName, string itemsPredicate)
+    {
+        await Page.WaitForFunctionAsync($$"""
+            async () => {
+                const db = await new Promise((resolve, reject) => {
+                    const request = indexedDB.open('OpenHabitTracker');
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+                try {
+                    const items = await new Promise((resolve, reject) => {
+                        const request = db.transaction('{{storeName}}').objectStore('{{storeName}}').getAll();
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                    });
+                    return ({{itemsPredicate}})(items);
+                } finally {
+                    db.close();
+                }
+            }
+            """);
+    }
 }

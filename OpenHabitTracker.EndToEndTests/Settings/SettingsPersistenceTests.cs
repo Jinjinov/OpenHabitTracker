@@ -32,6 +32,8 @@ public class SettingsPersistenceTests : BaseTest
         await OpenSettingsAsync();
         await Page.Locator("label[for='IsDarkMode']").ClickAsync();
 
+        await WaitForIndexedDbAsync("SettingsEntity", "settings => settings.some(s => (s.isDarkMode ?? s.IsDarkMode) === false)"); // wait for the IndexedDB write before reload
+
         await Page.ReloadAsync();
 
         await Expect(Page.Locator("html")).ToHaveAttributeAsync("data-bs-theme", "light");
@@ -239,6 +241,8 @@ public class SettingsPersistenceTests : BaseTest
         await Page.Locator("[data-search-step-16] label").ClickAsync();
 
         await CloseSidebarAsync();
+
+        await WaitForIndexedDbAsync("SettingsEntity", "settings => settings.some(s => (s.showOnlyOverSelectedRatioMin ?? s.ShowOnlyOverSelectedRatioMin) === true)"); // wait for the IndexedDB write before reload
 
         await Page.ReloadAsync();
 

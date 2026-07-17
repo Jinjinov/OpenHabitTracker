@@ -115,6 +115,8 @@ public class NoteTests : BaseTest
 
         await Page.Locator("[data-notes-step-7]").ClickAsync(); // Close
 
+        await WaitForIndexedDbAsync("NoteEntity", "notes => notes.some(note => (note.content ?? note.Content) == 'Persisted content text')"); // wait for the IndexedDB write before reload
+
         await Page.ReloadAsync();
         await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
 
