@@ -241,7 +241,7 @@ public class TrashServiceTests
 
         await _sut.Restore(trashed);
 
-        await _dataAccess.Received().UpdateHabit(Arg.Is<HabitEntity>(h => h.Id == 1 && !h.IsDeleted));
+        await _dataAccess.Received().UpdateHabit(Arg.Is<HabitEntity>(h => h != null && h.Id == 1 && !h.IsDeleted));
     }
 
     [Test]

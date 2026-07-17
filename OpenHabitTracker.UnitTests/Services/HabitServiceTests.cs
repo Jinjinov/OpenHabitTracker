@@ -488,7 +488,7 @@ public class HabitServiceTests
 
         await _sut.UpdateHabit();
 
-        await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(e => e.Id == habit.Id));
+        await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(e => e != null && e.Id == habit.Id));
     }
 
     // --- SetStartTime tests ---
@@ -537,7 +537,7 @@ public class HabitServiceTests
 
         await _sut.UpdateTimeDone(habit, time);
 
-        await _dataAccess.Received(1).UpdateTime(Arg.Is<TimeEntity>(e => e.Id == time.Id));
+        await _dataAccess.Received(1).UpdateTime(Arg.Is<TimeEntity>(e => e != null && e.Id == time.Id));
     }
 
     // --- LoadTimesDone tests ---

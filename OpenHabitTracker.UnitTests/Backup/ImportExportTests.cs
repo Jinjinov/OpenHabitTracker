@@ -35,53 +35,53 @@ public class ImportExportTests
             .Do(callInfo =>
             {
                 long nextId = 1;
-                foreach (PriorityEntity entity in callInfo.Arg<IReadOnlyList<PriorityEntity>>())
+                foreach (PriorityEntity entity in callInfo.RequiredArg<IReadOnlyList<PriorityEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddUser(Arg.Any<UserEntity>()))
-            .Do(callInfo => callInfo.Arg<UserEntity>().Id = 1);
+            .Do(callInfo => callInfo.RequiredArg<UserEntity>().Id = 1);
         _dataAccess.When(x => x.AddSettings(Arg.Any<SettingsEntity>()))
-            .Do(callInfo => callInfo.Arg<SettingsEntity>().Id = 1);
+            .Do(callInfo => callInfo.RequiredArg<SettingsEntity>().Id = 1);
         _dataAccess.When(x => x.AddCategories(Arg.Any<IReadOnlyList<CategoryEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 1;
-                foreach (CategoryEntity entity in callInfo.Arg<IReadOnlyList<CategoryEntity>>())
+                foreach (CategoryEntity entity in callInfo.RequiredArg<IReadOnlyList<CategoryEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 10;
-                foreach (HabitEntity entity in callInfo.Arg<IReadOnlyList<HabitEntity>>())
+                foreach (HabitEntity entity in callInfo.RequiredArg<IReadOnlyList<HabitEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 20;
-                foreach (NoteEntity entity in callInfo.Arg<IReadOnlyList<NoteEntity>>())
+                foreach (NoteEntity entity in callInfo.RequiredArg<IReadOnlyList<NoteEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddTasks(Arg.Any<IReadOnlyList<TaskEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 30;
-                foreach (TaskEntity entity in callInfo.Arg<IReadOnlyList<TaskEntity>>())
+                foreach (TaskEntity entity in callInfo.RequiredArg<IReadOnlyList<TaskEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddItems(Arg.Any<IReadOnlyList<ItemEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 40;
-                foreach (ItemEntity entity in callInfo.Arg<IReadOnlyList<ItemEntity>>())
+                foreach (ItemEntity entity in callInfo.RequiredArg<IReadOnlyList<ItemEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddTimes(Arg.Any<IReadOnlyList<TimeEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 50;
-                foreach (TimeEntity entity in callInfo.Arg<IReadOnlyList<TimeEntity>>())
+                foreach (TimeEntity entity in callInfo.RequiredArg<IReadOnlyList<TimeEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.GetSettings(Arg.Any<long>()).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = 1 }));
@@ -158,7 +158,7 @@ public class ImportExportTests
 
         await service.ImportDataFile(ToStream(json));
 
-        await _dataAccess.Received(1).AddHabits(Arg.Is<IReadOnlyList<HabitEntity>>(list => list.Any(h => h.Title == "Exercise")));
+        await _dataAccess.Received(1).AddHabits(Arg.Is<IReadOnlyList<HabitEntity>>(list => list != null && list.Any(h => h.Title == "Exercise")));
     }
 
     // --- YAML ---
@@ -180,7 +180,7 @@ public class ImportExportTests
 
         await service.ImportDataFile(ToStream(yaml));
 
-        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list.Any(n => n.Title == "Ideas")));
+        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.Any(n => n.Title == "Ideas")));
     }
 
     // --- TSV ---
@@ -202,7 +202,7 @@ public class ImportExportTests
 
         await service.ImportDataFile(ToStream(tsv));
 
-        await _dataAccess.Received(1).AddHabits(Arg.Is<IReadOnlyList<HabitEntity>>(list => list.Any(h => h.Title == "Morning Run")));
+        await _dataAccess.Received(1).AddHabits(Arg.Is<IReadOnlyList<HabitEntity>>(list => list != null && list.Any(h => h.Title == "Morning Run")));
     }
 
     [Test]
@@ -222,7 +222,7 @@ public class ImportExportTests
         await service.ImportDataFile(ToStream(tsv));
 
         // The note is still imported even though its category has an empty title
-        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list.Any(n => n.Title == "Floating Note")));
+        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.Any(n => n.Title == "Floating Note")));
     }
 
     [Test]

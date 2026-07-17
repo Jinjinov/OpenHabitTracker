@@ -232,7 +232,7 @@ public class NoteServiceTests
 
         await _sut.UpdateNote();
 
-        await _dataAccess.Received(1).UpdateNote(Arg.Is<NoteEntity>(e => e.Id == note.Id));
+        await _dataAccess.Received(1).UpdateNote(Arg.Is<NoteEntity>(e => e != null && e.Id == note.Id));
     }
 
     // --- AddNote additional tests ---

@@ -45,7 +45,7 @@ public class HabitComponentTests
         _clientState.Settings.ShowPriorityDropdown = false;
 
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
-        loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
+        loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.RequiredArg<string>(), callInfo.RequiredArg<string>()));
 
         IJsInterop jsInterop = Substitute.For<IJsInterop>();
 

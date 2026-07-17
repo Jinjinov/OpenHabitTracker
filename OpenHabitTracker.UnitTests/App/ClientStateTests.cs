@@ -33,17 +33,17 @@ public class ClientStateTests
             .Do(callInfo =>
             {
                 long nextId = 1;
-                foreach (PriorityEntity entity in callInfo.Arg<IReadOnlyList<PriorityEntity>>())
+                foreach (PriorityEntity entity in callInfo.RequiredArg<IReadOnlyList<PriorityEntity>>())
                     entity.Id = nextId++;
             });
 
         // Mock AddUser to assign an ID
         _dataAccess.When(x => x.AddUser(Arg.Any<UserEntity>()))
-            .Do(callInfo => callInfo.Arg<UserEntity>().Id = 1);
+            .Do(callInfo => callInfo.RequiredArg<UserEntity>().Id = 1);
 
         // Mock AddSettings to assign an ID
         _dataAccess.When(x => x.AddSettings(Arg.Any<SettingsEntity>()))
-            .Do(callInfo => callInfo.Arg<SettingsEntity>().Id = 1);
+            .Do(callInfo => callInfo.RequiredArg<SettingsEntity>().Id = 1);
 
         MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         MarkdownToHtml markdownToHtml = new(pipeline);
@@ -234,42 +234,42 @@ public class ClientStateTests
             .Do(callInfo =>
             {
                 long nextId = 1;
-                foreach (CategoryEntity entity in callInfo.Arg<IReadOnlyList<CategoryEntity>>())
+                foreach (CategoryEntity entity in callInfo.RequiredArg<IReadOnlyList<CategoryEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 10;
-                foreach (HabitEntity entity in callInfo.Arg<IReadOnlyList<HabitEntity>>())
+                foreach (HabitEntity entity in callInfo.RequiredArg<IReadOnlyList<HabitEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 20;
-                foreach (NoteEntity entity in callInfo.Arg<IReadOnlyList<NoteEntity>>())
+                foreach (NoteEntity entity in callInfo.RequiredArg<IReadOnlyList<NoteEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddTasks(Arg.Any<IReadOnlyList<TaskEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 30;
-                foreach (TaskEntity entity in callInfo.Arg<IReadOnlyList<TaskEntity>>())
+                foreach (TaskEntity entity in callInfo.RequiredArg<IReadOnlyList<TaskEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddItems(Arg.Any<IReadOnlyList<ItemEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 40;
-                foreach (ItemEntity entity in callInfo.Arg<IReadOnlyList<ItemEntity>>())
+                foreach (ItemEntity entity in callInfo.RequiredArg<IReadOnlyList<ItemEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.When(x => x.AddTimes(Arg.Any<IReadOnlyList<TimeEntity>>()))
             .Do(callInfo =>
             {
                 long nextId = 50;
-                foreach (TimeEntity entity in callInfo.Arg<IReadOnlyList<TimeEntity>>())
+                foreach (TimeEntity entity in callInfo.RequiredArg<IReadOnlyList<TimeEntity>>())
                     entity.Id = nextId++;
             });
         _dataAccess.GetSettings(Arg.Any<long>()).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = 1 }));
@@ -296,8 +296,8 @@ public class ClientStateTests
         await _dataAccess.Received(1).AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>());
         await _dataAccess.Received(1).AddTasks(Arg.Any<IReadOnlyList<TaskEntity>>());
         await _dataAccess.Received(1).AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>());
-        await _dataAccess.Received(1).AddItems(Arg.Is<IReadOnlyList<ItemEntity>>(list => list.Count == 2));
-        await _dataAccess.Received(1).AddTimes(Arg.Is<IReadOnlyList<TimeEntity>>(list => list.Count == 1));
+        await _dataAccess.Received(1).AddItems(Arg.Is<IReadOnlyList<ItemEntity>>(list => list != null && list.Count == 2));
+        await _dataAccess.Received(1).AddTimes(Arg.Is<IReadOnlyList<TimeEntity>>(list => list != null && list.Count == 1));
     }
 
     [Test]

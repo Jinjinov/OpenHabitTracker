@@ -38,7 +38,7 @@ public class NotesStatisticsComponentTests
         ICategoryService categoryService = Substitute.For<ICategoryService>();
 
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
-        loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
+        loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.RequiredArg<string>(), callInfo.RequiredArg<string>()));
 
         _ctx.Services.AddScoped(_ => _noteService);
         _ctx.Services.AddScoped(_ => priorityService);

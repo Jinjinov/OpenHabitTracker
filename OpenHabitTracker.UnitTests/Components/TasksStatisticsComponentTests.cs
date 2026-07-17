@@ -33,7 +33,7 @@ public class TasksStatisticsComponentTests
         ClientState clientState = new(new[] { dataAccess }, markdownToHtml);
 
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
-        loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.Arg<string>(), callInfo.Arg<string>()));
+        loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.RequiredArg<string>(), callInfo.RequiredArg<string>()));
 
         ICategoryService categoryService = Substitute.For<ICategoryService>();
 

@@ -385,7 +385,7 @@ public class TaskServiceTests
 
         await _sut.UpdateTask();
 
-        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(e => e.Id == task.Id));
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(e => e != null && e.Id == task.Id));
     }
 
     // --- SetSelectedTask tests ---

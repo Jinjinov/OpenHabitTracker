@@ -157,7 +157,7 @@ public class ItemServiceTests
         await _sut.UpdateItem("New Title");
 
         Assert.That(item.Title, Is.EqualTo("New Title"));
-        await _dataAccess.Received(1).UpdateItem(Arg.Is<ItemEntity>(e => e.Title == "New Title"));
+        await _dataAccess.Received(1).UpdateItem(Arg.Is<ItemEntity>(e => e != null && e.Title == "New Title"));
     }
 
     // --- DeleteItem tests ---
