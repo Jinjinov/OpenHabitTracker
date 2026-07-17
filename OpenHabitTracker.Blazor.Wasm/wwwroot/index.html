@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OpenHabitTracker</title>
     <base href="/" />
+    <link rel="preload" id="webassembly" />
 
     <link id="theme-link" rel="stylesheet" href="_content/OpenHabitTracker.Blazor/bootstrap/default/bootstrap.min.css" />
     <link rel="stylesheet" href="_content/OpenHabitTracker.Blazor/bootstrap-icons/bootstrap-icons.min.css" />
@@ -35,12 +36,13 @@
     </div>
 
     <!--<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>-->
+    <script type="importmap"></script>
     <script src="_framework/blazor.webassembly.js"></script>
 
     <script src="_content/DnetIndexedDb/rxjs.min.js"></script>
     <script src="_content/DnetIndexedDb/dnet-indexeddb.js"></script>
 
-    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
 </body>
 
 </html>
