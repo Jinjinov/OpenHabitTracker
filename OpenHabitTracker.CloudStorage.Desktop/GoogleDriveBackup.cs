@@ -59,7 +59,7 @@ public class GoogleDriveBackup : GoogleDriveBase, IGoogleDriveBackup
         request.Fields = "modifiedTime";
 
         Google.Apis.Drive.v3.Data.File file = request.Execute();
-        DateTime modifiedTime = file.ModifiedTime ?? DateTime.MinValue;
+        DateTime modifiedTime = file.ModifiedTimeDateTimeOffset?.LocalDateTime ?? DateTime.MinValue;
 
         return modifiedTime;
     }

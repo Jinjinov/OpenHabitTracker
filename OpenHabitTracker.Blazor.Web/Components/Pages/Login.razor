@@ -57,8 +57,11 @@
 </EditForm>
 
 @code {
+    // no property initializer: a form post can bind null over it (BL0008); OnInitialized runs after form binding
     [SupplyParameterFromForm]
-    private InputModel Input { get; set; } = new();
+    private InputModel Input { get; set; } = default!;
+
+    protected override void OnInitialized() => Input ??= new();
 
     private string loginErrorMessage = string.Empty;
 

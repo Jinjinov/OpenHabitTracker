@@ -31,7 +31,7 @@ public class AppReview : IAppReview
         Preferences.Default.Set(PromptShownKey, true);
 
         // deep link to the store's write-a-review page - guaranteed UI, unlike the quota-limited in-app dialog
-        await MainThread.InvokeOnMainThreadAsync(() => AppRating.Default.PerformRatingOnStoreAsync(packageName: AndroidPackageName, applicationId: AppleAppId, productId: WindowsProductId));
+        await MainThread.InvokeOnMainThreadAsync(() => AppRating.Default?.PerformRatingOnStoreAsync(packageName: AndroidPackageName, applicationId: AppleAppId, productId: WindowsProductId) ?? Task.CompletedTask);
     }
 
     public async Task RecordEngagement(EngagementKind kind)
@@ -58,6 +58,6 @@ public class AppReview : IAppReview
         Preferences.Default.Set(PromptShownKey, true);
 
         // On Android the dialog appears only when the app is installed from Google Play; the OS may also silently skip it (quota)
-        await MainThread.InvokeOnMainThreadAsync(() => AppRating.Default.PerformInAppRateAsync());
+        await MainThread.InvokeOnMainThreadAsync(() => AppRating.Default?.PerformInAppRateAsync() ?? Task.CompletedTask);
     }
 }

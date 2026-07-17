@@ -29,8 +29,8 @@ public static class MauiProgram
 
                 Application.Current?.Dispatcher.Dispatch(async () =>
                 {
-                    if (Application.Current.Windows.Count > 0 && Application.Current.Windows[0].Page is Page page)
-                        await page.DisplayAlert("Error", message, "OK");
+                    if (Application.Current is Application application && application.Windows.Count > 0 && application.Windows[0].Page is Page page)
+                        await page.DisplayAlertAsync("Error", message, "OK");
                 });
             }
             catch
