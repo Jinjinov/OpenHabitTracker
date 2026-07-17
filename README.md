@@ -49,6 +49,9 @@ Android - APKPure:
 Android - GitHub, auto-updating with [<img src="OpenHabitTracker.Web/icons/Obtainium.svg" height="20" align="absmiddle"> Obtainium](https://github.com/ImranR98/Obtainium):  
 [<img src="OpenHabitTracker.Web/icons/GitHub.svg" height="48">](https://github.com/Jinjinov/OpenHabitTracker/releases)
 
+Windows - winget (installs the Microsoft Store version):  
+`winget install OpenHabitTracker`
+
 ## Docker image contains a Blazor Server app for one user
 
 https://hub.docker.com/r/jinjinov/openhabittracker
