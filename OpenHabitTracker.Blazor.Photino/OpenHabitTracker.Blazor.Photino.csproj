@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>OpenHT</AssemblyName>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
 
@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="9.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="10.0.10" />
     <PackageReference Include="Photino.Blazor" Version="4.0.13" />
   </ItemGroup>
 

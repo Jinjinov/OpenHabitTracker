@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Box.Sdk.Gen" Version="1.12.0" />
-    <PackageReference Include="Dropbox.Api" Version="7.0.0" />
-    <PackageReference Include="Google.Apis.Drive.v3" Version="1.71.0.3905" />
-    <PackageReference Include="Microsoft.Graph" Version="5.93.0" />
+    <PackageReference Include="Dropbox.Api" Version="7.2.0" />
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.75.0.4192" />
+    <PackageReference Include="Microsoft.Graph" Version="6.2.0" />
     <PackageReference Include="NextcloudApi" Version="1.0.18" />
   </ItemGroup>
 

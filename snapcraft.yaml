@@ -34,15 +34,15 @@ parts:
     plugin: dotnet
     # dotnet-build-configuration: Release
     # dotnet-self-contained-runtime-identifier: linux-x64
-    dotnet-version: "9.0"
+    dotnet-version: "10.0"
     dotnet-configuration: "Release"
-    dotnet-build-framework: "net9.0"
+    dotnet-build-framework: "net10.0"
     dotnet-verbosity: "normal"
     dotnet-project: OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
     dotnet-properties:
       PublishSingleFile: "true"
     # build-packages:
-    #   - dotnet-sdk-9.0
+    #   - dotnet-sdk-10.0
     override-build: |
       craftctl default
       # Replace content of .desktop file
@@ -53,7 +53,7 @@ parts:
 
 apps:
   openhabittracker:
-    extensions: [ gnome, dotnet9 ]
+    extensions: [ gnome, dotnet10 ]
     command: OpenHT
     desktop: net.openhabittracker.OpenHabitTracker.desktop
     plugs:

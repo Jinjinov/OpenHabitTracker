@@ -1,5 +1,5 @@
 {
-  "runtime": "Net90",
+  "runtime": "Net100",
   "documentGenerator": {
     "fromDocument": {
       "url": "../OpenHabitTracker.Blazor.Web/openapi.json",
