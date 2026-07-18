@@ -131,6 +131,26 @@ If a .wasm or .js resource fails to load, Blazor silently degrades and tests may
 because their assertions coincidentally match something in the partially loaded DOM.
 Wired up in BaseTest.BaseSetUp alongside PageError/Console to catch broken resource loads.
 
+#### Reload tests race async IndexedDB saves — FIXED
+
+Mutations save to IndexedDB asynchronously; a page reload during the write discards it, so a
+mutate-then-reload test races unless something synchronizes with the save. The race is decided by
+runtime timing — the whole class passed on net9 and one test failed deterministically on net10.
+Two classes of reload test:
+
+- Safe by construction: the last action's UI change renders only AFTER the awaited save completes
+  (the add flows hide the form after AddX returns; some settings re-render after saving).
+  Their existing Expect calls already synchronize — no extra wait needed.
+- Racy: the DOM shows the new value natively, BEFORE Blazor even runs the save handler
+  (checkboxes, typed inputs, selects, toggle labels). The post-save re-render changes nothing
+  observable, so no UI assertion can synchronize. These call
+  BaseTest.WaitForIndexedDbAsync(store, predicate) before ReloadAsync to poll the actual
+  persisted data.
+
+To classify a new reload test: does the final pre-reload Expect wait on something that renders
+only after the save completes? If not, add a WaitForIndexedDbAsync call with a predicate for the
+mutated field.
+
 #### #blazor-error-ui — FIXED
 
 When Blazor crashes hard (unrecoverable error), it makes #blazor-error-ui visible.
