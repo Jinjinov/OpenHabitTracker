@@ -94,13 +94,17 @@
     </ItemGroup>
 
     <!-- CVE-2025-6965 override: EF Core Sqlite still pins the vulnerable 2.1.11 native SQLite builds;
-         the desktop lib is pinned in OpenHabitTracker.EntityFrameworkCore, the platform libs here;
+         one lib pin per platform TFM here, and one per desktop host csproj
+         (never in the shared EFCore project - see the note there);
          remove when Microsoft.EntityFrameworkCore.Sqlite references 2.1.12+ itself -->
     <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
         <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.android" Version="2.1.12" />
     </ItemGroup>
     <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
         <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.ios" Version="2.1.12" />
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' or $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">
+        <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.12" />
     </ItemGroup>
 
     <ItemGroup>

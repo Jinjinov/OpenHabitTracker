@@ -31,6 +31,10 @@
     </PackageReference>
     <PackageReference Include="Scalar.AspNetCore" Version="2.16.15" />
     <PackageReference Include="WatchDog.NET" Version="1.4.12" />
+    <!-- CVE-2025-6965 override: EF Core Sqlite still pins the vulnerable 2.1.11 native SQLite;
+         pinned per-host so the desktop lib never flows into the android APK (see the note in
+         OpenHabitTracker.EntityFrameworkCore.csproj); remove when EF references 2.1.12+ itself -->
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.12" />
   </ItemGroup>
 
   <ItemGroup>
