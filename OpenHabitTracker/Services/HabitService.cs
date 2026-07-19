@@ -215,15 +215,15 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
                 await SetLastTimeDone(habit, now);
 
             await _appReview.RecordEngagement(EngagementKind.Completed);
+
+            if (_clientState.Settings.UncheckAllItemsOnHabitDone)
+            {
+                await UncheckAllItems(habit);
+            }
         }
         else
         {
-            await AddTimeDone(habit, now, quantity); // records the engagement itself
-        }
-
-        if (_clientState.Settings.UncheckAllItemsOnHabitDone)
-        {
-            await UncheckAllItems(habit);
+            await AddTimeDone(habit, now, quantity); // records the engagement and unchecks the items itself
         }
     }
 
