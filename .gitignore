@@ -3,6 +3,7 @@
 .idea
 bin
 obj
+AppPackages
 *.user
 credentials.json
 GoogleDriveClientSecrets.Hidden.cs
