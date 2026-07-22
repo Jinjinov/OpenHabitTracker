@@ -19,8 +19,12 @@ namespace OpenHabitTracker.Blazor.Wpf;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public MainWindow(string databasePath)
+    private readonly string _windowSettingsPath;
+
+    public MainWindow(string databasePath, string windowSettingsPath)
     {
+        _windowSettingsPath = windowSettingsPath;
+
         IServiceCollection services = new ServiceCollection();
         services.AddWpfBlazorWebView();
 #if DEBUG
@@ -56,9 +60,29 @@ public partial class MainWindow : Window
 
         InitializeComponent();
 
-        // https://stackoverflow.com/questions/67972372/why-are-window-height-and-window-width-not-exact-c-wpf
-        Width = 1680 + 14;
-        Height = 1050 + 7 + 31;
+        WindowSettings? saved = WindowSettings.Load(_windowSettingsPath);
+
+        if (saved is not null)
+        {
+            Left = saved.X;
+            Top = saved.Y;
+            Width = saved.Width;
+            Height = saved.Height;
+        }
+        else
+        {
+            // First run: min(0.9 of the work area, the 1680x1050 cap), top-left. All in DIPs (WPF's native unit).
+            Rect workArea = SystemParameters.WorkArea;
+            Left = 0;
+            Top = 0;
+            Width = Math.Min(workArea.Width * 0.9, 1680);
+            Height = Math.Min(workArea.Height * 0.9, 1050);
+        }
+
+        // Attach after the initial sizing so only user resizes/moves persist.
+        SizeChanged += (sender, e) => SaveWindowSettings();
+        LocationChanged += (sender, e) => SaveWindowSettings();
+        Closing += (sender, e) => SaveWindowSettings();
 
         //serviceProvider.UseServices();
 
@@ -79,6 +103,21 @@ public partial class MainWindow : Window
         //authService.TryRefreshTokenLogin();
 
         logger.LogInformation("Running app");
+    }
+
+    private void SaveWindowSettings()
+    {
+        // Only a normal window has meaningful bounds; skip maximized/minimized states.
+        if (WindowState != WindowState.Normal)
+            return;
+
+        new WindowSettings
+        {
+            X = Left,
+            Y = Top,
+            Width = Width,
+            Height = Height
+        }.Save(_windowSettingsPath);
     }
 }
 

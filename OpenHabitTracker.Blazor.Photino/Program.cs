@@ -11,8 +11,10 @@ using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
 using OpenHabitTracker.Services;
 using Photino.Blazor;
+using Photino.NET;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 
@@ -102,14 +104,53 @@ public class Program
         app.MainWindow.SetIconFile(Path.Combine(AppContext.BaseDirectory, "favicon.ico"));
         app.MainWindow.SetTitle("OpenHabitTracker");
         app.MainWindow.SetUseOsDefaultSize(false);
-        app.MainWindow.SetSize(1680, 1050);
         app.MainWindow.SetUseOsDefaultLocation(false);
-        app.MainWindow.SetTop(0);
-        app.MainWindow.SetLeft(0);
+
+        string windowSettingsPath = Path.Combine(databaseDirectory, "Window.yaml");
+
+        // MainMonitor is only valid once the native window exists, so size in WindowCreated.
+        app.MainWindow.WindowCreated += (sender, e) =>
+        {
+            WindowSettings? saved = WindowSettings.Load(windowSettingsPath);
+
+            if (saved is not null)
+            {
+                app.MainWindow.SetLeft((int)saved.X);
+                app.MainWindow.SetTop((int)saved.Y);
+                app.MainWindow.SetSize((int)saved.Width, (int)saved.Height);
+            }
+            else
+            {
+                // First run: min(0.9 of the work area, the 1680x1050 logical cap scaled to pixels), top-left. Pixels are the native unit.
+                Monitor monitor = app.MainWindow.MainMonitor;
+                Rectangle workArea = monitor.WorkArea;
+                double scale = monitor.Scale;
+                app.MainWindow.SetLeft(0);
+                app.MainWindow.SetTop(0);
+                app.MainWindow.SetSize(
+                    Math.Min((int)(workArea.Width * 0.9), (int)(1680 * scale)),
+                    Math.Min((int)(workArea.Height * 0.9), (int)(1050 * scale)));
+            }
+
+            // Attach after the initial sizing so only user resizes/moves persist.
+            app.MainWindow.WindowSizeChanged += (s, size) => SaveWindowSettings(app.MainWindow, windowSettingsPath);
+            app.MainWindow.WindowLocationChanged += (s, location) => SaveWindowSettings(app.MainWindow, windowSettingsPath);
+        };
 
         logger.LogInformation("Running app");
 
         app.Run();
+    }
+
+    static void SaveWindowSettings(PhotinoWindow window, string path)
+    {
+        new WindowSettings
+        {
+            X = window.Left,
+            Y = window.Top,
+            Width = window.Width,
+            Height = window.Height
+        }.Save(path);
     }
 
     [JSInvokable]

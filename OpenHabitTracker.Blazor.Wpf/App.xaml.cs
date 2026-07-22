@@ -35,7 +35,9 @@ public partial class App : Application
         string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
         MigrateDatabase(databasePath);
 
-        new MainWindow(databasePath).Show();
+        string windowSettingsPath = Path.Combine(appDataDirectory, "Window.yaml");
+
+        new MainWindow(databasePath, windowSettingsPath).Show();
     }
 
     // One-time move of an existing db from the old bare-relative "OpenHT.db" location

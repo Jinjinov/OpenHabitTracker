@@ -1,7 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <!-- Windows version required (not bare net10.0-windows): .NET 10 switched the WPF BlazorWebView
+         to WebView2CompositionControl, which loads the WinRT projection Microsoft.Windows.SDK.NET
+         that only a versioned Windows TFM supplies; a bare TFM crashes at startup. 19041.0 matches Maui. -->
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AssemblyName>OpenHT</AssemblyName>
     <OutputType>WinExe</OutputType>

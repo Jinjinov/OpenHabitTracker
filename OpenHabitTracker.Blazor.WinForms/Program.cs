@@ -36,10 +36,13 @@ static class Program
         string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
         MigrateDatabase(databasePath);
 
-        Application.SetHighDpiMode(HighDpiMode.SystemAware);
+        string windowSettingsPath = Path.Combine(appDataDirectory, "Window.yaml");
+
+        // PerMonitorV2 (not SystemAware) so DeviceDpi is accurate per monitor for window sizing.
+        Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
-        Application.Run(new MainForm(databasePath));
+        Application.Run(new MainForm(databasePath, windowSettingsPath));
     }
 
     // One-time move of an existing db from the old bare-relative "OpenHT.db" location
