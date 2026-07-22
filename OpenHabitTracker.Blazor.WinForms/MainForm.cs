@@ -19,7 +19,7 @@ namespace OpenHabitTracker.Blazor.WinForms;
 
 public partial class MainForm : Form
 {
-    public MainForm()
+    public MainForm(string databasePath)
     {
         IServiceCollection services = new ServiceCollection();
         services.AddWindowsFormsBlazorWebView();
@@ -37,7 +37,7 @@ public partial class MainForm : Form
         });
 
         services.AddServices();
-        services.AddDataAccess("OpenHT.db");
+        services.AddDataAccess(databasePath);
         services.AddBackup();
         services.AddBlazor();
         services.AddScoped<IAppReview, AppReview>(); // different in Maui

@@ -23,6 +23,32 @@ public class Program
     [STAThread]
     static void Main(string[] args)
     {
+        string databaseDirectory = Environment.GetEnvironmentVariable("SNAP_USER_COMMON") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ".OpenHabitTracker");
+        Directory.CreateDirectory(databaseDirectory);
+
+        PhotinoBlazorApp? app = null;
+
+        // Registered first so startup and DB-init crashes are logged;
+        // routed through the db directory so the write succeeds on sandboxed targets (Snap/Flatpak).
+        AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
+        {
+            try
+            {
+                string? message = error.ExceptionObject.ToString();
+
+                Debug.WriteLine(message);
+
+                File.WriteAllText(Path.Combine(databaseDirectory, "Error.log"), message);
+
+                app?.MainWindow.ShowMessage("Error", message);
+            }
+            catch
+            {
+            }
+        };
+
+        string databasePath = Path.Combine(databaseDirectory, "OpenHT.db");
+
         PhotinoBlazorAppBuilder builder = PhotinoBlazorAppBuilder.CreateDefault(args);
 
         builder.Services.AddLogging(loggingBuilder =>
@@ -34,10 +60,6 @@ public class Program
             loggingBuilder.AddConsole();
 
         });
-
-        string databaseDirectory = Environment.GetEnvironmentVariable("SNAP_USER_COMMON") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ".OpenHabitTracker");
-        Directory.CreateDirectory(databaseDirectory);
-        string databasePath = Path.Combine(databaseDirectory, "OpenHT.db");
 
         builder.Services.AddServices<OnClickMarkdownExtension>();
         builder.Services.AddDataAccess(databasePath);
@@ -58,7 +80,7 @@ public class Program
         builder.RootComponents.Add<Routes>("app");
         builder.RootComponents.Add<HeadOutlet>("head::after");
 
-        PhotinoBlazorApp app = builder.Build();
+        app = builder.Build();
 
         //ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
         // 0
@@ -84,26 +106,6 @@ public class Program
         app.MainWindow.SetUseOsDefaultLocation(false);
         app.MainWindow.SetTop(0);
         app.MainWindow.SetLeft(0);
-
-        AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
-        {
-            try
-            {
-                string? message = error.ExceptionObject.ToString();
-
-                Debug.WriteLine(message);
-
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker");
-                Directory.CreateDirectory(path);
-                path = Path.Combine(path, "Error.log");
-                File.WriteAllText(path, message);
-
-                app.MainWindow.ShowMessage("Error", message);
-            }
-            catch
-            {
-            }
-        };
 
         logger.LogInformation("Running app");
 

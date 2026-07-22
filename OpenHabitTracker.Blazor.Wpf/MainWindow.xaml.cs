@@ -19,7 +19,7 @@ namespace OpenHabitTracker.Blazor.Wpf;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public MainWindow()
+    public MainWindow(string databasePath)
     {
         IServiceCollection services = new ServiceCollection();
         services.AddWpfBlazorWebView();
@@ -37,7 +37,7 @@ public partial class MainWindow : Window
         });
 
         services.AddServices();
-        services.AddDataAccess("OpenHT.db");
+        services.AddDataAccess(databasePath);
         services.AddBackup();
         services.AddBlazor();
         services.AddScoped<IAppReview, AppReview>(); // different in Maui

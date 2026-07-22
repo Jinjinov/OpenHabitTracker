@@ -14,6 +14,11 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
+        // Per-platform writable dir (e.g. /data/user/0/net.openhabittracker/files on Android);
+        // routing the log here fixes the silent write failure of SpecialFolder.ApplicationData on Android/iOS.
+        string appDataDirectory = FileSystem.Current.AppDataDirectory;
+        Directory.CreateDirectory(appDataDirectory);
+
         AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
         {
             try
@@ -22,10 +27,7 @@ public static class MauiProgram
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OpenHabitTracker");
-                Directory.CreateDirectory(path);
-                path = Path.Combine(path, "Error.log");
-                File.WriteAllText(path, message);
+                File.WriteAllText(Path.Combine(appDataDirectory, "Error.log"), message);
 
                 Application.Current?.Dispatcher.Dispatch(async () =>
                 {
@@ -50,24 +52,7 @@ public static class MauiProgram
 #endif
         builder.Logging.AddConsole();
 
-        string databaseFile = "OpenHT.db";
-        string databaseFolder = "";
-
-        //if (DeviceInfo.Platform == DevicePlatform.iOS)
-        //{
-        //    databaseFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library");
-        //}
-        //else if (DeviceInfo.Platform == DevicePlatform.Android)
-        //{
-        //    databaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-        //    // solution for: Microsoft.Data.Sqlite.SqliteException: 'SQLite Error 14: 'unable to open database file'.'
-        //    Directory.CreateDirectory(databaseFolder);
-        //}
-
-        databaseFolder = FileSystem.Current.AppDataDirectory; // /data/user/0/net.openhabittracker/files
-        Directory.CreateDirectory(databaseFolder);
-
-        string databasePath = Path.Combine(databaseFolder, databaseFile);
+        string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
 
         builder.Services.AddServices();
         builder.Services.AddDataAccess(databasePath); // %localappdata%\Packages\...\LocalState - Environment.SpecialFolder.LocalApplicationData - FileSystem.Current.AppDataDirectory
