@@ -1,0 +1,51 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Server (Blazor Web)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/OpenHabitTracker.Blazor.Web/OpenHabitTracker.Blazor.Web.csproj",
+      "presentation": { "group": "1-cross-platform", "order": 1 }
+    },
+    {
+      "name": "WASM (Blazor WebAssembly)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/OpenHabitTracker.Blazor.Wasm/OpenHabitTracker.Blazor.Wasm.csproj",
+      "presentation": { "group": "1-cross-platform", "order": 2 }
+    },
+    {
+      "name": "Photino",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj",
+      "presentation": { "group": "1-cross-platform", "order": 3 }
+    },
+
+    {
+      "name": "WinForms",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/OpenHabitTracker.Blazor.WinForms/OpenHabitTracker.Blazor.WinForms.csproj",
+      "presentation": { "group": "2-windows-only", "order": 1 }
+    },
+    {
+      "name": "WPF",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/OpenHabitTracker.Blazor.Wpf/OpenHabitTracker.Blazor.Wpf.csproj",
+      "presentation": { "group": "2-windows-only", "order": 2 }
+    },
+
+    {
+      "name": "MAUI Windows",
+      "type": "maui",
+      "request": "launch",
+      "preLaunchTask": "maui: Build Windows",
+      "project": "E:\\Jinjinov\\OpenHabitTracker-dev\\OpenHabitTracker\\OpenHabitTracker.Blazor.Maui\\OpenHabitTracker.Blazor.Maui.csproj",
+      "targetFramework": "net10.0-windows10.0.19041.0",
+      "device": "windowsmachine"
+    }
+  ]
+}

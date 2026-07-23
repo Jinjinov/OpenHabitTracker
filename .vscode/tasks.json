@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "maui",
+			"targetFramework": "net10.0-windows10.0.19041.0",
+			"configuration": "Debug",
+			"project": "E:\\Jinjinov\\OpenHabitTracker-dev\\OpenHabitTracker\\OpenHabitTracker.Blazor.Maui\\OpenHabitTracker.Blazor.Maui.csproj",
+			"problemMatcher": [
+				"$msCompile",
+				"$maui-problem-matcher-location",
+				"$maui-problem-matcher",
+				"$maui-problem-matcher-location-multiline",
+				"$maui-problem-matcher-multiline"
+			],
+			"label": "maui: Build Windows"
+		}
+	]
+}
