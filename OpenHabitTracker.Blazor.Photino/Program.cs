@@ -108,25 +108,28 @@ public class Program
 
         string windowSettingsPath = Path.Combine(databaseDirectory, "Window.yaml");
 
-        // MainMonitor is only valid once the native window exists, so size in WindowCreated.
+        WindowSettings? saved = WindowSettings.Load(windowSettingsPath);
+
+        if (saved is not null)
+        {
+            // Applied before the native window exists, so these land in the startup parameters:
+            // on X11 the position only survives as a pre-realize hint, a move after the window is
+            // shown loses to the window manager's own placement. Top-left of 0,0 on first run is
+            // already the startup default, so it takes the same path.
+            app.MainWindow.SetLeft((int)saved.X);
+            app.MainWindow.SetTop((int)saved.Y);
+            app.MainWindow.SetSize((int)saved.Width, (int)saved.Height);
+        }
+
         app.MainWindow.WindowCreated += (sender, e) =>
         {
-            WindowSettings? saved = WindowSettings.Load(windowSettingsPath);
-
-            if (saved is not null)
+            if (saved is null)
             {
-                app.MainWindow.SetLeft((int)saved.X);
-                app.MainWindow.SetTop((int)saved.Y);
-                app.MainWindow.SetSize((int)saved.Width, (int)saved.Height);
-            }
-            else
-            {
-                // First run: min(0.9 of the work area, the 1680x1050 logical cap scaled to pixels), top-left. Pixels are the native unit.
+                // First run: min(0.9 of the work area, the 1680x1050 logical cap scaled to pixels). Pixels are the native unit.
+                // MainMonitor is only valid once the native window exists, so this size is set here.
                 Monitor monitor = app.MainWindow.MainMonitor;
                 Rectangle workArea = monitor.WorkArea;
                 double scale = monitor.Scale;
-                app.MainWindow.SetLeft(0);
-                app.MainWindow.SetTop(0);
                 app.MainWindow.SetSize(
                     Math.Min((int)(workArea.Width * 0.9), (int)(1680 * scale)),
                     Math.Min((int)(workArea.Height * 0.9), (int)(1050 * scale)));
