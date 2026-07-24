@@ -29,7 +29,8 @@
 
     <div class="input-group" data-tasks-step-12>
         <span class="input-group-text bg-transparent col-4">@Loc["Planned at"]</span>
-        <InputDate class="form-control" Type="InputDateType.DateTimeLocal" Value="Task.PlannedAt" ValueExpression="() => Task.PlannedAt" ValueChanged="(DateTime? plannedAt) => SavePlannedAt(Task, plannedAt)" />
+        <InputDate class="form-control" Type="InputDateType.Date" aria-label="@Loc["Planned at"]" Value="Task.PlannedDate" ValueExpression="() => Task.PlannedDate" ValueChanged="(DateTime? plannedDate) => SavePlannedDate(Task, plannedDate)" />
+        <InputDate class="form-control" Type="InputDateType.Time" aria-label="@Loc["Time"]" Value="Task.PlannedTime" ValueExpression="() => Task.PlannedTime" ValueChanged="(TimeOnly? plannedTime) => SavePlannedTime(Task, plannedTime)" />
     </div>
 
     <div class="input-group" data-tasks-step-13>
@@ -239,9 +240,16 @@
         await TaskService.UpdateTask();
     }
 
-    async Task SavePlannedAt(TaskModel task, DateTime? plannedAt)
+    async Task SavePlannedDate(TaskModel task, DateTime? plannedDate)
     {
-        task.PlannedAt = plannedAt;
+        task.PlannedDate = plannedDate;
+
+        await TaskService.UpdateTask();
+    }
+
+    async Task SavePlannedTime(TaskModel task, TimeOnly? plannedTime)
+    {
+        task.PlannedTime = plannedTime;
 
         await TaskService.UpdateTask();
     }

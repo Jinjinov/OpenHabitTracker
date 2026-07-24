@@ -121,9 +121,11 @@ public class TaskTests : BaseTest
         await Page.Locator("input[aria-label='Task title']").FillAsync("Task Edited Title");
         await Page.Locator("input[aria-label='Task title']").BlurAsync();
 
-        // Change planned at
-        await Page.Locator("[data-tasks-step-12] input").FillAsync("2030-01-15T10:00");
-        await Page.Locator("[data-tasks-step-12] input").BlurAsync();
+        // Change planned at (date and time are separate controls)
+        await Page.Locator("[data-tasks-step-12] input[type='date']").FillAsync("2030-01-15");
+        await Page.Locator("[data-tasks-step-12] input[type='date']").BlurAsync();
+        await Page.Locator("[data-tasks-step-12] input[type='time']").FillAsync("10:00");
+        await Page.Locator("[data-tasks-step-12] input[type='time']").BlurAsync();
 
         // Change duration hours
         await Page.Locator("select[aria-label='Duration hours']").SelectOptionAsync("1");
@@ -183,8 +185,10 @@ public class TaskTests : BaseTest
 
         await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Planned Task" }).ClickAsync();
 
-        await Page.Locator("[data-tasks-step-12] input").FillAsync("2030-01-15T10:00");
-        await Page.Locator("[data-tasks-step-12] input").BlurAsync();
+        await Page.Locator("[data-tasks-step-12] input[type='date']").FillAsync("2030-01-15");
+        await Page.Locator("[data-tasks-step-12] input[type='date']").BlurAsync();
+        await Page.Locator("[data-tasks-step-12] input[type='time']").FillAsync("10:00");
+        await Page.Locator("[data-tasks-step-12] input[type='time']").BlurAsync();
 
         await Page.Locator("[data-tasks-step-10]").ClickAsync(); // Close
 
@@ -197,7 +201,34 @@ public class TaskTests : BaseTest
 
         await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Planned Task" }).ClickAsync();
 
-        await Expect(Page.Locator("[data-tasks-step-12] input")).ToHaveValueAsync("2030-01-15T10:00");
+        await Expect(Page.Locator("[data-tasks-step-12] input[type='date']")).ToHaveValueAsync("2030-01-15");
+        await Expect(Page.Locator("[data-tasks-step-12] input[type='time']")).ToHaveValueAsync("10:00");
+    }
+
+    [Test]
+    public async Task EditTask_PlannedDateOnly_TimeStaysEmptyAfterReload()
+    {
+        await AddItemAsync("Date Only Task");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Date Only Task" }).ClickAsync();
+
+        // Set only the date, leave the time empty -> stored as the date-only sentinel
+        await Page.Locator("[data-tasks-step-12] input[type='date']").FillAsync("2030-01-15");
+        await Page.Locator("[data-tasks-step-12] input[type='date']").BlurAsync();
+
+        await Page.Locator("[data-tasks-step-10]").ClickAsync(); // Close
+
+        await WaitForIndexedDbAsync("TaskEntity", "tasks => tasks.some(task => (task.plannedAt ?? task.PlannedAt) != null)"); // wait for the IndexedDB write before reload
+
+        await Page.ReloadAsync();
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
+
+        await NavigateToAsync("[data-main-step-4]");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Date Only Task" }).ClickAsync();
+
+        await Expect(Page.Locator("[data-tasks-step-12] input[type='date']")).ToHaveValueAsync("2030-01-15");
+        await Expect(Page.Locator("[data-tasks-step-12] input[type='time']")).ToHaveValueAsync("");
     }
 
     [Test]

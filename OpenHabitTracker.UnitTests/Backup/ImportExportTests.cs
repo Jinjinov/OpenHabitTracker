@@ -206,6 +206,54 @@ public class ImportExportTests
     }
 
     [Test]
+    public async Task Tsv_ExportThenImport_DateOnlyTaskStaysDateOnly()
+    {
+        // TSV writes DateTime without milliseconds; the whole-second sentinel has none to lose.
+        await AssertDateOnlyRoundTrips(clientState => new TsvImportExport(clientState));
+    }
+
+    // --- date-only sentinel round-trip ---
+
+    [Test]
+    public async Task Json_ExportThenImport_DateOnlyTaskStaysDateOnly()
+    {
+        await AssertDateOnlyRoundTrips(clientState => new JsonImportExport(clientState));
+    }
+
+    [Test]
+    public async Task Yaml_ExportThenImport_DateOnlyTaskStaysDateOnly()
+    {
+        await AssertDateOnlyRoundTrips(clientState => new YamlImportExport(clientState));
+    }
+
+    private async Task AssertDateOnlyRoundTrips(Func<ClientState, dynamic> makeService)
+    {
+        await _sut.LoadSettings();
+
+        DateTime dateOnly = new DateTime(2030, 1, 15) + TaskModel.DateOnlySentinel;
+
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>(
+            [new CategoryEntity { Id = 1, Title = "Work" }]));
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>(
+            [new TaskEntity { Id = 1, CategoryId = 1, Title = "Date Only", PlannedAt = dateOnly }]));
+
+        dynamic service = makeService(_sut);
+
+        string exported = await service.GetDataExportFileString();
+
+        ResetState();
+
+        await service.ImportDataFile(ToStream(exported));
+
+        await _dataAccess.Received(1).AddTasks(Arg.Is<IReadOnlyList<TaskEntity>>(list =>
+            list != null && list.Any(t =>
+                t.Title == "Date Only" &&
+                t.PlannedAt.HasValue &&
+                t.PlannedAt.Value.Date == new DateTime(2030, 1, 15) &&
+                t.PlannedAt.Value.TimeOfDay >= new TimeSpan(0, 23, 59, 59))));
+    }
+
+    [Test]
     public async Task Tsv_UncategorizedNote_StillAddedToNotes()
     {
         await _sut.LoadSettings();

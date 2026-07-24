@@ -50,7 +50,8 @@
 
             <div class="input-group">
                 <span class="input-group-text bg-transparent">@Loc["Planned at"]</span>
-                <InputDate class="form-control" Type="InputDateType.DateTimeLocal" @bind-Value="TaskService.NewTask.PlannedAt" aria-label="@Loc["Planned at"]" />
+                <InputDate class="form-control" Type="InputDateType.Date" @bind-Value="TaskService.NewTask.PlannedDate" aria-label="@Loc["Planned at"]" />
+                <InputDate class="form-control" Type="InputDateType.Time" @bind-Value="TaskService.NewTask.PlannedTime" aria-label="@Loc["Time"]" />
             </div>
 
             <div class="input-group">
@@ -137,7 +138,7 @@
                                 <button id="task-item-@task.Id" class="input-group-text bg-transparent flex-grow-1 text-wrap highlightable d-flex align-items-center" title="@task.Title" @onclick="() => OpenSelected(task.Id)" data-tasks-step-2><span class="title-clamp">@((MarkupString)SearchFilterService.MarkSearchResults(task.Title))</span></button>
                                 @if (task.PlannedAt is not null)
                                 {
-                                    <small class="input-group-text bg-transparent" data-tasks-step-3>@(task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
+                                    <small class="input-group-text bg-transparent" data-tasks-step-3>@(task.IsPlannedDateOnly ? task.PlannedAt.Value.ToShortDateString() : task.PlannedAt.Value.Date == DateTime.Now.Date ? task.PlannedAt.Value.ToShortTimeString() : task.PlannedAt.Value.ToShortDateString())</small>
                                 }
                                 <button class="@($"btn {(task.CompletedAt is null ? "btn-outline-primary" : "btn-primary")}")" aria-label="@Loc["Mark as done"]" @onclick="() => OnMarkAsDone(task)" data-tasks-step-4><i class="bi bi-check-square"></i></button>
                             </div>
