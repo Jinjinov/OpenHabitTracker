@@ -74,6 +74,8 @@
   "Choose how to compare the done date (<, =, >, ≠).": "Kies hoe je de voltooiingsdatum vergelijkt (<, =, >, ≠).",
   "Filter by done date.": "Filteren op voltooiingsdatum.",
   "Clear the done date filter.": "Het filter op voltooiingsdatum wissen.",
+  "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filter taken op een bereik van geplande datums relatief aan vandaag. Negatieve dagen liggen in het verleden, positieve in de toekomst. Laat een veld leeg voor een open bereik.",
+  "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filter taken en gewoonten op een bereik van voltooiingsdatums relatief aan vandaag. Negatieve dagen liggen in het verleden, positieve in de toekomst. Laat een veld leeg voor een open bereik.",
   "Filter by categories.": "Filteren op categorieën.",
   "Filter by priorities.": "Filteren op prioriteiten.",
   "Hide completed tasks.": "Voltooide taken verbergen.",

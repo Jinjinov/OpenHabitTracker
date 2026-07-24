@@ -186,6 +186,18 @@
   "Clear planned date": "Počisti načrtovani datum",
   "Clear done date": "Počisti datum dokončanja",
 
+  "Planned within days from today": "Načrtovano v razponu dni od danes",
+  "Done within days from today": "Končano v razponu dni od danes",
+  "Not done within days from today": "Ni končano v razponu dni od danes",
+  "Relative range preview from": "od {0}",
+  "Relative range preview until": "do {0}",
+  "Earliest planned day offset from today": "Načrtovano: najzgodnejši dan od danes",
+  "Latest planned day offset from today": "Načrtovano: najpoznejši dan od danes",
+  "Earliest done day offset from today": "Končano: najzgodnejši dan od danes",
+  "Latest done day offset from today": "Končano: najpoznejši dan od danes",
+  "Clear planned range": "Počisti načrtovani razpon",
+  "Clear done range": "Počisti razpon dokončanja",
+
   "Version": "Različica",
   "Take notes, plan tasks, track habits": "Piši zapiske, načrtuj naloge, sledi navadam",
   "Free and Ad-Free": "Brezplačno in brez oglasov",

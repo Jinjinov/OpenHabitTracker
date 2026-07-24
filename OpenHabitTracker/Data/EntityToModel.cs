@@ -155,6 +155,11 @@ public static class EntityToModel
         model.ShowOnlyUnderSelectedRatioMax = entity.ShowOnlyUnderSelectedRatioMax;
         model.SelectedRatioMin = entity.SelectedRatioMin;
         model.SelectedRatioMax = entity.SelectedRatioMax;
+        model.PlannedFromDayOffset = entity.PlannedFromDayOffset;
+        model.PlannedToDayOffset = entity.PlannedToDayOffset;
+        model.DoneFromDayOffset = entity.DoneFromDayOffset;
+        model.DoneToDayOffset = entity.DoneToDayOffset;
+        model.ShowDoneInRange = entity.ShowDoneInRange;
         model.HorizontalMargin = entity.HorizontalMargin;
         model.VerticalMargin = entity.VerticalMargin;
         model.CategoryFilterDisplay = entity.CategoryFilterDisplay;

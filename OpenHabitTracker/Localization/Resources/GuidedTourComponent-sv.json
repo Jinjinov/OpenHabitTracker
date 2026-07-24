@@ -74,6 +74,8 @@
   "Choose how to compare the done date (<, =, >, ≠).": "Välj hur klardatumet jämförs (<, =, >, ≠).",
   "Filter by done date.": "Filtrera efter klardatum.",
   "Clear the done date filter.": "Rensa filtret för klardatum.",
+  "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filtrera uppgifter efter ett intervall av planerade datum relativt till idag. Negativa dagar är i det förflutna, positiva i framtiden. Lämna ett fält tomt för ett öppet intervall.",
+  "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filtrera uppgifter och vanor efter ett intervall av slutförda datum relativt till idag. Negativa dagar är i det förflutna, positiva i framtiden. Lämna ett fält tomt för ett öppet intervall.",
   "Filter by categories.": "Filtrera efter kategorier.",
   "Filter by priorities.": "Filtrera efter prioriteringar.",
   "Hide completed tasks.": "Dölj avslutade uppgifter.",

@@ -16,6 +16,16 @@ public class QueryParameters
 
     public DateCompare PlannedAtCompare { get; set; } = DateCompare.On;
 
+    public DateTime? PlannedRangeStart { get; set; }
+
+    public DateTime? PlannedRangeEnd { get; set; }
+
+    public DateTime? DoneRangeStart { get; set; }
+
+    public DateTime? DoneRangeEnd { get; set; }
+
+    public bool ShowDoneInRange { get; set; }
+
     public bool HideCompletedTasks { get; set; }
 
     public bool ShowOnlyOverSelectedRatioMin { get; set; }

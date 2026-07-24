@@ -186,6 +186,18 @@
   "Clear planned date": "Tøm planlagt dato",
   "Clear done date": "Tøm ferdigdato",
 
+  "Planned within days from today": "Planlagt innen dager fra i dag",
+  "Done within days from today": "Fullført innen dager fra i dag",
+  "Not done within days from today": "Ikke fullført innen dager fra i dag",
+  "Relative range preview from": "fra {0}",
+  "Relative range preview until": "til {0}",
+  "Earliest planned day offset from today": "Planlagt: tidligste dag fra i dag",
+  "Latest planned day offset from today": "Planlagt: seneste dag fra i dag",
+  "Earliest done day offset from today": "Fullført: tidligste dag fra i dag",
+  "Latest done day offset from today": "Fullført: seneste dag fra i dag",
+  "Clear planned range": "Tøm planlagt intervall",
+  "Clear done range": "Tøm ferdigintervall",
+
   "Version": "Versjon",
   "Take notes, plan tasks, track habits": "Ta notater, planlegg oppgaver, følg vaner",
   "Free and Ad-Free": "Gratis og reklamefri",

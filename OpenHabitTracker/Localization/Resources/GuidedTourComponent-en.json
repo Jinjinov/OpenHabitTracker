@@ -74,6 +74,8 @@
   "Choose how to compare the done date (<, =, >, ≠).": "Choose how to compare the done date (<, =, >, ≠).",
   "Filter by done date.": "Filter by done date.",
   "Clear the done date filter.": "Clear the done date filter.",
+  "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.",
+  "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.",
   "Filter by categories.": "Filter by categories.",
   "Filter by priorities.": "Filter by priorities.",
   "Hide completed tasks.": "Hide completed tasks.",

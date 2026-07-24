@@ -74,6 +74,8 @@
   "Choose how to compare the done date (<, =, >, ≠).": "选择完成日期的比较方式（<、=、>、≠）。",
   "Filter by done date.": "按完成日期筛选。",
   "Clear the done date filter.": "清除完成日期筛选。",
+  "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "按相对于今天的计划日期范围筛选任务。负数天数表示过去，正数天数表示将来。将字段留空可表示开放范围。",
+  "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "按相对于今天的完成日期范围筛选任务和习惯。负数天数表示过去，正数天数表示将来。将字段留空可表示开放范围。",
   "Filter by categories.": "按分类筛选。",
   "Filter by priorities.": "按优先级筛选。",
   "Hide completed tasks.": "隐藏已完成任务。",

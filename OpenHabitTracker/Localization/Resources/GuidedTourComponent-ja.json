@@ -74,6 +74,8 @@
   "Choose how to compare the done date (<, =, >, ≠).": "完了日の比較方法を選択します（<、=、>、≠）。",
   "Filter by done date.": "完了日で絞り込みます。",
   "Clear the done date filter.": "完了日フィルターをクリアします。",
+  "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "タスクを今日を基準とした予定日の範囲でフィルタリングします。マイナスの日数は過去、プラスの日数は未来です。範囲を開いたままにするにはフィールドを空欄にします。",
+  "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "タスクと習慣を今日を基準とした完了日の範囲でフィルタリングします。マイナスの日数は過去、プラスの日数は未来です。範囲を開いたままにするにはフィールドを空欄にします。",
   "Filter by categories.": "カテゴリで絞り込みます。",
   "Filter by priorities.": "優先度で絞り込みます。",
   "Hide completed tasks.": "完了済みタスクを非表示にします。",

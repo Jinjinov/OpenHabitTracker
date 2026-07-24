@@ -237,8 +237,8 @@ public class SettingsPersistenceTests : BaseTest
         // Open search panel; FilterByStatus section is expanded by default (FoldSection[FilterByStatus]=false)
         await Page.Locator("[data-main-step-6]").ClickAsync();
 
-        // Enable ShowOnlyOverSelectedRatioMin — data-search-step-16 wraps the checkbox + label
-        await Page.Locator("[data-search-step-16] label").ClickAsync();
+        // Enable ShowOnlyOverSelectedRatioMin — data-search-step-18 wraps the checkbox + label
+        await Page.Locator("[data-search-step-18] label").ClickAsync();
 
         await CloseSidebarAsync();
 
@@ -248,6 +248,6 @@ public class SettingsPersistenceTests : BaseTest
 
         await Page.Locator("[data-main-step-6]").ClickAsync();
 
-        await Expect(Page.Locator("[data-search-step-16] input[type='checkbox']")).ToBeCheckedAsync();
+        await Expect(Page.Locator("[data-search-step-18] input[type='checkbox']")).ToBeCheckedAsync();
     }
 }

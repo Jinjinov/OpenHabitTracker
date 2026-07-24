@@ -74,6 +74,8 @@
   "Choose how to compare the done date (<, =, >, ≠).": "Odaberite način usporedbe datuma dovršetka (<, =, >, ≠).",
   "Filter by done date.": "Filtriraj po datumu dovršetka.",
   "Clear the done date filter.": "Očisti filtar datuma dovršetka.",
+  "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filtriraj zadatke prema rasponu planiranih datuma u odnosu na danas. Negativni dani su u prošlosti, pozitivni u budućnosti. Ostavi polje prazno za otvoreni raspon.",
+  "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filtriraj zadatke i navike prema rasponu datuma završetka u odnosu na danas. Negativni dani su u prošlosti, pozitivni u budućnosti. Ostavi polje prazno za otvoreni raspon.",
   "Filter by categories.": "Filtriraj po kategorijama.",
   "Filter by priorities.": "Filtriraj po prioritetima.",
   "Hide completed tasks.": "Sakrij dovršene zadatke.",

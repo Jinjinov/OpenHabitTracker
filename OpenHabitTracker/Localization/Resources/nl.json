@@ -186,6 +186,18 @@
   "Clear planned date": "Geplande datum wissen",
   "Clear done date": "Voltooiingsdatum wissen",
 
+  "Planned within days from today": "Gepland binnen dagen vanaf vandaag",
+  "Done within days from today": "Voltooid binnen dagen vanaf vandaag",
+  "Not done within days from today": "Niet voltooid binnen dagen vanaf vandaag",
+  "Relative range preview from": "vanaf {0}",
+  "Relative range preview until": "tot {0}",
+  "Earliest planned day offset from today": "Gepland: vroegste dag vanaf vandaag",
+  "Latest planned day offset from today": "Gepland: laatste dag vanaf vandaag",
+  "Earliest done day offset from today": "Voltooid: vroegste dag vanaf vandaag",
+  "Latest done day offset from today": "Voltooid: laatste dag vanaf vandaag",
+  "Clear planned range": "Gepland bereik wissen",
+  "Clear done range": "Voltooiingsbereik wissen",
+
   "Version": "Versie",
   "Take notes, plan tasks, track habits": "Maak notities, plan taken, volg gewoontes",
   "Free and Ad-Free": "Gratis en advertentievrij",

@@ -66,6 +66,16 @@ public class SettingsModel
 
     public int SelectedRatioMax { get; set; } = 150;
 
+    public int? PlannedFromDayOffset { get; set; }
+
+    public int? PlannedToDayOffset { get; set; }
+
+    public int? DoneFromDayOffset { get; set; }
+
+    public int? DoneToDayOffset { get; set; }
+
+    public bool ShowDoneInRange { get; set; }
+
     public int HorizontalMargin { get; set; } = 1;
 
     public int VerticalMargin { get; set; } = 1;
@@ -107,6 +117,26 @@ public class SettingsModel
         { ContentType.Habit, Sort.SelectedRatio }
     };
 
+    // Caps the day offsets so resolving them can never overflow DateTime in AddDays.
+    public const int MaxDayOffset = 9000;
+
+    // Resolves the signed day offsets into concrete date bounds relative to the given day.
+    // Resolving at query time is what keeps the filter from going stale.
+    // A null offset is an open-ended bound; both null means the filter is off (start and end null).
+    internal (DateTime? Start, DateTime? End) ResolvePlannedRange(DateTime today) =>
+        ResolveRange(PlannedFromDayOffset, PlannedToDayOffset, today);
+
+    internal (DateTime? Start, DateTime? End) ResolveDoneRange(DateTime today) =>
+        ResolveRange(DoneFromDayOffset, DoneToDayOffset, today);
+
+    private static (DateTime? Start, DateTime? End) ResolveRange(int? fromOffset, int? toOffset, DateTime today)
+    {
+        DateTime? start = fromOffset is int from ? today.Date.AddDays(Math.Clamp(from, -MaxDayOffset, MaxDayOffset)) : null;
+        DateTime? end = toOffset is int to ? today.Date.AddDays(Math.Clamp(to, -MaxDayOffset, MaxDayOffset)) : null;
+
+        return (start, end);
+    }
+
     public static SettingsModel GetDefaultSettings(long userId)
     {
         return new SettingsModel
@@ -142,6 +172,11 @@ public class SettingsModel
             ShowOnlyUnderSelectedRatioMax = false,
             SelectedRatioMin = 50,
             SelectedRatioMax = 150,
+            PlannedFromDayOffset = null,
+            PlannedToDayOffset = null,
+            DoneFromDayOffset = null,
+            DoneToDayOffset = null,
+            ShowDoneInRange = true,
             HorizontalMargin = 1,
             VerticalMargin = 3,
             CategoryFilterDisplay = FilterDisplay.CheckBoxes,

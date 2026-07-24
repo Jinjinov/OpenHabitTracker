@@ -74,6 +74,8 @@
   "Choose how to compare the done date (<, =, >, ≠).": "Velg hvordan ferdigdatoen sammenlignes (<, =, >, ≠).",
   "Filter by done date.": "Filtrer etter ferdigdato.",
   "Clear the done date filter.": "Tøm filteret for ferdigdato.",
+  "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filtrer oppgaver etter et intervall av planlagte datoer relativt til i dag. Negative dager er i fortiden, positive i fremtiden. La et felt stå tomt for et åpent intervall.",
+  "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filtrer oppgaver og vaner etter et intervall av fullførte datoer relativt til i dag. Negative dager er i fortiden, positive i fremtiden. La et felt stå tomt for et åpent intervall.",
   "Filter by categories.": "Filtrer etter kategorier.",
   "Filter by priorities.": "Filtrer etter prioriteter.",
   "Hide completed tasks.": "Skjul fullførte oppgaver.",

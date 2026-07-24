@@ -335,6 +335,48 @@ public class EntityToModelTests
         Assert.That(entity.HideCompletedTasks, Is.False);
     }
 
+    [Test]
+    public void SettingsModel_ToEntity_PreservesRelativeRangeOffsets()
+    {
+        SettingsModel model = new()
+        {
+            PlannedFromDayOffset = -7,
+            PlannedToDayOffset = 7,
+            DoneFromDayOffset = -3,
+            DoneToDayOffset = null,
+            ShowDoneInRange = true,
+        };
+
+        SettingsEntity entity = model.ToEntity();
+
+        Assert.That(entity.PlannedFromDayOffset, Is.EqualTo(-7));
+        Assert.That(entity.PlannedToDayOffset, Is.EqualTo(7));
+        Assert.That(entity.DoneFromDayOffset, Is.EqualTo(-3));
+        Assert.That(entity.DoneToDayOffset, Is.Null);
+        Assert.That(entity.ShowDoneInRange, Is.True);
+    }
+
+    [Test]
+    public void SettingsEntity_ToModel_PreservesRelativeRangeOffsets()
+    {
+        SettingsEntity entity = new()
+        {
+            PlannedFromDayOffset = -7,
+            PlannedToDayOffset = 7,
+            DoneFromDayOffset = -3,
+            DoneToDayOffset = null,
+            ShowDoneInRange = true,
+        };
+
+        SettingsModel model = entity.ToModel();
+
+        Assert.That(model.PlannedFromDayOffset, Is.EqualTo(-7));
+        Assert.That(model.PlannedToDayOffset, Is.EqualTo(7));
+        Assert.That(model.DoneFromDayOffset, Is.EqualTo(-3));
+        Assert.That(model.DoneToDayOffset, Is.Null);
+        Assert.That(model.ShowDoneInRange, Is.True);
+    }
+
     // --- Time ---
 
     [Test]

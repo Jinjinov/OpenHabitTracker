@@ -74,6 +74,8 @@
   "Choose how to compare the done date (<, =, >, ≠).": "Zvolte způsob porovnávání data dokončení (<, =, >, ≠).",
   "Filter by done date.": "Filtrovat podle data dokončení.",
   "Clear the done date filter.": "Vymazat filtr data dokončení.",
+  "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filtrovat úkoly podle rozsahu plánovaných dat vzhledem k dnešku. Záporné dny jsou v minulosti, kladné v budoucnosti. Ponechte pole prázdné pro otevřený rozsah.",
+  "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filtrovat úkoly a návyky podle rozsahu dat dokončení vzhledem k dnešku. Záporné dny jsou v minulosti, kladné v budoucnosti. Ponechte pole prázdné pro otevřený rozsah.",
   "Filter by categories.": "Filtrovat podle kategorií.",
   "Filter by priorities.": "Filtrovat podle priorit.",
   "Hide completed tasks.": "Skrýt dokončené úkoly.",

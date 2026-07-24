@@ -66,6 +66,16 @@ public class SettingsEntity
 
     public int SelectedRatioMax { get; set; } = 150;
 
+    public int? PlannedFromDayOffset { get; set; }
+
+    public int? PlannedToDayOffset { get; set; }
+
+    public int? DoneFromDayOffset { get; set; }
+
+    public int? DoneToDayOffset { get; set; }
+
+    public bool ShowDoneInRange { get; set; }
+
     public int HorizontalMargin { get; set; } = 1;
 
     public int VerticalMargin { get; set; } = 1;

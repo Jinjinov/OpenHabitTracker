@@ -74,6 +74,8 @@
   "Choose how to compare the done date (<, =, >, ≠).": "Elige cómo comparar la fecha de finalización (<, =, >, ≠).",
   "Filter by done date.": "Filtrar por fecha de finalización.",
   "Clear the done date filter.": "Borrar el filtro de fecha de finalización.",
+  "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filtra las tareas por un rango de fechas planificadas relativo a hoy. Los días negativos están en el pasado y los positivos en el futuro. Deja un campo vacío para un rango abierto.",
+  "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "Filtra las tareas y los hábitos por un rango de fechas de finalización relativo a hoy. Los días negativos están en el pasado y los positivos en el futuro. Deja un campo vacío para un rango abierto.",
   "Filter by categories.": "Filtrar por categorías.",
   "Filter by priorities.": "Filtrar por prioridades.",
   "Hide completed tasks.": "Ocultar tareas completadas.",

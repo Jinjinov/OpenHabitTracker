@@ -186,6 +186,18 @@
   "Clear planned date": "Clear planned date",
   "Clear done date": "Clear done date",
 
+  "Planned within days from today": "Planned within days from today",
+  "Done within days from today": "Done within days from today",
+  "Not done within days from today": "Not done within days from today",
+  "Relative range preview from": "from {0}",
+  "Relative range preview until": "until {0}",
+  "Earliest planned day offset from today": "Earliest planned day offset from today",
+  "Latest planned day offset from today": "Latest planned day offset from today",
+  "Earliest done day offset from today": "Earliest done day offset from today",
+  "Latest done day offset from today": "Latest done day offset from today",
+  "Clear planned range": "Clear planned range",
+  "Clear done range": "Clear done range",
+
   "Version": "Version",
   "Take notes, plan tasks, track habits": "Take notes, plan tasks, track habits",
   "Free and Ad-Free": "Free and Ad-Free",

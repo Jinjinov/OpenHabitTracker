@@ -186,6 +186,18 @@
   "Clear planned date": "Rensa planerat datum",
   "Clear done date": "Rensa klardatum",
 
+  "Planned within days from today": "Planerad inom dagar från idag",
+  "Done within days from today": "Klar inom dagar från idag",
+  "Not done within days from today": "Inte klar inom dagar från idag",
+  "Relative range preview from": "från {0}",
+  "Relative range preview until": "till {0}",
+  "Earliest planned day offset from today": "Planerad: tidigaste dag från idag",
+  "Latest planned day offset from today": "Planerad: senaste dag från idag",
+  "Earliest done day offset from today": "Klar: tidigaste dag från idag",
+  "Latest done day offset from today": "Klar: senaste dag från idag",
+  "Clear planned range": "Rensa planerat intervall",
+  "Clear done range": "Rensa klarintervall",
+
   "Version": "Version",
   "Take notes, plan tasks, track habits": "Skriv anteckningar, planera uppgifter, följ vanor",
   "Free and Ad-Free": "Gratis och reklamfri",

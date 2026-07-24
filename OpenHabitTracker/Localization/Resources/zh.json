@@ -186,6 +186,18 @@
   "Clear planned date": "清除计划日期",
   "Clear done date": "清除完成日期",
 
+  "Planned within days from today": "计划：从今天起的天数内",
+  "Done within days from today": "完成：从今天起的天数内",
+  "Not done within days from today": "未完成：从今天起的天数内",
+  "Relative range preview from": "从 {0} 起",
+  "Relative range preview until": "至 {0}",
+  "Earliest planned day offset from today": "计划：从今天起最早的一天",
+  "Latest planned day offset from today": "计划：从今天起最晚的一天",
+  "Earliest done day offset from today": "完成：从今天起最早的一天",
+  "Latest done day offset from today": "完成：从今天起最晚的一天",
+  "Clear planned range": "清除计划范围",
+  "Clear done range": "清除完成范围",
+
   "Version": "版本",
   "Take notes, plan tasks, track habits": "记笔记、规划任务、培养习惯",
   "Free and Ad-Free": "免费无广告",

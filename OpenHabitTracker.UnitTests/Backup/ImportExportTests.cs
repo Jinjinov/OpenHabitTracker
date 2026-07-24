@@ -161,6 +161,26 @@ public class ImportExportTests
         await _dataAccess.Received(1).AddHabits(Arg.Is<IReadOnlyList<HabitEntity>>(list => list != null && list.Any(h => h.Title == "Exercise")));
     }
 
+    [Test]
+    public void Json_Settings_RoundTripsRelativeRangeOffsets()
+    {
+        // JSON and YAML export the whole SettingsModel graph, so the offsets ride along with no extra code.
+        UserImportExportData data = new();
+        data.Settings.PlannedFromDayOffset = -7;
+        data.Settings.PlannedToDayOffset = 7;
+        data.Settings.DoneFromDayOffset = -3;
+        data.Settings.DoneToDayOffset = null;
+
+        JsonSerializerOptions options = new() { WriteIndented = true };
+        string json = JsonSerializer.Serialize(data, options);
+        UserImportExportData restored = JsonSerializer.Deserialize<UserImportExportData>(json, options)!;
+
+        Assert.That(restored.Settings.PlannedFromDayOffset, Is.EqualTo(-7));
+        Assert.That(restored.Settings.PlannedToDayOffset, Is.EqualTo(7));
+        Assert.That(restored.Settings.DoneFromDayOffset, Is.EqualTo(-3));
+        Assert.That(restored.Settings.DoneToDayOffset, Is.Null);
+    }
+
     // --- YAML ---
 
     [Test]

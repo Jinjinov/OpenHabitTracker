@@ -188,6 +188,46 @@ public class SearchFilterServiceTests
         Assert.That(qp.PlannedAtCompare, Is.EqualTo(DateCompare.Before));
     }
 
+    // --- GetQueryParameters relative range offsets ---
+
+    [Test]
+    public void GetQueryParameters_ResolvesRelativeOffsetsToDatesFromToday()
+    {
+        SettingsModel settings = new()
+        {
+            PlannedFromDayOffset = -7,
+            PlannedToDayOffset = 7,
+            DoneFromDayOffset = -3,
+            DoneToDayOffset = null,
+        };
+
+        QueryParameters qp = _sut.GetQueryParameters(settings);
+
+        Assert.That(qp.PlannedRangeStart, Is.EqualTo(DateTime.Today.AddDays(-7)));
+        Assert.That(qp.PlannedRangeEnd, Is.EqualTo(DateTime.Today.AddDays(7)));
+        Assert.That(qp.DoneRangeStart, Is.EqualTo(DateTime.Today.AddDays(-3)));
+        Assert.That(qp.DoneRangeEnd, Is.Null);
+    }
+
+    [Test]
+    public void GetQueryParameters_NoRelativeOffsets_LeavesRangeBoundsNull()
+    {
+        QueryParameters qp = _sut.GetQueryParameters(new SettingsModel());
+
+        Assert.That(qp.PlannedRangeStart, Is.Null);
+        Assert.That(qp.PlannedRangeEnd, Is.Null);
+        Assert.That(qp.DoneRangeStart, Is.Null);
+        Assert.That(qp.DoneRangeEnd, Is.Null);
+    }
+
+    [Test]
+    public void GetQueryParameters_MapsShowDoneInRange()
+    {
+        QueryParameters qp = _sut.GetQueryParameters(new SettingsModel { ShowDoneInRange = true });
+
+        Assert.That(qp.ShowDoneInRange, Is.True);
+    }
+
     // --- MarkSearchResultsInHtml case-sensitive multiple occurrences ---
 
     [Test]

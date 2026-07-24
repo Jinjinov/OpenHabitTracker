@@ -22,6 +22,11 @@ public class SearchFilterService : ISearchFilterService
 
     public QueryParameters GetQueryParameters(SettingsModel settings)
     {
+        DateTime today = DateTime.Today;
+
+        (DateTime? plannedRangeStart, DateTime? plannedRangeEnd) = settings.ResolvePlannedRange(today);
+        (DateTime? doneRangeStart, DateTime? doneRangeEnd) = settings.ResolveDoneRange(today);
+
         return new()
         {
             SearchTerm = SearchTerm,
@@ -30,6 +35,11 @@ public class SearchFilterService : ISearchFilterService
             DoneAtCompare = DoneAtCompare,
             PlannedAtFilter = PlannedAtFilter,
             PlannedAtCompare = PlannedAtCompare,
+            PlannedRangeStart = plannedRangeStart,
+            PlannedRangeEnd = plannedRangeEnd,
+            DoneRangeStart = doneRangeStart,
+            DoneRangeEnd = doneRangeEnd,
+            ShowDoneInRange = settings.ShowDoneInRange,
             HideCompletedTasks = settings.HideCompletedTasks,
             ShowOnlyOverSelectedRatioMin = settings.ShowOnlyOverSelectedRatioMin,
             ShowOnlyUnderSelectedRatioMax = settings.ShowOnlyUnderSelectedRatioMax,

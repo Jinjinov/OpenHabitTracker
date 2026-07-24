@@ -186,6 +186,18 @@
   "Clear planned date": "Geplantes Datum löschen",
   "Clear done date": "Erledigungsdatum löschen",
 
+  "Planned within days from today": "Geplant innerhalb von Tagen ab heute",
+  "Done within days from today": "Erledigt innerhalb von Tagen ab heute",
+  "Not done within days from today": "Nicht erledigt innerhalb von Tagen ab heute",
+  "Relative range preview from": "ab {0}",
+  "Relative range preview until": "bis {0}",
+  "Earliest planned day offset from today": "Geplant: frühester Tag ab heute",
+  "Latest planned day offset from today": "Geplant: spätester Tag ab heute",
+  "Earliest done day offset from today": "Erledigt: frühester Tag ab heute",
+  "Latest done day offset from today": "Erledigt: spätester Tag ab heute",
+  "Clear planned range": "Geplanten Bereich löschen",
+  "Clear done range": "Erledigungsbereich löschen",
+
   "Version": "Version",
   "Take notes, plan tasks, track habits": "Notizen schreiben, Aufgaben planen, Gewohnheiten verfolgen",
   "Free and Ad-Free": "Kostenlos und werbefrei",

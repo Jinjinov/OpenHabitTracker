@@ -130,8 +130,8 @@ public class SearchTests : BaseTest
 
         int totalCount = await Page.Locator("[data-habits-step-2]").CountAsync();
 
-        await Page.Locator("[data-search-step-13] label[for='Priority.None']").ClickAsync();
-        await Expect(Page.Locator("[data-search-step-13] input[id='Priority.None']")).Not.ToBeCheckedAsync();
+        await Page.Locator("[data-search-step-15] label[for='Priority.None']").ClickAsync();
+        await Expect(Page.Locator("[data-search-step-15] input[id='Priority.None']")).Not.ToBeCheckedAsync();
 
         int filteredCount = await Page.Locator("[data-habits-step-2]").CountAsync();
         Assert.That(filteredCount, Is.LessThanOrEqualTo(totalCount));
@@ -162,8 +162,8 @@ public class SearchTests : BaseTest
         await NavigateToAsync("[data-main-step-5]");
         await OpenSearchAsync();
 
-        // data-search-step-22 is the Habits sort select; index 2 = Title
-        await Page.Locator("[data-search-step-22] select").SelectOptionAsync(new SelectOptionValue { Index = 2 });
+        // data-search-step-24 is the Habits sort select; index 2 = Title
+        await Page.Locator("[data-search-step-24] select").SelectOptionAsync(new SelectOptionValue { Index = 2 });
 
         ILocator habits = Page.Locator("[data-habits-step-2]");
         await Expect(habits.Nth(1)).ToBeVisibleAsync();
@@ -190,10 +190,10 @@ public class SearchTests : BaseTest
         await OpenSearchAsync();
 
         // Set SelectedRatioMax slider to 0 via JS (all habits have ratio ≥ 0, so none pass ratio < 0)
-        await Page.Locator("[data-search-step-19]").EvaluateAsync("el => { el.value = '0'; el.dispatchEvent(new Event('input', { bubbles: true })); }");
+        await Page.Locator("[data-search-step-21]").EvaluateAsync("el => { el.value = '0'; el.dispatchEvent(new Event('input', { bubbles: true })); }");
 
         // Enable "under x%" filter
-        await Page.Locator("[data-search-step-18] label").ClickAsync();
+        await Page.Locator("[data-search-step-20] label").ClickAsync();
 
         await Expect(Page.Locator("[data-habits-step-2]")).ToHaveCountAsync(0);
     }
@@ -214,11 +214,66 @@ public class SearchTests : BaseTest
 
         await OpenSearchAsync();
 
-        // data-search-step-16 wraps ShowOnlyOverSelectedRatioMin; default SelectedRatioMin = 50%
-        await Page.Locator("[data-search-step-16] label").ClickAsync();
+        // data-search-step-18 wraps ShowOnlyOverSelectedRatioMin; default SelectedRatioMin = 50%
+        await Page.Locator("[data-search-step-18] label").ClickAsync();
         await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "LowRatio Habit" })).ToHaveCountAsync(0);
 
         int countAfter = await Page.Locator("[data-habits-step-2]").CountAsync();
         Assert.That(countAfter, Is.LessThan(countBefore));
+    }
+
+    [Test]
+    public async Task RelativePlannedFilter_Offsets_PersistedAfterReload()
+    {
+        await NavigateToAsync("[data-main-step-4]"); // tasks page
+        await OpenSearchAsync();
+
+        // data-search-step-12 is the relative Planned range row (two number inputs)
+        await Page.Locator("input[aria-label='Earliest planned day offset from today']").FillAsync("-7");
+        await Page.Locator("input[aria-label='Earliest planned day offset from today']").BlurAsync();
+        await Page.Locator("input[aria-label='Latest planned day offset from today']").FillAsync("7");
+        await Page.Locator("input[aria-label='Latest planned day offset from today']").BlurAsync();
+
+        await WaitForIndexedDbAsync("SettingsEntity", "settings => settings.some(s => (s.plannedFromDayOffset ?? s.PlannedFromDayOffset) != null)");
+
+        await Page.ReloadAsync();
+        await Expect(Page.Locator("nav[aria-label]")).ToBeVisibleAsync();
+
+        await NavigateToAsync("[data-main-step-4]");
+        await OpenSearchAsync();
+
+        await Expect(Page.Locator("input[aria-label='Earliest planned day offset from today']")).ToHaveValueAsync("-7");
+        await Expect(Page.Locator("input[aria-label='Latest planned day offset from today']")).ToHaveValueAsync("7");
+    }
+
+    [Test]
+    public async Task RelativePlannedFilter_TodayWindow_ExcludesAndIncludesTaskPlannedToday()
+    {
+        await NavigateToAsync("[data-main-step-4]");
+        await AddItemAsync("RelToday Task");
+
+        // Give the task a planned date of today (date-only control from issue 23)
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "RelToday Task" }).ClickAsync();
+        await Page.Locator("[data-tasks-step-12] input[type='date']").FillAsync(DateTime.Today.ToString("yyyy-MM-dd"));
+        await Page.Locator("[data-tasks-step-12] input[type='date']").BlurAsync();
+        await Page.Locator("[data-tasks-step-10]").ClickAsync(); // Close
+
+        await OpenSearchAsync();
+
+        // A future-only window (+1 to +7 days) must exclude a task planned today
+        await Page.Locator("input[aria-label='Earliest planned day offset from today']").FillAsync("1");
+        await Page.Locator("input[aria-label='Earliest planned day offset from today']").BlurAsync();
+        await Page.Locator("input[aria-label='Latest planned day offset from today']").FillAsync("7");
+        await Page.Locator("input[aria-label='Latest planned day offset from today']").BlurAsync();
+
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "RelToday Task" })).ToHaveCountAsync(0);
+
+        // Today-only window (0 to 0) must include it again
+        await Page.Locator("input[aria-label='Earliest planned day offset from today']").FillAsync("0");
+        await Page.Locator("input[aria-label='Earliest planned day offset from today']").BlurAsync();
+        await Page.Locator("input[aria-label='Latest planned day offset from today']").FillAsync("0");
+        await Page.Locator("input[aria-label='Latest planned day offset from today']").BlurAsync();
+
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "RelToday Task" })).ToBeVisibleAsync();
     }
 }

@@ -74,6 +74,8 @@
   "Choose how to compare the done date (<, =, >, ≠).": "완료일 비교 방식을 선택합니다 (<, =, >, ≠).",
   "Filter by done date.": "완료일로 필터합니다.",
   "Clear the done date filter.": "완료일 필터를 지웁니다.",
+  "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "오늘을 기준으로 한 예정 날짜 범위로 작업을 필터링합니다. 음수 일은 과거, 양수 일은 미래입니다. 범위를 열어 두려면 필드를 비워 두세요.",
+  "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range.": "오늘을 기준으로 한 완료 날짜 범위로 작업과 습관을 필터링합니다. 음수 일은 과거, 양수 일은 미래입니다. 범위를 열어 두려면 필드를 비워 두세요.",
   "Filter by categories.": "카테고리로 필터합니다.",
   "Filter by priorities.": "우선순위로 필터합니다.",
   "Hide completed tasks.": "완료된 할 일을 숨깁니다.",

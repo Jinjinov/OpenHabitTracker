@@ -68,6 +68,43 @@
                 <InputDate class="form-control" aria-label="@Loc["Done"]" Value="SearchFilterService.DoneAtFilter" ValueExpression="() => SearchFilterService.DoneAtFilter" TValue="DateTime?" ValueChanged="UpdateDoneAtFilter" Type="InputDateType.Date" @attributes="dataSearchStep10" />
                 <button class="btn btn-outline-primary" aria-label="@Loc["Clear done date"]" @onclick="() => UpdateDoneAtFilter(null)" data-search-step-11><i class="bi bi-x-square"></i></button>
             </div>
+
+            <div class="list-group-item" data-search-step-12>
+                <small>@Loc["Planned within days from today"]:</small>
+                <div class="input-group flex-nowrap mt-2">
+                    <InputNumber class="form-control" aria-label="@Loc["Earliest planned day offset from today"]" placeholder="-" Value="_settings.PlannedFromDayOffset" ValueExpression="() => _settings.PlannedFromDayOffset" ValueChanged="SavePlannedFromDayOffset" TValue="int?" />
+                    <span class="input-group-text bg-transparent">@Loc["to"]</span>
+                    <InputNumber class="form-control" aria-label="@Loc["Latest planned day offset from today"]" placeholder="+" Value="_settings.PlannedToDayOffset" ValueExpression="() => _settings.PlannedToDayOffset" ValueChanged="SavePlannedToDayOffset" TValue="int?" />
+                </div>
+                @if (_settings.PlannedFromDayOffset is not null || _settings.PlannedToDayOffset is not null)
+                {
+                    <div class="input-group flex-nowrap mt-2">
+                        <span class="input-group-text bg-transparent flex-grow-1">@RelativeRangePreview(_settings.ResolvePlannedRange(DateTime.Today))</span>
+                        <button class="btn btn-outline-primary" aria-label="@Loc["Clear planned range"]" @onclick="ClearPlannedRange"><i class="bi bi-x-square"></i></button>
+                    </div>
+                }
+            </div>
+
+            <div class="list-group-item" data-search-step-13>
+                <div class="d-flex align-items-center">
+                    <small>@Loc[_settings.ShowDoneInRange ? "Done within days from today" : "Not done within days from today"]:</small>
+                    <div class="form-check form-switch ms-auto mb-0">
+                        <InputCheckbox class="form-check-input" role="switch" aria-label="@Loc["Done within days from today"]" Value="_settings.ShowDoneInRange" ValueExpression="() => _settings.ShowDoneInRange" ValueChanged="SaveShowDoneInRange" />
+                    </div>
+                </div>
+                <div class="input-group flex-nowrap mt-2">
+                    <InputNumber class="form-control" aria-label="@Loc["Earliest done day offset from today"]" placeholder="-" Value="_settings.DoneFromDayOffset" ValueExpression="() => _settings.DoneFromDayOffset" ValueChanged="SaveDoneFromDayOffset" TValue="int?" />
+                    <span class="input-group-text bg-transparent">@Loc["to"]</span>
+                    <InputNumber class="form-control" aria-label="@Loc["Latest done day offset from today"]" placeholder="+" Value="_settings.DoneToDayOffset" ValueExpression="() => _settings.DoneToDayOffset" ValueChanged="SaveDoneToDayOffset" TValue="int?" />
+                </div>
+                @if (_settings.DoneFromDayOffset is not null || _settings.DoneToDayOffset is not null)
+                {
+                    <div class="input-group flex-nowrap mt-2">
+                        <span class="input-group-text bg-transparent flex-grow-1">@RelativeRangePreview(_settings.ResolveDoneRange(DateTime.Today))</span>
+                        <button class="btn btn-outline-primary" aria-label="@Loc["Clear done range"]" @onclick="ClearDoneRange"><i class="bi bi-x-square"></i></button>
+                    </div>
+                }
+            </div>
             }
 
             <button class="btn btn-plain border-0 p-0 text-start mx-1 my-2" @onclick="() => ToggleFoldSection(QuerySection.FilterByCategory)" aria-expanded="@(!_settings.FoldSection[QuerySection.FilterByCategory])">
@@ -78,7 +115,7 @@
             {
                 @if (_settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes)
                 {
-                    <div class="list-group-item" data-search-step-12>
+                    <div class="list-group-item" data-search-step-14>
                         <CheckBox IsTriState="true" Checked="ShowAllCategories" CheckedChanged="(bool? show) => SetShowAllCategories()">
                             <span>@Loc["Categories"]:</span>
                         </CheckBox>
@@ -98,7 +135,7 @@
                 }
                 else if (_settings.CategoryFilterDisplay == FilterDisplay.RadioButtons)
                 {
-                    <div class="list-group-item" data-search-step-12>
+                    <div class="list-group-item" data-search-step-14>
                         <span>@Loc["Categories"]:</span>
                         <div class="mt-3" />
                         <div class="form-check position-relative">
@@ -116,7 +153,7 @@
                 }
                 else if (_settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
                 {
-                    <div class="list-group-item" data-search-step-12>
+                    <div class="list-group-item" data-search-step-14>
                         <small>@Loc["Categories"]:</small>
                         <InputSelect class="form-select" aria-label="@Loc["Categories"]" Value="_settings.SelectedCategoryId" ValueExpression="() => _settings.SelectedCategoryId" TValue="long?" ValueChanged="SaveSelectedCategoryId">
                             <option value="">@Loc["All"]</option>
@@ -137,7 +174,7 @@
             {
                 @if (_settings.PriorityFilterDisplay == FilterDisplay.CheckBoxes)
                 {
-                    <div class="list-group-item" data-search-step-13>
+                    <div class="list-group-item" data-search-step-15>
                         <CheckBox IsTriState="true" Checked="ShowAllPriorities" CheckedChanged="(bool? show) => SetShowAllPriorities()">
                             <span>@Loc["Priorities"]:</span>
                         </CheckBox>
@@ -170,7 +207,7 @@
                 }
                 else if (_settings.PriorityFilterDisplay == FilterDisplay.RadioButtons)
                 {
-                    <div class="list-group-item" data-search-step-13>
+                    <div class="list-group-item" data-search-step-15>
                         <span>@Loc["Priorities"]:</span>
 
                         <div class="form-check position-relative mt-3">
@@ -205,7 +242,7 @@
                 }
                 else if (_settings.PriorityFilterDisplay == FilterDisplay.SelectOptions)
                 {
-                    <div class="list-group-item" data-search-step-13>
+                    <div class="list-group-item" data-search-step-15>
                         <small>@Loc["Priorities"]:</small>
                         <InputSelect class="form-select" aria-label="@Loc["Priorities"]" Value="_settings.SelectedPriority" ValueExpression="() => _settings.SelectedPriority" TValue="Priority?" ValueChanged="SaveSelectedPriority">
                             <option value="">@Loc["All"]</option>
@@ -227,7 +264,7 @@
             @if (!_settings.FoldSection[QuerySection.FilterByStatus])
             {
             <div class="list-group-item">
-                <div class="position-relative" data-search-step-14>
+                <div class="position-relative" data-search-step-16>
                     <InputCheckbox id="HideCompletedTasks" class="form-check-input me-1" Value="_settings.HideCompletedTasks" ValueExpression="() => _settings.HideCompletedTasks" ValueChanged="SaveHideCompletedTasks" />
                     <label for="HideCompletedTasks" class="form-check-label stretched-link d-inline">@Loc["Hide completed tasks"]</label>
                 </div>
@@ -235,26 +272,26 @@
 
             <div class="list-group-item">
                 <small>@Loc["Habit interval ratio"]:</small>
-                <div data-search-step-15>
+                <div data-search-step-17>
                 <InputSelect class="form-select" aria-label="@Loc["Habit interval ratio"]" Value="_settings.SelectedRatio" ValueExpression="() => _settings.SelectedRatio" TValue="Ratio" ValueChanged="SaveSelectedRatio">
                     <option value="@Ratio.ElapsedToAverage">@Loc["Elapsed time to average interval"]</option>
                     <option value="@Ratio.ElapsedToDesired">@Loc["Elapsed time to repeat interval"]</option>
                     <option value="@Ratio.AverageToDesired">@Loc["Average interval to repeat interval"]</option>
                 </InputSelect>
                 </div>
-                <div class="position-relative mt-2" data-search-step-16>
+                <div class="position-relative mt-2" data-search-step-18>
                     <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowOnlyOverSelectedRatioMin" ValueExpression="() => _settings.ShowOnlyOverSelectedRatioMin" ValueChanged="SaveShowOnlyOverSelectedRatioMin" />
                     <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show only habits with interval ratio over"] @_settings.SelectedRatioMin%</label>
                 </div>
 
-                <input type="range" class="form-range d-block" aria-label="@Loc["Minimum interval ratio"]" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-17 />
+                <input type="range" class="form-range d-block" aria-label="@Loc["Minimum interval ratio"]" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-19 />
 
-                <div class="position-relative mt-2" data-search-step-18>
+                <div class="position-relative mt-2" data-search-step-20>
                     <InputCheckbox id="ShowOnlyUnderSelectedRatioMax" class="form-check-input me-1" Value="_settings.ShowOnlyUnderSelectedRatioMax" ValueExpression="() => _settings.ShowOnlyUnderSelectedRatioMax" ValueChanged="SaveShowOnlyUnderSelectedRatioMax" />
                     <label for="ShowOnlyUnderSelectedRatioMax" class="form-check-label stretched-link d-inline">@Loc["Show only habits with interval ratio under"] @_settings.SelectedRatioMax%</label>
                 </div>
 
-                <input type="range" class="form-range d-block" aria-label="@Loc["Maximum interval ratio"]" min="0" max="300" value="@_settings.SelectedRatioMax" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMax(Convert.ToInt32(args.Value))" data-search-step-19 />
+                <input type="range" class="form-range d-block" aria-label="@Loc["Maximum interval ratio"]" min="0" max="300" value="@_settings.SelectedRatioMax" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMax(Convert.ToInt32(args.Value))" data-search-step-21 />
             </div>
             }
 
@@ -264,7 +301,7 @@
 
             @if (!_settings.FoldSection[QuerySection.Sort])
             {
-            <div class="list-group-item" data-search-step-20>
+            <div class="list-group-item" data-search-step-22>
                 <small><i class="bi bi-sticky" aria-hidden="true"></i> @Loc["Notes"]:</small>
                 <InputSelect class="form-select" aria-label="@Loc["Sort notes"]" Value="_settings.SortBy[ContentType.Note]" ValueExpression="() => _settings.SortBy[ContentType.Note]" ValueChanged="(Sort sort) => SaveSort(ContentType.Note, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
@@ -273,7 +310,7 @@
                 </InputSelect>
             </div>
 
-            <div class="list-group-item" data-search-step-21>
+            <div class="list-group-item" data-search-step-23>
                 <small><i class="bi bi-list-task" aria-hidden="true"></i> @Loc["Tasks"]:</small>
                 <InputSelect class="form-select" aria-label="@Loc["Sort tasks"]" Value="_settings.SortBy[ContentType.Task]" ValueExpression="() => _settings.SortBy[ContentType.Task]" ValueChanged="(Sort sort) => SaveSort(ContentType.Task, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
@@ -286,7 +323,7 @@
                 </InputSelect>
             </div>
 
-            <div class="list-group-item" data-search-step-22>
+            <div class="list-group-item" data-search-step-24>
                 <small><i class="bi bi-repeat" aria-hidden="true"></i> @Loc["Habits"]:</small>
                 <InputSelect class="form-select" aria-label="@Loc["Sort habits"]" Value="_settings.SortBy[ContentType.Habit]" ValueExpression="() => _settings.SortBy[ContentType.Habit]" ValueChanged="(Sort sort) => SaveSort(ContentType.Habit, sort)">
                     <option value="@Sort.Category">@Loc["Category"]</option>
@@ -325,6 +362,8 @@
         new() { Text = "Choose how to compare the done date (<, =, >, ≠)." },
         new() { Text = "Filter by done date." },
         new() { Text = "Clear the done date filter." },
+        new() { Text = "Filter tasks by a planned-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range." },
+        new() { Text = "Filter tasks and habits by a done-date range relative to today. Negative days are in the past, positive days are in the future. Leave a field empty for an open-ended range." },
         new() { Text = "Filter by categories." },
         new() { Text = "Filter by priorities." },
         new() { Text = "Hide completed tasks." },
@@ -524,6 +563,102 @@
     async Task SaveSelectedRatioMax(int max)
     {
         _settings.SelectedRatioMax = max;
+
+        await UpdateSettings();
+    }
+
+    const int MaxDayOffset = SettingsModel.MaxDayOffset;
+
+    // Cap the offset so it can never overflow, then keep the range valid:
+    // the edited bound wins, the sibling is clamped so from <= to.
+    async Task SavePlannedFromDayOffset(int? offset)
+    {
+        if (offset is int value)
+            offset = Math.Clamp(value, -MaxDayOffset, MaxDayOffset);
+
+        _settings.PlannedFromDayOffset = offset;
+
+        if (offset is int from && _settings.PlannedToDayOffset is int to && from > to)
+            _settings.PlannedToDayOffset = from;
+
+        await UpdateSettings();
+    }
+
+    async Task SavePlannedToDayOffset(int? offset)
+    {
+        if (offset is int value)
+            offset = Math.Clamp(value, -MaxDayOffset, MaxDayOffset);
+
+        _settings.PlannedToDayOffset = offset;
+
+        if (offset is int to && _settings.PlannedFromDayOffset is int from && to < from)
+            _settings.PlannedFromDayOffset = to;
+
+        await UpdateSettings();
+    }
+
+    async Task SaveDoneFromDayOffset(int? offset)
+    {
+        if (offset is int value)
+            offset = Math.Clamp(value, -MaxDayOffset, MaxDayOffset);
+
+        _settings.DoneFromDayOffset = offset;
+
+        if (offset is int from && _settings.DoneToDayOffset is int to && from > to)
+            _settings.DoneToDayOffset = from;
+
+        await UpdateSettings();
+    }
+
+    async Task SaveDoneToDayOffset(int? offset)
+    {
+        if (offset is int value)
+            offset = Math.Clamp(value, -MaxDayOffset, MaxDayOffset);
+
+        _settings.DoneToDayOffset = offset;
+
+        if (offset is int to && _settings.DoneFromDayOffset is int from && to < from)
+            _settings.DoneFromDayOffset = to;
+
+        await UpdateSettings();
+    }
+
+    string RelativeRangePreview((DateTime? Start, DateTime? End) range)
+    {
+        string? start = range.Start?.ToShortDateString();
+        string? end = range.End?.ToShortDateString();
+
+        if (start is not null && end is not null)
+            return $"{start} {Loc["to"]} {end}";
+
+        if (start is not null)
+            return Loc["Relative range preview from", start];
+
+        if (end is not null)
+            return Loc["Relative range preview until", end];
+
+        return string.Empty;
+    }
+
+    async Task ClearPlannedRange()
+    {
+        _settings.PlannedFromDayOffset = null;
+        _settings.PlannedToDayOffset = null;
+
+        await UpdateSettings();
+    }
+
+    async Task ClearDoneRange()
+    {
+        _settings.DoneFromDayOffset = null;
+        _settings.DoneToDayOffset = null;
+
+        await UpdateSettings();
+    }
+
+    async Task SaveShowDoneInRange(bool show)
+    {
+        _settings.ShowDoneInRange = show;
 
         await UpdateSettings();
     }

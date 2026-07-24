@@ -87,6 +87,28 @@ public static class QueryExtensions
             };
         }
 
+        if (queryParameters.PlannedRangeStart is DateTime plannedRangeStart)
+            tasks = tasks.Where(x => x.PlannedAt?.Date >= plannedRangeStart.Date);
+
+        if (queryParameters.PlannedRangeEnd is DateTime plannedRangeEnd)
+            tasks = tasks.Where(x => x.PlannedAt?.Date <= plannedRangeEnd.Date);
+
+        if (queryParameters.DoneRangeStart is not null || queryParameters.DoneRangeEnd is not null)
+        {
+            DateTime? doneRangeStart = queryParameters.DoneRangeStart?.Date;
+            DateTime? doneRangeEnd = queryParameters.DoneRangeEnd?.Date;
+
+            Func<TaskModel, bool> completedInRange = x =>
+                x.CompletedAt is DateTime completedAt &&
+                (doneRangeStart is null || completedAt.Date >= doneRangeStart) &&
+                (doneRangeEnd is null || completedAt.Date <= doneRangeEnd);
+
+            // when off, show tasks NOT completed within the range, including never completed
+            tasks = queryParameters.ShowDoneInRange
+                ? tasks.Where(completedInRange)
+                : tasks.Where(x => !completedInRange(x));
+        }
+
         if (queryParameters.CategoryFilterDisplay == FilterDisplay.CheckBoxes)
         {
             tasks = tasks.Where(x => !queryParameters.HiddenCategoryIds.Contains(x.CategoryId));
@@ -144,6 +166,23 @@ public static class QueryExtensions
                 DateCompare.NotOn => habits.Where(x => x.TimesDone?.Any(t => t.CompletedAt?.Date == queryParameters.DoneAtFilter.Value.Date) != true),
                 _ => throw new ArgumentOutOfRangeException(nameof(queryParameters.DoneAtCompare))
             };
+        }
+
+        // A single completion must fall within the window, so both bounds are one Any, not two.
+        if (queryParameters.DoneRangeStart is not null || queryParameters.DoneRangeEnd is not null)
+        {
+            DateTime? doneRangeStart = queryParameters.DoneRangeStart?.Date;
+            DateTime? doneRangeEnd = queryParameters.DoneRangeEnd?.Date;
+
+            Func<HabitModel, bool> doneInRange = x => x.TimesDone?.Any(t =>
+                t.CompletedAt is DateTime completedAt &&
+                (doneRangeStart is null || completedAt.Date >= doneRangeStart) &&
+                (doneRangeEnd is null || completedAt.Date <= doneRangeEnd)) == true;
+
+            // when off, show habits with no completion in the range, including never completed
+            habits = queryParameters.ShowDoneInRange
+                ? habits.Where(doneInRange)
+                : habits.Where(x => !doneInRange(x));
         }
 
         if (queryParameters.CategoryFilterDisplay == FilterDisplay.CheckBoxes)

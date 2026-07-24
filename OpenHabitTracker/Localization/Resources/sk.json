@@ -186,6 +186,18 @@
   "Clear planned date": "Vymaž plánovaný dátum",
   "Clear done date": "Vymaž dátum dokončenia",
 
+  "Planned within days from today": "Naplánované v rozmedzí dní odo dneška",
+  "Done within days from today": "Dokončené v rozmedzí dní odo dneška",
+  "Not done within days from today": "Nedokončené v rozmedzí dní odo dneška",
+  "Relative range preview from": "od {0}",
+  "Relative range preview until": "do {0}",
+  "Earliest planned day offset from today": "Naplánované: najbližší deň odo dneška",
+  "Latest planned day offset from today": "Naplánované: najvzdialenejší deň odo dneška",
+  "Earliest done day offset from today": "Dokončené: najbližší deň odo dneška",
+  "Latest done day offset from today": "Dokončené: najvzdialenejší deň odo dneška",
+  "Clear planned range": "Vymaž plánovaný rozsah",
+  "Clear done range": "Vymaž rozsah dokončenia",
+
   "Version": "Verzia",
   "Take notes, plan tasks, track habits": "Píšte poznámky, plánujte úlohy, sledujte návyky",
   "Free and Ad-Free": "Zadarmo a bez reklám",
