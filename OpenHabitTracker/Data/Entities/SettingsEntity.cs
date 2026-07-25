@@ -74,7 +74,7 @@ public class SettingsEntity
 
     public int? DoneToDayOffset { get; set; }
 
-    public bool ShowDoneInRange { get; set; }
+    public bool ShowDoneInRange { get; set; } = true;
 
     public int HorizontalMargin { get; set; } = 1;
 
