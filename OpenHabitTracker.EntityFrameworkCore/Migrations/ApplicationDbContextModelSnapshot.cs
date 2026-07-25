@@ -15,7 +15,7 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.10");
 
             modelBuilder.Entity("OpenHabitTracker.Data.Entities.CategoryEntity", b =>
                 {
@@ -81,7 +81,7 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
 
                     b.ToTable("Contents");
 
-                    b.HasDiscriminator().HasValue("ContentEntity");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ContentEntity");
 
                     b.UseTphMappingStrategy();
                 });
@@ -144,6 +144,12 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                     b.Property<bool>("DisplayNoteContentAsMarkdown")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("DoneFromDayOffset")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("DoneToDayOffset")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("FirstDayOfWeek")
                         .HasColumnType("INTEGER");
 
@@ -169,6 +175,12 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MaxSmallCalendarDays")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PlannedFromDayOffset")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PlannedToDayOffset")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PriorityFilterDisplay")
@@ -203,6 +215,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowCreatedUpdated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowDoneInRange")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowGroupedByCategory")
