@@ -1,5 +1,9 @@
 # 1.2.4 - 
 
+- Added relative date range filters for planned and done dates
+- Added separate planned date and planned time for tasks
+- Added window position and size persistence in desktop versions
+- Added a Windows installer with automatic updates
 - Fixed guided tour
 
 # 1.2.3 - Jul 7, 2026
