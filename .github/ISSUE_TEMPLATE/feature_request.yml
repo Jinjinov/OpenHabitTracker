@@ -1,0 +1,11 @@
+name: Feature request
+description: Suggest an idea
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to see?
+      description: What you want to do, and why the app makes it hard today.
+    validations:
+      required: true

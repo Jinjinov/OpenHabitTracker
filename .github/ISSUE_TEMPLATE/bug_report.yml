@@ -1,0 +1,33 @@
+name: Bug report
+description: Something is not working
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Windows
+        - Linux
+        - Android
+        - iOS
+        - macOS
+        - Web (PWA)
+        - Self-hosted (Docker)
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The version shown on the About screen.
+      placeholder: 1.2.3
+    validations:
+      required: true
