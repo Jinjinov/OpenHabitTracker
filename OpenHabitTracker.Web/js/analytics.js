@@ -73,3 +73,6 @@ function everydayComparisonVisit() {
 function fullComparisonVisit() {
   gtag('event', 'oht_full_comparison_visit', {'transport': 'beacon'});
 }
+function versionHistoryVisit() {
+  gtag('event', 'oht_version_history_visit', {'transport': 'beacon'});
+}
