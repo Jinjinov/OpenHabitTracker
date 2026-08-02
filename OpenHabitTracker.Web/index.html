@@ -20,6 +20,7 @@
     <meta property="og:title" content="OpenHabitTracker" />
     <meta property="og:description" content="Free, open source habit tracker for Web, Windows, Android, iOS, macOS and Linux. Take notes, plan tasks, and track habits." />
     <meta property="og:image" content="https://openhabittracker.net/icons/thumbnail.png" />
+    <meta property="og:image:alt" content="OpenHabitTracker logo" />
     <meta property="og:url" content="https://openhabittracker.net/" />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -27,6 +28,7 @@
     <meta name="twitter:title" content="OpenHabitTracker">
     <meta name="twitter:description" content="Free, open source habit tracker for Web, Windows, Android, iOS, macOS and Linux. Take notes, plan tasks, and track habits.">
     <meta name="twitter:image" content="https://openhabittracker.net/icons/thumbnail.png">
+    <meta name="twitter:image:alt" content="OpenHabitTracker logo">
 
     <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png" />
@@ -46,7 +48,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.css">
 
-    <title>OpenHabitTracker</title>
+    <title>OpenHabitTracker - free open source habit tracker</title>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RMDS3FFLKW"></script>
@@ -145,6 +147,9 @@
       .large {
         font-size: 1.5em;
       }
+      .card-img-top {
+        height: auto;
+      }
       .btn-bd-primary {
         --bd-violet-bg: #712cf9;
         --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
@@ -233,7 +238,7 @@
         <a class="nav-link d-none d-lg-block" href="#why">Why I created it</a>
         <a class="nav-link" href="#webapp">Web app</a>
         <a class="nav-link d-none d-md-block" href="#stores">Stores</a>
-        <a class="nav-link d-none d-lg-block" href="#sync">Online sync</a>
+        <a class="nav-link d-none d-lg-block" href="#sync">Sync</a>
         <a class="nav-link" href="#features">Features</a>
         <a class="nav-link d-none d-lg-block" href="#formats">Formats</a>
         <a class="nav-link d-none d-sm-block" href="#ui-ux">UI &amp; UX</a>
@@ -247,9 +252,9 @@
       <div class="card">
         <div class="card-body">
 
-          <h3 id="why" class="card-title">Why I created it</h3>
+          <h2 id="why" class="card-title h3">Why I created it</h2>
 
-          <h4 class="card-subtitle my-3 text-muted">The friendly habit tracker</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">The friendly habit tracker</h3>
           <ul>
             <li><span class="caveat large">OpenHabitTracker</span> doesn't use a streak counter</li>
             <li>You won't feel demotivated when you skip a habit once because you won't have to start your streak from zero</li>
@@ -264,15 +269,15 @@
 
           <p>Your feedback is welcome on <a href="https://www.reddit.com/r/OpenHabitTracker" onclick="redditVisit()">Reddit</a> and <a href="https://github.com/Jinjinov/OpenHabitTracker/discussions" onclick="gitHubDiscussionsVisit()">GitHub</a></p>
 
-          <h3 id="webapp" class="card-title mt-5">Web app</h3>
+          <h2 id="webapp" class="card-title h3 mt-5">Web app</h2>
 
-          <h4 class="card-subtitle my-3 text-muted">Current version <span class="fs-6">(2026.07.07)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Current version <span class="fs-6">(2026.07.07)</span></h3>
           <p><a href="https://pwa.openhabittracker.net" onclick="onlineAppUsage()" class="btn btn-primary">Use <span class="caveat large">OpenHabitTracker </span> in your browser</a></p>
 
-          <h3 id="stores" class="card-title mt-5">Stores</h3>
+          <h2 id="stores" class="card-title h3 mt-5">Stores</h2>
 
           <p>If you enjoy using <span class="caveat large">OpenHabitTracker</span>, I would be really grateful if you could leave a rating on your store - it truly means a lot and helps others discover the app!</p>
-          <h4 class="card-subtitle my-3 text-muted"><span class="caveat large">OpenHabitTracker</span> is available on</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted"><span class="caveat large">OpenHabitTracker</span> is available on</h3>
           <p><i class="fab fa-microsoft"></i> Windows - Microsoft Store:<br><a href="https://apps.microsoft.com/detail/9mwzmlxzzllr" onclick="microsoftStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on Microsoft Store"><img src="icons/Microsoft.svg" style="height:64px;" alt="Microsoft Store badge"></a></p>
           <p><i class="fab fa-linux"></i> Linux - Flathub:<br><a href="https://flathub.org/apps/net.openhabittracker.OpenHabitTracker" onclick="flathubStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on Flathub"><img src="icons/Flathub.svg" style="height:64px;" alt="Flathub badge"></a></p>
           <p><i class="fab fa-linux"></i> Linux - Snap Store:<br><a href="https://snapcraft.io/openhabittracker" onclick="snapStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on Snap Store"><img src="icons/SnapStore.svg" style="height:64px;" alt="Snap Store badge"></a></p>
@@ -284,9 +289,9 @@
 
           <p><i class="fab fa-microsoft"></i> Windows - winget (installs the Microsoft Store version):<br><span class="text-light bg-dark font-monospace">winget install OpenHabitTracker</span></p>
 
-          <h3 id="sync" class="card-title mt-5">Online sync</h3>
+          <h2 id="sync" class="card-title h3 mt-5">Self-hosted sync</h2>
 
-          <h4 class="card-subtitle my-3 text-muted">Host a Docker image on your own server</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Host a Docker image on your own server</h3>
           <p>Progressive web app:</p>
           <ul>
             <li>Works offline</li>
@@ -302,32 +307,32 @@
             <li><a href="https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker" onclick="gitHubContainerRegistryVisit()">GitHub Container Registry</a></li>
           </ul>
 
-          <h3 id="features" class="card-title mt-5">Features</h3>
+          <h2 id="features" class="card-title h3 mt-5">Habit tracker features</h2>
 
-          <h4 class="card-subtitle my-3 text-muted">Take notes, manage tasks, track habits:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Take notes, manage tasks, track habits:</h3>
           <ul>
             <li>Define your goals by organizing your notes, tasks and habits all in one place</li>
             <li>Use categories to group similar goals</li>
             <li>Keep track of what is important by assigning priorities</li>
           </ul>
 
-          <h4 class="card-subtitle my-3 text-muted">Search, filter and sort:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Search, filter and sort:</h3>
           <ul>
             <li>Use search to quickly find any content</li>
             <li>Use filters to view only what you want to focus on</li>
             <li>Sort your notes, tasks and habits by any property</li>
           </ul>
 
-          <h4 class="card-subtitle my-3 text-muted">Habit tracking:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Habit tracking:</h3>
           <ul>
             <li>Set the desired interval for your habits (repeating tasks)</li>
             <li>Compare the average interval with the desired interval</li>
             <li>See when you last completed a task and how that compares to the desired interval</li>
           </ul>
 
-          <h3 id="formats" class="card-title mt-5">Formats</h3>
+          <h2 id="formats" class="card-title h3 mt-5">Formats</h2>
 
-          <h4 class="card-subtitle my-3 text-muted">Integration with Google services:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Integration with Google services:</h3>
           <ul>
             <li>Import from Google Keep</li>
             <!--
@@ -335,7 +340,7 @@
             -->
           </ul>
 
-          <h4 class="card-subtitle my-3 text-muted">File import/export:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">File import/export:</h3>
           <ul>
             <li>Markdown</li>
             <li>YAML</li>
@@ -343,9 +348,9 @@
             <li>TSV (Tab Separated Values)</li>
           </ul>
 
-          <h3 id="ui-ux" class="card-title mt-5">UI &amp; UX</h3>
+          <h2 id="ui-ux" class="card-title h3 mt-5">UI &amp; UX</h2>
 
-          <h4 class="card-subtitle my-3 text-muted">Appearance &amp; accessibility:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Appearance &amp; accessibility:</h3>
           <ul>
             <li>Light &amp; dark mode</li>
             <li>26 themes</li>
@@ -354,7 +359,7 @@
             <li>Accessibility support</li>
           </ul>
 
-          <h4 class="card-subtitle my-3 text-muted">Available in 20 languages:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Available in 20 languages:</h3>
           <ul>
             <li>Chinese</li>
             <li>Croatian</li>
@@ -378,9 +383,9 @@
             <li>Swedish</li>
           </ul>
 
-          <h3 id="downloads" class="card-title mt-5">Downloads &amp; Version history</h3>
+          <h2 id="downloads" class="card-title h3 mt-5">Downloads &amp; Version history</h2>
 
-          <h4 class="card-subtitle my-3 text-muted">1.2.3 <span class="fs-6">(2026.07.07)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.2.3 <span class="fs-6">(2026.07.07)</span></h3>
           <ul>
             <li>Added "Max days in small calendar" setting</li>
             <li>Added in-app review prompt</li>
@@ -394,7 +399,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.2.3.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.2.3.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.2.3.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.2.3.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.2.2 <span class="fs-6">(2026.05.25)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.2.2 <span class="fs-6">(2026.05.25)</span></h3>
           <ul>
             <li>Added current and best streak in habits</li>
             <li>Added three habit display modes: Repetitions, Time, Quantity</li>
@@ -404,7 +409,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.2.2.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.2.2.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.2.2.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.2.2.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.2.1 <span class="fs-6">(2026.04.04)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.2.1 <span class="fs-6">(2026.04.04)</span></h3>
           <ul>
             <li>Added habit start date</li>
             <li>Added "under x%" habit interval ratio filter</li>
@@ -421,7 +426,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.2.1.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.2.1.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.2.1.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.2.1.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.1.8 <span class="fs-6">(2026.03.27)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.1.8 <span class="fs-6">(2026.03.27)</span></h3>
           <ul>
             <li>Added category-grouped view for notes, tasks, habits</li>
             <li>Added "and / or" completion rule per category</li>
@@ -436,7 +441,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.1.8.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.1.8.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.1.8.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.1.8.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.1.7 <span class="fs-6">(2026.03.21)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.1.7 <span class="fs-6">(2026.03.21)</span></h3>
           <ul>
             <li>Added weekly recap / stats for notes, tasks, habits</li>
             <li>Added arrow key navigation for the menu</li>
@@ -450,7 +455,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.1.7.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.1.7.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.1.7.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.1.7.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.1.6 <span class="fs-6">(2026.03.14)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.1.6 <span class="fs-6">(2026.03.14)</span></h3>
           <ul>
             <li>Added 16 new languages: French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Slovak, Czech, Croatian, Serbian</li>
             <li>Improved accessibility: navigation landmarks, ARIA labels, keyboard navigation</li>
@@ -463,7 +468,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.1.6.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.1.6.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.1.6.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.1.6.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.1.5 <span class="fs-6">(2026.02.14)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.1.5 <span class="fs-6">(2026.02.14)</span></h3>
           <ul>
             <li>Replaced "X" with "Close"</li>
             <li>Search icon is now a toggle</li>
@@ -483,7 +488,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.1.5.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.1.5.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.1.5.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.1.5.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.1.4 <span class="fs-6">(2025.09.30)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.1.4 <span class="fs-6">(2025.09.30)</span></h3>
           <ul>
             <li>Fixed Flatpak and Snapcraft folder permissions</li>
             <li>Fixed updating From and To time in Habit</li>
@@ -493,7 +498,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.1.4.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.1.4.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.1.4.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.1.4.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.1.3 <span class="fs-6">(2025.04.04)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.1.3 <span class="fs-6">(2025.04.04)</span></h3>
           <ul>
             <li>Setting to hide completed tasks</li>
             <li>Improved filters</li>
@@ -503,7 +508,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.1.3.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.1.3.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.1.3.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.1.3.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.1.2 <span class="fs-6">(2025.03.03)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.1.2 <span class="fs-6">(2025.03.03)</span></h3>
           <ul>
             <li>Replaced help with a guided tour</li>
             <li>Added a Docker image for online sync</li>
@@ -513,7 +518,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.1.2.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.1.2.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.1.2.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.1.2.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.1.1 <span class="fs-6">(2025.02.02)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.1.1 <span class="fs-6">(2025.02.02)</span></h3>
           <ul>
             <li>Fixed export of items with no category</li>
           </ul>
@@ -522,7 +527,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.1.1.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.1.1.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.1.1.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.1.1.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.1.0 <span class="fs-6">(2025.01.07)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.1.0 <span class="fs-6">(2025.01.07)</span></h3>
           <ul>
             <li>Display a welcome note instead of examples when user opens the app for the first time</li>
             <li>Added a lot of new icons</li>
@@ -533,7 +538,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.1.0.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.1.0.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.1.0.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.1.0.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.0.9 <span class="fs-6">(2024.12.31)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.0.9 <span class="fs-6">(2024.12.31)</span></h3>
           <ul>
             <li>Added new settings</li>
             <li>Improved top bar and menu</li>
@@ -545,7 +550,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.9.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.0.9.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.9.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.0.9.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.0.8 <span class="fs-6">(2024.12.24)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.0.8 <span class="fs-6">(2024.12.24)</span></h3>
           <ul>
             <li>Fixed localization bug</li>
             <li>Improved Search, Filter, Sort</li>
@@ -555,7 +560,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.8.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.0.8.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.8.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.0.8.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.0.7 <span class="fs-6">(2024.09.22)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.0.7 <span class="fs-6">(2024.09.22)</span></h3>
           <ul>
             <li>Fixed import and export for notes, tasks, habits without a category</li>
             <li>Fixed TSV export</li>
@@ -567,7 +572,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.7.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.0.7.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.7.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.0.7.apk</a></p>
           
-          <h4 class="card-subtitle my-3 text-muted">1.0.6 <span class="fs-6">(2024.09.15)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.0.6 <span class="fs-6">(2024.09.15)</span></h3>
           <ul>
             <li>Set default title color</li>
             <li>Add blockquote and table support in a note</li>
@@ -580,7 +585,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.6.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.0.6.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.6.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.0.6.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.0.5 <span class="fs-6">(2024.09.09)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.0.5 <span class="fs-6">(2024.09.09)</span></h3>
           <ul>
             <li>New, better examples</li>
             <li>Clicking on Menu closes it if it is open</li>
@@ -595,7 +600,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.5.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.0.5.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.5.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.0.5.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.0.3 <span class="fs-6">(2024.08.28)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.0.3 <span class="fs-6">(2024.08.28)</span></h3>
           <ul>
             <li>Added "Pause timer" and "Reset timer"</li>
           </ul>
@@ -604,7 +609,7 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.3.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.0.3.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.3.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.0.3.apk</a></p>
 
-          <h4 class="card-subtitle my-3 text-muted">1.0.0 <span class="fs-6">(2024.08.08)</span></h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">1.0.0 <span class="fs-6">(2024.08.08)</span></h3>
           <ul>
             <li>Initial version</li>
           </ul>
@@ -613,23 +618,23 @@
           <p><i class="fab fa-apple"></i> <b>macOS:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.macOS.1.0.0.pkg" onclick="macosAppDownload()" class="card-link">OpenHabitTracker.macOS.1.0.0.pkg</a> - run <span class="text-light bg-dark font-monospace">OpenHT.app</span></p>
           <p><i class="fab fa-android"></i> <b>Android:</b> <a href="https://openhabittracker.net/download/OpenHabitTracker.Android.1.0.0.apk" onclick="androidAppDownload()" class="card-link">OpenHabitTracker.Android.1.0.0.apk</a></p>
 
-          <h3 id="videos" class="card-title mt-5">Videos</h3>
+          <h2 id="videos" class="card-title h3 mt-5">Videos</h2>
 
-          <h4 class="card-subtitle my-3 text-muted">Notes, Tasks, Habits:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Notes, Tasks, Habits:</h3>
           <video src="videos/desktop-main.mp4" controls style="max-width: 100%;"></video>
 
-          <h4 class="card-subtitle my-3 text-muted">Search, Settings:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Search, Settings:</h3>
           <video src="videos/desktop-sidebar.mp4" controls style="max-width: 100%;"></video>
 
-          <h3 id="screenshots" class="card-title mt-5">Screenshots</h3>
+          <h2 id="screenshots" class="card-title h3 mt-5">Screenshots</h2>
 
-          <h4 class="card-subtitle my-3 text-muted">Desktop:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Desktop:</h3>
 
           <div class="d-flex flex-wrap">
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/desktop_1_settings.png">
-                <img src="images/desktop_1_settings.png" class="card-img-top" alt="Desktop settings screenshot">
+                <img src="images/desktop_1_settings.png" class="card-img-top" width="2102" height="1352" alt="OpenHabitTracker settings sidebar on desktop, next to notes, tasks and habits" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Settings</p>
@@ -638,7 +643,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/desktop_2_note.png">
-                <img src="images/desktop_2_note.png" class="card-img-top" alt="Desktop note screenshot">
+                <img src="images/desktop_2_note.png" class="card-img-top" width="2102" height="1352" alt="OpenHabitTracker note edited as Markdown on desktop, with the search, filter and sort sidebar" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Note</p>
@@ -647,7 +652,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/desktop_3_notes.png">
-                <img src="images/desktop_3_notes.png" class="card-img-top" alt="Desktop notes screenshot">
+                <img src="images/desktop_3_notes.png" class="card-img-top" width="2102" height="1352" alt="OpenHabitTracker notes overview on desktop with colored notes in categories" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Notes</p>
@@ -656,7 +661,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/desktop_4_task.png">
-                <img src="images/desktop_4_task.png" class="card-img-top" alt="Desktop task screenshot">
+                <img src="images/desktop_4_task.png" class="card-img-top" width="2102" height="1352" alt="OpenHabitTracker task on desktop with checklist, planned date, duration and timer" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Task</p>
@@ -665,7 +670,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/desktop_5_tasks.png">
-                <img src="images/desktop_5_tasks.png" class="card-img-top" alt="Desktop tasks screenshot">
+                <img src="images/desktop_5_tasks.png" class="card-img-top" width="2102" height="1352" alt="OpenHabitTracker task list and task detail on desktop, with the menu sidebar open" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Tasks</p>
@@ -674,7 +679,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/desktop_6_habit.png">
-                <img src="images/desktop_6_habit.png" class="card-img-top" alt="Desktop habit screenshot">
+                <img src="images/desktop_6_habit.png" class="card-img-top" width="2102" height="1352" alt="OpenHabitTracker habit detail with calendar on desktop" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Habit</p>
@@ -683,7 +688,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/desktop_7_habits.png">
-                <img src="images/desktop_7_habits.png" class="card-img-top" alt="Desktop habits screenshot">
+                <img src="images/desktop_7_habits.png" class="card-img-top" width="2102" height="1352" alt="OpenHabitTracker habit list on desktop with interval percentages" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Habits</p>
@@ -692,7 +697,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/desktop_8_backup.png">
-                <img src="images/desktop_8_backup.png" class="card-img-top" alt="Desktop backup screenshot">
+                <img src="images/desktop_8_backup.png" class="card-img-top" width="2102" height="1352" alt="OpenHabitTracker backup sidebar on desktop with JSON, TSV, YAML, Markdown and Google Keep import" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Backup</p>
@@ -701,13 +706,13 @@
 
           </div>
 
-          <h4 class="card-subtitle my-3 text-muted">Phone:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Phone:</h3>
 
           <div class="d-flex flex-wrap">
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/phone_1_empty.png">
-                <img src="images/phone_1_empty.png" class="card-img-top" alt="Phone main screenshot">
+                <img src="images/phone_1_empty.png" class="card-img-top" width="1080" height="2400" alt="OpenHabitTracker on a phone with add new note, task and habit" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Main</p>
@@ -716,7 +721,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/phone_2_notes.png">
-                <img src="images/phone_2_notes.png" class="card-img-top" alt="Phone notes screenshot">
+                <img src="images/phone_2_notes.png" class="card-img-top" width="1080" height="2400" alt="OpenHabitTracker notes list on a phone" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Notes</p>
@@ -725,7 +730,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/phone_3_markdown.png">
-                <img src="images/phone_3_markdown.png" class="card-img-top" alt="Phone markdown screenshot">
+                <img src="images/phone_3_markdown.png" class="card-img-top" width="1080" height="2400" alt="OpenHabitTracker Markdown note on a phone" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Markdown</p>
@@ -734,7 +739,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/phone_4_task.png">
-                <img src="images/phone_4_task.png" class="card-img-top" alt="Phone task screenshot">
+                <img src="images/phone_4_task.png" class="card-img-top" width="1080" height="2400" alt="OpenHabitTracker task with checklist and time tracking on a phone" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Task</p>
@@ -743,7 +748,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/phone_5_habit.png">
-                <img src="images/phone_5_habit.png" class="card-img-top" alt="Phone habit screenshot">
+                <img src="images/phone_5_habit.png" class="card-img-top" width="1080" height="2400" alt="OpenHabitTracker habit view on a phone" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Habit</p>
@@ -752,7 +757,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/phone_6_search.png">
-                <img src="images/phone_6_search.png" class="card-img-top" alt="Phone search screenshot">
+                <img src="images/phone_6_search.png" class="card-img-top" width="1080" height="2400" alt="OpenHabitTracker search and filter on a phone" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Search</p>
@@ -761,7 +766,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/phone_7_settings.png">
-                <img src="images/phone_7_settings.png" class="card-img-top" alt="Phone settings screenshot">
+                <img src="images/phone_7_settings.png" class="card-img-top" width="1080" height="2400" alt="OpenHabitTracker settings with theme selection on a phone" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Settings</p>
@@ -770,7 +775,7 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/phone_8_backup.png">
-                <img src="images/phone_8_backup.png" class="card-img-top" alt="Phone backup screenshot">
+                <img src="images/phone_8_backup.png" class="card-img-top" width="1080" height="2400" alt="OpenHabitTracker backup sidebar on a phone with export formats and Google Keep import" loading="lazy">
               </a>
               <div class="card-body">
                 <p class="card-text">Backup</p>
@@ -779,9 +784,9 @@
 
           </div>
 
-          <h3 id="compare" class="card-title mt-5">Compare</h3>
+          <h2 id="compare" class="card-title h3 mt-5">Compare</h2>
 
-          <h4 class="card-subtitle my-3 text-muted">How <span class="caveat large">OpenHabitTracker</span> stacks up against the alternatives:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">How <span class="caveat large">OpenHabitTracker</span> stacks up against the alternatives:</h3>
           <ul>
             <li><a href="habit-tracker-comparison.html" onclick="fullComparisonVisit()">Habit tracker comparison: OpenHabitTracker vs Habitica, Loop, Streaks and Everyday</a></li>
             <li><a href="loop-habit-tracker-alternative.html" onclick="loopComparisonVisit()">Loop Habit Tracker for iPhone and desktop - an open source alternative</a></li>
@@ -791,16 +796,16 @@
             <li><a href="everyday-alternative.html" onclick="everydayComparisonVisit()">An Everyday alternative with unlimited free habits</a></li>
           </ul>
 
-          <h3 id="about" class="card-title mt-5">About</h3>
+          <h2 id="about" class="card-title h3 mt-5">About</h2>
 
-          <h4 class="card-subtitle my-3 text-muted"><span class="caveat large">OpenHabitTracker </span> is:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted"><span class="caveat large">OpenHabitTracker </span> is:</h3>
           <ul>
             <li>Free and Ad-free</li>
             <li>Open source: <a href="https://github.com/Jinjinov/OpenHabitTracker" onclick="gitHubVisit()">GitHub</a></li>
             <li>Cross platform: Web, Windows, Android, iOS, macOS and Linux</li>
           </ul>
 
-          <h4 class="card-subtitle my-3 text-muted">Made with latest technologies:</h4>
+          <h3 class="card-subtitle h4 my-3 text-muted">Made with latest technologies:</h3>
           <ul>
             <li><a href="https://dotnet.microsoft.com/en-us/download/dotnet">.NET</a></li>
             <li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/">C#</a></li>
