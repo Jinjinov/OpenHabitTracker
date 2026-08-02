@@ -76,3 +76,6 @@ function fullComparisonVisit() {
 function versionHistoryVisit() {
   gtag('event', 'oht_version_history_visit', {'transport': 'beacon'});
 }
+function selfHostedComparisonVisit() {
+  gtag('event', 'oht_self_hosted_comparison_visit', {'transport': 'beacon'});
+}

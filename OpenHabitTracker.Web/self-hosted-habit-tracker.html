@@ -7,21 +7,21 @@
 
     <meta name="theme-color" content="#FFFFFF">
     <meta name="application-name" content="OpenHabitTracker">
-    <meta name="description" content="Everyday's free tier stops at 3 habits. OpenHabitTracker is free with unlimited habits - open source, no account, native apps on every platform.">
+    <meta name="description" content="Self-hosted habit tracker you run in Docker, with native Windows, Linux, macOS, iOS and Android apps that sync to it. Compared honestly with Beaver Habits, HabitTrove and HabitSync.">
 
-    <link rel="canonical" href="https://openhabittracker.net/everyday-alternative.html">
+    <link rel="canonical" href="https://openhabittracker.net/self-hosted-habit-tracker.html">
 
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="OpenHabitTracker" />
-    <meta property="og:title" content="Everyday Habit Tracker Alternative - OpenHabitTracker" />
-    <meta property="og:description" content="Everyday's free tier stops at 3 habits. OpenHabitTracker is free with unlimited habits - open source, no account, native apps on every platform." />
+    <meta property="og:title" content="Self-hosted habit tracker with native apps" />
+    <meta property="og:description" content="Self-hosted habit tracker you run in Docker, with native Windows, Linux, macOS, iOS and Android apps that sync to it. Compared honestly with Beaver Habits, HabitTrove and HabitSync." />
     <meta property="og:image" content="https://openhabittracker.net/icons/thumbnail.png" />
-    <meta property="og:url" content="https://openhabittracker.net/everyday-alternative.html" />
+    <meta property="og:url" content="https://openhabittracker.net/self-hosted-habit-tracker.html" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@dzindzinovic">
-    <meta name="twitter:title" content="Everyday Habit Tracker Alternative - OpenHabitTracker">
-    <meta name="twitter:description" content="Everyday's free tier stops at 3 habits. OpenHabitTracker is free with unlimited habits - open source, no account, native apps on every platform.">
+    <meta name="twitter:title" content="Self-hosted habit tracker with native apps">
+    <meta name="twitter:description" content="Self-hosted habit tracker you run in Docker, with native Windows, Linux, macOS, iOS and Android apps that sync to it. Compared honestly with Beaver Habits, HabitTrove and HabitSync.">
     <meta name="twitter:image" content="https://openhabittracker.net/icons/thumbnail.png">
 
     <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png" />
@@ -40,7 +40,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.css">
 
-    <title>Everyday Habit Tracker Alternative - OpenHabitTracker</title>
+    <title>Self-hosted habit tracker with native apps - OpenHabitTracker</title>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RMDS3FFLKW"></script>
@@ -171,58 +171,94 @@
 
       <div class="text-center mb-4">
         <p class="mb-1"><a href="index.html" class="caveat large text-decoration-none">OpenHabitTracker</a></p>
-        <h1 class="display-5">An Everyday alternative with unlimited free habits</h1>
-        <p class="lead">Keep the simple calendar, lose the 3-habit limit</p>
+        <h1 class="display-5">A self-hosted habit tracker with native apps on every platform</h1>
+        <p class="lead">One docker-compose file, and your phone, tablet and desktop all log into it</p>
         <hr class="my-4">
       </div>
 
       <div class="card">
         <div class="card-body">
 
-          <p><a href="https://everyday.app" rel="nofollow">Everyday</a> nails the "don't break the chain" idea: a clean calendar grid of colored squares, visible on mobile, on the web and on macOS. It is friendly, visual and very easy to start with. The catch comes at habit number four: the free tier stops at <b>3 habits</b>, and beyond that it costs about $30/year (or a ~$100 lifetime purchase), with an account required and your data in their cloud.</p>
+          <p>Self-hosted habit trackers are almost always web apps. You run a container, open a browser tab, and that tab is the product. That works until you want to tick a habit off on your phone in the kitchen, or on a laptop that happens to be offline.</p>
 
-          <p>Three habits is enough to try a habit tracker - it is rarely enough to use one.</p>
+          <p><span class="caveat large">OpenHabitTracker</span> is a self-hosted habit tracker with <b>native apps for Windows, Linux, macOS, iOS and Android</b> that log into your own Docker container and sync to it. Notes and tasks live in the same app, and the whole thing also runs with no server at all if you never want one.</p>
 
-          <p><span class="caveat large">OpenHabitTracker</span> is a free, open source alternative with <b>no habit limit</b>, no account and no subscription - your data stays on your device.</p>
+          <h2 class="card-title mt-5 fs-3">Self-hosting it</h2>
 
-          <h2 class="card-title mt-5 fs-3">Everyday vs OpenHabitTracker</h2>
+          <p>The image is on <a href="https://hub.docker.com/r/jinjinov/openhabittracker" onclick="dockerHubVisit()">Docker Hub</a> and the <a href="https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker" onclick="gitHubContainerRegistryVisit()">GitHub Container Registry</a>, built for amd64 and arm64, so it runs on a NAS or a Raspberry Pi as well as on a server:</p>
+
+          <pre class="bg-body-tertiary p-3 rounded"><code>services:
+  openhabittracker:
+    image: jinjinov/openhabittracker:latest
+    ports:
+      - "5050:8080"
+    environment:
+      - AppSettings__UserName=${APPSETTINGS_USERNAME}
+      - AppSettings__Email=${APPSETTINGS_EMAIL}
+      - AppSettings__Password=${APPSETTINGS_PASSWORD}
+      - AppSettings__JwtSecret=${APPSETTINGS_JWT_SECRET}
+      - TZ=Europe/Berlin # replace with your timezone
+    volumes:
+      - ./.OpenHabitTracker:/app/.OpenHabitTracker</code></pre>
+
+          <ul>
+            <li>Data is a single SQLite file in the mounted volume - back it up by copying it</li>
+            <li>Log in at <code>/login</code>, read the logs at <code>/watchdog</code></li>
+            <li>A REST API with an OpenAPI document and a Scalar UI sits at <code>/scalar/v1</code>, behind the same login</li>
+            <li>Set <code>TZ</code> to your own timezone - it decides when a day ends, which is not a detail for a habit tracker</li>
+            <li>Install the app on each device, point it at your server, log in, and it syncs</li>
+          </ul>
+
+          <p>Ready-made templates exist for TrueNAS, Unraid, CapRover and Dokploy, so on those it is a couple of clicks rather than a compose file.</p>
+
+          <h2 class="card-title mt-5 fs-3">Compared with the other self-hosted habit trackers</h2>
+
+          <p>The three closest projects are <a href="https://github.com/daya0576/beaverhabits" rel="nofollow">Beaver Habits</a>, <a href="https://github.com/dohsimpson/HabitTrove" rel="nofollow">HabitTrove</a> and <a href="https://github.com/jofoerster/habitsync" rel="nofollow">HabitSync</a>. Each of them does things this app does not do at all, so here is the whole picture rather than the flattering half:</p>
 
           <div class="table-responsive">
             <table class="table table-striped align-middle">
               <thead>
                 <tr>
                   <th scope="col"></th>
-                  <th scope="col">Everyday</th>
+                  <th scope="col">Beaver Habits</th>
+                  <th scope="col">HabitTrove</th>
+                  <th scope="col">HabitSync</th>
                   <th scope="col">OpenHabitTracker</th>
                 </tr>
               </thead>
               <tbody>
-                <tr><th scope="row">Price</th><td>3 habits free; ~$30/year or ~$100 lifetime</td><td>free, unlimited</td></tr>
-                <tr><th scope="row">Habit limit</th><td>3 on the free tier</td><td>none</td></tr>
-                <tr><th scope="row">Open source</th><td>❌</td><td>✅ GPL-3.0</td></tr>
-                <tr><th scope="row">Account required</th><td>✅</td><td>❌ no</td></tr>
-                <tr><th scope="row">Where your data lives</th><td>their cloud</td><td>on your device</td></tr>
-                <tr><th scope="row">Android / iOS</th><td>✅</td><td>✅</td></tr>
-                <tr><th scope="row">macOS</th><td>✅</td><td>✅</td></tr>
-                <tr><th scope="row">Windows / Linux</th><td>🌐 browser only</td><td>✅ native apps</td></tr>
-                <tr><th scope="row">Web</th><td>✅</td><td>✅ PWA, works offline</td></tr>
-                <tr><th scope="row">Streak model</th><td>✅ don't break the chain</td><td>elapsed time vs desired interval; streaks opt-in</td></tr>
-                <tr><th scope="row">Notification reminders</th><td>✅</td><td>❌ overdue habits are highlighted instead</td></tr>
-                <tr><th scope="row">Notes / tasks</th><td>❌</td><td>✅ Markdown notes + tasks</td></tr>
-                <tr><th scope="row">Sync</th><td>✅ their cloud</td><td>✅ optional self-hosted server (Docker)</td></tr>
-                <tr><th scope="row">Languages</th><td>~10</td><td>20</td></tr>
-                <tr><th scope="row">Themes</th><td>limited</td><td>26, dark and light</td></tr>
+                <tr><th scope="row">Price</th><td>free</td><td>free</td><td>free</td><td>free</td></tr>
+                <tr><th scope="row">License</th><td>BSD-3-Clause</td><td>AGPL-3.0</td><td>BSD-3-Clause</td><td>GPL-3.0</td></tr>
+                <tr><th scope="row">Self-hosted with Docker</th><td>&#9989;</td><td>&#9989;</td><td>&#9989;</td><td>&#9989;</td></tr>
+                <tr><th scope="row">Habit tracking</th><td>&#9989;</td><td>&#9989;</td><td>&#9989;</td><td>&#9989;</td></tr>
+                <tr><th scope="row">Native desktop apps</th><td>&#10060; browser</td><td>&#10060; browser</td><td>&#10060; browser</td><td>&#9989; Windows, Linux, macOS</td></tr>
+                <tr><th scope="row">Native mobile apps</th><td>&#10060; PWA</td><td>&#10060; PWA</td><td>&#9989; Android</td><td>&#9989; Android and iOS</td></tr>
+                <tr><th scope="row">Usable with no server at all</th><td>&#10060;</td><td>&#10060;</td><td>&#10060;</td><td>&#9989; local-only, no account</td></tr>
+                <tr><th scope="row">Notes</th><td>&#10060;</td><td>&#10060;</td><td>&#10060;</td><td>&#9989; Markdown</td></tr>
+                <tr><th scope="row">Tasks with checklists</th><td>&#10060;</td><td>&#10060;</td><td>&#10060;</td><td>&#9989;</td></tr>
+                <tr><th scope="row">Notifications</th><td>via API integrations</td><td>&#10060;</td><td>&#9989; Apprise, 80+ services</td><td>&#10060; overdue habits are highlighted instead</td></tr>
+                <tr><th scope="row">Shared habits, challenges</th><td>&#10060;</td><td>&#10060;</td><td>&#9989; friends and leaderboards</td><td>&#10060;</td></tr>
+                <tr><th scope="row">Gamification</th><td>&#10060;</td><td>&#9989; coins and rewards</td><td>&#9989; achievements</td><td>&#10060;</td></tr>
+                <tr><th scope="row">Multiple users</th><td>&#9989;</td><td>not documented</td><td>&#9989; with approval or SSO</td><td>&#10060; single user</td></tr>
+                <tr><th scope="row">Hosted option</th><td>&#9989; beaverhabits.com</td><td>&#10060;</td><td>&#10060;</td><td>&#9989; PWA, but without sync</td></tr>
+                <tr><th scope="row">Import and export</th><td>JSON</td><td>not documented</td><td>not documented</td><td>JSON, YAML, TSV, Markdown, Google Keep</td></tr>
               </tbody>
             </table>
           </div>
 
-          <p>Credit where due: Everyday's calendar grid is one of the best-looking "chain" visualizations around, onboarding takes seconds, and having the same view in the browser and on your phone is convenient. If you track three habits or fewer and like the aesthetic, the free tier may be all you need.</p>
+          <h2 class="card-title mt-5 fs-3">Which one you actually want</h2>
 
-          <h2 class="card-title mt-5 fs-3">Chains break - intervals bend</h2>
+          <p><b>HabitSync</b>, if being reminded matters, or if you want to track habits together with other people. It is the only one of the four that will message you on Discord, Signal or email when something is due, and the only one with shared habits, challenges and leaderboards. Reminders are the biggest single thing OpenHabitTracker does not have.</p>
 
-          <p>Everyday is built on the Seinfeld method: do the thing daily, keep the chain alive. <span class="caveat large">OpenHabitTracker</span> takes a more forgiving approach - each habit has its own desired interval (daily, every 4 days, weekly...), and the app shows how overdue each habit is as a percentage of that interval. A 4-day habit that is 2 days overdue sits at 150% and its badge shifts toward the overdue color (green, amber and red in the default theme). One missed day never breaks anything - the percentage just grows until you get to it.</p>
+          <p><b>HabitTrove</b>, if the reward loop is what keeps you going - completions earn coins, and you spend them on a wishlist you wrote yourself.</p>
 
-          <p>Classic streaks are available too - opt-in, off by default, added because a user <a href="https://github.com/Jinjinov/OpenHabitTracker/discussions/16" onclick="gitHubVisit()">asked on GitHub</a>.</p>
+          <p><b>Beaver Habits</b>, if you want the lightest thing that tracks habits and nothing else, or if you would rather host nothing at all and use their hosted instance. Its integrations with Home Assistant, Apple Shortcuts and CalDAV are further along, too.</p>
+
+          <p><b>OpenHabitTracker</b>, if you want real apps rather than browser tabs - Windows, Linux, macOS, iOS and Android, all syncing to your own container - and if your habits belong next to your notes and tasks instead of in a separate tool. It is also the only one of the four that is completely usable with no server and no account, which makes it easy to try before deciding to host anything.</p>
+
+          <h2 class="card-title mt-5 fs-3">About streaks</h2>
+
+          <p>Habit trackers usually run on streaks, and a broken streak is where people quit. This one measures how much of a habit's interval has elapsed instead: a habit you meant to do every 10 days that is 2 days late reads 120%, so the list sorts by how overdue things are rather than by how guilty you should feel. Streaks do exist since version 1.2.2, current and best - but they are off by default and live inside the habit detail, because someone asked for them, not because the app is built on them.</p>
 
           <h2 class="card-title mt-5 fs-3">Screenshots</h2>
 
@@ -230,10 +266,10 @@
 
           <div class="card m-2">
             <a href="images/desktop_7_habits.png">
-              <img src="images/desktop_7_habits.png" class="card-img-top" alt="OpenHabitTracker habit list on desktop with unlimited habits" loading="lazy">
+              <img src="images/desktop_7_habits.png" class="card-img-top" alt="OpenHabitTracker habit list on desktop with interval percentages" loading="lazy">
             </a>
             <div class="card-body">
-              <p class="card-text">As many habits as you want - free</p>
+              <p class="card-text">The habit list on desktop - interval ratios instead of streaks</p>
             </div>
           </div>
 
@@ -243,45 +279,38 @@
 
             <div class="card m-2" style="width: 25rem;">
               <a href="images/phone_5_habit.png">
-                <img src="images/phone_5_habit.png" class="card-img-top" alt="OpenHabitTracker habit view with calendar on a phone" loading="lazy">
+                <img src="images/phone_5_habit.png" class="card-img-top" alt="OpenHabitTracker habit view on a phone" loading="lazy">
               </a>
               <div class="card-body">
-                <p class="card-text">Habit calendar on a phone</p>
+                <p class="card-text">A habit on a phone - the same data as the desktop app</p>
               </div>
             </div>
 
             <div class="card m-2" style="width: 25rem;">
-              <a href="images/phone_2_notes.png">
-                <img src="images/phone_2_notes.png" class="card-img-top" alt="OpenHabitTracker notes on a phone" loading="lazy">
+              <a href="images/phone_4_task.png">
+                <img src="images/phone_4_task.png" class="card-img-top" alt="OpenHabitTracker task with checklist and time tracking on a phone" loading="lazy">
               </a>
               <div class="card-body">
-                <p class="card-text">Notes and tasks included - not just habits</p>
+                <p class="card-text">Tasks with checklists live in the same app</p>
               </div>
             </div>
 
             <div class="card m-2" style="width: 25rem;">
-              <a href="images/phone_7_settings.png">
-                <img src="images/phone_7_settings.png" class="card-img-top" alt="OpenHabitTracker settings on a phone" loading="lazy">
+              <a href="images/phone_8_backup.png">
+                <img src="images/phone_8_backup.png" class="card-img-top" alt="OpenHabitTracker backup sidebar on a phone with export formats and Google Keep import" loading="lazy">
               </a>
               <div class="card-body">
-                <p class="card-text">Settings - themes, languages, customization</p>
+                <p class="card-text">Open export formats - your data leaves as easily as it arrived</p>
               </div>
             </div>
 
           </div>
 
-          <h2 class="card-title mt-5 fs-3">The honest verdict</h2>
-
-          <ul>
-            <li><b>Stay with Everyday</b> if you track 3 habits or fewer, love the chain grid, and don't mind an account.</li>
-            <li><b>Try OpenHabitTracker</b> if you want unlimited habits for free, your data on your own device, native desktop apps, and notes and tasks in the same place.</li>
-          </ul>
-
-          <h2 class="card-title mt-5 fs-3">Try it for free</h2>
+          <h2 class="card-title mt-5 fs-3">Try it without installing anything</h2>
 
           <p><a href="https://pwa.openhabittracker.net" onclick="onlineAppUsage()" class="btn btn-primary">Use <span class="caveat large">OpenHabitTracker </span> in your browser</a></p>
 
-          <p>No install needed - the PWA keeps all data on your device. Or get the native app:</p>
+          <p>The PWA works offline and keeps all data on your device. Or get the native app:</p>
 
           <p><svg class="fa-svg fa-svg-android"><use href="#fa-android"></use></svg> Android - Google Play:<br><a href="https://play.google.com/store/apps/details?id=net.openhabittracker" onclick="googleStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on Google Play"><img src="icons/Google.svg" style="height:64px;" alt="Google Play badge"></a></p>
           <p><svg class="fa-svg fa-svg-apple"><use href="#fa-apple"></use></svg> iOS - App Store:<br><a href="https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=iphone" onclick="iosStoreVisit()" class="card-link" aria-label="Get OpenHabitTracker on iOS App Store"><img src="icons/AppStore.svg" style="height:64px;" alt="App Store badge"></a></p>
@@ -297,13 +326,13 @@
 
       <footer class="text-center my-4">
         <p>
-          <a href="index.html" class="text-decoration-none">Home</a> ·
-          <a href="habit-tracker-comparison.html" class="text-decoration-none">Full 5-app comparison</a> ·
-          <a href="loop-habit-tracker-alternative.html" class="text-decoration-none">Loop alternative</a> ·
-          <a href="google-keep-alternative.html" class="text-decoration-none">Google Keep alternative</a> ·
-          <a href="habitica-alternative.html" class="text-decoration-none">Habitica alternative</a> ·
-          <a href="streaks-alternative.html" class="text-decoration-none">Streaks alternative</a> ·
-          <a href="self-hosted-habit-tracker.html" class="text-decoration-none">Self-hosted</a>
+          <a href="index.html" class="text-decoration-none">Home</a> &middot;
+          <a href="habit-tracker-comparison.html" class="text-decoration-none">Full 5-app comparison</a> &middot;
+          <a href="loop-habit-tracker-alternative.html" class="text-decoration-none">Loop alternative</a> &middot;
+          <a href="google-keep-alternative.html" class="text-decoration-none">Google Keep alternative</a> &middot;
+          <a href="habitica-alternative.html" class="text-decoration-none">Habitica alternative</a> &middot;
+          <a href="streaks-alternative.html" class="text-decoration-none">Streaks alternative</a> &middot;
+          <a href="everyday-alternative.html" class="text-decoration-none">Everyday alternative</a>
         </p>
       </footer>
 
