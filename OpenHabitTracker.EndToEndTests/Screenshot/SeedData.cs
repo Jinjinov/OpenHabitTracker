@@ -100,14 +100,28 @@ public static class SeedData
     private static object Category(string title, object[] notes, object[] tasks, object[] habits) =>
         new { UserId = 0, Title = title, IsCollapsed = false, CompletionRule = 0, Notes = notes, Tasks = tasks, Habits = habits };
 
-    public static string Write(string path)
+    // QuerySection: Search, FilterByDate, FilterByCategory, FilterByPriority, FilterByStatus, Sort.
+    // true means folded. Open sections read as depth on a wide frame and as clutter on a phone,
+    // where they push the priority filter off the bottom.
+    private static readonly Dictionary<int, bool> AllOpen = new()
+    {
+        [0] = false, [1] = false, [2] = false, [3] = false, [4] = false, [5] = false
+    };
+
+    private static readonly Dictionary<int, bool> PhoneFolded = new()
+    {
+        [0] = false, [1] = true, [2] = true, [3] = false, [4] = true, [5] = true
+    };
+
+    public static string Write(string path, bool foldForPhone = false)
     {
         object data = new
         {
             Settings = new
             {
                 ShowColor = false,          // a text dropdown - frame is better spent on the item
-                HideCompletedTasks = false  // finished work stays visible
+                HideCompletedTasks = false, // finished work stays visible
+                FoldSection = foldForPhone ? PhoneFolded : AllOpen
             },
             // Checklist items are deliberately rare - two habits and two tasks carry one,
             // 3 to 5 entries each. Items expand under their parent and swallow the list otherwise.

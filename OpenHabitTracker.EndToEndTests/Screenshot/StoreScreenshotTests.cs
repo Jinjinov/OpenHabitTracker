@@ -170,11 +170,15 @@ public class StoreScreenshotTests : PlaywrightTest
     [Test]
     public async Task Capture_All()
     {
-        string seedFile = SeedData.Write(Path.GetFullPath("seed.json"));
+        // The narrow targets get the filter sections folded - see SeedData.
+        string wideSeed = SeedData.Write(Path.GetFullPath("seed-wide.json"));
+        string narrowSeed = SeedData.Write(Path.GetFullPath("seed-narrow.json"), foldForPhone: true);
 
         foreach (Target target in Targets)
         {
-            await CaptureSessionAsync(target, seedFile,
+            bool wide = target.Name is "desktop" or "ipad-13";
+
+            await CaptureSessionAsync(target, wide ? wideSeed : narrowSeed,
                 target.Name == "desktop" ? [.. Scenes, HomeScene] : Scenes);
         }
 
