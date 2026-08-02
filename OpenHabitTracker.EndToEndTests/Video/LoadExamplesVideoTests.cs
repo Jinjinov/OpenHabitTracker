@@ -104,99 +104,140 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await page.WaitForTimeoutAsync(1000); // wait for Blazor OnAfterRenderAsync to finish
     }
 
-    private static async Task LoadExamples(IPage page)
+    // Seeding happens before ffmpeg starts. The old scenarios filmed themselves clicking
+    // Load examples, which spent four of twenty-five seconds on an empty app and a data menu.
+    private static async Task SeedAsync(IPage page, string seedFile)
     {
-        if (!await page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Data" }).IsVisibleAsync())
+        if (!await page.Locator("[data-data-step-1]").IsVisibleAsync())
         {
-            await ClickAsync(page.Locator("[data-main-step-1]")); // menu toggle button (three dots) — open only if Data button not already visible
-            await page.WaitForTimeoutAsync(1000);
+            await page.Locator("[data-main-step-1]").ClickAsync();
+            await page.Locator("div[role='menu'] button:has(i.bi-database)").ClickAsync();
         }
 
-        await ClickAsync(page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Data" })); // Data button in menu sidebar
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("[data-data-step-1]")); // Load examples button in Data sidebar
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("#closeSidebar")); // close sidebar button
-        await page.WaitForTimeoutAsync(1000);
+        await Assertions.Expect(page.Locator("[data-data-step-1]")).ToBeVisibleAsync();
+        await page.Locator("[data-data-step-2]").ClickAsync(); // delete all, so a retake does not stack
+        await page.Locator("input[type='file'].d-none").SetInputFilesAsync(seedFile);
+        await page.WaitForTimeoutAsync(3000); // IndexedDB writes have no observable completion signal
+        await page.Locator("#closeSidebar").ClickAsync();
+        await Assertions.Expect(page.Locator("main#main-content")).ToBeVisibleAsync();
     }
 
-    private static async Task ShowNotes(IPage page)
+    private static Task Beat(IPage page) => page.WaitForTimeoutAsync(1000); // let the eye land
+
+    // ~29.9 s at roughly 1.9 s a beat: the move, hover, hold and click take about 0.9 s and the
+    // pause takes 1 s. The timer hold buys its 3 s from the same budget.
+    private static async Task Main(IPage page)
     {
-        await ClickAsync(page.Locator("[data-main-step-3]")); // Notes nav link in top bar
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("[data-notes-step-2]").First); // note title button — opens note detail
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("[data-notes-step-7]")); // Close button in note detail
-        await page.WaitForTimeoutAsync(1000);
+        await ClickAsync(page.Locator("[data-main-step-5]")); // Habits
+        await Beat(page);
+
+        // Everything that can be done from the list is done from the list. A demo that opens an
+        // item to tick it off teaches that the app is laborious, and none of this needs the detail:
+        // in the list strip (DisplayMonth false) a day click calls AddTimeDone directly, and the
+        // read-only ItemsComponent still calls SetIsDone - read-only only removes add, rename and
+        // delete. First row on purpose: it is the most overdue, so the badge swings red to green.
+        await ClickAsync(page.Locator("[data-habits-step-6] button[role='gridcell'].border-primary-subtle").First);
+        await Beat(page);
+
+        // The id form of the checkbox is the read-only one, so this is a list row, not a detail.
+        await ClickAsync(page.Locator("[data-habits-step-5] input[id^='item-']").First);
+        await Beat(page);
+
+        // The detail earns its place with the month calendar and the history, not with ticking.
+        await ClickAsync(page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasTextString = "Morning run" }));
+        await Beat(page);
+
+        await ClickAsync(page.Locator("[data-habits-step-11]")); // close
+        await Beat(page);
+
+        await ClickAsync(page.Locator("[data-main-step-4]")); // Tasks
+        await Beat(page);
+
+        await ClickAsync(page.Locator("[data-tasks-step-4]").First); // done from the list, one click
+        await Beat(page);
+
+        await ClickAsync(page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasTextString = "quarterly report" }));
+        await Beat(page);
+
+        await ClickAsync(page.Locator("[data-tasks-step-14] button")); // the timer exists only here
+        await page.WaitForTimeoutAsync(3000); // the only thing a still cannot show
+
+        await ClickAsync(page.Locator("[data-tasks-step-10]")); // close
+        await Beat(page);
+
+        // No note is opened: the list renders the markdown itself (data-notes-step-3), so reading
+        // a note costs no clicks at all. Opening one would only show the editor.
+        await ClickAsync(page.Locator("[data-main-step-3]")); // Notes
+        await page.WaitForTimeoutAsync(6500); // hold on the rendered markdown - lands the take at ~29 s
     }
 
-    private static async Task ShowTasks(IPage page)
+    // The filter half is shared; what differs is that a phone sidebar covers the list, so the
+    // payoff of filtering is invisible until it closes.
+    private static async Task FilterAsync(IPage page)
     {
-        await ClickAsync(page.Locator("[data-main-step-4]")); // Tasks nav link in top bar
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("[data-tasks-step-2]").First); // task title button — opens task detail
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("[data-tasks-step-10]")); // Close button in task detail
-        await page.WaitForTimeoutAsync(1000);
+        await ClickAsync(page.Locator("[data-main-step-6]")); // search toggle
+        await Beat(page);
+
+        await MoveToAsync(page.Locator("[data-search-step-1]"));
+        await page.Locator("[data-search-step-1]").PressSequentiallyAsync("run", new LocatorPressSequentiallyOptions { Delay = 200 });
+        await Beat(page);
+
+        await ClickAsync(page.Locator("[data-search-step-3]")); // clear
+        await Beat(page);
+
+        // English only, and only in a capture harness - the shoot is en-US by design.
+        await ClickAsync(page.GetByText("Priorities:"));
+        await page.WaitForTimeoutAsync(200); // a wipe, not a state: with nothing selected the list is empty
+
+        await ClickAsync(page.Locator("label[for='Priority.VeryHigh']"));
+        await Beat(page);
     }
 
-    private static async Task ShowHabits(IPage page)
+    private static async Task SettingsAsync(IPage page, int themeSteps)
     {
-        await ClickAsync(page.Locator("[data-main-step-5]")); // Habits nav link in top bar
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("[data-habits-step-2]").First); // habit title button — opens habit detail
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("[data-habits-step-11]")); // Close button in habit detail
-        await page.WaitForTimeoutAsync(1000);
+        await ClickAsync(page.Locator("[data-main-step-1]")); // menu
+        await Beat(page);
+
+        await ClickAsync(page.Locator("div[role='menu'] button:has(i.bi-gear)"));
+        await Beat(page);
+
+        await ClickAsync(page.Locator("label[for='IsDarkMode']")); // dark to light, the whole app repaints
+        await Beat(page);
+
+        await ClickAsync(page.Locator("label[for='IsDarkMode']")); // and back
+        await Beat(page);
+
+        foreach (string toggle in new[] { "ShowHelp", "ShowPriorityDropdown", "ShowItemList" })
+        {
+            await ClickAsync(page.Locator($"label[for='{toggle}']"));
+            await Beat(page);
+        }
+
+        ILocator theme = page.Locator("select[aria-label='Theme']");
+        for (int step = 1; step <= themeSteps; step++)
+        {
+            await MoveToAsync(theme);
+            await theme.SelectOptionAsync(new SelectOptionValue { Index = step * 4 });
+            await Beat(page);
+        }
     }
 
-    private static async Task ShowHome(IPage page)
+    private static async Task SidebarDesktop(IPage page)
     {
-        await ClickAsync(page.Locator("[data-main-step-2]")); // Home nav link in top bar
-        await page.WaitForTimeoutAsync(1000);
+        await FilterAsync(page);
+        await SettingsAsync(page, themeSteps: 2); // the menu replaces the sidebar - no close needed
+        await page.WaitForTimeoutAsync(4500); // ~29 s, a second under Apple's hard 30
     }
 
-    private static async Task ShowSearch(IPage page)
+    private static async Task SidebarMobile(IPage page)
     {
-        await ClickAsync(page.Locator("[data-main-step-6]")); // Search toggle button in top bar
-        await page.WaitForTimeoutAsync(1000);
-        await MoveToAsync(page.Locator("[data-search-step-1]")); // move cursor to search input
-        await page.Locator("[data-search-step-1]").PressSequentiallyAsync("daily", new LocatorPressSequentiallyOptions { Delay = 200 }); // search input field — typed char by char
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("[data-search-step-3]")); // clear search term button (x)
-        await page.WaitForTimeoutAsync(1000);
-    }
+        await FilterAsync(page);
 
-    private static async Task ShowSettings(IPage page)
-    {
-        await ClickAsync(page.Locator("[data-main-step-1]")); // menu toggle button (three dots)
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("button").Filter(new LocatorFilterOptions { HasText = "Settings" })); // Settings button in menu sidebar
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("label[for='ShowHelp']")); // Show help checkbox — toggle
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("label[for='ShowPriorityDropdown']")); // Show priority checkbox — toggle
-        await page.WaitForTimeoutAsync(1000);
-        await ClickAsync(page.Locator("label[for='ShowItemList']")); // Show item list checkbox — toggle
-        await page.WaitForTimeoutAsync(1000);
-    }
+        await ClickAsync(page.Locator("#closeSidebar"));
+        await page.WaitForTimeoutAsync(1500); // this is the beat where the filtered list is seen
 
-    private static async Task ShowMainContent(IPage page)
-    {
-        await LoadExamples(page);
-
-        await ShowNotes(page);
-        await ShowTasks(page);
-        await ShowHabits(page);
-    }
-
-    private static async Task ShowSidebar(IPage page)
-    {
-        await LoadExamples(page);
-
-        await ShowHome(page);
-        await ShowSearch(page);
-        await ShowSettings(page);
+        await SettingsAsync(page, themeSteps: 1); // one theme: they read poorly at 1080 wide
+        await page.WaitForTimeoutAsync(3500); // ~29 s
     }
 
     private async Task RecordVideo(string outputFile, string videoSize, int viewportWidth, int viewportHeight, bool mobile, Func<IPage, Task> scenario)
@@ -223,6 +264,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
         Directory.CreateDirectory("videos");
 
         await GotoBaseUrl(page);
+        await SeedAsync(page, Screenshot.SeedData.Write(Path.GetFullPath("seed-video.json")));
 
         // Apple App Store — App Preview requirements:
         // https://developer.apple.com/help/app-store-connect/reference/app-information/app-preview-specifications/
@@ -277,27 +319,21 @@ public class LoadExamplesVideoTests : PlaywrightTest
     }
 
     //[Test]
-    public async Task Desktop_ShowMainContent_C_inetpub_wwwroot() =>
-        await RecordVideo("videos/desktop-main.mp4", "1920x1080", 1920, 1086, false, ShowMainContent); // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
+    public async Task Desktop_Main() =>
+        await RecordVideo("videos/desktop-main.mp4", "1920x1080", 1920, 1086, false, Main); // 1086: +6 for the Chromium height discrepancy on Windows - see VideoTests.cs
 
     //[Test]
-    public async Task Desktop_ShowSidebar_C_inetpub_wwwroot() =>
-        await RecordVideo("videos/desktop-sidebar.mp4", "1920x1080", 1920, 1086, false, ShowSidebar); // 1086: +6 for Chromium height rendering discrepancy on Windows — see VideoTests.cs comment block
+    public async Task Desktop_Sidebar() =>
+        await RecordVideo("videos/desktop-sidebar.mp4", "1920x1080", 1920, 1086, false, SidebarDesktop);
 
-    // NOTE: mobile videos are recorded at 500×1084 (scaled from Apple's required 886×1920) because a 3440×1440 monitor is only 1440px tall — ddagrab cannot capture taller than the physical display.
-    // Two approaches that do NOT work:
-    //   1. Playwright built-in RecordVideo: captures browser content at any size without ddagrab, but output quality is too poor for store submission.
-    //   2. ffmpeg scale=886:1920 upscale: 500/1084 ≈ 886/1920 aspect ratios look identical on paper, but the re-encode produces sample_aspect_ratio: 120000:120053 (non-square pixels) which causes Apple's validator to compute display dimensions different from the encoded dimensions and reject the file.
-    // Two real fixes: (1) rotate the Windows display to portrait via Display Settings → Display orientation → Portrait (3440×1440 becomes 1440×3440, so 886×1920 fits); restore to Landscape after recording.
-    //                 (2) a virtual monitor driver (e.g. parsec-vdd) that creates a display tall enough to fit 886×1920 plus Chromium window chrome (~88px) plus invisible DWM (Desktop Window Manager) borders (~8px);
-    //                     the offsetX/offsetY calculation is already dynamic so it adapts, but the hardcoded +6 viewport height correction and -2 offsetY correction (see VideoTests.cs quirks comment)
-    //                     were measured empirically on a physical display and may need to be re-measured if the virtual driver reports window chrome or DWM (Desktop Window Manager) borders differently.
+    // Recorded with the Windows display rotated to Portrait: 1440x3440 fits Apple's 886x1920
+    // preview natively, which retires the old 500x1084 upscale and the SAR it left behind.
+    // Re-measure offsetX/offsetY after rotating - the values in VideoTests.cs were taken in landscape.
+    //[Test]
+    public async Task Mobile_Main() =>
+        await RecordVideo("videos/mobile-main.mp4", "886x1920", 886, 1926, true, Main);
 
     //[Test]
-    public async Task Mobile_ShowMainContent_C_inetpub_wwwroot() =>
-        await RecordVideo("videos/mobile-main.mp4", "500x1084", 500, 1090, true, ShowMainContent); // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
-
-    //[Test]
-    public async Task Mobile_ShowSidebar_C_inetpub_wwwroot() =>
-        await RecordVideo("videos/mobile-sidebar.mp4", "500x1084", 500, 1090, true, ShowSidebar); // 1090: original 886×1920 aspect ratio scaled to 500×1084, +6 for Chromium height rendering discrepancy on Windows
+    public async Task Mobile_Sidebar() =>
+        await RecordVideo("videos/mobile-sidebar.mp4", "886x1920", 886, 1926, true, SidebarMobile);
 }
