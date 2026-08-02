@@ -1,0 +1,125 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>hero art</title>
+<style>
+  html, body { margin: 0; padding: 0; }
+  #art { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+  .cell { position: absolute; border-radius: 12%; }
+  .num { position: absolute; font: 600 34px/1 system-ui, sans-serif; opacity: .55; }
+  body.dark #art { background: #212529; }
+  body.light #art { background: #f8f9fa; }
+</style>
+<div id="art"></div>
+<script>
+  const D1 = "m 78.066744,154.71663 q 0,9.56666 0.933332,20.76664 0.933332,11.19998 3.499995,20.5333 0.466666,2.56667 2.33333,2.8 1.866664,0.23333 3.733328,0.23333 4.199993,0 7.466655,-0.23333 3.499995,-0.46667 8.166656,-1.4 2.56666,-4.19999 2.8,-6.99999 0.23333,-2.79999 0.23333,-6.99999 0,-3.73333 -0.93333,-7.46665 -0.93334,-3.73333 -0.93334,-6.99999 0,-0.46667 0,-0.93334 0.23334,-0.46666 0.23334,-0.93333 l -12.833318,-46.19993 -4.433326,-4.43333 q -0.466666,0.46667 -1.633331,2.33333 -1.166665,1.86667 -2.566663,4.2 -1.166665,2.09999 -2.099997,3.96666 -0.933332,1.86666 -0.933332,2.56666 0,0.23333 -0.466666,3.26666 -0.233333,3.03333 -0.933332,7.23333 -0.466666,3.96666 -0.933332,8.16665 -0.466666,4.19999 -0.699999,6.53332 z m -10.266652,-2.79999 q 0,-5.13333 0.699999,-13.06665 0.699999,-7.93332 3.033329,-15.39998 2.566663,-7.69999 6.99999,-13.06664 4.433327,-5.6 12.133316,-5.6 4.666659,0 7.699988,4.43333 3.266666,4.19999 4.199996,8.63332 l 14.69998,69.53323 q 0,6.29999 -2.8,10.49999 -2.56666,4.19999 -6.99999,6.76665 -4.19999,2.33333 -9.566652,3.26667 -5.366659,1.16666 -10.733317,1.16666 -4.433327,0 -8.866654,-1.86666 -4.433327,-2.1 -5.833325,-6.76666 -0.466666,-2.56666 -1.166665,-8.86665 -0.466666,-6.53333 -1.166665,-13.53332 -0.699999,-7.23332 -1.399998,-13.53331 -0.466666,-6.29999 -0.699999,-8.86665 0,-0.46667 -0.233333,-1.86667 0,-1.4 0,-1.86666 z m 5.833325,-83.533213 q 0,3.499994 1.633331,6.29999 1.866664,2.566663 4.66666,4.66666 2.799996,1.866664 6.066658,3.033329 3.499995,0.933332 6.766656,0.933332 5.599992,0 8.633318,-3.966661 3.03333,-3.966661 3.03333,-9.099986 0,-6.766657 -4.19999,-10.733318 -4.199996,-3.966661 -10.966652,-3.966661 -2.566663,0 -5.366659,0.933332 -2.799996,0.933332 -5.133326,2.799996 -2.099997,1.633331 -3.733328,3.966661 -1.399998,2.33333 -1.399998,5.133326 z m -10.033319,0 q 0,-4.899993 2.33333,-8.866654 2.33333,-3.966661 5.833325,-6.766657 3.733328,-2.799996 8.166655,-4.199994 4.66666,-1.633331 9.099987,-1.633331 4.199993,0 7.933321,0.933332 3.733324,0.933332 6.766654,3.033329 3.03333,2.099997 4.66666,5.366659 1.86667,3.266662 1.86667,7.699989 0,2.799996 -0.46667,7.699988 -0.46667,4.66666 -2.33333,9.33332 -1.63333,4.433327 -5.13332,7.699989 -3.5,3.266662 -9.566658,3.266662 -5.833324,0 -11.199983,-1.166665 -5.133326,-1.399998 -9.33332,-4.199994 -3.966661,-3.033329 -6.299991,-7.466656 -2.33333,-4.433327 -2.33333,-10.733317 z";
+  const D2 = "m 138.73331,187.61659 q 0,-6.3 2.33333,-10.73332 2.56666,-4.66666 6.53333,-7.46666 3.96666,-2.79999 9.33332,-4.19999 5.36665,-1.4 11.19998,-1.4 6.06666,0 9.33332,3.5 3.49999,3.26666 5.13332,7.93332 1.86667,4.43332 2.33333,9.33332 0.46667,4.66666 0.46667,7.46665 0,4.66666 -1.86666,7.93332 -1.63333,3.03333 -4.66666,5.13333 -2.8,2.1 -6.76666,3.03333 -3.73333,0.93333 -7.69999,0.93333 -4.43333,0 -9.09999,-1.63333 -4.43332,-1.4 -8.16665,-4.19999 -3.73333,-2.8 -6.06666,-6.76666 -2.33333,-3.96666 -2.33333,-8.86665 z m 10.03332,-0.23334 q 0,2.8 1.4,5.36666 1.63333,2.33333 3.73333,4.2 2.33333,1.63333 5.13332,2.56666 2.8,0.93333 5.36666,0.93333 6.76666,0 10.96665,-3.96666 4.2,-3.96666 4.2,-10.73332 0,-5.13332 -3.03333,-9.09998 -3.03333,-3.96667 -8.63332,-3.96667 -3.26667,0 -6.76666,1.16667 -3.26666,0.93333 -6.06666,3.03333 -2.79999,1.86666 -4.66666,4.66666 -1.63333,2.56666 -1.63333,5.83332 z m -5.83332,-83.29988 q 0,-0.46666 0,-1.86666 0.23333,-1.4 0.23333,-1.86666 0.23333,-2.333333 0.7,-8.633324 0.7,-6.533324 1.4,-13.533314 0.69999,-7.233323 1.39999,-13.533313 0.7,-6.533324 0.93334,-9.099987 1.39999,-4.899993 5.83332,-6.766657 4.43333,-1.866664 8.86665,-1.866664 5.36666,0 10.73332,1.166665 5.36666,0.933332 9.56665,3.499995 4.43333,2.33333 6.99999,6.533324 2.8,3.966661 2.8,10.266652 l -14.46665,69.766563 q -1.16666,4.43333 -4.43332,8.86666 -3.03333,4.19999 -7.69999,4.19999 -7.69999,0 -12.13332,-5.36666 -4.43332,-5.59999 -6.99999,-13.06665 -2.33333,-7.69999 -3.03333,-15.63331 -0.69999,-7.93332 -0.69999,-13.06665 z m 10.26665,-2.79999 q 0.23333,2.33333 0.7,6.53332 0.46666,4.2 0.93333,8.39999 0.7,3.96666 0.93333,6.99999 0.46667,3.03333 0.46667,3.26666 0,0.7 0.93333,2.56666 0.93333,1.86667 2.1,4.2 1.39999,2.1 2.56666,3.96666 1.16666,1.86666 1.63333,2.33333 l 4.43333,-4.43333 12.83331,-46.19993 q 0,-0.466666 -0.23333,-0.933332 0,-0.466666 0,-0.933332 0,-3.499995 0.93333,-6.99999 0.93333,-3.733328 0.93333,-7.699989 0,-4.199993 -0.23333,-6.766656 -0.23333,-2.799996 -2.8,-6.99999 -4.66666,-0.933332 -8.16665,-1.399998 -3.26666,-0.466666 -7.46666,-0.466666 -1.86666,0 -3.73333,0.466666 -1.63333,0.233333 -2.33333,2.799996 -2.33333,9.33332 -3.49999,20.533303 -0.93333,11.199984 -0.93333,20.766638 z";
+  
+  const q = new URLSearchParams(location.search);
+  const mode = q.get('mode') || 'dark';
+  document.body.className = mode;
+
+  // Saturated, not the -subtle variants: those exist to sit behind text and turn to mud at this size.
+  const theme = mode === 'dark'
+    ? { empty: '#2b3035', ramp: ['#0b3a26', '#12603d', '#1a8754', '#2fbf7a'], ink: '#dee2e6',
+        tertiary: '#2b3035', done: '#051b11', short: '#332701', line: '#495057',
+        today: '#084298', warn: '#ffda6a' }
+    : { empty: '#e9ecef', ramp: ['#a3e0c1', '#6cc99a', '#34a56f', '#198754'], ink: '#212529',
+        tertiary: '#f8f9fa', done: '#d1e7dd', short: '#fff3cd', line: '#dee2e6',
+        today: '#9ec5fe', warn: '#997404' };
+
+  function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  const next = rng(20260802);
+
+  const artEl = document.getElementById('art');
+  function put(x, y, w, h, color, extra) {
+    const el = document.createElement('div');
+    el.className = 'cell';
+    el.style.cssText = `left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${color};` + (extra || '');
+    artEl.appendChild(el);
+    return el;
+  }
+
+  // 4. The app's own month calendar, transposed: weekdays are rows, weeks are columns,
+  // which turns a portrait grid into a landscape one and lets neighbouring months fill the frame.
+  // Square cells and no header row, as in the app. Colours and dimming follow
+  // CalendarComponent.razor: bg-body-tertiary, bg-success-subtle, bg-warning-subtle,
+  // text-warning on weekends, -emphasis only inside the current month.
+  function strip() {
+    const rows = 7, cols = 13;
+    const size = 1920 / cols;                 // square, so the row count sets the margin
+    const top = (1080 - rows * size) / 2;
+
+    // Row 0 is Monday, so a month that starts on a Wednesday starts at row 2.
+    const monthStart = 4 * 7 + 2, monthLength = 31, todayCell = monthStart + 30; // the 31st
+
+    // Walk the days in order, not row by row: consecutive days run down a column and wrap to the
+    // next week, so persistence has to follow that path or the streaks come out as islands of one
+    // weekday repeating across months.
+    let keeping = next() < 0.6;
+
+    for (let index = 0; index < cols * rows; index++) {
+      const c = Math.floor(index / rows), r = index % rows;
+      const inMonth = index >= monthStart && index < monthStart + monthLength;
+
+      // Streaks belong to the month on show. The neighbours are texture, so they get
+      // independent draws - random days, no runs - which lets the month's structure read.
+      let done;
+      if (inMonth) {
+        keeping = next() < (keeping ? 0.82 : 0.45);
+        done = keeping ? (next() < 0.72 ? 'full' : 'short') : null;
+      } else {
+        done = next() < 0.32 ? (next() < 0.7 ? 'full' : 'short') : null;
+      }
+      if (index === todayCell) done = 'full';          // today reads as success, not as a gap
+
+      const bg = done === 'full' ? theme.done : done === 'short' ? theme.short : theme.tertiary;
+
+      const x = c * size, y = top + r * size;
+      put(x + 3, y + 3, size - 6, size - 6, bg,
+        `border:2px solid ${theme.line};border-radius:6px;` +
+        (index === todayCell ? `box-shadow:inset 0 0 0 8px ${theme.today};` : '') +
+        (inMonth ? '' : 'opacity:.45;'));
+
+      const n = document.createElement('div');
+      n.className = 'num';
+      n.textContent = ((index - monthStart + monthLength * 3) % monthLength) + 1;
+      n.style.cssText += `left:${x + 20}px;top:${y + 18}px;color:${r > 4 ? theme.warn : theme.ink};` +
+        (inMonth ? 'opacity:.95;' : 'opacity:.4;');
+      artEl.appendChild(n);
+
+      if (done) {
+        const t = document.createElement('div');
+        t.className = 'num';
+        t.textContent = '0:' + (done === 'full' ? 30 + Math.floor(next() * 25) : 10 + Math.floor(next() * 12));
+        t.style.cssText += `left:${x + 20}px;top:${y + size - 52}px;font-size:28px;` +
+          `color:${r > 4 ? theme.warn : theme.ink};` + (inMonth ? 'opacity:.8;' : 'opacity:.35;');
+        artEl.appendChild(t);
+      }
+    }
+  }
+
+  // The mark as the vector it is, never approximated by cells - and in the app's own emphasis
+  // grey rather than pure white, so it sits in the palette instead of on top of it.
+  function overlayMark(color) {
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 256 256');
+    svg.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);' +
+      'height:104%;filter:drop-shadow(0 0 26px rgba(0,0,0,.55));';
+    const g = document.createElementNS(ns, 'g');
+    g.setAttribute('fill', color);
+    [D1, D2].forEach(function (d) {
+      const path = document.createElementNS(ns, 'path');
+      path.setAttribute('d', d);
+      g.appendChild(path);
+    });
+    svg.appendChild(g);
+    artEl.appendChild(svg);
+  }
+
+  strip();
+  const markColor = q.get('mark');
+  if (markColor) overlayMark(theme.ink);
+</script>
