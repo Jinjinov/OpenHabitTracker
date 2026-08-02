@@ -55,6 +55,13 @@ For all other elements, use locators that are already present in the markup, in 
 4. `aria-label` — **avoid**: values are localized via `@Loc[...]` and will break if language changes
 5. Visible text / `HasText` filter — **avoid for assertions**: also localized and fragile
 
+Dry-run a recording scenario headless before booking a recording session.
+Temporarily flip `Headless` to true, add a `[Test]` that runs the scenario at every viewport it
+will be recorded at, and time it. Three locator faults and one viewport-only fault were caught
+that way in one pass, each of which would have wasted a take.
+The mobile viewport is the one that matters: the list is hidden behind the detail there, so any
+list-scoped locator that works on desktop can still fail on the phone.
+
 Existing attributes already usable by tests (do not need to be added):
 - `data-main-step-1` — menu toggle button
 - `data-main-step-2` — Home nav link
@@ -72,6 +79,19 @@ Existing attributes already usable by tests (do not need to be added):
 - `data-search-step-1` — search input field
 - `data-search-step-3` — clear search term button
 - `id="closeSidebar"` — sidebar close button
+- `data-habits-step-5` — checklist inside a habit list row
+- `data-habits-step-6` — the habit row's small calendar; its day cells are
+  `button[role='gridcell']`, and today carries `.border-primary-subtle`
+- `data-habits-step-11` — Close in the habit detail
+- `data-tasks-step-4` — Mark as done in a task list row
+- `data-tasks-step-14` — the task timer row; its start button is `button:has(i.bi-play)`
+- `data-notes-step-3` — the note's rendered markdown in the list
+- `data-data-step-2` — Delete all data; the import file input is `input[type='file'].d-none`
+- `id="habit-component"` — the open habit detail, useful for scoping away from list rows
+- `id="item-{id}"` — a checklist checkbox, and only on the read-only variant in a list row;
+  the editable one in a detail uses `aria-label` instead
+- `id="Priority.None"` … `id="Priority.VeryHigh"` — priority filter checkboxes
+- `select[aria-label='Theme']` — the theme picker (aria-label is localized, so English only)
 
 ---
 
