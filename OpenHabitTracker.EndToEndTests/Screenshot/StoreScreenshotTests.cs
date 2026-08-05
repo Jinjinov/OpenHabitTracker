@@ -26,6 +26,41 @@ public class StoreScreenshotTests : PlaywrightTest
         new("desktop", 1440, 900, 2)
     ];
 
+    // Store media is committed and read from the repo by the upload tools, so the capture writes
+    // there rather than into the bin working directory a clean wipes and git never sees.
+    // Three levels up from bin/<config>/<tfm> is the project, four is the app repo root.
+    private static readonly string RepoRoot = Path.GetFullPath(Path.Combine("..", "..", "..", ".."));
+
+    // en-US only this round - both tools take per-locale folders, so 20 locales is this one string.
+    private const string Locale = "en-US";
+
+    private static string AndroidImages(string folder) =>
+        Path.Combine(RepoRoot, "fastlane", "metadata", "android", Locale, "images", folder);
+
+    private static string AppleScreenshots => Path.Combine(RepoRoot, "fastlane", "screenshots", Locale);
+
+    private sealed record Destination(string Directory, string Prefix);
+
+    // Play reads one folder per form factor and one 9:16 set serves both tablet folders.
+    // deliver reads one folder per locale and infers the device class from the image resolution,
+    // so the three Apple sizes share it and only the filename prefix keeps them apart.
+    private static Destination[] DestinationsFor(string target) => target switch
+    {
+        "play-phone" => [new(AndroidImages("phoneScreenshots"), "")],
+        "play-tablet" => [new(AndroidImages("sevenInchScreenshots"), ""), new(AndroidImages("tenInchScreenshots"), "")],
+        _ => [new(AppleScreenshots, target + "-")]
+    };
+
+    // A rerun must leave exactly the set it captured: supply uploads every file in the folder, so
+    // a leftover from an earlier run - or from the 2024 set - would ship alongside the new shots.
+    private static void ClearCapturedShots(Destination destination)
+    {
+        Directory.CreateDirectory(destination.Directory);
+
+        foreach (string file in Directory.EnumerateFiles(destination.Directory, destination.Prefix + "*.png"))
+            File.Delete(file);
+    }
+
     private IBrowser _browser = null!;
 
     [SetUp]
@@ -85,13 +120,20 @@ public class StoreScreenshotTests : PlaywrightTest
         await GotoBaseUrlAsync(page);
         await ImportSeedAsync(page, seedFile);
 
-        string directory = Path.Combine("screenshots", target.Name);
-        Directory.CreateDirectory(directory);
+        Destination[] destinations = DestinationsFor(target.Name);
+
+        foreach (Destination destination in destinations)
+            ClearCapturedShots(destination);
 
         foreach ((string file, Func<IPage, Task> scene) in scenes)
         {
             await scene(page);
-            await page.ScreenshotAsync(new PageScreenshotOptions { Path = Path.Combine(directory, file) });
+
+            string captured = Path.Combine(destinations[0].Directory, destinations[0].Prefix + file);
+            await page.ScreenshotAsync(new PageScreenshotOptions { Path = captured });
+
+            foreach (Destination duplicate in destinations.Skip(1))
+                File.Copy(captured, Path.Combine(duplicate.Directory, duplicate.Prefix + file), overwrite: true);
         }
     }
 
@@ -164,7 +206,7 @@ public class StoreScreenshotTests : PlaywrightTest
 
         await CaptureSessionAsync(desktop, seedFile, [.. Scenes, HomeScene]);
 
-        TestContext.Out.WriteLine(Path.GetFullPath("screenshots"));
+        TestContext.Out.WriteLine(AppleScreenshots);
     }
 
     [Test]
@@ -182,6 +224,7 @@ public class StoreScreenshotTests : PlaywrightTest
                 target.Name == "desktop" ? [.. Scenes, HomeScene] : Scenes);
         }
 
-        TestContext.Out.WriteLine(Path.GetFullPath("screenshots"));
+        TestContext.Out.WriteLine(AndroidImages(""));
+        TestContext.Out.WriteLine(AppleScreenshots);
     }
 }
