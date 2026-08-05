@@ -1,0 +1,4 @@
+• Dodati relativni filteri opsega datuma za planirane i gotove datume
+• Dodati odvojeni planirani datum i planirano vreme za zadatke
+• Dodato pamćenje pozicije i veličine prozora u desktop verzijama
+• Popravljen vođeni obilazak
