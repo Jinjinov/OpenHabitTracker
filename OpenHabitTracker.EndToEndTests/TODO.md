@@ -91,6 +91,11 @@ Existing attributes already usable by tests (do not need to be added):
 - `id="item-{id}"` — a checklist checkbox, and only on the read-only variant in a list row;
   the editable one in a detail uses `aria-label` instead
 - `id="Priority.None"` … `id="Priority.VeryHigh"` — priority filter checkboxes
+- `id="category-{id}"` — category filter checkboxes, with `label[for="category-{id}"]` beside them.
+  Click the LABEL: it carries Bootstrap's `stretched-link`, which covers the input and intercepts
+  the click, so clicking the checkbox itself times out.
+  Scope to the `category-` prefix rather than taking `input[type='checkbox']` `.First`,
+  which resolves to the date-range filter rendered above the category section.
 - `select[aria-label='Theme']` — the theme picker (aria-label is localized, so English only)
 
 ---
