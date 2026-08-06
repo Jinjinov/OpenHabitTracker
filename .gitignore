@@ -2,6 +2,8 @@
 .idea
 bin
 obj
+publish
+Releases
 AppPackages
 *.user
 credentials.json
