@@ -41,6 +41,9 @@ parts:
     dotnet-project: OpenHabitTracker.Blazor.Photino/OpenHabitTracker.Blazor.Photino.csproj
     dotnet-properties:
       PublishSingleFile: "true"
+      # the plugin's "dotnet publish --self-contained False" is dropped when PublishSingleFile
+      # is a property on the same command line, so it has to be repeated here
+      SelfContained: "false"
     # build-packages:
     #   - dotnet-sdk-10.0
     override-build: |
