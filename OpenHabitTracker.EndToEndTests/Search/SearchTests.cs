@@ -90,8 +90,11 @@ public class SearchTests : BaseTest
 
         int totalCount = await Page.Locator("[data-notes-step-2]").CountAsync();
 
-        // Uncheck the first visible category checkbox to hide its items
-        await Page.Locator("input[type='checkbox']").First.ClickAsync();
+        // Uncheck the first visible category to hide its items.
+        // Click the label, not the input: the label carries Bootstrap's stretched-link, which
+        // covers the checkbox and intercepts the click. Scoped by the category- prefix because
+        // a bare input[type='checkbox'].First is the date-range filter above the category section.
+        await Page.Locator("label[for^='category-']").First.ClickAsync();
         await Expect(Page.Locator("[data-notes-step-2]")).Not.ToHaveCountAsync(totalCount);
 
         int filteredCount = await Page.Locator("[data-notes-step-2]").CountAsync();
