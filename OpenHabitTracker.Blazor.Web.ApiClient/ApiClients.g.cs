@@ -4,6 +4,7 @@
 // </auto-generated>
 //----------------------
 
+using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 using OpenHabitTracker.Dto;
@@ -5815,6 +5816,182 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<HabitModel>> HabitsGetAsync(string searchTerm, bool? matchCase, System.DateTime? doneAtFilter, DateCompare? doneAtCompare, System.DateTime? plannedAtFilter, DateCompare? plannedAtCompare, System.DateTime? plannedRangeStart, System.DateTime? plannedRangeEnd, System.DateTime? doneRangeStart, System.DateTime? doneRangeEnd, bool? showDoneInRange, bool? hideCompletedTasks, bool? showOnlyOverSelectedRatioMin, bool? showOnlyUnderSelectedRatioMax, int? selectedRatioMin, int? selectedRatioMax, Ratio? selectedRatio, FilterDisplay? categoryFilterDisplay, FilterDisplay? priorityFilterDisplay, long? selectedCategoryId, Priority? selectedPriority, System.Collections.Generic.IEnumerable<long> hiddenCategoryIds, System.Collections.Generic.IDictionary<string, bool> showPriority, System.Collections.Generic.IDictionary<string, Sort> sortBy)
+        {
+            return HabitsGetAsync(searchTerm, matchCase, doneAtFilter, doneAtCompare, plannedAtFilter, plannedAtCompare, plannedRangeStart, plannedRangeEnd, doneRangeStart, doneRangeEnd, showDoneInRange, hideCompletedTasks, showOnlyOverSelectedRatioMin, showOnlyUnderSelectedRatioMax, selectedRatioMin, selectedRatioMax, selectedRatio, categoryFilterDisplay, priorityFilterDisplay, selectedCategoryId, selectedPriority, hiddenCategoryIds, showPriority, sortBy, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<HabitModel>> HabitsGetAsync(string searchTerm, bool? matchCase, System.DateTime? doneAtFilter, DateCompare? doneAtCompare, System.DateTime? plannedAtFilter, DateCompare? plannedAtCompare, System.DateTime? plannedRangeStart, System.DateTime? plannedRangeEnd, System.DateTime? doneRangeStart, System.DateTime? doneRangeEnd, bool? showDoneInRange, bool? hideCompletedTasks, bool? showOnlyOverSelectedRatioMin, bool? showOnlyUnderSelectedRatioMax, int? selectedRatioMin, int? selectedRatioMax, Ratio? selectedRatio, FilterDisplay? categoryFilterDisplay, FilterDisplay? priorityFilterDisplay, long? selectedCategoryId, Priority? selectedPriority, System.Collections.Generic.IEnumerable<long> hiddenCategoryIds, System.Collections.Generic.IDictionary<string, bool> showPriority, System.Collections.Generic.IDictionary<string, Sort> sortBy, System.Threading.CancellationToken cancellationToken)
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "api/Query/habits"
+                    urlBuilder_.Append("api/Query/habits");
+                    urlBuilder_.Append('?');
+                    if (searchTerm != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SearchTerm")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(searchTerm, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (matchCase != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("MatchCase")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(matchCase, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneAtFilter != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneAtFilter")).Append('=').Append(System.Uri.EscapeDataString(doneAtFilter.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneAtCompare != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneAtCompare")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(doneAtCompare, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedAtFilter != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedAtFilter")).Append('=').Append(System.Uri.EscapeDataString(plannedAtFilter.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedAtCompare != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedAtCompare")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(plannedAtCompare, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedRangeStart != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedRangeStart")).Append('=').Append(System.Uri.EscapeDataString(plannedRangeStart.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedRangeEnd != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedRangeEnd")).Append('=').Append(System.Uri.EscapeDataString(plannedRangeEnd.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneRangeStart != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneRangeStart")).Append('=').Append(System.Uri.EscapeDataString(doneRangeStart.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneRangeEnd != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneRangeEnd")).Append('=').Append(System.Uri.EscapeDataString(doneRangeEnd.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showDoneInRange != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowDoneInRange")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showDoneInRange, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (hideCompletedTasks != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("HideCompletedTasks")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(hideCompletedTasks, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showOnlyOverSelectedRatioMin != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowOnlyOverSelectedRatioMin")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showOnlyOverSelectedRatioMin, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showOnlyUnderSelectedRatioMax != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowOnlyUnderSelectedRatioMax")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showOnlyUnderSelectedRatioMax, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedRatioMin != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedRatioMin")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedRatioMin, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedRatioMax != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedRatioMax")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedRatioMax, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedRatio != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedRatio")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedRatio, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (categoryFilterDisplay != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("CategoryFilterDisplay")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(categoryFilterDisplay, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (priorityFilterDisplay != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PriorityFilterDisplay")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(priorityFilterDisplay, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedCategoryId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedCategoryId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedCategoryId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedPriority != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedPriority")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedPriority, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (hiddenCategoryIds != null)
+                    {
+                            foreach (var item_ in hiddenCategoryIds) { urlBuilder_.Append(System.Uri.EscapeDataString("HiddenCategoryIds")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append('&'); }
+                    }
+                    if (showPriority != null)
+                    {
+                        foreach (var item_ in showPriority) { urlBuilder_.Append(System.Uri.EscapeDataString(item_.Key)).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(item_.Value, System.Globalization.CultureInfo.InvariantCulture))).Append('&'); }
+                    }
+                    if (sortBy != null)
+                    {
+                        foreach (var item_ in sortBy) { urlBuilder_.Append(System.Uri.EscapeDataString(item_.Key)).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(item_.Value, System.Globalization.CultureInfo.InvariantCulture))).Append('&'); }
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<HabitModel>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<NoteModel>> NotesAsync(QueryParameters body)
         {
             return NotesAsync(body, System.Threading.CancellationToken.None);
@@ -5900,6 +6077,182 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<NoteModel>> NotesGetAsync(string searchTerm, bool? matchCase, System.DateTime? doneAtFilter, DateCompare? doneAtCompare, System.DateTime? plannedAtFilter, DateCompare? plannedAtCompare, System.DateTime? plannedRangeStart, System.DateTime? plannedRangeEnd, System.DateTime? doneRangeStart, System.DateTime? doneRangeEnd, bool? showDoneInRange, bool? hideCompletedTasks, bool? showOnlyOverSelectedRatioMin, bool? showOnlyUnderSelectedRatioMax, int? selectedRatioMin, int? selectedRatioMax, Ratio? selectedRatio, FilterDisplay? categoryFilterDisplay, FilterDisplay? priorityFilterDisplay, long? selectedCategoryId, Priority? selectedPriority, System.Collections.Generic.IEnumerable<long> hiddenCategoryIds, System.Collections.Generic.IDictionary<string, bool> showPriority, System.Collections.Generic.IDictionary<string, Sort> sortBy)
+        {
+            return NotesGetAsync(searchTerm, matchCase, doneAtFilter, doneAtCompare, plannedAtFilter, plannedAtCompare, plannedRangeStart, plannedRangeEnd, doneRangeStart, doneRangeEnd, showDoneInRange, hideCompletedTasks, showOnlyOverSelectedRatioMin, showOnlyUnderSelectedRatioMax, selectedRatioMin, selectedRatioMax, selectedRatio, categoryFilterDisplay, priorityFilterDisplay, selectedCategoryId, selectedPriority, hiddenCategoryIds, showPriority, sortBy, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<NoteModel>> NotesGetAsync(string searchTerm, bool? matchCase, System.DateTime? doneAtFilter, DateCompare? doneAtCompare, System.DateTime? plannedAtFilter, DateCompare? plannedAtCompare, System.DateTime? plannedRangeStart, System.DateTime? plannedRangeEnd, System.DateTime? doneRangeStart, System.DateTime? doneRangeEnd, bool? showDoneInRange, bool? hideCompletedTasks, bool? showOnlyOverSelectedRatioMin, bool? showOnlyUnderSelectedRatioMax, int? selectedRatioMin, int? selectedRatioMax, Ratio? selectedRatio, FilterDisplay? categoryFilterDisplay, FilterDisplay? priorityFilterDisplay, long? selectedCategoryId, Priority? selectedPriority, System.Collections.Generic.IEnumerable<long> hiddenCategoryIds, System.Collections.Generic.IDictionary<string, bool> showPriority, System.Collections.Generic.IDictionary<string, Sort> sortBy, System.Threading.CancellationToken cancellationToken)
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "api/Query/notes"
+                    urlBuilder_.Append("api/Query/notes");
+                    urlBuilder_.Append('?');
+                    if (searchTerm != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SearchTerm")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(searchTerm, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (matchCase != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("MatchCase")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(matchCase, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneAtFilter != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneAtFilter")).Append('=').Append(System.Uri.EscapeDataString(doneAtFilter.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneAtCompare != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneAtCompare")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(doneAtCompare, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedAtFilter != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedAtFilter")).Append('=').Append(System.Uri.EscapeDataString(plannedAtFilter.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedAtCompare != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedAtCompare")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(plannedAtCompare, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedRangeStart != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedRangeStart")).Append('=').Append(System.Uri.EscapeDataString(plannedRangeStart.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedRangeEnd != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedRangeEnd")).Append('=').Append(System.Uri.EscapeDataString(plannedRangeEnd.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneRangeStart != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneRangeStart")).Append('=').Append(System.Uri.EscapeDataString(doneRangeStart.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneRangeEnd != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneRangeEnd")).Append('=').Append(System.Uri.EscapeDataString(doneRangeEnd.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showDoneInRange != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowDoneInRange")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showDoneInRange, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (hideCompletedTasks != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("HideCompletedTasks")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(hideCompletedTasks, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showOnlyOverSelectedRatioMin != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowOnlyOverSelectedRatioMin")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showOnlyOverSelectedRatioMin, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showOnlyUnderSelectedRatioMax != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowOnlyUnderSelectedRatioMax")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showOnlyUnderSelectedRatioMax, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedRatioMin != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedRatioMin")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedRatioMin, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedRatioMax != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedRatioMax")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedRatioMax, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedRatio != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedRatio")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedRatio, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (categoryFilterDisplay != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("CategoryFilterDisplay")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(categoryFilterDisplay, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (priorityFilterDisplay != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PriorityFilterDisplay")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(priorityFilterDisplay, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedCategoryId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedCategoryId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedCategoryId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedPriority != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedPriority")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedPriority, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (hiddenCategoryIds != null)
+                    {
+                            foreach (var item_ in hiddenCategoryIds) { urlBuilder_.Append(System.Uri.EscapeDataString("HiddenCategoryIds")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append('&'); }
+                    }
+                    if (showPriority != null)
+                    {
+                        foreach (var item_ in showPriority) { urlBuilder_.Append(System.Uri.EscapeDataString(item_.Key)).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(item_.Value, System.Globalization.CultureInfo.InvariantCulture))).Append('&'); }
+                    }
+                    if (sortBy != null)
+                    {
+                        foreach (var item_ in sortBy) { urlBuilder_.Append(System.Uri.EscapeDataString(item_.Key)).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(item_.Value, System.Globalization.CultureInfo.InvariantCulture))).Append('&'); }
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<NoteModel>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<TaskModel>> TasksAsync(QueryParameters body)
         {
             return TasksAsync(body, System.Threading.CancellationToken.None);
@@ -5930,6 +6283,182 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient
                 
                     // Operation Path: "api/Query/tasks"
                     urlBuilder_.Append("api/Query/tasks");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<TaskModel>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<TaskModel>> TasksGetAsync(string searchTerm, bool? matchCase, System.DateTime? doneAtFilter, DateCompare? doneAtCompare, System.DateTime? plannedAtFilter, DateCompare? plannedAtCompare, System.DateTime? plannedRangeStart, System.DateTime? plannedRangeEnd, System.DateTime? doneRangeStart, System.DateTime? doneRangeEnd, bool? showDoneInRange, bool? hideCompletedTasks, bool? showOnlyOverSelectedRatioMin, bool? showOnlyUnderSelectedRatioMax, int? selectedRatioMin, int? selectedRatioMax, Ratio? selectedRatio, FilterDisplay? categoryFilterDisplay, FilterDisplay? priorityFilterDisplay, long? selectedCategoryId, Priority? selectedPriority, System.Collections.Generic.IEnumerable<long> hiddenCategoryIds, System.Collections.Generic.IDictionary<string, bool> showPriority, System.Collections.Generic.IDictionary<string, Sort> sortBy)
+        {
+            return TasksGetAsync(searchTerm, matchCase, doneAtFilter, doneAtCompare, plannedAtFilter, plannedAtCompare, plannedRangeStart, plannedRangeEnd, doneRangeStart, doneRangeEnd, showDoneInRange, hideCompletedTasks, showOnlyOverSelectedRatioMin, showOnlyUnderSelectedRatioMax, selectedRatioMin, selectedRatioMax, selectedRatio, categoryFilterDisplay, priorityFilterDisplay, selectedCategoryId, selectedPriority, hiddenCategoryIds, showPriority, sortBy, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<TaskModel>> TasksGetAsync(string searchTerm, bool? matchCase, System.DateTime? doneAtFilter, DateCompare? doneAtCompare, System.DateTime? plannedAtFilter, DateCompare? plannedAtCompare, System.DateTime? plannedRangeStart, System.DateTime? plannedRangeEnd, System.DateTime? doneRangeStart, System.DateTime? doneRangeEnd, bool? showDoneInRange, bool? hideCompletedTasks, bool? showOnlyOverSelectedRatioMin, bool? showOnlyUnderSelectedRatioMax, int? selectedRatioMin, int? selectedRatioMax, Ratio? selectedRatio, FilterDisplay? categoryFilterDisplay, FilterDisplay? priorityFilterDisplay, long? selectedCategoryId, Priority? selectedPriority, System.Collections.Generic.IEnumerable<long> hiddenCategoryIds, System.Collections.Generic.IDictionary<string, bool> showPriority, System.Collections.Generic.IDictionary<string, Sort> sortBy, System.Threading.CancellationToken cancellationToken)
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "api/Query/tasks"
+                    urlBuilder_.Append("api/Query/tasks");
+                    urlBuilder_.Append('?');
+                    if (searchTerm != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SearchTerm")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(searchTerm, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (matchCase != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("MatchCase")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(matchCase, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneAtFilter != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneAtFilter")).Append('=').Append(System.Uri.EscapeDataString(doneAtFilter.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneAtCompare != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneAtCompare")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(doneAtCompare, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedAtFilter != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedAtFilter")).Append('=').Append(System.Uri.EscapeDataString(plannedAtFilter.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedAtCompare != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedAtCompare")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(plannedAtCompare, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedRangeStart != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedRangeStart")).Append('=').Append(System.Uri.EscapeDataString(plannedRangeStart.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (plannedRangeEnd != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PlannedRangeEnd")).Append('=').Append(System.Uri.EscapeDataString(plannedRangeEnd.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneRangeStart != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneRangeStart")).Append('=').Append(System.Uri.EscapeDataString(doneRangeStart.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (doneRangeEnd != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DoneRangeEnd")).Append('=').Append(System.Uri.EscapeDataString(doneRangeEnd.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showDoneInRange != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowDoneInRange")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showDoneInRange, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (hideCompletedTasks != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("HideCompletedTasks")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(hideCompletedTasks, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showOnlyOverSelectedRatioMin != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowOnlyOverSelectedRatioMin")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showOnlyOverSelectedRatioMin, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showOnlyUnderSelectedRatioMax != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowOnlyUnderSelectedRatioMax")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showOnlyUnderSelectedRatioMax, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedRatioMin != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedRatioMin")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedRatioMin, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedRatioMax != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedRatioMax")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedRatioMax, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedRatio != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedRatio")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedRatio, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (categoryFilterDisplay != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("CategoryFilterDisplay")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(categoryFilterDisplay, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (priorityFilterDisplay != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PriorityFilterDisplay")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(priorityFilterDisplay, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedCategoryId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedCategoryId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedCategoryId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (selectedPriority != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SelectedPriority")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(selectedPriority, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (hiddenCategoryIds != null)
+                    {
+                            foreach (var item_ in hiddenCategoryIds) { urlBuilder_.Append(System.Uri.EscapeDataString("HiddenCategoryIds")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append('&'); }
+                    }
+                    if (showPriority != null)
+                    {
+                        foreach (var item_ in showPriority) { urlBuilder_.Append(System.Uri.EscapeDataString(item_.Key)).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(item_.Value, System.Globalization.CultureInfo.InvariantCulture))).Append('&'); }
+                    }
+                    if (sortBy != null)
+                    {
+                        foreach (var item_ in sortBy) { urlBuilder_.Append(System.Uri.EscapeDataString(item_.Key)).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(item_.Value, System.Globalization.CultureInfo.InvariantCulture))).Append('&'); }
+                    }
+                    urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

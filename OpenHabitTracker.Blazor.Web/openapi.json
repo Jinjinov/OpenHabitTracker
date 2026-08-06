@@ -1,9 +1,14 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.1.1",
   "info": {
     "title": "OpenHT | v1",
     "version": "1.0.0"
   },
+  "servers": [
+    {
+      "url": "http://localhost:5260/"
+    }
+  ],
   "paths": {
     "/api/Auth/jwt-token": {
       "post": {
@@ -167,19 +172,31 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               }
@@ -220,19 +237,31 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               }
@@ -273,19 +302,31 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               }
@@ -326,19 +367,31 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               }
@@ -379,19 +432,31 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               }
@@ -432,19 +497,31 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               }
@@ -485,19 +562,31 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               }
@@ -538,19 +627,31 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               }
@@ -591,19 +692,31 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "integer",
+                  "pattern": "^-?(?:0|[1-9]\\d*)$",
+                  "type": [
+                    "integer",
+                    "string"
+                  ],
                   "format": "int64"
                 }
               }
@@ -655,7 +768,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -664,7 +781,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -673,7 +794,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -805,7 +930,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -814,7 +943,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -823,7 +956,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -955,7 +1092,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -964,7 +1105,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -973,7 +1118,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1105,7 +1254,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1114,7 +1267,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1123,7 +1280,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1255,7 +1416,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1264,7 +1429,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1273,7 +1442,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1292,9 +1465,12 @@
             "name": "habitId",
             "in": "query",
             "schema": {
-              "type": "integer",
-              "format": "int64",
-              "default": null
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int64"
             }
           }
         ],
@@ -1416,7 +1592,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1425,7 +1605,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1434,7 +1618,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1453,9 +1641,12 @@
             "name": "parentId",
             "in": "query",
             "schema": {
-              "type": "integer",
-              "format": "int64",
-              "default": null
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int64"
             }
           }
         ],
@@ -1577,7 +1768,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1586,7 +1781,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1595,7 +1794,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1727,7 +1930,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1736,7 +1943,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1745,7 +1956,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1877,7 +2092,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1886,7 +2105,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1895,7 +2118,11 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "integer",
+                    "pattern": "^-?(?:0|[1-9]\\d*)$",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "format": "int64"
                   }
                 }
@@ -1996,7 +2223,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2035,7 +2266,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2059,7 +2294,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2098,7 +2337,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2122,7 +2365,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2161,7 +2408,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2185,7 +2436,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2224,7 +2479,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2248,7 +2507,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2287,7 +2550,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2311,7 +2578,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2350,7 +2621,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2374,7 +2649,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2413,7 +2692,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2437,7 +2720,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2476,7 +2763,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2500,7 +2791,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2539,7 +2834,11 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           }
@@ -2590,6 +2889,248 @@
           },
           "required": true
         },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HabitModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HabitModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HabitModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "operationId": "HabitsGet",
+        "parameters": [
+          {
+            "name": "SearchTerm",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MatchCase",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "DoneAtFilter",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DoneAtCompare",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/DateCompare"
+            }
+          },
+          {
+            "name": "PlannedAtFilter",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "PlannedAtCompare",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/DateCompare"
+            }
+          },
+          {
+            "name": "PlannedRangeStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "PlannedRangeEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DoneRangeStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DoneRangeEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ShowDoneInRange",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "HideCompletedTasks",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "ShowOnlyOverSelectedRatioMin",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "ShowOnlyUnderSelectedRatioMax",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "SelectedRatioMin",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SelectedRatioMax",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SelectedRatio",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Ratio"
+            }
+          },
+          {
+            "name": "CategoryFilterDisplay",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FilterDisplay"
+            }
+          },
+          {
+            "name": "PriorityFilterDisplay",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FilterDisplay"
+            }
+          },
+          {
+            "name": "SelectedCategoryId",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int64"
+            }
+          },
+          {
+            "name": "SelectedPriority",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Priority"
+            }
+          },
+          {
+            "name": "HiddenCategoryIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "pattern": "^-?(?:0|[1-9]\\d*)$",
+                "type": [
+                  "integer",
+                  "string"
+                ],
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "name": "ShowPriority",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/components/schemas/Sort"
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -2680,6 +3221,248 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "operationId": "NotesGet",
+        "parameters": [
+          {
+            "name": "SearchTerm",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MatchCase",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "DoneAtFilter",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DoneAtCompare",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/DateCompare"
+            }
+          },
+          {
+            "name": "PlannedAtFilter",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "PlannedAtCompare",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/DateCompare"
+            }
+          },
+          {
+            "name": "PlannedRangeStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "PlannedRangeEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DoneRangeStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DoneRangeEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ShowDoneInRange",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "HideCompletedTasks",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "ShowOnlyOverSelectedRatioMin",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "ShowOnlyUnderSelectedRatioMax",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "SelectedRatioMin",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SelectedRatioMax",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SelectedRatio",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Ratio"
+            }
+          },
+          {
+            "name": "CategoryFilterDisplay",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FilterDisplay"
+            }
+          },
+          {
+            "name": "PriorityFilterDisplay",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FilterDisplay"
+            }
+          },
+          {
+            "name": "SelectedCategoryId",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int64"
+            }
+          },
+          {
+            "name": "SelectedPriority",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Priority"
+            }
+          },
+          {
+            "name": "HiddenCategoryIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "pattern": "^-?(?:0|[1-9]\\d*)$",
+                "type": [
+                  "integer",
+                  "string"
+                ],
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "name": "ShowPriority",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/components/schemas/Sort"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NoteModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NoteModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NoteModel"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/Query/tasks": {
@@ -2739,6 +3522,248 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "operationId": "TasksGet",
+        "parameters": [
+          {
+            "name": "SearchTerm",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MatchCase",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "DoneAtFilter",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DoneAtCompare",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/DateCompare"
+            }
+          },
+          {
+            "name": "PlannedAtFilter",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "PlannedAtCompare",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/DateCompare"
+            }
+          },
+          {
+            "name": "PlannedRangeStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "PlannedRangeEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DoneRangeStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DoneRangeEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ShowDoneInRange",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "HideCompletedTasks",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "ShowOnlyOverSelectedRatioMin",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "ShowOnlyUnderSelectedRatioMax",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "SelectedRatioMin",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SelectedRatioMax",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SelectedRatio",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Ratio"
+            }
+          },
+          {
+            "name": "CategoryFilterDisplay",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FilterDisplay"
+            }
+          },
+          {
+            "name": "PriorityFilterDisplay",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FilterDisplay"
+            }
+          },
+          {
+            "name": "SelectedCategoryId",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int64"
+            }
+          },
+          {
+            "name": "SelectedPriority",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Priority"
+            }
+          },
+          {
+            "name": "HiddenCategoryIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "pattern": "^-?(?:0|[1-9]\\d*)$",
+                "type": [
+                  "integer",
+                  "string"
+                ],
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "name": "ShowPriority",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/components/schemas/Sort"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskModel"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -2748,17 +3773,37 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "userId": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "title": {
             "type": "string"
+          },
+          "isCollapsed": {
+            "type": "boolean"
+          },
+          "completionRule": {
+            "$ref": "#/components/schemas/CompletionRule"
           }
         }
+      },
+      "CompletionRule": {
+        "enum": [
+          "All",
+          "Any"
+        ]
       },
       "DateCompare": {
         "enum": [
@@ -2779,6 +3824,13 @@
           "Saturday"
         ]
       },
+      "DisplayMetric": {
+        "enum": [
+          "Repetitions",
+          "Time",
+          "Quantity"
+        ]
+      },
       "FilterDisplay": {
         "enum": [
           "CheckBoxes",
@@ -2790,32 +3842,70 @@
         "type": "object",
         "properties": {
           "repeatCount": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int32"
           },
           "repeatInterval": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int32"
           },
           "repeatPeriod": {
             "$ref": "#/components/schemas/Period"
           },
+          "displayMetric": {
+            "$ref": "#/components/schemas/DisplayMetric"
+          },
+          "targetQuantity": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
+          },
           "duration": {
-            "type": "string",
-            "format": "time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "time"
           },
           "lastTimeDoneAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "startAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           },
           "id": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "categoryId": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "title": {
@@ -2844,39 +3934,73 @@
         "type": "object",
         "properties": {
           "repeatCount": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int32"
           },
           "repeatInterval": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int32"
           },
           "repeatPeriod": {
             "$ref": "#/components/schemas/Period"
           },
-          "duration": {
-            "type": "string",
-            "format": "time",
-            "nullable": true
+          "displayMetric": {
+            "$ref": "#/components/schemas/DisplayMetric"
+          },
+          "targetQuantity": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
           },
           "lastTimeDoneAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "startAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           },
           "timesDone": {
-            "type": "array",
+            "type": [
+              "null",
+              "array"
+            ],
             "items": {
               "$ref": "#/components/schemas/TimeModel"
-            },
-            "nullable": true
+            }
           },
           "items": {
-            "type": "array",
+            "type": [
+              "null",
+              "array"
+            ],
             "items": {
               "$ref": "#/components/schemas/ItemModel"
-            },
-            "nullable": true
+            }
+          },
+          "duration": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "time"
           },
           "title": {
             "type": "string"
@@ -2904,20 +4028,30 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "parentId": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "title": {
             "type": "string"
           },
           "doneAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           }
         }
       },
@@ -2928,9 +4062,11 @@
             "type": "string"
           },
           "doneAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           }
         }
       },
@@ -2956,11 +4092,19 @@
             "type": "string"
           },
           "id": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "categoryId": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "title": {
@@ -3013,18 +4157,6 @@
           }
         }
       },
-      "NullableOfPriority": {
-        "enum": [
-          "None",
-          "VeryLow",
-          "Low",
-          "Medium",
-          "High",
-          "VeryHigh",
-          null
-        ],
-        "nullable": true
-      },
       "Period": {
         "enum": [
           "Day",
@@ -3047,7 +4179,11 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "title": {
@@ -3059,27 +4195,64 @@
         "type": "object",
         "properties": {
           "searchTerm": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "matchCase": {
             "type": "boolean"
           },
           "doneAtFilter": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           },
           "doneAtCompare": {
             "$ref": "#/components/schemas/DateCompare"
           },
           "plannedAtFilter": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           },
           "plannedAtCompare": {
             "$ref": "#/components/schemas/DateCompare"
+          },
+          "plannedRangeStart": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "plannedRangeEnd": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "doneRangeStart": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "doneRangeEnd": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "showDoneInRange": {
+            "type": "boolean"
           },
           "hideCompletedTasks": {
             "type": "boolean"
@@ -3087,8 +4260,23 @@
           "showOnlyOverSelectedRatioMin": {
             "type": "boolean"
           },
+          "showOnlyUnderSelectedRatioMax": {
+            "type": "boolean"
+          },
           "selectedRatioMin": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "selectedRatioMax": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int32"
           },
           "selectedRatio": {
@@ -3101,17 +4289,32 @@
             "$ref": "#/components/schemas/FilterDisplay"
           },
           "selectedCategoryId": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int64"
           },
           "selectedPriority": {
-            "$ref": "#/components/schemas/NullableOfPriority"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Priority"
+              }
+            ]
           },
           "hiddenCategoryIds": {
             "type": "array",
             "items": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           },
@@ -3151,11 +4354,19 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "userId": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "isDarkMode": {
@@ -3203,6 +4414,14 @@
           "showSmallCalendar": {
             "type": "boolean"
           },
+          "maxSmallCalendarDays": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
           "showLargeCalendar": {
             "type": "boolean"
           },
@@ -3224,22 +4443,90 @@
           "displayNoteContentAsMarkdown": {
             "type": "boolean"
           },
+          "showGroupedByCategory": {
+            "type": "boolean"
+          },
+          "showLastTimeDone": {
+            "type": "boolean"
+          },
           "hideCompletedTasks": {
             "type": "boolean"
           },
           "showOnlyOverSelectedRatioMin": {
             "type": "boolean"
           },
+          "showOnlyUnderSelectedRatioMax": {
+            "type": "boolean"
+          },
           "selectedRatioMin": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int32"
           },
+          "selectedRatioMax": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "plannedFromDayOffset": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "plannedToDayOffset": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "doneFromDayOffset": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "doneToDayOffset": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "showDoneInRange": {
+            "type": "boolean"
+          },
           "horizontalMargin": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int32"
           },
           "verticalMargin": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int32"
           },
           "categoryFilterDisplay": {
@@ -3249,17 +4536,32 @@
             "$ref": "#/components/schemas/FilterDisplay"
           },
           "selectedCategoryId": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int64"
           },
           "selectedPriority": {
-            "$ref": "#/components/schemas/NullableOfPriority"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Priority"
+              }
+            ]
           },
           "hiddenCategoryIds": {
             "type": "array",
             "items": {
-              "type": "integer",
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
               "format": "int64"
             }
           },
@@ -3302,31 +4604,47 @@
         "type": "object",
         "properties": {
           "plannedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           },
           "duration": {
-            "type": "string",
-            "format": "time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "time"
           },
           "startedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           },
           "completedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           },
           "id": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "categoryId": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "title": {
@@ -3355,31 +4673,41 @@
         "type": "object",
         "properties": {
           "plannedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "duration": {
-            "type": "string",
-            "format": "time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           },
           "startedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           },
           "completedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           },
           "items": {
-            "type": "array",
+            "type": [
+              "null",
+              "array"
+            ],
             "items": {
               "$ref": "#/components/schemas/ItemModel"
-            },
-            "nullable": true
+            }
+          },
+          "duration": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "time"
           },
           "title": {
             "type": "string"
@@ -3407,11 +4735,19 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "habitId": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "startedAt": {
@@ -3419,9 +4755,19 @@
             "format": "date-time"
           },
           "completedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "quantity": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
           }
         }
       },
@@ -3433,9 +4779,19 @@
             "format": "date-time"
           },
           "completedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "quantity": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
           }
         }
       },
@@ -3458,7 +4814,11 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
             "format": "int64"
           },
           "userName": {
