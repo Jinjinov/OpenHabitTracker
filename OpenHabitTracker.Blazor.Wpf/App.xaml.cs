@@ -33,36 +33,9 @@ public partial class App : Application
         };
 
         string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
-        MigrateDatabase(databasePath);
 
         string windowSettingsPath = Path.Combine(appDataDirectory, "Window.yaml");
 
         new MainWindow(databasePath, windowSettingsPath).Show();
-    }
-
-    // One-time move of an existing db from the old bare-relative "OpenHT.db" location
-    // (resolved against the process working directory) so ClickOnce users keep their data.
-    private static void MigrateDatabase(string databasePath)
-    {
-        try
-        {
-            if (File.Exists(databasePath))
-                return;
-
-            string oldDatabasePath = Path.GetFullPath("OpenHT.db");
-
-            if (oldDatabasePath == databasePath || !File.Exists(oldDatabasePath))
-                return;
-
-            foreach (string suffix in new[] { "", "-wal", "-shm" })
-            {
-                string source = oldDatabasePath + suffix;
-                if (File.Exists(source))
-                    File.Move(source, databasePath + suffix);
-            }
-        }
-        catch
-        {
-        }
     }
 }

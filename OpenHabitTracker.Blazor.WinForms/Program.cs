@@ -40,7 +40,6 @@ static class Program
         };
 
         string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
-        MigrateDatabase(databasePath);
 
         string windowSettingsPath = Path.Combine(appDataDirectory, "Window.yaml");
 
@@ -74,32 +73,6 @@ static class Program
             // Apply on exit, do not restart: the new version is picked up the next time the user
             // opens the app themselves (silent: no updater UI after they close the window).
             manager.WaitExitThenApplyUpdates(update.TargetFullRelease, silent: true, restart: false);
-        }
-        catch
-        {
-        }
-    }
-
-    // One-time move of an existing db from the old bare-relative "OpenHT.db" location
-    // (resolved against the process working directory) so ClickOnce users keep their data.
-    static void MigrateDatabase(string databasePath)
-    {
-        try
-        {
-            if (File.Exists(databasePath))
-                return;
-
-            string oldDatabasePath = Path.GetFullPath("OpenHT.db");
-
-            if (oldDatabasePath == databasePath || !File.Exists(oldDatabasePath))
-                return;
-
-            foreach (string suffix in new[] { "", "-wal", "-shm" })
-            {
-                string source = oldDatabasePath + suffix;
-                if (File.Exists(source))
-                    File.Move(source, databasePath + suffix);
-            }
         }
         catch
         {
