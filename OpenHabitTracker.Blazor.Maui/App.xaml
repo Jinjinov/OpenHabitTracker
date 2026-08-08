@@ -6,8 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <Color x:Key="PageBackgroundColor">#808080</Color>
-            <Color x:Key="PrimaryTextColor">White</Color>
+            <Color x:Key="PageBackgroundColor">#000000</Color>
 
         </ResourceDictionary>
     </Application.Resources>

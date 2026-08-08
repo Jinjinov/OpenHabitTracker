@@ -4,7 +4,7 @@
              xmlns:oht="clr-namespace:OpenHabitTracker.Blazor;assembly=OpenHabitTracker.Blazor"
              x:Class="OpenHabitTracker.Blazor.Maui.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
-             SafeAreaEdges="Container">
+             SafeAreaEdges="Container, Container, Container, None">
 
     <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
         <BlazorWebView.RootComponents>
