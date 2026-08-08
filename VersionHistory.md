@@ -1,4 +1,4 @@
-# 1.2.4 - 
+# 1.2.4 - Aug 8, 2026
 
 - Added relative date range filters for planned and done dates
 - Added separate planned date and planned time for tasks
