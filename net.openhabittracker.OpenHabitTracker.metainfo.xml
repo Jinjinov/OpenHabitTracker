@@ -371,6 +371,15 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.2.4" date="2026-08-08">
+      <description>
+        <p>Added relative date range filters for planned and done dates</p>
+        <p>Added separate planned date and planned time for tasks</p>
+        <p>Added window position and size persistence in desktop versions</p>
+        <p>Added a Windows installer with automatic updates</p>
+        <p>Fixed guided tour</p>
+      </description>
+    </release>
     <release version="1.2.3" date="2026-07-07">
       <description>
         <p>Added "Max days in small calendar" setting</p>
