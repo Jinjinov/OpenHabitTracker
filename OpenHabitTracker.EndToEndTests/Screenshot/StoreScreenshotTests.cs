@@ -189,14 +189,37 @@ public class StoreScreenshotTests : PlaywrightTest
         })
     ];
 
+    // Needs the temporary build that registers the real auth fragment: IAuthFragment.IsAuthAvailable
+    // is false in the PWA and its GetAuthFragment returns an empty RenderFragment, so on a shipped
+    // build this scene captures a heading and a blank space (TODO.md, sync shot).
+    private static (string File, Func<IPage, Task> Scene) SyncScene =>
+        ("09-sync.png", async page =>
+        {
+            await page.Locator("#closeSidebar").ClickAsync(); // close Settings from the previous scene
+            await page.Locator("[data-main-step-1]").ClickAsync(); // menu
+            await page.Locator("div[role='menu'] button:has(i.bi-database)").ClickAsync();
+            await Assertions.Expect(page.Locator("[data-data-step-12]")).ToBeVisibleAsync();
+        });
+
     // Desktop and Mac only - Home needs the width to show all three columns at once.
     private static (string File, Func<IPage, Task> Scene) HomeScene =>
-        ("09-home.png", async page =>
+        ("10-home.png", async page =>
         {
             await page.Locator("#closeSidebar").ClickAsync();
             await page.Locator("[data-main-step-2]").ClickAsync();
             await Assertions.Expect(page.Locator("main#main-content")).ToBeVisibleAsync();
         });
+
+    // Play takes 8 per folder, Apple 10 per device size, Microsoft 10 desktop - so the phone and
+    // tablet folders stop at the eight, and scene 10 is desktop-only because Home needs the width.
+    // The sync block also falls below the fold at the 360x640 phone viewport, which the Play cap
+    // already excludes.
+    private static (string File, Func<IPage, Task> Scene)[] ScenesFor(string target) => target switch
+    {
+        "play-phone" or "play-tablet" => Scenes,
+        "desktop" => [.. Scenes, SyncScene, HomeScene],
+        _ => [.. Scenes, SyncScene]
+    };
 
     [Test]
     public async Task Capture_Desktop()
@@ -204,7 +227,7 @@ public class StoreScreenshotTests : PlaywrightTest
         string seedFile = SeedData.Write(Path.GetFullPath("seed.json"));
         Target desktop = Targets.Single(target => target.Name == "desktop");
 
-        await CaptureSessionAsync(desktop, seedFile, [.. Scenes, HomeScene]);
+        await CaptureSessionAsync(desktop, seedFile, ScenesFor(desktop.Name));
 
         TestContext.Out.WriteLine(AppleScreenshots);
     }
@@ -220,8 +243,7 @@ public class StoreScreenshotTests : PlaywrightTest
         {
             bool wide = target.Name is "desktop" or "ipad-13";
 
-            await CaptureSessionAsync(target, wide ? wideSeed : narrowSeed,
-                target.Name == "desktop" ? [.. Scenes, HomeScene] : Scenes);
+            await CaptureSessionAsync(target, wide ? wideSeed : narrowSeed, ScenesFor(target.Name));
         }
 
         TestContext.Out.WriteLine(AndroidImages(""));
