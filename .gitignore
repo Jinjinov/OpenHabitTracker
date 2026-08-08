@@ -5,6 +5,9 @@ obj
 publish
 Releases
 AppPackages
+.flatpak-builder
+build-dir
+repo
 *.user
 credentials.json
 GoogleDriveClientSecrets.Hidden.cs
