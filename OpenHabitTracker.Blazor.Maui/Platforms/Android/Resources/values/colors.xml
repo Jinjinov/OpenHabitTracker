@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#000000</color>
+    <!-- Feeds maui_splash_color, so this is the Android 12+ splash background.
+         Keep it matching MauiSplashScreen Color in the csproj. -->
+    <color name="colorPrimary">#808080</color>
+    <!-- Legacy status bar background, a fallback for older Android where the window is not edge to edge.
+         Under edge to edge the color comes from PageBackgroundColor in App.xaml. -->
     <color name="colorPrimaryDark">#000000</color>
 </resources>
