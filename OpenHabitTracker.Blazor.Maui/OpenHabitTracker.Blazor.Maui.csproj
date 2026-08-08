@@ -85,6 +85,52 @@
         <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#808080" BaseSize="128,128" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <!-- The Apple SDK bundles every file under Resources; appicon.icon.json is a build input for
+             _CompileMacIconComposerIcon below, not something to ship inside the app bundle -->
+        <DefaultItemExcludes>$(DefaultItemExcludes);Resources\AppIcon\appicon.icon.json</DefaultItemExcludes>
+    </PropertyGroup>
+
+    <!-- macOS 26 draws any asset-catalog app icon inside a gray rounded plate unless the icon comes
+         from an Icon Composer .icon file. MauiIcon only ever emits the iOS-idiom appiconset, so the
+         Mac Catalyst icon gets plated. Dropping CFBundleIconName would fall back to the good-looking
+         appicon.icns, but App Store Connect rejects that key as missing (ITMS-90713).
+         So compile a .icon here and overwrite what MauiIcon's actool run produced.
+         The .icon bundle is assembled under obj from the same appiconfg.svg the other platforms use,
+         so the artwork stays single-sourced; only the layer/material settings live in appicon.icon.json.
+         Drop all of this once MauiIcon emits a .icon of its own. -->
+    <Target Name="_CompileMacIconComposerIcon"
+            Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst' and Exists('$(DeviceSpecificIntermediateOutputPath)actool/bundle')"
+            AfterTargets="_CompileImageAssets"
+            Inputs="Resources\AppIcon\appicon.icon.json;Resources\AppIcon\appiconfg.svg"
+            Outputs="$(DeviceSpecificIntermediateOutputPath)appicon.icon.stamp">
+
+        <PropertyGroup>
+            <_IconComposerRoot>$(DeviceSpecificIntermediateOutputPath)iconcomposer</_IconComposerRoot>
+            <_IconComposerIcon>$(_IconComposerRoot)/appicon.icon</_IconComposerIcon>
+            <_IconComposerOut>$(_IconComposerRoot)/out</_IconComposerOut>
+        </PropertyGroup>
+
+        <MakeDir Directories="$(_IconComposerIcon)/Assets;$(_IconComposerOut)" />
+        <Copy SourceFiles="Resources\AppIcon\appicon.icon.json" DestinationFiles="$(_IconComposerIcon)/icon.json" />
+        <Copy SourceFiles="Resources\AppIcon\appiconfg.svg" DestinationFolder="$(_IconComposerIcon)/Assets" />
+
+        <!-- actool's exit code is unreliable, so a compiled Assets.car is the only success signal -->
+        <Exec Command="xcrun actool &quot;$(_IconComposerIcon)&quot; --app-icon appicon --compile &quot;$(_IconComposerOut)&quot; --output-partial-info-plist &quot;$(_IconComposerRoot)/partial-info.plist&quot; --minimum-deployment-target $(SupportedOSPlatformVersion) --platform macosx --target-device mac --ui-framework-family uikit"
+              StandardOutputImportance="low" IgnoreExitCode="true" />
+
+        <Error Condition="!Exists('$(_IconComposerOut)/Assets.car')"
+               Text="actool did not produce an Assets.car from Resources\AppIcon\appicon.icon.json" />
+
+        <Copy SourceFiles="$(_IconComposerOut)/Assets.car;$(_IconComposerOut)/appicon.icns"
+              DestinationFolder="$(DeviceSpecificIntermediateOutputPath)actool/bundle" />
+
+        <Touch Files="$(DeviceSpecificIntermediateOutputPath)appicon.icon.stamp" AlwaysCreate="true" />
+        <ItemGroup>
+            <FileWrites Include="$(DeviceSpecificIntermediateOutputPath)appicon.icon.stamp" />
+        </ItemGroup>
+    </Target>
+
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Maui.Core" Version="14.2.2" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
