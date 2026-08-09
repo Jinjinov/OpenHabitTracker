@@ -19,8 +19,18 @@ public static class SeedData
 
     // Deterministic jitter - a rerun reproduces the set, but no two completions are identical.
     // Nobody drinks exactly eight glasses or practises for exactly thirty minutes every single day.
-    private static int Spread(double daysAgo, int salt, int modulus) =>
-        (int)((((long)(daysAgo * 31) + salt * 17) % modulus + modulus) % modulus);
+    // It has to be a hash and not arithmetic on the day, in both directions:
+    // a bare multiply-and-mod repeats one value for every day whenever the modulus divides the
+    // multiplier (which is how a 45 minute habit came out at exactly 53 minutes in every session),
+    // and a single shift still leaves consecutive days in runs of the same value on small moduli.
+    private static int Spread(double daysAgo, int salt, int modulus)
+    {
+        ulong hash = (ulong)((long)(daysAgo * 16) + salt * 7919L) * 0x9E3779B97F4A7C15UL;
+        hash ^= hash >> 29;
+        hash *= 0xBF58476D1CE4E5B9UL;
+        hash ^= hash >> 32;
+        return (int)(hash % (ulong)modulus);
+    }
 
     private static object[] Times(int targetMinutes, int targetQuantity, double[] daysAgo) =>
         daysAgo.Select(day =>
@@ -52,13 +62,22 @@ public static class SeedData
             UpdatedAt = Date(createdDaysAgo)
         };
 
+    // The session is generated from the task's own Duration, the same way a habit's history is
+    // generated from targetMinutes, so a 30 minute task can never show a two hour session.
     private static object Task(string title, string color, int priority, double plannedInDays, string duration,
-        object[] items, double? completedDaysAgo = null) =>
-        new
+        object[] items, double? completedDaysAgo = null)
+    {
+        int targetMinutes = (int)TimeSpan.Parse(duration).TotalMinutes;
+        double day = completedDaysAgo ?? 0;
+
+        DateTime start = Now.Date.AddDays(-day).AddHours(6 + Spread(day, 13, 4)).AddMinutes(5 * Spread(day, 19, 12));
+        int minutes = Math.Max(5, targetMinutes - targetMinutes / 3 + Spread(day, 23, targetMinutes * 2 / 3 + 1));
+
+        return new
         {
-            PlannedAt = Date(-plannedInDays, 10, 0),
-            StartedAt = completedDaysAgo is null ? null : Date(completedDaysAgo.Value, 9, 0),
-            CompletedAt = completedDaysAgo is null ? null : Date(completedDaysAgo.Value, 11, 0),
+            PlannedAt = Date(-plannedInDays, 8 + Spread(plannedInDays, 29, 9), 5 * Spread(plannedInDays, 31, 12)),
+            StartedAt = completedDaysAgo is null ? null : start.ToString("yyyy-MM-ddTHH:mm:sszzz"),
+            CompletedAt = completedDaysAgo is null ? null : start.AddMinutes(minutes).ToString("yyyy-MM-ddTHH:mm:sszzz"),
             Items = items,
             Duration = duration,
             Title = title,
@@ -68,6 +87,7 @@ public static class SeedData
             CreatedAt = Date(20),
             UpdatedAt = Date(1)
         };
+    }
 
     // Duration and the completion history are generated together from targetMinutes,
     // so the day cells can never show a time the habit does not claim to take.
