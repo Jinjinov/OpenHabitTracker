@@ -137,9 +137,24 @@ public class StoreScreenshotTests : PlaywrightTest
         }
     }
 
+    // Put the opened detail at the top of the frame. On the narrow viewports the rows above it push
+    // the Close button past the fold - measured at 38 to 248 px over, depending on size and whether
+    // the item carries a checklist - and a detail starting mid-screen reads as an afterthought.
+    // Takes the detail component's own id - #habit-component, #task-component, #note-component -
+    // because scrolling any looser ancestor moves nothing: the container that scrolls is the column.
+    private static async Task ScrollDetailToTopAsync(IPage page, string componentId)
+    {
+        await page.Locator(componentId).EvaluateAsync("el => el.scrollIntoView({ block: 'start' })");
+
+        // Scroll settle; there is no observable state change to await on.
+        await page.WaitForTimeoutAsync(300);
+    }
+
     // Three list-and-detail pairs, then the two panels no competitor matches.
     // Details open a named item, never .First - the lists sort the most urgent first, which would
     // open a red overdue habit and make the marquee shot look like a telling-off.
+    // They also open items WITHOUT a checklist: three checkboxes cost about 114 px, which on a
+    // phone is the difference between showing the fields under the calendar and showing none.
     private static (string File, Func<IPage, Task> Scene)[] Scenes =>
     [
         ("01-habits.png", async page =>
@@ -149,8 +164,11 @@ public class StoreScreenshotTests : PlaywrightTest
         }),
         ("02-habit-detail.png", async page =>
         {
-            await page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasTextString = "Morning run" }).ClickAsync();
+            // Display metric Time rather than the default Repetitions, and no checklist, so the
+            // repeat rule, duration, metric and category sit directly under the month calendar.
+            await page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasTextString = "Strength training" }).ClickAsync();
             await Assertions.Expect(page.Locator("[data-habits-step-11]")).ToBeVisibleAsync();
+            await ScrollDetailToTopAsync(page, "#habit-component");
         }),
         ("03-tasks.png", async page =>
         {
@@ -160,8 +178,9 @@ public class StoreScreenshotTests : PlaywrightTest
         }),
         ("04-task-detail.png", async page =>
         {
-            await page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasTextString = "quarterly report" }).ClickAsync();
+            await page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasTextString = "Reply to the support mail" }).ClickAsync();
             await Assertions.Expect(page.Locator("[data-tasks-step-10]")).ToBeVisibleAsync();
+            await ScrollDetailToTopAsync(page, "#task-component");
         }),
         ("05-notes.png", async page =>
         {
@@ -171,21 +190,37 @@ public class StoreScreenshotTests : PlaywrightTest
         }),
         ("06-note-detail.png", async page =>
         {
-            await page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasTextString = "Atomic Habits" }).ClickAsync();
+            // The shortest note that still shows rendered markdown - a checkbox list. The longer
+            // ones overflow every narrow viewport by more than the scroll range can recover.
+            await page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasTextString = "Release checklist" }).ClickAsync();
             await Assertions.Expect(page.Locator("[data-notes-step-7]")).ToBeVisibleAsync();
+            await ScrollDetailToTopAsync(page, "#note-component");
         }),
         ("07-search.png", async page =>
         {
             await page.Locator("[data-notes-step-7]").ClickAsync(); // close the note
             await page.Locator("[data-main-step-6]").ClickAsync(); // search toggle
             await Assertions.Expect(page.Locator("[data-search-step-1]")).ToBeVisibleAsync();
+
+            // A term with hits in more than one note, so the list behind shows highlighting
+            // rather than an empty filter panel.
+            await page.Locator("[data-search-step-1]").FillAsync("release");
+            await Assertions.Expect(page.Locator("[data-notes-step-2]").First).ToBeVisibleAsync();
         }),
         ("08-settings.png", async page =>
         {
+            await page.Locator("[data-search-step-3]").ClickAsync(); // clear the term, or it leaks onward
             await page.Locator("#closeSidebar").ClickAsync();
+            await page.Locator("[data-main-step-5]").ClickAsync(); // Habits behind this sidebar, not Notes again
             await page.Locator("[data-main-step-1]").ClickAsync(); // menu
             await page.Locator("div[role='menu'] button:has(i.bi-gear)").ClickAsync();
             await Assertions.Expect(page.Locator("label[for='ShowItemList']")).ToBeVisibleAsync();
+
+            // Toggled from inside the sidebar so the control and its effect on the list behind it
+            // land in one frame. The label is the click target - it carries Bootstrap's
+            // stretched-link, which covers the checkbox.
+            await page.Locator("label[for='ShowGroupedByCategory']").ClickAsync();
+            await Assertions.Expect(page.Locator("[data-habits-step-2]").First).ToBeVisibleAsync();
         })
     ];
 
@@ -195,7 +230,9 @@ public class StoreScreenshotTests : PlaywrightTest
     private static (string File, Func<IPage, Task> Scene) SyncScene =>
         ("09-sync.png", async page =>
         {
+            await page.Locator("label[for='ShowGroupedByCategory']").ClickAsync(); // back off, or it leaks into Home
             await page.Locator("#closeSidebar").ClickAsync(); // close Settings from the previous scene
+            await page.Locator("[data-main-step-4]").ClickAsync(); // Tasks behind this one - the third list
             await page.Locator("[data-main-step-1]").ClickAsync(); // menu
             await page.Locator("div[role='menu'] button:has(i.bi-database)").ClickAsync();
             await Assertions.Expect(page.Locator("[data-data-step-12]")).ToBeVisibleAsync();

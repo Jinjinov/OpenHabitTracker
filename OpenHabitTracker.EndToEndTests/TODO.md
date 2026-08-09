@@ -87,13 +87,17 @@ Existing attributes already usable by tests (do not need to be added):
 - `data-tasks-step-14` — the task timer row; its start button is `button:has(i.bi-play)`
 - `data-notes-step-3` — the note's rendered markdown in the list
 - `data-data-step-2` — Delete all data; the import file input is `input[type='file'].d-none`
-- `id="habit-component"` — the open habit detail, useful for scoping away from list rows
+- `id="habit-component"`, `id="task-component"`, `id="note-component"` — the open detail of each
+  type, useful for scoping away from list rows and as the only reliable scroll target: scrolling
+  any looser ancestor moves nothing, because the element that scrolls is the column
 - `id="item-{id}"` — a checklist checkbox, and only on the read-only variant in a list row;
   the editable one in a detail uses `aria-label` instead
 - `id="Priority.None"` … `id="Priority.VeryHigh"` — priority filter checkboxes
 - `id="category-{id}"` — category filter checkboxes, with `label[for="category-{id}"]` beside them.
   Click the LABEL: it carries Bootstrap's `stretched-link`, which covers the input and intercepts
   the click, so clicking the checkbox itself times out.
+  Every Settings toggle has the same shape — `label[for="ShowGroupedByCategory"]` and friends —
+  so the click-the-label rule is general, not specific to the category filter.
   Scope to the `category-` prefix rather than taking `input[type='checkbox']` `.First`,
   which resolves to the date-range filter rendered above the category section.
 - `select[aria-label='Theme']` — the theme picker (aria-label is localized, so English only)
