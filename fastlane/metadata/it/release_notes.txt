@@ -2,3 +2,4 @@
 • Aggiunti data e ora pianificate separate per i compiti
 • Aggiunto il salvataggio di posizione e dimensione della finestra nelle versioni desktop
 • Corretto il tour guidato
+• Corretta la visualizzazione doppia di note, compiti e abitudini nella vista raggruppata dopo l'importazione

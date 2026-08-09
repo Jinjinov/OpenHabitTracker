@@ -2,3 +2,4 @@
 • Getrenntes Plandatum und geplante Uhrzeit für Aufgaben hinzugefügt
 • Speichern von Fensterposition und -größe in den Desktop-Versionen hinzugefügt
 • Fehler in der geführten Tour behoben
+• Doppelte Anzeige von Notizen, Aufgaben und Gewohnheiten in der gruppierten Ansicht nach dem Import behoben

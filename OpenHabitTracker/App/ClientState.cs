@@ -538,22 +538,10 @@ public class ClientState
         if (Categories is null) Categories = categories.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in categories.ToDictionary(x => x.Model.Id, x => x.Model)) Categories[pair.Key] = pair.Value;
 
-        foreach (NoteModel note in notes.Select(x => x.Model))
-        {
-            if (note.CategoryId != 0 && Categories.TryGetValue(note.CategoryId, out CategoryModel? noteCategory))
-                noteCategory.Notes.Add(note);
-        }
-
-        foreach (TaskModel task in tasks.Select(x => x.Model))
-        {
-            if (task.CategoryId != 0 && Categories.TryGetValue(task.CategoryId, out CategoryModel? taskCategory))
-                taskCategory.Tasks.Add(task);
-        }
-
-        foreach (HabitModel habit in habits.Select(x => x.Model))
-        {
-            if (habit.CategoryId != 0 && Categories.TryGetValue(habit.CategoryId, out CategoryModel? habitCategory))
-                habitCategory.Habits.Add(habit);
-        }
+        // no CategoryModel sub-list wiring here, unlike LoadNotes / LoadTasks / LoadHabits.
+        // those build fresh models out of entities, so the sub-lists start empty;
+        // here notes, tasks and habits are the flattened sub-lists themselves (SelectMany above),
+        // and they came from the CategoryModel instances just put into Categories,
+        // so every model is already in its category - adding it again renders it twice in grouped view.
     }
 }

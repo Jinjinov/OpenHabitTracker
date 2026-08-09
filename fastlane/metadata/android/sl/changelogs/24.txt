@@ -2,3 +2,4 @@
 • Dodan ločen načrtovani datum in načrtovana ura za naloge
 • Dodano shranjevanje položaja in velikosti okna v namiznih različicah
 • Popravljen vodič po aplikaciji
+• Popravljeno podvojeno prikazovanje zapiskov, nalog in navad v pogledu, združenem po kategoriji, po uvozu

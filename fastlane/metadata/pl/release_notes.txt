@@ -2,3 +2,4 @@
 • Dodano oddzielną zaplanowaną datę i zaplanowaną godzinę dla zadań
 • Dodano zapamiętywanie pozycji i rozmiaru okna w wersjach desktopowych
 • Naprawiono przewodnik
+• Naprawiono podwójne wyświetlanie notatek, zadań i nawyków w widoku pogrupowanym po imporcie

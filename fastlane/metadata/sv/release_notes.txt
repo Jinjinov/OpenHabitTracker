@@ -2,3 +2,4 @@
 • Lagt till separat planerat datum och planerad tid för uppgifter
 • Lagt till sparande av fönstrets position och storlek i skrivbordsversionerna
 • Åtgärdade rundturen
+• Åtgärdade att anteckningar, uppgifter och vanor visades två gånger i grupperad vy efter import

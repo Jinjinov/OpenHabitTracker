@@ -2,3 +2,4 @@
 • Tilføjet separat planlagt dato og planlagt tidspunkt for opgaver
 • Tilføjet lagring af vinduets position og størrelse i desktopversionerne
 • Rettet rundvisningen
+• Rettet at noter, opgaver og vaner blev vist to gange i grupperet visning efter import

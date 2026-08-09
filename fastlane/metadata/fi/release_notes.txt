@@ -2,3 +2,4 @@
 • Lisätty erillinen suunniteltu päivämäärä ja kellonaika tehtäville
 • Lisätty ikkunan sijainnin ja koon tallennus työpöytäversioihin
 • Korjattu opastettu esittely
+• Korjattu muistiinpanojen, tehtävien ja tapojen näkyminen kahteen kertaan ryhmitellyssä näkymässä tuonnin jälkeen

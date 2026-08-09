@@ -2,3 +2,4 @@
 • Adicionadas data planeada e hora planeada separadas para as tarefas
 • Adicionada a memorização da posição e do tamanho da janela nas versões para computador
 • Corrigida a visita guiada
+• Corrigida a duplicação de notas, tarefas e hábitos na vista agrupada após a importação

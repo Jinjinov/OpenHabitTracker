@@ -2,3 +2,4 @@
 • Aparte geplande datum en geplande tijd toegevoegd voor taken
 • Onthouden van vensterpositie en -grootte toegevoegd in desktopversies
 • Probleem met de rondleiding opgelost
+• Probleem opgelost waarbij notities, taken en gewoontes na een import dubbel werden weergegeven in de gegroepeerde weergave

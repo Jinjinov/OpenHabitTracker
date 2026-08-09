@@ -55,6 +55,46 @@ public class BackupTests : BaseTest
         await Expect(Page.Locator("[data-habits-step-2]")).ToHaveCountAsync(originalHabitCount);
     }
 
+    // Regression guard for: the import added every item to its category a second time, so grouped-by-category
+    // view rendered each of them twice. Only visible in the session that imported - a reload rebuilds the
+    // categories from the database and hides it, which is why the setting is toggled here without reloading.
+    [Test]
+    public async Task Import_ThenGroupByCategory_ShowsEachItemOnce()
+    {
+        await OpenSidebarAsync("bi-database");
+        IDownload download = await Page.RunAndWaitForDownloadAsync(() =>
+            Page.Locator("[data-data-step-3]").ClickAsync());
+        string exportedFilePath = Path.Combine(Path.GetTempPath(), download.SuggestedFilename);
+        await download.SaveAsAsync(exportedFilePath);
+
+        await Page.Locator("[data-data-step-2]").ClickAsync();
+
+        await Page.Locator("input[type='file'].d-none").SetInputFilesAsync(exportedFilePath);
+        await Page.WaitForTimeoutAsync(2000); // allow all async DB writes to complete
+        await CloseSidebarAsync();
+
+        await NavigateToAsync("[data-main-step-3]");
+        int noteCount = await Page.Locator("[data-notes-step-2]").CountAsync();
+
+        await NavigateToAsync("[data-main-step-4]");
+        int taskCount = await Page.Locator("[data-tasks-step-2]").CountAsync();
+
+        await NavigateToAsync("[data-main-step-5]");
+        int habitCount = await Page.Locator("[data-habits-step-2]").CountAsync();
+
+        Assert.That(habitCount, Is.GreaterThan(0)); // a failed import would make every count below trivially equal
+
+        await EnableGroupedByCategoryAsync();
+
+        await Expect(Page.Locator("[data-habits-step-2]")).ToHaveCountAsync(habitCount);
+
+        await NavigateToAsync("[data-main-step-4]");
+        await Expect(Page.Locator("[data-tasks-step-2]")).ToHaveCountAsync(taskCount);
+
+        await NavigateToAsync("[data-main-step-3]");
+        await Expect(Page.Locator("[data-notes-step-2]")).ToHaveCountAsync(noteCount);
+    }
+
     [Test]
     public async Task ExportJson_ThenDeleteAll_ThenImport_RestoresNoteCount()
     {

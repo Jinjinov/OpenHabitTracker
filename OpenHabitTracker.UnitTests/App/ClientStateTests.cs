@@ -50,6 +50,54 @@ public class ClientStateTests
         _sut = new(new[] { _dataAccess }, markdownToHtml);
     }
 
+    // SetUserData copies each new entity Id back onto its model, so the Add mocks must assign one.
+    // A distinct range per type keeps the ids readable in a failing assertion.
+    private void StubAddMethodsToAssignIds()
+    {
+        _dataAccess.When(x => x.AddCategories(Arg.Any<IReadOnlyList<CategoryEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 1;
+                foreach (CategoryEntity entity in callInfo.RequiredArg<IReadOnlyList<CategoryEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 10;
+                foreach (HabitEntity entity in callInfo.RequiredArg<IReadOnlyList<HabitEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.When(x => x.AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 20;
+                foreach (NoteEntity entity in callInfo.RequiredArg<IReadOnlyList<NoteEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.When(x => x.AddTasks(Arg.Any<IReadOnlyList<TaskEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 30;
+                foreach (TaskEntity entity in callInfo.RequiredArg<IReadOnlyList<TaskEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.When(x => x.AddItems(Arg.Any<IReadOnlyList<ItemEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 40;
+                foreach (ItemEntity entity in callInfo.RequiredArg<IReadOnlyList<ItemEntity>>())
+                    entity.Id = nextId++;
+            });
+        _dataAccess.When(x => x.AddTimes(Arg.Any<IReadOnlyList<TimeEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 50;
+                foreach (TimeEntity entity in callInfo.RequiredArg<IReadOnlyList<TimeEntity>>())
+                    entity.Id = nextId++;
+            });
+    }
+
     [Test]
     public async Task LoadHabits_CallsGetHabits_ExactlyOnce_EvenWhenCalledTwice()
     {
@@ -230,48 +278,7 @@ public class ClientStateTests
     [Test]
     public async Task SetUserData_WithCategoriesNotesTasksHabitsTimesItems_CallsAllAddMethods()
     {
-        _dataAccess.When(x => x.AddCategories(Arg.Any<IReadOnlyList<CategoryEntity>>()))
-            .Do(callInfo =>
-            {
-                long nextId = 1;
-                foreach (CategoryEntity entity in callInfo.RequiredArg<IReadOnlyList<CategoryEntity>>())
-                    entity.Id = nextId++;
-            });
-        _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>()))
-            .Do(callInfo =>
-            {
-                long nextId = 10;
-                foreach (HabitEntity entity in callInfo.RequiredArg<IReadOnlyList<HabitEntity>>())
-                    entity.Id = nextId++;
-            });
-        _dataAccess.When(x => x.AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>()))
-            .Do(callInfo =>
-            {
-                long nextId = 20;
-                foreach (NoteEntity entity in callInfo.RequiredArg<IReadOnlyList<NoteEntity>>())
-                    entity.Id = nextId++;
-            });
-        _dataAccess.When(x => x.AddTasks(Arg.Any<IReadOnlyList<TaskEntity>>()))
-            .Do(callInfo =>
-            {
-                long nextId = 30;
-                foreach (TaskEntity entity in callInfo.RequiredArg<IReadOnlyList<TaskEntity>>())
-                    entity.Id = nextId++;
-            });
-        _dataAccess.When(x => x.AddItems(Arg.Any<IReadOnlyList<ItemEntity>>()))
-            .Do(callInfo =>
-            {
-                long nextId = 40;
-                foreach (ItemEntity entity in callInfo.RequiredArg<IReadOnlyList<ItemEntity>>())
-                    entity.Id = nextId++;
-            });
-        _dataAccess.When(x => x.AddTimes(Arg.Any<IReadOnlyList<TimeEntity>>()))
-            .Do(callInfo =>
-            {
-                long nextId = 50;
-                foreach (TimeEntity entity in callInfo.RequiredArg<IReadOnlyList<TimeEntity>>())
-                    entity.Id = nextId++;
-            });
+        StubAddMethodsToAssignIds();
         _dataAccess.GetSettings(Arg.Any<long>()).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = 1 }));
 
         await _sut.LoadSettings();
@@ -298,6 +305,40 @@ public class ClientStateTests
         await _dataAccess.Received(1).AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>());
         await _dataAccess.Received(1).AddItems(Arg.Is<IReadOnlyList<ItemEntity>>(list => list != null && list.Count == 2));
         await _dataAccess.Received(1).AddTimes(Arg.Is<IReadOnlyList<TimeEntity>>(list => list != null && list.Count == 1));
+    }
+
+    // Regression guard for: SetUserData added every model to its CategoryModel sub-list, although the
+    // notes / tasks / habits it iterates are the flattening of those very sub-lists, so each imported
+    // item sat in its category twice and grouped-by-category view rendered it twice until the next reload.
+    [Test]
+    public async Task SetUserData_WithCategory_WiresEachItemIntoItExactlyOnce()
+    {
+        StubAddMethodsToAssignIds();
+        _dataAccess.GetSettings(Arg.Any<long>()).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = 1 }));
+
+        await _sut.LoadSettings();
+
+        UserImportExportData userData = new()
+        {
+            Categories =
+            [
+                new CategoryModel
+                {
+                    Title = "Work",
+                    Notes = [new NoteModel { Title = "Meeting" }],
+                    Tasks = [new TaskModel { Title = "Review PR" }],
+                    Habits = [new HabitModel { Title = "Exercise" }]
+                }
+            ]
+        };
+
+        await _sut.SetUserData(userData);
+
+        CategoryModel category = _sut.Categories!.Values.Single();
+
+        Assert.That(category.Notes, Has.Count.EqualTo(1));
+        Assert.That(category.Tasks, Has.Count.EqualTo(1));
+        Assert.That(category.Habits, Has.Count.EqualTo(1));
     }
 
     [Test]

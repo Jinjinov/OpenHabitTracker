@@ -2,3 +2,4 @@
 • Añadidas fecha planificada y hora planificada por separado para las tareas
 • Añadida la memorización de la posición y el tamaño de la ventana en las versiones de escritorio
 • Corregido el tour guiado
+• Corregidas las notas, tareas y hábitos que aparecían dos veces en la vista agrupada tras la importación

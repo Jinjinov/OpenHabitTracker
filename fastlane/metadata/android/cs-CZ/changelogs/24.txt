@@ -2,3 +2,4 @@
 • Přidáno oddělené datum a čas naplánování úkolů
 • Přidáno ukládání pozice a velikosti okna v desktopových verzích
 • Opravena prohlídka aplikace
+• Opraveno zdvojené zobrazení poznámek, úkolů a návyků v seskupení podle kategorie po importu

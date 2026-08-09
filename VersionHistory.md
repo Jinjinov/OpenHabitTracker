@@ -5,6 +5,7 @@
 - Added window position and size persistence in desktop versions
 - Added a Windows installer with automatic updates
 - Fixed guided tour
+- Fixed notes / tasks / habits appearing twice in grouped view after import
 
 # 1.2.3 - Jul 7, 2026
 

@@ -2,3 +2,4 @@
 • Ajout d'une date et d'une heure planifiées distinctes pour les tâches
 • Ajout de la mémorisation de la position et de la taille de la fenêtre dans les versions de bureau
 • Correction de la visite guidée
+• Correction des notes, tâches et habitudes affichées en double dans la vue groupée après un import

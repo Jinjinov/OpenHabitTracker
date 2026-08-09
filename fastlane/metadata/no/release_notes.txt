@@ -2,3 +2,4 @@
 • Lagt til separat planlagt dato og planlagt tidspunkt for oppgaver
 • Lagt til lagring av vindusposisjon og -størrelse i skrivebordsversjonene
 • Rettet omvisningen
+• Rettet at notater, oppgaver og vaner ble vist to ganger i gruppert visning etter import

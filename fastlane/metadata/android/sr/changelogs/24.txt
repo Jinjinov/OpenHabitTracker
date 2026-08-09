@@ -2,3 +2,4 @@
 • Dodati odvojeni planirani datum i planirano vreme za zadatke
 • Dodato pamćenje pozicije i veličine prozora u desktop verzijama
 • Popravljen vođeni obilazak
+• Popravljeno dvostruko prikazivanje beleški, zadataka i navika u prikazu grupisanom po kategoriji nakon uvoza

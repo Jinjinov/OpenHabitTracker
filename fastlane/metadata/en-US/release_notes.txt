@@ -2,3 +2,4 @@
 • Added separate planned date and planned time for tasks
 • Added window position and size persistence in desktop versions
 • Fixed guided tour
+• Fixed notes / tasks / habits appearing twice in grouped view after import
