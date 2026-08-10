@@ -11,16 +11,21 @@ namespace OpenHabitTracker.EndToEndTests.Screenshot;
 [TestFixture]
 public class HeroArtTests : PlaywrightTest
 {
-    [Test]
+    //[Test]
     public async Task Capture_SuperHeroArt()
     {
         string page = new Uri(Path.GetFullPath(Path.Combine("..", "..", "..", "Screenshot", "hero.html"))).AbsoluteUri;
 
+        // Written next to the hero.html it is rendered from, not into the bin working directory a
+        // clean wipes and git never sees. It stays out of fastlane/metadata/ on purpose: deliver
+        // reads that tree as one folder per locale.
+        string output = Path.GetFullPath(Path.Combine("..", "..", "..", "Screenshot", "hero"));
+
         await using IBrowser browser = await BrowserType.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
 
-        Directory.CreateDirectory("hero");
+        Directory.CreateDirectory(output);
 
-        foreach (string mark in new[] { "", "grey" })
+        foreach (string mark in new[] { "", "icon" })
         {
             foreach (string mode in new[] { "dark", "light" })
             foreach (int scale in new[] { 1, 2 }) // 1920x1080 and 3840x2160, both accepted
@@ -36,10 +41,10 @@ public class HeroArtTests : PlaywrightTest
                 await tab.GotoAsync($"{page}?mode={mode}" + (mark == "" ? "" : $"&mark={mark}"));
 
                 await tab.Locator("#art").ScreenshotAsync(
-                    new LocatorScreenshotOptions { Path = Path.Combine("hero", $"hero-{mode}{(mark == "" ? "" : "-" + mark)}-{1920 * scale}x{1080 * scale}.png") });
+                    new LocatorScreenshotOptions { Path = Path.Combine(output, $"hero-{mode}{(mark == "" ? "" : "-" + mark)}-{1920 * scale}x{1080 * scale}.png") });
             }
         }
 
-        TestContext.Out.WriteLine(Path.GetFullPath("hero"));
+        TestContext.Out.WriteLine(output);
     }
 }

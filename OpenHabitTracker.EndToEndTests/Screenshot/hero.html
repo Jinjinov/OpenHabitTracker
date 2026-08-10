@@ -120,6 +120,5 @@
   }
 
   strip();
-  const markColor = q.get('mark');
-  if (markColor) overlayMark(theme.ink);
+  if (q.has('mark')) overlayMark(theme.ink);
 </script>
