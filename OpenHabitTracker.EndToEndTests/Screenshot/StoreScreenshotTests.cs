@@ -24,7 +24,11 @@ public class StoreScreenshotTests : PlaywrightTest
         // stops taking it - that is 1080x2160, exactly 2.0, at the cost of one row.
         new("play-phone", 360, 800, 3),
         new("iphone-69", 440, 956, 3),       // 1320x2868 - App Store iPhone 6.9", the size Apple scales down from
-        new("play-tablet", 600, 960, 2),     // 1200x1920 - Play seven-inch and ten-inch, 9:16
+        // The two Play tablet folders get their own capture rather than one shared set: 600 and 800
+        // sit either side of the 768 breakpoint, so a ten-inch tablet renders a layout a seven-inch
+        // one never shows. 800x1280 at scale 2 is the Galaxy Tab viewport.
+        new("play-tablet-7", 600, 960, 2),   // 1200x1920 - Play seven-inch
+        new("play-tablet-10", 800, 1280, 2), // 1600x2560 - Play ten-inch
         new("ipad-13", 1032, 1376, 2),       // 2064x2752 - App Store iPad 13"
         // 2880x1800 - Mac App Store 16:10, clears the Microsoft 1366x768 minimum.
         // 1920x1200 at scale 1.5 produces the same pixel size but a worse shot:
@@ -47,13 +51,14 @@ public class StoreScreenshotTests : PlaywrightTest
 
     private sealed record Destination(string Directory, string Prefix);
 
-    // Play reads one folder per form factor and one 9:16 set serves both tablet folders.
+    // Play reads one folder per form factor, one capture each.
     // deliver reads one folder per locale and infers the device class from the image resolution,
     // so the three Apple sizes share it and only the filename prefix keeps them apart.
     private static Destination[] DestinationsFor(string target) => target switch
     {
         "play-phone" => [new(AndroidImages("phoneScreenshots"), "")],
-        "play-tablet" => [new(AndroidImages("sevenInchScreenshots"), ""), new(AndroidImages("tenInchScreenshots"), "")],
+        "play-tablet-7" => [new(AndroidImages("sevenInchScreenshots"), "")],
+        "play-tablet-10" => [new(AndroidImages("tenInchScreenshots"), "")],
         _ => [new(AppleScreenshots, target + "-")]
     };
 
@@ -259,7 +264,7 @@ public class StoreScreenshotTests : PlaywrightTest
     // already excludes.
     private static (string File, Func<IPage, Task> Scene)[] ScenesFor(string target) => target switch
     {
-        "play-phone" or "play-tablet" => Scenes,
+        "play-phone" or "play-tablet-7" or "play-tablet-10" => Scenes,
         "desktop" => [.. Scenes, SyncScene, HomeScene],
         _ => [.. Scenes, SyncScene]
     };
@@ -284,7 +289,7 @@ public class StoreScreenshotTests : PlaywrightTest
 
         foreach (Target target in Targets)
         {
-            bool wide = target.Name is "desktop" or "ipad-13";
+            bool wide = target.Name is "desktop" or "ipad-13" or "play-tablet-10";
 
             await CaptureSessionAsync(target, wide ? wideSeed : narrowSeed, ScenesFor(target.Name));
         }
