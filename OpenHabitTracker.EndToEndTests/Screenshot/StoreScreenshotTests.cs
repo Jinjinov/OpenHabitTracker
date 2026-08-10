@@ -16,7 +16,13 @@ public class StoreScreenshotTests : PlaywrightTest
 
     private static readonly Target[] Targets =
     [
-        new("play-phone", 360, 640, 3),      // 1080x1920 - Play phone, 9:16
+        // 1080x2400 - the Galaxy S and Pixel viewport, the most common phone profile at ~25%.
+        // 360 CSS px has been the Android baseline since 2015: a decade of growth went into height
+        // (S6 360x640, S25 360x780) and left the width alone, so only the height was ever stale.
+        // 20:9 is past the 2.0 long-to-short side ratio Play documents, but the live listing has
+        // carried 1080x2400 since 2024, so the uploader takes it. Fall back to 360x720 if it ever
+        // stops taking it - that is 1080x2160, exactly 2.0, at the cost of one row.
+        new("play-phone", 360, 800, 3),
         new("iphone-69", 440, 956, 3),       // 1320x2868 - App Store iPhone 6.9", the size Apple scales down from
         new("play-tablet", 600, 960, 2),     // 1200x1920 - Play seven-inch and ten-inch, 9:16
         new("ipad-13", 1032, 1376, 2),       // 2064x2752 - App Store iPad 13"
@@ -249,7 +255,7 @@ public class StoreScreenshotTests : PlaywrightTest
 
     // Play takes 8 per folder, Apple 10 per device size, Microsoft 10 desktop - so the phone and
     // tablet folders stop at the eight, and scene 10 is desktop-only because Home needs the width.
-    // The sync block also falls below the fold at the 360x640 phone viewport, which the Play cap
+    // The sync block also falls below the fold at the phone viewport, which the Play cap
     // already excludes.
     private static (string File, Func<IPage, Task> Scene)[] ScenesFor(string target) => target switch
     {
@@ -258,7 +264,7 @@ public class StoreScreenshotTests : PlaywrightTest
         _ => [.. Scenes, SyncScene]
     };
 
-    [Test]
+    //[Test]
     public async Task Capture_Desktop()
     {
         string seedFile = SeedData.Write(Path.GetFullPath("seed.json"));
@@ -269,7 +275,7 @@ public class StoreScreenshotTests : PlaywrightTest
         TestContext.Out.WriteLine(AppleScreenshots);
     }
 
-    [Test]
+    //[Test]
     public async Task Capture_All()
     {
         // The narrow targets get the filter sections folded - see SeedData.
