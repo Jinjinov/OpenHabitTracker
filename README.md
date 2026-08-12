@@ -177,22 +177,21 @@ Choose the platform where you want to host the OpenHabitTracker server:
 
 ## Desktop screenshots:
 
-[![](OpenHabitTracker.Web/images/desktop_1_settings.png)](OpenHabitTracker.Web/images/desktop_1_settings.png)
-[![](OpenHabitTracker.Web/images/desktop_2_note.png)](OpenHabitTracker.Web/images/desktop_2_note.png)
-[![](OpenHabitTracker.Web/images/desktop_3_notes.png)](OpenHabitTracker.Web/images/desktop_3_notes.png)
-[![](OpenHabitTracker.Web/images/desktop_4_task.png)](OpenHabitTracker.Web/images/desktop_4_task.png)
-[![](OpenHabitTracker.Web/images/desktop_5_tasks.png)](OpenHabitTracker.Web/images/desktop_5_tasks.png)
-[![](OpenHabitTracker.Web/images/desktop_6_habit.png)](OpenHabitTracker.Web/images/desktop_6_habit.png)
-[![](OpenHabitTracker.Web/images/desktop_7_habits.png)](OpenHabitTracker.Web/images/desktop_7_habits.png)
-[![](OpenHabitTracker.Web/images/desktop_8_backup.png)](OpenHabitTracker.Web/images/desktop_8_backup.png)
+[![](OpenHabitTracker.Web/images/desktop-settings.png)](OpenHabitTracker.Web/images/desktop-settings.png)
+[![](OpenHabitTracker.Web/images/desktop-note-detail.png)](OpenHabitTracker.Web/images/desktop-note-detail.png)
+[![](OpenHabitTracker.Web/images/desktop-notes.png)](OpenHabitTracker.Web/images/desktop-notes.png)
+[![](OpenHabitTracker.Web/images/desktop-task-detail.png)](OpenHabitTracker.Web/images/desktop-task-detail.png)
+[![](OpenHabitTracker.Web/images/desktop-tasks.png)](OpenHabitTracker.Web/images/desktop-tasks.png)
+[![](OpenHabitTracker.Web/images/desktop-habit-detail.png)](OpenHabitTracker.Web/images/desktop-habit-detail.png)
+[![](OpenHabitTracker.Web/images/desktop-habits.png)](OpenHabitTracker.Web/images/desktop-habits.png)
+[![](OpenHabitTracker.Web/images/desktop-sync.png)](OpenHabitTracker.Web/images/desktop-sync.png)
 
 ## Phone screenshots:
 
-[![](OpenHabitTracker.Web/images/phone_1_empty.png)](OpenHabitTracker.Web/images/phone_1_empty.png)
-[![](OpenHabitTracker.Web/images/phone_2_notes.png)](OpenHabitTracker.Web/images/phone_2_notes.png)
-[![](OpenHabitTracker.Web/images/phone_3_markdown.png)](OpenHabitTracker.Web/images/phone_3_markdown.png)
-[![](OpenHabitTracker.Web/images/phone_4_task.png)](OpenHabitTracker.Web/images/phone_4_task.png)
-[![](OpenHabitTracker.Web/images/phone_5_habit.png)](OpenHabitTracker.Web/images/phone_5_habit.png)
-[![](OpenHabitTracker.Web/images/phone_6_search.png)](OpenHabitTracker.Web/images/phone_6_search.png)
-[![](OpenHabitTracker.Web/images/phone_7_settings.png)](OpenHabitTracker.Web/images/phone_7_settings.png)
-[![](OpenHabitTracker.Web/images/phone_8_backup.png)](OpenHabitTracker.Web/images/phone_8_backup.png)
+[![](OpenHabitTracker.Web/images/phone-notes.png)](OpenHabitTracker.Web/images/phone-notes.png)
+[![](OpenHabitTracker.Web/images/phone-note-detail.png)](OpenHabitTracker.Web/images/phone-note-detail.png)
+[![](OpenHabitTracker.Web/images/phone-task-detail.png)](OpenHabitTracker.Web/images/phone-task-detail.png)
+[![](OpenHabitTracker.Web/images/phone-habit-detail.png)](OpenHabitTracker.Web/images/phone-habit-detail.png)
+[![](OpenHabitTracker.Web/images/phone-search.png)](OpenHabitTracker.Web/images/phone-search.png)
+[![](OpenHabitTracker.Web/images/phone-settings.png)](OpenHabitTracker.Web/images/phone-settings.png)
+[![](OpenHabitTracker.Web/images/phone-sync.png)](OpenHabitTracker.Web/images/phone-sync.png)

@@ -25,9 +25,9 @@
   <Date>2026-07-06</Date>
   <MinVer>6.1</MinVer>
 
-  <Screenshot>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/images/desktop_7_habits.png</Screenshot>
-  <Screenshot>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/images/desktop_5_tasks.png</Screenshot>
-  <Screenshot>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/images/desktop_3_notes.png</Screenshot>
+  <Screenshot>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/images/desktop-habits.png</Screenshot>
+  <Screenshot>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/images/desktop-tasks.png</Screenshot>
+  <Screenshot>https://raw.githubusercontent.com/Jinjinov/OpenHabitTracker/main/OpenHabitTracker.Web/images/desktop-notes.png</Screenshot>
 
   <Requires>A password and a JWT secret must be set before the first start.</Requires>
 
