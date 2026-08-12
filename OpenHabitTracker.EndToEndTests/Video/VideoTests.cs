@@ -86,6 +86,23 @@ public class VideoTests : PlaywrightTest
      *   4. Neither side unblocks → deadlock
      * Fix: if stderr capture is needed, start ReadToEndAsync() as a concurrent Task
      * BEFORE calling WaitForExitAsync(), so it drains the buffer while FFmpeg runs.
+     *
+     * ── 7. A slow capture pipeline shortens the video instead of dropping frames ──
+     * ddagrab is a lavfi source: it timestamps frames from its own framerate counter,
+     * not from the wall clock. So a pipeline that cannot sustain the requested 30 fps
+     * does not produce a full-length video with gaps - it produces a SHORTER video that
+     * plays fast, with every pause in the scenario compressed. A 28 s take came out as
+     * 18 s this way, and the log line reads speed=0.62x rather than any error.
+     * Recording straight to the App Store spec - the silent anullsrc input, aac,
+     * -level 4.0, -movflags +faststart, -shortest - was enough to trigger it.
+     * Preset is NOT the factor: slow, veryfast and ultrafast all produced the identical
+     * frame count, so libx264 was never the bottleneck. h264_amf would skip the
+     * GPU-to-CPU readback entirely, but this machine answers "Encoder not found".
+     * Fix: capture cheaply - video only, no second input, ultrafast - and re-encode to
+     * the spec in a second pass afterwards, where nothing is real-time.
+     * Guard: time the scenario with a Stopwatch and compare it to the captured duration.
+     * They track each other when FFmpeg keeps up, and nothing else reveals the problem -
+     * FFmpeg exits 0 and the test passes either way.
      */
 
     //[Test]
