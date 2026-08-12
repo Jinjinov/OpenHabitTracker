@@ -18,4 +18,5 @@ OpenHT.db*
 watchlogs*.db
 *.snap
 fastlane/*.json
+fastlane/app_previews
 *.p8
