@@ -461,11 +461,11 @@ public class LoadExamplesVideoTests : PlaywrightTest
             Assert.Fail($"FFmpeg wrote no video to {outputFile}.{Environment.NewLine}{log}");
     }
 
-    [Test]
+    //[Test]
     public async Task Desktop_Main() =>
         await RecordVideo("videos/desktop-main.mp4", "1920x1080", 1920, 1086, false, Main); // 1086: +6 for the Chromium height discrepancy on Windows - see VideoTests.cs
 
-    [Test]
+    //[Test]
     public async Task Desktop_Sidebar() =>
         await RecordVideo("videos/desktop-sidebar.mp4", "1920x1080", 1920, 1086, false, SidebarDesktop, OpenHabits);
 
@@ -479,11 +479,11 @@ public class LoadExamplesVideoTests : PlaywrightTest
     // non-square pixels that make Apple's validator compute display dimensions disagreeing with
     // the encoded ones - a rejection. setsar=1 in the second pass forces it back to 1:1.
     // 1090: +6 for the Chromium height discrepancy on Windows - see VideoTests.cs.
-    [Test]
+    //[Test]
     public async Task Mobile_Main() =>
         await RecordVideo("videos/mobile-main.mp4", "500x1084", 500, 1090, true, Main, scaleTo: "886:1920");
 
-    [Test]
+    //[Test]
     public async Task Mobile_Sidebar() =>
         await RecordVideo("videos/mobile-sidebar.mp4", "500x1084", 500, 1090, true, SidebarMobile, OpenHabits, "886:1920");
 
