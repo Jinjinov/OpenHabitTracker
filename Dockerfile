@@ -8,12 +8,15 @@ LABEL org.opencontainers.image.source=https://github.com/Jinjinov/OpenHabitTrack
 WORKDIR /src
 
 # Copy the project files and restore dependencies for the target architecture
+# RequiresAspNetWebAssets has to be forced: the SDK only infers it from .razor Content items,
+# which are not in the context yet at restore time, and without it the restore skips the
+# Microsoft.AspNetCore.App.Internal.Assets pack that carries wwwroot/_framework/blazor.web.js
 COPY ["OpenHabitTracker/OpenHabitTracker.csproj", "OpenHabitTracker/"]
 COPY ["OpenHabitTracker.Backup/OpenHabitTracker.Backup.csproj", "OpenHabitTracker.Backup/"]
 COPY ["OpenHabitTracker.Blazor/OpenHabitTracker.Blazor.csproj", "OpenHabitTracker.Blazor/"]
 COPY ["OpenHabitTracker.Blazor.Web/OpenHabitTracker.Blazor.Web.csproj", "OpenHabitTracker.Blazor.Web/"]
 COPY ["OpenHabitTracker.EntityFrameworkCore/OpenHabitTracker.EntityFrameworkCore.csproj", "OpenHabitTracker.EntityFrameworkCore/"]
-RUN dotnet restore "OpenHabitTracker.Blazor.Web/OpenHabitTracker.Blazor.Web.csproj" -a $TARGETARCH
+RUN dotnet restore "OpenHabitTracker.Blazor.Web/OpenHabitTracker.Blazor.Web.csproj" -a $TARGETARCH -p:RequiresAspNetWebAssets=true
 
 # Copy the remaining files and publish the app (publish builds too)
 COPY . .
