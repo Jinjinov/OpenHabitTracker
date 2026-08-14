@@ -9,20 +9,33 @@ version: '1.2.4'
 grade: stable #devel
 summary: Take notes, plan tasks, track habits
 description: |
-  - Free and Ad-Free
-  - Open Source
-  - Privacy Focused: All user data is stored locally on your device
-  - Available on Windows, Linux, Android, iOS, macOS, and as a web app
-  - Localized to English, German, Spanish, Slovenian, French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Czech, Slovak, Croatian, Serbian
+  Take notes, plan tasks, and track habits - native apps on all your devices, plus a web app. Free, ad-free, and open source. No account needed: all your data stays on your device.
 
-  Key Features:
+  Habits without streak guilt:
 
-  - Markdown support for notes
-  - Use categories and priorities to organize your notes, tasks, and habits
-  - Advanced Search, Filter, and Sort
-  - Data Export/Import: JSON, YAML, TSV, Markdown
+  Instead of a streak counter, every habit has a desired repeat interval. The app shows how overdue each habit is as a percentage of that interval, so you always see what needs attention first. Missing a day never resets anything. Classic streaks are available too - off by default.
+
+  Notes, tasks and habits in one place:
+
+  - Notes with full Markdown support
+  - Tasks with planned dates, duration and time tracking
+  - Habits with flexible repeat intervals - track repetitions, time or quantity
+  - Checklist sub-items on both tasks and habits
+  - Categories, colors, priorities, search, filters and sorting - for notes, tasks and habits
+
+  Your data stays yours:
+
+  - All data is stored locally on your device
+  - Export and import: Markdown, JSON, YAML, TSV
   - Import your notes from Google Keep
-  - Available in 26 themes with Dark and Light modes
+  - Optional sync: host the Docker image on your own server and every app, desktop or mobile, can log in and sync
+
+  Made to fit you:
+
+  - 26 themes with dark and light mode
+  - Customizable UI - show or hide almost every element
+  - Available in 20 languages
+  - Keyboard navigation and screen reader support
 
 base: core24
 
