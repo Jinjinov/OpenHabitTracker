@@ -20,3 +20,4 @@ watchlogs*.db
 fastlane/*.json
 fastlane/app_previews
 *.p8
+*.Backup.tmp
