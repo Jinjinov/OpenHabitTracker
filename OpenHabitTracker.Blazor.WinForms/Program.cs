@@ -58,7 +58,7 @@ static class Program
     {
         try
         {
-            UpdateManager manager = new("https://openhabittracker.net/download/Windows/");
+            UpdateManager manager = new("https://openhabittracker.net/download/win/");
 
             // False outside a Velopack install (dev/debug runs, unpacked copies) - nothing to do.
             if (!manager.IsInstalled)
