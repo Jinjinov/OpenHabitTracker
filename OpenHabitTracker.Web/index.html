@@ -11,14 +11,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="OpenHabitTracker">
     <meta name="application-name" content="OpenHabitTracker">
-    <meta name="description" content="Free, open source habit tracker for Web, Windows, Android, iOS, macOS and Linux. Take notes, plan tasks, and track habits.">
+    <meta name="description" content="Free, open source habit tracker with no ads, for Web, Windows, Android, iOS, macOS and Linux. Take notes, plan tasks, and track habits.">
 
     <link rel="canonical" href="https://openhabittracker.net/">
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="OpenHabitTracker" />
     <meta property="og:title" content="OpenHabitTracker" />
-    <meta property="og:description" content="Free, open source habit tracker for Web, Windows, Android, iOS, macOS and Linux. Take notes, plan tasks, and track habits." />
+    <meta property="og:description" content="Free, open source habit tracker with no ads, for Web, Windows, Android, iOS, macOS and Linux. Take notes, plan tasks, and track habits." />
     <meta property="og:image" content="https://openhabittracker.net/icons/thumbnail.png" />
     <meta property="og:image:alt" content="OpenHabitTracker logo" />
     <meta property="og:url" content="https://openhabittracker.net/" />
@@ -26,7 +26,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@dzindzinovic">
     <meta name="twitter:title" content="OpenHabitTracker">
-    <meta name="twitter:description" content="Free, open source habit tracker for Web, Windows, Android, iOS, macOS and Linux. Take notes, plan tasks, and track habits.">
+    <meta name="twitter:description" content="Free, open source habit tracker with no ads, for Web, Windows, Android, iOS, macOS and Linux. Take notes, plan tasks, and track habits.">
     <meta name="twitter:image" content="https://openhabittracker.net/icons/thumbnail.png">
     <meta name="twitter:image:alt" content="OpenHabitTracker logo">
 
@@ -59,6 +59,29 @@
       "softwareVersion": "1.2.4",
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
       "isAccessibleForFree": true,
+      "featureList": [
+        "Tracks each habit by how overdue it is: the time elapsed since the last completion as a percentage of the desired interval, so a 10-day habit that is 2 days overdue reads 120%",
+        "A streak counter is not the main indicator: it is off by default, sits inside the habit detail, and counts in the habit's own period",
+        "Search, filter and sort in six independently foldable sections",
+        "Planned dates and done dates filtered separately, each with four comparison modes: before, on, after and not on",
+        "Relative date filters stored as day offsets and resolved against today at query time, so a saved filter never goes stale",
+        "Filter habits by interval ratio, with a minimum and a maximum bound",
+        "Invert the done-date range to show what was not completed in a window, including items never completed at all",
+        "11 sort keys, chosen separately for notes, tasks and habits",
+        "Category and priority filters render as check boxes, radio buttons or a drop-down list",
+        "Search covers note bodies and checklist items, not only titles, and highlights matches in place",
+        "25 settings on one screen, controlling the start page, the start sidebar, what each list row shows, how filters render and list density",
+        "26 themes plus dark and light mode",
+        "20 languages",
+        "Markdown notes with blockquote and table support, rendered inline in the list",
+        "Tasks with a planned date and time, a duration, a checklist and a timer",
+        "Habits with repeat rules and a display metric of repetitions, time or quantity",
+        "Categories that group notes, tasks and habits, each with a completion rule of all or any",
+        "Import and export JSON, YAML, TSV and Markdown, plus import from a Google Keep Takeout ZIP",
+        "Optional self-hosted sync through a Docker image, with the native apps logging in to your own server",
+        "Full keyboard navigation and screen reader support",
+        "No ads, no account, no subscription, and all data stays on your device"
+      ],
       "url": "https://openhabittracker.net/",
       "downloadUrl": "https://openhabittracker.net/#downloads",
       "installUrl": "https://pwa.openhabittracker.net",
@@ -258,8 +281,8 @@
 
           <h3 class="card-subtitle h4 my-3 text-muted">The friendly habit tracker</h3>
           <ul>
-            <li><span class="caveat large">OpenHabitTracker</span> doesn't use a streak counter</li>
-            <li>You won't feel demotivated when you skip a habit once because you won't have to start your streak from zero</li>
+            <li><span class="caveat large">OpenHabitTracker</span> doesn't use a streak counter as the main indicator</li>
+            <li>You won't feel demotivated when you skip a habit once, because a skip only raises the urgency</li>
             <li>It tracks the time elapsed since your last task completion and compares it to the task's repeating interval:
               <ul>
                 <li>A task with a 10 day interval which is 2 days overdue is at 120%</li>
@@ -268,6 +291,8 @@
             </li>
             <li>It allows you to easily prioritize your tasks based on their level of urgency</li>
           </ul>
+
+          <p>I built it as a personal project: the app has no ads, no trackers, no account, no subscriptions and no in-app purchases.</p>
 
           <p>Your feedback is welcome on <a href="https://www.reddit.com/r/OpenHabitTracker" onclick="redditVisit()">Reddit</a> and <a href="https://github.com/Jinjinov/OpenHabitTracker/discussions" onclick="gitHubDiscussionsVisit()">GitHub</a></p>
 
@@ -613,7 +638,7 @@
 
           <h3 class="card-subtitle h4 my-3 text-muted"><span class="caveat large">OpenHabitTracker </span> is:</h3>
           <ul>
-            <li>Free and Ad-free</li>
+            <li>Free and ad-free: no ads, no subscription</li>
             <li>Open source: <a href="https://github.com/Jinjinov/OpenHabitTracker" onclick="gitHubVisit()">GitHub</a></li>
             <li>Cross platform: Web, Windows, Android, iOS, macOS and Linux</li>
           </ul>
