@@ -1,0 +1,80 @@
+# OpenHabitTracker
+
+> Free, open source app for taking notes, planning tasks, and tracking habits.
+> No ads, no account, no subscription, and all data stays on your device.
+> Native apps for Windows, Linux, macOS, iOS and Android, a web app, and optional self-hosted sync
+> through a Docker image.
+
+OpenHabitTracker measures a habit by how overdue it is rather than by an unbroken run of days.
+Each habit has a repeat rule of count, interval and period, and the app shows the time elapsed since
+the last completion as a percentage of that interval, so a 10-day habit 2 days overdue reads 120%
+and a 4-day habit 2 days overdue reads 150%.
+A streak counter exists but is not the main indicator: it is off by default, appears only inside a
+habit's detail, and counts in the habit's own period, so a weekly habit has a streak of weeks.
+Skipping a day raises the urgency percentage rather than erasing anything.
+
+Two areas go deeper than this category usually does.
+
+Search, filter and sort.
+Six independently foldable sections: search, filter by date, by category, by priority, by status,
+and sort.
+Planned and done dates are filtered separately, each with 4 comparison modes: before, on, after and
+not on.
+A date filter takes either an absolute date or a relative day offset that is resolved against today
+at query time, so a saved filter never goes stale.
+The habit interval ratio is a filterable quantity rather than a badge, with a minimum and a maximum
+bound, so "habits between 50 and 150 percent of their interval" is expressible.
+There are 11 sort keys, chosen per content type.
+Category and priority filters each render as check boxes, radio buttons or a drop-down.
+Search covers note bodies and checklist items, not only titles, and highlights matches in place.
+The done-date range can be inverted to show what was not completed in a window, including items
+never completed at all.
+
+Customization.
+25 settings on one screen, 26 themes plus dark mode, 20 languages, 12 item colours, 6 priority
+levels.
+Settings decide which page and which sidebar open at start, what each list row shows, which
+calendars appear, how filters render, and how dense the lists are.
+Six of them add or remove entire blocks from the habit detail, so the same habit is either a short
+form or a full statistics page.
+Settings persist, sync, and travel in the JSON and YAML exports.
+
+Notes support Markdown, rendered inline in the list.
+Tasks have a planned date and time, a duration, a checklist and a timer.
+Habits have a repeat rule, a display metric of repetitions, time or quantity, a checklist, a timer,
+a calendar and full completion history.
+Categories group all three and carry a completion rule of all or any.
+Import and export cover JSON, YAML, TSV and Markdown, plus import from a Google Keep Takeout ZIP.
+
+## Site
+
+- [Home](https://openhabittracker.net/): what the app does, screenshots, and downloads for every platform
+- [Web app](https://pwa.openhabittracker.net): the full app in a browser, works offline, no account needed
+- [Version history](https://openhabittracker.net/version-history.html): every release since 1.0.0, with downloads
+
+## Comparisons with other habit trackers
+
+- [Habit tracker comparison](https://openhabittracker.net/habit-tracker-comparison.html): against Habitica, Loop, Streaks and Everyday
+- [Self-hosted habit tracker](https://openhabittracker.net/self-hosted-habit-tracker.html): against Beaver Habits, HabitTrove and HabitSync
+- [Loop Habit Tracker alternative](https://openhabittracker.net/loop-habit-tracker-alternative.html): Loop for iPhone, desktop and the web
+- [Google Keep alternative](https://openhabittracker.net/google-keep-alternative.html): with built-in Google Keep import
+- [Habitica alternative](https://openhabittracker.net/habitica-alternative.html): without the RPG
+- [Streaks alternative](https://openhabittracker.net/streaks-alternative.html): Streaks for Android, Windows and Linux
+- [Everyday alternative](https://openhabittracker.net/everyday-alternative.html): unlimited free habits
+
+## Source and self-hosting
+
+- [GitHub repository](https://github.com/Jinjinov/OpenHabitTracker): GPL-3.0, written in C# and Blazor, one UI codebase running in six .NET hosts
+- [Docker image](https://hub.docker.com/r/jinjinov/openhabittracker): single-user Blazor Server instance, amd64 and arm64, with JWT auth and a REST API
+- [GitHub Container Registry](https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker): the same image on ghcr.io
+
+## Install
+
+- [Microsoft Store](https://apps.microsoft.com/detail/9mwzmlxzzllr): Windows
+- [Google Play](https://play.google.com/store/apps/details?id=net.openhabittracker): Android
+- [App Store](https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=iphone): iOS
+- [Mac App Store](https://apps.apple.com/us/app/openhabittracker/id6654885470?platform=mac): macOS
+- [Flathub](https://flathub.org/apps/net.openhabittracker.OpenHabitTracker): Linux
+- [Snap Store](https://snapcraft.io/openhabittracker): Linux
+- [APKPure](https://apkpure.com/openhabittracker/net.openhabittracker): Android
+- [GitHub releases](https://github.com/Jinjinov/OpenHabitTracker/releases): Android APK, auto-updating with Obtainium
