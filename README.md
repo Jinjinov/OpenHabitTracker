@@ -8,20 +8,37 @@ https://pwa.openhabittracker.net
 
 Take notes, plan tasks, track habits
 
-- Free and Ad-free
-- Open Source
-- Privacy Focused: All user data is stored locally on your device
+OpenHabitTracker is free and open source. The app has no ads, no trackers, no account, no subscriptions and no in-app purchases.
+
+- All your data stays on your device, and syncs only to a server you run yourself
 - Available on Windows, Linux, Android, iOS, macOS, and as a web app
 - Localized to English, German, Spanish, Slovenian, French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Czech, Slovak, Croatian, Serbian
 
-Key Features:
+Key features:
 
-- Markdown support for notes
-- Use categories and priorities to organize your notes, tasks, and habits
-- Advanced Search, Filter, and Sort
-- Data Export/Import: JSON, YAML, TSV, Markdown
-- Import your notes from Google Keep
-- Available in 26 themes with Dark and Light modes
+- Markdown notes, rendered in the list so reading one costs no clicks
+- Tasks with a planned date and time, a duration, a checklist and a timer
+- Habits measured by how overdue they are rather than by an unbroken streak: a habit with a 10 day interval that is 2 days overdue reads 120%
+- Categories, 6 priority levels and 12 colours across notes, tasks and habits
+- Import and export JSON, YAML, TSV and Markdown, plus import from a Google Keep Takeout ZIP
+- 26 themes with dark and light mode
+- Full keyboard navigation and screen reader support
+
+Search, filter and sort:
+
+- Six sections - search, date, category, priority, status and sort - each folding independently
+- Planned dates and done dates filtered separately, each with four comparisons: before, on, after and not on
+- Date filters take a fixed date or a number of days from today, worked out when the query runs, so a saved filter never goes stale
+- Filter habits by how overdue they are, with a lower bound, an upper bound, or both
+- Turn the done-date filter around to see what you have not done in a period, including what you have never done at all
+- Eleven sort keys, chosen separately for notes, tasks and habits
+- Search reads note text and checklist items, not only titles
+
+Customization:
+
+- Twenty-five settings on one screen: which page and which sidebar open at start, what each row shows, which calendars appear, how the filters are drawn, and how tightly the lists are packed
+- Six of those add or remove whole blocks from a habit, so the same habit is either a short form or a full statistics page
+- Settings are saved, synced, and included in JSON and YAML backups
 
 ## Stores:
 
