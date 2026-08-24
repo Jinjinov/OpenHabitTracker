@@ -16,6 +16,10 @@ finish-args:
   - --socket=wayland
   - --socket=fallback-x11
   - --share=ipc
+  - --share=network
+  - --filesystem=xdg-desktop
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-download
   - --env=DOTNET_ROOT=/app/lib/dotnet
   - --env=WEBKIT_DISABLE_DMABUF_RENDERER=1
 
