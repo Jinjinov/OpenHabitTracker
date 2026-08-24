@@ -26,10 +26,7 @@ static class Program
         // Before any window is created, so the checks run in the packaged app's own environment.
         if (SelfTestRunner.IsRequested())
         {
-            return SelfTestRunner.RunSync(
-            [
-                SelfTestChecks.DataDirectory(appDataDirectory)
-            ], Console.Out);
+            return SelfTestRunner.RunSync(SelfTestChecks.Standard(appDataDirectory), Console.Out);
         }
 
         AppDomain.CurrentDomain.UnhandledException += (sender, error) =>

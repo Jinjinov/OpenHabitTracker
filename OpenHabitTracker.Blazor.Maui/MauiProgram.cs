@@ -24,10 +24,7 @@ public static class MauiProgram
         // so this is never true there and the app builds as usual.
         if (SelfTestRunner.IsRequested())
         {
-            Environment.Exit(SelfTestRunner.RunSync(
-            [
-                SelfTestChecks.DataDirectory(appDataDirectory)
-            ], Console.Out));
+            Environment.Exit(SelfTestRunner.RunSync(SelfTestChecks.Standard(appDataDirectory), Console.Out));
         }
 
         AppDomain.CurrentDomain.UnhandledException += (sender, error) =>

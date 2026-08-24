@@ -1,3 +1,8 @@
+using System.Net.Http;
+using System.Net.Sockets;
+using System.Reflection;
+using System.Text.Json;
+
 namespace OpenHabitTracker.SelfTest;
 
 /// <summary>
@@ -5,13 +10,135 @@ namespace OpenHabitTracker.SelfTest;
 /// </summary>
 public static class SelfTestChecks
 {
+    private const string ReachableHost = "openhabittracker.net";
+
+    private static readonly TimeSpan NetworkTimeout = TimeSpan.FromSeconds(5);
+
+    /// <summary>
+    /// The checks every host runs. A host adds its own on top rather than repeating these.
+    /// </summary>
+    public static IEnumerable<SelfTestCheck> Standard(string dataDirectory) =>
+    [
+        DataDirectory(dataDirectory),
+        UserDirectory(dataDirectory),
+        Network(),
+        Localization(),
+        TimeZone()
+    ];
+
     /// <summary>
     /// The resolved data directory exists and a file written there can be read back and removed.
     /// The reported path is half the value: a sandbox that redirects the write shows up in it.
     /// </summary>
     public static SelfTestCheck DataDirectory(string path) => new("data directory", async () =>
     {
-        string probe = Path.Combine(path, $"selftest-{Guid.NewGuid():N}.tmp");
+        await WriteReadDelete(path);
+
+        return Path.GetFullPath(path);
+    });
+
+    /// <summary>
+    /// A file written to the user's Documents folder lands in the real one.
+    /// Without filesystem permission a Flatpak silently redirects this into its own private tree
+    /// and a Snap without the home plug refuses the write outright, which is the whole point:
+    /// export reports success either way, so only the resulting path proves anything.
+    /// </summary>
+    public static SelfTestCheck UserDirectory(string dataDirectory) => new("user directory", async () =>
+    {
+        string documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+        if (string.IsNullOrEmpty(documents))
+            throw new InvalidOperationException("no Documents folder is defined");
+
+        Directory.CreateDirectory(documents);
+
+        await WriteReadDelete(documents);
+
+        string full = Path.GetFullPath(documents);
+
+        if (full.StartsWith(Path.GetFullPath(dataDirectory), StringComparison.Ordinal))
+            throw new InvalidOperationException($"redirected into the app's own data directory: {full}");
+
+        if (Environment.GetEnvironmentVariable("FLATPAK_ID") is not null && full.Contains("/.var/app/", StringComparison.Ordinal))
+            throw new InvalidOperationException($"redirected into the Flatpak sandbox: {full}");
+
+        return full;
+    });
+
+    /// <summary>
+    /// The process can open a socket and complete one request.
+    /// A Flatpak without --share=network has no network namespace at all, so sync cannot work
+    /// however correct the app is.
+    /// </summary>
+    public static SelfTestCheck Network() => new("network", async () =>
+    {
+        using TcpClient client = new();
+
+        await client.ConnectAsync(ReachableHost, 443).WaitAsync(NetworkTimeout);
+
+        using HttpClient http = new() { Timeout = NetworkTimeout };
+
+        using HttpResponseMessage response = await http.GetAsync($"https://{ReachableHost}", HttpCompletionOption.ResponseHeadersRead);
+
+        return $"{ReachableHost} {(int)response.StatusCode}";
+    });
+
+    /// <summary>
+    /// Every localization resource is present, parses, and carries the same keys as English.
+    /// Per-host packaging is what breaks this: a file named to look culture-specific ends up in a
+    /// satellite assembly instead of the one the loader reads.
+    /// </summary>
+    public static SelfTestCheck Localization() => new("localization", () =>
+    {
+        Assembly assembly = typeof(SelfTestChecks).Assembly;
+
+        const string prefix = "OpenHabitTracker.Localization.Resources.";
+
+        Dictionary<string, HashSet<string>> byResource = [];
+
+        foreach (string name in assembly.GetManifestResourceNames().Where(x => x.StartsWith(prefix, StringComparison.Ordinal) && x.EndsWith(".json", StringComparison.Ordinal)))
+        {
+            using Stream stream = assembly.GetManifestResourceStream(name) ?? throw new InvalidOperationException($"{name} cannot be opened");
+
+            using JsonDocument document = JsonDocument.Parse(stream);
+
+            byResource[name[prefix.Length..^".json".Length]] = [.. document.RootElement.EnumerateObject().Select(x => x.Name)];
+        }
+
+        const string tourPrefix = "GuidedTourComponent-";
+
+        List<string> languages = [.. byResource.Keys.Where(x => !x.StartsWith(tourPrefix, StringComparison.Ordinal))];
+        List<string> tours = [.. byResource.Keys.Where(x => x.StartsWith(tourPrefix, StringComparison.Ordinal)).Select(x => x[tourPrefix.Length..])];
+
+        if (languages.Count == 0)
+            throw new InvalidOperationException("no localization resources are embedded in this build");
+
+        List<string> missingTour = [.. languages.Except(tours).Order()];
+
+        if (missingTour.Count > 0)
+            throw new InvalidOperationException($"no guided tour resource for {string.Join(", ", missingTour)}");
+
+        if (!byResource.TryGetValue("en", out HashSet<string>? english))
+            throw new InvalidOperationException("the English resource is missing");
+
+        List<string> incomplete = [.. languages.Where(x => !byResource[x].SetEquals(english)).Order()];
+
+        if (incomplete.Count > 0)
+            throw new InvalidOperationException($"key set differs from English in {string.Join(", ", incomplete)}");
+
+        return Task.FromResult($"{languages.Count} languages, {english.Count} keys");
+    });
+
+    /// <summary>
+    /// No assertion is possible here, because only the user knows which zone is right.
+    /// Reading it is the test: a container defaulting to UTC moves every habit's day boundary.
+    /// </summary>
+    public static SelfTestCheck TimeZone() => new("time zone", () =>
+        Task.FromResult($"{TimeZoneInfo.Local.Id}, now {DateTime.Now:yyyy-MM-dd HH:mm}, day starts {DateTime.Today:yyyy-MM-dd HH:mm}"));
+
+    private static async Task WriteReadDelete(string directory)
+    {
+        string probe = Path.Combine(directory, $"selftest-{Guid.NewGuid():N}.tmp");
 
         await File.WriteAllTextAsync(probe, nameof(SelfTestChecks));
 
@@ -26,7 +153,5 @@ public static class SelfTestChecks
         {
             File.Delete(probe);
         }
-
-        return Path.GetFullPath(path);
-    });
+    }
 }

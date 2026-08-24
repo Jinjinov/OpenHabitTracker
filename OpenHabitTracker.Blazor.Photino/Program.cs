@@ -33,10 +33,7 @@ public class Program
         // the packaged app was installed into.
         if (SelfTestRunner.IsRequested(args))
         {
-            return SelfTestRunner.RunSync(
-            [
-                SelfTestChecks.DataDirectory(databaseDirectory)
-            ], Console.Out);
+            return SelfTestRunner.RunSync(SelfTestChecks.Standard(databaseDirectory), Console.Out);
         }
 
         PhotinoBlazorApp? app = null;

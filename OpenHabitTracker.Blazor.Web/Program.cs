@@ -63,10 +63,7 @@ if (SelfTestRunner.IsRequested(args))
 {
     // Exit rather than return: the entry point is top-level statements, and a returned value
     // would make every other path owe one too.
-    Environment.Exit(await SelfTestRunner.Run(
-    [
-        SelfTestChecks.DataDirectory(databaseFolder)
-    ], Console.Out));
+    Environment.Exit(await SelfTestRunner.Run(SelfTestChecks.Standard(databaseFolder), Console.Out));
 }
 
 builder.Services.AddServices();

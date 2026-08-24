@@ -21,10 +21,7 @@ public partial class App : Application
         {
             // Exit rather than Shutdown: Shutdown only queues a request on the dispatcher, and with
             // no window ever shown the app has nothing to close, so the process would sit forever.
-            Environment.Exit(SelfTestRunner.RunSync(
-            [
-                SelfTestChecks.DataDirectory(appDataDirectory)
-            ], Console.Out));
+            Environment.Exit(SelfTestRunner.RunSync(SelfTestChecks.Standard(appDataDirectory), Console.Out));
         }
 
         AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
