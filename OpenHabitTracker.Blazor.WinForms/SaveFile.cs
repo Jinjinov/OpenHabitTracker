@@ -28,7 +28,7 @@ public class SaveFile : ISaveFile
 
             await File.WriteAllTextAsync(path, content);
 
-            return path;
+            return Path.GetFullPath(path);
         }
 
         return filename;

@@ -29,7 +29,7 @@ public class SaveFile(PhotinoWindow mainWindow) : ISaveFile
 
             await File.WriteAllTextAsync(path, content);
 
-            return path;
+            return Path.GetFullPath(path);
         }
 
         return filename;
