@@ -1,3 +1,4 @@
+using OpenHabitTracker.App;
 using OpenHabitTracker.SelfTest;
 using System;
 using System.IO;
@@ -21,7 +22,7 @@ public partial class App : Application
         {
             // Exit rather than Shutdown: Shutdown only queues a request on the dispatcher, and with
             // no window ever shown the app has nothing to close, so the process would sit forever.
-            Environment.Exit(SelfTestRunner.RunSync(SelfTestChecks.Standard(appDataDirectory), Console.Out));
+            Environment.Exit(SelfTestRunner.RunSync(SelfTestChecks.Desktop(appDataDirectory), Console.Out));
         }
 
         AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
@@ -32,7 +33,7 @@ public partial class App : Application
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                File.WriteAllText(Path.Combine(appDataDirectory, "Error.log"), message);
+                CrashLog.Write(appDataDirectory, message);
 
                 MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -43,7 +44,7 @@ public partial class App : Application
 
         string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
 
-        string windowSettingsPath = Path.Combine(appDataDirectory, "Window.yaml");
+        string windowSettingsPath = Path.Combine(appDataDirectory, WindowSettings.FileName);
 
         new MainWindow(databasePath, windowSettingsPath).Show();
     }

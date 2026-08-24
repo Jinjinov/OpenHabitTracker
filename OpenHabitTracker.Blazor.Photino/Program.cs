@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Blazor.Auth;
 using OpenHabitTracker.Blazor.Files;
@@ -33,7 +34,7 @@ public class Program
         // the packaged app was installed into.
         if (SelfTestRunner.IsRequested(args))
         {
-            return SelfTestRunner.RunSync(SelfTestChecks.Standard(databaseDirectory), Console.Out);
+            return SelfTestRunner.RunSync(SelfTestChecks.Desktop(databaseDirectory), Console.Out);
         }
 
         PhotinoBlazorApp? app = null;
@@ -48,7 +49,7 @@ public class Program
 
                 Debug.WriteLine(message);
 
-                File.WriteAllText(Path.Combine(databaseDirectory, "Error.log"), message);
+                CrashLog.Write(databaseDirectory, message);
 
                 app?.MainWindow.ShowMessage("Error", message);
             }
@@ -114,7 +115,7 @@ public class Program
         app.MainWindow.SetUseOsDefaultSize(false);
         app.MainWindow.SetUseOsDefaultLocation(false);
 
-        string windowSettingsPath = Path.Combine(databaseDirectory, "Window.yaml");
+        string windowSettingsPath = Path.Combine(databaseDirectory, WindowSettings.FileName);
 
         WindowSettings? saved = WindowSettings.Load(windowSettingsPath);
 

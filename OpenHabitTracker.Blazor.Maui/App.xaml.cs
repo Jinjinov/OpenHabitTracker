@@ -1,5 +1,5 @@
 using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
-using OpenHabitTracker.Backup;
+using OpenHabitTracker.App;
 using Application = Microsoft.Maui.Controls.Application;
 
 namespace OpenHabitTracker.Blazor.Maui;
@@ -16,7 +16,7 @@ public partial class App : Application
     protected override Window CreateWindow(IActivationState? activationState)
     {
         // Same per-platform dir the db and log use (see MauiProgram).
-        string windowSettingsPath = Path.Combine(FileSystem.Current.AppDataDirectory, "Window.yaml");
+        string windowSettingsPath = Path.Combine(FileSystem.Current.AppDataDirectory, WindowSettings.FileName);
 
         Window window = new Window(new MainPage())
         {

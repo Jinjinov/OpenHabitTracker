@@ -6,6 +6,7 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
+using OpenHabitTracker.App;
 using OpenHabitTracker.SelfTest;
 using OpenHabitTracker.Services;
 
@@ -24,7 +25,7 @@ public static class MauiProgram
         // so this is never true there and the app builds as usual.
         if (SelfTestRunner.IsRequested())
         {
-            Environment.Exit(SelfTestRunner.RunSync(SelfTestChecks.Standard(appDataDirectory), Console.Out));
+            Environment.Exit(SelfTestRunner.RunSync(SelfTestChecks.Desktop(appDataDirectory), Console.Out));
         }
 
         AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
@@ -35,7 +36,7 @@ public static class MauiProgram
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                File.WriteAllText(Path.Combine(appDataDirectory, "Error.log"), message);
+                CrashLog.Write(appDataDirectory, message);
 
                 Application.Current?.Dispatcher.Dispatch(async () =>
                 {

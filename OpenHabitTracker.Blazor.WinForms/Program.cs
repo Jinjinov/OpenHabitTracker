@@ -1,3 +1,4 @@
+using OpenHabitTracker.App;
 using OpenHabitTracker.SelfTest;
 using System;
 using System.IO;
@@ -26,7 +27,7 @@ static class Program
         // Before any window is created, so the checks run in the packaged app's own environment.
         if (SelfTestRunner.IsRequested())
         {
-            return SelfTestRunner.RunSync(SelfTestChecks.Standard(appDataDirectory), Console.Out);
+            return SelfTestRunner.RunSync(SelfTestChecks.Desktop(appDataDirectory), Console.Out);
         }
 
         AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
@@ -37,7 +38,7 @@ static class Program
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                File.WriteAllText(Path.Combine(appDataDirectory, "Error.log"), message);
+                CrashLog.Write(appDataDirectory, message);
 
                 MessageBox.Show(text: message, caption: "Error");
             }
@@ -48,7 +49,7 @@ static class Program
 
         string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
 
-        string windowSettingsPath = Path.Combine(appDataDirectory, "Window.yaml");
+        string windowSettingsPath = Path.Combine(appDataDirectory, WindowSettings.FileName);
 
         // Not awaited: this must not block startup - it runs in the background while the app does.
         _ = CheckForUpdatesAsync();

@@ -1,3 +1,4 @@
+using OpenHabitTracker.App;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Reflection;
@@ -25,6 +26,72 @@ public static class SelfTestChecks
         Localization(),
         TimeZone()
     ];
+
+    /// <summary>
+    /// The checks that only mean something where there is a window and a crash handler,
+    /// so Photino, WinForms, Wpf and Maui run these on top of <see cref="Standard"/>.
+    /// </summary>
+    public static IEnumerable<SelfTestCheck> Desktop(string dataDirectory) =>
+    [
+        .. Standard(dataDirectory),
+        CrashLog(dataDirectory),
+        WindowGeometry(dataDirectory)
+    ];
+
+    /// <summary>
+    /// The crash handler's own write path, exercised through the same call the handler makes,
+    /// so a directory it cannot write to is found before a crash needs it rather than after.
+    /// A probe name is used because the real Error.log is evidence and must not be overwritten.
+    /// </summary>
+    public static SelfTestCheck CrashLog(string dataDirectory) => new("crash log", () =>
+    {
+        string fileName = $"selftest-{Guid.NewGuid():N}.log";
+        string message = $"self test {DateTime.Now:O}";
+
+        App.CrashLog.Write(dataDirectory, message, fileName);
+
+        try
+        {
+            string? read = App.CrashLog.Read(dataDirectory, fileName);
+
+            if (read != message)
+                throw new InvalidOperationException(read is null ? "the log was not written" : "the log was written but read back different");
+        }
+        finally
+        {
+            File.Delete(Path.Combine(dataDirectory, fileName));
+        }
+
+        return Task.FromResult(Path.Combine(Path.GetFullPath(dataDirectory), App.CrashLog.FileName));
+    });
+
+    /// <summary>
+    /// Window geometry survives a save and load through the real serializer.
+    /// Both sides swallow their own exceptions on purpose, so a broken round-trip is silent at
+    /// runtime and only a comparison of the values proves anything.
+    /// </summary>
+    public static SelfTestCheck WindowGeometry(string dataDirectory) => new("window geometry", () =>
+    {
+        string path = Path.Combine(dataDirectory, $"selftest-{Guid.NewGuid():N}.yaml");
+
+        WindowSettings written = new() { X = 11, Y = 22, Width = 1033, Height = 744 };
+
+        written.Save(path);
+
+        try
+        {
+            WindowSettings? read = WindowSettings.Load(path) ?? throw new InvalidOperationException("saved geometry did not load back");
+
+            if (read.X != written.X || read.Y != written.Y || read.Width != written.Width || read.Height != written.Height)
+                throw new InvalidOperationException($"loaded {read.X},{read.Y} {read.Width}x{read.Height} after saving {written.X},{written.Y} {written.Width}x{written.Height}");
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+
+        return Task.FromResult(Path.Combine(Path.GetFullPath(dataDirectory), WindowSettings.FileName));
+    });
 
     /// <summary>
     /// The resolved data directory exists and a file written there can be read back and removed.

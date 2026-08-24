@@ -1,11 +1,13 @@
 using YamlDotNet.Serialization;
 
-namespace OpenHabitTracker.Backup;
+namespace OpenHabitTracker.App;
 
 // Desktop-only, machine-local window geometry, persisted next to the db as Window.yaml.
 // Each host reads/writes in its own native units (DIPs for WPF/MAUI, pixels for Photino/WinForms).
 public class WindowSettings
 {
+    public const string FileName = "Window.yaml";
+
     public double X { get; set; }
     public double Y { get; set; }
     public double Width { get; set; }
@@ -17,8 +19,8 @@ public class WindowSettings
     {
         try
         {
-            if (System.IO.File.Exists(path))
-                return new DeserializerBuilder().Build().Deserialize<WindowSettings>(System.IO.File.ReadAllText(path));
+            if (File.Exists(path))
+                return new DeserializerBuilder().Build().Deserialize<WindowSettings>(File.ReadAllText(path));
         }
         catch
         {
@@ -31,7 +33,7 @@ public class WindowSettings
     {
         try
         {
-            System.IO.File.WriteAllText(path, new SerializerBuilder().Build().Serialize(this));
+            File.WriteAllText(path, new SerializerBuilder().Build().Serialize(this));
         }
         catch
         {

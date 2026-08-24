@@ -1,0 +1,11 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- The one place the release version is written. The SDK flows it into every assembly, and
+         AppVersion reads it back for the About page, so no source file repeats it as text.
+         Maui's ApplicationDisplayVersion and Package.appxmanifest are separate: those are package
+         identity, not the assembly version, and bump-version.ps1 still writes them. -->
+    <Version>1.2.4</Version>
+  </PropertyGroup>
+
+</Project>
