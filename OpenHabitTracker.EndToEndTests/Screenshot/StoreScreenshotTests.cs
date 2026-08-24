@@ -237,7 +237,7 @@ public class StoreScreenshotTests : PlaywrightTest
 
     // Needs the temporary build that registers the real auth fragment: IAuthFragment.IsAuthAvailable
     // is false in the PWA and its GetAuthFragment returns an empty RenderFragment, so on a shipped
-    // build this scene captures a heading and a blank space (TODO.md, sync shot).
+    // build this scene captures a heading and a blank space.
     private static (string File, Func<IPage, Task> Scene) SyncScene =>
         ("09-sync.png", async page =>
         {
