@@ -1,6 +1,6 @@
 namespace OpenHabitTracker.EndToEndTests.Accessibility;
 
-// Prerequisite: start OpenHabitTracker.Blazor.Wasm at http://localhost before running tests.
+// Prerequisite: start OpenHabitTracker.Blazor.Web at http://localhost before running tests.
 // See: OpenHabitTracker.EndToEndTests/TODO.md for Playwright quirks and locator guidelines.
 
 [TestFixture]
