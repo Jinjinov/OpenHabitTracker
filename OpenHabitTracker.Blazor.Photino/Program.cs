@@ -9,6 +9,7 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
+using OpenHabitTracker.SelfTest;
 using OpenHabitTracker.Services;
 using Photino.Blazor;
 using Photino.NET;
@@ -23,10 +24,20 @@ namespace OpenHabitTracker.Blazor.Photino;
 public class Program
 {
     [STAThread]
-    static void Main(string[] args)
+    static int Main(string[] args)
     {
         string databaseDirectory = Environment.GetEnvironmentVariable("SNAP_USER_COMMON") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ".OpenHabitTracker");
         Directory.CreateDirectory(databaseDirectory);
+
+        // Before anything Photino touches, so the checks run windowless inside whatever sandbox
+        // the packaged app was installed into.
+        if (SelfTestRunner.IsRequested(args))
+        {
+            return SelfTestRunner.RunSync(
+            [
+                SelfTestChecks.DataDirectory(databaseDirectory)
+            ], Console.Out);
+        }
 
         PhotinoBlazorApp? app = null;
 
@@ -143,6 +154,8 @@ public class Program
         logger.LogInformation("Running app");
 
         app.Run();
+
+        return 0;
     }
 
     static void SaveWindowSettings(PhotinoWindow window, string path)

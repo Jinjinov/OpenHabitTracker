@@ -6,6 +6,7 @@ using OpenHabitTracker.Blazor.Layout;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
+using OpenHabitTracker.SelfTest;
 using OpenHabitTracker.Services;
 
 namespace OpenHabitTracker.Blazor.Maui;
@@ -18,6 +19,16 @@ public static class MauiProgram
         // routing the log here fixes the silent write failure of SpecialFolder.ApplicationData on Android/iOS.
         string appDataDirectory = FileSystem.Current.AppDataDirectory;
         Directory.CreateDirectory(appDataDirectory);
+
+        // Windows and macCatalyst only: Android and iOS start the app with no command line,
+        // so this is never true there and the app builds as usual.
+        if (SelfTestRunner.IsRequested())
+        {
+            Environment.Exit(SelfTestRunner.RunSync(
+            [
+                SelfTestChecks.DataDirectory(appDataDirectory)
+            ], Console.Out));
+        }
 
         AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
         {

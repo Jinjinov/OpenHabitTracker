@@ -1,3 +1,4 @@
+using OpenHabitTracker.SelfTest;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ static class Program
     ///  The main entry point for the application.
     /// </summary>
     [STAThread]
-    static void Main()
+    static int Main()
     {
         // Must be the first line: on install/update/uninstall Velopack relaunches the app as a hook
         // for this call to handle and exit; anything above it would run during those invocations.
@@ -21,6 +22,15 @@ static class Program
         // Local (not Roaming): a SQLite db must not roam; the log is machine-local too.
         string appDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OpenHabitTracker");
         Directory.CreateDirectory(appDataDirectory);
+
+        // Before any window is created, so the checks run in the packaged app's own environment.
+        if (SelfTestRunner.IsRequested())
+        {
+            return SelfTestRunner.RunSync(
+            [
+                SelfTestChecks.DataDirectory(appDataDirectory)
+            ], Console.Out);
+        }
 
         AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
         {
@@ -51,6 +61,8 @@ static class Program
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
         Application.Run(new MainForm(databasePath, windowSettingsPath));
+
+        return 0;
     }
 
     // Best-effort: any failure is swallowed, so a failed update check never crashes the app.

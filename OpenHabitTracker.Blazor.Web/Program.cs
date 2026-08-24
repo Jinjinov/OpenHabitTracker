@@ -14,6 +14,7 @@ using OpenHabitTracker.Blazor.Web;
 using OpenHabitTracker.Blazor.Web.Components;
 using OpenHabitTracker.Blazor.Web.Data;
 using OpenHabitTracker.Data;
+using OpenHabitTracker.SelfTest;
 using OpenHabitTracker.Services;
 using Scalar.AspNetCore;
 using System.Text;
@@ -56,6 +57,17 @@ string databaseFolder = Path.Combine(AppContext.BaseDirectory, ".OpenHabitTracke
 
 Directory.CreateDirectory(databaseFolder);
 string databasePath = Path.Combine(databaseFolder, databaseFile);
+
+// Before the host is built, so the checks run in the container's own environment.
+if (SelfTestRunner.IsRequested(args))
+{
+    // Exit rather than return: the entry point is top-level statements, and a returned value
+    // would make every other path owe one too.
+    Environment.Exit(await SelfTestRunner.Run(
+    [
+        SelfTestChecks.DataDirectory(databaseFolder)
+    ], Console.Out));
+}
 
 builder.Services.AddServices();
 
