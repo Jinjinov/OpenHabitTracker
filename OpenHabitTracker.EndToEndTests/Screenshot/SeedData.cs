@@ -32,15 +32,23 @@ public static class SeedData
         return (int)(hash % (ulong)modulus);
     }
 
+    // A completion is never allowed into the future. The app itself refuses to record one, and a
+    // habit whose last completion is ahead of the clock renders a negative elapsed time in the list
+    // - "-7 m (-1%)" - which is how this was found. Only the day-zero entry can overshoot: it starts
+    // in the morning and a long session can still be running when the capture takes the shot, so
+    // that session is pulled back to finish shortly before the run.
+    private static DateTime EndBeforeNow(DateTime start, int minutes, double day, int salt) =>
+        start.AddMinutes(minutes) <= Now ? start : Now.AddMinutes(-(5 + Spread(day, salt, 25) + minutes));
+
     private static object[] Times(int targetMinutes, int targetQuantity, double[] daysAgo) =>
         daysAgo.Select(day =>
         {
-            DateTime start = Now.Date.AddDays(-day)
-                .AddHours(6 + Spread(day, 3, 4))
-                .AddMinutes(5 * Spread(day, 7, 12));
-
             int minutes = Math.Max(5, targetMinutes - targetMinutes / 3 + Spread(day, 5, targetMinutes * 2 / 3 + 1));
             int quantity = targetQuantity == 1 ? 1 : Math.Max(1, targetQuantity - 3 + Spread(day, 11, 5));
+
+            DateTime start = EndBeforeNow(Now.Date.AddDays(-day)
+                .AddHours(6 + Spread(day, 3, 4))
+                .AddMinutes(5 * Spread(day, 7, 12)), minutes, day, 29);
 
             return (object)new
             {
@@ -70,8 +78,11 @@ public static class SeedData
         int targetMinutes = (int)TimeSpan.Parse(duration).TotalMinutes;
         double day = completedDaysAgo ?? 0;
 
-        DateTime start = Now.Date.AddDays(-day).AddHours(6 + Spread(day, 13, 4)).AddMinutes(5 * Spread(day, 19, 12));
         int minutes = Math.Max(5, targetMinutes - targetMinutes / 3 + Spread(day, 23, targetMinutes * 2 / 3 + 1));
+
+        DateTime start = EndBeforeNow(
+            Now.Date.AddDays(-day).AddHours(6 + Spread(day, 13, 4)).AddMinutes(5 * Spread(day, 19, 12)),
+            minutes, day, 37);
 
         return new
         {

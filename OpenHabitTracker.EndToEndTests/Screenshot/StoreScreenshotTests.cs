@@ -353,6 +353,25 @@ public class StoreScreenshotTests : PlaywrightTest
         await page.WaitForTimeoutAsync(750);
     }
 
+    // The six section headers are the only buttons in the sidebar carrying aria-expanded, and each
+    // label is unique, so the pair identifies one section without depending on their order.
+    // Do not compare the attribute against "true": Blazor renders a bool attribute value as an empty
+    // string, or omits the attribute entirely, depending on how the expression is typed. Anything
+    // that is not an explicit false counts as open, and a missing header means already folded.
+    private static async Task FoldSectionAsync(IPage page, string label)
+    {
+        ILocator header = page.Locator("#sidebar-container button[aria-expanded]")
+            .Filter(new LocatorFilterOptions { HasTextString = label });
+
+        if (await header.CountAsync() == 0)
+            return;
+
+        string? expanded = await header.GetAttributeAsync("aria-expanded");
+
+        if (expanded is null || !expanded.Equals("false", StringComparison.OrdinalIgnoreCase))
+            await header.ClickAsync();
+    }
+
     private static async Task SetFilterDisplayAsync(IPage page, string value)
     {
         await page.Locator("select[aria-label='Display category filter as']").SelectOptionAsync(value);
@@ -365,6 +384,10 @@ public class StoreScreenshotTests : PlaywrightTest
         {
             await OpenSettingsSidebarAsync(page);
             await SetDetailBlocksAsync(page, on: false);
+
+            // The small calendar runs the opposite way to the six, so the pair differs in the list
+            // behind the detail as well as in the detail itself.
+            await SetToggleAsync(page, "ShowSmallCalendar", true);
             await page.Locator("#closeSidebar").ClickAsync();
 
             await page.Locator("[data-main-step-5]").ClickAsync(); // habits
@@ -376,6 +399,7 @@ public class StoreScreenshotTests : PlaywrightTest
         {
             await OpenSettingsSidebarAsync(page);
             await SetDetailBlocksAsync(page, on: true);
+            await SetToggleAsync(page, "ShowSmallCalendar", false);
             await page.Locator("#closeSidebar").ClickAsync();
 
             // The month calendar is the block that proves the pair, so wait for it rather than for
@@ -387,6 +411,11 @@ public class StoreScreenshotTests : PlaywrightTest
         {
             await page.Locator("[data-habits-step-11]").ClickAsync(); // close the habit, the list is the subject
             await OpenSettingsSidebarAsync(page);
+
+            // Put the day strips back, or the previous scene's setting leaks into this shot and
+            // every one after it. Only the habit detail pair is meant to differ on this.
+            await SetToggleAsync(page, "ShowSmallCalendar", true);
+
             await SetThemeAsync(page, "default");
             await Assertions.Expect(page.Locator("[data-habits-step-2]").First).ToBeVisibleAsync();
         }),
@@ -414,6 +443,12 @@ public class StoreScreenshotTests : PlaywrightTest
 
             await page.Locator("[data-main-step-6]").ClickAsync();
             await Assertions.Expect(page.Locator("[data-search-step-1]")).ToBeVisibleAsync();
+
+            // Fold two sections so this differs from the check box shot in more than the widgets,
+            // and so the folding is itself visible. This is the last scene, so nothing inherits it.
+            await FoldSectionAsync(page, "Search");
+            await FoldSectionAsync(page, "Filter by date");
+            await Assertions.Expect(page.Locator("[data-search-step-1]")).Not.ToBeVisibleAsync();
         })
     ];
 
