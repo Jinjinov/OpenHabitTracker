@@ -2,7 +2,8 @@ using Microsoft.Playwright;
 
 namespace OpenHabitTracker.EndToEndTests.Screenshot;
 
-// Store screenshot capture harness - it records, it does not assert, like the Video fixtures.
+// Screenshot capture harness - it records, it does not assert, like the Video fixtures.
+// Two sets share the plumbing: the store matrix, and the article set for the SEO.md pieces.
 // Prerequisite: the app is served at http://localhost (OpenHabitTracker.md, Deployment).
 
 [TestFixture]
@@ -117,7 +118,8 @@ public class StoreScreenshotTests : PlaywrightTest
 
     // One context per target: IndexedDB lives in the context, so the seed is imported once and
     // every scene in that session sees the same data.
-    private async Task CaptureSessionAsync(Target target, string seedFile, (string File, Func<IPage, Task> Scene)[] scenes)
+    private async Task CaptureSessionAsync(Target target, string seedFile, (string File, Func<IPage, Task> Scene)[] scenes,
+        Destination[]? destinations = null)
     {
         await using IBrowserContext context = await _browser.NewContextAsync(new BrowserNewContextOptions
         {
@@ -131,7 +133,7 @@ public class StoreScreenshotTests : PlaywrightTest
         await GotoBaseUrlAsync(page);
         await ImportSeedAsync(page, seedFile);
 
-        Destination[] destinations = DestinationsFor(target.Name);
+        destinations ??= DestinationsFor(target.Name);
 
         foreach (Destination destination in destinations)
             ClearCapturedShots(destination);
@@ -268,6 +270,163 @@ public class StoreScreenshotTests : PlaywrightTest
         "desktop" => [.. Scenes, SyncScene, HomeScene],
         _ => [.. Scenes, SyncScene]
     };
+
+    // The article set, for the two SEO.md pieces on customization and on search.
+    // It proves claims to somebody already reading rather than winning a glance, which is why it
+    // captures things the store list drops: the same screen under opposite settings, side by side.
+    // Desktop only, and it writes to the site's own images folder rather than a store folder,
+    // because the articles and the later UI comparison page are its consumers.
+    private static string WebImages => Path.Combine(RepoRoot, "OpenHabitTracker.Web", "images");
+
+    // The prefix is load-bearing: ClearCapturedShots deletes Prefix + "*.png" in the destination,
+    // and this destination also holds the nineteen site screenshots.
+    private static Destination[] ArticleDestination => [new(WebImages, "article-")];
+
+    private static async Task OpenSettingsSidebarAsync(IPage page)
+    {
+        if (!await page.Locator("[data-settings-step-1]").IsVisibleAsync())
+        {
+            await page.Locator("[data-main-step-1]").ClickAsync(); // menu
+            await page.Locator("div[role='menu'] button:has(i.bi-gear)").ClickAsync();
+        }
+
+        await Assertions.Expect(page.Locator("[data-settings-step-1]")).ToBeVisibleAsync();
+    }
+
+    // Clicks the label rather than the checkbox: it carries Bootstrap's stretched-link, which covers
+    // the input. Reads the current state first, so a scene can ask for an absolute setting rather
+    // than having to know what the seed or the previous scene left behind.
+    private static async Task SetToggleAsync(IPage page, string id, bool on)
+    {
+        if (await page.Locator($"#{id}").IsCheckedAsync() != on)
+            await page.Locator($"label[for='{id}']").ClickAsync();
+    }
+
+    // The six settings that each add or remove a whole block from the habit detail.
+    // Off, the detail is title, checklist, repeat rule, duration, metric and timer; on, it also
+    // carries the priority selector, the month calendar, the statistics, the category, the colour
+    // and the timestamps. That gap is the lead image of the customization article.
+    private static readonly string[] DetailBlocks =
+    [
+        "ShowPriorityDropdown", "ShowLargeCalendar", "ShowHabitStatistics",
+        "ShowCategory", "ShowColor", "ShowCreatedUpdated"
+    ];
+
+    private static async Task SetDetailBlocksAsync(IPage page, bool on)
+    {
+        foreach (string id in DetailBlocks)
+            await SetToggleAsync(page, id, on);
+    }
+
+    // SetTheme only rewrites the href on #theme-link, and the page renders unstyled until that
+    // stylesheet lands - around a second. Two waits are needed and neither is sufficient alone.
+    //
+    // First, the sheet has to be the one asked for and to carry rules. Selecting the theme already
+    // in use is a no-op in SaveTheme, so nothing swaps and this is true immediately.
+    //
+    // Then the custom properties have to be recalculated, which lags the parse by a frame or more.
+    // Half-themed frames are the failure this catches, and they are subtle rather than obviously
+    // broken: app.css sets .nav-link.active to var(--bs-body-bg) with !important, so a nav button
+    // photographed in that gap comes out white on an otherwise correctly themed page.
+    // Settling on a rendered value is the honest check - the paint, not the download.
+    private static async Task SetThemeAsync(IPage page, string theme)
+    {
+        await page.Locator("select[aria-label='Theme']").SelectOptionAsync(theme);
+
+        await page.WaitForFunctionAsync(
+            @"theme => {
+                const link = document.getElementById('theme-link');
+                if (!link || !link.getAttribute('href').includes('/' + theme + '/')) return false;
+                const sheet = [...document.styleSheets].find(s => s.href === link.href);
+                return !!sheet && sheet.cssRules.length > 0;
+            }", theme);
+
+        await page.WaitForFunctionAsync(
+            @"() => new Promise(resolve => {
+                const read = () => getComputedStyle(document.body).backgroundColor + '|' +
+                    getComputedStyle(document.documentElement).getPropertyValue('--bs-body-bg');
+                const first = read();
+                requestAnimationFrame(() => requestAnimationFrame(() => resolve(read() === first)));
+            })");
+
+        // Cushion for the repaint after the values settle; there is no event for 'finished painting'.
+        await page.WaitForTimeoutAsync(750);
+    }
+
+    private static async Task SetFilterDisplayAsync(IPage page, string value)
+    {
+        await page.Locator("select[aria-label='Display category filter as']").SelectOptionAsync(value);
+        await page.Locator("select[aria-label='Display priority filter as']").SelectOptionAsync(value);
+    }
+
+    private static (string File, Func<IPage, Task> Scene)[] ArticleScenes =>
+    [
+        ("habit-detail-minimal.png", async page =>
+        {
+            await OpenSettingsSidebarAsync(page);
+            await SetDetailBlocksAsync(page, on: false);
+            await page.Locator("#closeSidebar").ClickAsync();
+
+            await page.Locator("[data-main-step-5]").ClickAsync(); // habits
+            await page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasTextString = "Strength training" }).ClickAsync();
+            await Assertions.Expect(page.Locator("[data-habits-step-11]")).ToBeVisibleAsync();
+            await ScrollDetailToTopAsync(page, "#habit-component");
+        }),
+        ("habit-detail-full.png", async page =>
+        {
+            await OpenSettingsSidebarAsync(page);
+            await SetDetailBlocksAsync(page, on: true);
+            await page.Locator("#closeSidebar").ClickAsync();
+
+            // The month calendar is the block that proves the pair, so wait for it rather than for
+            // the detail, which was already on screen before the toggles ran.
+            await Assertions.Expect(page.Locator("[data-habits-step-13]")).ToBeVisibleAsync();
+            await ScrollDetailToTopAsync(page, "#habit-component");
+        }),
+        ("theme-default.png", async page =>
+        {
+            await page.Locator("[data-habits-step-11]").ClickAsync(); // close the habit, the list is the subject
+            await OpenSettingsSidebarAsync(page);
+            await SetThemeAsync(page, "default");
+            await Assertions.Expect(page.Locator("[data-habits-step-2]").First).ToBeVisibleAsync();
+        }),
+        // Same frame, same data, one dropdown changed - and the control that changed it is in shot,
+        // which is what makes the pair read as customization rather than as two different apps.
+        // United against the default: orange is the furthest the set travels from the shipped blue
+        // while still being a theme somebody would pick on purpose.
+        ("theme-united.png", async page => await SetThemeAsync(page, "united")),
+        ("filter-checkboxes.png", async page =>
+        {
+            await SetThemeAsync(page, "default");
+
+            await SetFilterDisplayAsync(page, "CheckBoxes");
+            await page.Locator("#closeSidebar").ClickAsync();
+
+            await page.Locator("[data-main-step-6]").ClickAsync(); // search, filter, sort
+            await Assertions.Expect(page.Locator("[data-search-step-1]")).ToBeVisibleAsync();
+        }),
+        ("filter-dropdowns.png", async page =>
+        {
+            await page.Locator("#closeSidebar").ClickAsync();
+            await OpenSettingsSidebarAsync(page);
+            await SetFilterDisplayAsync(page, "SelectOptions");
+            await page.Locator("#closeSidebar").ClickAsync();
+
+            await page.Locator("[data-main-step-6]").ClickAsync();
+            await Assertions.Expect(page.Locator("[data-search-step-1]")).ToBeVisibleAsync();
+        })
+    ];
+
+    //[Test]
+    public async Task Capture_Articles()
+    {
+        string seedFile = SeedData.Write(Path.GetFullPath("seed-article.json"));
+        Target desktop = Targets.Single(target => target.Name == "desktop");
+
+        await CaptureSessionAsync(desktop, seedFile, ArticleScenes, ArticleDestination);
+
+        TestContext.Out.WriteLine(WebImages);
+    }
 
     //[Test]
     public async Task Capture_Desktop()
