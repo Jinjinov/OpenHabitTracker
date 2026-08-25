@@ -52,6 +52,11 @@ Import and export cover JSON, YAML, TSV and Markdown, plus import from a Google 
 - [Web app](https://pwa.openhabittracker.net): the full app in a browser, works offline, no account needed
 - [Version history](https://openhabittracker.net/version-history.html): every release since 1.0.0, with downloads
 
+## In detail
+
+- [Customization](https://openhabittracker.net/customizable-habit-tracker.html): what can be turned on or off, per screen and per content type
+- [Search, filter and sort](https://openhabittracker.net/habit-tracker-search-and-filter.html): the date filters, the overdue filter, and the filter that shows what was not done
+
 ## Comparisons with other habit trackers
 
 - [Habit tracker comparison](https://openhabittracker.net/habit-tracker-comparison.html): against Habitica, Loop, Streaks and Everyday
