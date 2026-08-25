@@ -9,7 +9,7 @@ Take notes, plan tasks, track habits
 OpenHabitTracker is free and open source. The app has no ads, no trackers, no account, no subscriptions and no in-app purchases.
 
 - All your data stays on your device, and syncs only to a server you run yourself
-- Available on Windows, Linux, Android, iOS, macOS, and as a web app
+- Available on Windows, Linux, Android, iOS, macOS, as a web app, and self-hosted
 - Localized to English, German, Spanish, Slovenian, French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Czech, Slovak, Croatian, Serbian
 
 <br>
