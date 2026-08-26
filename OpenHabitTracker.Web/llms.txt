@@ -18,8 +18,7 @@ Two areas go deeper than this category usually does.
 Search, filter and sort.
 Six independently foldable sections: search, filter by date, by category, by priority, by status,
 and sort.
-Planned and done dates are filtered separately, each with 4 comparison modes: before, on, after and
-not on.
+Planned and done dates are filtered separately, each before, on, after or not on a date you pick.
 A date filter takes either an absolute date or a relative day offset that is resolved against today
 at query time, so a saved filter never goes stale.
 The habit interval ratio is a filterable quantity rather than a badge, with a minimum and a maximum
@@ -27,8 +26,7 @@ bound, so "habits between 50 and 150 percent of their interval" is expressible.
 There are 11 sort keys, chosen per content type.
 Category and priority filters each render as check boxes, radio buttons or a drop-down.
 Search covers note bodies and checklist items, not only titles, and highlights matches in place.
-The done-date range can be inverted to show what was not completed in a window, including items
-never completed at all.
+The done-date range can be inverted to show what was not completed in a window.
 
 Customization.
 25 settings on one screen, 26 themes plus dark mode, 20 languages, 12 item colours, 6 priority
