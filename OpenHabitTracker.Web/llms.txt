@@ -29,7 +29,7 @@ Search covers note bodies and checklist items, not only titles, and highlights m
 The done-date range can be inverted to show what was not completed in a window.
 
 Customization.
-25 settings on one screen, 26 themes plus dark mode, 20 languages, 12 item colours, 6 priority
+25 settings on one screen, 26 themes plus dark mode, 20 languages, 12 item colors, 6 priority
 levels.
 Settings decide which page and which sidebar open at start, what each list row shows, which
 calendars appear, how filters render, and how dense the lists are.

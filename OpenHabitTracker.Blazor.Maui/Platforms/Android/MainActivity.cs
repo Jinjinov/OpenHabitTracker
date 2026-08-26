@@ -12,7 +12,7 @@ public class MainActivity : MauiAppCompatActivity
         base.OnCreate(savedInstanceState);
 
         // Pin light status bar glyphs: MAUI's theme inherits Theme.MaterialComponents.DayNight,
-        // so the glyph colour would follow the SYSTEM light/dark setting rather than the app's,
+        // so the glyph color would follow the SYSTEM light/dark setting rather than the app's,
         // and a user in light mode would get dark glyphs on the app's dark status bar.
         if (Window?.DecorView is Android.Views.View decorView)
         {

@@ -38,7 +38,7 @@ Customization:
 
 - Almost everything on screen can be turned on or off: which page and which sidebar open at start, what each row shows, which calendars appear, how the filters are drawn, and how tightly the lists are packed
 - Some of them add or remove whole blocks from a habit, so the same habit is either a short form or a full statistics page
-- A background colour to tell your notes, tasks and habits apart at a glance
+- A background color to tell your notes, tasks and habits apart at a glance
 - Settings are saved, synced, and included in JSON and YAML backups
 
 ## Stores:

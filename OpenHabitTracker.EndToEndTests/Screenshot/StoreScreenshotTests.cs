@@ -304,7 +304,7 @@ public class StoreScreenshotTests : PlaywrightTest
 
     // The six settings that each add or remove a whole block from the habit detail.
     // Off, the detail is title, checklist, repeat rule, duration, metric and timer; on, it also
-    // carries the priority selector, the month calendar, the statistics, the category, the colour
+    // carries the priority selector, the month calendar, the statistics, the category, the color
     // and the timestamps. That gap is the lead image of the customization article.
     private static readonly string[] DetailBlocks =
     [
