@@ -1,6 +1,7 @@
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Data.Statistics
 @using OpenHabitTracker.Services
 
 @inject ICalendarService CalendarService
@@ -47,52 +48,19 @@
                     if (dateTime.Month == _calendarParams.FirstDayOfMonth.Month)
                         text += "-emphasis";
                     string border = dateTime == selectedDateTime ? "border-4 border-success-subtle" : dateTime.Date == DateTime.Today ? "border-4 border-primary-subtle" : "";
-                    string background = "bg-body-tertiary";
-                    string timesDone = "";
+
                     List<TimeModel>? list = null;
+                    Habit.TimesDoneByDay.TryGetValue(dateTime, out list);
 
-                    if (Habit.TimesDoneByDay.TryGetValue(dateTime, out list) && list.Count > 0)
-                    {
-                        if (Habit.DisplayMetric == DisplayMetric.Time)
-                        {
-                            TimeSpan totalTime = new TimeSpan(list.Sum(t => t.CompletedAt.HasValue ? t.CompletedAt.Value.Ticks - t.StartedAt.Ticks : 0));
-                            if (totalTime.TotalMinutes >= 1)
-                                timesDone = $"{(int)totalTime.TotalHours}:{totalTime.Minutes:D2}";
-
-                            if (Habit.Duration is null)
-                                background = "bg-success-subtle";
-                            else if (totalTime >= Habit.Duration.Value.ToTimeSpan())
-                                background = "bg-success-subtle";
-                            else
-                                background = "bg-warning-subtle";
-                        }
-                        else if (Habit.DisplayMetric == DisplayMetric.Quantity)
-                        {
-                            long sum = list.Sum(t => t.Quantity);
-                            timesDone = $"({sum})";
-
-                            if (sum >= Habit.TargetQuantity)
-                                background = "bg-success-subtle";
-                            else
-                                background = "bg-warning-subtle";
-                        }
-                        else
-                        {
-                            if (list.Count > 1)
-                                timesDone = $"{list.Count}x";
-
-                            if ((Habit.RepeatPeriod == Period.Day && list.Count >= Habit.RepeatCount) || (Habit.RepeatPeriod != Period.Day && Habit.RepeatCountReached(dateTime)))
-                                background = "bg-success-subtle";
-                            else
-                                background = "bg-warning-subtle";
-                        }
-                    }
+                    DayStatus dayStatus = HabitStatistics.GetDayStatus(Habit, dateTime);
+                    string background = dayStatus.Background;
+                    string timesDone = dayStatus.Label;
 
                     string ariaLabel = Habit.DisplayMetric switch
                     {
                         DisplayMetric.Time => $"{dateTime:dddd, MMMM d} \u2014 {timesDone}",
-                        DisplayMetric.Quantity => $"{dateTime:dddd, MMMM d} \u2014 {(list is null ? 0 : list.Sum(t => t.Quantity))} {Loc["Quantity"]}",
-                        _ => $"{dateTime:dddd, MMMM d} \u2014 {list?.Count ?? 0} {Loc["times done"]}"
+                        DisplayMetric.Quantity => $"{dateTime:dddd, MMMM d} \u2014 {dayStatus.Quantity} {Loc["Quantity"]}",
+                        _ => $"{dateTime:dddd, MMMM d} \u2014 {dayStatus.Count} {Loc["times done"]}"
                     };
 
                     <button class="@($"border {border} {text} d-flex {background}")"

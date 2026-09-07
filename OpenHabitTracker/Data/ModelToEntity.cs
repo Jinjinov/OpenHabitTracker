@@ -143,6 +143,7 @@ public static class ModelToEntity
         entity.MaxSmallCalendarDays = model.MaxSmallCalendarDays;
         entity.ShowLargeCalendar = model.ShowLargeCalendar;
         entity.ShowHabitStatistics = model.ShowHabitStatistics;
+        entity.ShowHabitCharts = model.ShowHabitCharts;
         entity.ShowCategory = model.ShowCategory;
         entity.ShowColor = model.ShowColor;
         entity.ShowCreatedUpdated = model.ShowCreatedUpdated;

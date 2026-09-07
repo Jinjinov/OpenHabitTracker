@@ -28,6 +28,9 @@ public class HabitModel : ItemsModel
 
     internal Streak? BestStreak { get; set; }
 
+    // Every unbroken run, longest first. BestStreak is its first element.
+    internal List<Streak> AllStreaks { get; set; } = [];
+
     internal int NonZeroRepeatCount => Math.Max(1, RepeatCount);
 
     internal TimeSpan ElapsedTime => LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : new TimeSpan(Math.Max(0L, (DateTime.Now - (StartAt ?? CreatedAt)).Ticks));
@@ -114,6 +117,7 @@ public class HabitModel : ItemsModel
         {
             CurrentStreak = null;
             BestStreak = null;
+            AllStreaks = [];
             return;
         }
 
@@ -151,13 +155,11 @@ public class HabitModel : ItemsModel
 
         CurrentStreak = count == 0 ? null : new Streak { Count = count, From = streakFrom, To = streakTo };
 
-        // Scan forward from the earliest bucket to find the longest unbroken run.
+        // Scan forward from the earliest bucket, collecting every unbroken run rather than only the longest.
         DateTime firstBucket = GetBucketStart(TimesDone!.Min(t => t.StartedAt.Date), RepeatPeriod);
         DateTime todayBucket = GetBucketStart(today, RepeatPeriod);
 
-        int bestCount = 0;
-        DateTime bestFrom = default;
-        DateTime bestTo = default;
+        List<Streak> runs = [];
         int runCount = 0;
         DateTime runFrom = default;
         DateTime runTo = default;
@@ -171,20 +173,19 @@ public class HabitModel : ItemsModel
                     runFrom = starts.Min(); // first completion of this run
                 runTo = starts.Max();       // last completion so far in this run
                 runCount++;
-                if (runCount > bestCount)
-                {
-                    bestCount = runCount;
-                    bestFrom = runFrom;
-                    bestTo = runTo;
-                }
             }
-            else
+            else if (runCount > 0)
             {
-                runCount = 0; // gap resets the current run
+                runs.Add(new Streak { Count = runCount, From = runFrom, To = runTo });
+                runCount = 0; // gap closes the run
             }
         }
 
-        BestStreak = bestCount == 0 ? null : new Streak { Count = bestCount, From = bestFrom, To = bestTo };
+        // Flush the run the loop ends inside, which is never closed by a gap.
+        if (runCount > 0)
+            runs.Add(new Streak { Count = runCount, From = runFrom, To = runTo });
+
+        SetStreaks(runs);
     }
 
     // Gap comparisons use .Date to avoid time-of-day sensitivity
@@ -217,11 +218,9 @@ public class HabitModel : ItemsModel
             CurrentStreak = new Streak { Count = count, From = streakFrom, To = streakTo };
         }
 
-        // Scan forward to find the longest unbroken run;
-        // seed with the first entry so a single completion always produces BestStreak.Count = 1.
-        int bestCount = 0;
-        DateTime bestFrom = default;
-        DateTime bestTo = default;
+        // Scan forward collecting every unbroken run;
+        // seed with the first entry so a single completion always produces one run of 1.
+        List<Streak> runs = [];
         int runCount = 1;
         DateTime runFrom = sorted[0].StartedAt;
         DateTime runTo = sorted[0].StartedAt;
@@ -235,13 +234,8 @@ public class HabitModel : ItemsModel
             }
             else
             {
-                // Gap exceeded: close the current run and check if it beats the best so far.
-                if (runCount > bestCount)
-                {
-                    bestCount = runCount;
-                    bestFrom = runFrom;
-                    bestTo = runTo;
-                }
+                // Gap exceeded: close the current run and start a new one.
+                runs.Add(new Streak { Count = runCount, From = runFrom, To = runTo });
                 runCount = 1;
                 runFrom = sorted[i].StartedAt;
                 runTo = sorted[i].StartedAt;
@@ -249,14 +243,18 @@ public class HabitModel : ItemsModel
         }
 
         // Flush the last run, which is never closed by the loop above.
-        if (runCount > bestCount)
-        {
-            bestCount = runCount;
-            bestFrom = runFrom;
-            bestTo = runTo;
-        }
+        runs.Add(new Streak { Count = runCount, From = runFrom, To = runTo });
 
-        BestStreak = bestCount == 0 ? null : new Streak { Count = bestCount, From = bestFrom, To = bestTo };
+        SetStreaks(runs);
+    }
+
+    // OrderByDescending is stable, so ties keep chronological order and BestStreak stays the
+    // earliest run that reached the maximum, which is what the strictly-greater comparison did before.
+    private void SetStreaks(List<Streak> runs)
+    {
+        AllStreaks = runs.OrderByDescending(x => x.Count).ToList();
+
+        BestStreak = AllStreaks.FirstOrDefault();
     }
 
     private int CountCompletionsInBucket(DateTime bucketStart)

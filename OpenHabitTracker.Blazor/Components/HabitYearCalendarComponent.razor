@@ -1,0 +1,184 @@
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Data.Statistics
+
+@inject ClientState ClientState
+@inject IStringLocalizer Loc
+@inject IJsInterop JsInterop
+
+<div class="px-1 border rounded-0">
+    <div class="fw-bold">@Loc["Calendar"]</div>
+
+    <div class="py-3">
+
+        @* The grid is drawn whether or not there is data in it - an empty habit gets the same
+           year long frame the other panels get, rather than a line of text. *@
+        <div style="overflow-x: auto;" @ref="_scrollRef">
+            <div style="min-width: 100%;">
+                @* Month labels sit above the column that carries the first of the month, and the year
+                   sits above the month it starts, which is January except at the left edge. *@
+                <div class="d-flex">
+                    <div style="flex: 0 0 26px;"></div>
+                    @for (int column = 0; column < _weeks.Count; column++)
+                    {
+                        DateTime? labelled = LabelledMonth(_weeks[column], column);
+
+                        <div style="flex: 1 0 26px; max-width: 44px;" @key="_weeks[column]">
+                            @* Both lines keep their height whether or not they carry text, otherwise a
+                               column without a year pulls its month up into the year row. *@
+                            <small class="d-block text-nowrap" style="font-size: 0.6rem; height: 0.75rem; line-height: 0.75rem;">@(labelled is { Month: 1 } || (column == 0 && labelled is not null) ? labelled.Value.ToString("yyyy") : "")</small>
+                            <small class="d-block text-nowrap" style="font-size: 0.65rem; height: 0.9rem; line-height: 0.9rem;">@(labelled?.ToString("MMM") ?? "")</small>
+                        </div>
+                    }
+                </div>
+
+                <div role="grid" aria-label="@Loc["Calendar"]" @onkeydown="HandleKeyDown" @ref="_gridRef">
+                    @for (int row = 0; row < 7; row++)
+                    {
+                        int weekday = row;
+
+                        <div class="d-flex align-items-center" role="row">
+                            <div style="flex: 0 0 26px;" role="rowheader">
+                                <small style="font-size: 0.65rem;">@Loc[_days[DayIndex(weekday)]]</small>
+                            </div>
+
+                            @for (int column = 0; column < _weeks.Count; column++)
+                            {
+                                int cellIndex = weekday * _weeks.Count + column;
+                                DateTime date = _weeks[column].AddDays(weekday);
+                                DayStatus status = HabitStatistics.GetDayStatus(Habit, date);
+
+                                <div role="gridcell"
+                                     tabindex="@(cellIndex == _activeIndex ? 0 : -1)"
+                                     @ref="_cellRefs[cellIndex]"
+                                     @key="date"
+                                     aria-label="@CellAriaLabel(date, status)"
+                                     title="@CellAriaLabel(date, status)"
+                                     class="@($"border d-flex align-items-center justify-content-center {status.Background} {(date.Date == DateTime.Today ? "border-2 border-primary-subtle" : "")}")"
+                                     style="flex: 1 0 26px; max-width: 44px; height: 22px;">
+                                    <small style="font-size: 0.6rem; line-height: 1;">@date.Day</small>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public HabitModel Habit { get; set; } = null!;
+
+    readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
+
+    List<DateTime> _weeks = new();
+    ElementReference[] _cellRefs = Array.Empty<ElementReference>();
+    ElementReference _gridRef;
+    ElementReference _scrollRef;
+    int _activeIndex;
+    bool _scrollToEnd;
+    bool _scrollKeysPrevented;
+
+    protected override void OnParametersSet()
+    {
+        List<DateTime> weeks = HabitStatistics.GetCalendarWeeks(Habit, ClientState.Settings.FirstDayOfWeek, DateTime.Now);
+
+        if (weeks.Count != _weeks.Count)
+        {
+            _cellRefs = new ElementReference[weeks.Count * 7];
+            _activeIndex = 0;
+            _scrollToEnd = true;
+        }
+
+        _weeks = weeks;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_scrollKeysPrevented && _gridRef.Id is not null)
+        {
+            _scrollKeysPrevented = true;
+            await JsInterop.PreventScrollKeys(_gridRef);
+        }
+
+        if (_scrollToEnd && _weeks.Count > 0 && _scrollRef.Id is not null)
+        {
+            _scrollToEnd = false;
+            await JsInterop.SetElementProperty(_scrollRef, "scrollLeft", 999999);
+        }
+    }
+
+    int DayIndex(int row) => ((int)ClientState.Settings.FirstDayOfWeek + row) % 7;
+
+    // The month a column is labelled with: the one whose first day the column contains.
+    // The leftmost column is always labelled, otherwise a range that starts mid-month has no label
+    // at all, which is what a habit with a single completion used to show.
+    DateTime? LabelledMonth(DateTime week, int column)
+    {
+        for (int day = 0; day < 7; day++)
+        {
+            if (week.AddDays(day).Day == 1)
+                return week.AddDays(day);
+        }
+
+        return column == 0 ? week : null;
+    }
+
+    string CellAriaLabel(DateTime date, DayStatus status) => Habit.DisplayMetric switch
+    {
+        DisplayMetric.Time => $"{date:dddd, MMMM d} — {status.Label}",
+        DisplayMetric.Quantity => $"{date:dddd, MMMM d} — {status.Quantity} {Loc["Quantity"]}",
+        _ => $"{date:dddd, MMMM d} — {status.Count} {Loc["times done"]}"
+    };
+
+    // Read only: the month calendar in the detail owns editing, so this grid only moves focus.
+    async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        int columns = _weeks.Count;
+        int total = columns * 7;
+
+        if (total == 0)
+            return;
+
+        int row = _activeIndex / columns;
+        int column = _activeIndex % columns;
+
+        switch (e.Key)
+        {
+            case "ArrowRight":
+                column = Math.Min(column + 1, columns - 1);
+                break;
+            case "ArrowLeft":
+                column = Math.Max(column - 1, 0);
+                break;
+            case "ArrowDown":
+                row = Math.Min(row + 1, 6);
+                break;
+            case "ArrowUp":
+                row = Math.Max(row - 1, 0);
+                break;
+            case "Home":
+                column = 0;
+                break;
+            case "End":
+                column = columns - 1;
+                break;
+            case "PageUp":
+                column = Math.Max(column - 4, 0);
+                break;
+            case "PageDown":
+                column = Math.Min(column + 4, columns - 1);
+                break;
+            default:
+                return;
+        }
+
+        _activeIndex = row * columns + column;
+
+        await JsInterop.FocusElement(_cellRefs[_activeIndex]);
+    }
+}

@@ -1,3 +1,8 @@
+# 1.2.5 - Sep 9, 2026
+
+- Added five habit charts: target, history, calendar, best streaks and frequency
+- Added a "Show habit charts" setting
+
 # 1.2.4 - Aug 8, 2026
 
 - Added relative date range filters for planned and done dates

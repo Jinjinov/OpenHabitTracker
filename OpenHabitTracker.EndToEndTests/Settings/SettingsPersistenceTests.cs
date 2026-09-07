@@ -44,8 +44,8 @@ public class SettingsPersistenceTests : BaseTest
     {
         await OpenSettingsAsync();
 
-        // data-settings-step-17 wraps the language select
-        await Page.Locator("[data-settings-step-17] select").SelectOptionAsync("de");
+        // data-settings-step-18 wraps the language select
+        await Page.Locator("[data-settings-step-18] select").SelectOptionAsync("de");
 
         // After switching to German the Notes nav link aria-label becomes "Notizen"
         await Expect(Page.Locator("[data-main-step-3]")).ToHaveAttributeAsync("aria-label", "Notizen");
@@ -55,7 +55,7 @@ public class SettingsPersistenceTests : BaseTest
     public async Task Language_Change_PersistedAfterReload()
     {
         await OpenSettingsAsync();
-        await Page.Locator("[data-settings-step-17] select").SelectOptionAsync("de");
+        await Page.Locator("[data-settings-step-18] select").SelectOptionAsync("de");
         await Expect(Page.Locator("[data-main-step-3]")).ToHaveAttributeAsync("aria-label", "Notizen"); // wait for IndexedDB write before reload
 
         await Page.ReloadAsync();
@@ -64,7 +64,7 @@ public class SettingsPersistenceTests : BaseTest
 
         // Reset to English to avoid affecting subsequent tests
         await OpenSettingsAsync();
-        await Page.Locator("[data-settings-step-17] select").SelectOptionAsync("en");
+        await Page.Locator("[data-settings-step-18] select").SelectOptionAsync("en");
     }
 
     [Test]

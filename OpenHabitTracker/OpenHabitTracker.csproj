@@ -9,6 +9,7 @@
   <ItemGroup>
     <InternalsVisibleTo Include="OpenHabitTracker.Blazor" />
     <InternalsVisibleTo Include="OpenHabitTracker.UnitTests" />
+    <InternalsVisibleTo Include="OpenHabitTracker.EndToEndTests" />
   </ItemGroup>
 
   <ItemGroup>

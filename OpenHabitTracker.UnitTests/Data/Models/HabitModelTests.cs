@@ -840,4 +840,127 @@ public class HabitModelTests
 
         Assert.That(habit.TargetQuantity, Is.EqualTo(1));
     }
+
+    [Test]
+    public void AllStreaks_NoCompletions_IsEmpty()
+    {
+        HabitModel habit = new() { RepeatCount = 1, RepeatInterval = 1, RepeatPeriod = Period.Day, TimesDone = [] };
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.AllStreaks, Is.Empty);
+    }
+
+    [Test]
+    public void AllStreaks_Daily_CollectsEveryRunLongestFirst()
+    {
+        DateTime today = DateTime.Today;
+
+        // A run of 3, a gap, then a run of 2 ending today.
+        HabitModel habit = new()
+        {
+            RepeatCount = 1,
+            RepeatInterval = 1,
+            RepeatPeriod = Period.Day,
+            TimesDone =
+            [
+                new TimeModel { StartedAt = today.AddDays(-8).AddHours(8), CompletedAt = today.AddDays(-8).AddHours(8) },
+                new TimeModel { StartedAt = today.AddDays(-7).AddHours(8), CompletedAt = today.AddDays(-7).AddHours(8) },
+                new TimeModel { StartedAt = today.AddDays(-6).AddHours(8), CompletedAt = today.AddDays(-6).AddHours(8) },
+                new TimeModel { StartedAt = today.AddDays(-1).AddHours(8), CompletedAt = today.AddDays(-1).AddHours(8) },
+                new TimeModel { StartedAt = today.AddHours(8), CompletedAt = today.AddHours(8) }
+            ]
+        };
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.AllStreaks.Select(x => x.Count), Is.EqualTo(new[] { 3, 2 }));
+            Assert.That(habit.BestStreak!.Count, Is.EqualTo(3));
+            Assert.That(habit.AllStreaks[0], Is.SameAs(habit.BestStreak));
+        });
+    }
+
+    [Test]
+    public void AllStreaks_Daily_RunBoundariesAreRealCompletionDates()
+    {
+        DateTime today = DateTime.Today;
+
+        HabitModel habit = new()
+        {
+            RepeatCount = 1,
+            RepeatInterval = 1,
+            RepeatPeriod = Period.Day,
+            TimesDone =
+            [
+                new TimeModel { StartedAt = today.AddDays(-5).AddHours(8), CompletedAt = today.AddDays(-5).AddHours(8) },
+                new TimeModel { StartedAt = today.AddDays(-4).AddHours(9), CompletedAt = today.AddDays(-4).AddHours(9) }
+            ]
+        };
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.AllStreaks, Has.Count.EqualTo(1));
+            Assert.That(habit.AllStreaks[0].From, Is.EqualTo(today.AddDays(-5).AddHours(8)));
+            Assert.That(habit.AllStreaks[0].To, Is.EqualTo(today.AddDays(-4).AddHours(9)));
+        });
+    }
+
+    [Test]
+    public void AllStreaks_GapBased_CollectsEveryRunLongestFirst()
+    {
+        DateTime today = DateTime.Today;
+
+        // Interval of 2 days: three completions two days apart, a long gap, then two more.
+        HabitModel habit = new()
+        {
+            RepeatCount = 1,
+            RepeatInterval = 2,
+            RepeatPeriod = Period.Day,
+            TimesDone =
+            [
+                new TimeModel { StartedAt = today.AddDays(-20), CompletedAt = today.AddDays(-20) },
+                new TimeModel { StartedAt = today.AddDays(-18), CompletedAt = today.AddDays(-18) },
+                new TimeModel { StartedAt = today.AddDays(-16), CompletedAt = today.AddDays(-16) },
+                new TimeModel { StartedAt = today.AddDays(-2), CompletedAt = today.AddDays(-2) },
+                new TimeModel { StartedAt = today, CompletedAt = today }
+            ]
+        };
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.That(habit.AllStreaks.Select(x => x.Count), Is.EqualTo(new[] { 3, 2 }));
+    }
+
+    [Test]
+    public void AllStreaks_TiedRuns_KeepChronologicalOrderSoBestStreakIsTheEarliest()
+    {
+        DateTime today = DateTime.Today;
+
+        // Two runs of 2, separated by a gap.
+        HabitModel habit = new()
+        {
+            RepeatCount = 1,
+            RepeatInterval = 1,
+            RepeatPeriod = Period.Day,
+            TimesDone =
+            [
+                new TimeModel { StartedAt = today.AddDays(-10).AddHours(8), CompletedAt = today.AddDays(-10).AddHours(8) },
+                new TimeModel { StartedAt = today.AddDays(-9).AddHours(8), CompletedAt = today.AddDays(-9).AddHours(8) },
+                new TimeModel { StartedAt = today.AddDays(-1).AddHours(8), CompletedAt = today.AddDays(-1).AddHours(8) },
+                new TimeModel { StartedAt = today.AddHours(8), CompletedAt = today.AddHours(8) }
+            ]
+        };
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.AllStreaks.Select(x => x.Count), Is.EqualTo(new[] { 2, 2 }));
+            Assert.That(habit.BestStreak!.From, Is.EqualTo(today.AddDays(-10).AddHours(8)));
+        });
+    }
 }

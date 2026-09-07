@@ -18,6 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Only for the seed generator in Screenshot/SeedData.cs, which shares the deterministic
+         jitter with the debug examples. The tests themselves drive the deployed app over HTTP. -->
+    <ProjectReference Include="..\OpenHabitTracker\OpenHabitTracker.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Microsoft.Playwright" />
     <Using Include="Microsoft.Playwright.NUnit" />
     <Using Include="NUnit.Framework" />

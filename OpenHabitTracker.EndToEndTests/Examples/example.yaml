@@ -17,6 +17,7 @@ Settings:
   ShowSmallCalendar: true
   ShowLargeCalendar: true
   ShowHabitStatistics: false
+  ShowHabitCharts: false
   ShowCategory: true
   ShowColor: true
   ShowCreatedUpdated: false

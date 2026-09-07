@@ -42,6 +42,8 @@ public class SettingsEntity
 
     public bool ShowHabitStatistics { get; set; } = false;
 
+    public bool ShowHabitCharts { get; set; } = false;
+
     public bool ShowCategory { get; set; } = true;
 
     public bool ShowColor { get; set; } = true;

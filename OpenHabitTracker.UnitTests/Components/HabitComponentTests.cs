@@ -117,6 +117,50 @@ public class HabitComponentTests
     // --- Streak block tests ---
 
     [Test]
+    public void Charts_WhenShowHabitChartsFalse_AreNotRendered()
+    {
+        // ShowHabitCharts is already false in SetUp
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        Assert.That(cut.FindAll("[data-habits-step-27]"), Is.Empty);
+    }
+
+    [Test]
+    public void Charts_WhenShowHabitChartsTrue_RenderAllFivePanels()
+    {
+        _clientState.Settings.ShowHabitCharts = true;
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.FindAll("[data-habits-step-27]"), Has.Count.EqualTo(1));
+            Assert.That(cut.FindAll("[data-habits-step-28]"), Has.Count.EqualTo(1));
+            Assert.That(cut.FindAll("[data-habits-step-29]"), Has.Count.EqualTo(1));
+            Assert.That(cut.FindAll("[data-habits-step-30]"), Has.Count.EqualTo(1));
+            Assert.That(cut.FindAll("[data-habits-step-31]"), Has.Count.EqualTo(1));
+        });
+    }
+
+    [Test]
+    public void Charts_AreIndependentOfShowHabitStatistics()
+    {
+        _clientState.Settings.ShowHabitCharts = true;
+        _clientState.Settings.ShowHabitStatistics = false;
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.FindAll("[data-habits-step-27]"), Has.Count.EqualTo(1));
+            Assert.That(cut.FindAll("[data-habits-step-20]"), Is.Empty);
+        });
+    }
+
+    [Test]
     public void StreakBlock_WhenShowHabitStatisticsTrue_RendersCurrentStreakLabel()
     {
         _clientState.Settings.ShowHabitStatistics = true;

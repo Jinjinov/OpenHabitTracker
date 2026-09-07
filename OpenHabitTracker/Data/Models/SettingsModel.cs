@@ -42,6 +42,8 @@ public class SettingsModel
 
     public bool ShowHabitStatistics { get; set; } = false;
 
+    public bool ShowHabitCharts { get; set; } = false;
+
     public bool ShowCategory { get; set; } = true;
 
     public bool ShowColor { get; set; } = true;
@@ -160,6 +162,7 @@ public class SettingsModel
             MaxSmallCalendarDays = 0,
             ShowLargeCalendar = true,
             ShowHabitStatistics = false,
+            ShowHabitCharts = false,
             ShowCategory = true,
             ShowColor = true,
             ShowCreatedUpdated = false,

@@ -163,6 +163,16 @@ html, body {
     }
 }
 
+/* HABIT CHART PANELS */
+
+/* The granularity select is transparent so it does not fight the panel it sits in, but the option
+   popup is drawn by the platform and inherits nothing - without explicit colors dark mode gets
+   dark text on a white list. Chromium and Firefox honor this; Safari ignores it and uses its own. */
+.chart-period-select option {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+
 /* SPINNER */
 
 .spinner-container {

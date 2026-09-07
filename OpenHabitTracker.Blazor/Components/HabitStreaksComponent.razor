@@ -1,0 +1,55 @@
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Data.Statistics
+
+@inject IStringLocalizer Loc
+
+<div class="px-1 border rounded-0">
+    <div class="fw-bold">@Loc["Best streaks"]</div>
+
+    <div class="py-3">
+
+        @if (_streaks.Count == 0)
+        {
+            <small>@Loc["Nothing to show yet"]</small>
+        }
+        else
+        {
+            @* Left aligned rather than centred: two similar lengths are hard to compare from the middle out.
+               One color, because the length is already the length. *@
+            foreach (Streak streak in _streaks)
+            {
+                <div class="d-flex align-items-center gap-1 my-1" @key="streak">
+                    <small class="text-nowrap" style="width: 5.5rem;">@streak.From.ToShortDateString()</small>
+
+                    <div class="flex-grow-1 bg-body-secondary border position-relative" style="height: 18px;">
+                        <div class="bg-primary" style="width: @ChartCss.Pct(_max > 0 ? (double)streak.Count / _max : 0)%; height: 100%; opacity: 0.55;"></div>
+                        <small class="position-absolute top-0 start-0 end-0 text-center text-nowrap" style="font-size: 0.7rem; line-height: 18px;">@streak.Count @Loc[HabitStatistics.GetStreakUnitKey(Habit.RepeatPeriod, streak.Count)]</small>
+                    </div>
+
+                    <small class="text-nowrap" style="width: 5.5rem;">@streak.To.ToShortDateString()</small>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public HabitModel Habit { get; set; } = null!;
+
+    const int _maxRows = 10;
+
+    List<Streak> _streaks = new();
+    int _max;
+
+    protected override void OnParametersSet()
+    {
+        // The ten longest runs, listed newest first: sorting the list by length as well makes the
+        // dates jump around, and the dates are what place a streak in your own history.
+        _streaks = Habit.AllStreaks.Take(_maxRows).OrderByDescending(x => x.From).ToList();
+        _max = _streaks.Count == 0 ? 0 : _streaks.Max(x => x.Count);
+    }
+}

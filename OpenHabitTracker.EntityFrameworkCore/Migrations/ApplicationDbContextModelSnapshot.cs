@@ -223,6 +223,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                     b.Property<bool>("ShowGroupedByCategory")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("ShowHabitCharts")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("ShowHabitStatistics")
                         .HasColumnType("INTEGER");
 

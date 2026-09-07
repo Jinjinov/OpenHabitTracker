@@ -1,4 +1,5 @@
 using System.Text.Json;
+using OpenHabitTracker.App;
 
 namespace OpenHabitTracker.EndToEndTests.Screenshot;
 
@@ -17,20 +18,9 @@ public static class SeedData
     private static object Item(string title, double? doneDaysAgo = null) =>
         new { Title = title, DoneAt = doneDaysAgo is null ? null : Date(doneDaysAgo.Value) };
 
-    // Deterministic jitter - a rerun reproduces the set, but no two completions are identical.
-    // Nobody drinks exactly eight glasses or practises for exactly thirty minutes every single day.
-    // It has to be a hash and not arithmetic on the day, in both directions:
-    // a bare multiply-and-mod repeats one value for every day whenever the modulus divides the
-    // multiplier (which is how a 45 minute habit came out at exactly 53 minutes in every session),
-    // and a single shift still leaves consecutive days in runs of the same value on small moduli.
-    private static int Spread(double daysAgo, int salt, int modulus)
-    {
-        ulong hash = (ulong)((long)(daysAgo * 16) + salt * 7919L) * 0x9E3779B97F4A7C15UL;
-        hash ^= hash >> 29;
-        hash *= 0xBF58476D1CE4E5B9UL;
-        hash ^= hash >> 32;
-        return (int)(hash % (ulong)modulus);
-    }
+    // The deterministic jitter lives in ExampleData in the core project, shared with the debug
+    // examples so the two generators cannot drift on it. A rerun reproduces the set exactly.
+    private static int Spread(double daysAgo, int salt, int modulus) => ExampleData.Spread(daysAgo, salt, modulus);
 
     // A completion is never allowed into the future. The app itself refuses to record one, and a
     // habit whose last completion is ahead of the clock renders a negative elapsed time in the list

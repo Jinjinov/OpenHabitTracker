@@ -1,0 +1,95 @@
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Data.Statistics
+
+@inject ClientState ClientState
+@inject IStringLocalizer Loc
+
+<div class="px-1 border rounded-0">
+    <div class="fw-bold">@Loc["Frequency"]</div>
+
+    <div class="py-3">
+
+        @* A real table, not a grid of dots: the dot is decoration and every cell carries its number as text,
+           so this is readable without seeing relative circle areas. *@
+        <div style="overflow-x: auto;">
+            <table class="mx-auto" style="width: max-content; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        @foreach (DateTime month in _months)
+                        {
+                            <th scope="col" class="fw-normal text-center p-0" style="width: 28px;" @key="month">
+                                <small style="font-size: 0.65rem;">@month.ToString("MMM")</small>
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int row = 0; row < 7; row++)
+                    {
+                        DayOfWeek dayOfWeek = (DayOfWeek)(((int)ClientState.Settings.FirstDayOfWeek + row) % 7);
+
+                        <tr>
+                            <th scope="row" class="fw-normal p-0 pe-1">
+                                <small style="font-size: 0.65rem;">@Loc[_days[(int)dayOfWeek]]</small>
+                            </th>
+
+                            @foreach (DateTime month in _months)
+                            {
+                                double value = Value(month, dayOfWeek);
+                                double size = Size(value);
+
+                                @* position-relative is load bearing: .visually-hidden is position: absolute,
+                                   and with no positioned ancestor all of these spans resolve against a
+                                   containing block far up the tree and stretch the page into a scrollbar.
+                                   Making the cell the containing block keeps each one inside its own cell. *@
+                                <td class="text-center align-middle p-0 position-relative" style="height: 24px;" @key="month">
+                                    @if (size > 0)
+                                    {
+                                        <span class="d-inline-block rounded-circle bg-primary align-middle" style="width: @ChartCss.Px(size)px; height: @ChartCss.Px(size)px;" aria-hidden="true"></span>
+                                    }
+                                    <span class="visually-hidden">@month.ToString("MMMM") @Loc[_days[(int)dayOfWeek]] @HabitStatistics.Format(Habit, value)</span>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public HabitModel Habit { get; set; } = null!;
+
+    const double _maxDot = 18;
+
+    readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
+
+    List<FrequencyCell> _cells = new();
+    List<DateTime> _months = new();
+    double _max;
+
+    protected override void OnParametersSet()
+    {
+        _cells = HabitStatistics.GetFrequency(Habit, ClientState.Settings.FirstDayOfWeek, DateTime.Now);
+        _months = _cells.Select(x => x.Month).Distinct().ToList();
+        _max = _cells.Count == 0 ? 0 : _cells.Max(x => x.Value);
+    }
+
+    double Value(DateTime month, DayOfWeek dayOfWeek) =>
+        _cells.FirstOrDefault(x => x.Month == month && x.DayOfWeek == dayOfWeek)?.Value ?? 0;
+
+    // Area, not diameter, carries the value, so the square root is the honest scale.
+    double Size(double value)
+    {
+        if (value <= 0 || _max <= 0)
+            return 0;
+
+        return Math.Max(4, _maxDot * Math.Sqrt(value / _max));
+    }
+}

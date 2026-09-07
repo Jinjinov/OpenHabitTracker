@@ -1,0 +1,79 @@
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Data.Statistics
+
+@inject ClientState ClientState
+@inject IStringLocalizer Loc
+
+<div class="px-1 border rounded-0">
+    <div class="fw-bold">@Loc["Target"]</div>
+
+    <div class="py-3">
+
+        @foreach (TargetRow row in _rows)
+        {
+            <div class="d-flex align-items-center gap-2 my-1">
+                @* 4.5rem, checked against the longest of the five labels in all 20 languages:
+                   Croatian "Tromjesečje", Serbian "Tromesečje", French "Aujourd'hui". *@
+                <small class="text-nowrap" style="width: 4.5rem;">@Loc[PeriodLabel(row.Period)]</small>
+
+                @if (row.Target is null)
+                {
+                    <small class="flex-grow-1">@HabitStatistics.Format(Habit, row.Actual)</small>
+                }
+                else
+                {
+                    @* Green means past the target and nothing else - the same thing it means in History.
+                       Being ahead of schedule is a marker, not a colour, so a window that is exactly
+                       met never reads as a surplus.
+                       The value sits inside the bar rather than after it, so a wide number cannot
+                       shorten the bar and every row ends at the same place. *@
+                    <div class="d-flex flex-grow-1 bg-body-secondary border position-relative" style="height: 20px;" role="img" aria-label="@RowAriaLabel(row)">
+                        <div class="@(IsOverTarget(row) ? "bg-success" : "bg-primary")" style="width: @ChartCss.Pct(Math.Min(row.Fraction, 1))%; opacity: 0.55;"></div>
+
+                        @* Where the window would be if it were exactly on pace.
+                           Only for habits that repeat daily, and never on the Today row:
+                           a daily target done at any hour is simply done, and for a habit that
+                           repeats monthly the marker says nothing anyone can act on. *@
+                        @if (Habit.RepeatPeriod == Period.Day && row.Period != StatisticsPeriod.Day && row.Pace is > 0 and < 1)
+                        {
+                            <div class="position-absolute top-0 bottom-0 border-start border-2" style="left: @ChartCss.Pct(row.Pace)%;"></div>
+                        }
+
+                        <small class="position-absolute top-0 start-0 end-0 text-center text-nowrap" style="font-size: 0.75rem; line-height: 20px;">@Loc["Value of target", HabitStatistics.Format(Habit, row.Actual), HabitStatistics.Format(Habit, row.Target.Value)]</small>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public HabitModel Habit { get; set; } = null!;
+
+    List<TargetRow> _rows = new();
+
+    protected override void OnParametersSet()
+    {
+        _rows = HabitStatistics.GetTargetRows(Habit, ClientState.Settings.FirstDayOfWeek, DateTime.Now);
+    }
+
+    // Strictly past the target, so a window that lands exactly on it is not painted as a surplus.
+    bool IsOverTarget(TargetRow row) => row.Fraction > 1.0001;
+
+    string PeriodLabel(StatisticsPeriod period) => period switch
+    {
+        StatisticsPeriod.Day => "Today",
+        StatisticsPeriod.Week => "Week",
+        StatisticsPeriod.Month => "Month",
+        StatisticsPeriod.Quarter => "Quarter",
+        StatisticsPeriod.Year => "Year",
+        _ => ""
+    };
+
+    string RowAriaLabel(TargetRow row) =>
+        $"{Loc[PeriodLabel(row.Period)]}: {Loc["Value of target", HabitStatistics.Format(Habit, row.Actual), HabitStatistics.Format(Habit, row.Target!.Value)]}";
+}

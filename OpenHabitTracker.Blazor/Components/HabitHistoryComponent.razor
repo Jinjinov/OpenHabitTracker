@@ -1,0 +1,160 @@
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Data.Statistics
+
+@inject ClientState ClientState
+@inject IStringLocalizer Loc
+@inject IJsInterop JsInterop
+
+<div class="px-1 border rounded-0">
+    <div class="d-flex align-items-center gap-2">
+        <span class="fw-bold flex-grow-1">@Loc["History"]</span>
+
+        <InputSelect class="form-select form-select-sm w-auto bg-transparent border-0 chart-period-select" aria-label="@Loc["History"]" Value="_period" ValueExpression="() => _period" TValue="StatisticsPeriod" ValueChanged="OnPeriodChanged">
+            @foreach (StatisticsPeriod period in Enum.GetValues<StatisticsPeriod>())
+            {
+                <option value="@period">@Loc[period.ToString()]</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="py-3">
+
+        @* The frame is drawn whether or not there is data in it: an empty plot reads as a chart with
+           nothing in it, where a line of text reads as something broken. *@
+        <div style="overflow-x: auto;" @ref="_scrollRef">
+            <div class="d-flex" style="min-width: 100%;">
+                @for (int index = 0; index < _buckets.Count; index++)
+                {
+                    HistoryBucket bucket = _buckets[index];
+
+                    double total = _max > 0 ? bucket.Value / _max * _chartHeight : 0;
+                    double reached = bucket.Expected is > 0 ? Math.Min(bucket.Value, bucket.Expected.Value) / Math.Max(_max, 0.000001) * _chartHeight : total;
+                    double surplus = Math.Max(0, total - reached);
+
+                    <div style="flex: 1 0 24px;" role="img" aria-label="@BucketAriaLabel(bucket)">
+                        @* The value label is the top of the bar, not a fixed row above the plot, so it
+                           stays with its bar instead of floating high above a short one.
+                           The boundary between the two segments is where the bucket met what it was asked for. *@
+                        <div class="d-flex flex-column justify-content-end align-items-center" style="height: @(_chartHeight)px;">
+                            @if (bucket.Value > 0)
+                            {
+                                <small class="text-nowrap" style="font-size: 0.6rem; line-height: 1.1;">@HabitStatistics.Format(Habit, bucket.Value)</small>
+                            }
+                            <div class="bg-success" style="width: 14px; height: @ChartCss.Px(surplus)px; opacity: 0.55;"></div>
+                            <div class="bg-primary" style="width: 14px; height: @ChartCss.Px(reached)px; opacity: 0.55;"></div>
+                        </div>
+
+                        @* Day, then month only where a month begins, then year: a name in every column
+                           would eat the width it is meant to describe.
+                           Every line keeps its height so the axis stays level across the columns. *@
+                        @if (_period is StatisticsPeriod.Day or StatisticsPeriod.Week)
+                        {
+                            <small class="d-block text-nowrap text-center" style="font-size: 0.65rem; height: 0.9rem; line-height: 0.9rem;">@bucket.Start.Day</small>
+                        }
+                        <small class="d-block text-nowrap text-center" style="font-size: 0.65rem; height: 0.9rem; line-height: 0.9rem;">@AxisMonth(bucket, index)</small>
+                        <small class="d-block text-nowrap text-center" style="font-size: 0.6rem; height: 0.75rem; line-height: 0.75rem;">@AxisYear(bucket, index)</small>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public HabitModel Habit { get; set; } = null!;
+
+    const int _chartHeight = 120;
+
+    StatisticsPeriod _period;
+    bool _periodPicked;
+    List<HistoryBucket> _buckets = new();
+    double _max;
+
+    ElementReference _scrollRef;
+    bool _scrollToEnd;
+
+    protected override void OnParametersSet()
+    {
+        // Opens on the granularity the habit itself repeats at, so a habit done three times a day
+        // does not open on month bars and a monthly one does not open on a wall of empty days.
+        if (!_periodPicked)
+            _period = HabitStatistics.FromRepeatPeriod(Habit.RepeatPeriod);
+
+        Refresh();
+    }
+
+    void OnPeriodChanged(StatisticsPeriod period)
+    {
+        _period = period;
+        _periodPicked = true;
+
+        Refresh();
+    }
+
+    void Refresh()
+    {
+        _buckets = HabitStatistics.GetHistory(Habit, _period, ClientState.Settings.FirstDayOfWeek, DateTime.Now);
+        _max = _buckets.Count == 0 ? 0 : _buckets.Max(x => x.Value);
+        _scrollToEnd = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Newest is on the right, so the useful end is the one the user should be looking at.
+        if (_scrollToEnd && _buckets.Count > 0 && _scrollRef.Id is not null)
+        {
+            _scrollToEnd = false;
+            await JsInterop.SetElementProperty(_scrollRef, "scrollLeft", 999999);
+        }
+    }
+
+    // The month a bucket is labelled with, or nothing when it does not begin one.
+    // The leftmost bucket is always labelled so the axis never starts nameless.
+    DateTime? LabelledMonth(HistoryBucket bucket, int index)
+    {
+        if (_period is StatisticsPeriod.Month or StatisticsPeriod.Quarter)
+            return bucket.Start;
+
+        if (_period == StatisticsPeriod.Day)
+            return bucket.Start.Day == 1 || index == 0 ? bucket.Start : null;
+
+        if (_period == StatisticsPeriod.Week)
+        {
+            for (int day = 0; day < 7; day++)
+            {
+                if (bucket.Start.AddDays(day).Day == 1)
+                    return bucket.Start.AddDays(day);
+            }
+
+            return index == 0 ? bucket.Start : null;
+        }
+
+        return null;
+    }
+
+    string AxisMonth(HistoryBucket bucket, int index) =>
+        _period == StatisticsPeriod.Year ? "" : LabelledMonth(bucket, index)?.ToString("MMM") ?? "";
+
+    string AxisYear(HistoryBucket bucket, int index)
+    {
+        if (_period == StatisticsPeriod.Year)
+            return bucket.Start.ToString("yyyy");
+
+        DateTime? labelled = LabelledMonth(bucket, index);
+
+        return labelled is { Month: 1 } || (index == 0 && labelled is not null) ? labelled.Value.ToString("yyyy") : "";
+    }
+
+    string BucketAriaLabel(HistoryBucket bucket)
+    {
+        string value = HabitStatistics.Format(Habit, bucket.Value);
+
+        return bucket.Expected is null
+            ? $"{bucket.Label}: {value}"
+            : $"{bucket.Label}: {Loc["Value of target", value, HabitStatistics.Format(Habit, bucket.Expected.Value)]}";
+    }
+}

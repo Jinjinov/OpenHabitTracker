@@ -3,7 +3,7 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.App;
 
-public class Examples(ClientState clientState, MarkdownToHtml markdownToHtml)
+public partial class Examples(ClientState clientState, MarkdownToHtml markdownToHtml)
 {
     private readonly ClientState _clientState = clientState;
     private readonly MarkdownToHtml _markdownToHtml = markdownToHtml;
@@ -339,7 +339,13 @@ public class Examples(ClientState clientState, MarkdownToHtml markdownToHtml)
     {
         SettingsModel settings = SettingsModel.GetDefaultSettings(user.Id);
 
+        // Debug builds load a year of habit history on top of the same set - the release examples
+        // are two days deep, which leaves every chart, streak and statistic empty to develop against.
+#if DEBUG
+        UserImportExportData userData = GetDebugExamples(user, settings);
+#else
         UserImportExportData userData = GetExamples(user, settings);
+#endif
 
         await _clientState.SetUserData(userData);
     }

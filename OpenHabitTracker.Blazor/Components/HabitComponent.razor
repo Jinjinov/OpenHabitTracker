@@ -2,6 +2,7 @@
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Data.Statistics
 @using OpenHabitTracker.Services
 
 @implements IDisposable
@@ -173,9 +174,29 @@
         }
     }
 
+    @* Independent of ShowHabitStatistics on purpose: both blocks can be on, both off, or either alone. *@
+    @if (ClientState.Settings.ShowHabitCharts)
+    {
+        <div data-habits-step-27>
+            <HabitTargetComponent Habit="Habit" />
+        </div>
+        <div data-habits-step-28>
+            <HabitHistoryComponent Habit="Habit" />
+        </div>
+        <div data-habits-step-29>
+            <HabitYearCalendarComponent Habit="Habit" />
+        </div>
+        <div data-habits-step-30>
+            <HabitStreaksComponent Habit="Habit" />
+        </div>
+        <div data-habits-step-31>
+            <HabitFrequencyComponent Habit="Habit" />
+        </div>
+    }
+
     @if (ClientState.Settings.ShowCategory)
     {
-        <div class="input-group flex-nowrap" data-habits-step-27>
+        <div class="input-group flex-nowrap" data-habits-step-32>
             <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
             <CategoryComponent Model="Habit" OnChange="SaveModel" />
         </div>
@@ -183,7 +204,7 @@
 
     @if (ClientState.Settings.ShowColor)
     {
-        <div class="input-group flex-nowrap" data-habits-step-28>
+        <div class="input-group flex-nowrap" data-habits-step-33>
             <span class="input-group-text bg-transparent col-4">@Loc["Color"]</span>
             <ColorComponent Model="Habit" OnChange="SaveModel" />
         </div>
@@ -191,7 +212,7 @@
 
     @if (ClientState.Settings.ShowCreatedUpdated)
     {
-        <div class="p-1 border rounded-0" data-habits-step-29>
+        <div class="p-1 border rounded-0" data-habits-step-34>
             <small class="d-inline-block mx-1">@Loc["Created"]: @Habit.CreatedAt</small>
             <small class="d-inline-block mx-1">@Loc["Updated"]: @Habit.UpdatedAt</small>
         </div>
@@ -421,14 +442,7 @@
         _showQuantityModal = false;
     }
 
-    string StreakUnit(int count) => Habit.RepeatPeriod switch
-    {
-        Period.Day => count == 1 ? Loc["Day"] : Loc["Days"],
-        Period.Week => count == 1 ? Loc["Week"] : Loc["Weeks"],
-        Period.Month => count == 1 ? Loc["Month"] : Loc["Months"],
-        Period.Year => count == 1 ? Loc["Year"] : Loc["Years"],
-        _ => ""
-    };
+    string StreakUnit(int count) => Loc[HabitStatistics.GetStreakUnitKey(Habit.RepeatPeriod, count)];
 
     string ToReadableString(TimeSpan span)
     {
