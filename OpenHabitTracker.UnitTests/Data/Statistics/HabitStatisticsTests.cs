@@ -356,15 +356,70 @@ public class HabitStatisticsTests
     }
 
     [Test]
-    public void GetTargetRows_Pace_IsFractionOfWindowElapsed()
+    public void GetTargetRows_Pace_CountsWholePeriodsAskedForSoFar()
     {
         HabitModel habit = Habit();
 
-        // Wednesday noon is 2.5 of 7 days into a Monday-first week.
+        // Wednesday is the third day of a Monday-first week, so the week has asked for 3 of 7 -
+        // not the 2.5 of 7 that the clock has actually run through.
         TargetRow week = HabitStatistics.GetTargetRows(habit, DayOfWeek.Monday, new DateTime(2026, 3, 4, 12, 0, 0))
             .Single(r => r.Period == StatisticsPeriod.Week);
 
-        Assert.That(week.Pace, Is.EqualTo(2.5 / 7.0).Within(0.0001));
+        Assert.That(week.Pace, Is.EqualTo(3.0 / 7.0).Within(0.0001));
+    }
+
+    [Test]
+    public void GetTargetRows_Pace_MonthlyHabitInAQuarter_AsksForOnePerMonthStarted()
+    {
+        HabitModel monthly = Habit(DisplayMetric.Repetitions, repeatCount: 1, repeatInterval: 1, repeatPeriod: Period.Month);
+
+        double July = HabitStatistics.GetTargetRows(monthly, DayOfWeek.Monday, new DateTime(2026, 7, 20))
+            .Single(r => r.Period == StatisticsPeriod.Quarter).Pace;
+        double August = HabitStatistics.GetTargetRows(monthly, DayOfWeek.Monday, new DateTime(2026, 8, 20))
+            .Single(r => r.Period == StatisticsPeriod.Quarter).Pace;
+        double September = HabitStatistics.GetTargetRows(monthly, DayOfWeek.Monday, new DateTime(2026, 9, 7))
+            .Single(r => r.Period == StatisticsPeriod.Quarter).Pace;
+
+        // 1 of 3, 2 of 3, 3 of 3 - so three completions by September is exactly on the mark,
+        // and only a fourth would be a surplus.
+        Assert.Multiple(() =>
+        {
+            Assert.That(July, Is.EqualTo(1 / 3.0).Within(0.0001));
+            Assert.That(August, Is.EqualTo(2 / 3.0).Within(0.0001));
+            Assert.That(September, Is.EqualTo(1).Within(0.0001));
+        });
+    }
+
+    [Test]
+    public void GetTargetRows_Periods_CountTheHabitOwnRepeatPeriodsInEachWindow()
+    {
+        // Pace is only shown above 2 periods, so these are the numbers that decide it:
+        // a monthly habit gets no pace in Month, and does in Quarter and Year.
+        HabitModel monthly = Habit(DisplayMetric.Repetitions, repeatCount: 1, repeatInterval: 1, repeatPeriod: Period.Month);
+
+        List<TargetRow> rows = HabitStatistics.GetTargetRows(monthly, DayOfWeek.Monday, new DateTime(2026, 9, 7, 12, 0, 0));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(rows.Single(r => r.Period == StatisticsPeriod.Month).Periods, Is.EqualTo(1).Within(0.0001));
+            Assert.That(rows.Single(r => r.Period == StatisticsPeriod.Quarter).Periods, Is.EqualTo(3).Within(0.0001));
+            Assert.That(rows.Single(r => r.Period == StatisticsPeriod.Year).Periods, Is.EqualTo(12).Within(0.0001));
+        });
+    }
+
+    [Test]
+    public void GetTargetRows_Periods_FollowTheRepeatInterval()
+    {
+        // Every second day: a week spans three and a half of those, a day only half of one.
+        HabitModel everyTwoDays = Habit(DisplayMetric.Repetitions, repeatCount: 1, repeatInterval: 2, repeatPeriod: Period.Day);
+
+        List<TargetRow> rows = HabitStatistics.GetTargetRows(everyTwoDays, DayOfWeek.Monday, new DateTime(2026, 9, 7, 12, 0, 0));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(rows.Single(r => r.Period == StatisticsPeriod.Day).Periods, Is.EqualTo(0.5).Within(0.0001));
+            Assert.That(rows.Single(r => r.Period == StatisticsPeriod.Week).Periods, Is.EqualTo(3.5).Within(0.0001));
+        });
     }
 
     [Test]

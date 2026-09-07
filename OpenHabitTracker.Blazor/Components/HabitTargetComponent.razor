@@ -30,16 +30,11 @@
                        The value sits inside the bar rather than after it, so a wide number cannot
                        shorten the bar and every row ends at the same place. *@
                     <div class="d-flex flex-grow-1 bg-body-secondary border position-relative" style="height: 20px;" role="img" aria-label="@RowAriaLabel(row)">
-                        <div class="@(IsOverTarget(row) ? "bg-success" : "bg-primary")" style="width: @ChartCss.Pct(Math.Min(row.Fraction, 1))%; opacity: 0.55;"></div>
-
-                        @* Where the window would be if it were exactly on pace.
-                           Only for habits that repeat daily, and never on the Today row:
-                           a daily target done at any hour is simply done, and for a habit that
-                           repeats monthly the marker says nothing anyone can act on. *@
-                        @if (Habit.RepeatPeriod == Period.Day && row.Period != StatisticsPeriod.Day && row.Pace is > 0 and < 1)
-                        {
-                            <div class="position-absolute top-0 bottom-0 border-start border-2" style="left: @ChartCss.Pct(row.Pace)%;"></div>
-                        }
+                        @* Green is whatever went past what the window has asked for so far, and the
+                           boundary between the two colours is that ask. Landing exactly on it - three
+                           of three in September - is not a surplus and stays plain. *@
+                        <div class="bg-primary" style="width: @ChartCss.Pct(Reached(row))%; opacity: 0.55;"></div>
+                        <div class="bg-success" style="width: @ChartCss.Pct(Ahead(row))%; opacity: 0.55;"></div>
 
                         <small class="position-absolute top-0 start-0 end-0 text-center text-nowrap" style="font-size: 0.75rem; line-height: 20px;">@Loc["Value of target", HabitStatistics.Format(Habit, row.Actual), HabitStatistics.Format(Habit, row.Target.Value)]</small>
                     </div>
@@ -61,8 +56,23 @@
         _rows = HabitStatistics.GetTargetRows(Habit, ClientState.Settings.FirstDayOfWeek, DateTime.Now);
     }
 
-    // Strictly past the target, so a window that lands exactly on it is not painted as a surplus.
-    bool IsOverTarget(TargetRow row) => row.Fraction > 1.0001;
+    // Pace only says something when the window spans more than one of the habit repeat periods.
+    // One period is done or not done, so marking a fraction of it is a fraction of a yes or no:
+    // a monthly habit gets no pace in the Month row, but does in Quarter and Year, where being
+    // two of three months in is a real position to be in.
+    bool ShowsPace(TargetRow row) => row.Periods >= 2;
+
+    // What the window has asked for so far, as a share of its whole target: the pace where that
+    // means something, the whole target where it does not.
+    double Asked(TargetRow row) => ShowsPace(row) ? row.Pace : 1;
+
+    // Going over fills the bar and pushes the boundary left rather than painting everything green,
+    // so four of three reads as three quarters plain and a quarter over.
+    double Scale(TargetRow row) => Math.Max(1, row.Fraction);
+
+    double Reached(TargetRow row) => Math.Min(row.Fraction, Asked(row)) / Scale(row);
+
+    double Ahead(TargetRow row) => Math.Max(0, row.Fraction - Asked(row)) / Scale(row);
 
     string PeriodLabel(StatisticsPeriod period) => period switch
     {

@@ -124,15 +124,22 @@ public static class HabitStatistics
             DateTime start = GetBucketStart(now, period, firstDayOfWeek);
             DateTime end = GetNextBucketStart(start, period);
 
-            double windowDays = (end - start).TotalDays;
-            double elapsedDays = Math.Clamp((now - start).TotalDays, 0, windowDays);
+            int interval = Math.Max(1, habit.RepeatInterval);
+
+            double periods = GetPeriodsInRange(habit.RepeatPeriod, start, end) / interval;
+            double elapsed = GetPeriodsInRange(habit.RepeatPeriod, start, now < end ? now : end) / interval;
+
+            // The period in progress counts as asked for, so a quarter wants 1 from a monthly habit
+            // the moment July starts, not once July is over.
+            double due = Math.Min(Math.Floor(elapsed) + 1, periods);
 
             rows.Add(new TargetRow
             {
                 Period = period,
                 Actual = GetValue(habit, GetTimesInRange(habit, start, end)),
                 Target = GetExpected(habit, start, end),
-                Pace = windowDays > 0 ? elapsedDays / windowDays : 0
+                Pace = periods > 0 ? Math.Clamp(due / periods, 0, 1) : 0,
+                Periods = periods
             });
         }
 
