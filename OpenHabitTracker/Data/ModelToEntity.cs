@@ -133,6 +133,7 @@ public static class ModelToEntity
         entity.FirstDayOfWeek = model.FirstDayOfWeek;
         entity.SelectedRatio = model.SelectedRatio;
         entity.BaseUrl = model.BaseUrl;
+        entity.Username = model.Username;
         entity.RefreshToken = model.RefreshToken;
         entity.RememberMe = model.RememberMe;
         entity.ShowHelp = model.ShowHelp;

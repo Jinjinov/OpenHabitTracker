@@ -24,6 +24,9 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
     private readonly AppSettings _appSettings = options.Value;
     private readonly ApplicationDbContext _dbContext = dbContext;
 
+    // Rotated on every launch, so this is how long an unused device stays signed in.
+    private const int RefreshTokenLifetimeDays = 90;
+
     [AllowAnonymous]
     [HttpPost("jwt-token")]
     [EndpointName("GetJwtToken")]
@@ -45,11 +48,16 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
 
         TokenResponse tokenResponse = GetTokenResponse(user.UserName);
 
+        // a row per login, rotated in place and never removed otherwise
+        await _dbContext.RefreshTokens
+            .Where(rt => rt.Username == user.UserName && rt.ExpiryDate < DateTime.UtcNow)
+            .ExecuteDeleteAsync();
+
         RefreshToken refreshToken = new()
         {
             Username = user.UserName,
             Token = tokenResponse.RefreshToken,
-            ExpiryDate = DateTime.UtcNow.AddDays(7)
+            ExpiryDate = DateTime.UtcNow.AddDays(RefreshTokenLifetimeDays)
         };
 
         _dbContext.RefreshTokens.Add(refreshToken);
@@ -112,7 +120,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         TokenResponse tokenResponse = GetTokenResponse(user.UserName);
 
         storedToken.Token = tokenResponse.RefreshToken;
-        storedToken.ExpiryDate = DateTime.UtcNow.AddDays(7);
+        storedToken.ExpiryDate = DateTime.UtcNow.AddDays(RefreshTokenLifetimeDays);
 
         await _dbContext.SaveChangesAsync();
 

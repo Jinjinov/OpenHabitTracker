@@ -242,37 +242,76 @@ public class ClientStateTests
     }
 
     [Test]
-    public async Task GetUserData_DoesNotExportRefreshToken()
+    public async Task GetUserData_DoesNotExportDeviceScopedSettings()
     {
         _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>(
-            [new SettingsEntity { Id = 1, RefreshToken = "secret-token" }]));
+            [new SettingsEntity
+            {
+                Id = 1,
+                BaseUrl = "https://example.com",
+                Username = "someone",
+                RefreshToken = "secret-token",
+                RememberMe = false
+            }]));
         _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
 
         UserImportExportData result = await _sut.GetUserData();
 
-        Assert.That(result.Settings.RefreshToken, Is.Empty);
-        Assert.That(_sut.Settings.RefreshToken, Is.EqualTo("secret-token"));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Settings.BaseUrl, Is.Empty);
+            Assert.That(result.Settings.Username, Is.Empty);
+            Assert.That(result.Settings.RefreshToken, Is.Empty);
+            Assert.That(result.Settings.RememberMe, Is.True);
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Settings.BaseUrl, Is.EqualTo("https://example.com"));
+            Assert.That(_sut.Settings.Username, Is.EqualTo("someone"));
+            Assert.That(_sut.Settings.RefreshToken, Is.EqualTo("secret-token"));
+            Assert.That(_sut.Settings.RememberMe, Is.False);
+        });
     }
 
     // --- SetUserData tests ---
 
     [Test]
-    public async Task SetUserData_DoesNotOverwriteDeviceRefreshToken()
+    public async Task SetUserData_DoesNotOverwriteDeviceScopedSettings()
     {
         _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>(
-            [new SettingsEntity { Id = 1, RefreshToken = "device-token" }]));
+            [new SettingsEntity
+            {
+                Id = 1,
+                BaseUrl = "https://device.example",
+                Username = "device-user",
+                RefreshToken = "device-token",
+                RememberMe = false
+            }]));
         _dataAccess.GetSettings(Arg.Any<long>()).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = 1 }));
 
         await _sut.LoadSettings();
 
         UserImportExportData userData = new()
         {
-            Settings = new SettingsModel { RefreshToken = "stale-token-from-file" }
+            Settings = new SettingsModel
+            {
+                BaseUrl = "https://file.example",
+                Username = "user-from-file",
+                RefreshToken = "stale-token-from-file",
+                RememberMe = true
+            }
         };
 
         await _sut.SetUserData(userData);
 
-        Assert.That(_sut.Settings.RefreshToken, Is.EqualTo("device-token"));
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Settings.BaseUrl, Is.EqualTo("https://device.example"));
+            Assert.That(_sut.Settings.Username, Is.EqualTo("device-user"));
+            Assert.That(_sut.Settings.RefreshToken, Is.EqualTo("device-token"));
+            Assert.That(_sut.Settings.RememberMe, Is.False);
+        });
     }
 
     [Test]

@@ -35,6 +35,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
                 if (_clientState.Settings.RememberMe)
                 {
                     _clientState.Settings.BaseUrl = address;
+                    _clientState.Settings.Username = username;
                     _clientState.Settings.RefreshToken = tokenResponse.RefreshToken;
 
                     await _clientState.UpdateSettings();

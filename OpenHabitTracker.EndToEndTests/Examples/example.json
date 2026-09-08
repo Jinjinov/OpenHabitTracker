@@ -9,6 +9,7 @@
     "FirstDayOfWeek": 1,
     "SelectedRatio": 1,
     "BaseUrl": "",
+    "Username": "",
     "RefreshToken": "",
     "RememberMe": true,
     "ShowHelp": true,

@@ -51,6 +51,13 @@
     private string username = "";
     private string password = "";
 
+    // saved on login when Remember me is on - never the password
+    protected override void OnInitialized()
+    {
+        address = _settings.BaseUrl;
+        username = _settings.Username;
+    }
+
     async Task OnStateChanged()
     {
         StateChanged = !StateChanged;

@@ -340,10 +340,13 @@ public class ClientState
         Dictionary<long, List<TimeModel>> timesByHabitId = Times.Values.GroupBy(x => x.HabitId).ToDictionary(g => g.Key, g => g.ToList());
         Dictionary<long, List<ItemModel>> itemsByParentId = Items.Values.GroupBy(x => x.ParentId).ToDictionary(g => g.Key, g => g.ToList());
 
-        // export a copy of the settings without RefreshToken - it is this device's auth session
-        // and must never leave the device in a backup file
+        // export a copy with the device-scoped block reset - an address and a login name in a file
+        // that gets attached to bug reports are most of a credential pair
         SettingsModel settings = Settings.ToEntity().ToModel();
+        settings.BaseUrl = string.Empty;
+        settings.Username = string.Empty;
         settings.RefreshToken = string.Empty;
+        settings.RememberMe = true;
 
         UserImportExportData userData = new()
         {
@@ -403,9 +406,11 @@ public class ClientState
     {
         userData.Settings.UserId = User.Id;
 
-        // keep this device's RefreshToken - the imported file's token is blank or stale
-        // and must not replace a valid session
+        // keep this device's block - the file carries the blanks written by the export above
+        userData.Settings.BaseUrl = Settings.BaseUrl;
+        userData.Settings.Username = Settings.Username;
         userData.Settings.RefreshToken = Settings.RefreshToken;
+        userData.Settings.RememberMe = Settings.RememberMe;
 
         if (Settings.Id == 0)
         {

@@ -22,6 +22,8 @@ public class SettingsModel
 
     public string BaseUrl { get; set; } = string.Empty;
 
+    public string Username { get; set; } = string.Empty;
+
     public string RefreshToken { get; set; } = string.Empty;
 
     public bool RememberMe { get; set; } = true;
@@ -152,6 +154,7 @@ public class SettingsModel
             FirstDayOfWeek = DayOfWeek.Monday,
             SelectedRatio = Ratio.ElapsedToDesired,
             BaseUrl = "",
+            Username = "",
             RefreshToken = "",
             RememberMe = true,
             ShowHelp = true,

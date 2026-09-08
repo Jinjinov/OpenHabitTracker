@@ -281,6 +281,10 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("VerticalMargin")
                         .HasColumnType("INTEGER");
 

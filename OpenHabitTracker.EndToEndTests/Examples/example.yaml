@@ -8,6 +8,7 @@ Settings:
   FirstDayOfWeek: Monday
   SelectedRatio: ElapsedToDesired
   BaseUrl: ''
+  Username: ''
   RefreshToken: ''
   RememberMe: true
   ShowHelp: true
