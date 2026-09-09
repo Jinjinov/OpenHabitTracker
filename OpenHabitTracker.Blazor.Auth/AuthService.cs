@@ -59,7 +59,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         {
             Error = _loc["Invalid address"];
         }
-        catch (ApiException ex) when (ex.StatusCode == 500 || ex.StatusCode == 502 || ex.StatusCode == 503)
+        catch (ApiException)
         {
             Error = _loc["Connection error"];
         }
@@ -67,13 +67,17 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         {
             Error = _loc["Invalid address"];
         }
-        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.ConnectionError || ex.HttpRequestError == HttpRequestError.SecureConnectionError)
-        {
-            Error = _loc["Connection error"];
-        }
         catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.NameResolutionError || ex.HttpRequestError == HttpRequestError.Unknown)
         {
             Error = _loc["Invalid address"];
+        }
+        catch (HttpRequestException)
+        {
+            Error = _loc["Connection error"];
+        }
+        catch (TaskCanceledException)
+        {
+            Error = _loc["Connection error"];
         }
 
         return false;
@@ -125,7 +129,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         {
             Error = _loc["Invalid address"];
         }
-        catch (ApiException ex) when (ex.StatusCode == 500 || ex.StatusCode == 502 || ex.StatusCode == 503)
+        catch (ApiException)
         {
             Error = _loc["Connection error"];
         }
@@ -133,13 +137,17 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         {
             Error = _loc["Invalid address"];
         }
-        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.ConnectionError || ex.HttpRequestError == HttpRequestError.SecureConnectionError)
-        {
-            Error = _loc["Connection error"];
-        }
         catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.NameResolutionError || ex.HttpRequestError == HttpRequestError.Unknown)
         {
             Error = _loc["Invalid address"];
+        }
+        catch (HttpRequestException)
+        {
+            Error = _loc["Connection error"];
+        }
+        catch (TaskCanceledException)
+        {
+            Error = _loc["Connection error"];
         }
 
         return false;
