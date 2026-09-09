@@ -71,7 +71,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         {
             Error = _loc["Connection error"];
         }
-        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.NameResolutionError)
+        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.NameResolutionError || ex.HttpRequestError == HttpRequestError.Unknown)
         {
             Error = _loc["Invalid address"];
         }
@@ -137,7 +137,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         {
             Error = _loc["Connection error"];
         }
-        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.NameResolutionError)
+        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.NameResolutionError || ex.HttpRequestError == HttpRequestError.Unknown)
         {
             Error = _loc["Invalid address"];
         }
