@@ -85,6 +85,7 @@ public class Program
         builder.Services.AddScoped<IPreRenderService, PreRenderService>();
         builder.Services.AddScoped<IAuthFragment, OpenHabitTracker.Blazor.Auth.AuthFragment>();
         builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<ITokenRefresher>(sp => sp.GetRequiredService<IAuthService>());
         builder.Services.AddHttpClients();
 
         // register root component and selector

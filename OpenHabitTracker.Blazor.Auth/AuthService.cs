@@ -15,6 +15,10 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
     private readonly ApiClientOptions _apiClientOptions = apiClientOptions;
     private readonly IStringLocalizer _loc = loc;
 
+    // One refresh at a time: the poller and a user action reach expiry together, and the server
+    // only tolerates a stale token for a short grace period.
+    private readonly SemaphoreSlim _refreshLock = new(1, 1);
+
     public string? Login { get; set; } = string.Empty;
     public string? Error { get; set; } = string.Empty;
 
@@ -30,7 +34,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
             if (!string.IsNullOrEmpty(tokenResponse.JwtToken))
             {
-                _apiClientOptions.BearerToken = tokenResponse.JwtToken;
+                SetTokens(tokenResponse);
 
                 if (_clientState.Settings.RememberMe)
                 {
@@ -105,7 +109,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
             if (!string.IsNullOrEmpty(tokenResponse.JwtToken))
             {
-                _apiClientOptions.BearerToken = tokenResponse.JwtToken;
+                SetTokens(tokenResponse);
 
                 _clientState.Settings.RefreshToken = tokenResponse.RefreshToken;
 
@@ -153,9 +157,61 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         return false;
     }
 
+    private void SetTokens(TokenResponse tokenResponse)
+    {
+        _apiClientOptions.BearerToken = tokenResponse.JwtToken;
+        _apiClientOptions.RefreshToken = tokenResponse.RefreshToken;
+        _apiClientOptions.BearerTokenExpiresAt = tokenResponse.JwtTokenExpiresAt;
+    }
+
+    // ITokenRefresher: called from the request pipeline, before the JWT expires and again if a call
+    // comes back 401 anyway. The refresh runs on AuthClient, which has no such handler, so it cannot recurse.
+    public async Task<bool> TryRefresh()
+    {
+        string refreshToken = _apiClientOptions.RefreshToken;
+
+        if (string.IsNullOrEmpty(refreshToken))
+            return false;
+
+        await _refreshLock.WaitAsync();
+
+        try
+        {
+            // Another call may have refreshed while this one waited for the lock.
+            if (_apiClientOptions.RefreshToken != refreshToken)
+                return !string.IsNullOrEmpty(_apiClientOptions.BearerToken);
+
+            RefreshTokenRequest refreshTokenRequest = new() { RefreshToken = refreshToken };
+
+            TokenResponse tokenResponse = await _authClient.GetRefreshTokenAsync(refreshTokenRequest);
+
+            if (string.IsNullOrEmpty(tokenResponse.JwtToken))
+                return false;
+
+            SetTokens(tokenResponse);
+
+            // The server rotates the value, so the stored copy is dead until this is written.
+            await _clientState.UpdateLocalRefreshToken(tokenResponse.RefreshToken);
+
+            return true;
+        }
+        catch (Exception)
+        {
+            // Unreachable server, or a refresh token the server no longer accepts. Either way the
+            // original failure stands and the caller reports it.
+            return false;
+        }
+        finally
+        {
+            _refreshLock.Release();
+        }
+    }
+
     public async Task Logout()
     {
         _apiClientOptions.BearerToken = "";
+        _apiClientOptions.RefreshToken = "";
+        _apiClientOptions.BearerTokenExpiresAt = default;
 
         await _remoteDataSync.SetDataLocation(DataLocation.Local);
 

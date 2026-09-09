@@ -86,17 +86,20 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(secret));
         SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha256);
 
+        DateTime expires = DateTime.UtcNow.AddDays(1);
+
         JwtSecurityToken token = new(
             issuer: issuer,
             audience: audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddDays(1),
+            expires: expires,
             signingCredentials: creds);
 
         TokenResponse tokenResponse = new()
         {
             JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
-            RefreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64))
+            RefreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+            JwtTokenExpiresAt = expires
         };
 
         return tokenResponse;

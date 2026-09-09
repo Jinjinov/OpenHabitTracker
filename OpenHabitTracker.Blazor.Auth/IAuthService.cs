@@ -1,6 +1,8 @@
+using OpenHabitTracker.Blazor.Web.ApiClient;
+
 namespace OpenHabitTracker.Blazor.Auth;
 
-public interface IAuthService
+public interface IAuthService : ITokenRefresher
 {
     string? Login { get; set; }
 

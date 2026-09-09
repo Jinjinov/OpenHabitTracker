@@ -16,4 +16,8 @@ public class ApiClientOptions
     }
 
     public string BearerToken { get; set; } = string.Empty;
+
+    public string RefreshToken { get; set; } = string.Empty;
+
+    public DateTimeOffset BearerTokenExpiresAt { get; set; }
 }
