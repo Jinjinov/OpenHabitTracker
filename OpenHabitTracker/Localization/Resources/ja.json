@@ -111,6 +111,7 @@
   "Import": "インポート",
   "Online sync": "オンライン同期",
   "Online sync is enabled": "オンライン同期が有効です",
+  "Online sync is not working": "オンライン同期が機能していません",
   "To enable online sync, run": "オンライン同期を有効にするには、実行してください",
   "image on your server": "サーバー上のイメージ",
   "Address": "アドレス",

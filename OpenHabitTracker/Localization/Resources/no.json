@@ -111,6 +111,7 @@
   "Import": "Importer",
   "Online sync": "Nettsynkronisering",
   "Online sync is enabled": "Nettsynkronisering er aktivert",
+  "Online sync is not working": "Nettsynkronisering virker ikke",
   "To enable online sync, run": "Kjør følgende for å aktivere nettsynkronisering",
   "image on your server": "image på serveren din",
   "Address": "Adresse",

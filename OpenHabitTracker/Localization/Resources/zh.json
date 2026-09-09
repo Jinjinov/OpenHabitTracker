@@ -111,6 +111,7 @@
   "Import": "导入",
   "Online sync": "在线同步",
   "Online sync is enabled": "在线同步已启用",
+  "Online sync is not working": "在线同步不可用",
   "To enable online sync, run": "要启用在线同步，请运行",
   "image on your server": "服务器上的镜像",
   "Address": "地址",

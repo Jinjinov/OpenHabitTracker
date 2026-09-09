@@ -111,6 +111,7 @@
   "Import": "Importer",
   "Online sync": "Sync en ligne",
   "Online sync is enabled": "Sync en ligne activée",
+  "Online sync is not working": "Sync en ligne ne fonctionne pas",
   "To enable online sync, run": "Pour activer la sync en ligne, exécutez",
   "image on your server": "l'image sur votre serveur",
   "Address": "Adresse",

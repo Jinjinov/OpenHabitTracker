@@ -111,6 +111,7 @@
   "Import": "Importera",
   "Online sync": "Onlinesynkronisering",
   "Online sync is enabled": "Onlinesynkronisering är aktiverad",
+  "Online sync is not working": "Onlinesynkronisering fungerar inte",
   "To enable online sync, run": "Kör följande för att aktivera onlinesynkronisering",
   "image on your server": "image på din server",
   "Address": "Adress",

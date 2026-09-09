@@ -17,6 +17,9 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
 
     private Action? _refresh;
 
+    // True once a tick has failed, false again after one succeeds. The nav icon renders from it.
+    public bool ServerUnreachable { get; private set; }
+
     public async ValueTask DisposeAsync()
     {
         await StopPolling();
@@ -54,6 +57,8 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
         _cts.Dispose();
         _timer?.Dispose();
 
+        ServerUnreachable = false;
+
         // Clear references to allow garbage collection
         _cts = null;
         _timer = null;
@@ -86,6 +91,8 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
                     }
 
                     _timer.Period = _interval;
+
+                    SetServerUnreachable(false);
                 }
                 // The tick failed, most likely an unreachable server. Skip it, slow down, let the
                 // next tick retry. The filter keeps a real cancellation falling through to the
@@ -93,6 +100,8 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
                 catch (Exception) when (!_cts.Token.IsCancellationRequested)
                 {
                     _timer.Period = _unreachableInterval;
+
+                    SetServerUnreachable(true);
                 }
             }
         }
@@ -100,6 +109,17 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
         {
             // Task was canceled, clean up if necessary
         }
+    }
+
+    // Only a change repaints, or the UI re-renders on every tick.
+    private void SetServerUnreachable(bool serverUnreachable)
+    {
+        if (ServerUnreachable == serverUnreachable)
+            return;
+
+        ServerUnreachable = serverUnreachable;
+
+        _refresh?.Invoke();
     }
 
     public async Task SetDataLocation(DataLocation dataLocation)

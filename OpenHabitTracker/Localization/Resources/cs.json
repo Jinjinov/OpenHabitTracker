@@ -111,6 +111,7 @@
   "Import": "Importovat",
   "Online sync": "Online synchronizace",
   "Online sync is enabled": "Online synchronizace je povolena",
+  "Online sync is not working": "Online synchronizace nefunguje",
   "To enable online sync, run": "Pro povolení online synchronizace spusťte",
   "image on your server": "obraz na vašem serveru",
   "Address": "Adresa",

@@ -111,6 +111,7 @@
   "Import": "가져오기",
   "Online sync": "온라인 동기화",
   "Online sync is enabled": "온라인 동기화 활성화됨",
+  "Online sync is not working": "온라인 동기화 작동 안 함",
   "To enable online sync, run": "온라인 동기화를 활성화하려면 실행하세요",
   "image on your server": "서버의 이미지",
   "Address": "주소",
