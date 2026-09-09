@@ -55,33 +55,25 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         {
             Error = _loc["Invalid credentials"];
         }
-        catch (ApiException ex) when (ex.StatusCode == 404)
+        catch (ApiException ex) when (ex.StatusCode == 404 || ex.StatusCode == 405)
         {
             Error = _loc["Invalid address"];
         }
-        catch (ApiException ex) when (ex.StatusCode == 405)
+        catch (ApiException ex) when (ex.StatusCode == 500 || ex.StatusCode == 502 || ex.StatusCode == 503)
         {
-            Error = _loc["Invalid address"];
-        }
-        catch (ApiException ex) when (ex.StatusCode == 502)
-        {
-            Error = _loc["Invalid address"];
+            Error = _loc["Connection error"];
         }
         catch (InvalidOperationException)
         {
             Error = _loc["Invalid address"];
         }
-        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.ConnectionError)
+        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.ConnectionError || ex.HttpRequestError == HttpRequestError.SecureConnectionError)
         {
             Error = _loc["Connection error"];
         }
         catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.NameResolutionError)
         {
             Error = _loc["Invalid address"];
-        }
-        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.SecureConnectionError)
-        {
-            Error = _loc["Connection error"];
         }
 
         return false;
@@ -129,33 +121,25 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         {
             Error = _loc["Invalid credentials"];
         }
-        catch (ApiException ex) when (ex.StatusCode == 404)
+        catch (ApiException ex) when (ex.StatusCode == 404 || ex.StatusCode == 405)
         {
             Error = _loc["Invalid address"];
         }
-        catch (ApiException ex) when (ex.StatusCode == 405)
+        catch (ApiException ex) when (ex.StatusCode == 500 || ex.StatusCode == 502 || ex.StatusCode == 503)
         {
-            Error = _loc["Invalid address"];
-        }
-        catch (ApiException ex) when (ex.StatusCode == 502)
-        {
-            Error = _loc["Invalid address"];
+            Error = _loc["Connection error"];
         }
         catch (InvalidOperationException)
         {
             Error = _loc["Invalid address"];
         }
-        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.ConnectionError)
+        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.ConnectionError || ex.HttpRequestError == HttpRequestError.SecureConnectionError)
         {
             Error = _loc["Connection error"];
         }
         catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.NameResolutionError)
         {
             Error = _loc["Invalid address"];
-        }
-        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.SecureConnectionError)
-        {
-            Error = _loc["Connection error"];
         }
 
         return false;
