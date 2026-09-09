@@ -55,6 +55,10 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         {
             Error = _loc["Invalid credentials"];
         }
+        catch (ApiException ex) when (ex.StatusCode == 405)
+        {
+            Error = _loc["Invalid address"];
+        }
         catch (InvalidOperationException)
         {
             Error = _loc["Invalid address"];
@@ -62,6 +66,10 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.ConnectionError)
         {
             Error = _loc["Connection error"];
+        }
+        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.NameResolutionError)
+        {
+            Error = _loc["Invalid address"];
         }
 
         return false;
@@ -109,6 +117,10 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         {
             Error = _loc["Invalid credentials"];
         }
+        catch (ApiException ex) when (ex.StatusCode == 405)
+        {
+            Error = _loc["Invalid address"];
+        }
         catch (InvalidOperationException)
         {
             Error = _loc["Invalid address"];
@@ -116,6 +128,10 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.ConnectionError)
         {
             Error = _loc["Connection error"];
+        }
+        catch (HttpRequestException ex) when (ex.HttpRequestError == HttpRequestError.NameResolutionError)
+        {
+            Error = _loc["Invalid address"];
         }
 
         return false;
