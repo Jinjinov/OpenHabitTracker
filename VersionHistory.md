@@ -2,6 +2,10 @@
 
 - Added five habit charts: target, history, calendar, best streaks and frequency
 - Added a "Show habit charts" setting
+- Added remembering the server address and username on the sync login form
+- Extended staying logged in for sync from 7 to 90 days between uses
+- Added an icon that shows when online sync is not working
+- Fixed online sync giving up until restart after the server became unreachable
 
 # 1.2.4 - Aug 8, 2026
 
