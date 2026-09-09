@@ -24,6 +24,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OpenHabitTracker.Blazor\OpenHabitTracker.Blazor.csproj" />
+    <ProjectReference Include="..\OpenHabitTracker.Blazor.Auth\OpenHabitTracker.Blazor.Auth.csproj" />
+    <ProjectReference Include="..\OpenHabitTracker.Blazor.Web\OpenHabitTracker.Blazor.Web.csproj" />
+    <ProjectReference Include="..\OpenHabitTracker.Blazor.Web.ApiClient\OpenHabitTracker.Blazor.Web.ApiClient.csproj" />
   </ItemGroup>
 
   <ItemGroup>
