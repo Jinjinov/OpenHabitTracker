@@ -27,6 +27,10 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
     // Rotated on every launch, so this is how long an unused device stays signed in.
     private const int RefreshTokenLifetimeDays = 90;
 
+    // How long the rotated-away value keeps working, to cover a lost response or two calls
+    // refreshing at once. Rotation without this is what makes those look like an attack.
+    private const int PreviousTokenGraceSeconds = 60;
+
     [AllowAnonymous]
     [HttpPost("jwt-token")]
     [EndpointName("GetJwtToken")]
@@ -105,7 +109,33 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
     {
         RefreshToken? storedToken = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken);
 
-        if (storedToken is null || storedToken.ExpiryDate < DateTime.UtcNow)
+        bool withinGracePeriod = false;
+
+        if (storedToken is null)
+        {
+            storedToken = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.PreviousToken == request.RefreshToken);
+
+            if (storedToken is null)
+            {
+                return Unauthorized("Invalid or expired refresh token");
+            }
+
+            withinGracePeriod = storedToken.PreviousTokenValidUntil > DateTime.UtcNow;
+
+            if (!withinGracePeriod)
+            {
+                // The value was rotated away and the grace period has passed, so someone is replaying
+                // a token this device already exchanged. Drop the row: whoever holds either value
+                // has to sign in with a password again.
+                _dbContext.RefreshTokens.Remove(storedToken);
+
+                await _dbContext.SaveChangesAsync();
+
+                return Unauthorized("Invalid or expired refresh token");
+            }
+        }
+
+        if (storedToken.ExpiryDate < DateTime.UtcNow)
         {
             return Unauthorized("Invalid or expired refresh token");
         }
@@ -119,7 +149,20 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
 
         TokenResponse tokenResponse = GetTokenResponse(user.UserName);
 
-        storedToken.Token = tokenResponse.RefreshToken;
+        if (withinGracePeriod)
+        {
+            // The caller missed the last response, so give it the value that is current now rather
+            // than rotating again and leaving it one step behind for good.
+            tokenResponse.RefreshToken = storedToken.Token;
+        }
+        else
+        {
+            storedToken.PreviousToken = storedToken.Token;
+            storedToken.PreviousTokenValidUntil = DateTime.UtcNow.AddSeconds(PreviousTokenGraceSeconds);
+
+            storedToken.Token = tokenResponse.RefreshToken;
+        }
+
         storedToken.ExpiryDate = DateTime.UtcNow.AddDays(RefreshTokenLifetimeDays);
 
         await _dbContext.SaveChangesAsync();
