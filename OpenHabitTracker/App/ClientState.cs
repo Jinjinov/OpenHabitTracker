@@ -296,21 +296,52 @@ public class ClientState
 
     public async Task RefreshState()
     {
-        Settings = new();
+        SettingsModel settings = Settings;
+        Dictionary<long, HabitModel>? habits = Habits;
+        Dictionary<long, NoteModel>? notes = Notes;
+        Dictionary<long, TaskModel>? tasks = Tasks;
+        Dictionary<long, TimeModel>? times = Times;
+        Dictionary<long, ItemModel>? items = Items;
+        Dictionary<long, CategoryModel>? categories = Categories;
+        List<HabitModel>? trashedHabits = TrashedHabits;
+        List<NoteModel>? trashedNotes = TrashedNotes;
+        List<TaskModel>? trashedTasks = TrashedTasks;
 
-        await LoadSettings();
+        try
+        {
+            Settings = new();
 
-        Habits = null;
-        Notes = null;
-        Tasks = null;
-        Times = null;
-        Items = null;
-        Categories = null;
-        TrashedHabits = null;
-        TrashedNotes = null;
-        TrashedTasks = null;
+            await LoadSettings();
 
-        await LoadContent();
+            Habits = null;
+            Notes = null;
+            Tasks = null;
+            Times = null;
+            Items = null;
+            Categories = null;
+            TrashedHabits = null;
+            TrashedNotes = null;
+            TrashedTasks = null;
+
+            await LoadContent();
+        }
+        catch (Exception)
+        {
+            // A load that fails partway leaves default settings and empty lists on screen, so put
+            // back what was there. The next refresh that reaches the data source replaces it.
+            Settings = settings;
+            Habits = habits;
+            Notes = notes;
+            Tasks = tasks;
+            Times = times;
+            Items = items;
+            Categories = categories;
+            TrashedHabits = trashedHabits;
+            TrashedNotes = trashedNotes;
+            TrashedTasks = trashedTasks;
+
+            throw;
+        }
     }
 
     public async Task<UserImportExportData> GetUserData()
