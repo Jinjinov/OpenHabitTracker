@@ -13,6 +13,7 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
     private Task? _timerTask;
     private CancellationTokenSource? _cts;
     private readonly TimeSpan _interval = TimeSpan.FromSeconds(10);
+    private readonly TimeSpan _unreachableInterval = TimeSpan.FromSeconds(60);
 
     private Action? _refresh;
 
@@ -69,17 +70,29 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
             // Continue running until cancellation is requested
             while (await _timer.WaitForNextTickAsync(_cts.Token))
             {
-                IReadOnlyList<UserEntity> users = await _clientState.DataAccess.GetUsers();
-
-                if (users.Count > 0)
+                try
                 {
-                    if (_lastRefreshAt < users[0].LastChangeAt)
-                    {
-                        await _clientState.RefreshState();
-                        _lastRefreshAt = DateTime.UtcNow;
+                    IReadOnlyList<UserEntity> users = await _clientState.DataAccess.GetUsers();
 
-                        _refresh?.Invoke();
+                    if (users.Count > 0)
+                    {
+                        if (_lastRefreshAt < users[0].LastChangeAt)
+                        {
+                            await _clientState.RefreshState();
+                            _lastRefreshAt = DateTime.UtcNow;
+
+                            _refresh?.Invoke();
+                        }
                     }
+
+                    _timer.Period = _interval;
+                }
+                // The tick failed, most likely an unreachable server. Skip it, slow down, let the
+                // next tick retry. The filter keeps a real cancellation falling through to the
+                // outer clause, since a request timeout is also an OperationCanceledException.
+                catch (Exception) when (!_cts.Token.IsCancellationRequested)
+                {
+                    _timer.Period = _unreachableInterval;
                 }
             }
         }
