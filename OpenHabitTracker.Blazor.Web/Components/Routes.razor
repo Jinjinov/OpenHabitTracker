@@ -1,3 +1,4 @@
+@using System.Net.Http
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -9,7 +10,7 @@
 <CascadingAuthenticationState>
     <Router AppAssembly="@AssemblyProvider.AppAssembly" AdditionalAssemblies="@AssemblyProvider.AdditionalAssemblies">
         <Found Context="routeData">
-            <ErrorBoundary>
+            <ErrorBoundary @ref="_errorBoundary">
                 <ChildContent>
                     <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(ProtectedLayout)">
                         <Authorizing>
@@ -28,7 +29,19 @@
                     </AuthorizeRouteView>
                 </ChildContent>
                 <ErrorContent Context="Exception">
-                    @Exception.ToString()
+                    @if (IsServerError(Exception))
+                    {
+                        <p role="alert">Cannot reach the server.</p>
+                        <button class="btn btn-primary" @onclick="Retry">Retry</button>
+                    }
+                    else
+                    {
+                        <p role="alert">Something went wrong.</p>
+                        <details>
+                            <summary>Details</summary>
+                            <pre>@Exception.ToString()</pre>
+                        </details>
+                    }
                 </ErrorContent>
             </ErrorBoundary>
         </Found>
@@ -37,3 +50,13 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+@code {
+    private ErrorBoundary? _errorBoundary;
+
+    // ApiException lives in the API client project, which this one does not reference.
+    private static bool IsServerError(Exception exception) =>
+        exception is HttpRequestException || exception.GetType().Name == "ApiException";
+
+    private void Retry() => _errorBoundary?.Recover();
+}
