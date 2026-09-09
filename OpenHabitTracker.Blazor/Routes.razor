@@ -1,6 +1,4 @@
-﻿@using System.Net.Http
-
-@inject IAssemblyProvider AssemblyProvider
+﻿@inject IAssemblyProvider AssemblyProvider
 
 <Router AppAssembly="@AssemblyProvider.AppAssembly" AdditionalAssemblies="@AssemblyProvider.AdditionalAssemblies">
     <Found Context="routeData">
@@ -9,19 +7,7 @@
                 <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
             </ChildContent>
             <ErrorContent Context="Exception">
-                @if (IsServerError(Exception))
-                {
-                    <p role="alert">Cannot reach the server.</p>
-                    <button class="btn btn-primary" @onclick="Retry">Retry</button>
-                }
-                else
-                {
-                    <p role="alert">Something went wrong.</p>
-                    <details>
-                        <summary>Details</summary>
-                        <pre>@Exception.ToString()</pre>
-                    </details>
-                }
+                <ErrorComponent Exception="Exception" OnRetry="Retry" />
             </ErrorContent>
         </ErrorBoundary>
     </Found>
@@ -32,10 +18,6 @@
 
 @code {
     private ErrorBoundary? _errorBoundary;
-
-    // ApiException lives in the API client project, which this one does not reference.
-    private static bool IsServerError(Exception exception) =>
-        exception is HttpRequestException || exception.GetType().Name == "ApiException";
 
     private void Retry() => _errorBoundary?.Recover();
 }

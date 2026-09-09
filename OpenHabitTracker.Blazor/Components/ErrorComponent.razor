@@ -1,0 +1,45 @@
+@using System.Net.Http
+@using OpenHabitTracker.App
+
+@inject NavigationManager NavigationManager
+@inject RemoteDataSync RemoteDataSync
+
+@if (IsServerError)
+{
+    <p role="alert">Cannot reach the server.</p>
+}
+else
+{
+    <p role="alert">Something went wrong.</p>
+
+    <details>
+        <summary>Details</summary>
+        <pre>@Exception.ToString()</pre>
+    </details>
+}
+
+<button class="btn btn-primary me-1" @onclick="OnRetry">Retry</button>
+<button class="btn btn-outline-primary" @onclick="Reload">Reload</button>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public Exception Exception { get; set; } = null!;
+
+    // Clears the boundary and re-renders. Enough for a failed click, but a lifecycle method that
+    // threw runs again and can throw again, which is what Reload is for.
+    [Parameter]
+    public EventCallback OnRetry { get; set; }
+
+    // ApiException lives in the API client project, which this one does not reference.
+    private bool IsServerError => Exception is HttpRequestException || Exception.GetType().Name == "ApiException";
+
+    // The poller would not notice until its next tick, up to a minute away.
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && IsServerError)
+            RemoteDataSync.ReportServerUnreachable();
+    }
+
+    private void Reload() => NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+}

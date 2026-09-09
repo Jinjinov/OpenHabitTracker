@@ -74,7 +74,16 @@
         </div>
     </nav>
 
-    @if (_windowDimensions is not null)
+    @if (_startupError is not null)
+    {
+        <p role="alert">The local database could not be opened.</p>
+
+        <details>
+            <summary>Details</summary>
+            <pre>@_startupError.ToString()</pre>
+        </details>
+    }
+    else if (_windowDimensions is not null)
     {
         @* Main body row *@
 
@@ -114,7 +123,14 @@
                     <CascadingValue Name="DynamicComponentType" Value=@_dynamicComponentType>
                         <CascadingValue Name="ContentDeleted" Value=@_contentDeleted>
 
-                            @ChildContent
+                            <ErrorBoundary @ref="_pageErrorBoundary">
+                                <ChildContent>
+                                    @ChildContent
+                                </ChildContent>
+                                <ErrorContent Context="Exception">
+                                    <ErrorComponent Exception="Exception" OnRetry="RetryPage" />
+                                </ErrorContent>
+                            </ErrorBoundary>
 
                         </CascadingValue>
                     </CascadingValue>
@@ -132,6 +148,12 @@
 
 @code {
     TourStep[] tourSteps;
+
+    private ErrorBoundary? _pageErrorBoundary;
+
+    private Exception? _startupError;
+
+    private void RetryPage() => _pageErrorBoundary?.Recover();
 
     public Main()
     {
@@ -210,10 +232,21 @@
     {
         Logger.LogInformation("MainLayout.OnInitializedAsync start");
 
-        await ClientState.LoadUsers();
-        bool loadWelcomeNote = await ClientState.LoadSettings();
-        if (loadWelcomeNote)
-            await Examples.AddWelcomeNote(ClientState.User);
+        try
+        {
+            await ClientState.LoadUsers();
+            bool loadWelcomeNote = await ClientState.LoadSettings();
+            if (loadWelcomeNote)
+                await Examples.AddWelcomeNote(ClientState.User);
+        }
+        catch (Exception exception)
+        {
+            _startupError = exception;
+
+            Logger.LogError(exception, "MainLayout.OnInitializedAsync failed to open the local database");
+
+            return;
+        }
 
         RemoteDataSync.SetRefreshAction(() => StateHasChanged());
 

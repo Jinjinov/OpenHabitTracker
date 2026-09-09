@@ -111,6 +111,9 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
         }
     }
 
+    // A call that failed outside the poller knows before the next tick does.
+    public void ReportServerUnreachable() => SetServerUnreachable(true);
+
     // Only a change repaints, or the UI re-renders on every tick.
     private void SetServerUnreachable(bool serverUnreachable)
     {
