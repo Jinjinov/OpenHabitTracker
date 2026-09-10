@@ -145,5 +145,11 @@
   "Previous": "Precedente",
   "Next": "Avanti",
   "Complete tour": "Completa il tour",
-  "Close tour": "Chiudi il tour"
+  "Close tour": "Chiudi il tour",
+  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "Scegliere l'ora del giorno in cui arriva il riepilogo giornaliero di ciò che è in scadenza, oppure cancellarla per disattivarlo.",
+  "Choose whether the daily summary covers tasks, habits, or both.": "Scegliere se il riepilogo giornaliero include compiti, abitudini o entrambi.",
+  "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Scegliere di quanto un'abitudine deve superare il suo intervallo prima che il riepilogo giornaliero la menzioni.",
+  "Let the daily summary count tasks that are past their planned time and still not done.": "Lasciare che il riepilogo giornaliero conti i compiti la cui ora pianificata è passata e che non sono ancora stati completati.",
+  "Choose how long before a task's planned time its reminder arrives, or turn it off.": "Scegliere quanto tempo prima dell'ora pianificata di un compito arriva il suo promemoria, oppure disattivarlo.",
+  "Only notify about items at this priority or higher.": "Notificare solo gli elementi con questa priorità o superiore."
 }

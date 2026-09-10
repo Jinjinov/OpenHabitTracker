@@ -284,5 +284,20 @@
   "Target quantity": "Ciljna količina",
   "OK": "U redu",
   "Cancel": "Otkaži",
-  "Rate this app": "Ocenite ovu aplikaciju"
+  "Rate this app": "Ocenite ovu aplikaciju",
+  "Daily summary at": "Dnevni pregled u",
+  "Daily summary covers": "Dnevni pregled obuhvata",
+  "Clear daily summary time": "Obriši vreme dnevnog pregleda",
+  "Clear reminder time": "Obriši vreme podsetnika",
+  "Remind hours": "Sati podsetnika",
+  "Remind minutes": "Minuti podsetnika",
+  "Remind before a planned task": "Podseti pre planiranog zadatka",
+  "Tasks and habits": "Zadaci i navike",
+  "Notify only from priority": "Obavesti samo od prioriteta",
+  "Any priority": "Bilo koji prioritet",
+  "Notify about habits over": "Obavesti o navikama iznad",
+  "Include overdue tasks": "Uključi zakasnele zadatke",
+  "Due today": "Danas na redu",
+  "Daily summary": "Dnevni pregled",
+  "Task reminders": "Podsetnici na zadatke"
 }

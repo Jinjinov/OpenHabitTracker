@@ -11,6 +11,7 @@ NOTATER, OPPGAVER OG VANER PÅ ETT STED
 • Vaner med fleksible gjentakelsesintervaller - registrert som repetisjoner, tid eller mengde
 • Sjekkliste-underpunkter på både oppgaver og vaner
 • Kategorier, farger, prioriteter, søk, filtre og sortering - for notater, oppgaver og vaner
+• Valgfrie varsler: én daglig oppsummering av det som forfaller og en påminnelse før en oppgaves planlagte tidspunkt
 
 DATAENE DINE ER DINE
 

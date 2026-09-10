@@ -284,5 +284,20 @@
   "Target quantity": "目標数量",
   "OK": "OK",
   "Cancel": "キャンセル",
-  "Rate this app": "このアプリを評価する"
+  "Rate this app": "このアプリを評価する",
+  "Daily summary at": "毎日のまとめの時刻",
+  "Daily summary covers": "毎日のまとめの対象",
+  "Clear daily summary time": "毎日のまとめの時刻をクリア",
+  "Clear reminder time": "リマインダーの時間をクリア",
+  "Remind hours": "リマインダー 時",
+  "Remind minutes": "リマインダー 分",
+  "Remind before a planned task": "予定されたタスクの前に通知",
+  "Tasks and habits": "タスクと習慣",
+  "Notify only from priority": "この優先度以上のみ通知",
+  "Any priority": "すべての優先度",
+  "Notify about habits over": "次の割合を超えた習慣を通知",
+  "Include overdue tasks": "期限切れのタスクを含める",
+  "Due today": "今日が期限",
+  "Daily summary": "毎日のまとめ",
+  "Task reminders": "タスクのリマインダー"
 }

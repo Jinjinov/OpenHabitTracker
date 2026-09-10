@@ -145,5 +145,11 @@
   "Previous": "이전",
   "Next": "다음",
   "Complete tour": "둘러보기 완료",
-  "Close tour": "둘러보기 닫기"
+  "Close tour": "둘러보기 닫기",
+  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "기한이 된 항목의 일일 요약이 도착할 시각을 선택합니다. 지우면 꺼집니다.",
+  "Choose whether the daily summary covers tasks, habits, or both.": "일일 요약에 할 일, 습관 또는 둘 다를 포함할지 선택합니다.",
+  "Choose how far over its interval a habit has to be before the daily summary mentions it.": "습관이 간격을 얼마나 넘어야 일일 요약에 나타날지 선택합니다.",
+  "Let the daily summary count tasks that are past their planned time and still not done.": "예정 시간이 지났는데 아직 완료되지 않은 할 일도 일일 요약에 포함합니다.",
+  "Choose how long before a task's planned time its reminder arrives, or turn it off.": "할 일의 예정 시간보다 얼마나 앞서 알림이 올지 선택하거나 끕니다.",
+  "Only notify about items at this priority or higher.": "이 우선순위 이상인 항목만 알립니다."
 }

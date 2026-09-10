@@ -11,6 +11,7 @@ BILJEŠKE, ZADACI I NAVIKE NA JEDNOM MJESTU
 • Navike s fleksibilnim intervalima ponavljanja - bilježe se kao ponavljanja, vrijeme ili količina
 • Podstavke popisa (checkliste) na zadacima i navikama
 • Kategorije, boje, prioriteti, pretraživanje, filtri i sortiranje - za bilješke, zadatke i navike
+• Neobavezne obavijesti: jedan dnevni sažetak onoga što je na redu i podsjetnik prije planiranog vremena zadatka
 
 VAŠI PODACI SU VAŠI
 

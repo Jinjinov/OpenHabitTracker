@@ -284,5 +284,20 @@
   "Target quantity": "목표 수량",
   "OK": "확인",
   "Cancel": "취소",
-  "Rate this app": "이 앱 평가하기"
+  "Rate this app": "이 앱 평가하기",
+  "Daily summary at": "일일 요약 시각",
+  "Daily summary covers": "일일 요약 대상",
+  "Clear daily summary time": "일일 요약 시각 지우기",
+  "Clear reminder time": "알림 시간 지우기",
+  "Remind hours": "알림 시간(시)",
+  "Remind minutes": "알림 시간(분)",
+  "Remind before a planned task": "예정된 할 일 전에 알림",
+  "Tasks and habits": "할 일과 습관",
+  "Notify only from priority": "이 우선순위 이상만 알림",
+  "Any priority": "모든 우선순위",
+  "Notify about habits over": "다음 비율을 넘은 습관 알림",
+  "Include overdue tasks": "기한 지난 할 일 포함",
+  "Due today": "오늘 기한",
+  "Daily summary": "일일 요약",
+  "Task reminders": "할 일 알림"
 }

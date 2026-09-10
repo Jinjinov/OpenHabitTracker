@@ -284,5 +284,20 @@
   "Target quantity": "Tavoitemäärä",
   "OK": "OK",
   "Cancel": "Peruuta",
-  "Rate this app": "Arvioi tämä sovellus"
+  "Rate this app": "Arvioi tämä sovellus",
+  "Daily summary at": "Päivittäinen yhteenveto klo",
+  "Daily summary covers": "Päivittäinen yhteenveto kattaa",
+  "Clear daily summary time": "Tyhjennä päivittäisen yhteenvedon aika",
+  "Clear reminder time": "Tyhjennä muistutuksen aika",
+  "Remind hours": "Muistutuksen tunnit",
+  "Remind minutes": "Muistutuksen minuutit",
+  "Remind before a planned task": "Muistuta ennen suunniteltua tehtävää",
+  "Tasks and habits": "Tehtävät ja tavat",
+  "Notify only from priority": "Ilmoita vain prioriteetista alkaen",
+  "Any priority": "Mikä tahansa prioriteetti",
+  "Notify about habits over": "Ilmoita tavoista yli",
+  "Include overdue tasks": "Sisällytä myöhässä olevat tehtävät",
+  "Due today": "Tänään vuorossa",
+  "Daily summary": "Päivittäinen yhteenveto",
+  "Task reminders": "Tehtävämuistutukset"
 }

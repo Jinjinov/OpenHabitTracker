@@ -284,5 +284,20 @@
   "Target quantity": "Doelhoeveelheid",
   "OK": "OK",
   "Cancel": "Annuleren",
-  "Rate this app": "Beoordeel deze app"
+  "Rate this app": "Beoordeel deze app",
+  "Daily summary at": "Dagelijks overzicht om",
+  "Daily summary covers": "Dagelijks overzicht omvat",
+  "Clear daily summary time": "Tijd van dagelijks overzicht wissen",
+  "Clear reminder time": "Herinneringstijd wissen",
+  "Remind hours": "Herinnering uren",
+  "Remind minutes": "Herinnering minuten",
+  "Remind before a planned task": "Herinneren vóór een geplande taak",
+  "Tasks and habits": "Taken en gewoontes",
+  "Notify only from priority": "Alleen melden vanaf prioriteit",
+  "Any priority": "Elke prioriteit",
+  "Notify about habits over": "Melden over gewoontes boven",
+  "Include overdue tasks": "Achterstallige taken meetellen",
+  "Due today": "Vandaag te doen",
+  "Daily summary": "Dagelijks overzicht",
+  "Task reminders": "Taakherinneringen"
 }

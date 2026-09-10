@@ -11,6 +11,7 @@ NOTITIES, TAKEN EN GEWOONTES OP ÉÉN PLEK
 • Gewoontes met flexibele herhaalintervallen - bijgehouden als herhalingen, tijd of hoeveelheid
 • Checklist-subitems voor taken én gewoontes
 • Categorieën, kleuren, prioriteiten, zoeken, filters en sorteren - voor notities, taken en gewoontes
+• Optionele meldingen: één dagelijks overzicht van wat er aan de beurt is en een herinnering voor de geplande tijd van een taak
 
 JOUW GEGEVENS BLIJVEN VAN JOU
 

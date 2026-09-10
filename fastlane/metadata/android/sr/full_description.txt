@@ -11,6 +11,7 @@ BELEŠKE, ZADACI I NAVIKE NA JEDNOM MESTU
 • Navike s fleksibilnim intervalima ponavljanja - beleže se kao ponavljanja, vreme ili količina
 • Podstavke liste (čekliste) na zadacima i navikama
 • Kategorije, boje, prioriteti, pretraga, filteri i sortiranje - za beleške, zadatke i navike
+• Opciona obaveštenja: jedan dnevni pregled onoga što je na redu i podsetnik pre planiranog vremena zadatka
 
 VAŠI PODACI SU VAŠI
 

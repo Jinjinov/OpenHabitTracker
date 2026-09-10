@@ -284,5 +284,20 @@
   "Target quantity": "Målmängd",
   "OK": "OK",
   "Cancel": "Avbryt",
-  "Rate this app": "Betygsätt appen"
+  "Rate this app": "Betygsätt appen",
+  "Daily summary at": "Daglig sammanfattning kl.",
+  "Daily summary covers": "Daglig sammanfattning omfattar",
+  "Clear daily summary time": "Rensa tid för daglig sammanfattning",
+  "Clear reminder time": "Rensa påminnelsetid",
+  "Remind hours": "Påminnelse timmar",
+  "Remind minutes": "Påminnelse minuter",
+  "Remind before a planned task": "Påminn före en planerad uppgift",
+  "Tasks and habits": "Uppgifter och vanor",
+  "Notify only from priority": "Avisera bara från prioritet",
+  "Any priority": "Alla prioriteter",
+  "Notify about habits over": "Avisera om vanor över",
+  "Include overdue tasks": "Inkludera försenade uppgifter",
+  "Due today": "Ska göras idag",
+  "Daily summary": "Daglig sammanfattning",
+  "Task reminders": "Uppgiftspåminnelser"
 }

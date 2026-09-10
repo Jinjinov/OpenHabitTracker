@@ -145,5 +145,11 @@
   "Previous": "Předchozí",
   "Next": "Další",
   "Complete tour": "Dokončit prohlídku",
-  "Close tour": "Zavřít prohlídku"
+  "Close tour": "Zavřít prohlídku",
+  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "Zvolte denní čas, kdy přijde souhrn toho, co je na řadě, nebo jej vymažte a souhrn tím vypněte.",
+  "Choose whether the daily summary covers tasks, habits, or both.": "Zvolte, zda denní souhrn zahrnuje úkoly, návyky nebo obojí.",
+  "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Zvolte, jak moc musí návyk překročit svůj interval, než jej denní souhrn zmíní.",
+  "Let the daily summary count tasks that are past their planned time and still not done.": "Nechte denní souhrn počítat i úkoly, kterým už uplynul plánovaný čas a stále nejsou hotové.",
+  "Choose how long before a task's planned time its reminder arrives, or turn it off.": "Zvolte, jak dlouho před plánovaným časem úkolu přijde připomenutí, nebo je vypněte.",
+  "Only notify about items at this priority or higher.": "Upozorňovat jen na položky s touto prioritou nebo vyšší."
 }

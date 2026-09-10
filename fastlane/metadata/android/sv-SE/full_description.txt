@@ -11,6 +11,7 @@ ANTECKNINGAR, UPPGIFTER OCH VANOR PÅ ETT STÄLLE
 • Vanor med flexibla upprepningsintervall - registrerade som repetitioner, tid eller mängd
 • Checklistor med delmoment på både uppgifter och vanor
 • Kategorier, färger, prioriteter, sökning, filter och sortering - för anteckningar, uppgifter och vanor
+• Valfria aviseringar: en daglig sammanfattning av det som ska göras och en påminnelse före en uppgifts planerade tid
 
 DIN DATA ÄR DIN
 

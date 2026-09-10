@@ -284,5 +284,20 @@
   "Target quantity": "Cílové množství",
   "OK": "OK",
   "Cancel": "Zrušit",
-  "Rate this app": "Ohodnotit tuto aplikaci"
+  "Rate this app": "Ohodnotit tuto aplikaci",
+  "Daily summary at": "Denní souhrn v",
+  "Daily summary covers": "Denní souhrn zahrnuje",
+  "Clear daily summary time": "Vymazat čas denního souhrnu",
+  "Clear reminder time": "Vymazat čas připomenutí",
+  "Remind hours": "Připomenout hodiny",
+  "Remind minutes": "Připomenout minuty",
+  "Remind before a planned task": "Připomenout před naplánovaným úkolem",
+  "Tasks and habits": "Úkoly a návyky",
+  "Notify only from priority": "Upozorňovat jen od priority",
+  "Any priority": "Jakákoli priorita",
+  "Notify about habits over": "Upozorňovat na návyky nad",
+  "Include overdue tasks": "Zahrnout úkoly po termínu",
+  "Due today": "Dnes na řadě",
+  "Daily summary": "Denní souhrn",
+  "Task reminders": "Připomenutí úkolů"
 }

@@ -11,6 +11,7 @@ MUISTIINPANOT, TEHTÄVÄT JA TAVAT YHDESSÄ PAIKASSA
 • Tavat joustavilla toistoväleillä - kirjaa toistoina, aikana tai määränä
 • Tarkistuslistan alakohdat sekä tehtävissä että tavoissa
 • Kategoriat, värit, prioriteetit, haku, suodattimet ja lajittelu - muistiinpanoille, tehtäville ja tavoille
+• Valinnaiset ilmoitukset: yksi päivittäinen yhteenveto vuorossa olevista ja muistutus ennen tehtävän suunniteltua aikaa
 
 TIETOSI OVAT SINUN
 

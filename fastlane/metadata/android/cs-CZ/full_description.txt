@@ -11,6 +11,7 @@ POZNÁMKY, ÚKOLY A NÁVYKY NA JEDNOM MÍSTĚ
 • Návyky s flexibilními intervaly opakování - zaznamenávané jako opakování, čas nebo množství
 • Podúkoly (checklisty) u úkolů i návyků
 • Kategorie, barvy, priority, hledání, filtry a řazení - pro poznámky, úkoly i návyky
+• Volitelná upozornění: jeden denní souhrn toho, co je na řadě, a připomenutí před plánovaným časem úkolu
 
 VAŠE DATA JSOU VAŠE
 

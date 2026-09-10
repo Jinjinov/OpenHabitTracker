@@ -284,5 +284,20 @@
   "Target quantity": "Målmængde",
   "OK": "OK",
   "Cancel": "Annuller",
-  "Rate this app": "Bedøm denne app"
+  "Rate this app": "Bedøm denne app",
+  "Daily summary at": "Daglig oversigt kl.",
+  "Daily summary covers": "Daglig oversigt omfatter",
+  "Clear daily summary time": "Ryd tidspunkt for daglig oversigt",
+  "Clear reminder time": "Ryd påmindelsestidspunkt",
+  "Remind hours": "Påmind timer",
+  "Remind minutes": "Påmind minutter",
+  "Remind before a planned task": "Påmind før en planlagt opgave",
+  "Tasks and habits": "Opgaver og vaner",
+  "Notify only from priority": "Underret kun fra prioritet",
+  "Any priority": "Enhver prioritet",
+  "Notify about habits over": "Underret om vaner over",
+  "Include overdue tasks": "Inkluder forfaldne opgaver",
+  "Due today": "Forfalder i dag",
+  "Daily summary": "Daglig oversigt",
+  "Task reminders": "Opgavepåmindelser"
 }

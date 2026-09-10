@@ -284,5 +284,20 @@
   "Target quantity": "Quantità obiettivo",
   "OK": "OK",
   "Cancel": "Annulla",
-  "Rate this app": "Valuta questa app"
+  "Rate this app": "Valuta questa app",
+  "Daily summary at": "Riepilogo giornaliero alle",
+  "Daily summary covers": "Il riepilogo giornaliero include",
+  "Clear daily summary time": "Cancella l'ora del riepilogo giornaliero",
+  "Clear reminder time": "Cancella l'ora del promemoria",
+  "Remind hours": "Ore del promemoria",
+  "Remind minutes": "Minuti del promemoria",
+  "Remind before a planned task": "Ricorda prima di un compito pianificato",
+  "Tasks and habits": "Compiti e abitudini",
+  "Notify only from priority": "Notifica solo dalla priorità",
+  "Any priority": "Qualsiasi priorità",
+  "Notify about habits over": "Notifica le abitudini oltre",
+  "Include overdue tasks": "Includi i compiti scaduti",
+  "Due today": "In scadenza oggi",
+  "Daily summary": "Riepilogo giornaliero",
+  "Task reminders": "Promemoria dei compiti"
 }

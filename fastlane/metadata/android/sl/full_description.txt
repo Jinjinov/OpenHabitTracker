@@ -11,6 +11,7 @@ ZAPISKI, NALOGE IN NAVADE NA ENEM MESTU
 • Navade s prilagodljivimi intervali ponavljanja - beleži ponovitve, čas ali količino
 • Kontrolni seznami s podtočkami pri nalogah in navadah
 • Kategorije, barve, prioritete, iskanje, filtri in razvrščanje - za zapiske, naloge in navade
+• Neobvezna obvestila: en dnevni povzetek tega, kar je na vrsti, in opomnik pred načrtovanim časom naloge
 
 TVOJI PODATKI SO TVOJI
 

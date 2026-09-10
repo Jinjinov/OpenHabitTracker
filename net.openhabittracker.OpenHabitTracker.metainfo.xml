@@ -149,6 +149,26 @@
       <li xml:lang="sk">Kategórie, farby, priority, hľadanie, filtre a triedenie - pre poznámky, úlohy aj návyky</li>
       <li xml:lang="hr">Kategorije, boje, prioriteti, pretraživanje, filtri i sortiranje - za bilješke, zadatke i navike</li>
       <li xml:lang="sr">Kategorije, boje, prioriteti, pretraga, filteri i sortiranje - za beleške, zadatke i navike</li>
+      <li>Optional notifications: one daily summary of what is due, and a reminder before a task's planned time</li>
+      <li xml:lang="de">Optionale Benachrichtigungen: eine tägliche Zusammenfassung des Fälligen und eine Erinnerung vor der geplanten Zeit einer Aufgabe</li>
+      <li xml:lang="es">Notificaciones opcionales: un resumen diario de lo pendiente y un recordatorio antes de la hora planificada de una tarea</li>
+      <li xml:lang="sl">Neobvezna obvestila: en dnevni povzetek tega, kar je na vrsti, in opomnik pred načrtovanim časom naloge</li>
+      <li xml:lang="fr">Notifications optionnelles : un résumé quotidien de ce qui est à faire et un rappel avant l'heure prévue d'une tâche</li>
+      <li xml:lang="pt">Notificações opcionais: um resumo diário do que está pendente e um lembrete antes da hora planeada de uma tarefa</li>
+      <li xml:lang="it">Notifiche opzionali: un riepilogo giornaliero di ciò che è in scadenza e un promemoria prima dell'ora pianificata di un compito</li>
+      <li xml:lang="ja">任意の通知:期限が来ているものの毎日のまとめと、タスクの予定時刻前のリマインダー</li>
+      <li xml:lang="zh_CN">可选通知:每日的待办摘要,以及任务计划时间前的提醒</li>
+      <li xml:lang="ko">선택적 알림: 기한이 된 항목의 일일 요약과 할 일의 예정 시간 전 알림</li>
+      <li xml:lang="nl">Optionele meldingen: één dagelijks overzicht van wat er aan de beurt is en een herinnering voor de geplande tijd van een taak</li>
+      <li xml:lang="da">Valgfrie notifikationer: én daglig oversigt over det forfaldne og en påmindelse før en opgaves planlagte tidspunkt</li>
+      <li xml:lang="no">Valgfrie varsler: én daglig oppsummering av det som forfaller og en påminnelse før en oppgaves planlagte tidspunkt</li>
+      <li xml:lang="sv">Valfria aviseringar: en daglig sammanfattning av det som ska göras och en påminnelse före en uppgifts planerade tid</li>
+      <li xml:lang="fi">Valinnaiset ilmoitukset: yksi päivittäinen yhteenveto vuorossa olevista ja muistutus ennen tehtävän suunniteltua aikaa</li>
+      <li xml:lang="pl">Opcjonalne powiadomienia: jedno dzienne podsumowanie tego, co na dziś, i przypomnienie przed zaplanowaną godziną zadania</li>
+      <li xml:lang="cs">Volitelná upozornění: jeden denní souhrn toho, co je na řadě, a připomenutí před plánovaným časem úkolu</li>
+      <li xml:lang="sk">Voliteľné upozornenia: jeden denný súhrn toho, čo je na rade, a pripomenutie pred plánovaným časom úlohy</li>
+      <li xml:lang="hr">Neobavezne obavijesti: jedan dnevni sažetak onoga što je na redu i podsjetnik prije planiranog vremena zadatka</li>
+      <li xml:lang="sr">Opciona obaveštenja: jedan dnevni pregled onoga što je na redu i podsetnik pre planiranog vremena zadatka</li>
       <li>All data is stored locally on your device</li>
       <li xml:lang="de">Alle Daten werden lokal auf deinem Gerät gespeichert</li>
       <li xml:lang="es">Todos los datos se guardan localmente en tu dispositivo</li>

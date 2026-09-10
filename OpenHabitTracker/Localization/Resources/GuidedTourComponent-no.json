@@ -145,5 +145,11 @@
   "Previous": "Forrige",
   "Next": "Neste",
   "Complete tour": "Fullfør omvisning",
-  "Close tour": "Lukk omvisning"
+  "Close tour": "Lukk omvisning",
+  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "Velg tidspunktet på dagen da den daglige oppsummeringen av det som forfaller kommer, eller tøm det for å slå den av.",
+  "Choose whether the daily summary covers tasks, habits, or both.": "Velg om den daglige oppsummeringen omfatter oppgaver, vaner eller begge deler.",
+  "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Velg hvor langt over intervallet sitt en vane må være før den daglige oppsummeringen nevner den.",
+  "Let the daily summary count tasks that are past their planned time and still not done.": "La den daglige oppsummeringen telle oppgaver som har passert planlagt tidspunkt og fortsatt ikke er gjort.",
+  "Choose how long before a task's planned time its reminder arrives, or turn it off.": "Velg hvor lenge før en oppgaves planlagte tidspunkt påminnelsen kommer, eller slå den av.",
+  "Only notify about items at this priority or higher.": "Varsle bare om elementer med denne prioriteten eller høyere."
 }

@@ -11,6 +11,7 @@ NOTE, COMPITI E ABITUDINI IN UN UNICO POSTO
 • Abitudini con intervalli di ripetizione flessibili - registrate come ripetizioni, tempo o quantità
 • Sotto-elementi checklist per compiti e abitudini
 • Categorie, colori, priorità, ricerca, filtri e ordinamento - per note, compiti e abitudini
+• Notifiche opzionali: un riepilogo giornaliero di ciò che è in scadenza e un promemoria prima dell'ora pianificata di un compito
 
 I TUOI DATI SONO TUOI
 

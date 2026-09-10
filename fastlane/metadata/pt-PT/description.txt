@@ -11,6 +11,7 @@ NOTAS, TAREFAS E HÁBITOS NUM SÓ LUGAR
 • Hábitos com intervalos de repetição flexíveis - registados como repetições, tempo ou quantidade
 • Subitens de lista de verificação em tarefas e hábitos
 • Categorias, cores, prioridades, pesquisa, filtros e ordenação - para notas, tarefas e hábitos
+• Notificações opcionais: um resumo diário do que está pendente e um lembrete antes da hora planeada de uma tarefa
 
 OS SEUS DADOS SÃO SEUS
 

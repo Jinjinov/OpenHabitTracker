@@ -145,5 +145,11 @@
   "Previous": "Nazaj",
   "Next": "Naprej",
   "Complete tour": "Dokončaj vodič",
-  "Close tour": "Zapri vodič"
+  "Close tour": "Zapri vodič",
+  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "Izberi uro dneva, ob kateri prispe dnevni povzetek tega, kar je na vrsti, ali ga počisti in s tem izklopi.",
+  "Choose whether the daily summary covers tasks, habits, or both.": "Izberi, ali dnevni povzetek zajema naloge, navade ali oboje.",
+  "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Izberi, za koliko mora navada preseči svoj interval, preden jo dnevni povzetek omeni.",
+  "Let the daily summary count tasks that are past their planned time and still not done.": "Naj dnevni povzetek šteje tudi naloge, ki jim je načrtovani čas potekel in še niso opravljene.",
+  "Choose how long before a task's planned time its reminder arrives, or turn it off.": "Izberi, kako dolgo pred načrtovanim časom naloge prispe opomnik, ali ga izklopi.",
+  "Only notify about items at this priority or higher.": "Obveščaj samo o elementih s to prioriteto ali višjo."
 }

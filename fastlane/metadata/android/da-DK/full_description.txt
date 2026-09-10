@@ -11,6 +11,7 @@ NOTER, OPGAVER OG VANER ET SAMLET STED
 • Vaner med fleksible gentagelsesintervaller - registreret som gentagelser, tid eller mængde
 • Tjekliste-underpunkter på både opgaver og vaner
 • Kategorier, farver, prioriteter, søgning, filtre og sortering - for noter, opgaver og vaner
+• Valgfrie notifikationer: én daglig oversigt over det forfaldne og en påmindelse før en opgaves planlagte tidspunkt
 
 DINE DATA ER DINE
 

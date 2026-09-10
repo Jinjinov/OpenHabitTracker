@@ -145,5 +145,11 @@
   "Previous": "Vorige",
   "Next": "Volgende",
   "Complete tour": "Rondleiding voltooien",
-  "Close tour": "Rondleiding sluiten"
+  "Close tour": "Rondleiding sluiten",
+  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "Kies het tijdstip waarop het dagelijkse overzicht van wat er aan de beurt is binnenkomt, of wis het om het uit te schakelen.",
+  "Choose whether the daily summary covers tasks, habits, or both.": "Kies of het dagelijkse overzicht taken, gewoontes of beide omvat.",
+  "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Kies hoe ver een gewoonte over haar interval moet zijn voordat het dagelijkse overzicht haar noemt.",
+  "Let the daily summary count tasks that are past their planned time and still not done.": "Laat het dagelijkse overzicht ook taken meetellen waarvan de geplande tijd voorbij is en die nog niet klaar zijn.",
+  "Choose how long before a task's planned time its reminder arrives, or turn it off.": "Kies hoe lang voor de geplande tijd van een taak de herinnering binnenkomt, of schakel deze uit.",
+  "Only notify about items at this priority or higher.": "Alleen melden over items met deze prioriteit of hoger."
 }

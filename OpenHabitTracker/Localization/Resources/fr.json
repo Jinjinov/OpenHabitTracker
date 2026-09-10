@@ -284,5 +284,20 @@
   "Target quantity": "Quantité cible",
   "OK": "OK",
   "Cancel": "Annuler",
-  "Rate this app": "Noter cette application"
+  "Rate this app": "Noter cette application",
+  "Daily summary at": "Résumé quotidien à",
+  "Daily summary covers": "Le résumé quotidien couvre",
+  "Clear daily summary time": "Effacer l'heure du résumé quotidien",
+  "Clear reminder time": "Effacer l'heure du rappel",
+  "Remind hours": "Heures du rappel",
+  "Remind minutes": "Minutes du rappel",
+  "Remind before a planned task": "Rappeler avant une tâche prévue",
+  "Tasks and habits": "Tâches et habitudes",
+  "Notify only from priority": "Notifier seulement à partir de la priorité",
+  "Any priority": "Toute priorité",
+  "Notify about habits over": "Notifier les habitudes au-dessus de",
+  "Include overdue tasks": "Inclure les tâches en retard",
+  "Due today": "À faire aujourd'hui",
+  "Daily summary": "Résumé quotidien",
+  "Task reminders": "Rappels de tâches"
 }

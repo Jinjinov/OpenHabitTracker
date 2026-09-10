@@ -145,5 +145,11 @@
   "Previous": "Anterior",
   "Next": "Siguiente",
   "Complete tour": "Completar tour",
-  "Close tour": "Cerrar tour"
+  "Close tour": "Cerrar tour",
+  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "Elige la hora del día a la que llega el resumen diario de lo pendiente, o bórrala para desactivarlo.",
+  "Choose whether the daily summary covers tasks, habits, or both.": "Elige si el resumen diario incluye tareas, hábitos o ambos.",
+  "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Elige cuánto debe superar un hábito su intervalo antes de que el resumen diario lo mencione.",
+  "Let the daily summary count tasks that are past their planned time and still not done.": "Deja que el resumen diario cuente las tareas cuya hora planificada ya pasó y siguen sin completarse.",
+  "Choose how long before a task's planned time its reminder arrives, or turn it off.": "Elige cuánto antes de la hora planificada de una tarea llega su recordatorio, o desactívalo.",
+  "Only notify about items at this priority or higher.": "Notificar solo sobre elementos con esta prioridad o superior."
 }

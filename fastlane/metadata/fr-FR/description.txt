@@ -11,6 +11,7 @@ NOTES, TÂCHES ET HABITUDES AU MÊME ENDROIT
 • Habitudes avec intervalles de répétition flexibles - suivies en répétitions, temps ou quantité
 • Sous-éléments de type checklist pour les tâches et les habitudes
 • Catégories, couleurs, priorités, recherche, filtres et tri - pour les notes, les tâches et les habitudes
+• Notifications optionnelles : un résumé quotidien de ce qui est à faire et un rappel avant l'heure prévue d'une tâche
 
 VOS DONNÉES VOUS APPARTIENNENT
 

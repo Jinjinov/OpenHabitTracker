@@ -145,5 +145,11 @@
   "Previous": "上一步",
   "Next": "下一步",
   "Complete tour": "完成引导",
-  "Close tour": "关闭引导"
+  "Close tour": "关闭引导",
+  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "选择每日摘要送达的时间，清除即可关闭。",
+  "Choose whether the daily summary covers tasks, habits, or both.": "选择每日摘要包含任务、习惯还是两者。",
+  "Choose how far over its interval a habit has to be before the daily summary mentions it.": "选择习惯超出其间隔多少后才会出现在每日摘要中。",
+  "Let the daily summary count tasks that are past their planned time and still not done.": "让每日摘要也计入已过计划时间但仍未完成的任务。",
+  "Choose how long before a task's planned time its reminder arrives, or turn it off.": "选择在任务计划时间之前多久收到提醒，或将其关闭。",
+  "Only notify about items at this priority or higher.": "仅通知此优先级或更高的项目。"
 }

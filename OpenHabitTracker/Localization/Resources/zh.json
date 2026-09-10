@@ -284,5 +284,20 @@
   "Target quantity": "目标数量",
   "OK": "确定",
   "Cancel": "取消",
-  "Rate this app": "评价此应用"
+  "Rate this app": "评价此应用",
+  "Daily summary at": "每日摘要时间",
+  "Daily summary covers": "每日摘要包含",
+  "Clear daily summary time": "清除每日摘要时间",
+  "Clear reminder time": "清除提醒时间",
+  "Remind hours": "提醒小时",
+  "Remind minutes": "提醒分钟",
+  "Remind before a planned task": "在计划任务前提醒",
+  "Tasks and habits": "任务和习惯",
+  "Notify only from priority": "仅从此优先级起通知",
+  "Any priority": "任意优先级",
+  "Notify about habits over": "通知超过此比例的习惯",
+  "Include overdue tasks": "包含逾期任务",
+  "Due today": "今天到期",
+  "Daily summary": "每日摘要",
+  "Task reminders": "任务提醒"
 }

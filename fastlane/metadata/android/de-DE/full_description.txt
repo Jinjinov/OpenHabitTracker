@@ -11,6 +11,7 @@ NOTIZEN, AUFGABEN UND GEWOHNHEITEN AN EINEM ORT
 • Gewohnheiten mit flexiblen Wiederholungsintervallen - erfasst als Wiederholungen, Zeit oder Menge
 • Checklisten-Unterpunkte für Aufgaben und Gewohnheiten
 • Kategorien, Farben, Prioritäten, Suche, Filter und Sortierung - für Notizen, Aufgaben und Gewohnheiten
+• Optionale Benachrichtigungen: eine tägliche Zusammenfassung des Fälligen und eine Erinnerung vor der geplanten Zeit einer Aufgabe
 
 DEINE DATEN GEHÖREN DIR
 

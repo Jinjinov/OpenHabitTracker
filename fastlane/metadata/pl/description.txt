@@ -11,6 +11,7 @@ NOTATKI, ZADANIA I NAWYKI W JEDNYM MIEJSCU
 • Nawyki z elastycznymi odstępami powtarzania - zapisywane jako powtórzenia, czas lub ilość
 • Podpunkty listy kontrolnej w zadaniach i nawykach
 • Kategorie, kolory, priorytety, wyszukiwanie, filtry i sortowanie - dla notatek, zadań i nawyków
+• Opcjonalne powiadomienia: jedno dzienne podsumowanie tego, co na dziś, i przypomnienie przed zaplanowaną godziną zadania
 
 TWOJE DANE SĄ TWOJE
 

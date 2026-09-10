@@ -284,5 +284,20 @@
   "Target quantity": "Zielmenge",
   "OK": "OK",
   "Cancel": "Abbrechen",
-  "Rate this app": "Diese App bewerten"
+  "Rate this app": "Diese App bewerten",
+  "Daily summary at": "Tägliche Zusammenfassung um",
+  "Daily summary covers": "Tägliche Zusammenfassung umfasst",
+  "Clear daily summary time": "Zeit der täglichen Zusammenfassung löschen",
+  "Clear reminder time": "Erinnerungszeit löschen",
+  "Remind hours": "Erinnerung Stunden",
+  "Remind minutes": "Erinnerung Minuten",
+  "Remind before a planned task": "Vor einer geplanten Aufgabe erinnern",
+  "Tasks and habits": "Aufgaben und Gewohnheiten",
+  "Notify only from priority": "Erst ab Priorität benachrichtigen",
+  "Any priority": "Jede Priorität",
+  "Notify about habits over": "Über Gewohnheiten benachrichtigen ab",
+  "Include overdue tasks": "Überfällige Aufgaben einbeziehen",
+  "Due today": "Heute fällig",
+  "Daily summary": "Tägliche Zusammenfassung",
+  "Task reminders": "Aufgabenerinnerungen"
 }
