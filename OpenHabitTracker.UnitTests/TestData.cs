@@ -6,8 +6,11 @@ namespace OpenHabitTracker.UnitTests;
 internal static class TestData
 {
     internal static HabitModel Habit(long id = 1, string title = "Test", bool isDeleted = false,
-        Priority priority = Priority.None, long categoryId = 0) =>
-        new() { Id = id, Title = title, IsDeleted = isDeleted, Priority = priority, CategoryId = categoryId };
+        Priority priority = Priority.None, long categoryId = 0, int repeatCount = 1, int repeatInterval = 1,
+        Period repeatPeriod = Period.Day, DateTime? lastTimeDoneAt = null, DateTime? startAt = null) =>
+        new() { Id = id, Title = title, IsDeleted = isDeleted, Priority = priority, CategoryId = categoryId,
+            RepeatCount = repeatCount, RepeatInterval = repeatInterval, RepeatPeriod = repeatPeriod,
+            LastTimeDoneAt = lastTimeDoneAt, StartAt = startAt };
 
     internal static NoteModel Note(long id = 1, string title = "Test", string content = "", bool isDeleted = false,
         Priority priority = Priority.None, long categoryId = 0) =>

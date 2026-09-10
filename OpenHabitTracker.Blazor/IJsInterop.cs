@@ -22,4 +22,6 @@ public interface IJsInterop
     ValueTask SetCalculateAutoHeight(ElementReference element);
     ValueTask HandleTabKey(ElementReference element);
     ValueTask PreventScrollKeys(ElementReference element);
+    ValueTask<bool> RequestNotificationPermission();
+    ValueTask ShowNotification(string title, string body, string route, object dotnetRef);
 }

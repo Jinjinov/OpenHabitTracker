@@ -204,3 +204,30 @@ export function handleTabKey(textarea) {
         textarea.tabKeyHandlerAdded = true;
     }
 }
+
+export async function requestNotificationPermission() {
+    if (!("Notification" in window))
+        return false;
+
+    if (Notification.permission === "granted")
+        return true;
+
+    // A denied permission cannot be re-requested; only the browser's own UI can change it back.
+    if (Notification.permission === "denied")
+        return false;
+
+    return await Notification.requestPermission() === "granted";
+}
+
+export function showNotification(title, body, route, dotnetRef) {
+    if (!("Notification" in window) || Notification.permission !== "granted")
+        return;
+
+    const notification = new Notification(title, { body: body });
+
+    notification.onclick = () => {
+        window.focus();
+        notification.close();
+        dotnetRef.invokeMethodAsync("OnNotificationActivated", route).catch(() => { });
+    };
+}

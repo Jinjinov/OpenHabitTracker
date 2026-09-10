@@ -84,6 +84,18 @@ public class SettingsModel
 
     public int VerticalMargin { get; set; } = 1;
 
+    public int? NotificationHour { get; set; }
+
+    public int? NotificationLeadMinutes { get; set; }
+
+    public DigestContent NotificationContent { get; set; }
+
+    public Priority NotificationMinimumPriority { get; set; }
+
+    public int NotificationHabitThreshold { get; set; } = 100;
+
+    public bool NotificationIncludeOverdueTasks { get; set; } = true;
+
     public FilterDisplay CategoryFilterDisplay { get; set; } = FilterDisplay.CheckBoxes;
 
     public FilterDisplay PriorityFilterDisplay { get; set; } = FilterDisplay.CheckBoxes;
@@ -185,6 +197,12 @@ public class SettingsModel
             ShowDoneInRange = true,
             HorizontalMargin = 1,
             VerticalMargin = 3,
+            NotificationHour = null,
+            NotificationLeadMinutes = null,
+            NotificationContent = DigestContent.Both,
+            NotificationMinimumPriority = Priority.None,
+            NotificationHabitThreshold = 100,
+            NotificationIncludeOverdueTasks = true,
             CategoryFilterDisplay = FilterDisplay.CheckBoxes,
             PriorityFilterDisplay = FilterDisplay.CheckBoxes,
             SelectedCategoryId = null,

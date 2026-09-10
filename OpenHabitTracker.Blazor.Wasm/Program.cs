@@ -34,6 +34,7 @@ builder.Services.AddDataAccess();
 builder.Services.AddBackup();
 builder.Services.AddBlazor();
 builder.Services.AddScoped<IAppReview, AppReview>(); // different in Maui
+builder.Services.AddScoped<INotifications, OpenHabitTracker.Blazor.Wasm.Notifications>();
 builder.Services.AddScoped<IOpenFile, OpenFile>();
 builder.Services.AddScoped<ISaveFile, SaveFile>();
 builder.Services.AddScoped<INavBarFragment, OpenHabitTracker.Blazor.Wasm.Layout.NavBarFragment>();

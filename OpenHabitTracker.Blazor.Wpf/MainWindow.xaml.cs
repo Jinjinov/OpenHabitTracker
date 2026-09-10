@@ -46,6 +46,7 @@ public partial class MainWindow : Window
         services.AddBackup();
         services.AddBlazor();
         services.AddScoped<IAppReview, AppReview>(); // different in Maui
+        services.AddScoped<INotifications, OpenHabitTracker.Blazor.Wpf.Notifications>();
         services.AddScoped<IOpenFile, OpenFile>();
         services.AddScoped<ISaveFile, SaveFile>();
         services.AddScoped<INavBarFragment, NavBarFragment>();

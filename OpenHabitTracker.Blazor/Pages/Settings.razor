@@ -8,6 +8,9 @@
 @inject IJsInterop JsInterop
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
+@inject IPriorityService PriorityService
+@inject INotifications Notifications
+@inject INotificationScheduler NotificationScheduler
 
 <div>
     <div class="my-1 list-group">
@@ -220,6 +223,68 @@
             </InputSelect>
         </div>
 
+        @if (Notifications.CanNotify)
+        {
+            <div class="list-group-item" data-settings-step-27>
+                <small>@Loc["Daily summary at"]:</small>
+                <InputSelect class="form-select" aria-label="@Loc["Daily summary at"]" Value="_notificationHour" ValueExpression="() => _notificationHour" TValue="int" ValueChanged="SaveNotificationHour">
+                    <option value="-1">@Loc["Off"]</option>
+                    @for (int i = 0; i <= 23; i++)
+                    {
+                        <option value="@i">@($"{i:00}:00")</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="list-group-item" data-settings-step-28>
+                <small>@Loc["Remind before a planned task"]:</small>
+                <InputSelect class="form-select" aria-label="@Loc["Remind before a planned task"]" Value="_notificationLeadMinutes" ValueExpression="() => _notificationLeadMinutes" TValue="int" ValueChanged="SaveNotificationLeadMinutes">
+                    <option value="-1">@Loc["Off"]</option>
+                    <option value="0">@Loc["At the planned time"]</option>
+                    <option value="5">@Loc["5 minutes before"]</option>
+                    <option value="10">@Loc["10 minutes before"]</option>
+                    <option value="15">@Loc["15 minutes before"]</option>
+                    <option value="30">@Loc["30 minutes before"]</option>
+                    <option value="60">@Loc["1 hour before"]</option>
+                    <option value="120">@Loc["2 hours before"]</option>
+                    <option value="1440">@Loc["1 day before"]</option>
+                </InputSelect>
+            </div>
+
+            <div class="list-group-item" data-settings-step-29>
+                <small>@Loc["Notify about"]:</small>
+                <InputSelect class="form-select" aria-label="@Loc["Notify about"]" Value="_settings.NotificationContent" ValueExpression="() => _settings.NotificationContent" TValue="DigestContent" ValueChanged="SaveNotificationContent">
+                    <option value="@DigestContent.Both">@Loc["Tasks and habits"]</option>
+                    <option value="@DigestContent.Tasks">@Loc["Tasks"]</option>
+                    <option value="@DigestContent.Habits">@Loc["Habits"]</option>
+                </InputSelect>
+            </div>
+
+            <div class="list-group-item" data-settings-step-30>
+                <small>@Loc["Notify only from priority"]:</small>
+                <InputSelect class="form-select" aria-label="@Loc["Notify only from priority"]" Value="_settings.NotificationMinimumPriority" ValueExpression="() => _settings.NotificationMinimumPriority" TValue="Priority" ValueChanged="SaveNotificationMinimumPriority">
+                    <option value="@Priority.None">@Loc["Any priority"]</option>
+                    @foreach (Priority priority in Enum.GetValues<Priority>())
+                    {
+                        @if (priority != Priority.None)
+                        {
+                            <option value="@priority">@Loc[PriorityService.GetPriorityName(priority)]</option>
+                        }
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="list-group-item" data-settings-step-31>
+                <small>@Loc["Notify about habits over"] @_settings.NotificationHabitThreshold%</small>
+                <input type="range" min="50" max="200" step="10" class="form-range d-block" aria-label="@Loc["Notify about habits over"]" value="@_settings.NotificationHabitThreshold" @oninput="(ChangeEventArgs args) => SaveNotificationHabitThreshold(Convert.ToInt32(args.Value))" />
+            </div>
+
+            <div class="list-group-item" data-settings-step-32>
+                <InputCheckbox id="NotificationIncludeOverdueTasks" class="form-check-input me-1" Value="_settings.NotificationIncludeOverdueTasks" ValueExpression="() => _settings.NotificationIncludeOverdueTasks" ValueChanged="SaveNotificationIncludeOverdueTasks" />
+                <label for="NotificationIncludeOverdueTasks" class="form-check-label stretched-link d-inline">@Loc["Include tasks overdue from earlier days"]</label>
+            </div>
+        }
+
     </div>
 </div>
 
@@ -229,35 +294,46 @@
 }
 
 @code {
-    TourStep[] tourSteps =
+    TourStep[] tourSteps;
+
+    public Settings()
     {
-        new() { Text = "Toggle dark mode." },
-        new() { Text = "Choose a theme." },
-        new() { Text = "Choose a start page that should open every time you start OpenHabitTracker." },
-        new() { Text = "Choose a start sidebar that should open every time you start OpenHabitTracker." },
-        new() { Text = "Group items by category in Notes, Tasks and Habits." },
-        new() { Text = "Show the time each habit was last completed in the category header." },
-        new() { Text = "Show help on every page." },
-        new() { Text = "Show the priority in Notes, Tasks and Habits." },
-        new() { Text = "Show the item list in Tasks and Habits." },
-        new() { Text = "Show the small calendar in one line in Habits." },
-        new() { Text = "Choose the maximum number of days shown in the small calendar in Habits. Auto shows as many days as fit." },
-        new() { Text = "Show the large calendar for the selected Habit." },
-        new() { Text = "Show the habit statistics." },
-        new() { Text = "Show the habit charts: target, history, calendar, best streaks and frequency." },
-        new() { Text = "Show the category in Notes, Tasks and Habits." },
-        new() { Text = "Show the color picker in Notes, Tasks and Habits." },
-        new() { Text = "Show the created date and the updated date in Notes, Tasks and Habits." },
-        new() { Text = "Choose a language." },
-        new() { Text = "Choose the start of the week in the large calendar in Habits." },
-        new() { Text = "Pressing the TAB key inserts a tab in the content when writing the text in Notes." },
-        new() { Text = "You can use Markdown to format the content in Notes." },
-        new() { Text = "Resetting the habit when it is completed will uncheck all items." },
-        new() { Text = "Choose how to display the category filter." },
-        new() { Text = "Choose how to display the priority filter." },
-        new() { Text = "Choose the horizontal space between items in the list." },
-        new() { Text = "Choose the vertical space between items in the list." },
-    };
+        tourSteps = new TourStep[]
+        {
+            new() { Text = "Toggle dark mode." },
+            new() { Text = "Choose a theme." },
+            new() { Text = "Choose a start page that should open every time you start OpenHabitTracker." },
+            new() { Text = "Choose a start sidebar that should open every time you start OpenHabitTracker." },
+            new() { Text = "Group items by category in Notes, Tasks and Habits." },
+            new() { Text = "Show the time each habit was last completed in the category header." },
+            new() { Text = "Show help on every page." },
+            new() { Text = "Show the priority in Notes, Tasks and Habits." },
+            new() { Text = "Show the item list in Tasks and Habits." },
+            new() { Text = "Show the small calendar in one line in Habits." },
+            new() { Text = "Choose the maximum number of days shown in the small calendar in Habits. Auto shows as many days as fit." },
+            new() { Text = "Show the large calendar for the selected Habit." },
+            new() { Text = "Show the habit statistics." },
+            new() { Text = "Show the habit charts: target, history, calendar, best streaks and frequency." },
+            new() { Text = "Show the category in Notes, Tasks and Habits." },
+            new() { Text = "Show the color picker in Notes, Tasks and Habits." },
+            new() { Text = "Show the created date and the updated date in Notes, Tasks and Habits." },
+            new() { Text = "Choose a language." },
+            new() { Text = "Choose the start of the week in the large calendar in Habits." },
+            new() { Text = "Pressing the TAB key inserts a tab in the content when writing the text in Notes." },
+            new() { Text = "You can use Markdown to format the content in Notes." },
+            new() { Text = "Resetting the habit when it is completed will uncheck all items." },
+            new() { Text = "Choose how to display the category filter." },
+            new() { Text = "Choose how to display the priority filter." },
+            new() { Text = "Choose the horizontal space between items in the list." },
+            new() { Text = "Choose the vertical space between items in the list." },
+            new() { Text = "Choose the time of day the daily summary of what is due arrives, or turn it off.", Show = () => Notifications.CanNotify },
+            new() { Text = "Choose how long before a task's planned time its reminder arrives, or turn it off.", Show = () => Notifications.CanNotify },
+            new() { Text = "Choose whether notifications cover tasks, habits, or both.", Show = () => Notifications.CanNotify },
+            new() { Text = "Only notify about items at this priority or higher.", Show = () => Notifications.CanNotify },
+            new() { Text = "Choose how far over its interval a habit has to be before the daily summary mentions it.", Show = () => Notifications.CanNotify },
+            new() { Text = "Let the daily summary count tasks that were planned for an earlier day and are still not done.", Show = () => Notifications.CanNotify },
+        };
+    }
 
     private async Task StartTour(string tourId)
     {
@@ -275,9 +351,16 @@
 
     SettingsModel _settings => ClientState.Settings;
 
+    // -1 is the off entry: InputSelect needs a non-nullable TValue, the stored value is nullable.
+    int _notificationHour => _settings.NotificationHour ?? -1;
+
+    int _notificationLeadMinutes => _settings.NotificationLeadMinutes ?? -1;
+
     async Task UpdateAndRefresh()
     {
         await ClientState.UpdateSettings();
+
+        await NotificationScheduler.Rebuild();
 
         StateChanged.Value = !StateChanged.Value;
         await StateChangedChanged.InvokeAsync(StateChanged.Value);
@@ -476,6 +559,58 @@
     async Task SaveVerticalMargin(int verticalMargin)
     {
         _settings.VerticalMargin = verticalMargin;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveNotificationHour(int hour)
+    {
+        _settings.NotificationHour = await ResolveWithPermission(hour);
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveNotificationLeadMinutes(int minutes)
+    {
+        _settings.NotificationLeadMinutes = await ResolveWithPermission(minutes);
+
+        await UpdateAndRefresh();
+    }
+
+    // Turning a half on needs the OS permission; a refusal is permanent on iOS,
+    // so the setting goes back to off rather than staying on while nothing fires.
+    async Task<int?> ResolveWithPermission(int value)
+    {
+        if (value < 0)
+            return null;
+
+        return await Notifications.RequestPermission() ? value : null;
+    }
+
+    async Task SaveNotificationContent(DigestContent content)
+    {
+        _settings.NotificationContent = content;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveNotificationMinimumPriority(Priority priority)
+    {
+        _settings.NotificationMinimumPriority = priority;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveNotificationHabitThreshold(int threshold)
+    {
+        _settings.NotificationHabitThreshold = threshold;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveNotificationIncludeOverdueTasks(bool include)
+    {
+        _settings.NotificationIncludeOverdueTasks = include;
 
         await UpdateAndRefresh();
     }

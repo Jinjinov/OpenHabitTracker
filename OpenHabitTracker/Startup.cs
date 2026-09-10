@@ -44,6 +44,7 @@ public static class Startup
         services.AddScoped<ITaskService, TaskService>();
         services.AddScoped<ITrashService, TrashService>();
         services.AddScoped<ISearchFilterService, SearchFilterService>();
+        services.AddScoped<INotificationScheduler, NotificationScheduler>();
 
         services.AddLocalization(options => options.ResourcesPath = @"Localization\Resources");
         services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();

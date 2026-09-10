@@ -15,6 +15,7 @@ public class HabitServiceTests
     private ClientState _clientState = null!;
     private SearchFilterService _searchFilterService = null!;
     private IAppReview _appReview = null!;
+    private INotificationScheduler _notificationScheduler = null!;
     private HabitService _sut = null!;
 
     [SetUp]
@@ -31,7 +32,8 @@ public class HabitServiceTests
 
         _searchFilterService = new();
         _appReview = Substitute.For<IAppReview>();
-        _sut = new(_clientState, _searchFilterService, _appReview);
+        _notificationScheduler = Substitute.For<INotificationScheduler>();
+        _sut = new(_clientState, _searchFilterService, _appReview, _notificationScheduler);
     }
 
     [TearDown]

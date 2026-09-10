@@ -18,6 +18,7 @@
          pinned per-host so the desktop lib never flows into the android APK (see the note in
          OpenHabitTracker.EntityFrameworkCore.csproj); remove when EF references 2.1.12+ itself -->
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.12" />
+    <PackageReference Include="Tmds.DBus.Protocol" Version="0.95.1" />
   </ItemGroup>
 
   <ItemGroup>

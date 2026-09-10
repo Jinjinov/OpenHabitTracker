@@ -84,6 +84,20 @@ public class SettingsEntity
 
     public int VerticalMargin { get; set; } = 1;
 
+    // null means off; otherwise the hour of day the daily summary is delivered.
+    public int? NotificationHour { get; set; }
+
+    // null means off; otherwise minutes before a timed task's planned moment.
+    public int? NotificationLeadMinutes { get; set; }
+
+    public DigestContent NotificationContent { get; set; }
+
+    public Priority NotificationMinimumPriority { get; set; }
+
+    public int NotificationHabitThreshold { get; set; } = 100;
+
+    public bool NotificationIncludeOverdueTasks { get; set; } = true;
+
     public FilterDisplay CategoryFilterDisplay { get; set; } = FilterDisplay.CheckBoxes;
 
     public FilterDisplay PriorityFilterDisplay { get; set; } = FilterDisplay.CheckBoxes;

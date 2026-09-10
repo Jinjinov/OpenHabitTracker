@@ -6,11 +6,12 @@ using OpenHabitTracker.Query;
 
 namespace OpenHabitTracker.Services;
 
-public class HabitService(ClientState clientState, ISearchFilterService searchFilterService, IAppReview appReview) : IHabitService
+public class HabitService(ClientState clientState, ISearchFilterService searchFilterService, IAppReview appReview, INotificationScheduler notificationScheduler) : IHabitService
 {
     private readonly ClientState _clientState = clientState;
     private readonly ISearchFilterService _searchFilterService = searchFilterService;
     private readonly IAppReview _appReview = appReview;
+    private readonly INotificationScheduler _notificationScheduler = notificationScheduler;
 
     public IReadOnlyCollection<HabitModel>? Habits => _clientState.Habits?.Values;
 
@@ -216,6 +217,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
             await _appReview.RecordEngagement(EngagementKind.Completed);
 
+            await _notificationScheduler.Rebuild();
+
             if (_clientState.Settings.UncheckAllItemsOnHabitDone)
             {
                 await UncheckAllItems(habit);
@@ -298,6 +301,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         }
 
         await _appReview.RecordEngagement(EngagementKind.Completed);
+
+        await _notificationScheduler.Rebuild();
     }
 
     public async Task RemoveTimeDone(HabitModel habit, TimeModel timeModel)

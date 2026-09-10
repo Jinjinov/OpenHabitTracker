@@ -15,6 +15,8 @@
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
 @inject IAuthFragment AuthFragment
+@inject INotificationScheduler NotificationScheduler
+@inject INotifications Notifications
 
 @* Root <div> inside <html><body><app> *@
 
@@ -266,7 +268,21 @@
         if (!string.IsNullOrEmpty(ClientState.Settings.StartSidebar))
             SelectComponent(ClientState.Settings.StartSidebar);
 
+        // Tapping a notification navigates to what it was about.
+        Notifications.SetActivatedAction(OnNotificationActivated);
+
+        await NotificationScheduler.Rebuild();
+
         Logger.LogInformation("MainLayout.OnInitializedAsync end");
+    }
+
+    void OnNotificationActivated(string route)
+    {
+        InvokeAsync(() =>
+        {
+            NavigationManager.NavigateTo(route);
+            StateHasChanged();
+        });
     }
 
     void SetDynamicComponentParameters()

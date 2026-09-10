@@ -164,6 +164,12 @@ public static class ModelToEntity
         entity.ShowDoneInRange = model.ShowDoneInRange;
         entity.HorizontalMargin = model.HorizontalMargin;
         entity.VerticalMargin = model.VerticalMargin;
+        entity.NotificationHour = model.NotificationHour;
+        entity.NotificationLeadMinutes = model.NotificationLeadMinutes;
+        entity.NotificationContent = model.NotificationContent;
+        entity.NotificationMinimumPriority = model.NotificationMinimumPriority;
+        entity.NotificationHabitThreshold = model.NotificationHabitThreshold;
+        entity.NotificationIncludeOverdueTasks = model.NotificationIncludeOverdueTasks;
         entity.CategoryFilterDisplay = model.CategoryFilterDisplay;
         entity.PriorityFilterDisplay = model.PriorityFilterDisplay;
         entity.SelectedCategoryId = model.SelectedCategoryId;

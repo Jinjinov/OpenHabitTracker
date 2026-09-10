@@ -399,6 +399,24 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.Property<int>("MaxSmallCalendarDays")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("NotificationContent")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NotificationHabitThreshold")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("NotificationHour")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("NotificationIncludeOverdueTasks")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("NotificationLeadMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NotificationMinimumPriority")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("PlannedFromDayOffset")
                         .HasColumnType("INTEGER");
 

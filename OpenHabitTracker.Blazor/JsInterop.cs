@@ -128,6 +128,18 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IJsInterop, IAsyncDisposab
         await module.InvokeVoidAsync("preventScrollKeys", element);
     }
 
+    public async ValueTask<bool> RequestNotificationPermission()
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        return await module.InvokeAsync<bool>("requestNotificationPermission");
+    }
+
+    public async ValueTask ShowNotification(string title, string body, string route, object dotnetRef)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("showNotification", title, body, route, dotnetRef);
+    }
+
     public async ValueTask DisposeAsync()
     {
         if (_moduleTask.IsValueCreated)

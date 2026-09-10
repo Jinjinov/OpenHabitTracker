@@ -15,6 +15,7 @@ public class TaskServiceTests
     private ClientState _clientState = null!;
     private SearchFilterService _searchFilterService = null!;
     private IAppReview _appReview = null!;
+    private INotificationScheduler _notificationScheduler = null!;
     private TaskService _sut = null!;
 
     [SetUp]
@@ -33,7 +34,8 @@ public class TaskServiceTests
 
         _searchFilterService = new();
         _appReview = Substitute.For<IAppReview>();
-        _sut = new(_clientState, _searchFilterService, _appReview);
+        _notificationScheduler = Substitute.For<INotificationScheduler>();
+        _sut = new(_clientState, _searchFilterService, _appReview, _notificationScheduler);
     }
 
     [TearDown]

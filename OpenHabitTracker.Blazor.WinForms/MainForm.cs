@@ -46,6 +46,7 @@ public partial class MainForm : Form
         services.AddBackup();
         services.AddBlazor();
         services.AddScoped<IAppReview, AppReview>(); // different in Maui
+        services.AddScoped<INotifications, OpenHabitTracker.Blazor.WinForms.Notifications>();
         services.AddScoped<IOpenFile, OpenFile>();
         services.AddScoped<ISaveFile, SaveFile>();
         services.AddScoped<INavBarFragment, NavBarFragment>();
