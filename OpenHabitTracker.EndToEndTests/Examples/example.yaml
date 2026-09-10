@@ -29,6 +29,12 @@ Settings:
   SelectedRatioMin: 50
   HorizontalMargin: 1
   VerticalMargin: 3
+  NotificationTime: ''
+  NotificationLeadMinutes: 
+  NotificationContent: Both
+  NotificationMinimumPriority: None
+  NotificationHabitThreshold: 100
+  NotificationIncludeOverdueTasks: true
   CategoryFilterDisplay: CheckBoxes
   PriorityFilterDisplay: CheckBoxes
   SelectedCategoryId: 

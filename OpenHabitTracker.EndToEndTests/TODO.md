@@ -180,6 +180,14 @@ To classify a new reload test: does the final pre-reload Expect wait on somethin
 only after the save completes? If not, add a WaitForIndexedDbAsync call with a predicate for the
 mutated field.
 
+#### Notifications are always denied headless
+
+Headless Chromium ships no notification presenter, so `Notification.permission` reads `denied` and
+`requestPermission()` resolves `denied` however the context grants it - `GrantPermissionsAsync`
+with or without an explicit origin makes no difference. Headed, the same grant reads `granted`, and
+a cleared context resolves `denied` without hanging on a prompt, so both answers are testable there.
+`BaseTest.Headless` is virtual for this: `NotificationSettingsTests` overrides it to false.
+
 #### #blazor-error-ui — FIXED
 
 When Blazor crashes hard (unrecoverable error), it makes #blazor-error-ui visible.

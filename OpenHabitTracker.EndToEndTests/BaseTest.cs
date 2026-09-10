@@ -15,10 +15,14 @@ public abstract class BaseTest : PlaywrightTest
 
     private List<string> _browserErrors = new();
 
+    // Headless Chromium has no notification presenter, so Notification.permission is "denied" there
+    // whatever the context grants. A fixture that needs a real permission answer overrides this.
+    protected virtual bool Headless => true;
+
     [SetUp]
     public async Task BaseSetUp()
     {
-        Browser = await BrowserType.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+        Browser = await BrowserType.LaunchAsync(new BrowserTypeLaunchOptions { Headless = Headless });
         Context = await Browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = new ViewportSize { Width = 1920, Height = 1080 },
