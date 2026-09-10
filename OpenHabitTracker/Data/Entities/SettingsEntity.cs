@@ -96,7 +96,7 @@ public class SettingsEntity
 
     public int NotificationHabitThreshold { get; set; } = 100;
 
-    public bool NotificationIncludeOverdueTasks { get; set; } = true;
+    public bool NotificationIncludeOverdueTasks { get; set; }
 
     public FilterDisplay CategoryFilterDisplay { get; set; } = FilterDisplay.CheckBoxes;
 

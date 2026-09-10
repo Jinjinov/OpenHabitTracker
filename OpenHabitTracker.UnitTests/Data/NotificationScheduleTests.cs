@@ -10,7 +10,7 @@ public class NotificationScheduleTests
 
     private static SettingsModel Settings(bool summaryOff = false, int? leadMinutes = 15,
         DigestContent content = DigestContent.Both, Priority minimumPriority = Priority.None,
-        int habitThreshold = 100, bool includeOverdueTasks = true,
+        int habitThreshold = 100, bool includeOverdueTasks = false,
         Ratio selectedRatio = Ratio.ElapsedToDesired) =>
         new()
         {
@@ -116,10 +116,11 @@ public class NotificationScheduleTests
         // Planned at 15:00, digest at 09:00: the partition keeps it out of today's digest.
         // From tomorrow it is overdue, so it counts there like any other overdue task.
         List<ScheduledNotification> result = NotificationSchedule.Build(
-            [TimedTask(new DateTime(2026, 7, 24, 15, 0, 0))], [], Settings(), Now);
+            [TimedTask(new DateTime(2026, 7, 24, 15, 0, 0))], [], Settings(includeOverdueTasks: true), Now);
 
         Assert.That(result.Any(notification => notification.Kind == NotificationKind.DailyDigest && notification.NotifyAt.Date == Now.Date), Is.False);
         Assert.That(result.Count(notification => notification.Kind == NotificationKind.TaskReminder), Is.EqualTo(1));
+        Assert.That(result.Single(notification => notification.NotifyAt.Date == Now.Date.AddDays(1)).TaskCount, Is.EqualTo(1));
     }
 
     [Test]
@@ -137,7 +138,7 @@ public class NotificationScheduleTests
     public void Build_OverdueTask_CountsInEveryDigestWhileTheSettingIsOn()
     {
         List<ScheduledNotification> result = NotificationSchedule.Build(
-            [UntimedTask(Now.AddDays(-3))], [], Settings(leadMinutes: null), Now);
+            [UntimedTask(Now.AddDays(-3))], [], Settings(leadMinutes: null, includeOverdueTasks: true), Now);
 
         Assert.That(result, Has.Count.EqualTo(NotificationSchedule.HorizonDays));
         Assert.That(result.All(notification => notification.TaskCount == 1), Is.True);
@@ -147,7 +148,7 @@ public class NotificationScheduleTests
     public void Build_OverdueTask_CountsInNoDigestWhileTheSettingIsOff()
     {
         List<ScheduledNotification> result = NotificationSchedule.Build(
-            [UntimedTask(Now.AddDays(-3))], [], Settings(leadMinutes: null, includeOverdueTasks: false), Now);
+            [UntimedTask(Now.AddDays(-3))], [], Settings(leadMinutes: null), Now);
 
         Assert.That(result, Is.Empty);
     }

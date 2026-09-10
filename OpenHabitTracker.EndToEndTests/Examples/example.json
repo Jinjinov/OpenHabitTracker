@@ -35,7 +35,7 @@
     "NotificationContent": 0,
     "NotificationMinimumPriority": 0,
     "NotificationHabitThreshold": 100,
-    "NotificationIncludeOverdueTasks": true,
+    "NotificationIncludeOverdueTasks": false,
     "CategoryFilterDisplay": 0,
     "PriorityFilterDisplay": 0,
     "SelectedCategoryId": null,

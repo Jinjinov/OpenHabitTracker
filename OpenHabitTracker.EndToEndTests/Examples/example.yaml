@@ -34,7 +34,7 @@ Settings:
   NotificationContent: Both
   NotificationMinimumPriority: None
   NotificationHabitThreshold: 100
-  NotificationIncludeOverdueTasks: true
+  NotificationIncludeOverdueTasks: false
   CategoryFilterDisplay: CheckBoxes
   PriorityFilterDisplay: CheckBoxes
   SelectedCategoryId: 

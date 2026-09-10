@@ -100,7 +100,7 @@ public class SettingsModel
 
     public int NotificationHabitThreshold { get; set; } = 100;
 
-    public bool NotificationIncludeOverdueTasks { get; set; } = true;
+    public bool NotificationIncludeOverdueTasks { get; set; }
 
     public FilterDisplay CategoryFilterDisplay { get; set; } = FilterDisplay.CheckBoxes;
 
@@ -208,7 +208,7 @@ public class SettingsModel
             NotificationContent = DigestContent.Both,
             NotificationMinimumPriority = Priority.None,
             NotificationHabitThreshold = 100,
-            NotificationIncludeOverdueTasks = true,
+            NotificationIncludeOverdueTasks = false,
             CategoryFilterDisplay = FilterDisplay.CheckBoxes,
             PriorityFilterDisplay = FilterDisplay.CheckBoxes,
             SelectedCategoryId = null,
