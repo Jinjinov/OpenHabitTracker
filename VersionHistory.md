@@ -1,11 +1,11 @@
 # 1.2.5 - Sep 9, 2026
 
 - Added five habit charts: target, history, calendar, best streaks and frequency
-- Added a "Show habit charts" setting
+- Added a daily summary notification of what is due
+- Added a reminder notification before a task's planned time
 - Added remembering the server address and username on the sync login form
-- Extended staying logged in for sync from 7 to 90 days between uses
 - Added an icon that shows when online sync is not working
-- Added notifications: a daily summary of what is due, and a reminder before a task's planned time
+- Extended staying logged in for sync from 7 to 90 days between uses
 - Fixed online sync giving up until restart after the server became unreachable
 
 # 1.2.4 - Aug 8, 2026
