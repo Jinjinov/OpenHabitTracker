@@ -20,7 +20,7 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
 
         SettingsModel settings = _clientState.Settings;
 
-        if (settings.NotificationHour is null && settings.NotificationLeadMinutes is null)
+        if (settings.NotificationTime is null && settings.NotificationLeadMinutes is null)
         {
             await _notifications.CancelAll();
             return;

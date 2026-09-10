@@ -8,13 +8,13 @@ public class NotificationScheduleTests
 {
     private static readonly DateTime Now = new(2026, 7, 24, 8, 0, 0);
 
-    private static SettingsModel Settings(int? hour = 9, int? leadMinutes = 15,
+    private static SettingsModel Settings(bool summaryOff = false, int? leadMinutes = 15,
         DigestContent content = DigestContent.Both, Priority minimumPriority = Priority.None,
         int habitThreshold = 100, bool includeOverdueTasks = true,
         Ratio selectedRatio = Ratio.ElapsedToDesired) =>
         new()
         {
-            NotificationHour = hour,
+            NotificationTime = summaryOff ? null : new TimeOnly(9, 0),
             NotificationLeadMinutes = leadMinutes,
             NotificationContent = content,
             NotificationMinimumPriority = minimumPriority,
@@ -45,7 +45,7 @@ public class NotificationScheduleTests
     public void Build_BothSwitchesOff_ReturnsNothing()
     {
         List<ScheduledNotification> result = NotificationSchedule.Build(
-            [TimedTask(Now.AddHours(4))], [DailyHabit(3)], Settings(hour: null, leadMinutes: null), Now);
+            [TimedTask(Now.AddHours(4))], [DailyHabit(3)], Settings(summaryOff: true, leadMinutes: null), Now);
 
         Assert.That(result, Is.Empty);
     }
@@ -54,7 +54,7 @@ public class NotificationScheduleTests
     public void Build_TimedTask_SchedulesReminderBeforeItsPlannedMoment()
     {
         List<ScheduledNotification> result = NotificationSchedule.Build(
-            [TimedTask(new DateTime(2026, 7, 24, 14, 0, 0), id: 7)], [], Settings(hour: null), Now);
+            [TimedTask(new DateTime(2026, 7, 24, 14, 0, 0), id: 7)], [], Settings(summaryOff: true), Now);
 
         Assert.That(result, Has.Count.EqualTo(1));
         Assert.That(result[0].Kind, Is.EqualTo(NotificationKind.TaskReminder));
@@ -66,7 +66,7 @@ public class NotificationScheduleTests
     public void Build_UntimedTask_GetsNoReminderOfItsOwn()
     {
         List<ScheduledNotification> result = NotificationSchedule.Build(
-            [UntimedTask(Now.AddDays(1))], [], Settings(hour: null), Now);
+            [UntimedTask(Now.AddDays(1))], [], Settings(summaryOff: true), Now);
 
         Assert.That(result, Is.Empty);
     }
@@ -95,7 +95,7 @@ public class NotificationScheduleTests
     public void Build_PlannedMomentAlreadyPast_SchedulesNoReminder()
     {
         List<ScheduledNotification> result = NotificationSchedule.Build(
-            [TimedTask(Now.AddHours(-1))], [], Settings(hour: null), Now);
+            [TimedTask(Now.AddHours(-1))], [], Settings(summaryOff: true), Now);
 
         Assert.That(result, Is.Empty);
     }
@@ -105,7 +105,7 @@ public class NotificationScheduleTests
     {
         // Planned in ten minutes, reminded a day ahead: the moment to fire was yesterday.
         List<ScheduledNotification> result = NotificationSchedule.Build(
-            [TimedTask(Now.AddMinutes(10))], [], Settings(hour: null, leadMinutes: 1440), Now);
+            [TimedTask(Now.AddMinutes(10))], [], Settings(summaryOff: true, leadMinutes: 1440), Now);
 
         Assert.That(result, Is.Empty);
     }

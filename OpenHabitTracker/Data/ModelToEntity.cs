@@ -164,7 +164,7 @@ public static class ModelToEntity
         entity.ShowDoneInRange = model.ShowDoneInRange;
         entity.HorizontalMargin = model.HorizontalMargin;
         entity.VerticalMargin = model.VerticalMargin;
-        entity.NotificationHour = model.NotificationHour;
+        entity.NotificationTime = model.NotificationTime;
         entity.NotificationLeadMinutes = model.NotificationLeadMinutes;
         entity.NotificationContent = model.NotificationContent;
         entity.NotificationMinimumPriority = model.NotificationMinimumPriority;

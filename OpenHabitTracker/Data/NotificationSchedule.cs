@@ -55,12 +55,12 @@ public static class NotificationSchedule
             }
         }
 
-        if (settings.NotificationHour is int hour)
+        if (settings.NotificationTime is TimeOnly summaryTime)
         {
             for (int dayOffset = 0; dayOffset < HorizonDays; dayOffset++)
             {
                 DateTime day = now.Date.AddDays(dayOffset);
-                DateTime notifyAt = day.AddHours(hour);
+                DateTime notifyAt = day.Add(summaryTime.ToTimeSpan());
 
                 if (notifyAt <= now)
                     continue;

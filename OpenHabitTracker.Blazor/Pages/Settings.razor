@@ -225,42 +225,61 @@
 
         @if (Notifications.CanNotify)
         {
-            <div class="list-group-item" data-settings-step-27>
+            <div class="list-group-item">
                 <small>@Loc["Daily summary at"]:</small>
-                <InputSelect class="form-select" aria-label="@Loc["Daily summary at"]" Value="_notificationHour" ValueExpression="() => _notificationHour" TValue="int" ValueChanged="SaveNotificationHour">
-                    <option value="-1">@Loc["Off"]</option>
-                    @for (int i = 0; i <= 23; i++)
-                    {
-                        <option value="@i">@($"{i:00}:00")</option>
-                    }
-                </InputSelect>
+                <div class="input-group" data-settings-step-27>
+                    <InputDate class="form-control" Type="InputDateType.Time" aria-label="@Loc["Daily summary at"]" Value="_settings.NotificationTime" ValueExpression="() => _settings.NotificationTime" TValue="TimeOnly?" ValueChanged="SaveNotificationTime" />
+                    <button class="btn btn-outline-primary" aria-label="@Loc["Clear daily summary time"]" @onclick="() => SaveNotificationTime(null)"><i class="bi bi-x-square"></i></button>
+                </div>
+
+                <small class="d-block mt-2">@Loc["Daily summary covers"]:</small>
+                <div data-settings-step-28>
+                    <InputSelect class="form-select" aria-label="@Loc["Daily summary covers"]" Value="_settings.NotificationContent" ValueExpression="() => _settings.NotificationContent" TValue="DigestContent" ValueChanged="SaveNotificationContent">
+                        <option value="@DigestContent.Both">@Loc["Tasks and habits"]</option>
+                        <option value="@DigestContent.Tasks">@Loc["Tasks"]</option>
+                        <option value="@DigestContent.Habits">@Loc["Habits"]</option>
+                    </InputSelect>
+                </div>
+
+                <div class="mt-2" data-settings-step-29>
+                    <small>@Loc["Notify about habits over"] @_settings.NotificationHabitThreshold%</small>
+                    <input type="range" min="0" max="200" class="form-range d-block" aria-label="@Loc["Notify about habits over"]" value="@_settings.NotificationHabitThreshold" @oninput="(ChangeEventArgs args) => SaveNotificationHabitThreshold(Convert.ToInt32(args.Value))" />
+                </div>
+
+                <div class="position-relative mt-2" data-settings-step-30>
+                    <InputCheckbox id="NotificationIncludeOverdueTasks" class="form-check-input me-1" Value="_settings.NotificationIncludeOverdueTasks" ValueExpression="() => _settings.NotificationIncludeOverdueTasks" ValueChanged="SaveNotificationIncludeOverdueTasks" />
+                    <label for="NotificationIncludeOverdueTasks" class="form-check-label stretched-link d-inline">@Loc["Include overdue tasks"]</label>
+                </div>
             </div>
 
-            <div class="list-group-item" data-settings-step-28>
-                <small>@Loc["Remind before a planned task"]:</small>
-                <InputSelect class="form-select" aria-label="@Loc["Remind before a planned task"]" Value="_notificationLeadMinutes" ValueExpression="() => _notificationLeadMinutes" TValue="int" ValueChanged="SaveNotificationLeadMinutes">
-                    <option value="-1">@Loc["Off"]</option>
-                    <option value="0">@Loc["At the planned time"]</option>
-                    <option value="5">@Loc["5 minutes before"]</option>
-                    <option value="10">@Loc["10 minutes before"]</option>
-                    <option value="15">@Loc["15 minutes before"]</option>
-                    <option value="30">@Loc["30 minutes before"]</option>
-                    <option value="60">@Loc["1 hour before"]</option>
-                    <option value="120">@Loc["2 hours before"]</option>
-                    <option value="1440">@Loc["1 day before"]</option>
-                </InputSelect>
+            <div class="list-group-item" data-settings-step-31>
+                <div class="position-relative">
+                    <InputCheckbox id="NotificationLead" class="form-check-input me-1" Value="_settings.NotificationLeadMinutes is not null" ValueExpression="() => _notificationLeadOn" ValueChanged="SaveNotificationLeadOn" />
+                    <label for="NotificationLead" class="form-check-label stretched-link d-inline">@Loc["Remind before a planned task"]</label>
+                </div>
+
+                <div class="input-group mt-2">
+                    <InputSelect class="form-select" aria-label="@Loc["Remind hours"]" Value="_settings.NotificationLeadHour" ValueExpression="() => _settings.NotificationLeadHour" TValue="int" ValueChanged="(int hour) => SaveNotificationLead(hour, _settings.NotificationLeadMinute)">
+                        @for (int i = 0; i <= 24; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </InputSelect>
+                    <span class="input-group-text bg-transparent">h</span>
+
+                    <InputSelect class="form-select" aria-label="@Loc["Remind minutes"]" Value="_settings.NotificationLeadMinute" ValueExpression="() => _settings.NotificationLeadMinute" TValue="int" ValueChanged="(int minute) => SaveNotificationLead(_settings.NotificationLeadHour, minute)">
+                        @for (int i = 0; i <= 59; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </InputSelect>
+                    <span class="input-group-text bg-transparent">min</span>
+
+                    <button class="btn btn-outline-primary" aria-label="@Loc["Clear reminder time"]" @onclick="() => SaveNotificationLead(0, 0)"><i class="bi bi-x-square"></i></button>
+                </div>
             </div>
 
-            <div class="list-group-item" data-settings-step-29>
-                <small>@Loc["Notify about"]:</small>
-                <InputSelect class="form-select" aria-label="@Loc["Notify about"]" Value="_settings.NotificationContent" ValueExpression="() => _settings.NotificationContent" TValue="DigestContent" ValueChanged="SaveNotificationContent">
-                    <option value="@DigestContent.Both">@Loc["Tasks and habits"]</option>
-                    <option value="@DigestContent.Tasks">@Loc["Tasks"]</option>
-                    <option value="@DigestContent.Habits">@Loc["Habits"]</option>
-                </InputSelect>
-            </div>
-
-            <div class="list-group-item" data-settings-step-30>
+            <div class="list-group-item" data-settings-step-32>
                 <small>@Loc["Notify only from priority"]:</small>
                 <InputSelect class="form-select" aria-label="@Loc["Notify only from priority"]" Value="_settings.NotificationMinimumPriority" ValueExpression="() => _settings.NotificationMinimumPriority" TValue="Priority" ValueChanged="SaveNotificationMinimumPriority">
                     <option value="@Priority.None">@Loc["Any priority"]</option>
@@ -272,16 +291,6 @@
                         }
                     }
                 </InputSelect>
-            </div>
-
-            <div class="list-group-item" data-settings-step-31>
-                <small>@Loc["Notify about habits over"] @_settings.NotificationHabitThreshold%</small>
-                <input type="range" min="50" max="200" step="10" class="form-range d-block" aria-label="@Loc["Notify about habits over"]" value="@_settings.NotificationHabitThreshold" @oninput="(ChangeEventArgs args) => SaveNotificationHabitThreshold(Convert.ToInt32(args.Value))" />
-            </div>
-
-            <div class="list-group-item" data-settings-step-32>
-                <InputCheckbox id="NotificationIncludeOverdueTasks" class="form-check-input me-1" Value="_settings.NotificationIncludeOverdueTasks" ValueExpression="() => _settings.NotificationIncludeOverdueTasks" ValueChanged="SaveNotificationIncludeOverdueTasks" />
-                <label for="NotificationIncludeOverdueTasks" class="form-check-label stretched-link d-inline">@Loc["Include tasks overdue from earlier days"]</label>
             </div>
         }
 
@@ -326,13 +335,13 @@
             new() { Text = "Choose how to display the priority filter." },
             new() { Text = "Choose the horizontal space between items in the list." },
             new() { Text = "Choose the vertical space between items in the list." },
-            new() { Text = "Choose the time of day the daily summary of what is due arrives, or turn it off.", Show = () => Notifications.CanNotify },
-            new() { Text = "Choose how long before a task's planned time its reminder arrives, or turn it off.", Show = () => Notifications.CanNotify },
-            new() { Text = "Choose whether notifications cover tasks, habits, or both.", Show = () => Notifications.CanNotify },
-            new() { Text = "Only notify about items at this priority or higher.", Show = () => Notifications.CanNotify },
+            new() { Text = "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.", Show = () => Notifications.CanNotify },
+            new() { Text = "Choose whether the daily summary covers tasks, habits, or both.", Show = () => Notifications.CanNotify },
             new() { Text = "Choose how far over its interval a habit has to be before the daily summary mentions it.", Show = () => Notifications.CanNotify },
-            new() { Text = "Let the daily summary count tasks that were planned for an earlier day and are still not done.", Show = () => Notifications.CanNotify },
-        };
+            new() { Text = "Let the daily summary count tasks that are past their planned time and still not done.", Show = () => Notifications.CanNotify },
+            new() { Text = "Choose how long before a task\'s planned time its reminder arrives, or turn it off.", Show = () => Notifications.CanNotify },
+            new() { Text = "Only notify about items at this priority or higher.", Show = () => Notifications.CanNotify },
+    };
     }
 
     private async Task StartTour(string tourId)
@@ -351,10 +360,6 @@
 
     SettingsModel _settings => ClientState.Settings;
 
-    // -1 is the off entry: InputSelect needs a non-nullable TValue, the stored value is nullable.
-    int _notificationHour => _settings.NotificationHour ?? -1;
-
-    int _notificationLeadMinutes => _settings.NotificationLeadMinutes ?? -1;
 
     async Task UpdateAndRefresh()
     {
@@ -563,28 +568,35 @@
         await UpdateAndRefresh();
     }
 
-    async Task SaveNotificationHour(int hour)
+    async Task SaveNotificationTime(TimeOnly? time)
     {
-        _settings.NotificationHour = await ResolveWithPermission(hour);
+        _settings.NotificationTime = await Allowed(time is not null) ? time : null;
 
         await UpdateAndRefresh();
     }
 
-    async Task SaveNotificationLeadMinutes(int minutes)
+    // The checkbox owns on and off; the two selects own the value, and setting one turns it on.
+    bool _notificationLeadOn => _settings.NotificationLeadMinutes is not null;
+
+    async Task SaveNotificationLeadOn(bool on)
     {
-        _settings.NotificationLeadMinutes = await ResolveWithPermission(minutes);
+        _settings.NotificationLeadMinutes = await Allowed(on) ? _settings.NotificationLeadMinutes ?? 0 : null;
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveNotificationLead(int hour, int minute)
+    {
+        _settings.NotificationLeadMinutes = await Allowed(true) ? hour * 60 + minute : null;
 
         await UpdateAndRefresh();
     }
 
     // Turning a half on needs the OS permission; a refusal is permanent on iOS,
     // so the setting goes back to off rather than staying on while nothing fires.
-    async Task<int?> ResolveWithPermission(int value)
+    async Task<bool> Allowed(bool turningOn)
     {
-        if (value < 0)
-            return null;
-
-        return await Notifications.RequestPermission() ? value : null;
+        return turningOn && await Notifications.RequestPermission();
     }
 
     async Task SaveNotificationContent(DigestContent content)

@@ -84,9 +84,15 @@ public class SettingsModel
 
     public int VerticalMargin { get; set; } = 1;
 
-    public int? NotificationHour { get; set; }
+    public TimeOnly? NotificationTime { get; set; }
 
     public int? NotificationLeadMinutes { get; set; }
+
+    // Split for the two selects the way ItemsModel splits Duration. Off is the checkbox's job, so
+    // an unset lead time still reads as zero rather than as a value the selects cannot show.
+    internal int NotificationLeadHour => NotificationLeadMinutes is int minutes ? minutes / 60 : 0;
+
+    internal int NotificationLeadMinute => NotificationLeadMinutes is int minutes ? minutes % 60 : 0;
 
     public DigestContent NotificationContent { get; set; }
 
@@ -197,7 +203,7 @@ public class SettingsModel
             ShowDoneInRange = true,
             HorizontalMargin = 1,
             VerticalMargin = 3,
-            NotificationHour = null,
+            NotificationTime = null,
             NotificationLeadMinutes = null,
             NotificationContent = DigestContent.Both,
             NotificationMinimumPriority = Priority.None,
