@@ -11,6 +11,7 @@ NOTES, TASKS AND HABITS IN ONE PLACE
 • Habits with flexible repeat intervals - track repetitions, time or quantity
 • Checklist sub-items on both tasks and habits
 • Categories, colors, priorities, search, filters and sorting - for notes, tasks and habits
+• Optional notifications: one daily summary of what is due, and a reminder before a task's planned time
 
 YOUR DATA STAYS YOURS
 

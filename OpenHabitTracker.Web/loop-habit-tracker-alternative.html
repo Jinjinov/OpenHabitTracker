@@ -218,7 +218,7 @@
                 <tr><th scope="row">Forgiving scoring (no streak reset)</th><td>✅ habit strength algorithm</td><td>✅ elapsed time vs desired interval</td></tr>
                 <tr><th scope="row">Streaks</th><td>✅ shown in statistics</td><td>✅ opt-in, off by default</td></tr>
                 <tr><th scope="row">Home screen widgets</th><td>✅</td><td>❌</td></tr>
-                <tr><th scope="row">Notification reminders</th><td>✅</td><td>❌ overdue habits are highlighted instead</td></tr>
+                <tr><th scope="row">Notification reminders</th><td>✅ per habit</td><td>✅ daily summary and reminders before planned tasks</td></tr>
                 <tr><th scope="row">Charts and statistics</th><td>✅ score, history, calendar, best streaks, frequency</td><td>✅ weekly stats, plus target, history, calendar, best streaks and frequency per habit</td></tr>
                 <tr><th scope="row">Notes</th><td>❌</td><td>✅ Markdown</td></tr>
                 <tr><th scope="row">Tasks / to-dos</th><td>❌</td><td>✅</td></tr>
@@ -229,7 +229,7 @@
             </table>
           </div>
 
-          <p>To be clear about what Loop does better: its <b>home screen widgets</b> and <b>notification reminders</b> have no equivalent in OpenHabitTracker, and as a single-purpose Android app it is smaller and more focused. If those are your priorities and Android is your only device, stay with Loop.</p>
+          <p>To be clear about what Loop does better: its <b>home screen widgets</b> have no equivalent in OpenHabitTracker, its reminders are set per habit where OpenHabitTracker sends one daily summary of everything due, and as a single-purpose Android app it is smaller and more focused. If those are your priorities and Android is your only device, stay with Loop.</p>
 
           <h2 class="card-title mt-5 fs-3">The same forgiving philosophy, a different mechanism</h2>
 
@@ -242,7 +242,7 @@
             <li>A habit with a 4-day interval that is also 2 days overdue is at <b>150%</b> - relative to its schedule, it is more urgent</li>
           </ul>
 
-          <p>Each habit's badge shifts color with that percentage - on track, approaching the interval, overdue (green, amber and red in the default theme) - so the habit list itself works as a gentle reminder of what is most overdue, without a single notification. Missing a day never resets anything; the percentage just grows a little.</p>
+          <p>Each habit's badge shifts color with that percentage - on track, approaching the interval, overdue (green, amber and red in the default theme) - so the habit list itself shows what is most overdue at a glance, whether or not you switch notifications on. Missing a day never resets anything; the percentage just grows a little.</p>
 
           <p>And streaks? OpenHabitTracker shipped for two years without them. They were added in version 1.2.2 only because a user <a href="https://github.com/Jinjinov/OpenHabitTracker/discussions/16" onclick="gitHubVisit()">asked for them on GitHub</a> - and they are opt-in, off by default, tucked away in the habit statistics. Nothing resets to zero, nothing guilts you.</p>
 
@@ -308,7 +308,7 @@
           <h2 class="card-title mt-5 fs-3">The honest verdict</h2>
 
           <ul>
-            <li><b>Stay with Loop</b> if you are Android-only and widgets and notification reminders matter to you. It is an excellent app.</li>
+            <li><b>Stay with Loop</b> if you are Android-only and home screen widgets or per-habit reminder times matter to you. It is an excellent app.</li>
             <li><b>Try OpenHabitTracker</b> if you want your habits on iPhone, desktop or the web, if you want optional sync across devices through a <a href="index.html#sync">self-hosted server</a>, or if you want notes and tasks living next to your habits.</li>
           </ul>
 
