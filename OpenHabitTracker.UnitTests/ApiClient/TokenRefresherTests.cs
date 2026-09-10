@@ -1,41 +1,30 @@
-using Markdig;
-using Microsoft.Extensions.Localization;
 using NSubstitute;
-using OpenHabitTracker.App;
-using OpenHabitTracker.Blazor.Auth;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Dto;
 
-namespace OpenHabitTracker.UnitTests.Auth;
+namespace OpenHabitTracker.UnitTests.ApiClient;
 
 [TestFixture]
-public class AuthServiceRefreshTests
+public class TokenRefresherTests
 {
-    private IDataAccess _dataAccess = null!;
-    private ClientState _clientState = null!;
     private AuthClient _authClient = null!;
-    private ApiClientOptions _apiClientOptions = null!;
-    private AuthService _sut = null!;
+    private ApiClientOptions _options = null!;
+    private IDataAccess _localDataAccess = null!;
+    private TokenRefresher _sut = null!;
 
     [SetUp]
     public void SetUp()
     {
-        _dataAccess = Substitute.For<IDataAccess>();
-        _dataAccess.DataLocation.Returns(DataLocation.Local);
-        _dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([]));
-        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 1 }]));
+        _options = new ApiClientOptions { RefreshToken = "stored-refresh" };
 
-        MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-        MarkdownToHtml markdownToHtml = new(pipeline);
-        _clientState = new(new[] { _dataAccess }, markdownToHtml);
+        _authClient = Substitute.For<AuthClient>(new HttpClient(), _options);
 
-        _apiClientOptions = new ApiClientOptions { RefreshToken = "stored-refresh" };
+        _localDataAccess = Substitute.For<IDataAccess>();
+        _localDataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 1, RememberMe = true }]));
 
-        _authClient = Substitute.For<AuthClient>(new HttpClient(), _apiClientOptions);
-
-        _sut = new(_clientState, new RemoteDataSync(_clientState), _authClient, _apiClientOptions, Substitute.For<IStringLocalizer>());
+        _sut = new(_authClient, _options, _localDataAccess);
     }
 
     private static TokenResponse Response(string jwt = "new-jwt", string refresh = "new-refresh") =>
@@ -44,7 +33,7 @@ public class AuthServiceRefreshTests
     [Test]
     public async Task TryRefresh_NoStoredRefreshToken_ReturnsFalseWithoutCallingTheServer()
     {
-        _apiClientOptions.RefreshToken = "";
+        _options.RefreshToken = "";
 
         bool refreshed = await _sut.TryRefresh();
 
@@ -63,20 +52,10 @@ public class AuthServiceRefreshTests
         Assert.Multiple(() =>
         {
             Assert.That(refreshed, Is.True);
-            Assert.That(_apiClientOptions.BearerToken, Is.EqualTo("new-jwt"));
-            Assert.That(_apiClientOptions.RefreshToken, Is.EqualTo("new-refresh"));
-            Assert.That(_apiClientOptions.BearerTokenExpiresAt, Is.EqualTo(response.JwtTokenExpiresAt));
+            Assert.That(_options.BearerToken, Is.EqualTo("new-jwt"));
+            Assert.That(_options.RefreshToken, Is.EqualTo("new-refresh"));
+            Assert.That(_options.BearerTokenExpiresAt, Is.EqualTo(response.JwtTokenExpiresAt));
         });
-    }
-
-    [Test]
-    public async Task TryRefresh_Succeeds_WritesTheRotatedTokenToTheLocalSettingsRow()
-    {
-        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>()).Returns(Response());
-
-        await _sut.TryRefresh();
-
-        await _dataAccess.Received(1).UpdateSettings(Arg.Is<SettingsEntity>(settings => settings != null && settings.RefreshToken == "new-refresh"));
     }
 
     [Test]
@@ -90,6 +69,28 @@ public class AuthServiceRefreshTests
     }
 
     [Test]
+    public async Task TryRefresh_RememberMeOn_WritesTheRotatedTokenToTheLocalSettingsRow()
+    {
+        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>()).Returns(Response());
+
+        await _sut.TryRefresh();
+
+        await _localDataAccess.Received(1).UpdateSettings(Arg.Is<SettingsEntity>(settings => settings != null && settings.RefreshToken == "new-refresh"));
+    }
+
+    [Test]
+    public async Task TryRefresh_RememberMeOff_KeepsTheRotatedTokenOutOfStorage()
+    {
+        _localDataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 1, RememberMe = false }]));
+        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>()).Returns(Response());
+
+        bool refreshed = await _sut.TryRefresh();
+
+        Assert.That(refreshed, Is.True);
+        await _localDataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+    }
+
+    [Test]
     public async Task TryRefresh_ServerUnreachable_ReturnsFalse()
     {
         _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>()).Returns<TokenResponse>(_ => throw new HttpRequestException());
@@ -97,7 +98,7 @@ public class AuthServiceRefreshTests
         bool refreshed = await _sut.TryRefresh();
 
         Assert.That(refreshed, Is.False);
-        Assert.That(_apiClientOptions.BearerToken, Is.Empty);
+        Assert.That(_options.BearerToken, Is.Empty);
     }
 
     [Test]
@@ -108,7 +109,7 @@ public class AuthServiceRefreshTests
         bool refreshed = await _sut.TryRefresh();
 
         Assert.That(refreshed, Is.False);
-        await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+        await _localDataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
     }
 
     [Test]
@@ -118,7 +119,7 @@ public class AuthServiceRefreshTests
         _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>()).Returns(pending.Task);
 
         // All five capture the stored token before any of them reaches the lock, which is the case
-        // the double-check inside it exists for.
+        // the re-check inside it exists for.
         Task<bool>[] callers = Enumerable.Range(0, 5).Select(_ => _sut.TryRefresh()).ToArray();
 
         pending.SetResult(Response());

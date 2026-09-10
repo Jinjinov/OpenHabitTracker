@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using OpenHabitTracker.Data;
 
 namespace OpenHabitTracker.Blazor.Web.ApiClient;
@@ -20,7 +19,7 @@ public static class Startup
 
         services.AddScoped<ApiClientOptions>();
 
-        services.TryAddScoped<ITokenRefresher, NoTokenRefresher>();
+        services.AddScoped<ITokenRefresher, TokenRefresher>();
 
         // IHttpClientFactory builds message handlers in a DI scope of its own, so a handler it creates
         // would hold a different ApiClientOptions than the client reads. Wrapping a handler taken from

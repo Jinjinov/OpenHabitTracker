@@ -160,25 +160,6 @@ public class ClientState
         return loadWelcomeNote;
     }
 
-    // While the session is Remote, Settings is the server's row, so the device's own refresh token
-    // has to be written to the local one directly or the next start cannot sign in by itself.
-    public async Task UpdateLocalRefreshToken(string refreshToken)
-    {
-        IDataAccess localDataAccess = _dataAccessByLocation[DataLocation.Local];
-
-        IReadOnlyList<SettingsEntity> settings = await localDataAccess.GetSettings();
-
-        if (settings.Count == 0)
-            return;
-
-        settings[0].RefreshToken = refreshToken;
-
-        await localDataAccess.UpdateSettings(settings[0]);
-
-        if (DataLocation == DataLocation.Local)
-            Settings.RefreshToken = refreshToken;
-    }
-
     public async Task UpdateSettings()
     {
         if (await DataAccess.GetSettings(Settings.Id) is SettingsEntity settings)

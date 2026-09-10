@@ -54,7 +54,6 @@ public partial class MainForm : Form
         services.AddScoped<IPreRenderService, PreRenderService>();
         services.AddScoped<IAuthFragment, OpenHabitTracker.Blazor.Auth.AuthFragment>();
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<ITokenRefresher>(sp => sp.GetRequiredService<IAuthService>());
         services.AddHttpClients();
 
         InitializeComponent();

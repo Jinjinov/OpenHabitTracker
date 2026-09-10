@@ -12,7 +12,13 @@ public static class Startup
 
         //services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
-        services.AddScoped<IDataAccess, DataAccess>();
+        services.AddScoped<DataAccess>();
+
+        services.AddScoped<IDataAccess>(serviceProvider => serviceProvider.GetRequiredService<DataAccess>());
+
+        // Keyed registrations stay out of the IEnumerable<IDataAccess> that ClientState resolves, so
+        // this names the same instance rather than adding one.
+        services.AddKeyedScoped<IDataAccess>(DataAccessKeys.Local, (serviceProvider, _) => serviceProvider.GetRequiredService<DataAccess>());
 
         return services;
     }
