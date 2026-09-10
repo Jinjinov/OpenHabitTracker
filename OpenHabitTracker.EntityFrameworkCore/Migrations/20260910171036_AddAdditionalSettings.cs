@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace OpenHabitTracker.EntityFrameworkCore.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNotificationSettings : Migration
+    public partial class AddAdditionalSettings : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,18 +25,12 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                 nullable: false,
                 defaultValue: 100);
 
-            migrationBuilder.AddColumn<int>(
-                name: "NotificationHour",
-                table: "Settings",
-                type: "INTEGER",
-                nullable: true);
-
             migrationBuilder.AddColumn<bool>(
                 name: "NotificationIncludeOverdueTasks",
                 table: "Settings",
                 type: "INTEGER",
                 nullable: false,
-                defaultValue: true);
+                defaultValue: false);
 
             migrationBuilder.AddColumn<int>(
                 name: "NotificationLeadMinutes",
@@ -49,6 +44,26 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                 type: "INTEGER",
                 nullable: false,
                 defaultValue: 0);
+
+            migrationBuilder.AddColumn<TimeOnly>(
+                name: "NotificationTime",
+                table: "Settings",
+                type: "TEXT",
+                nullable: true);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "ShowHabitCharts",
+                table: "Settings",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: false);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Username",
+                table: "Settings",
+                type: "TEXT",
+                nullable: false,
+                defaultValue: "");
         }
 
         /// <inheritdoc />
@@ -63,10 +78,6 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                 table: "Settings");
 
             migrationBuilder.DropColumn(
-                name: "NotificationHour",
-                table: "Settings");
-
-            migrationBuilder.DropColumn(
                 name: "NotificationIncludeOverdueTasks",
                 table: "Settings");
 
@@ -76,6 +87,18 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
 
             migrationBuilder.DropColumn(
                 name: "NotificationMinimumPriority",
+                table: "Settings");
+
+            migrationBuilder.DropColumn(
+                name: "NotificationTime",
+                table: "Settings");
+
+            migrationBuilder.DropColumn(
+                name: "ShowHabitCharts",
+                table: "Settings");
+
+            migrationBuilder.DropColumn(
+                name: "Username",
                 table: "Settings");
         }
     }

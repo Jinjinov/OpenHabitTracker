@@ -11,8 +11,8 @@ using OpenHabitTracker.EntityFrameworkCore;
 namespace OpenHabitTracker.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260906162150_AddShowHabitCharts")]
-    partial class AddShowHabitCharts
+    [Migration("20260910171036_AddAdditionalSettings")]
+    partial class AddAdditionalSettings
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -180,6 +180,24 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                     b.Property<int>("MaxSmallCalendarDays")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("NotificationContent")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NotificationHabitThreshold")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("NotificationIncludeOverdueTasks")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("NotificationLeadMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NotificationMinimumPriority")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<TimeOnly?>("NotificationTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("PlannedFromDayOffset")
                         .HasColumnType("INTEGER");
 
@@ -283,6 +301,10 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
 
                     b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("VerticalMargin")
                         .HasColumnType("INTEGER");
