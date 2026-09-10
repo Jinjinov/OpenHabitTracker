@@ -1,0 +1,7 @@
+• Pet grafikona navika: cilj, istorija, kalendar, najbolji nizovi i učestalost
+• Dnevni pregled onoga što je na redu kao obaveštenje
+• Podsetnik pre planiranog vremena zadatka
+• Prijava za sinhronizaciju pamti adresu servera i korisničko ime
+• Ikona koja pokazuje kada mrežna sinhronizacija ne radi
+• Prijava za sinhronizaciju traje 90 dana umesto 7
+• Ispravljeno: sinhronizacija je odustajala do ponovnog pokretanja nakon pada servera
