@@ -141,6 +141,12 @@
         <PackageReference Include="Plugin.Maui.AppRating" Version="1.2.3" />
     </ItemGroup>
 
+    <!-- Windows schedules through Windows.UI.Notifications; the compat helper supplies the toast
+         activator that the manifest CLSID points at. It has no assets for the other platforms. -->
+    <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+        <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+    </ItemGroup>
+
     <!-- CVE-2025-6965 override: EF Core Sqlite still pins the vulnerable 2.1.11 native SQLite builds;
          one lib pin per platform TFM here, and one per desktop host csproj
          (never in the shared EFCore project - see the note there);

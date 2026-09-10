@@ -1,5 +1,6 @@
 using OpenHabitTracker.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tmds.DBus.Protocol;
 
@@ -16,6 +17,11 @@ public sealed class Notifications : RunningOnlyNotifications
     private const string PortalInterface = "org.freedesktop.portal.Notification";
 
     private bool _connected;
+
+    private bool _watching;
+
+    // The portal reports an invoked action by notification id, so the route is kept beside it.
+    private readonly Dictionary<string, string> _routesById = new();
 
     public override bool CanNotify => OperatingSystem.IsLinux();
 
@@ -36,6 +42,10 @@ public sealed class Notifications : RunningOnlyNotifications
                 await connection.ConnectAsync();
                 _connected = true;
             }
+
+            await WatchActions(connection);
+
+            _routesById[request.Id] = request.Route;
 
             MessageWriter writer = connection.GetMessageWriter();
 
@@ -62,6 +72,11 @@ public sealed class Notifications : RunningOnlyNotifications
                 writer.WriteVariantString(request.Body);
             }
 
+            // Without a default action the portal has nothing to report when the body is clicked.
+            writer.WriteDictionaryEntryStart();
+            writer.WriteString("default-action");
+            writer.WriteVariantString("open");
+
             writer.WriteDictionaryEnd(dictionary);
 
             MessageBuffer message = writer.CreateMessage();
@@ -72,5 +87,37 @@ public sealed class Notifications : RunningOnlyNotifications
         {
             // A desktop with no notification portal is not a reason to break the app.
         }
+    }
+
+    private async Task WatchActions(DBusConnection connection)
+    {
+        if (_watching)
+            return;
+
+        _watching = true;
+
+        await connection.WatchSignalAsync(
+            sender: PortalService,
+            path: PortalPath,
+            @interface: PortalInterface,
+            signal: "ActionInvoked",
+            reader: ReadNotificationId,
+            handler: OnActionInvoked,
+            readerState: null,
+            emitOnCapturedContext: false,
+            flags: ObserverFlags.None);
+    }
+
+    private static string ReadNotificationId(Message message, object? state)
+    {
+        Reader reader = message.GetBodyReader();
+
+        return reader.ReadString();
+    }
+
+    private void OnActionInvoked(Exception? error, string notificationId)
+    {
+        if (error is null && _routesById.TryGetValue(notificationId, out string? route))
+            OnActivated(route);
     }
 }

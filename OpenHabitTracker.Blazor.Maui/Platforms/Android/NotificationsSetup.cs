@@ -8,7 +8,7 @@ public static class NotificationsSetup
 {
     public static MauiAppBuilder UseNotifications(this MauiAppBuilder builder)
     {
-        builder.Services.AddScoped<INotifications, PluginNotifications>();
+        builder.Services.AddScoped<INotifications, AndroidNotifications>();
 
         return builder.UseLocalNotification();
     }

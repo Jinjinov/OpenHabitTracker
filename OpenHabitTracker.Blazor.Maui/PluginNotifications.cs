@@ -10,7 +10,7 @@ namespace OpenHabitTracker.Blazor.Maui;
 
 // Plugin.LocalNotification already carries the boot receiver and the persisted pending-request
 // store. Each platform folder decides whether this is the implementation it registers.
-public sealed class PluginNotifications : INotifications
+public class PluginNotifications : INotifications
 {
     // Apple keeps only the 64 soonest-firing requests and discards the rest without an error.
     private const int AppleBudget = 64;
@@ -62,6 +62,9 @@ public sealed class PluginNotifications : INotifications
                 }
             };
 
+            if (ChannelIdFor(request) is string channelId)
+                notification.Android.ChannelId = channelId;
+
             await LocalNotificationCenter.Current.Show(notification);
         }
     }
@@ -71,6 +74,13 @@ public sealed class PluginNotifications : INotifications
         LocalNotificationCenter.Current.CancelAll();
 
         return Task.CompletedTask;
+    }
+
+    // Android splits these into two channels so each kind can be silenced in system settings;
+    // the platforms without channels ignore it.
+    protected virtual string? ChannelIdFor(NotificationRequest request)
+    {
+        return null;
     }
 
     // Digests first, then the soonest reminders, so the discard never falls on the daily summary.
