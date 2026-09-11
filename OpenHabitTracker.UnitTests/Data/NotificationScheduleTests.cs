@@ -172,7 +172,7 @@ public class NotificationScheduleTests
 
         List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(leadMinutes: null), Now);
 
-        Assert.That(result, Has.Count.EqualTo(4));
+        Assert.That(result, Has.Count.EqualTo(NotificationSchedule.HorizonDays - 10));
         Assert.That(result[0].NotifyAt.Date, Is.EqualTo(Now.Date.AddDays(10)));
     }
 

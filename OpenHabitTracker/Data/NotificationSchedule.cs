@@ -27,8 +27,10 @@ public class ScheduledNotification
 // so these results stay assertable without any wording in them.
 public static class NotificationSchedule
 {
-    // Long enough to outlast a holiday; past that, silence rather than nagging.
-    public const int HorizonDays = 14;
+    // Long enough that an app left unopened for a month keeps summarising; past that, silence
+    // rather than nagging. Also half of Apple's 64 pending requests, so at the limit the split is
+    // even - and every day with nothing due leaves its slot to a task reminder instead.
+    public const int HorizonDays = 32;
 
     public static List<ScheduledNotification> Build(IEnumerable<TaskModel> tasks, IEnumerable<HabitModel> habits, SettingsModel settings, DateTime now)
     {
