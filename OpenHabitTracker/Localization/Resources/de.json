@@ -299,5 +299,7 @@
   "Include overdue tasks": "Überfällige Aufgaben einbeziehen",
   "Due today": "Heute fällig",
   "Daily summary": "Tägliche Zusammenfassung",
-  "Task reminders": "Aufgabenerinnerungen"
+  "Task reminders": "Aufgabenerinnerungen",
+  "Notification permission": "Benachrichtigungsberechtigung",
+  "Open system settings": "Systemeinstellungen öffnen"
 }

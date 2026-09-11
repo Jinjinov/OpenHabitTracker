@@ -22,6 +22,13 @@ public interface INotifications
     // Can hand a future moment to the OS and have it fire with the app shut.
     bool CanScheduleWhileClosed { get; }
 
+    // Can open the OS page where a refused permission is turned back on. False where no such
+    // page can be reached from inside the app: every host that never asks for permission, and
+    // the browser, which exposes no way to open its own site settings.
+    bool CanOpenSettings { get; }
+
+    Task OpenSettings();
+
     // Called with the Route of the notification the user tapped. Assignment rather than an
     // event, like RemoteDataSync.SetRefreshAction: a component that initializes twice sets the
     // same action twice instead of accumulating a second subscription.

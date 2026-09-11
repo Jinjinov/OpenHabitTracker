@@ -6,8 +6,15 @@ public class Notifications : INotifications
 
     public bool CanScheduleWhileClosed => false;
 
+    public bool CanOpenSettings => false;
+
     public void SetActivatedAction(Action<string> onActivated)
     {
+    }
+
+    public Task OpenSettings()
+    {
+        return Task.CompletedTask;
     }
 
     public Task<bool> RequestPermission()

@@ -151,5 +151,6 @@
   "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Zvoľ, o koľko musí návyk prekročiť svoj interval, kým ho denný súhrn spomenie.",
   "Let the daily summary count tasks that are past their planned time and still not done.": "Nechaj denný súhrn počítať aj úlohy, ktorým už uplynul plánovaný čas a stále nie sú hotové.",
   "Choose how long before a task's planned time its reminder arrives, or turn it off.": "Zvoľ, ako dlho pred plánovaným časom úlohy príde pripomenutie, alebo ho vypni.",
-  "Only notify about items at this priority or higher.": "Upozorňovať len na položky s touto prioritou alebo vyššou."
+  "Only notify about items at this priority or higher.": "Upozorňovať len na položky s touto prioritou alebo vyššou.",
+  "Open the system page where notifications for this app are allowed or blocked.": "Otvor systémovú stránku, kde sú upozornenia pre túto aplikáciu povolené alebo blokované."
 }

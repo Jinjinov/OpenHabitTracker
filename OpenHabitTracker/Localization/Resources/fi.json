@@ -299,5 +299,7 @@
   "Include overdue tasks": "Sisällytä myöhässä olevat tehtävät",
   "Due today": "Tänään vuorossa",
   "Daily summary": "Päivittäinen yhteenveto",
-  "Task reminders": "Tehtävämuistutukset"
+  "Task reminders": "Tehtävämuistutukset",
+  "Notification permission": "Ilmoituslupa",
+  "Open system settings": "Avaa järjestelmäasetukset"
 }

@@ -151,5 +151,6 @@
   "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Choose how far over its interval a habit has to be before the daily summary mentions it.",
   "Let the daily summary count tasks that are past their planned time and still not done.": "Let the daily summary count tasks that are past their planned time and still not done.",
   "Choose how long before a task's planned time its reminder arrives, or turn it off.": "Choose how long before a task's planned time its reminder arrives, or turn it off.",
-  "Only notify about items at this priority or higher.": "Only notify about items at this priority or higher."
+  "Only notify about items at this priority or higher.": "Only notify about items at this priority or higher.",
+  "Open the system page where notifications for this app are allowed or blocked.": "Open the system page where notifications for this app are allowed or blocked."
 }

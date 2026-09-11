@@ -299,5 +299,7 @@
   "Include overdue tasks": "Inkluder forfaldne opgaver",
   "Due today": "Forfalder i dag",
   "Daily summary": "Daglig oversigt",
-  "Task reminders": "Opgavepåmindelser"
+  "Task reminders": "Opgavepåmindelser",
+  "Notification permission": "Notifikationstilladelse",
+  "Open system settings": "Åbn systemindstillinger"
 }

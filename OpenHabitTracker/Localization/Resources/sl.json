@@ -299,5 +299,7 @@
   "Include overdue tasks": "Vključi zamujene naloge",
   "Due today": "Danes na vrsti",
   "Daily summary": "Dnevni povzetek",
-  "Task reminders": "Opomniki za naloge"
+  "Task reminders": "Opomniki za naloge",
+  "Notification permission": "Dovoljenje za obvestila",
+  "Open system settings": "Odpri sistemske nastavitve"
 }

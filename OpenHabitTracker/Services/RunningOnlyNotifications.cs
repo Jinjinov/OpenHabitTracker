@@ -18,9 +18,18 @@ public abstract class RunningOnlyNotifications : INotifications, IAsyncDisposabl
 
     public bool CanScheduleWhileClosed => false;
 
+    // The browser has no API for its own site settings, and the portal never refuses, so neither
+    // host that runs on this base has a page to offer.
+    public bool CanOpenSettings => false;
+
     private Action<string>? _onActivated;
 
     public abstract Task<bool> RequestPermission();
+
+    public Task OpenSettings()
+    {
+        return Task.CompletedTask;
+    }
 
     protected abstract Task Show(NotificationRequest request);
 

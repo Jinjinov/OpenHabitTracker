@@ -299,5 +299,7 @@
   "Include overdue tasks": "包含逾期任务",
   "Due today": "今天到期",
   "Daily summary": "每日摘要",
-  "Task reminders": "任务提醒"
+  "Task reminders": "任务提醒",
+  "Notification permission": "通知权限",
+  "Open system settings": "打开系统设置"
 }

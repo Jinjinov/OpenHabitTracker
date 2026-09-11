@@ -28,6 +28,14 @@ public sealed class WindowsNotifications : INotifications
 
     public bool CanScheduleWhileClosed => true;
 
+    // Windows never asks, so there is no refusal to send anyone to system settings about.
+    public bool CanOpenSettings => false;
+
+    public Task OpenSettings()
+    {
+        return Task.CompletedTask;
+    }
+
     public void SetActivatedAction(Action<string> onActivated)
     {
         _onActivated = onActivated;

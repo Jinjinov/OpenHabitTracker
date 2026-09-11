@@ -299,5 +299,7 @@
   "Include overdue tasks": "Inclure les tâches en retard",
   "Due today": "À faire aujourd'hui",
   "Daily summary": "Résumé quotidien",
-  "Task reminders": "Rappels de tâches"
+  "Task reminders": "Rappels de tâches",
+  "Notification permission": "Autorisation de notification",
+  "Open system settings": "Ouvrir les paramètres système"
 }

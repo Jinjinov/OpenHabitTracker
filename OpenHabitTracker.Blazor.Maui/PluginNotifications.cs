@@ -19,6 +19,8 @@ public class PluginNotifications : INotifications
 
     public bool CanScheduleWhileClosed => true;
 
+    public bool CanOpenSettings => true;
+
     private Action<string>? _onActivated;
 
     public PluginNotifications()
@@ -31,6 +33,15 @@ public class PluginNotifications : INotifications
         // On macOS this dialog is asynchronous where iOS is modal, so the answer is awaited
         // rather than assumed to have arrived.
         return await LocalNotificationCenter.Current.RequestNotificationPermission();
+    }
+
+    // A refusal is permanent on iOS and sticks after two dismissals on Android, so the only way
+    // back is the OS page. macCatalyst overrides this, where the same call lands nowhere useful.
+    public virtual Task OpenSettings()
+    {
+        AppInfo.Current.ShowSettingsUI();
+
+        return Task.CompletedTask;
     }
 
     public async Task Replace(IReadOnlyList<NotificationRequest> requests)

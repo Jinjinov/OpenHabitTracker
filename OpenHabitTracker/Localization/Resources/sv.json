@@ -299,5 +299,7 @@
   "Include overdue tasks": "Inkludera försenade uppgifter",
   "Due today": "Ska göras idag",
   "Daily summary": "Daglig sammanfattning",
-  "Task reminders": "Uppgiftspåminnelser"
+  "Task reminders": "Uppgiftspåminnelser",
+  "Notification permission": "Aviseringsbehörighet",
+  "Open system settings": "Öppna systeminställningar"
 }
