@@ -301,5 +301,8 @@
   "Daily summary": "Dzienne podsumowanie",
   "Task reminders": "Przypomnienia o zadaniach",
   "Notification permission": "Uprawnienie do powiadomień",
-  "Open system settings": "Otwórz ustawienia systemowe"
+  "Open system settings": "Otwórz ustawienia systemowe",
+  "Allowed": "Dozwolone",
+  "Blocked": "Zablokowane",
+  "Not asked": "Nie pytano"
 }

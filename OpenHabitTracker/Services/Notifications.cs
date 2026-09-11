@@ -17,6 +17,11 @@ public class Notifications : INotifications
         return Task.CompletedTask;
     }
 
+    public Task<NotificationPermission> GetPermission()
+    {
+        return Task.FromResult(NotificationPermission.Unknown);
+    }
+
     public Task<bool> RequestPermission()
     {
         return Task.FromResult(false);

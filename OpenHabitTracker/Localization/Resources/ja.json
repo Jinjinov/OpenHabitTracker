@@ -301,5 +301,8 @@
   "Daily summary": "毎日のまとめ",
   "Task reminders": "タスクのリマインダー",
   "Notification permission": "通知の許可",
-  "Open system settings": "システム設定を開く"
+  "Open system settings": "システム設定を開く",
+  "Allowed": "許可",
+  "Blocked": "ブロック",
+  "Not asked": "未確認"
 }

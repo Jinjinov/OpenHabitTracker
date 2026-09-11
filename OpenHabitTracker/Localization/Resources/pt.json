@@ -301,5 +301,8 @@
   "Daily summary": "Resumo diário",
   "Task reminders": "Lembretes de tarefas",
   "Notification permission": "Permissão de notificações",
-  "Open system settings": "Abrir definições do sistema"
+  "Open system settings": "Abrir definições do sistema",
+  "Allowed": "Permitido",
+  "Blocked": "Bloqueado",
+  "Not asked": "Não pedida"
 }

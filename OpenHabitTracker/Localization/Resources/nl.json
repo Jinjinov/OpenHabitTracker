@@ -301,5 +301,8 @@
   "Daily summary": "Dagelijks overzicht",
   "Task reminders": "Taakherinneringen",
   "Notification permission": "Meldingstoestemming",
-  "Open system settings": "Systeeminstellingen openen"
+  "Open system settings": "Systeeminstellingen openen",
+  "Allowed": "Toegestaan",
+  "Blocked": "Geblokkeerd",
+  "Not asked": "Niet gevraagd"
 }

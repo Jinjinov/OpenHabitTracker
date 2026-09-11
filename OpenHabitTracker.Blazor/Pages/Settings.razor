@@ -293,11 +293,14 @@
                 </InputSelect>
             </div>
 
-            @if (Notifications.CanOpenSettings)
+            @if (_notificationPermission != NotificationPermission.Unknown || true)
             {
                 <div class="list-group-item" data-settings-step-33>
-                    <small>@Loc["Notification permission"]:</small>
-                    <button class="btn btn-outline-primary w-100 mt-2" @onclick="() => Notifications.OpenSettings()"><i class="bi bi-bell" aria-hidden="true"></i> @Loc["Open system settings"]</button>
+                    <small>@Loc["Notification permission"]: @Loc[PermissionName(_notificationPermission)]</small>
+                    @if (Notifications.CanOpenSettings || true)
+                    {
+                        <button class="btn btn-outline-primary w-100 mt-2" @onclick="() => Notifications.OpenSettings()"><i class="bi bi-bell" aria-hidden="true"></i> @Loc["Open system settings"]</button>
+                    }
                 </div>
             }
         }
@@ -312,6 +315,23 @@
 
 @code {
     TourStep[] tourSteps;
+
+    NotificationPermission _notificationPermission;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _notificationPermission = await Notifications.GetPermission();
+    }
+
+    static string PermissionName(NotificationPermission permission)
+    {
+        return permission switch
+        {
+            NotificationPermission.Allowed => "Allowed",
+            NotificationPermission.Blocked => "Blocked",
+            _ => "Not asked"
+        };
+    }
 
     public Settings()
     {
@@ -375,6 +395,9 @@
         await ClientState.UpdateSettings();
 
         await NotificationScheduler.Rebuild();
+
+        // A setting that was just turned on may have asked for the permission and been answered.
+        _notificationPermission = await Notifications.GetPermission();
 
         StateChanged.Value = !StateChanged.Value;
         await StateChangedChanged.InvokeAsync(StateChanged.Value);

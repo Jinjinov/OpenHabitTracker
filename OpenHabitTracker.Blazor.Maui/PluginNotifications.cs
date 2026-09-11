@@ -35,6 +35,16 @@ public class PluginNotifications : INotifications
         return await LocalNotificationCenter.Current.RequestNotificationPermission();
     }
 
+    // The plugin reports a boolean, not the three states the OS has, so a permission that has
+    // never been asked for reads the same as one that was refused. Android cannot do better
+    // without storing a flag of its own; the Apple platform folders override this.
+    public virtual async Task<NotificationPermission> GetPermission()
+    {
+        return await LocalNotificationCenter.Current.AreNotificationsEnabled()
+            ? NotificationPermission.Allowed
+            : NotificationPermission.Blocked;
+    }
+
     // A refusal is permanent on iOS and sticks after two dismissals on Android, so the only way
     // back is the OS page. macCatalyst overrides this, where the same call lands nowhere useful.
     public virtual Task OpenSettings()

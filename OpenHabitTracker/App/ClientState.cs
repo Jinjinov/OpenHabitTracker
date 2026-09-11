@@ -342,6 +342,23 @@ public class ClientState
 
             throw;
         }
+
+        await DataReplaced();
+    }
+
+    // Assignment rather than an event, like RemoteDataSync.SetRefreshAction: NotificationScheduler
+    // takes ClientState, so it cannot be injected here.
+    private Func<Task>? _onDataReplaced;
+
+    public void SetDataReplacedAction(Func<Task> onDataReplaced)
+    {
+        _onDataReplaced = onDataReplaced;
+    }
+
+    private async Task DataReplaced()
+    {
+        if (_onDataReplaced is not null)
+            await _onDataReplaced();
     }
 
     public async Task<UserImportExportData> GetUserData()
@@ -466,6 +483,8 @@ public class ClientState
 
         if (userData.Categories.Count == 0)
         {
+            await DataReplaced();
+
             return;
         }
 
@@ -579,5 +598,7 @@ public class ClientState
         // here notes, tasks and habits are the flattened sub-lists themselves (SelectMany above),
         // and they came from the CategoryModel instances just put into Categories,
         // so every model is already in its category - adding it again renders it twice in grouped view.
+
+        await DataReplaced();
     }
 }

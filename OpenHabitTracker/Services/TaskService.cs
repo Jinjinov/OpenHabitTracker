@@ -189,5 +189,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
             taskEntity.IsDeleted = true;
             await _clientState.DataAccess.UpdateTask(taskEntity);
         }
+
+        await _notificationScheduler.Rebuild();
     }
 }

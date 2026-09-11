@@ -271,6 +271,10 @@
         // Tapping a notification navigates to what it was about.
         Notifications.SetActivatedAction(OnNotificationActivated);
 
+        // Import, delete-all and a sync pull replace the data wholesale, and ClientState cannot
+        // reach the scheduler itself.
+        ClientState.SetDataReplacedAction(() => NotificationScheduler.Rebuild());
+
         await NotificationScheduler.Rebuild();
 
         Logger.LogInformation("MainLayout.OnInitializedAsync end");

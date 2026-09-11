@@ -29,6 +29,10 @@ public interface INotifications
 
     Task OpenSettings();
 
+    // A read of state the OS already holds: no dialog, no side effect. Read when the settings
+    // sidebar opens, which is also when the user comes back from the OS page.
+    Task<NotificationPermission> GetPermission();
+
     // Called with the Route of the notification the user tapped. Assignment rather than an
     // event, like RemoteDataSync.SetRefreshAction: a component that initializes twice sets the
     // same action twice instead of accumulating a second subscription.

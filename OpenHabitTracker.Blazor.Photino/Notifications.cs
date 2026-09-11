@@ -31,6 +31,11 @@ public sealed class Notifications : RunningOnlyNotifications
         return Task.FromResult(CanNotify);
     }
 
+    public override Task<NotificationPermission> GetPermission()
+    {
+        return Task.FromResult(NotificationPermission.Unknown);
+    }
+
     protected override async Task Show(NotificationRequest request)
     {
         try

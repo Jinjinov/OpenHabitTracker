@@ -301,5 +301,8 @@
   "Daily summary": "每日摘要",
   "Task reminders": "任务提醒",
   "Notification permission": "通知权限",
-  "Open system settings": "打开系统设置"
+  "Open system settings": "打开系统设置",
+  "Allowed": "已允许",
+  "Blocked": "已阻止",
+  "Not asked": "未询问"
 }

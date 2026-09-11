@@ -23,5 +23,7 @@ public interface IJsInterop
     ValueTask HandleTabKey(ElementReference element);
     ValueTask PreventScrollKeys(ElementReference element);
     ValueTask<bool> RequestNotificationPermission();
+
+    ValueTask<string> GetNotificationPermission();
     ValueTask ShowNotification(string title, string body, string route, object dotnetRef);
 }

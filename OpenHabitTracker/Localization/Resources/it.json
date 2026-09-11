@@ -301,5 +301,8 @@
   "Daily summary": "Riepilogo giornaliero",
   "Task reminders": "Promemoria dei compiti",
   "Notification permission": "Autorizzazione alle notifiche",
-  "Open system settings": "Apri impostazioni di sistema"
+  "Open system settings": "Apri impostazioni di sistema",
+  "Allowed": "Consentito",
+  "Blocked": "Bloccato",
+  "Not asked": "Non richiesto"
 }

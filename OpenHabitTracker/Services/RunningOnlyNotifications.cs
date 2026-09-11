@@ -26,6 +26,8 @@ public abstract class RunningOnlyNotifications : INotifications, IAsyncDisposabl
 
     public abstract Task<bool> RequestPermission();
 
+    public abstract Task<NotificationPermission> GetPermission();
+
     public Task OpenSettings()
     {
         return Task.CompletedTask;

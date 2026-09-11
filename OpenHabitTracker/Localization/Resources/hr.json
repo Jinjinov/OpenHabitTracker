@@ -301,5 +301,8 @@
   "Daily summary": "Dnevni sažetak",
   "Task reminders": "Podsjetnici na zadatke",
   "Notification permission": "Dozvola za obavijesti",
-  "Open system settings": "Otvori postavke sustava"
+  "Open system settings": "Otvori postavke sustava",
+  "Allowed": "Dopušteno",
+  "Blocked": "Blokirano",
+  "Not asked": "Nije traženo"
 }

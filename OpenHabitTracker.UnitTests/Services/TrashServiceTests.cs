@@ -27,7 +27,7 @@ public class TrashServiceTests
         MarkdownToHtml markdownToHtml = new(pipeline);
         _clientState = new(new[] { _dataAccess }, markdownToHtml);
 
-        _sut = new(_clientState);
+        _sut = new(_clientState, Substitute.For<INotificationScheduler>());
     }
 
     // --- Delete (permanent) tests ---

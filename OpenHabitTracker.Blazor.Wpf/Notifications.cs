@@ -1,4 +1,4 @@
-using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
 using OpenHabitTracker.Services;
 using System;
 using System.Collections.Generic;
@@ -40,6 +40,11 @@ public sealed class Notifications : INotifications
     public Task OpenSettings()
     {
         return Task.CompletedTask;
+    }
+
+    public Task<NotificationPermission> GetPermission()
+    {
+        return Task.FromResult(NotificationPermission.Unknown);
     }
 
     public void SetActivatedAction(Action<string> onActivated)

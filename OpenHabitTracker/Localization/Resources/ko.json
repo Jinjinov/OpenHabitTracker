@@ -301,5 +301,8 @@
   "Daily summary": "일일 요약",
   "Task reminders": "할 일 알림",
   "Notification permission": "알림 권한",
-  "Open system settings": "시스템 설정 열기"
+  "Open system settings": "시스템 설정 열기",
+  "Allowed": "허용됨",
+  "Blocked": "차단됨",
+  "Not asked": "요청 안 함"
 }

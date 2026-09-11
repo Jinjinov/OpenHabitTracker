@@ -18,6 +18,17 @@ public sealed class Notifications(IJsInterop jsInterop) : RunningOnlyNotificatio
         return await _jsInterop.RequestNotificationPermission();
     }
 
+    public override async Task<NotificationPermission> GetPermission()
+    {
+        return await _jsInterop.GetNotificationPermission() switch
+        {
+            "granted" => NotificationPermission.Allowed,
+            "denied" => NotificationPermission.Blocked,
+            "default" => NotificationPermission.NotAsked,
+            _ => NotificationPermission.Unknown
+        };
+    }
+
     protected override async Task Show(NotificationRequest request)
     {
         _selfReference ??= DotNetObjectReference.Create(this);

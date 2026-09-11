@@ -1,12 +1,14 @@
-using OpenHabitTracker.App;
+﻿using OpenHabitTracker.App;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class TrashService(ClientState clientState) : ITrashService
+public class TrashService(ClientState clientState, INotificationScheduler notificationScheduler) : ITrashService
 {
     private readonly ClientState _clientState = clientState;
+
+    private readonly INotificationScheduler _notificationScheduler = notificationScheduler;
 
     public IReadOnlyList<HabitModel>? TrashedHabits => _clientState.TrashedHabits;
     public IReadOnlyList<NoteModel>? TrashedNotes => _clientState.TrashedNotes;
@@ -17,7 +19,14 @@ public class TrashService(ClientState clientState) : ITrashService
         await _clientState.LoadTrash();
     }
 
+    // The bulk operations below call the private half and rebuild once, rather than once per item.
     public async Task Restore(HabitModel model)
+    {
+        await RestoreModel(model);
+        await _notificationScheduler.Rebuild();
+    }
+
+    private async Task RestoreModel(HabitModel model)
     {
         model.IsDeleted = false;
         await RestoreHabit(model.Id);
@@ -32,6 +41,12 @@ public class TrashService(ClientState clientState) : ITrashService
     }
 
     public async Task Restore(TaskModel model)
+    {
+        await RestoreModel(model);
+        await _notificationScheduler.Rebuild();
+    }
+
+    private async Task RestoreModel(TaskModel model)
     {
         model.IsDeleted = false;
         await RestoreTask(model.Id);
@@ -69,7 +84,7 @@ public class TrashService(ClientState clientState) : ITrashService
     {
         if (_clientState.TrashedHabits is not null)
             foreach (HabitModel model in _clientState.TrashedHabits.ToList())
-                await Restore(model);
+                await RestoreModel(model);
 
         if (_clientState.TrashedNotes is not null)
             foreach (NoteModel model in _clientState.TrashedNotes.ToList())
@@ -77,10 +92,18 @@ public class TrashService(ClientState clientState) : ITrashService
 
         if (_clientState.TrashedTasks is not null)
             foreach (TaskModel model in _clientState.TrashedTasks.ToList())
-                await Restore(model);
+                await RestoreModel(model);
+
+        await _notificationScheduler.Rebuild();
     }
 
     public async Task Delete(HabitModel model)
+    {
+        await DeleteModel(model);
+        await _notificationScheduler.Rebuild();
+    }
+
+    private async Task DeleteModel(HabitModel model)
     {
         await DeleteHabit(model.Id);
         _clientState.TrashedHabits?.Remove(model);
@@ -101,6 +124,12 @@ public class TrashService(ClientState clientState) : ITrashService
     }
 
     public async Task Delete(TaskModel model)
+    {
+        await DeleteModel(model);
+        await _notificationScheduler.Rebuild();
+    }
+
+    private async Task DeleteModel(TaskModel model)
     {
         await DeleteTask(model.Id);
         _clientState.TrashedTasks?.Remove(model);
@@ -150,7 +179,7 @@ public class TrashService(ClientState clientState) : ITrashService
     {
         if (_clientState.TrashedHabits is not null)
             foreach (HabitModel model in _clientState.TrashedHabits.ToList())
-                await Delete(model);
+                await DeleteModel(model);
 
         if (_clientState.TrashedNotes is not null)
             foreach (NoteModel model in _clientState.TrashedNotes.ToList())
@@ -158,6 +187,8 @@ public class TrashService(ClientState clientState) : ITrashService
 
         if (_clientState.TrashedTasks is not null)
             foreach (TaskModel model in _clientState.TrashedTasks.ToList())
-                await Delete(model);
+                await DeleteModel(model);
+
+        await _notificationScheduler.Rebuild();
     }
 }

@@ -4,19 +4,12 @@ using UserNotifications;
 
 namespace OpenHabitTracker.Blazor.Maui;
 
-// On Mac Catalyst the iOS settings URL opens the auto-generated settings-bundle screen rather
-// than System Settings, so the notifications pane is opened by its own URL scheme instead. The
-// user still picks the app from the list there.
-public sealed class MacCatalystNotifications : PluginNotifications
+// Only to report the three states the row shows: the plugin reports a boolean, so a permission
+// that has never been asked for would read the same as one that was refused. macCatalyst carries
+// the identical override, because sharing one file across two platform folders would need a
+// per-platform condition in the csproj.
+public sealed class IosNotifications : PluginNotifications
 {
-    private const string NotificationsPane = "x-apple.systempreferences:com.apple.preference.notifications";
-
-    public override async Task OpenSettings()
-    {
-        await Launcher.Default.OpenAsync(NotificationsPane);
-    }
-
-    // Apple reports the three states the row wants, where the plugin only reports a boolean.
     public override async Task<NotificationPermission> GetPermission()
     {
         UNNotificationSettings settings = await UNUserNotificationCenter.Current.GetNotificationSettingsAsync();

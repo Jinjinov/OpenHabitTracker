@@ -301,5 +301,8 @@
   "Daily summary": "Denný súhrn",
   "Task reminders": "Pripomenutia úloh",
   "Notification permission": "Oprávnenie na upozornenia",
-  "Open system settings": "Otvoriť nastavenia systému"
+  "Open system settings": "Otvoriť nastavenia systému",
+  "Allowed": "Povolené",
+  "Blocked": "Blokované",
+  "Not asked": "Nevyžiadané"
 }

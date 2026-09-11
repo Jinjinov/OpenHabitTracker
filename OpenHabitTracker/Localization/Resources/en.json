@@ -301,5 +301,8 @@
   "Daily summary": "Daily summary",
   "Task reminders": "Task reminders",
   "Notification permission": "Notification permission",
-  "Open system settings": "Open system settings"
+  "Open system settings": "Open system settings",
+  "Allowed": "Allowed",
+  "Blocked": "Blocked",
+  "Not asked": "Not asked"
 }

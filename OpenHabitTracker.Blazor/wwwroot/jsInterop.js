@@ -219,6 +219,14 @@ export async function requestNotificationPermission() {
     return await Notification.requestPermission() === "granted";
 }
 
+// "default", "granted" or "denied", or "" where the browser has no Notification API at all.
+export function getNotificationPermission() {
+    if (!("Notification" in window))
+        return "";
+
+    return Notification.permission;
+}
+
 export function showNotification(title, body, route, dotnetRef) {
     if (!("Notification" in window) || Notification.permission !== "granted")
         return;

@@ -1,4 +1,4 @@
-using OpenHabitTracker.App;
+﻿using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
@@ -121,6 +121,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         NewHabit = null;
 
         await _appReview.RecordEngagement(EngagementKind.ContentCreated);
+
+        await _notificationScheduler.Rebuild();
     }
 
     public async Task UpdateHabit()
@@ -134,6 +136,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
             await _clientState.DataAccess.UpdateHabit(habit);
         }
+
+        await _notificationScheduler.Rebuild();
     }
 
     public async Task Start(HabitModel habit)
@@ -321,6 +325,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault(x => x.CompletedAt != null);
 
         await SetLastTimeDone(habit, last?.CompletedAt);
+
+        await _notificationScheduler.Rebuild();
     }
 
     public async Task UpdateTimeDone(HabitModel habit, TimeModel time)
@@ -340,6 +346,8 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         TimeModel? last = habit.TimesDone.OrderBy(x => x.StartedAt).LastOrDefault(x => x.CompletedAt != null);
 
         await SetLastTimeDone(habit, last?.CompletedAt);
+
+        await _notificationScheduler.Rebuild();
     }
 
     public async Task UpdateQuantity(HabitModel habit, TimeModel time)
@@ -369,5 +377,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
             habitEntity.IsDeleted = true;
             await _clientState.DataAccess.UpdateHabit(habitEntity);
         }
+
+        await _notificationScheduler.Rebuild();
     }
 }
