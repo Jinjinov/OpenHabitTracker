@@ -134,6 +134,12 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IJsInterop, IAsyncDisposab
         return await module.InvokeAsync<bool>("requestNotificationPermission");
     }
 
+    public async ValueTask SetVisibleAction(object dotnetRef)
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("setVisibleAction", dotnetRef);
+    }
+
     public async ValueTask<string> GetNotificationPermission()
     {
         IJSObjectReference module = await _moduleTask.Value;

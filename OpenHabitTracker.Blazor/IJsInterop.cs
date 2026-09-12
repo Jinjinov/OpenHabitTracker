@@ -25,5 +25,7 @@ public interface IJsInterop
     ValueTask<bool> RequestNotificationPermission();
 
     ValueTask<string> GetNotificationPermission();
+
+    ValueTask SetVisibleAction(object dotnetRef);
     ValueTask ShowNotification(string title, string body, string route, object dotnetRef);
 }

@@ -1,4 +1,5 @@
 @using GTour.Abstractions
+@using Microsoft.JSInterop
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
@@ -11,6 +12,8 @@
 @inject IPriorityService PriorityService
 @inject INotifications Notifications
 @inject INotificationScheduler NotificationScheduler
+
+@implements IDisposable
 
 <div>
     <div class="my-1 list-group">
@@ -318,9 +321,41 @@
 
     NotificationPermission _notificationPermission;
 
+    DotNetObjectReference<Settings>? _selfReference;
+
     protected override async Task OnInitializedAsync()
     {
         _notificationPermission = await Notifications.GetPermission();
+    }
+
+    // Returning from the OS settings page does not reload the app and does not rebuild this
+    // component, so without this the row keeps showing whatever it read when it was opened.
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        _selfReference = DotNetObjectReference.Create(this);
+
+        await JsInterop.SetVisibleAction(_selfReference);
+    }
+
+    [JSInvokable]
+    public async Task OnBecameVisible()
+    {
+        NotificationPermission permission = await Notifications.GetPermission();
+
+        await InvokeAsync(() =>
+        {
+            _notificationPermission = permission;
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        _selfReference?.Dispose();
+        _selfReference = null;
     }
 
     static string PermissionName(NotificationPermission permission)

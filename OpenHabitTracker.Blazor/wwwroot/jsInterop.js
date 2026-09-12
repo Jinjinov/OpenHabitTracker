@@ -219,6 +219,20 @@ export async function requestNotificationPermission() {
     return await Notification.requestPermission() === "granted";
 }
 
+// Coming back from the OS settings page does not reload the app, so whoever shows OS state has to
+// re-read it when the app becomes visible again. Assignment rather than a growing subscription: a
+// component that initializes twice replaces the reference instead of adding a second listener.
+let visibleRef = null;
+
+export function setVisibleAction(dotnetRef) {
+    visibleRef = dotnetRef;
+}
+
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && visibleRef)
+        visibleRef.invokeMethodAsync("OnBecameVisible").catch(() => { });
+});
+
 // "default", "granted" or "denied", or "" where the browser has no Notification API at all.
 export function getNotificationPermission() {
     if (!("Notification" in window))
