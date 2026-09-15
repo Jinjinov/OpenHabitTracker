@@ -202,6 +202,7 @@
     private Type? _dynamicComponentType;
     private Type? _previousDynamicComponentType;
     private bool _sidebarWasOpen;
+    private bool _openedByNotification;
 
     private ElementReference _menuButtonRef;
     private ElementReference _searchButtonRef;
@@ -282,6 +283,10 @@
 
     void OnNotificationActivated(string route)
     {
+        // A tap that cold-started the app arrives before the first render, and the start page
+        // must not replace what the tap asked for.
+        _openedByNotification = true;
+
         InvokeAsync(() =>
         {
             NavigationManager.NavigateTo(route);
@@ -340,7 +345,7 @@
 
             SetDynamicComponentParameters();
 
-            if (!string.IsNullOrEmpty(ClientState.Settings.StartPage))
+            if (!string.IsNullOrEmpty(ClientState.Settings.StartPage) && !_openedByNotification)
             {
                 if (!NavigationManager.Uri.Contains(ClientState.Settings.StartPage)) // fix for ERR_TOO_MANY_REDIRECTS on Blazor Server which calls OnInitializedAsync twice
                 {

@@ -3,6 +3,7 @@ using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
 using AndroidScheduleMode = Plugin.LocalNotification.Core.Models.AndroidOption.AndroidScheduleMode;
 using AndroidScheduleOptions = Plugin.LocalNotification.Core.Models.AndroidOption.AndroidScheduleOptions;
+using NotificationLaunchDetails = Plugin.LocalNotification.Core.Models.NotificationLaunchDetails;
 using NotificationRequestSchedule = Plugin.LocalNotification.Core.Models.NotificationRequestSchedule;
 using PluginNotificationRequest = Plugin.LocalNotification.Core.Models.NotificationRequest;
 
@@ -117,6 +118,29 @@ public class PluginNotifications : INotifications
     public void SetActivatedAction(Action<string> onActivated)
     {
         _onActivated = onActivated;
+
+        ReplayLaunchTap();
+    }
+
+    // A tap that cold-starts the app is raised by the plugin's delegate during launch, before this
+    // scoped service exists to hear it. The plugin keeps that first response, so it is replayed here
+    // once, the first time anything listens.
+    private static bool _launchTapReplayed;
+
+    private void ReplayLaunchTap()
+    {
+        if (_launchTapReplayed)
+            return;
+
+        NotificationLaunchDetails? launch = LocalNotificationCenter.LaunchNotificationDetails;
+
+        if (launch is null)
+            return;
+
+        _launchTapReplayed = true;
+
+        if (launch.DidNotificationLaunchApp && launch.ActionId == NotificationActionEventArgs.TapActionId && !string.IsNullOrEmpty(launch.Request?.ReturningData))
+            _onActivated?.Invoke(launch.Request.ReturningData);
     }
 
     private void OnActionTapped(NotificationActionEventArgs eventArgs)
