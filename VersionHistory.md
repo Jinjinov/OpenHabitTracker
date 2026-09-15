@@ -7,6 +7,9 @@
 - Added an icon that shows when online sync is not working
 - Extended staying logged in for sync from 7 to 90 days between uses
 - Fixed online sync giving up until restart after the server became unreachable
+- Fixed weekly statistics missing on the start page until something changed
+- Fixed the end of a page being hidden behind the navigation bar on phones
+- Fixed an error when the sync login button was tapped twice
 
 # 1.2.4 - Aug 8, 2026
 
