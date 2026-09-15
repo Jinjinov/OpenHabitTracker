@@ -21,7 +21,7 @@
 
 @if (ClientState.DataLocation == DataLocation.Local)
 {
-    <button class="btn btn-primary w-100 my-1" @onclick="Login">@Loc["Log in"]</button>
+    <button class="btn btn-primary w-100 my-1" @onclick="Login" disabled="@_loggingIn">@Loc["Log in"]</button>
 }
 @if (ClientState.DataLocation == DataLocation.Remote)
 {
@@ -64,13 +64,26 @@
         await StateChangedChanged.InvokeAsync(StateChanged);
     }
 
+    // Disables the button while a login runs: on a slow connection nothing else changes on screen,
+    // and a second tap would start a second login.
+    private bool _loggingIn;
+
     private async Task Login()
     {
-        bool ok = await AuthService.CredentialsLogin(address, username, password);
+        _loggingIn = true;
 
-        if (ok)
+        try
         {
-            await OnStateChanged();
+            bool ok = await AuthService.CredentialsLogin(address, username, password);
+
+            if (ok)
+            {
+                await OnStateChanged();
+            }
+        }
+        finally
+        {
+            _loggingIn = false;
         }
     }
 

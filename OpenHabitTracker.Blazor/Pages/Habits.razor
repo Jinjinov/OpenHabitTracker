@@ -239,7 +239,8 @@
         <GuidedTourComponent TourId="habits" TourSteps="tourSteps" />
     }
 
-    @if (!_showSecondColumn)
+    @* Created only once the habits are loaded: a component created on the first render sees no data and, with unchanged parameters, is never rendered again. *@
+    @if (!_showSecondColumn && HabitService.Habits is not null)
     {
         <HabitsStatisticsComponent PageStateChanged="_pageStateChanged" />
     }
@@ -253,7 +254,7 @@
         {
             <HabitComponent Habit="HabitService.SelectedHabit" HabitChanged="OnHabitChanged" CloseSelected="CloseSelected" />
         }
-        else
+        else if (HabitService.Habits is not null)
         {
             <HabitsStatisticsComponent PageStateChanged="_pageStateChanged" />
         }

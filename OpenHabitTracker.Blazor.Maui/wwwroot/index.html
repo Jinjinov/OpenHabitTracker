@@ -15,6 +15,12 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
 
     <script src="_content/OpenHabitTracker.Blazor/skipScrollTo.js"></script>
+
+    <script>
+        // Android hands the navigation bar height over through this interface, for the spacer in app.css.
+        if (window.safeAreaInsets)
+            document.documentElement.style.setProperty('--safe-area-inset-bottom', safeAreaInsets.bottom() + 'px');
+    </script>
 </head>
 
 <body>

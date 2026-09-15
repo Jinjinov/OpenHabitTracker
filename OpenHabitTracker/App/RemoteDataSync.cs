@@ -81,7 +81,10 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
 
                     if (users.Count > 0)
                     {
-                        if (_lastRefreshAt < users[0].LastChangeAt)
+                        // Skipped while a refresh started elsewhere is running - a delete-all stamps
+                        // LastChangeAt and then refreshes itself - because two refreshes overlapping
+                        // null each other's dictionaries. The next tick still sees the change.
+                        if (!_clientState.IsRefreshing && _lastRefreshAt < users[0].LastChangeAt)
                         {
                             await _clientState.RefreshState();
                             _lastRefreshAt = DateTime.UtcNow;
@@ -127,16 +130,19 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
 
     public async Task SetDataLocation(DataLocation dataLocation)
     {
+        // Stopped before the switch, so a tick's refresh in flight finishes on the remote data
+        // before the local refresh starts - two refreshes overlapping null each other's dictionaries.
+        if (dataLocation == DataLocation.Local)
+        {
+            await StopPolling();
+        }
+
         await _clientState.SetDataLocationAndRefresh(dataLocation);
         _lastRefreshAt = DateTime.UtcNow;
 
         if (_clientState.DataLocation == DataLocation.Remote)
         {
             StartPolling();
-        }
-        else
-        {
-            await StopPolling();
         }
     }
 }

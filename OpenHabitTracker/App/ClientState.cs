@@ -35,6 +35,8 @@ public class ClientState
 
     public IDataAccess DataAccess { get; set; }
 
+    public bool IsRefreshing { get; private set; }
+
     public UserModel User
     {
         get => _clientData.User;
@@ -89,6 +91,19 @@ public class ClientState
     {
         get => _clientData.TrashedTasks;
         set => _clientData.TrashedTasks = value;
+    }
+
+    private Func<Task>? _onDataReplaced;
+
+    public void SetDataReplacedAction(Func<Task> onDataReplaced)
+    {
+        _onDataReplaced = onDataReplaced;
+    }
+
+    private async Task DataReplaced()
+    {
+        if (_onDataReplaced is not null)
+            await _onDataReplaced();
     }
 
     public async Task SetDataLocationAndRefresh(DataLocation dataLocation)
@@ -307,6 +322,8 @@ public class ClientState
         List<NoteModel>? trashedNotes = TrashedNotes;
         List<TaskModel>? trashedTasks = TrashedTasks;
 
+        IsRefreshing = true;
+
         try
         {
             Settings = new();
@@ -342,23 +359,12 @@ public class ClientState
 
             throw;
         }
+        finally
+        {
+            IsRefreshing = false;
+        }
 
         await DataReplaced();
-    }
-
-    // Assignment rather than an event, like RemoteDataSync.SetRefreshAction: NotificationScheduler
-    // takes ClientState, so it cannot be injected here.
-    private Func<Task>? _onDataReplaced;
-
-    public void SetDataReplacedAction(Func<Task> onDataReplaced)
-    {
-        _onDataReplaced = onDataReplaced;
-    }
-
-    private async Task DataReplaced()
-    {
-        if (_onDataReplaced is not null)
-            await _onDataReplaced();
     }
 
     public async Task<UserImportExportData> GetUserData()

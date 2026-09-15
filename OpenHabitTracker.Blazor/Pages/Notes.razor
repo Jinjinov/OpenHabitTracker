@@ -134,7 +134,8 @@
         <GuidedTourComponent TourId="notes" TourSteps="tourSteps" />
     }
 
-    @if (!_showSecondColumn)
+    @* Created only once the notes are loaded: a component created on the first render sees no data and, with unchanged parameters, is never rendered again. *@
+    @if (!_showSecondColumn && NoteService.Notes is not null)
     {
         <NotesStatisticsComponent PageStateChanged="_pageStateChanged" />
     }
@@ -148,7 +149,7 @@
         {
             <NoteComponent Note="NoteService.SelectedNote" CloseSelected="CloseSelected" />
         }
-        else
+        else if (NoteService.Notes is not null)
         {
             <NotesStatisticsComponent PageStateChanged="_pageStateChanged" />
         }

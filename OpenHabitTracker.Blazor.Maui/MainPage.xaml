@@ -6,9 +6,10 @@
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              SafeAreaEdges="Container, Container, Container, None">
 
-    <!-- Bottom None draws the page under the Android navigation bar and the iOS home indicator.
-         Gesture navigation hides that (transparent 24 dp strip), three-button navigation does not:
-         an opaque 48 dp bar covers the end of every page, so test on three-button navigation.
+    <!-- Bottom None draws the page under the Android navigation bar and the iOS home indicator;
+         the scroll containers in app.css end with a spacer of that height so the page stays reachable.
+         Gesture navigation would hide a missing spacer (transparent 24 dp strip), three-button navigation
+         would not (an opaque 48 dp bar covers the end of every page), so test on three-button navigation.
          Container instead reserves the strip and paints it in PageBackgroundColor. -->
 
     <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">

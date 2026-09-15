@@ -134,11 +134,24 @@ html, body {
 
 /* MAIN ROW AND COLUMNS SCROLLBARS */
 
+/* The page is drawn edge to edge, under the Android navigation bar and the iOS home indicator, so each
+   scroll container ends with a spacer of that height: content still scrolls under the bar, and the last
+   item can be scrolled out from under it. A pseudo-element rather than padding, because the Bootstrap
+   py-* utilities on the columns set padding with !important. iOS reports the inset through env(); the
+   Android WebView reports 0 there, so the MAUI host sets the variable from the window insets. Every
+   other host resolves both to 0. */
+
 /* Mobile: show scrollbar in parent row */
 .parent-row {
     overflow: auto !important;
     max-height: 100% !important;
     display: block !important;
+}
+
+.parent-row::after {
+    content: '';
+    display: block;
+    height: var(--safe-area-inset-bottom, env(safe-area-inset-bottom));
 }
 
 /* Mobile: hide scrollbar in every child column */
@@ -156,10 +169,20 @@ html, body {
         display: flex !important;
     }
 
+    .parent-row::after {
+        content: none;
+    }
+
     /* Desktop: show scrollbar in every child column */
     .child-column {
         overflow: auto !important;
         max-height: 100% !important;
+    }
+
+    .child-column::after {
+        content: '';
+        display: block;
+        height: var(--safe-area-inset-bottom, env(safe-area-inset-bottom));
     }
 }
 

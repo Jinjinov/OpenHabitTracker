@@ -162,7 +162,8 @@
         <GuidedTourComponent TourId="tasks" TourSteps="tourSteps" />
     }
 
-    @if (!_showSecondColumn)
+    @* Created only once the tasks are loaded: a component created on the first render sees no data and, with unchanged parameters, is never rendered again. *@
+    @if (!_showSecondColumn && TaskService.Tasks is not null)
     {
         <TasksStatisticsComponent PageStateChanged="_pageStateChanged" />
     }
@@ -176,7 +177,7 @@
         {
             <TaskComponent Task="TaskService.SelectedTask" CloseSelected="CloseSelected" />
         }
-        else
+        else if (TaskService.Tasks is not null)
         {
             <TasksStatisticsComponent PageStateChanged="_pageStateChanged" />
         }
