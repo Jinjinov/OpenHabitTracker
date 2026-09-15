@@ -78,19 +78,43 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
         };
     }
 
-    // Label and count, never a count in front of a noun: the app has no pluralization mechanism
-    // and most of its twenty languages would need agreement.
+    // One line per kind, label and titles, so the collapsed notification already reads as a list
+    // of what is due. A label with the titles behind it needs no plural form, which the app has no
+    // mechanism for in its twenty languages.
     private string DigestBody(ScheduledNotification scheduled)
     {
-        List<string> parts = new();
+        List<string> lines = new();
 
         if (scheduled.TaskCount > 0)
-            parts.Add($"{_loc["Tasks"]}: {scheduled.TaskCount}");
+            lines.Add($"{_loc["Tasks"]}: {string.Join(", ", scheduled.TaskIds.Select(taskId => TaskLabel(taskId, scheduled.NotifyAt)))}");
 
         if (scheduled.HabitCount > 0)
-            parts.Add($"{_loc["Habits"]}: {scheduled.HabitCount}");
+            lines.Add($"{_loc["Habits"]}: {string.Join(", ", scheduled.HabitIds.Select(HabitLabel))}");
 
-        return string.Join(", ", parts);
+        return string.Join("\n", lines);
+    }
+
+    // The title alone for a task planned for the digest's day; the time when it has one, and the
+    // date when it is overdue from an earlier day, since either is what the reader would ask next.
+    private string TaskLabel(long taskId, DateTime notifyAt)
+    {
+        if (!_clientState.Tasks!.TryGetValue(taskId, out TaskModel? task) || task.PlannedAt is not DateTime plannedAt)
+            return _loc["Tasks"];
+
+        List<string> parts = new() { task.Title };
+
+        if (plannedAt.Date != notifyAt.Date)
+            parts.Add(plannedAt.ToString("d"));
+
+        if (task.PlannedTime is not null)
+            parts.Add(plannedAt.ToString("t"));
+
+        return string.Join(" ", parts);
+    }
+
+    private string HabitLabel(long habitId)
+    {
+        return _clientState.Habits!.TryGetValue(habitId, out HabitModel? habit) ? habit.Title : _loc["Habits"];
     }
 
     private string DigestRoute(ScheduledNotification scheduled)

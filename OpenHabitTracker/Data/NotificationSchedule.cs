@@ -17,10 +17,14 @@ public class ScheduledNotification
     // TaskReminder only.
     public long TaskId { get; set; }
 
-    // DailyDigest only.
-    public int TaskCount { get; set; }
+    // DailyDigest only: what it lists, most urgent first.
+    public List<long> TaskIds { get; set; } = new();
 
-    public int HabitCount { get; set; }
+    public List<long> HabitIds { get; set; } = new();
+
+    public int TaskCount => TaskIds.Count;
+
+    public int HabitCount => HabitIds.Count;
 }
 
 // Describes what should fire and when; the text and the route are composed by the caller,
@@ -67,11 +71,22 @@ public static class NotificationSchedule
                 if (notifyAt <= now)
                     continue;
 
-                int taskCount = candidateTasks.Count(task => IsInDigest(task, day, notifyAt, settings));
-                int habitCount = candidateHabits.Count(habit => IsDue(habit, notifyAt, settings));
+                List<long> taskIds = candidateTasks
+                    .Where(task => IsInDigest(task, day, notifyAt, settings))
+                    .OrderBy(task => task.PlannedAt)
+                    .ThenBy(task => task.Title)
+                    .Select(task => task.Id)
+                    .ToList();
 
-                if (taskCount + habitCount > 0)
-                    result.Add(new ScheduledNotification { NotifyAt = notifyAt, Kind = NotificationKind.DailyDigest, TaskCount = taskCount, HabitCount = habitCount });
+                List<long> habitIds = candidateHabits
+                    .Where(habit => IsDue(habit, notifyAt, settings))
+                    .OrderByDescending(habit => GetRatioAt(habit, settings.SelectedRatio, notifyAt))
+                    .ThenBy(habit => habit.Title)
+                    .Select(habit => habit.Id)
+                    .ToList();
+
+                if (taskIds.Count + habitIds.Count > 0)
+                    result.Add(new ScheduledNotification { NotifyAt = notifyAt, Kind = NotificationKind.DailyDigest, TaskIds = taskIds, HabitIds = habitIds });
             }
         }
 

@@ -251,6 +251,21 @@ public class NotificationScheduleTests
     }
 
     [Test]
+    public void Build_Digest_ListsTasksByPlannedMomentAndHabitsMostOverdueFirst()
+    {
+        TaskModel later = TimedTask(new DateTime(2026, 7, 22, 15, 0, 0), id: 1);
+        TaskModel earlier = TimedTask(new DateTime(2026, 7, 21, 9, 0, 0), id: 2);
+        TaskModel today = UntimedTask(Now, id: 3);
+
+        List<ScheduledNotification> result = NotificationSchedule.Build(
+            [later, earlier, today], [DailyHabit(2, id: 1), DailyHabit(5, id: 2)],
+            Settings(leadMinutes: null, includeOverdueTasks: true), Now);
+
+        Assert.That(result[0].TaskIds, Is.EqualTo(new long[] { 2, 1, 3 }));
+        Assert.That(result[0].HabitIds, Is.EqualTo(new long[] { 2, 1 }));
+    }
+
+    [Test]
     public void Build_LowerThreshold_CatchesAHabitTheDefaultWouldNot()
     {
         // 20 hours into a one-day interval is 83 percent.
