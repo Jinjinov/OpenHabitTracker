@@ -39,6 +39,8 @@ public sealed class AndroidNotifications : PluginNotifications
         return request.Id.StartsWith("digest-", StringComparison.Ordinal) ? DigestChannelId : ReminderChannelId;
     }
 
+    protected override string? SmallIconName => "notification_icon";
+
     // Before Android 12 exact alarms need no permission, so there is nothing to show or open.
     public override bool CanRequestExactTiming => OperatingSystem.IsAndroidVersionAtLeast(31);
 

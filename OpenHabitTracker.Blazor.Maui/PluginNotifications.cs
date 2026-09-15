@@ -1,6 +1,7 @@
 using OpenHabitTracker.Services;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
+using AndroidIcon = Plugin.LocalNotification.Core.Models.AndroidOption.AndroidIcon;
 using AndroidScheduleMode = Plugin.LocalNotification.Core.Models.AndroidOption.AndroidScheduleMode;
 using AndroidScheduleOptions = Plugin.LocalNotification.Core.Models.AndroidOption.AndroidScheduleOptions;
 using NotificationLaunchDetails = Plugin.LocalNotification.Core.Models.NotificationLaunchDetails;
@@ -106,6 +107,9 @@ public class PluginNotifications : INotifications
             if (ChannelIdFor(request) is string channelId)
                 notification.Android.ChannelId = channelId;
 
+            if (SmallIconName is string smallIconName)
+                notification.Android.IconSmallName = new AndroidIcon(smallIconName);
+
             await LocalNotificationCenter.Current.Show(notification);
         }
     }
@@ -123,6 +127,11 @@ public class PluginNotifications : INotifications
     {
         return null;
     }
+
+    // Android draws a notification icon from its alpha channel alone, so the launcher icon shows as
+    // a disc; the Android folder names a drawable made for the status bar. The other platforms use
+    // the app icon.
+    protected virtual string? SmallIconName => null;
 
     // A summary of what is due is still true hours later; a reminder for a planned time is not.
     // An inexact alarm is delivered when the device next wakes after its time, at the latest one hour
