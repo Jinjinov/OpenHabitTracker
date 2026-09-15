@@ -79,7 +79,12 @@ public class PluginNotifications : INotifications
                     {
                         // No exact-alarm permission is asked for: Play restricts USE_EXACT_ALARM to
                         // alarms and calendars, and a rounded lead time tolerates Doze's slack.
-                        ScheduleMode = AndroidScheduleMode.InexactAllowWhileIdle
+                        ScheduleMode = AndroidScheduleMode.InexactAllowWhileIdle,
+
+                        // An inexact alarm lands anywhere in the hour after its time, and Doze can
+                        // hold it longer, while the plugin silently drops anything later than this.
+                        // Its default is one minute, which discarded most of what was scheduled.
+                        AllowedDelay = AllowedDelayFor(request)
                     }
                 }
             };
@@ -103,6 +108,14 @@ public class PluginNotifications : INotifications
     protected virtual string? ChannelIdFor(NotificationRequest request)
     {
         return null;
+    }
+
+    // A summary of what is due is still true hours later; a reminder for a planned time is not.
+    private static TimeSpan AllowedDelayFor(NotificationRequest request)
+    {
+        return request.Id.StartsWith("digest-", StringComparison.Ordinal)
+            ? TimeSpan.FromHours(6)
+            : TimeSpan.FromMinutes(15);
     }
 
     // Digests first, then the soonest reminders, so the discard never falls on the daily summary.
