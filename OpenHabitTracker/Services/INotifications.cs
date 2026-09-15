@@ -33,6 +33,15 @@ public interface INotifications
     // sidebar opens, which is also when the user comes back from the OS page.
     Task<NotificationPermission> GetPermission();
 
+    // Android 12+ delivers a notification up to an hour after its time unless the user grants
+    // exact alarms on a system page; every other OS is exact without asking, so only Android
+    // has a state to show and a page to open.
+    bool CanRequestExactTiming { get; }
+
+    Task<bool> IsExactTimingAllowed();
+
+    Task OpenExactTimingSettings();
+
     // Called with the Route of the notification the user tapped. Assignment rather than an
     // event, like RemoteDataSync.SetRefreshAction: a component that initializes twice sets the
     // same action twice instead of accumulating a second subscription.

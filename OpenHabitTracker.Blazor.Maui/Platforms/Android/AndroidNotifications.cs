@@ -1,3 +1,4 @@
+using Android.Content;
 using Microsoft.Extensions.Localization;
 using OpenHabitTracker.Services;
 using Plugin.LocalNotification;
@@ -37,4 +38,27 @@ public sealed class AndroidNotifications : PluginNotifications
     {
         return request.Id.StartsWith("digest-", StringComparison.Ordinal) ? DigestChannelId : ReminderChannelId;
     }
+
+    // Before Android 12 exact alarms need no permission, so there is nothing to show or open.
+    public override bool CanRequestExactTiming => OperatingSystem.IsAndroidVersionAtLeast(31);
+
+    public override async Task<bool> IsExactTimingAllowed()
+    {
+        return await AndroidService.CanScheduleExactNotifications();
+    }
+
+    // Opens the app's own switch on the "Alarms & reminders" page; there is no dialog for this.
+    // Not the plugin's RequestExactAlarmsPermission, which returns without opening anything once
+    // the permission is granted, and the same button is how it is switched off again.
+    public override Task OpenExactTimingSettings()
+    {
+        Intent intent = new(global::Android.Provider.Settings.ActionRequestScheduleExactAlarm, global::Android.Net.Uri.Parse($"package:{Platform.AppContext.PackageName}"));
+        intent.AddFlags(ActivityFlags.NewTask);
+
+        Platform.AppContext.StartActivity(intent);
+
+        return Task.CompletedTask;
+    }
+
+    private static IAndroidNotificationService AndroidService => (IAndroidNotificationService)LocalNotificationCenter.Current;
 }

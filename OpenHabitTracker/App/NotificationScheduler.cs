@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Localization;
 using OpenHabitTracker.Data;
+using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 using OpenHabitTracker.Services;
 
@@ -17,6 +18,19 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
     {
         if (!_notifications.CanNotify)
             return;
+
+        // A rebuild from outside the UI runs in a scope of its own, whose ClientState has loaded
+        // nothing. The settings are read rather than loaded, so that a first launch, where the UI
+        // is creating the settings row at this moment, does not create a second one here.
+        if (_clientState.Settings.Id == 0)
+        {
+            IReadOnlyList<SettingsEntity> saved = await _clientState.DataAccess.GetSettings();
+
+            if (saved.Count == 0)
+                return;
+
+            _clientState.Settings = saved[0].ToModel();
+        }
 
         SettingsModel settings = _clientState.Settings;
 

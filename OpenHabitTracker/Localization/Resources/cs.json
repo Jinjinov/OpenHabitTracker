@@ -301,8 +301,12 @@
   "Daily summary": "Denní souhrn",
   "Task reminders": "Připomenutí úkolů",
   "Notification permission": "Oprávnění k upozorněním",
-  "Open system settings": "Otevřít nastavení systému",
+  "Open notification settings": "Otevřít nastavení oznámení",
   "Allowed": "Povoleno",
   "Blocked": "Blokováno",
-  "Not asked": "Nevyžádáno"
+  "Not asked": "Nevyžádáno",
+  "Exact notification timing": "Přesný čas oznámení",
+  "Open alarms & reminders": "Otevřít Budíky a připomenutí",
+  "On": "Zapnuto",
+  "Off": "Vypnuto"
 }

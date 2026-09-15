@@ -301,8 +301,12 @@
   "Daily summary": "Dnevni pregled",
   "Task reminders": "Podsetnici na zadatke",
   "Notification permission": "Dozvola za obaveštenja",
-  "Open system settings": "Otvori podešavanja sistema",
+  "Open notification settings": "Otvori podešavanja obaveštenja",
   "Allowed": "Dozvoljeno",
   "Blocked": "Blokirano",
-  "Not asked": "Nije traženo"
+  "Not asked": "Nije traženo",
+  "Exact notification timing": "Tačno vreme obaveštenja",
+  "Open alarms & reminders": "Otvori Alarmi i podsetnici",
+  "On": "Uključeno",
+  "Off": "Isključeno"
 }

@@ -301,8 +301,12 @@
   "Daily summary": "Daglig sammanfattning",
   "Task reminders": "Uppgiftspåminnelser",
   "Notification permission": "Aviseringsbehörighet",
-  "Open system settings": "Öppna systeminställningar",
+  "Open notification settings": "Öppna aviseringsinställningar",
   "Allowed": "Tillåten",
   "Blocked": "Blockerad",
-  "Not asked": "Inte frågad"
+  "Not asked": "Inte frågad",
+  "Exact notification timing": "Exakt aviseringstid",
+  "Open alarms & reminders": "Öppna Alarm och påminnelser",
+  "On": "På",
+  "Off": "Av"
 }

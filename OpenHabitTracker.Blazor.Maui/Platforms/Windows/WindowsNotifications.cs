@@ -41,6 +41,18 @@ public sealed class WindowsNotifications : INotifications
         return Task.FromResult(NotificationPermission.Unknown);
     }
 
+    public bool CanRequestExactTiming => false;
+
+    public Task<bool> IsExactTimingAllowed()
+    {
+        return Task.FromResult(false);
+    }
+
+    public Task OpenExactTimingSettings()
+    {
+        return Task.CompletedTask;
+    }
+
     public void SetActivatedAction(Action<string> onActivated)
     {
         _onActivated = onActivated;

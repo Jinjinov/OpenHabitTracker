@@ -22,6 +22,18 @@ public class Notifications : INotifications
         return Task.FromResult(NotificationPermission.Unknown);
     }
 
+    public bool CanRequestExactTiming => false;
+
+    public Task<bool> IsExactTimingAllowed()
+    {
+        return Task.FromResult(false);
+    }
+
+    public Task OpenExactTimingSettings()
+    {
+        return Task.CompletedTask;
+    }
+
     public Task<bool> RequestPermission()
     {
         return Task.FromResult(false);

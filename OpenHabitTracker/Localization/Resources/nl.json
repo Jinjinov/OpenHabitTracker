@@ -301,8 +301,12 @@
   "Daily summary": "Dagelijks overzicht",
   "Task reminders": "Taakherinneringen",
   "Notification permission": "Meldingstoestemming",
-  "Open system settings": "Systeeminstellingen openen",
+  "Open notification settings": "Meldingsinstellingen openen",
   "Allowed": "Toegestaan",
   "Blocked": "Geblokkeerd",
-  "Not asked": "Niet gevraagd"
+  "Not asked": "Niet gevraagd",
+  "Exact notification timing": "Exacte meldingstijd",
+  "Open alarms & reminders": "Wekkers en herinneringen openen",
+  "On": "Aan",
+  "Off": "Uit"
 }

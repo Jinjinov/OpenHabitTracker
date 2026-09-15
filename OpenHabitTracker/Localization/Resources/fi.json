@@ -301,8 +301,12 @@
   "Daily summary": "Päivittäinen yhteenveto",
   "Task reminders": "Tehtävämuistutukset",
   "Notification permission": "Ilmoituslupa",
-  "Open system settings": "Avaa järjestelmäasetukset",
+  "Open notification settings": "Avaa ilmoitusasetukset",
   "Allowed": "Sallittu",
   "Blocked": "Estetty",
-  "Not asked": "Ei kysytty"
+  "Not asked": "Ei kysytty",
+  "Exact notification timing": "Tarkka ilmoitusaika",
+  "Open alarms & reminders": "Avaa Hälytykset ja muistutukset",
+  "On": "Käytössä",
+  "Off": "Ei käytössä"
 }

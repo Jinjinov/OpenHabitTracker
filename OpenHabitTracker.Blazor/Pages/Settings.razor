@@ -302,8 +302,16 @@
                     <small>@Loc["Notification permission"]: @Loc[PermissionName(_notificationPermission)]</small>
                     @if (Notifications.CanOpenSettings)
                     {
-                        <button class="btn btn-outline-primary w-100 mt-2" @onclick="() => Notifications.OpenSettings()"><i class="bi bi-bell" aria-hidden="true"></i> @Loc["Open system settings"]</button>
+                        <button class="btn btn-outline-primary w-100 mt-2" @onclick="() => Notifications.OpenSettings()"><i class="bi bi-bell" aria-hidden="true"></i> @Loc["Open notification settings"]</button>
                     }
+                </div>
+            }
+
+            @if (Notifications.CanRequestExactTiming)
+            {
+                <div class="list-group-item" data-settings-step-34>
+                    <small>@Loc["Exact notification timing"]: @Loc[_exactTimingAllowed ? "On" : "Off"]</small>
+                    <button class="btn btn-outline-primary w-100 mt-2" @onclick="() => Notifications.OpenExactTimingSettings()"><i class="bi bi-alarm" aria-hidden="true"></i> @Loc["Open alarms & reminders"]</button>
                 </div>
             }
         }
@@ -321,11 +329,14 @@
 
     NotificationPermission _notificationPermission;
 
+    bool _exactTimingAllowed;
+
     DotNetObjectReference<Settings>? _selfReference;
 
     protected override async Task OnInitializedAsync()
     {
         _notificationPermission = await Notifications.GetPermission();
+        _exactTimingAllowed = await Notifications.IsExactTimingAllowed();
     }
 
     // Returning from the OS settings page does not reload the app and does not rebuild this
@@ -344,10 +355,12 @@
     public async Task OnBecameVisible()
     {
         NotificationPermission permission = await Notifications.GetPermission();
+        bool exactTimingAllowed = await Notifications.IsExactTimingAllowed();
 
         await InvokeAsync(() =>
         {
             _notificationPermission = permission;
+            _exactTimingAllowed = exactTimingAllowed;
             StateHasChanged();
         });
     }
@@ -405,6 +418,7 @@
             new() { Text = "Choose how long before a task\'s planned time its reminder arrives, or turn it off.", Show = () => Notifications.CanNotify },
             new() { Text = "Only notify about items at this priority or higher.", Show = () => Notifications.CanNotify },
             new() { Text = "Open the system page where notifications for this app are allowed or blocked.", Show = () => Notifications.CanOpenSettings },
+            new() { Text = "Android delivers notifications up to an hour late unless exact timing is switched on for this app.", Show = () => Notifications.CanRequestExactTiming },
     };
     }
 

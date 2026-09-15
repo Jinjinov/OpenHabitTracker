@@ -55,6 +55,19 @@ public class PluginNotifications : INotifications
         return Task.CompletedTask;
     }
 
+    // Apple and Windows deliver at the scheduled time without asking; Android overrides all three.
+    public virtual bool CanRequestExactTiming => false;
+
+    public virtual Task<bool> IsExactTimingAllowed()
+    {
+        return Task.FromResult(true);
+    }
+
+    public virtual Task OpenExactTimingSettings()
+    {
+        return Task.CompletedTask;
+    }
+
     public async Task Replace(IReadOnlyList<NotificationRequest> requests)
     {
         LocalNotificationCenter.Current.CancelAll();
@@ -77,13 +90,14 @@ public class PluginNotifications : INotifications
                     NotifyTime = request.NotifyAt,
                     Android = new AndroidScheduleOptions
                     {
-                        // No exact-alarm permission is asked for: Play restricts USE_EXACT_ALARM to
-                        // alarms and calendars, and a rounded lead time tolerates Doze's slack.
-                        ScheduleMode = AndroidScheduleMode.InexactAllowWhileIdle,
+                        // Exact when the user has granted SCHEDULE_EXACT_ALARM; otherwise the plugin
+                        // falls back to an inexact alarm that still fires in Doze. ExactAllowWhileIdle
+                        // would not fire at all without the permission.
+                        ScheduleMode = AndroidScheduleMode.Default,
 
-                        // An inexact alarm lands anywhere in the hour after its time, and Doze can
-                        // hold it longer, while the plugin silently drops anything later than this.
-                        // Its default is one minute, which discarded most of what was scheduled.
+                        // An inexact alarm lands anywhere in the hour after its time, while the plugin
+                        // silently drops anything later than this. Its default is one minute, which
+                        // discarded most of what was scheduled.
                         AllowedDelay = AllowedDelayFor(request)
                     }
                 }
@@ -111,11 +125,13 @@ public class PluginNotifications : INotifications
     }
 
     // A summary of what is due is still true hours later; a reminder for a planned time is not.
+    // An inexact alarm is delivered when the device next wakes after its time, at the latest one hour
+    // after it, so a reminder allows exactly that and anything later is dropped.
     private static TimeSpan AllowedDelayFor(NotificationRequest request)
     {
         return request.Id.StartsWith("digest-", StringComparison.Ordinal)
             ? TimeSpan.FromHours(6)
-            : TimeSpan.FromMinutes(15);
+            : TimeSpan.FromHours(1);
     }
 
     // Digests first, then the soonest reminders, so the discard never falls on the daily summary.
