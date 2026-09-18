@@ -246,7 +246,8 @@
 
                 <div class="mt-2" data-settings-step-29>
                     <small>@Loc["Notify about habits over"] @_settings.NotificationHabitThreshold%</small>
-                    <input type="range" min="0" max="200" class="form-range d-block" aria-label="@Loc["Notify about habits over"]" value="@_settings.NotificationHabitThreshold" @oninput="(ChangeEventArgs args) => SaveNotificationHabitThreshold(Convert.ToInt32(args.Value))" />
+                    @* input only moves the label; the save and the schedule rebuild wait for the release *@
+                    <input type="range" min="0" max="200" class="form-range d-block" aria-label="@Loc["Notify about habits over"]" value="@_settings.NotificationHabitThreshold" @oninput="(ChangeEventArgs args) => _settings.NotificationHabitThreshold = Convert.ToInt32(args.Value)" @onchange="(ChangeEventArgs args) => SaveNotificationHabitThreshold(Convert.ToInt32(args.Value))" />
                 </div>
 
                 <div class="position-relative mt-2" data-settings-step-30>
