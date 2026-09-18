@@ -1,7 +1,7 @@
-• Pet grafov navad: cilj, zgodovina, koledar, najboljši nizi in pogostost
-• Dnevni povzetek tega, kar je na vrsti, kot obvestilo
-• Opomnik pred načrtovanim časom naloge
-• Prijava za sinhronizacijo si zapomni naslov strežnika in uporabniško ime
-• Ikona, ki pokaže, ko spletna sinhronizacija ne deluje
-• Prijava za sinhronizacijo traja 90 dni namesto 7
-• Popravljeno: sinhronizacija je odnehala do ponovnega zagona po izpadu strežnika
+• Grafi navad: cilj, zgodovina, koledar, najboljši nizi in pogostost
+• Obvestilo z dnevnim povzetkom tega, kar je na vrsti
+• Opomnik pred načrtovano uro naloge
+• Ikona, ki pokaže, kdaj spletna sinhronizacija ne deluje
+• Popravljeno: spletna sinhronizacija je po nedosegljivem strežniku odpovedala do ponovnega zagona
+• Popravljeno: tedenska statistika je na začetni strani manjkala, dokler se ni kaj spremenilo
+• Popravljeno: konec strani, skrit za navigacijsko vrstico na telefonih

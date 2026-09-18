@@ -1,7 +1,7 @@
-• Fem vanediagram: mål, historik, kalender, bästa serier och frekvens
-• Daglig sammanfattning av det som ska göras som avisering
+• Statistikdiagram för vanor: mål, historik, kalender, bästa serier och frekvens
+• Daglig sammanfattning som avisering om vad som ska göras
 • Påminnelse före en uppgifts planerade tid
-• Synkinloggningen kommer ihåg serveradress och användarnamn
 • Ikon som visar när onlinesynkronisering inte fungerar
-• Förbli inloggad för synk förlängt från 7 till 90 dagar
-• Rättat: synk gav upp till omstart efter att servern blev onåbar
+• Åtgärdat: onlinesynkronisering gav upp tills omstart när servern inte kunde nås
+• Åtgärdat: veckostatistik saknades på startsidan tills något ändrades
+• Åtgärdat: slutet av en sida doldes bakom navigeringsfältet på telefoner

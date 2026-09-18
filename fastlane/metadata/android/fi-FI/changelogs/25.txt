@@ -1,7 +1,7 @@
-• Viisi tapakaaviota: tavoite, historia, kalenteri, parhaat putket ja tiheys
-• Päivittäinen yhteenveto vuorossa olevista ilmoituksena
-• Muistutus ennen tehtävän suunniteltua aikaa
-• Synkronoinnin kirjautuminen muistaa palvelimen osoitteen ja käyttäjänimen
-• Kuvake, joka näyttää kun verkkosynkronointi ei toimi
-• Synkronoinnin kirjautuminen kestää 7 päivän sijaan 90 päivää
-• Korjattu: synkronointi luovutti uudelleenkäynnistykseen asti palvelimen kaaduttua
+• Tapojen tilastokaaviot: tavoite, historia, kalenteri, parhaat sarjat ja toistuvuus
+• Päivittäinen yhteenveto tehtävistä ilmoituksena
+• Muistutus ennen tehtävän suunniteltua kellonaikaa
+• Kuvake, joka näyttää, kun online-synkronointi ei toimi
+• Korjattu: online-synkronointi pysähtyi uudelleenkäynnistykseen asti, kun palvelin ei vastannut
+• Korjattu: viikkotilastot puuttuivat aloitussivulta, kunnes jokin muuttui
+• Korjattu: sivun loppu jäi navigointipalkin taakse puhelimissa

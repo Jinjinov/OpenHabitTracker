@@ -1,7 +1,7 @@
-• Vijf gewoontegrafieken: doel, geschiedenis, kalender, beste reeksen en frequentie
-• Dagelijks overzicht van wat er aan de beurt is als melding
-• Herinnering voor de geplande tijd van een taak
-• Het sync-login onthoudt serveradres en gebruikersnaam
-• Pictogram dat toont wanneer online synchronisatie niet werkt
-• Ingelogd blijven voor sync verlengd van 7 naar 90 dagen
-• Opgelost: sync gaf het op tot herstart nadat de server onbereikbaar werd
+• Gewoontegrafieken: doel, geschiedenis, kalender, beste reeksen en frequentie
+• Melding met dagelijks overzicht van wat er gedaan moet worden
+• Herinnering vóór de geplande tijd van een taak
+• Pictogram dat aangeeft wanneer online synchronisatie niet werkt
+• Opgelost: online synchronisatie stopte tot een herstart als de server onbereikbaar werd
+• Opgelost: weekstatistieken ontbraken op de startpagina bij het openen
+• Opgelost: einde van een pagina op telefoons verborgen achter de navigatiebalk

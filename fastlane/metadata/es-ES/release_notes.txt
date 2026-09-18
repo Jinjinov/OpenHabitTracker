@@ -1,7 +1,7 @@
-• Cinco gráficos de hábitos: objetivo, historial, calendario, mejores rachas y frecuencia
-• Notificación de resumen diario de lo pendiente
+• Gráficos de hábitos: objetivo, historial, calendario, mejores rachas y frecuencia
+• Resumen diario de lo pendiente como notificación
 • Recordatorio antes de la hora planificada de una tarea
-• El acceso de sincronización recuerda la dirección del servidor y el usuario
-• Icono que muestra cuando la sincronización en línea no funciona
-• La sesión de sincronización dura 90 días en lugar de 7
-• Corregido: la sincronización se rendía hasta reiniciar tras caer el servidor
+• Icono que avisa si la sincronización en línea no funciona
+• Corregido: la sincronización en línea se detenía hasta reiniciar si fallaba el servidor
+• Corregido: estadísticas semanales ausentes en la página de inicio al abrir
+• Corregido: final de la página oculto tras la barra de navegación en teléfonos

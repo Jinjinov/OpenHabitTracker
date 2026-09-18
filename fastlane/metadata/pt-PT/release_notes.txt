@@ -1,7 +1,7 @@
-• Cinco gráficos de hábitos: objetivo, histórico, calendário, melhores sequências e frequência
-• Notificação de resumo diário do que está pendente
+• Gráficos de hábitos: meta, histórico, calendário, melhores sequências e frequência
+• Notificação com o resumo diário do que está pendente
 • Lembrete antes da hora planeada de uma tarefa
-• O início de sessão da sincronização guarda o endereço do servidor e o utilizador
-• Ícone que mostra quando a sincronização online não funciona
-• Sessão de sincronização prolongada de 7 para 90 dias
-• Corrigido: a sincronização desistia até reiniciar após o servidor ficar inacessível
+• Ícone que indica quando a sincronização online não funciona
+• Corrigido: a sincronização online parava até reiniciar se o servidor ficasse inacessível
+• Corrigido: estatísticas semanais em falta na página inicial ao abrir
+• Corrigido: fim da página escondido atrás da barra de navegação nos telemóveis

@@ -1,7 +1,7 @@
-• Pięć wykresów nawyków: cel, historia, kalendarz, najlepsze serie i częstotliwość
-• Dzienne podsumowanie tego, co na dziś, jako powiadomienie
+• Wykresy nawyków: cel, historia, kalendarz, najlepsze serie i częstotliwość
+• Powiadomienie z dziennym podsumowaniem tego, co jest do zrobienia
 • Przypomnienie przed zaplanowaną godziną zadania
-• Logowanie synchronizacji pamięta adres serwera i nazwę użytkownika
-• Ikona pokazująca, że synchronizacja online nie działa
-• Zalogowanie do synchronizacji przedłużone z 7 do 90 dni
-• Poprawiono: synchronizacja poddawała się do restartu po awarii serwera
+• Ikona pokazująca, gdy synchronizacja online nie działa
+• Naprawiono: po utracie serwera synchronizacja online nie działała aż do restartu
+• Naprawiono: brak statystyk tygodniowych na stronie startowej do czasu zmiany
+• Naprawiono: koniec strony ukryty za paskiem nawigacji na telefonach

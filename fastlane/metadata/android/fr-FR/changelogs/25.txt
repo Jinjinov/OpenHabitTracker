@@ -1,7 +1,7 @@
-• Cinq graphiques d'habitudes : objectif, historique, calendrier, meilleures séries, fréquence
+• Graphiques d'habitudes : objectif, historique, calendrier, meilleures séries et fréquence
 • Notification de résumé quotidien de ce qui est à faire
-• Rappel avant l'heure prévue d'une tâche
-• La connexion de synchronisation retient l'adresse du serveur et l'identifiant
-• Icône indiquant que la synchronisation en ligne ne fonctionne pas
-• Connexion de synchronisation prolongée de 7 à 90 jours
-• Corrigé : la synchronisation abandonnait jusqu'au redémarrage après une panne du serveur
+• Rappel avant l'heure planifiée d'une tâche
+• Icône indiquant que la sync en ligne ne fonctionne pas
+• Corrigé : la sync en ligne s'arrêtait jusqu'au redémarrage si le serveur était injoignable
+• Corrigé : statistiques hebdomadaires absentes de la page d'accueil à l'ouverture
+• Corrigé : bas de page masqué par la barre de navigation sur téléphone

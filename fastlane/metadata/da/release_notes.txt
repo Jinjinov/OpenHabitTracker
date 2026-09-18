@@ -1,7 +1,7 @@
-• Fem vanediagrammer: mål, historik, kalender, bedste rækker og hyppighed
-• Daglig oversigt over det forfaldne som notifikation
+• Statistikdiagrammer for vaner: mål, historik, kalender, bedste serier og hyppighed
+• Daglig oversigt som notifikation over, hvad der skal gøres
 • Påmindelse før en opgaves planlagte tidspunkt
-• Synk-login husker serveradresse og brugernavn
-• Ikon der viser, når online synkronisering ikke virker
-• Forbliv logget ind til synk forlænget fra 7 til 90 dage
-• Rettet: synk gav op indtil genstart efter serveren blev utilgængelig
+• Ikon, der viser, når online synkronisering ikke virker
+• Rettet: online synkronisering gav op indtil genstart, når serveren ikke kunne nås
+• Rettet: ugestatistik manglede på startsiden, indtil noget ændrede sig
+• Rettet: slutningen af en side var skjult bag navigationslinjen på telefoner

@@ -1,7 +1,7 @@
-• Pět grafů návyků: cíl, historie, kalendář, nejlepší série a frekvence
-• Denní shrnutí toho, co je na řadě, jako upozornění
-• Připomenutí před plánovaným časem úkolu
-• Přihlášení k synchronizaci si pamatuje adresu serveru a jméno
-• Ikona, která ukazuje, že online synchronizace nefunguje
-• Přihlášení k synchronizaci prodlouženo ze 7 na 90 dní
-• Opraveno: synchronizace to vzdala až do restartu po výpadku serveru
+• Grafy návyků: cíl, historie, kalendář, nejlepší série a četnost
+• Oznámení s denním souhrnem toho, co je na řadě
+• Připomínka před naplánovaným časem úkolu
+• Ikona, která ukazuje, když online synchronizace nefunguje
+• Opraveno: online synchronizace po nedostupnosti serveru nefungovala až do restartu
+• Opraveno: chybějící týdenní statistiky na úvodní stránce, dokud se něco nezměnilo
+• Opraveno: konec stránky skrytý za navigační lištou na telefonech

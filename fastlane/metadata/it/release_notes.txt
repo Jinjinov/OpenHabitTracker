@@ -1,7 +1,7 @@
-• Cinque grafici delle abitudini: obiettivo, cronologia, calendario, serie migliori e frequenza
-• Notifica di riepilogo giornaliero di ciò che è in scadenza
+• Grafici delle abitudini: obiettivo, cronologia, calendario, migliori serie e frequenza
+• Notifica di riepilogo giornaliero delle cose da fare
 • Promemoria prima dell'ora pianificata di un compito
-• L'accesso alla sincronizzazione ricorda server e nome utente
-• Icona che mostra quando la sincronizzazione online non funziona
-• L'accesso alla sincronizzazione dura 90 giorni invece di 7
-• Corretto: la sincronizzazione si arrendeva fino al riavvio dopo un guasto del server
+• Icona che segnala se la sincronizzazione online non funziona
+• Corretto: sincronizzazione online ferma fino al riavvio se il server non rispondeva
+• Corretto: statistiche settimanali mancanti nella pagina iniziale all'apertura
+• Corretto: fine pagina nascosta dalla barra di navigazione sui telefoni

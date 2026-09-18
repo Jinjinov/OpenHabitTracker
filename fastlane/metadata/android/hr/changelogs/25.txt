@@ -1,7 +1,7 @@
-• Pet grafikona navika: cilj, povijest, kalendar, najbolji nizovi i učestalost
-• Dnevni sažetak onoga što je na redu kao obavijest
+• Grafikoni navika: cilj, povijest, kalendar, najbolji nizovi i učestalost
+• Obavijest s dnevnim sažetkom onoga što je na redu
 • Podsjetnik prije planiranog vremena zadatka
-• Prijava za sinkronizaciju pamti adresu poslužitelja i korisničko ime
-• Ikona koja pokazuje kada mrežna sinkronizacija ne radi
-• Prijava za sinkronizaciju traje 90 dana umjesto 7
-• Ispravljeno: sinkronizacija je odustajala do ponovnog pokretanja nakon pada poslužitelja
+• Ikona koja pokazuje kada online sinkronizacija ne radi
+• Popravljeno: online sinkronizacija nakon nedostupnog poslužitelja nije radila do ponovnog pokretanja
+• Popravljeno: tjedna statistika nedostajala na početnoj stranici dok se nešto ne promijeni
+• Popravljeno: kraj stranice skriven iza navigacijske trake na telefonima

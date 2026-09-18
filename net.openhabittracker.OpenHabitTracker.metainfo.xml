@@ -391,6 +391,17 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.2.5" date="2026-09-09">
+      <description>
+        <p>Added habit statistics charts: target, history, calendar, best streaks and frequency</p>
+        <p>Added a daily summary notification of what is due</p>
+        <p>Added a reminder notification before a task's planned time</p>
+        <p>Added an icon that shows when online sync is not working</p>
+        <p>Fixed online sync giving up until restart after the server became unreachable</p>
+        <p>Fixed weekly statistics missing on the start page until something changed</p>
+        <p>Fixed the end of a page being hidden behind the navigation bar on phones</p>
+      </description>
+    </release>
     <release version="1.2.4" date="2026-08-08">
       <description>
         <p>Added relative date range filters for planned and done dates</p>

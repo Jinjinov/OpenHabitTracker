@@ -1,7 +1,7 @@
-• Fünf Gewohnheitsdiagramme: Ziel, Verlauf, Kalender, beste Serien und Häufigkeit
-• Tägliche Benachrichtigung mit dem, was fällig ist
-• Erinnerung vor der geplanten Zeit einer Aufgabe
-• Sync-Login merkt sich Serveradresse und Benutzername
-• Symbol zeigt, wenn die Online-Synchronisierung nicht funktioniert
-• Angemeldet bleiben für Sync von 7 auf 90 Tage verlängert
-• Behoben: Sync gab nach einem Serverausfall bis zum Neustart auf
+• Statistikdiagramme für Gewohnheiten: Ziel, Verlauf, Kalender, beste Serien, Häufigkeit
+• Tägliche Zusammenfassung anstehender Einträge als Benachrichtigung
+• Erinnerung vor der geplanten Uhrzeit einer Aufgabe
+• Symbol, das zeigt, wenn die Online-Synchronisation nicht funktioniert
+• Behoben: Online-Synchronisation gab bei Serverausfall bis zum Neustart auf
+• Behoben: Wochenstatistik fehlte anfangs auf der Startseite
+• Behoben: Seitenende auf Telefonen hinter der Navigationsleiste verborgen
