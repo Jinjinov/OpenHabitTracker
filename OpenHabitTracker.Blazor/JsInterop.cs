@@ -156,8 +156,15 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IJsInterop, IAsyncDisposab
     {
         if (_moduleTask.IsValueCreated)
         {
-            IJSObjectReference module = await _moduleTask.Value;
-            await module.DisposeAsync();
+            try
+            {
+                IJSObjectReference module = await _moduleTask.Value;
+                await module.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // On Blazor Server the scope is disposed after the circuit is gone, and the module with it.
+            }
         }
     }
 }
