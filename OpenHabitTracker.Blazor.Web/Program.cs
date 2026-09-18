@@ -34,7 +34,7 @@ builder.Logging.AddWatchDogLogger();
 
 // Load configuration from appsettings.json and environment variables
 builder.Configuration
-    .SetBasePath(Directory.GetCurrentDirectory())
+    .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 

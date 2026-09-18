@@ -13,6 +13,7 @@ using OpenHabitTracker.EntityFrameworkCore;
 using OpenHabitTracker.Services;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -59,7 +60,8 @@ public partial class MainForm : Form
 
         InitializeComponent();
 
-        Icon = new Icon("favicon.ico");
+        // Toast activation starts the exe with system32 as the working directory.
+        Icon = new Icon(Path.Combine(AppContext.BaseDirectory, "favicon.ico"));
 
         blazorWebView.HostPage = @"wwwroot\index.html";
         IServiceProvider serviceProvider = services.BuildServiceProvider();
