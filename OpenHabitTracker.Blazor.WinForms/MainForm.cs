@@ -23,9 +23,11 @@ public partial class MainForm : Form
 {
     private readonly string _windowSettingsPath;
 
-    public MainForm(string databasePath, string windowSettingsPath)
+    public MainForm(string appDataDirectory)
     {
-        _windowSettingsPath = windowSettingsPath;
+        string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
+
+        _windowSettingsPath = Path.Combine(appDataDirectory, WindowSettings.FileName);
 
         IServiceCollection services = new ServiceCollection();
         services.AddWindowsFormsBlazorWebView();
@@ -40,6 +42,7 @@ public partial class MainForm : Form
             //loggingBuilder.SetMinimumLevel(LogLevel.Debug);
 #endif
             loggingBuilder.AddConsole();
+            loggingBuilder.AddProvider(new FileLoggerProvider(appDataDirectory));
         });
 
         services.AddServices();

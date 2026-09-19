@@ -49,7 +49,7 @@ public class Program
 
                 Debug.WriteLine(message);
 
-                CrashLog.Write(databaseDirectory, message);
+                FileLog.Write(databaseDirectory, LogLevel.Critical, typeof(Program).FullName!, message ?? "Unhandled exception");
 
                 app?.MainWindow.ShowMessage("Error", message);
             }
@@ -69,7 +69,7 @@ public class Program
             //loggingBuilder.SetMinimumLevel(LogLevel.Debug);
 #endif
             loggingBuilder.AddConsole();
-
+            loggingBuilder.AddProvider(new FileLoggerProvider(databaseDirectory));
         });
 
         builder.Services.AddServices<OnClickMarkdownExtension>();

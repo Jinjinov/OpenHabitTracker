@@ -36,7 +36,7 @@ public static class MauiProgram
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                CrashLog.Write(appDataDirectory, message);
+                FileLog.Write(appDataDirectory, LogLevel.Critical, typeof(MauiProgram).FullName!, message ?? "Unhandled exception");
 
                 Application.Current?.Dispatcher.Dispatch(async () =>
                 {
@@ -62,6 +62,7 @@ public static class MauiProgram
         //builder.Logging.SetMinimumLevel(LogLevel.Debug);
 #endif
         builder.Logging.AddConsole();
+        builder.Logging.AddProvider(new FileLoggerProvider(appDataDirectory));
 
         string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
 

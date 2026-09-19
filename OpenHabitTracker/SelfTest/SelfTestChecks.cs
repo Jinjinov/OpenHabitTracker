@@ -28,33 +28,33 @@ public static class SelfTestChecks
     ];
 
     /// <summary>
-    /// The checks that only mean something where there is a window and a crash handler,
+    /// The checks that only mean something where there is a window and a log file,
     /// so Photino, WinForms, Wpf and Maui run these on top of <see cref="Standard"/>.
     /// </summary>
     public static IEnumerable<SelfTestCheck> Desktop(string dataDirectory) =>
     [
         .. Standard(dataDirectory),
-        CrashLog(dataDirectory),
+        LogFile(dataDirectory),
         WindowGeometry(dataDirectory)
     ];
 
     /// <summary>
-    /// The crash handler's own write path, exercised through the same call the handler makes,
-    /// so a directory it cannot write to is found before a crash needs it rather than after.
-    /// A probe name is used because the real Error.log is evidence and must not be overwritten.
+    /// The log's own write path, exercised through the same call the crash handler and the logger
+    /// make, so a directory it cannot write to is found before a failure needs it rather than after.
+    /// A probe name is used because the real Error.log is evidence and must not be touched.
     /// </summary>
-    public static SelfTestCheck CrashLog(string dataDirectory) => new("crash log", () =>
+    public static SelfTestCheck LogFile(string dataDirectory) => new("log file", () =>
     {
         string fileName = $"selftest-{Guid.NewGuid():N}.log";
         string message = $"self test {DateTime.Now:O}";
 
-        App.CrashLog.Write(dataDirectory, message, fileName);
+        FileLog.Append(dataDirectory, fileName, message);
 
         try
         {
-            string? read = App.CrashLog.Read(dataDirectory, fileName);
+            string? read = FileLog.Read(dataDirectory, fileName);
 
-            if (read != message)
+            if (read?.TrimEnd() != message)
                 throw new InvalidOperationException(read is null ? "the log was not written" : "the log was written but read back different");
         }
         finally
@@ -62,7 +62,7 @@ public static class SelfTestChecks
             File.Delete(Path.Combine(dataDirectory, fileName));
         }
 
-        return Task.FromResult(Path.Combine(Path.GetFullPath(dataDirectory), App.CrashLog.FileName));
+        return Task.FromResult(Path.Combine(Path.GetFullPath(dataDirectory), FileLog.FileName));
     });
 
     /// <summary>

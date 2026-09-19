@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using OpenHabitTracker.App;
 using OpenHabitTracker.SelfTest;
 using System;
@@ -33,7 +34,7 @@ public partial class App : Application
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                CrashLog.Write(appDataDirectory, message);
+                FileLog.Write(appDataDirectory, LogLevel.Critical, typeof(App).FullName!, message ?? "Unhandled exception");
 
                 MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -42,10 +43,6 @@ public partial class App : Application
             }
         };
 
-        string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
-
-        string windowSettingsPath = Path.Combine(appDataDirectory, WindowSettings.FileName);
-
-        new MainWindow(databasePath, windowSettingsPath).Show();
+        new MainWindow(appDataDirectory).Show();
     }
 }

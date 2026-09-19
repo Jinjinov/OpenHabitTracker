@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Toolkit.Uwp.Notifications;
 using OpenHabitTracker.Services;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,11 @@ namespace OpenHabitTracker.Blazor.WinForms;
 // HKCU\Software\Classes\AppUserModelId, register a CLSID with a LocalServer32 pointing at the exe,
 // and implement INotificationActivationCallback. That is roughly a hundred lines and is exactly
 // what the compat class contains.
-public sealed class Notifications : INotifications
+public sealed class Notifications(ILogger<Notifications> logger) : INotifications
 {
     private const string Group = "openhabittracker";
+
+    private readonly ILogger<Notifications> _logger = logger;
 
     // The compat activation callback is static and process-wide, so it is subscribed once and
     // routed through a settable action rather than an event.
@@ -99,9 +102,10 @@ public sealed class Notifications : INotifications
                 notifier.AddToSchedule(toast);
             }
         }
-        catch (Exception)
+        catch (Exception exception)
         {
             // Notifications disabled at the OS level are not a reason to break the app.
+            _logger.LogError(exception, "Scheduling notifications failed");
         }
 
         return Task.CompletedTask;
@@ -113,8 +117,9 @@ public sealed class Notifications : INotifications
         {
             RemoveAll(ToastNotificationManagerCompat.CreateToastNotifier());
         }
-        catch (Exception)
+        catch (Exception exception)
         {
+            _logger.LogError(exception, "Cancelling notifications failed");
         }
 
         return Task.CompletedTask;

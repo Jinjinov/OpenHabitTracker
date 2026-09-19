@@ -10,6 +10,7 @@ using OpenHabitTracker.Data;
 using OpenHabitTracker.EntityFrameworkCore;
 using OpenHabitTracker.Services;
 using System;
+using System.IO;
 using System.Linq;
 using System.Windows;
 
@@ -22,9 +23,11 @@ public partial class MainWindow : Window
 {
     private readonly string _windowSettingsPath;
 
-    public MainWindow(string databasePath, string windowSettingsPath)
+    public MainWindow(string appDataDirectory)
     {
-        _windowSettingsPath = windowSettingsPath;
+        string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
+
+        _windowSettingsPath = Path.Combine(appDataDirectory, WindowSettings.FileName);
 
         IServiceCollection services = new ServiceCollection();
         services.AddWpfBlazorWebView();
@@ -39,6 +42,7 @@ public partial class MainWindow : Window
             //loggingBuilder.SetMinimumLevel(LogLevel.Debug);
 #endif
             loggingBuilder.AddConsole();
+            loggingBuilder.AddProvider(new FileLoggerProvider(appDataDirectory));
         });
 
         services.AddServices();

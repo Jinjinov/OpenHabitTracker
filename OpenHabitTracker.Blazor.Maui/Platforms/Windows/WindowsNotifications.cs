@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Toolkit.Uwp.Notifications;
 using OpenHabitTracker.Services;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,11 @@ namespace OpenHabitTracker.Blazor.Maui;
 // This host is packaged, so its identity and its toast activator come from Package.appxmanifest
 // rather than from the registry; the compat class reads the CLSID from there and supplies the
 // activator, which is what makes OnActivated fire when a notification is clicked.
-public sealed class WindowsNotifications : INotifications
+public sealed class WindowsNotifications(ILogger<WindowsNotifications> logger) : INotifications
 {
     private const string Group = "openhabittracker";
+
+    private readonly ILogger<WindowsNotifications> _logger = logger;
 
     // The compat activation callback is static and process-wide, so it is subscribed once and
     // routed through a settable action rather than an event.
@@ -93,9 +96,10 @@ public sealed class WindowsNotifications : INotifications
                 notifier.AddToSchedule(toast);
             }
         }
-        catch (Exception)
+        catch (Exception exception)
         {
             // Notifications disabled at the OS level are not a reason to break the app.
+            _logger.LogError(exception, "Scheduling notifications failed");
         }
 
         return Task.CompletedTask;
@@ -107,8 +111,9 @@ public sealed class WindowsNotifications : INotifications
         {
             RemoveAll(ToastNotificationManagerCompat.CreateToastNotifier());
         }
-        catch (Exception)
+        catch (Exception exception)
         {
+            _logger.LogError(exception, "Cancelling notifications failed");
         }
 
         return Task.CompletedTask;

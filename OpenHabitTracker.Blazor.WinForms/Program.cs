@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using OpenHabitTracker.App;
 using OpenHabitTracker.SelfTest;
 using System;
@@ -38,7 +39,7 @@ static class Program
 
                 System.Diagnostics.Debug.WriteLine(message);
 
-                CrashLog.Write(appDataDirectory, message);
+                FileLog.Write(appDataDirectory, LogLevel.Critical, typeof(Program).FullName!, message ?? "Unhandled exception");
 
                 MessageBox.Show(text: message, caption: "Error");
             }
@@ -47,24 +48,20 @@ static class Program
             }
         };
 
-        string databasePath = Path.Combine(appDataDirectory, "OpenHT.db");
-
-        string windowSettingsPath = Path.Combine(appDataDirectory, WindowSettings.FileName);
-
         // Not awaited: this must not block startup - it runs in the background while the app does.
-        _ = CheckForUpdatesAsync();
+        _ = CheckForUpdatesAsync(appDataDirectory);
 
         // PerMonitorV2 (not SystemAware) so DeviceDpi is accurate per monitor for window sizing.
         Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
-        Application.Run(new MainForm(databasePath, windowSettingsPath));
+        Application.Run(new MainForm(appDataDirectory));
 
         return 0;
     }
 
-    // Best-effort: any failure is swallowed, so a failed update check never crashes the app.
-    static async Task CheckForUpdatesAsync()
+    // Best-effort: any failure is logged and swallowed, so a failed update check never crashes the app.
+    static async Task CheckForUpdatesAsync(string appDataDirectory)
     {
         try
         {
@@ -84,8 +81,9 @@ static class Program
             // opens the app themselves (silent: no updater UI after they close the window).
             manager.WaitExitThenApplyUpdates(update.TargetFullRelease, silent: true, restart: false);
         }
-        catch
+        catch (Exception exception)
         {
+            FileLog.Write(appDataDirectory, LogLevel.Error, typeof(Program).FullName!, "Update check failed", exception);
         }
     }
 }

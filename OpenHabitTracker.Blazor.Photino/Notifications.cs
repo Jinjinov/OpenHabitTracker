@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using OpenHabitTracker.Services;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,13 @@ namespace OpenHabitTracker.Blazor.Photino;
 // RemoveNotification and nothing else, so this host fires from a timer while it runs.
 // The portal is used rather than org.freedesktop.Notifications directly, because Flatpak's
 // default bus policy allows org.freedesktop.portal.* and the manifest carries no --talk-name.
-public sealed class Notifications : RunningOnlyNotifications
+public sealed class Notifications(ILogger<Notifications> logger) : RunningOnlyNotifications
 {
     private const string PortalService = "org.freedesktop.portal.Desktop";
     private const string PortalPath = "/org/freedesktop/portal/desktop";
     private const string PortalInterface = "org.freedesktop.portal.Notification";
+
+    private readonly ILogger<Notifications> _logger = logger;
 
     private bool _connected;
 
@@ -88,9 +91,10 @@ public sealed class Notifications : RunningOnlyNotifications
 
             await connection.CallMethodAsync(message);
         }
-        catch (Exception)
+        catch (Exception exception)
         {
             // A desktop with no notification portal is not a reason to break the app.
+            _logger.LogError(exception, "Showing a notification failed");
         }
     }
 
