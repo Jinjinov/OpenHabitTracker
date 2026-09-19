@@ -146,7 +146,7 @@
   "Next": "Naprej",
   "Complete tour": "Dokončaj vodič",
   "Close tour": "Zapri vodič",
-  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "Izberi uro dneva, ob kateri prispe dnevni povzetek tega, kar je na vrsti, ali ga počisti in s tem izklopi.",
+  "Choose the time of day the daily summary arrives, or clear it to turn it off. It lists the day's tasks that have no planned time, and habits over their interval.": "Izberi uro dneva, ob kateri prispe dnevni povzetek, ali jo počisti, da ga izklopiš. Navede naloge tistega dne brez načrtovane ure in navade, ki so čez svoj interval.",
   "Choose whether the daily summary covers tasks, habits, or both.": "Izberi, ali dnevni povzetek zajema naloge, navade ali oboje.",
   "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Izberi, za koliko mora navada preseči svoj interval, preden jo dnevni povzetek omeni.",
   "Let the daily summary count tasks that are past their planned time and still not done.": "Naj dnevni povzetek šteje tudi naloge, ki jim je načrtovani čas potekel in še niso opravljene.",

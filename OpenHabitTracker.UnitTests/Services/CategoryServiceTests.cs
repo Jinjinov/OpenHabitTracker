@@ -13,6 +13,7 @@ public class CategoryServiceTests
 {
     private IDataAccess _dataAccess = null!;
     private ClientState _clientState = null!;
+    private INotificationScheduler _notificationScheduler = null!;
     private CategoryService _sut = null!;
 
     [SetUp]
@@ -26,7 +27,9 @@ public class CategoryServiceTests
         MarkdownToHtml markdownToHtml = new(pipeline);
         _clientState = new(new[] { _dataAccess }, markdownToHtml);
 
-        _sut = new(_clientState);
+        _notificationScheduler = Substitute.For<INotificationScheduler>();
+
+        _sut = new(_clientState, _notificationScheduler);
     }
 
     // --- GetCategoryTitle tests ---
@@ -170,6 +173,20 @@ public class CategoryServiceTests
 
         Assert.That(task.IsDeleted, Is.True);
         Assert.That(task.CategoryId, Is.EqualTo(0));
+    }
+
+    // The trashed tasks and habits may have had reminders and digest entries.
+    [Test]
+    public async Task DeleteCategory_RebuildsNotificationSchedule()
+    {
+        TaskModel task = TestData.Task(id: 1, categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, tasks: [task]);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        await _sut.DeleteCategory(category);
+
+        await _notificationScheduler.Received(1).Rebuild();
     }
 
     [Test]

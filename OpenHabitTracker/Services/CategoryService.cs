@@ -5,9 +5,10 @@ using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.Services;
 
-public class CategoryService(ClientState clientState) : ICategoryService
+public class CategoryService(ClientState clientState, INotificationScheduler notificationScheduler) : ICategoryService
 {
     private readonly ClientState _clientState = clientState;
+    private readonly INotificationScheduler _notificationScheduler = notificationScheduler;
 
     public IReadOnlyCollection<CategoryModel>? Categories => _clientState.Categories?.Values;
 
@@ -141,6 +142,9 @@ public class CategoryService(ClientState clientState) : ICategoryService
 
             await UpdateSettings();
         }
+
+        // The tasks and habits just trashed may have had reminders and digest entries.
+        await _notificationScheduler.Rebuild();
     }
 
     public async Task ToggleCollapsed(CategoryModel category)

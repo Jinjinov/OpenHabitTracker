@@ -7,6 +7,7 @@
 @inject ClientState ClientState
 @inject ICategoryService CategoryService
 @inject ISearchFilterService SearchFilterService
+@inject INotificationScheduler NotificationScheduler
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
 
@@ -530,6 +531,9 @@
         _settings.SelectedRatio = ratio;
 
         await UpdateSettings();
+
+        // The daily summary decides which habits are due on this ratio.
+        await NotificationScheduler.Rebuild();
     }
 
     async Task SaveHideCompletedTasks(bool show)

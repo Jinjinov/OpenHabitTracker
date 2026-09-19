@@ -146,7 +146,7 @@
   "Next": "次へ",
   "Complete tour": "ツアーを完了",
   "Close tour": "ツアーを閉じる",
-  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "期限が来ているもののまとめが届く時刻を選びます。クリアすると無効になります。",
+  "Choose the time of day the daily summary arrives, or clear it to turn it off. It lists the day's tasks that have no planned time, and habits over their interval.": "毎日のまとめが届く時刻を選びます。クリアすると無効になります。まとめには、その日の予定時刻のないタスクと、間隔を超えた習慣が含まれます。",
   "Choose whether the daily summary covers tasks, habits, or both.": "毎日のまとめにタスク、習慣、またはその両方を含めるかを選びます。",
   "Choose how far over its interval a habit has to be before the daily summary mentions it.": "習慣が間隔をどれだけ超えたら毎日のまとめに載せるかを選びます。",
   "Let the daily summary count tasks that are past their planned time and still not done.": "予定時刻を過ぎてもまだ完了していないタスクを毎日のまとめに数えます。",

@@ -69,6 +69,8 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
         NewTask = null;
 
         await _appReview.RecordEngagement(EngagementKind.ContentCreated);
+
+        await _notificationScheduler.Rebuild();
     }
 
     public async Task UpdateTask()

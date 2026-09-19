@@ -146,7 +146,7 @@
   "Next": "Nästa",
   "Complete tour": "Slutför rundtur",
   "Close tour": "Stäng rundtur",
-  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "Välj tiden på dagen då den dagliga sammanfattningen av det som ska göras kommer, eller rensa den för att stänga av den.",
+  "Choose the time of day the daily summary arrives, or clear it to turn it off. It lists the day's tasks that have no planned time, and habits over their interval.": "Välj tiden på dagen då den dagliga sammanfattningen kommer, eller rensa den för att stänga av den. Den visar dagens uppgifter utan planerad tid och vanor som är över sitt intervall.",
   "Choose whether the daily summary covers tasks, habits, or both.": "Välj om den dagliga sammanfattningen omfattar uppgifter, vanor eller båda.",
   "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Välj hur långt över sitt intervall en vana måste vara innan den dagliga sammanfattningen nämner den.",
   "Let the daily summary count tasks that are past their planned time and still not done.": "Låt den dagliga sammanfattningen räkna uppgifter vars planerade tid har passerat och som fortfarande inte är gjorda.",

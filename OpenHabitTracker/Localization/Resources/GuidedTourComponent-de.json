@@ -146,7 +146,7 @@
   "Next": "Weiter",
   "Complete tour": "Tour abschließen",
   "Close tour": "Tour schließen",
-  "Choose the time of day the daily summary of what is due arrives, or clear it to turn it off.": "Wähle die Tageszeit, zu der die tägliche Zusammenfassung des Fälligen ankommt, oder lösche sie, um sie auszuschalten.",
+  "Choose the time of day the daily summary arrives, or clear it to turn it off. It lists the day's tasks that have no planned time, and habits over their interval.": "Wähle die Tageszeit, zu der die tägliche Zusammenfassung ankommt, oder lösche sie, um sie auszuschalten. Sie führt die Aufgaben des Tages ohne geplante Uhrzeit und die Gewohnheiten über ihrem Intervall auf.",
   "Choose whether the daily summary covers tasks, habits, or both.": "Wähle, ob die tägliche Zusammenfassung Aufgaben, Gewohnheiten oder beides umfasst.",
   "Choose how far over its interval a habit has to be before the daily summary mentions it.": "Wähle, wie weit eine Gewohnheit über ihrem Intervall liegen muss, bevor die tägliche Zusammenfassung sie erwähnt.",
   "Let the daily summary count tasks that are past their planned time and still not done.": "Lass die tägliche Zusammenfassung auch Aufgaben zählen, deren geplante Zeit vorbei ist und die noch nicht erledigt sind.",

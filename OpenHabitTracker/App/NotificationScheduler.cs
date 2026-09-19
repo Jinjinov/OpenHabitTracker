@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
@@ -8,11 +9,12 @@ namespace OpenHabitTracker.App;
 
 // Turns what NotificationSchedule says should fire into localized requests and hands the whole set
 // to the platform. Everything that can change the answer calls Rebuild.
-public class NotificationScheduler(ClientState clientState, INotifications notifications, IStringLocalizer loc) : INotificationScheduler
+public class NotificationScheduler(ClientState clientState, INotifications notifications, IStringLocalizer loc, ILogger<NotificationScheduler> logger) : INotificationScheduler
 {
     private readonly ClientState _clientState = clientState;
     private readonly INotifications _notifications = notifications;
     private readonly IStringLocalizer _loc = loc;
+    private readonly ILogger<NotificationScheduler> _logger = logger;
 
     public async Task Rebuild()
     {
@@ -36,6 +38,8 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
 
         if (settings.NotificationTime is null && settings.NotificationLeadMinutes is null)
         {
+            _logger.LogInformation("Notifications off, cancelling all");
+
             await _notifications.CancelAll();
             return;
         }
@@ -49,7 +53,12 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
             settings,
             DateTime.Now);
 
-        await _notifications.Replace(scheduled.Select(ToRequest).ToList());
+        List<NotificationRequest> requests = scheduled.Select(ToRequest).ToList();
+
+        _logger.LogInformation("Scheduling {Count} notifications from {Tasks} tasks and {Habits} habits, lead {Lead}, summary {Summary}",
+            requests.Count, _clientState.Tasks?.Count, _clientState.Habits?.Count, settings.NotificationLeadMinutes, settings.NotificationTime);
+
+        await _notifications.Replace(requests);
     }
 
     private NotificationRequest ToRequest(ScheduledNotification scheduled)

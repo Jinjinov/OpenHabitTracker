@@ -857,4 +857,16 @@ public class TaskServiceTests
 
         await _appReview.Received(1).RecordEngagement(EngagementKind.ContentCreated);
     }
+
+    // A new task can carry a planned time from the moment it is added.
+    [Test]
+    public async Task AddTask_RebuildsNotificationSchedule()
+    {
+        _clientState.Tasks = new();
+        _sut.NewTask = new TaskModel { Title = "New Task", PlannedAt = DateTime.Now.AddHours(1) };
+
+        await _sut.AddTask();
+
+        await _notificationScheduler.Received(1).Rebuild();
+    }
 }
