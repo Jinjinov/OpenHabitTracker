@@ -41,14 +41,16 @@
 
       <!-- A packaged app gets toast activation from the manifest rather than from the registry:
            the CLSID names the activator and the COM server tells Windows what to launch when a
-           notification is clicked while the app is closed. -->
+           notification is clicked while the app is closed.
+           The Arguments value is checked literally by ToastNotificationManagerCompat, which refuses
+           to create any notifier when it is anything but "-ToastActivated". -->
       <Extensions>
         <desktop:Extension Category="windows.toastNotificationActivation">
           <desktop:ToastNotificationActivation ToastActivatorCLSID="5D128618-61CB-469D-83BC-50CAA787068E" />
         </desktop:Extension>
         <com:Extension Category="windows.comServer">
           <com:ComServer>
-            <com:ExeServer Executable="OpenHT.exe" DisplayName="OpenHabitTracker" Arguments="----AppNotificationActivated:">
+            <com:ExeServer Executable="OpenHT.exe" DisplayName="OpenHabitTracker" Arguments="-ToastActivated">
               <com:Class Id="5D128618-61CB-469D-83BC-50CAA787068E" />
             </com:ExeServer>
           </com:ComServer>
