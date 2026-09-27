@@ -135,7 +135,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
 
     // ~29.9 s at roughly 1.9 s a beat: the move, hover, hold and click take about 0.9 s and the
     // pause takes 1 s. The timer hold buys its 3 s from the same budget.
-    private static async Task Main(IPage page)
+    private static async Task MainTake(IPage page)
     {
         await ClickAsync(page.Locator("[data-main-step-5]")); // Habits
         await Beat(page);
@@ -463,7 +463,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
 
     //[Test]
     public async Task Desktop_Main() =>
-        await RecordVideo("videos/desktop-main.mp4", "1920x1080", 1920, 1086, false, Main); // 1086: +6 for the Chromium height discrepancy on Windows - see VideoTests.cs
+        await RecordVideo("videos/desktop-main.mp4", "1920x1080", 1920, 1086, false, MainTake); // 1086: +6 for the Chromium height discrepancy on Windows - see VideoTests.cs
 
     //[Test]
     public async Task Desktop_Sidebar() =>
@@ -481,7 +481,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
     // 1090: +6 for the Chromium height discrepancy on Windows - see VideoTests.cs.
     //[Test]
     public async Task Mobile_Main() =>
-        await RecordVideo("videos/mobile-main.mp4", "500x1084", 500, 1090, true, Main, scaleTo: "886:1920");
+        await RecordVideo("videos/mobile-main.mp4", "500x1084", 500, 1090, true, MainTake, scaleTo: "886:1920");
 
     //[Test]
     public async Task Mobile_Sidebar() =>

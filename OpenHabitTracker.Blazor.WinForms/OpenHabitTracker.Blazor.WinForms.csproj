@@ -42,4 +42,13 @@
     </Content>
   </ItemGroup>
 
+  <!-- The WebView2 package references its WPF control in every .NET 5+ app, and that assembly
+       references the WPF WindowsBase, which a WinForms app does not have (MSB3277). This host only
+       uses the WinForms control, so the WPF one is dropped before references are resolved. -->
+  <Target Name="RemoveWebView2WpfReference" BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <Reference Remove="@(Reference)" Condition="'%(Filename)' == 'Microsoft.Web.WebView2.Wpf'" />
+    </ItemGroup>
+  </Target>
+
 </Project>

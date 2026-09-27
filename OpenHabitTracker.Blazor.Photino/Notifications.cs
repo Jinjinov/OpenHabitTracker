@@ -112,9 +112,8 @@ public sealed class Notifications(ILogger<Notifications> logger) : RunningOnlyNo
             signal: "ActionInvoked",
             reader: ReadNotificationId,
             handler: OnActionInvoked,
-            readerState: null,
-            emitOnCapturedContext: false,
-            flags: ObserverFlags.None);
+            flags: ObserverFlags.None,
+            emitOnCapturedContext: false);
     }
 
     private static string ReadNotificationId(Message message, object? state)
@@ -124,9 +123,10 @@ public sealed class Notifications(ILogger<Notifications> logger) : RunningOnlyNo
         return reader.ReadString();
     }
 
-    private void OnActionInvoked(Exception? error, string notificationId)
+    // A closed connection or a failed read also arrives here, carrying no value.
+    private void OnActionInvoked(Notification<string> notification)
     {
-        if (error is null && _routesById.TryGetValue(notificationId, out string? route))
+        if (notification.HasValue && _routesById.TryGetValue(notification.Value, out string? route))
             OnActivated(route);
     }
 }

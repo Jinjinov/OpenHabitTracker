@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="bunit" Version="2.7.2" />
+    <PackageReference Include="bunit" Version="2.11.3" />
     <PackageReference Include="coverlet.collector" Version="10.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
     <PackageReference Include="NSubstitute" Version="6.0.0" />
@@ -27,6 +27,14 @@
     <ProjectReference Include="..\OpenHabitTracker.Blazor.Web\OpenHabitTracker.Blazor.Web.csproj" />
     <ProjectReference Include="..\OpenHabitTracker.EntityFrameworkCore\OpenHabitTracker.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\OpenHabitTracker.Blazor.Web.ApiClient\OpenHabitTracker.Blazor.Web.ApiClient.csproj" />
+  </ItemGroup>
+
+  <!-- WatchDog.NET, a dependency of the Web project, depends on old ASP.NET Core 2.1 packages with
+       known vulnerabilities. Without this reference, this test project gets those old packages.
+       With it, this project uses the ASP.NET Core framework, which contains newer versions of the
+       same assemblies. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>

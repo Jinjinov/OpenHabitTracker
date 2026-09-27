@@ -54,6 +54,9 @@ public sealed class AndroidNotifications : PluginNotifications
     // the permission is granted, and the same button is how it is switched off again.
     public override Task OpenExactTimingSettings()
     {
+        if (!OperatingSystem.IsAndroidVersionAtLeast(31))
+            return Task.CompletedTask;
+
         Intent intent = new(global::Android.Provider.Settings.ActionRequestScheduleExactAlarm, global::Android.Net.Uri.Parse($"package:{Platform.AppContext.PackageName}"));
         intent.AddFlags(ActivityFlags.NewTask);
 

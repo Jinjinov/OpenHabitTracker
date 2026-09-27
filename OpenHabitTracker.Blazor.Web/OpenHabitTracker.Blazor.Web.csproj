@@ -31,6 +31,15 @@
     </PackageReference>
     <PackageReference Include="Scalar.AspNetCore" Version="2.16.15" />
     <PackageReference Include="WatchDog.NET" Version="1.4.12" />
+    <!-- GHSA-6c8g-7p36-r338 (SharpCompress) and GHSA-pggp-6c3x-2xmx (Snappier) override:
+         WatchDog.NET pins MongoDB.Driver 3.1.0, which pins SharpCompress 0.30.1 and Snappier 1.0.0;
+         3.12.0 references the fixed 0.48.1 and 1.3.1. WatchDog 1.4.12 is its last release,
+         so remove only when WatchDog is replaced or references a fixed driver itself -->
+    <PackageReference Include="MongoDB.Driver" Version="3.12.0" />
+    <!-- GHSA-rxg9-xrhp-64gj override: WatchDog.NET pins MySql.Data 8.0.29, whose
+         System.Windows.Extensions 4.7.0 pins the vulnerable System.Drawing.Common 4.7.0;
+         remove together with the MongoDB.Driver override above -->
+    <PackageReference Include="System.Drawing.Common" Version="10.0.12" />
     <!-- CVE-2025-6965 override: EF Core Sqlite still pins the vulnerable 2.1.11 native SQLite;
          pinned per-host so the desktop lib never flows into the android APK (see the note in
          OpenHabitTracker.EntityFrameworkCore.csproj); remove when EF references 2.1.12+ itself -->
