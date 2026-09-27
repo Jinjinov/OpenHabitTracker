@@ -652,6 +652,13 @@
     },
     {
         "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/tmds.dbus.protocol/0.95.1/tmds.dbus.protocol.0.95.1.nupkg",
+        "sha512": "7b49f51f8a2a84a2f2e578212cdb582d01af5709d348d6f9f2a4e9ea4b923c3025d57a2db74746390d769ebafc82be0c2af6e0a49ffe150c50a1eca76ef66135",
+        "dest": "nuget-sources",
+        "dest-filename": "tmds.dbus.protocol.0.95.1.nupkg"
+    },
+    {
+        "type": "file",
         "url": "https://api.nuget.org/v3-flatcontainer/yamldotnet/18.1.0/yamldotnet.18.1.0.nupkg",
         "sha512": "b9ec6e231b7b90819a5a5a7e2a3e554ed10012205f9712e890b69fa57f570d029bda369375d8a894b9476c571766b985c5eeaf6b474bae9bb9d47b594274abce",
         "dest": "nuget-sources",
