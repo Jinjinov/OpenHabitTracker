@@ -1,1 +1,1 @@
-gewohnheiten,habit,tracker,aufgaben,todo,notizen,markdown,routine,ziele,tagebuch
+gewohnheiten,habit,tracker,aufgaben,todo,notizen,markdown,routine,ziele,erinnerung,statistik

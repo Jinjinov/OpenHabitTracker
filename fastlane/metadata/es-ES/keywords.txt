@@ -1,1 +1,1 @@
-hábitos,habitos,tracker,tareas,notas,markdown,rutina,metas,productividad,diario
+hábitos,tracker,tareas,notas,markdown,rutina,metas,productividad,diario,recordatorio,estadísticas
