@@ -1,1 +1,1 @@
-tavat,tapa,tehtävät,muistiinpanot,markdown,rutiini,tavoitteet,habit,tracker
+tavat,tapa,tehtävät,muistiinpanot,markdown,rutiini,tavoitteet,habit,tracker,muistutus,tilastot

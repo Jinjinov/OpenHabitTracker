@@ -1,1 +1,1 @@
-návyky,navyky,zvyk,úkoly,todo,poznámky,markdown,rutina,cíle
+návyky,navyky,zvyk,úkoly,todo,poznámky,markdown,rutina,cíle,připomínka,statistiky

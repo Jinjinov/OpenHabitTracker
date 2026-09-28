@@ -1,1 +1,1 @@
-nawyki,nawyk,tracker,zadania,todo,notatki,markdown,rutyna,cele
+nawyki,nawyk,tracker,zadania,todo,notatki,markdown,rutyna,cele,przypomnienie,statystyki

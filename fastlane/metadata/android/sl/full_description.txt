@@ -2,7 +2,7 @@ Piši zapiske, načrtuj naloge in sledi navadam - z izvornimi aplikacijami na vs
 
 NAVADE BREZ PRITISKA NIZOV
 
-Namesto števca nizov ima vsaka navada želeni interval ponavljanja. Aplikacija prikaže, koliko je navada zapadla, kot odstotek tega intervala, zato vedno vidiš, kaj najprej potrebuje pozornost. Izpuščen dan ne ponastavi ničesar. Na voljo so tudi klasični nizi - privzeto izklopljeni.
+Namesto števca nizov ima vsaka navada želeni interval ponavljanja. Aplikacija prikaže, koliko je navada zapadla, kot odstotek tega intervala, zato vedno vidiš, kaj najprej potrebuje pozornost. Izpuščen dan le poveča nujnost. Na voljo so tudi klasični nizi - privzeto izklopljeni.
 
 ZAPISKI, NALOGE IN NAVADE NA ENEM MESTU
 
@@ -12,6 +12,7 @@ ZAPISKI, NALOGE IN NAVADE NA ENEM MESTU
 • Kontrolni seznami s podtočkami pri nalogah in navadah
 • Kategorije, barve, prioritete, iskanje, filtri in razvrščanje - za zapiske, naloge in navade
 • Neobvezna obvestila: en dnevni povzetek tega, kar je na vrsti, in opomnik pred načrtovanim časom naloge
+• Grafi za vsako navado: napredek proti cilju, zgodovina, letni koledar, najdaljši nizi in pogostost po dnevih v tednu
 
 TVOJI PODATKI SO TVOJI
 

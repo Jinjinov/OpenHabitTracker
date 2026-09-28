@@ -2,7 +2,7 @@ Take notes, plan tasks, and track habits - native apps on all your devices, plus
 
 HABITS WITHOUT STREAK GUILT
 
-Instead of a streak counter, every habit has a desired repeat interval. The app shows how overdue each habit is as a percentage of that interval, so you always see what needs attention first. Missing a day never resets anything. Classic streaks are available too - off by default.
+Instead of a streak counter, every habit has a desired repeat interval. The app shows how overdue each habit is as a percentage of that interval, so you always see what needs attention first. A skipped day only raises the urgency. Classic streaks are available too - off by default.
 
 NOTES, TASKS AND HABITS IN ONE PLACE
 
@@ -12,6 +12,7 @@ NOTES, TASKS AND HABITS IN ONE PLACE
 • Checklist sub-items on both tasks and habits
 • Categories, colors, priorities, search, filters and sorting - for notes, tasks and habits
 • Optional notifications: one daily summary of what is due, and a reminder before a task's planned time
+• Charts for every habit: progress toward the target, history, a year calendar, best streaks and weekday frequency
 
 YOUR DATA STAYS YOURS
 

@@ -2,7 +2,7 @@ Ta notater, planlegg oppgaver og følg vaner - med native apper på alle enheten
 
 VANER UTEN STREAK-PRESS
 
-I stedet for en streak-teller har hver vane et ønsket gjentakelsesintervall. Appen viser hvor forsinket en vane er som en prosentandel av intervallet, slik at du alltid ser hva som trenger oppmerksomhet først. En glemt dag nullstiller ingenting. Klassiske streaks finnes også - avslått som standard.
+I stedet for en streak-teller har hver vane et ønsket gjentakelsesintervall. Appen viser hvor forsinket en vane er som en prosentandel av intervallet, slik at du alltid ser hva som trenger oppmerksomhet først. En glemt dag øker bare hastegraden. Klassiske streaks finnes også - avslått som standard.
 
 NOTATER, OPPGAVER OG VANER PÅ ETT STED
 
@@ -12,6 +12,7 @@ NOTATER, OPPGAVER OG VANER PÅ ETT STED
 • Sjekkliste-underpunkter på både oppgaver og vaner
 • Kategorier, farger, prioriteter, søk, filtre og sortering - for notater, oppgaver og vaner
 • Valgfrie varsler: én daglig oppsummering av det som forfaller og en påminnelse før en oppgaves planlagte tidspunkt
+• Diagrammer for hver vane: fremgang mot målet, historikk, årskalender, beste serier og hyppighet per ukedag
 
 DATAENE DINE ER DINE
 

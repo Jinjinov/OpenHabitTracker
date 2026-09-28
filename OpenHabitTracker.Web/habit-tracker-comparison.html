@@ -229,7 +229,7 @@
               </thead>
               <tbody>
                 <tr><th scope="row">Free tier</th><td>unlimited</td><td>unlimited</td><td>unlimited</td><td>❌ no free tier</td><td>3 habits only</td></tr>
-                <tr><th scope="row">Paid tier</th><td>none</td><td>$4.99/month</td><td>none</td><td>~$5 one-time</td><td>~$30/year or $100 lifetime</td></tr>
+                <tr><th scope="row">Paid tier</th><td>none</td><td>$4.99/month or $47.99/year</td><td>none</td><td>$5.99 one-time</td><td>$7.49/month, $29.99/year, or lifetime</td></tr>
                 <tr><th scope="row">Ads</th><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
               </tbody>
             </table>
@@ -271,7 +271,7 @@
             </table>
           </div>
 
-          <p>Habitica and Everyday require an account and store your data on their servers. If either service shuts down, your data goes with it. Loop and Streaks keep everything local, which is good for privacy but means no sync between devices. Streaks syncs via iCloud, so it stays within Apple's ecosystem.</p>
+          <p>Habitica and Everyday require an account and store your data on their servers. If either service shuts down, your data goes with it. Loop keeps everything on the device, which is good for privacy but means no sync between devices. Streaks syncs through iCloud, so it stays within Apple's ecosystem.</p>
 
           <p>OpenHabitTracker stores data locally with no account required. For anyone who wants to sync across devices without relying on a third-party cloud service, there is a <a href="index.html#sync">Docker image that runs a self-hosted server</a>. Any native version of the app - desktop or mobile - can log in to your own instance and sync, so your data travels across devices through infrastructure you control.</p>
 
@@ -296,7 +296,7 @@
                 <tr><th scope="row">Interval-based urgency</th><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                 <tr><th scope="row">Habit strength algorithm</th><td>❌</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td></tr>
                 <tr><th scope="row">Flexible schedules</th><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
-                <tr><th scope="row">Weekly stats</th><td>✅ plus per-habit charts</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td></tr>
+                <tr><th scope="row">Statistics and charts</th><td>✅ weekly statistics plus charts per habit</td><td>➖ history tables in a separate data tool</td><td>✅ charts per habit</td><td>✅</td><td>✅ current and longest streak</td></tr>
                 <tr><th scope="row">Apple Health integration</th><td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td></tr>
                 <tr><th scope="row">Gamification</th><td>❌</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
                 <tr><th scope="row">Reminders</th><td>✅ daily summary and reminders before planned tasks</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
@@ -305,13 +305,13 @@
             </table>
           </div>
 
-          <p>Opening a habit shows five charts of its own history: a target for today, this week, this month, this quarter and this year; a history chart at any granularity from days to years; a continuous calendar with no breaks between months; its ten longest streaks; and how much gets done on each weekday, month by month. Loop offers the same set, which is where the idea came from - the difference is that OpenHabitTracker draws them for repetitions, time and quantity habits alike, and shows them on every platform rather than on Android only.</p>
+          <p>Opening a habit shows five charts of its own history: a target for today, this week, this month, this quarter and this year; a history chart at any granularity from days to years; a continuous calendar with no breaks between months; its ten longest streaks; and how much gets done on each weekday, month by month. Loop offers the same set, which is where the idea came from - the difference is that OpenHabitTracker shows them on every platform rather than on Android only.</p>
 
           <p>The biggest philosophical difference is in the first two rows.</p>
 
-          <p>The other four apps put streak counters front and center: miss a day, your streak resets to zero. OpenHabitTracker was designed around a different idea: instead of tracking streaks, it tracks time elapsed since your last completion and compares it to the habit's desired interval. A habit with a 10-day interval that's 2 days overdue shows at 120%. A habit with a 4-day interval that's also 2 days overdue shows at 150% - because relative to its schedule, it's more urgent. Missing one day doesn't reset anything, it just shifts the percentage a little.</p>
+          <p>Habitica, Streaks and Everyday put streak counters front and center: miss a day, your streak resets to zero. OpenHabitTracker was designed around a different idea: instead of tracking streaks, it tracks time elapsed since your last completion and compares it to the habit's desired interval. A habit with a 10-day interval that's 2 days overdue shows at 120%. A habit with a 4-day interval that's also 2 days overdue shows at 150% - because relative to its schedule, it's more urgent. A skip only raises the urgency, shifting the percentage a little.</p>
 
-          <p>OpenHabitTracker does show current and best streaks since version 1.2.2 - but they are opt-in, off by default, and were added only because a user <a href="https://github.com/Jinjinov/OpenHabitTracker/discussions/16" onclick="gitHubVisit()">asked for them on GitHub</a>. Nothing resets to zero, nothing guilts you.</p>
+          <p>OpenHabitTracker does show current and best streaks since version 1.2.2 - but they are opt-in, off by default, and were added only because a user <a href="https://github.com/Jinjinov/OpenHabitTracker/discussions/16" onclick="gitHubVisit()">asked for them on GitHub</a>.</p>
 
           <p>Its notifications work differently from the others: rather than a reminder per habit, one daily summary at an hour you choose covers everything due, and tasks with a planned time get their own reminder. The habit list shows the same thing at a glance whether or not notifications are on.</p>
 
@@ -338,7 +338,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr><th scope="row">Notes</th><td>✅ Markdown</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                <tr><th scope="row">Notes</th><td>✅ Markdown</td><td>❌</td><td>❌</td><td>➖ a daily note per habit</td><td>❌</td></tr>
                 <tr><th scope="row">Tasks</th><td>✅</td><td>✅ To-Dos</td><td>❌</td><td>❌</td><td>❌</td></tr>
               </tbody>
             </table>
@@ -363,8 +363,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr><th scope="row">Languages</th><td>20</td><td>22</td><td>~10</td><td>~10</td><td>~10</td></tr>
-                <tr><th scope="row">Themes</th><td>26</td><td>limited</td><td>limited</td><td>limited</td><td>limited</td></tr>
+                <tr><th scope="row">Languages</th><td>20</td><td>18 in the iPhone app</td><td>47</td><td>28</td><td>15</td></tr>
+                <tr><th scope="row">Themes</th><td>26</td><td>limited</td><td>limited</td><td>78 color themes</td><td>limited</td></tr>
                 <tr><th scope="row">Dark mode</th><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
               </tbody>
             </table>
@@ -372,7 +372,7 @@
 
           <p>OpenHabitTracker is available in: English, German, Spanish, Slovenian, French, Portuguese, Italian, Japanese, Chinese, Korean, Dutch, Danish, Norwegian, Swedish, Finnish, Polish, Czech, Slovak, Croatian, and Serbian.</p>
 
-          <p>It ships with 26 themes in both dark and light modes, which is more than any of the alternatives. Habitica has the edge on language count thanks to its large community of volunteer translators.</p>
+          <p>It ships with 26 themes that restyle the whole interface, in both dark and light modes. Streaks offers the most color themes, 78, and Loop has the widest language coverage, 47 languages from its open translation project.</p>
 
           <h2 class="card-title mt-5 fs-3">⌨️ Accessibility and keyboard navigation</h2>
 
@@ -389,7 +389,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr><th scope="row">Keyboard navigation</th><td>✅</td><td>✅ partial</td><td>➖ N/A</td><td>✅ VoiceOver</td><td>❓ unknown</td></tr>
+                <tr><th scope="row">Keyboard navigation</th><td>✅</td><td>✅ partial</td><td>➖ N/A</td><td>❓ not declared</td><td>❓ unknown</td></tr>
                 <tr><th scope="row">Screen reader support</th><td>✅</td><td>⚠️ partial</td><td>⚠️ partial</td><td>✅ VoiceOver</td><td>❓ unknown</td></tr>
               </tbody>
             </table>

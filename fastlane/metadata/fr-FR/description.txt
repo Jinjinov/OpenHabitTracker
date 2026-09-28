@@ -2,7 +2,7 @@ Prenez des notes, planifiez vos tâches et suivez vos habitudes - avec des appli
 
 DES HABITUDES SANS LA PRESSION DES SÉRIES
 
-Au lieu d'un compteur de séries, chaque habitude a un intervalle de répétition souhaité. L'application affiche le retard de chaque habitude en pourcentage de cet intervalle : vous voyez toujours ce qui demande votre attention en premier. Un jour manqué ne remet rien à zéro. Les séries classiques existent aussi - désactivées par défaut.
+Au lieu d'un compteur de séries, chaque habitude a un intervalle de répétition souhaité. L'application affiche le retard de chaque habitude en pourcentage de cet intervalle : vous voyez toujours ce qui demande votre attention en premier. Un jour manqué ne fait qu'augmenter l'urgence. Les séries classiques existent aussi - désactivées par défaut.
 
 NOTES, TÂCHES ET HABITUDES AU MÊME ENDROIT
 
@@ -12,6 +12,7 @@ NOTES, TÂCHES ET HABITUDES AU MÊME ENDROIT
 • Sous-éléments de type checklist pour les tâches et les habitudes
 • Catégories, couleurs, priorités, recherche, filtres et tri - pour les notes, les tâches et les habitudes
 • Notifications optionnelles : un résumé quotidien de ce qui est à faire et un rappel avant l'heure prévue d'une tâche
+• Graphiques pour chaque habitude : progression vers l'objectif, historique, calendrier annuel, meilleures séries et fréquence par jour de la semaine
 
 VOS DONNÉES VOUS APPARTIENNENT
 

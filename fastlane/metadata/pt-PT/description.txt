@@ -2,7 +2,7 @@ Tome notas, planeie tarefas e acompanhe hábitos - com aplicações nativas em t
 
 HÁBITOS SEM A PRESSÃO DAS SEQUÊNCIAS
 
-Em vez de um contador de sequências, cada hábito tem um intervalo de repetição desejado. A aplicação mostra o atraso de cada hábito como percentagem desse intervalo, para ver sempre o que precisa de atenção primeiro. Falhar um dia não repõe nada a zero. As sequências clássicas também existem - desativadas por predefinição.
+Em vez de um contador de sequências, cada hábito tem um intervalo de repetição desejado. A aplicação mostra o atraso de cada hábito como percentagem desse intervalo, para ver sempre o que precisa de atenção primeiro. Falhar um dia apenas aumenta a urgência. As sequências clássicas também existem - desativadas por predefinição.
 
 NOTAS, TAREFAS E HÁBITOS NUM SÓ LUGAR
 
@@ -12,6 +12,7 @@ NOTAS, TAREFAS E HÁBITOS NUM SÓ LUGAR
 • Subitens de lista de verificação em tarefas e hábitos
 • Categorias, cores, prioridades, pesquisa, filtros e ordenação - para notas, tarefas e hábitos
 • Notificações opcionais: um resumo diário do que está pendente e um lembrete antes da hora planeada de uma tarefa
+• Gráficos para cada hábito: progresso rumo ao objetivo, histórico, calendário anual, melhores sequências e frequência por dia da semana
 
 OS SEUS DADOS SÃO SEUS
 

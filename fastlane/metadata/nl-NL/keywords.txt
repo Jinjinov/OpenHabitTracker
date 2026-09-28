@@ -1,1 +1,1 @@
-gewoontes,gewoonte,tracker,taken,todo,notities,markdown,routine,doelen
+gewoontes,gewoonte,tracker,taken,todo,notities,markdown,routine,doelen,herinnering,statistieken

@@ -2,7 +2,7 @@ Notizen schreiben, Aufgaben planen und Gewohnheiten verfolgen - mit nativen Apps
 
 GEWOHNHEITEN OHNE STREAK-DRUCK
 
-Statt eines Streak-Zählers hat jede Gewohnheit ein Wunschintervall. Die App zeigt als Prozentwert, wie überfällig eine Gewohnheit im Verhältnis zu ihrem Intervall ist - so siehst du immer, was zuerst Aufmerksamkeit braucht. Ein verpasster Tag setzt nichts zurück. Klassische Streaks gibt es auch - standardmäßig ausgeschaltet.
+Statt eines Streak-Zählers hat jede Gewohnheit ein Wunschintervall. Die App zeigt als Prozentwert, wie überfällig eine Gewohnheit im Verhältnis zu ihrem Intervall ist - so siehst du immer, was zuerst Aufmerksamkeit braucht. Ein verpasster Tag erhöht nur die Dringlichkeit. Klassische Streaks gibt es auch - standardmäßig ausgeschaltet.
 
 NOTIZEN, AUFGABEN UND GEWOHNHEITEN AN EINEM ORT
 
@@ -12,6 +12,7 @@ NOTIZEN, AUFGABEN UND GEWOHNHEITEN AN EINEM ORT
 • Checklisten-Unterpunkte für Aufgaben und Gewohnheiten
 • Kategorien, Farben, Prioritäten, Suche, Filter und Sortierung - für Notizen, Aufgaben und Gewohnheiten
 • Optionale Benachrichtigungen: eine tägliche Zusammenfassung des Fälligen und eine Erinnerung vor der geplanten Zeit einer Aufgabe
+• Diagramme für jede Gewohnheit: Fortschritt zum Ziel, Verlauf, Jahreskalender, beste Serien und Häufigkeit nach Wochentag
 
 DEINE DATEN GEHÖREN DIR
 

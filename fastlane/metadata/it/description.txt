@@ -2,7 +2,7 @@ Prendi note, pianifica i compiti e monitora le abitudini - con app native su tut
 
 ABITUDINI SENZA L'ANSIA DELLE STREAK
 
-Invece di un contatore di streak, ogni abitudine ha un intervallo di ripetizione desiderato. L'app mostra il ritardo di ogni abitudine come percentuale di quell'intervallo, così vedi sempre cosa richiede attenzione per prima. Saltare un giorno non azzera nulla. Le streak classiche ci sono comunque - disattivate per impostazione predefinita.
+Invece di un contatore di streak, ogni abitudine ha un intervallo di ripetizione desiderato. L'app mostra il ritardo di ogni abitudine come percentuale di quell'intervallo, così vedi sempre cosa richiede attenzione per prima. Saltare un giorno aumenta solo l'urgenza. Le streak classiche ci sono comunque - disattivate per impostazione predefinita.
 
 NOTE, COMPITI E ABITUDINI IN UN UNICO POSTO
 
@@ -12,6 +12,7 @@ NOTE, COMPITI E ABITUDINI IN UN UNICO POSTO
 • Sotto-elementi checklist per compiti e abitudini
 • Categorie, colori, priorità, ricerca, filtri e ordinamento - per note, compiti e abitudini
 • Notifiche opzionali: un riepilogo giornaliero di ciò che è in scadenza e un promemoria prima dell'ora pianificata di un compito
+• Grafici per ogni abitudine: progresso verso l'obiettivo, cronologia, calendario annuale, serie migliori e frequenza per giorno della settimana
 
 I TUOI DATI SONO TUOI
 

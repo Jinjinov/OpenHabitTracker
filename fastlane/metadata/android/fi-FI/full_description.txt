@@ -2,7 +2,7 @@ Kirjoita muistiinpanoja, suunnittele tehtäviä ja seuraa tapoja - natiivisovell
 
 TAVAT ILMAN PUTKIPAINETTA
 
-Putkilaskurin sijaan jokaisella tavalla on haluttu toistoväli. Sovellus näyttää prosentteina, kuinka myöhässä tapa on suhteessa väliinsä, joten näet aina, mikä kaipaa huomiota ensin. Väliin jäänyt päivä ei nollaa mitään. Perinteiset putket ovat myös saatavilla - oletuksena pois päältä.
+Putkilaskurin sijaan jokaisella tavalla on haluttu toistoväli. Sovellus näyttää prosentteina, kuinka myöhässä tapa on suhteessa väliinsä, joten näet aina, mikä kaipaa huomiota ensin. Väliin jäänyt päivä vain lisää kiireellisyyttä. Perinteiset putket ovat myös saatavilla - oletuksena pois päältä.
 
 MUISTIINPANOT, TEHTÄVÄT JA TAVAT YHDESSÄ PAIKASSA
 
@@ -12,6 +12,7 @@ MUISTIINPANOT, TEHTÄVÄT JA TAVAT YHDESSÄ PAIKASSA
 • Tarkistuslistan alakohdat sekä tehtävissä että tavoissa
 • Kategoriat, värit, prioriteetit, haku, suodattimet ja lajittelu - muistiinpanoille, tehtäville ja tavoille
 • Valinnaiset ilmoitukset: yksi päivittäinen yhteenveto vuorossa olevista ja muistutus ennen tehtävän suunniteltua aikaa
+• Kaaviot jokaiselle tavalle: edistyminen kohti tavoitetta, historia, vuosikalenteri, parhaat sarjat ja tiheys viikonpäivittäin
 
 TIETOSI OVAT SINUN
 

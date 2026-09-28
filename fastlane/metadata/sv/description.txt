@@ -2,7 +2,7 @@ Skriv anteckningar, planera uppgifter och följ vanor - med appar på alla dina 
 
 VANOR UTAN STREAK-PRESS
 
-I stället för en streak-räknare har varje vana ett önskat upprepningsintervall. Appen visar hur försenad en vana är som en procentandel av intervallet, så att du alltid ser vad som behöver uppmärksamhet först. En missad dag nollställer ingenting. Klassiska streaks finns också - avstängda som standard.
+I stället för en streak-räknare har varje vana ett önskat upprepningsintervall. Appen visar hur försenad en vana är som en procentandel av intervallet, så att du alltid ser vad som behöver uppmärksamhet först. En missad dag ökar bara hur brådskande vanan är. Klassiska streaks finns också - avstängda som standard.
 
 ANTECKNINGAR, UPPGIFTER OCH VANOR PÅ ETT STÄLLE
 
@@ -12,6 +12,7 @@ ANTECKNINGAR, UPPGIFTER OCH VANOR PÅ ETT STÄLLE
 • Checklistor med delmoment på både uppgifter och vanor
 • Kategorier, färger, prioriteter, sökning, filter och sortering - för anteckningar, uppgifter och vanor
 • Valfria aviseringar: en daglig sammanfattning av det som ska göras och en påminnelse före en uppgifts planerade tid
+• Diagram för varje vana: framsteg mot målet, historik, årskalender, bästa serier och frekvens per veckodag
 
 DIN DATA ÄR DIN
 

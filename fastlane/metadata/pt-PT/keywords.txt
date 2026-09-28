@@ -1,1 +1,1 @@
-hábitos,habitos,tarefas,notas,markdown,rotina,objetivos,produtividade,tracker
+hábitos,habitos,tarefas,notas,markdown,rotina,objetivos,produtividade,tracker,lembrete,estatísticas

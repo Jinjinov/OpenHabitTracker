@@ -2,7 +2,7 @@ Toma notas, planifica tareas y sigue tus hábitos - con aplicaciones nativas en 
 
 HÁBITOS SIN LA PRESIÓN DE LAS RACHAS
 
-En lugar de un contador de rachas, cada hábito tiene un intervalo de repetición deseado. La aplicación muestra qué tan atrasado va cada hábito como porcentaje de ese intervalo, para que siempre veas qué necesita atención primero. Saltarte un día no reinicia nada. Las rachas clásicas también existen - desactivadas por defecto.
+En lugar de un contador de rachas, cada hábito tiene un intervalo de repetición deseado. La aplicación muestra qué tan atrasado va cada hábito como porcentaje de ese intervalo, para que siempre veas qué necesita atención primero. Saltarte un día solo aumenta la urgencia. Las rachas clásicas también existen - desactivadas por defecto.
 
 NOTAS, TAREAS Y HÁBITOS EN UN SOLO LUGAR
 
@@ -12,6 +12,7 @@ NOTAS, TAREAS Y HÁBITOS EN UN SOLO LUGAR
 • Sublistas de verificación en tareas y hábitos
 • Categorías, colores, prioridades, búsqueda, filtros y ordenación - para notas, tareas y hábitos
 • Notificaciones opcionales: un resumen diario de lo pendiente y un recordatorio antes de la hora planificada de una tarea
+• Gráficos para cada hábito: progreso hacia el objetivo, historial, calendario anual, mejores rachas y frecuencia por día de la semana
 
 TUS DATOS SON TUYOS
 

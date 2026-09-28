@@ -2,7 +2,7 @@ Pišite bilješke, planirajte zadatke i pratite navike - s izvornim aplikacijama
 
 NAVIKE BEZ PRITISKA NIZOVA
 
-Umjesto brojača nizova, svaka navika ima željeni interval ponavljanja. Aplikacija prikazuje koliko navika kasni kao postotak tog intervala, pa uvijek vidite što prvo treba pažnju. Propušten dan ništa ne poništava. Klasični nizovi također postoje - isključeni prema zadanim postavkama.
+Umjesto brojača nizova, svaka navika ima željeni interval ponavljanja. Aplikacija prikazuje koliko navika kasni kao postotak tog intervala, pa uvijek vidite što prvo treba pažnju. Propušten dan samo povećava hitnost. Klasični nizovi također postoje - isključeni prema zadanim postavkama.
 
 BILJEŠKE, ZADACI I NAVIKE NA JEDNOM MJESTU
 
@@ -12,6 +12,7 @@ BILJEŠKE, ZADACI I NAVIKE NA JEDNOM MJESTU
 • Podstavke popisa (checkliste) na zadacima i navikama
 • Kategorije, boje, prioriteti, pretraživanje, filtri i sortiranje - za bilješke, zadatke i navike
 • Neobavezne obavijesti: jedan dnevni sažetak onoga što je na redu i podsjetnik prije planiranog vremena zadatka
+• Grafikoni za svaku naviku: napredak prema cilju, povijest, godišnji kalendar, najbolji nizovi i učestalost po danima u tjednu
 
 VAŠI PODACI SU VAŠI
 

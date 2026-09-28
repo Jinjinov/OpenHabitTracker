@@ -2,7 +2,7 @@ Maak notities, plan taken en volg gewoontes - met native apps op al je apparaten
 
 GEWOONTES ZONDER STREAK-STRESS
 
-In plaats van een streak-teller heeft elke gewoonte een gewenst herhaalinterval. De app toont hoe achterstallig een gewoonte is als percentage van dat interval, zodat je altijd ziet wat eerst aandacht nodig heeft. Een dag overslaan reset niets. Klassieke streaks zijn er ook - standaard uitgeschakeld.
+In plaats van een streak-teller heeft elke gewoonte een gewenst herhaalinterval. De app toont hoe achterstallig een gewoonte is als percentage van dat interval, zodat je altijd ziet wat eerst aandacht nodig heeft. Een dag overslaan verhoogt alleen de urgentie. Klassieke streaks zijn er ook - standaard uitgeschakeld.
 
 NOTITIES, TAKEN EN GEWOONTES OP ÉÉN PLEK
 
@@ -12,6 +12,7 @@ NOTITIES, TAKEN EN GEWOONTES OP ÉÉN PLEK
 • Checklist-subitems voor taken én gewoontes
 • Categorieën, kleuren, prioriteiten, zoeken, filters en sorteren - voor notities, taken en gewoontes
 • Optionele meldingen: één dagelijks overzicht van wat er aan de beurt is en een herinnering voor de geplande tijd van een taak
+• Grafieken voor elke gewoonte: voortgang naar het doel, geschiedenis, jaarkalender, beste reeksen en frequentie per weekdag
 
 JOUW GEGEVENS BLIJVEN VAN JOU
 

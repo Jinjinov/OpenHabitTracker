@@ -1,1 +1,1 @@
-vaner,vane,tracker,opgaver,todo,noter,markdown,rutine,mål,produktivitet
+vaner,vane,tracker,opgaver,todo,noter,markdown,rutine,mål,produktivitet,påmindelse,statistik

@@ -2,7 +2,7 @@ Pište poznámky, plánujte úkoly a sledujte návyky - s nativními aplikacemi 
 
 NÁVYKY BEZ TLAKU SÉRIÍ
 
-Místo počítadla sérií má každý návyk požadovaný interval opakování. Aplikace zobrazuje, jak moc je návyk po termínu, jako procento tohoto intervalu - vždy vidíte, co potřebuje pozornost jako první. Vynechaný den nic nevynuluje. Klasické série jsou k dispozici také - ve výchozím nastavení vypnuté.
+Místo počítadla sérií má každý návyk požadovaný interval opakování. Aplikace zobrazuje, jak moc je návyk po termínu, jako procento tohoto intervalu - vždy vidíte, co potřebuje pozornost jako první. Vynechaný den jen zvýší naléhavost. Klasické série jsou k dispozici také - ve výchozím nastavení vypnuté.
 
 POZNÁMKY, ÚKOLY A NÁVYKY NA JEDNOM MÍSTĚ
 
@@ -12,6 +12,7 @@ POZNÁMKY, ÚKOLY A NÁVYKY NA JEDNOM MÍSTĚ
 • Podúkoly (checklisty) u úkolů i návyků
 • Kategorie, barvy, priority, hledání, filtry a řazení - pro poznámky, úkoly i návyky
 • Volitelná upozornění: jeden denní souhrn toho, co je na řadě, a připomenutí před plánovaným časem úkolu
+• Grafy pro každý návyk: postup k cíli, historie, roční kalendář, nejlepší série a četnost podle dnů v týdnu
 
 VAŠE DATA JSOU VAŠE
 

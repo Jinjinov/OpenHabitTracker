@@ -13,7 +13,7 @@ description: |
 
   Habits without streak guilt:
 
-  Instead of a streak counter, every habit has a desired repeat interval. The app shows how overdue each habit is as a percentage of that interval, so you always see what needs attention first. Missing a day never resets anything. Classic streaks are available too - off by default.
+  Instead of a streak counter, every habit has a desired repeat interval. The app shows how overdue each habit is as a percentage of that interval, so you always see what needs attention first. A skipped day only raises the urgency. Classic streaks are available too - off by default.
 
   Notes, tasks and habits in one place:
 

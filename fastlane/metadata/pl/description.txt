@@ -2,7 +2,7 @@ Twórz notatki, planuj zadania i śledź nawyki - z natywnymi aplikacjami na wsz
 
 NAWYKI BEZ PRESJI SERII
 
-Zamiast licznika serii każdy nawyk ma pożądany odstęp powtarzania. Aplikacja pokazuje, jak bardzo nawyk jest zaległy, jako procent tego odstępu - zawsze widzisz, co wymaga uwagi w pierwszej kolejności. Opuszczony dzień niczego nie zeruje. Klasyczne serie też są dostępne - domyślnie wyłączone.
+Zamiast licznika serii każdy nawyk ma pożądany odstęp powtarzania. Aplikacja pokazuje, jak bardzo nawyk jest zaległy, jako procent tego odstępu - zawsze widzisz, co wymaga uwagi w pierwszej kolejności. Opuszczony dzień jedynie zwiększa pilność. Klasyczne serie też są dostępne - domyślnie wyłączone.
 
 NOTATKI, ZADANIA I NAWYKI W JEDNYM MIEJSCU
 
@@ -12,6 +12,7 @@ NOTATKI, ZADANIA I NAWYKI W JEDNYM MIEJSCU
 • Podpunkty listy kontrolnej w zadaniach i nawykach
 • Kategorie, kolory, priorytety, wyszukiwanie, filtry i sortowanie - dla notatek, zadań i nawyków
 • Opcjonalne powiadomienia: jedno dzienne podsumowanie tego, co na dziś, i przypomnienie przed zaplanowaną godziną zadania
+• Wykresy dla każdego nawyku: postęp w realizacji celu, historia, kalendarz roczny, najlepsze serie i częstotliwość według dni tygodnia
 
 TWOJE DANE SĄ TWOJE
 

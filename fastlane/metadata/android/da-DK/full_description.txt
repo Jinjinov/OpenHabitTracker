@@ -2,7 +2,7 @@ Tag noter, planlæg opgaver og følg vaner - med native apps på alle dine enhed
 
 VANER UDEN STREAK-PRES
 
-I stedet for en streak-tæller har hver vane et ønsket gentagelsesinterval. Appen viser, hvor forsinket en vane er, som en procentdel af intervallet, så du altid kan se, hvad der først kræver opmærksomhed. En misset dag nulstiller ingenting. Klassiske streaks findes også - slået fra som standard.
+I stedet for en streak-tæller har hver vane et ønsket gentagelsesinterval. Appen viser, hvor forsinket en vane er, som en procentdel af intervallet, så du altid kan se, hvad der først kræver opmærksomhed. En misset dag gør kun vanen mere presserende. Klassiske streaks findes også - slået fra som standard.
 
 NOTER, OPGAVER OG VANER ET SAMLET STED
 
@@ -12,6 +12,7 @@ NOTER, OPGAVER OG VANER ET SAMLET STED
 • Tjekliste-underpunkter på både opgaver og vaner
 • Kategorier, farver, prioriteter, søgning, filtre og sortering - for noter, opgaver og vaner
 • Valgfrie notifikationer: én daglig oversigt over det forfaldne og en påmindelse før en opgaves planlagte tidspunkt
+• Diagrammer for hver vane: fremskridt mod målet, historik, årskalender, bedste serier og hyppighed pr. ugedag
 
 DINE DATA ER DINE
 
