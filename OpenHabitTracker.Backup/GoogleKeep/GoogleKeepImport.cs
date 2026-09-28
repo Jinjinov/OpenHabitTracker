@@ -48,7 +48,7 @@ public class GoogleKeepImport(ClientState clientState)
 
         UserImportExportData userData = new();
 
-        CategoryModel? category = null;
+        CategoryModel? uncategorized = null;
         NoteModel? note = null;
         TaskModel? task = null;
         //HabitModel? habit = null;
@@ -57,6 +57,8 @@ public class GoogleKeepImport(ClientState clientState)
 
         foreach (GoogleKeepNote googleKeepNote in googleKeepNotes.OrderByDescending(gkn => gkn.CreatedTimestampUsec))
         {
+            CategoryModel category;
+
             if (googleKeepNote.Labels.Count > 0)
             {
                 Label label = googleKeepNote.Labels.First();
@@ -72,12 +74,16 @@ public class GoogleKeepImport(ClientState clientState)
                     userData.Categories.Add(category);
                 }
             }
-
-            if (category is null)
+            else
             {
-                category = new();
+                if (uncategorized is null)
+                {
+                    uncategorized = new();
 
-                userData.Categories.Add(category);
+                    userData.Categories.Add(uncategorized);
+                }
+
+                category = uncategorized;
             }
 
             if (googleKeepNote.ListContent.Count == 0)
