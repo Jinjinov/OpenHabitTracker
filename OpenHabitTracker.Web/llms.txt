@@ -29,11 +29,11 @@ Search covers note bodies and checklist items, not only titles, and highlights m
 The done-date range can be inverted to show what was not completed in a window.
 
 Customization.
-25 settings on one screen, 26 themes plus dark mode, 20 languages, 12 item colors, 6 priority
+32 settings on one screen, 26 themes plus dark mode, 20 languages, 12 item colors, 6 priority
 levels.
 Settings decide which page and which sidebar open at start, what each list row shows, which
 calendars appear, how filters render, and how dense the lists are.
-Six of them add or remove entire blocks from the habit detail, so the same habit is either a short
+Seven of them add or remove entire blocks from the habit detail, so the same habit is either a short
 form or a full statistics page.
 Settings persist, sync, and travel in the JSON and YAML exports.
 
@@ -42,6 +42,21 @@ Tasks have a planned date and time, a duration, a checklist and a timer.
 Habits have a repeat rule, a display metric of repetitions, time or quantity, a checklist, a timer,
 a calendar and full completion history.
 Categories group all three and carry a completion rule of all or any.
+
+Notifications are a daily summary at a time you choose, naming the tasks that are due and the
+habits past a percentage of their interval you set, plus a reminder a set time before a task's
+planned time.
+The summary can cover tasks, habits or both, and a minimum priority applies to everything notified.
+A day with nothing due sends nothing.
+They fire on Android, iOS, macOS and Windows with the app closed, and on Linux and in the web app
+while it is open.
+
+Statistics sit beside each list for the current week: habits on track, due soon and overdue, tasks
+done and overdue with the time spent, notes created and updated.
+Each habit can also show charts of its own history, for repetitions, time and quantity habits alike:
+progress against the target for today, this week, this month, this quarter and this year, a history
+chart from days to years, a continuous year calendar, the ten longest streaks, and the amount done on
+each weekday by month.
 Import and export cover JSON, YAML, TSV and Markdown, plus import from a Google Keep Takeout ZIP.
 
 ## Site

@@ -20,6 +20,7 @@ Key features:
 - Tasks with a planned date and time, a duration, a checklist and a timer
 - Habits measured by how overdue they are rather than by an unbroken streak: a habit with a 10 day interval that is 2 days overdue reads 120%
 - Categories and priorities across notes, tasks and habits
+- Notifications: a daily summary of the tasks that are due and the habits that are overdue, and a reminder before a task's planned time
 - Import and export JSON, YAML, TSV and Markdown, plus import from a Google Keep Takeout ZIP
 - 26 themes with dark and light mode
 - Full keyboard navigation and screen reader support
@@ -33,6 +34,16 @@ Search, filter and sort:
 - Turn the done-date filter around to see what you have not done in a period
 - Eleven sort keys, chosen separately for notes, tasks and habits
 - Search reads note text and checklist items, not only titles
+
+Statistics and charts:
+
+- Weekly statistics beside each list: habits on track, due soon and overdue, tasks done and overdue with the time spent, notes created and updated
+- Charts for every habit, whether it is counted in repetitions, time or quantity:
+  - Progress toward the target for today, this week, this month, this quarter and this year
+  - History by day, week, month, quarter or year
+  - A continuous calendar with no breaks between months
+  - The ten longest streaks
+  - How much gets done on each weekday, month by month
 
 Customization:
 

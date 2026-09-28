@@ -56,10 +56,10 @@ public partial class Examples
                     Priority = Priority.Medium,
                     Items =
                     [
-                        new() { Title = "Target - the marker sits where the pace is" },
+                        new() { Title = "Target - green starts where the pace is" },
                         new() { Title = "History - all five granularities" },
                         new() { Title = "Calendar - months line up, no breaks" },
-                        new() { Title = "Best streaks - longest first" },
+                        new() { Title = "Best streaks - ten longest, newest first" },
                         new() { Title = "Frequency - weekday bias is visible" }
                     ],
                     PlannedAt = now.Date.AddHours(18),

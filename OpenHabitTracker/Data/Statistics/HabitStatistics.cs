@@ -114,7 +114,7 @@ public static class HabitStatistics
 
     // Five nested windows, each measured against its whole target rather than against the part that has elapsed.
     // Comparing against the elapsed part makes every row read 100 percent whenever the user is on pace,
-    // which is five rows carrying one bit between them. The pace marker carries that bit instead.
+    // which is five rows carrying one bit between them. Pace carries that bit instead.
     public static List<TargetRow> GetTargetRows(HabitModel habit, DayOfWeek firstDayOfWeek, DateTime now)
     {
         List<TargetRow> rows = new();
