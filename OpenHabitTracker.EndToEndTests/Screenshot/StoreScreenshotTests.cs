@@ -153,11 +153,12 @@ public class StoreScreenshotTests : PlaywrightTest
     // Put the opened detail at the top of the frame. On the narrow viewports the rows above it push
     // the Close button past the fold - measured at 38 to 248 px over, depending on size and whether
     // the item carries a checklist - and a detail starting mid-screen reads as an afterthought.
-    // Takes the detail component's own id - #habit-component, #task-component, #note-component -
-    // because scrolling any looser ancestor moves nothing: the container that scrolls is the column.
-    private static async Task ScrollDetailToTopAsync(IPage page, string componentId)
+    // Takes the detail component's own id - #habit-component, #task-component, #note-component - or a
+    // block inside it, because scrolling any looser ancestor moves nothing: the container that scrolls
+    // is the column.
+    private static async Task ScrollDetailToTopAsync(IPage page, string selector)
     {
-        await page.Locator(componentId).EvaluateAsync("el => el.scrollIntoView({ block: 'start' })");
+        await page.Locator(selector).EvaluateAsync("el => el.scrollIntoView({ block: 'start' })");
 
         // Scroll settle; there is no observable state change to await on.
         await page.WaitForTimeoutAsync(300);
@@ -451,6 +452,38 @@ public class StoreScreenshotTests : PlaywrightTest
             await Assertions.Expect(page.Locator("[data-search-step-1]")).Not.ToBeVisibleAsync();
         })
     ];
+
+    // The habit charts, for the statistics page. Its own prefix, so a rerun leaves the article set alone.
+    private static Destination[] StatisticsDestination => [new(WebImages, "statistics-")];
+
+    // Practice Spanish carries a year of history in this seed, which is what fills the calendar and the
+    // weekday table. The five panels are taller than the viewport, so they are shot in two halves.
+    private static (string File, Func<IPage, Task> Scene)[] StatisticsScenes =>
+    [
+        ("charts.png", async page =>
+        {
+            await OpenSettingsSidebarAsync(page);
+            await SetToggleAsync(page, "ShowHabitCharts", true);
+            await page.Locator("#closeSidebar").ClickAsync();
+
+            await page.Locator("[data-main-step-5]").ClickAsync(); // habits
+            await page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasTextString = "Practice Spanish" }).ClickAsync();
+            await Assertions.Expect(page.Locator("[data-habits-step-27]")).ToBeVisibleAsync();
+            await ScrollDetailToTopAsync(page, "[data-habits-step-27]"); // Target, History, Calendar
+        }),
+        ("calendar.png", async page => await ScrollDetailToTopAsync(page, "[data-habits-step-29]")) // Calendar, Best streaks, Frequency
+    ];
+
+    //[Test]
+    public async Task Capture_Statistics()
+    {
+        string seedFile = SeedData.Write(Path.GetFullPath("seed-statistics.json"), yearOfSpanish: true);
+        Target desktop = Targets.Single(target => target.Name == "desktop");
+
+        await CaptureSessionAsync(desktop, seedFile, StatisticsScenes, StatisticsDestination);
+
+        TestContext.Out.WriteLine(WebImages);
+    }
 
     //[Test]
     public async Task Capture_Articles()

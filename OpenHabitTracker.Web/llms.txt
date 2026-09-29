@@ -69,6 +69,7 @@ Import and export cover JSON, YAML, TSV and Markdown, plus import from a Google 
 
 - [Customization](https://openhabittracker.net/customizable-habit-tracker.html): what can be turned on or off, per screen and per content type
 - [Search, filter and sort](https://openhabittracker.net/habit-tracker-search-and-filter.html): the date filters, the overdue filter, and the filter that shows what was not done
+- [Statistics and charts](https://openhabittracker.net/habit-tracker-statistics.html): the five charts of a habit's history and the weekly statistics beside each list
 
 ## Comparisons with other habit trackers
 

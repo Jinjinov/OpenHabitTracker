@@ -7,21 +7,21 @@
 
     <meta name="theme-color" content="#FFFFFF">
     <meta name="application-name" content="OpenHabitTracker">
-    <meta name="description" content="Search, filter and sort in a free, open source habit tracker: filter habits by how overdue they are, and see what you have not done.">
+    <meta name="description" content="Habit statistics and charts in a free, open source tracker: progress toward the target, history, a year calendar, best streaks and weekday frequency.">
 
-    <link rel="canonical" href="https://openhabittracker.net/habit-tracker-search-and-filter.html">
+    <link rel="canonical" href="https://openhabittracker.net/habit-tracker-statistics.html">
 
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="OpenHabitTracker" />
-    <meta property="og:title" content="A habit tracker where you can filter and sort by anything" />
-    <meta property="og:description" content="Search, filter and sort in a free, open source habit tracker: filter habits by how overdue they are, and see what you have not done." />
+    <meta property="og:title" content="A habit tracker with statistics and charts" />
+    <meta property="og:description" content="Habit statistics and charts in a free, open source tracker: progress toward the target, history, a year calendar, best streaks and weekday frequency." />
     <meta property="og:image" content="https://openhabittracker.net/icons/thumbnail.png" />
-    <meta property="og:url" content="https://openhabittracker.net/habit-tracker-search-and-filter.html" />
+    <meta property="og:url" content="https://openhabittracker.net/habit-tracker-statistics.html" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@dzindzinovic">
-    <meta name="twitter:title" content="A habit tracker where you can filter and sort by anything">
-    <meta name="twitter:description" content="Search, filter and sort in a free, open source habit tracker: filter habits by how overdue they are, and see what you have not done.">
+    <meta name="twitter:title" content="A habit tracker with statistics and charts">
+    <meta name="twitter:description" content="Habit statistics and charts in a free, open source tracker: progress toward the target, history, a year calendar, best streaks and weekday frequency.">
     <meta name="twitter:image" content="https://openhabittracker.net/icons/thumbnail.png">
 
     <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png" />
@@ -40,7 +40,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.css">
 
-    <title>A habit tracker where you can filter and sort by anything</title>
+    <title>A habit tracker with statistics and charts</title>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RMDS3FFLKW"></script>
@@ -171,8 +171,8 @@
 
       <div class="text-center mb-4">
         <p class="mb-1"><a href="index.html" class="caveat large text-decoration-none">OpenHabitTracker</a></p>
-        <h1 class="display-5">A habit tracker where you can filter and sort by anything</h1>
-        <p class="lead">Including a filter that shows what you have not done</p>
+        <h1 class="display-5">A habit tracker with statistics and charts</h1>
+        <p class="lead">Whether you count a habit in repetitions, minutes or a quantity</p>
       </div>
 
       <div class="card">
@@ -180,61 +180,63 @@
 
           <p><span class="caveat large">OpenHabitTracker</span> is a free, open source habit tracker that also holds your notes and tasks. It runs on Windows, Linux, macOS, iOS, Android and in a browser, with no ads and no account.</p>
 
-          <h2 class="card-title mt-5 fs-3">Filtering and sorting habits</h2>
-
-          <p>A habit here is not measured by a streak. It is measured by how much of its interval has gone by. A habit you want to do every ten days, two days late, is at 120%. A habit you want to do every four days, also two days late, is at 150%.</p>
-
-          <p>Because that is a number, you can filter on a range of it: only habits above 50%, only habits below 150%, or only the ones in between. That last one is everything neither freshly done nor badly overdue.</p>
-
-          <p>You can sort by it as well, and the sort takes the repeat count into account, so a habit done three times a day and one done weekly are compared against each other rather than the daily ones always sitting on top.</p>
-
-          <p>There are other ways to sort habits by time: how long you want between repeats, how long it has actually been averaging, how long since the last one, and how much time you have spent on it in total or per completion.</p>
-
-          <p>Notes and tasks sort by the plain things, category, priority and title, and tasks also by their planned date and duration. Each of the three keeps its own sort order.</p>
+          <p>Open a habit and it can show five charts of its own history.</p>
 
           <div class="card m-2">
-            <a href="images/article-filter-checkboxes.png">
-              <img src="images/article-filter-checkboxes.png" class="card-img-top" alt="The OpenHabitTracker search, filter and sort sidebar open beside a habit list" loading="lazy">
+            <a href="images/statistics-charts.png">
+              <img src="images/statistics-charts.png" class="card-img-top" alt="OpenHabitTracker habit list beside the charts of one habit: progress toward the target for today, this week, this month, this quarter and this year, a weekly history bar chart and a continuous calendar" loading="lazy">
             </a>
             <div class="card-body">
-              <p class="card-text">Search, filter and sort in one sidebar</p>
+              <p class="card-text">Target, history and calendar for 20 minutes of Spanish a day</p>
             </div>
           </div>
 
-          <h2 class="card-title mt-5 fs-3">Filtering by date</h2>
+          <h2 class="card-title mt-5 fs-3">Progress toward the target</h2>
 
-          <p>Tasks have a planned date. Tasks and habits have the dates they were completed on. Both are filtered separately, each before, on, after or not on a date you pick.</p>
+          <p>The first chart has five bars: today, this week, this month, this quarter and this year. Each window is measured against everything it asks for, so 20 minutes of Spanish a day asks for 2:20 in a week and 10:00 in a 30-day month, and the bar shows how much of that is done.</p>
 
-          <p>A filter can also take a number of days from today instead of a date. Minus seven to plus seven is the week either side of now, and it still means that in a month, because the days are counted at the moment you look rather than the moment you set it.</p>
+          <p>Anything done beyond what the habit has asked for so far is drawn in green, so a week that is ahead of schedule looks different from one that is merely on its way.</p>
 
-          <h2 class="card-title mt-5 fs-3">Showing what was not done</h2>
+          <h2 class="card-title mt-5 fs-3">History</h2>
 
-          <p>The completed-date filter has a switch next to it. Turned on, the range shows what you finished in those days. Turned off, the same range shows what you did not.</p>
+          <p>A bar chart of how much was done in each day, week, month, quarter or year, with the newest on the right. It opens one step coarser than the habit repeats, so a daily habit starts on weeks and a weekly one on months, and you can switch to any of the five.</p>
 
-          <h2 class="card-title mt-5 fs-3">Searching notes, tasks and habits</h2>
+          <p>Each bar is compared with what its own period asked for, and the part above that is green.</p>
 
-          <p>Searching a note searches the whole note, not just its title. Searching tasks and habits searches their checklist items too, so a word inside a sub-item is findable without knowing which item holds it.</p>
+          <h2 class="card-title mt-5 fs-3">A calendar without breaks between months</h2>
 
-          <p>Matches are highlighted where they are found, including inside rendered Markdown. There is a match-case toggle, and the term stays applied while you move between notes, tasks and habits.</p>
-
-          <h2 class="card-title mt-5 fs-3">How the filters are drawn</h2>
-
-          <p>Category and priority filters render as check boxes, radio buttons or a drop-down list, chosen separately for each.</p>
+          <p>Every day of the past year in one continuous grid, reaching further back if the history does. A day is colored the same way as in the habit's month calendar: green when that day's target was met, amber when something was done but not enough.</p>
 
           <div class="card m-2">
-            <a href="images/article-filter-dropdowns.png">
-              <img src="images/article-filter-dropdowns.png" class="card-img-top" alt="The same OpenHabitTracker sidebar with the filters as drop-down lists" loading="lazy">
+            <a href="images/statistics-calendar.png">
+              <img src="images/statistics-calendar.png" class="card-img-top" alt="OpenHabitTracker charts for one habit: a continuous calendar, the ten longest streaks with their dates, and a table of how often the habit is done on each weekday, month by month" loading="lazy">
             </a>
             <div class="card-body">
-              <p class="card-text">The same filters as drop-down lists</p>
+              <p class="card-text">Calendar, best streaks and weekday frequency</p>
             </div>
           </div>
 
-          <p>Check boxes show which categories are excluded at a glance. A drop-down takes one line instead of nine, which on a phone decides whether the next filter is on screen.</p>
+          <h2 class="card-title mt-5 fs-3">Best streaks</h2>
 
-          <p>The sidebar has six sections, and each folds on its own and stays folded, so the ones you use are not buried under the ones you do not.</p>
+          <p>The ten longest streaks the habit has had, newest first, each with its start date, its length and its end date. A streak is counted in the habit's own period, so a weekly habit has a streak of weeks and a monthly one a streak of months.</p>
 
-          <p>Filter and sort settings are saved, sync between your devices if you self-host, and are included in JSON and YAML backups.</p>
+          <h2 class="card-title mt-5 fs-3">Which weekday it gets done</h2>
+
+          <p>A table with a row for each day of the week and a column for each month. The bigger the dot, the more was done on that weekday in that month, and every cell also carries its value as text for a screen reader.</p>
+
+          <h2 class="card-title mt-5 fs-3">Repetitions, time or quantity</h2>
+
+          <p>A habit is measured in repetitions, in time spent, or in a quantity you set a target for, and every chart uses the same measure. A time habit shows hours and minutes in its target, its history and its weekday table, and a quantity habit shows the sum of what was entered.</p>
+
+          <h2 class="card-title mt-5 fs-3">Weekly statistics beside every list</h2>
+
+          <p>Next to the habit list, a weekly panel counts the habits that are on track, due soon and overdue. The task list gets the tasks done and overdue with the time spent, and the notes list the notes created and updated.</p>
+
+          <p>The habit's own page can also show a statistics block: the current and best streak, the total and average time spent, the elapsed time, the repeat interval, the average interval, and the ratios between them.</p>
+
+          <h2 class="card-title mt-5 fs-3">Turning them on</h2>
+
+          <p>The charts and the statistics block are two separate settings, both off by default, so the habit page stays a short form until you want more. They are saved, sync between your devices if you self-host, and are included in JSON and YAML backups.</p>
 
           <h2 class="card-title mt-5 fs-3">Try it for free</h2>
 
@@ -258,7 +260,7 @@
         <p>
           <a href="index.html" class="text-decoration-none">Home</a> &middot;
           <a href="customizable-habit-tracker.html" class="text-decoration-none">Customize everything</a> &middot;
-          <a href="habit-tracker-statistics.html" class="text-decoration-none">Statistics and charts</a> &middot;
+          <a href="habit-tracker-search-and-filter.html" class="text-decoration-none">Filter and sort by anything</a> &middot;
           <a href="habit-tracker-comparison.html" class="text-decoration-none">Full 5-app comparison</a>
         </p>
       </footer>

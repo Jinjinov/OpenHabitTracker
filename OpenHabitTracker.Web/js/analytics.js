@@ -85,3 +85,6 @@ function customizationVisit() {
 function searchFilterSortVisit() {
   gtag('event', 'oht_search_filter_sort_visit', {'transport': 'beacon'});
 }
+function statisticsVisit() {
+  gtag('event', 'oht_statistics_visit', {'transport': 'beacon'});
+}

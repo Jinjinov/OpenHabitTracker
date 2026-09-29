@@ -97,6 +97,9 @@ public static class SeedData
     {
         object[] times = Times(targetMinutes, targetQuantity, daysAgo);
 
+        // A habit never starts after its first completion, or the charts clip the history they draw.
+        double startDaysAgo = Math.Max(56, daysAgo.Max());
+
         return new
         {
             RepeatCount = repeatCount,
@@ -105,7 +108,7 @@ public static class SeedData
             DisplayMetric = displayMetric,
             TargetQuantity = targetQuantity,
             LastTimeDoneAt = ((dynamic)times[0]).CompletedAt,
-            StartAt = Date(56),
+            StartAt = Date(startDaysAgo),
             TimesDone = times,
             Items = items,
             Duration = TimeSpan.FromMinutes(targetMinutes).ToString(@"hh\:mm\:ss"),
@@ -113,10 +116,25 @@ public static class SeedData
             Color = color,
             Priority = priority,
             IsDeleted = false,
-            CreatedAt = Date(56),
+            CreatedAt = Date(startDaysAgo),
             UpdatedAt = Date(0)
         };
     }
+
+    private static readonly double[] SpanishRecent = [1, 2, 4, 5, 8, 9, 12, 15];
+
+    // A year of Spanish behind the recent weeks, for the chart captures only: the year calendar and
+    // the weekday table need months of data to show anything, and the store lists must not change.
+    // A daily habit, so the streaks are counted in days, the unit people know them in, and one
+    // measured in minutes with a title that says nothing else, so the charts read the way it sounds.
+    // Most days done, with a two week break, so the streak list has runs of different lengths.
+    private static double[] SpanishYear =>
+    [
+        .. SpanishRecent,
+        .. Enumerable.Range(16, 349)
+            .Where(day => (day < 150 || day > 163) && Spread(day, 43, 10) < 8)
+            .Select(day => (double)day)
+    ];
 
     private static object Category(string title, object[] notes, object[] tasks, object[] habits) =>
         new { UserId = 0, Title = title, IsCollapsed = false, CompletionRule = 0, Notes = notes, Tasks = tasks, Habits = habits };
@@ -134,7 +152,7 @@ public static class SeedData
         [0] = false, [1] = true, [2] = true, [3] = false, [4] = true, [5] = true
     };
 
-    public static string Write(string path, bool foldForPhone = false)
+    public static string Write(string path, bool foldForPhone = false, bool yearOfSpanish = false)
     {
         object data = new
         {
@@ -206,7 +224,7 @@ public static class SeedData
                         Habit("Read 20 pages", "bg-secondary-subtle", 3, 1, 1, 0, 1, 1, 30,
                             [0, 1, 2, 3, 5, 6, 7, 10, 12, 13, 15, 18], []),
                         Habit("Practice Spanish", "bg-secondary-subtle", 2, 1, 1, 0, 1, 1, 20,
-                            [1, 2, 4, 5, 8, 9, 12, 15], []),
+                            yearOfSpanish ? SpanishYear : SpanishRecent, []),
                         Habit("Piano", "bg-secondary-subtle", 2, 3, 1, 1, 1, 1, 40,
                             [2, 4, 6, 9, 11, 13, 16, 18], [])
                     ]),
