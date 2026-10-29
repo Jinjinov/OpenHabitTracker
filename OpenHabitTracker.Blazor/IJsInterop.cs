@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using OpenHabitTracker.Localization;
 
 namespace OpenHabitTracker.Blazor;
 
@@ -7,6 +8,7 @@ public interface IJsInterop
     ValueTask ConsoleLog(string message);
     ValueTask SetMode(string mode);
     ValueTask SetLang(string lang);
+    ValueTask<BrowserDateTimeParts> GetDateTimeParts();
     ValueTask SetTheme(string theme);
     ValueTask FocusElement(ElementReference element);
     ValueTask FocusElementById(string id);

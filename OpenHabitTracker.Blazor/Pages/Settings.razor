@@ -174,21 +174,43 @@
         </div>
 
         <div class="list-group-item" data-settings-step-20>
+            <small>@Loc["Date format"]:</small>
+            <InputSelect class="form-select" aria-label="@Loc["Date format"]" Value="_settings.DateFormat" ValueExpression="() => _settings.DateFormat" TValue="string" ValueChanged="SaveDateFormat">
+                <option value="">@Loc["Auto"] (@DateExample(AutomaticDatePattern))</option>
+                @foreach (string pattern in _datePatterns)
+                {
+                    <option value="@pattern">@DateExample(pattern)</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="list-group-item" data-settings-step-21>
+            <small>@Loc["Time format"]:</small>
+            <InputSelect class="form-select" aria-label="@Loc["Time format"]" Value="_settings.TimeFormat" ValueExpression="() => _settings.TimeFormat" TValue="string" ValueChanged="SaveTimeFormat">
+                <option value="">@Loc["Auto"] (@TimeExample(AutomaticTimePattern))</option>
+                @foreach (string pattern in _timePatterns)
+                {
+                    <option value="@pattern">@TimeExample(pattern)</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="list-group-item" data-settings-step-22>
             <InputCheckbox id="InsertTabsInNoteContent" class="form-check-input me-1" Value="_settings.InsertTabsInNoteContent" ValueExpression="() => _settings.InsertTabsInNoteContent" ValueChanged="SaveInsertTabsInNoteContent" />
             <label for="InsertTabsInNoteContent" class="form-check-label stretched-link d-inline">@Loc["Insert tabs in note content"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-21>
+        <div class="list-group-item" data-settings-step-23>
             <InputCheckbox id="DisplayNoteContentAsMarkdown" class="form-check-input me-1" Value="_settings.DisplayNoteContentAsMarkdown" ValueExpression="() => _settings.DisplayNoteContentAsMarkdown" ValueChanged="SaveDisplayNoteContentAsMarkdown" />
             <label for="DisplayNoteContentAsMarkdown" class="form-check-label stretched-link d-inline">@Loc["Display note content as Markdown"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-22>
+        <div class="list-group-item" data-settings-step-24>
             <InputCheckbox id="UncheckAllItemsOnHabitDone" class="form-check-input me-1" Value="_settings.UncheckAllItemsOnHabitDone" ValueExpression="() => _settings.UncheckAllItemsOnHabitDone" ValueChanged="SaveUncheckAllItemsOnHabitDone" />
             <label for="UncheckAllItemsOnHabitDone" class="form-check-label stretched-link d-inline">@Loc["Reset habit when it is completed"]</label>
         </div>
 
-        <div class="list-group-item" data-settings-step-23>
+        <div class="list-group-item" data-settings-step-25>
             <small>@Loc["Display category filter as"]:</small>
             <InputSelect class="form-select" aria-label="@Loc["Display category filter as"]" Value="_settings.CategoryFilterDisplay" ValueExpression="() => _settings.CategoryFilterDisplay" TValue="FilterDisplay" ValueChanged="SaveCategoryFilterDisplay">
                 <option value="@FilterDisplay.CheckBoxes">@Loc["Check boxes"]</option>
@@ -197,7 +219,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-24>
+        <div class="list-group-item" data-settings-step-26>
             <small>@Loc["Display priority filter as"]:</small>
             <InputSelect class="form-select" aria-label="@Loc["Display priority filter as"]" Value="_settings.PriorityFilterDisplay" ValueExpression="() => _settings.PriorityFilterDisplay" TValue="FilterDisplay" ValueChanged="SavePriorityFilterDisplay">
                 <option value="@FilterDisplay.CheckBoxes">@Loc["Check boxes"]</option>
@@ -206,7 +228,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-25>
+        <div class="list-group-item" data-settings-step-27>
             <small>@Loc["Horizontal space"]:</small>
             <InputSelect class="form-select" aria-label="@Loc["Horizontal space"]" Value="_settings.HorizontalMargin" ValueExpression="() => _settings.HorizontalMargin" TValue="int" ValueChanged="SaveHorizontalMargin">
                 @for (int i = 0; i <= 5; i++)
@@ -216,7 +238,7 @@
             </InputSelect>
         </div>
 
-        <div class="list-group-item" data-settings-step-26>
+        <div class="list-group-item" data-settings-step-28>
             <small>@Loc["Vertical space"]:</small>
             <InputSelect class="form-select" aria-label="@Loc["Vertical space"]" Value="_settings.VerticalMargin" ValueExpression="() => _settings.VerticalMargin" TValue="int" ValueChanged="SaveVerticalMargin">
                 @for (int i = 0; i <= 5; i++)
@@ -230,13 +252,13 @@
         {
             <div class="list-group-item">
                 <small>@Loc["Daily summary at"]:</small>
-                <div class="input-group" data-settings-step-27>
+                <div class="input-group" data-settings-step-29>
                     <InputDate class="form-control" Type="InputDateType.Time" aria-label="@Loc["Daily summary at"]" Value="_settings.NotificationTime" ValueExpression="() => _settings.NotificationTime" TValue="TimeOnly?" ValueChanged="SaveNotificationTime" />
                     <button class="btn btn-outline-primary" aria-label="@Loc["Clear daily summary time"]" @onclick="() => SaveNotificationTime(null)"><i class="bi bi-x-square"></i></button>
                 </div>
 
                 <small class="d-block mt-2">@Loc["Daily summary covers"]:</small>
-                <div data-settings-step-28>
+                <div data-settings-step-30>
                     <InputSelect class="form-select" aria-label="@Loc["Daily summary covers"]" Value="_settings.NotificationContent" ValueExpression="() => _settings.NotificationContent" TValue="DigestContent" ValueChanged="SaveNotificationContent">
                         <option value="@DigestContent.Both">@Loc["Tasks and habits"]</option>
                         <option value="@DigestContent.Tasks">@Loc["Tasks"]</option>
@@ -244,19 +266,19 @@
                     </InputSelect>
                 </div>
 
-                <div class="mt-2" data-settings-step-29>
+                <div class="mt-2" data-settings-step-31>
                     <small>@Loc["Notify about habits over"] @_settings.NotificationHabitThreshold%</small>
                     @* input only moves the label; the save and the schedule rebuild wait for the release *@
                     <input type="range" min="0" max="200" class="form-range d-block" aria-label="@Loc["Notify about habits over"]" value="@_settings.NotificationHabitThreshold" @oninput="(ChangeEventArgs args) => _settings.NotificationHabitThreshold = Convert.ToInt32(args.Value)" @onchange="(ChangeEventArgs args) => SaveNotificationHabitThreshold(Convert.ToInt32(args.Value))" />
                 </div>
 
-                <div class="position-relative mt-2" data-settings-step-30>
+                <div class="position-relative mt-2" data-settings-step-32>
                     <InputCheckbox id="NotificationIncludeOverdueTasks" class="form-check-input me-1" Value="_settings.NotificationIncludeOverdueTasks" ValueExpression="() => _settings.NotificationIncludeOverdueTasks" ValueChanged="SaveNotificationIncludeOverdueTasks" />
                     <label for="NotificationIncludeOverdueTasks" class="form-check-label stretched-link d-inline">@Loc["Include overdue tasks"]</label>
                 </div>
             </div>
 
-            <div class="list-group-item" data-settings-step-31>
+            <div class="list-group-item" data-settings-step-33>
                 <div class="position-relative">
                     <InputCheckbox id="NotificationLead" class="form-check-input me-1" Value="_settings.NotificationLeadMinutes is not null" ValueExpression="() => _notificationLeadOn" ValueChanged="SaveNotificationLeadOn" />
                     <label for="NotificationLead" class="form-check-label stretched-link d-inline">@Loc["Remind before a planned task"]</label>
@@ -283,7 +305,7 @@
                 </div>
             </div>
 
-            <div class="list-group-item" data-settings-step-32>
+            <div class="list-group-item" data-settings-step-34>
                 <small>@Loc["Notify only from priority"]:</small>
                 <InputSelect class="form-select" aria-label="@Loc["Notify only from priority"]" Value="_settings.NotificationMinimumPriority" ValueExpression="() => _settings.NotificationMinimumPriority" TValue="Priority" ValueChanged="SaveNotificationMinimumPriority">
                     <option value="@Priority.None">@Loc["Any priority"]</option>
@@ -299,7 +321,7 @@
 
             @if (_notificationPermission != NotificationPermission.Unknown)
             {
-                <div class="list-group-item" data-settings-step-33>
+                <div class="list-group-item" data-settings-step-35>
                     <small>@Loc["Notification permission"]: @Loc[PermissionName(_notificationPermission)]</small>
                     @if (Notifications.CanOpenSettings)
                     {
@@ -310,7 +332,7 @@
 
             @if (Notifications.CanRequestExactTiming)
             {
-                <div class="list-group-item" data-settings-step-34>
+                <div class="list-group-item" data-settings-step-36>
                     <small>@Loc["Exact notification timing"]: @Loc[_exactTimingAllowed ? "On" : "Off"]</small>
                     <button class="btn btn-outline-primary w-100 mt-2" @onclick="() => Notifications.OpenExactTimingSettings()"><i class="bi bi-alarm" aria-hidden="true"></i> @Loc["Open alarms & reminders"]</button>
                 </div>
@@ -405,6 +427,8 @@
             new() { Text = "Show the created date and the updated date in Notes, Tasks and Habits." },
             new() { Text = "Choose a language." },
             new() { Text = "Choose the start of the week in the large calendar in Habits." },
+            new() { Text = "Choose how dates are written. Auto follows the date format of this device." },
+            new() { Text = "Choose between the 12 hour and the 24 hour clock. Auto follows the time format of this device." },
             new() { Text = "Pressing the TAB key inserts a tab in the content when writing the text in Notes." },
             new() { Text = "You can use Markdown to format the content in Notes." },
             new() { Text = "Resetting the habit when it is completed will uncheck all items." },
@@ -587,9 +611,39 @@
     {
         _settings.Culture = culture;
 
-        Localization.Loc.SetCulture(culture);
+        ClientState.SetCulture();
 
-        await JsInterop.SetLang(culture);
+        await JsInterop.SetLang(Localization.Loc.Cultures[culture].Culture.Name);
+
+        await UpdateAndRefresh();
+    }
+
+    readonly string[] _datePatterns = ["M/d/yyyy", "d/M/yyyy", "dd/MM/yyyy", "dd.MM.yyyy", "d. M. yyyy", "dd-MM-yyyy", "yyyy-MM-dd", "yyyy/MM/dd"];
+
+    readonly string[] _timePatterns = ["h:mm tt", "HH:mm"];
+
+    string AutomaticDatePattern => ClientState.AutomaticDateFormat ?? Localization.Loc.Cultures[_settings.Culture].Culture.DateTimeFormat.ShortDatePattern;
+
+    string AutomaticTimePattern => ClientState.AutomaticTimeFormat ?? Localization.Loc.Cultures[_settings.Culture].Culture.DateTimeFormat.ShortTimePattern;
+
+    static string DateExample(string pattern) => DateTime.Today.ToString(Localization.Loc.LiteralSeparators(pattern));
+
+    static string TimeExample(string pattern) => DateTime.Today.AddHours(14).AddMinutes(30).ToString(Localization.Loc.LiteralSeparators(pattern));
+
+    async Task SaveDateFormat(string? dateFormat)
+    {
+        _settings.DateFormat = string.IsNullOrEmpty(dateFormat) ? null : dateFormat;
+
+        ClientState.SetCulture();
+
+        await UpdateAndRefresh();
+    }
+
+    async Task SaveTimeFormat(string? timeFormat)
+    {
+        _settings.TimeFormat = string.IsNullOrEmpty(timeFormat) ? null : timeFormat;
+
+        ClientState.SetCulture();
 
         await UpdateAndRefresh();
     }

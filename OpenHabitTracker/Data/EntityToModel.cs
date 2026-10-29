@@ -131,6 +131,8 @@ public static class EntityToModel
         model.StartSidebar = entity.StartSidebar;
         model.Culture = entity.Culture;
         model.FirstDayOfWeek = entity.FirstDayOfWeek;
+        model.DateFormat = entity.DateFormat;
+        model.TimeFormat = entity.TimeFormat;
         model.SelectedRatio = entity.SelectedRatio;
         model.BaseUrl = entity.BaseUrl;
         model.Username = entity.Username;

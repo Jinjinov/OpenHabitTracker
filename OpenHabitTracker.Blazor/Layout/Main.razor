@@ -260,7 +260,7 @@
             RemoteDataSync.StartPolling();
         }
 
-        Localization.Loc.SetCulture(ClientState.Settings.Culture);
+        ClientState.SetCulture();
 
         _contentDeleted = EventCallback.Factory.Create(this, OnContentDeleted);
 
@@ -341,7 +341,15 @@
             if (ClientState.Settings.Theme != "default")
                 await JsInterop.SetTheme(ClientState.Settings.Theme);
 
-            await JsInterop.SetLang(ClientState.Settings.Culture);
+            await JsInterop.SetLang(Localization.Loc.Cultures[ClientState.Settings.Culture].Culture.Name);
+
+            // JS is unavailable before the first render.
+            Localization.BrowserDateTimeParts? parts = await JsInterop.GetDateTimeParts();
+            ClientState.AutomaticDateFormat = parts is null ? null : Localization.BrowserPatterns.ToDatePattern(parts.Date);
+            ClientState.AutomaticTimeFormat = parts is null ? null : Localization.BrowserPatterns.ToTimePattern(parts.Time, parts.HourCycle);
+            ClientState.SetCulture();
+
+            await NotificationScheduler.Rebuild();
 
             SetDynamicComponentParameters();
 

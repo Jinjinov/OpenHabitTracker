@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 
 namespace OpenHabitTracker.Localization;
 
@@ -32,12 +33,64 @@ public class Loc
         { "zh", new() { Language = "中文", Culture = new CultureInfo("zh") } }
     };
 
-    public static void SetCulture(string code)
+    // The UI culture picks the translation file; the formatting culture only replaces the date and time patterns.
+    public static void SetCulture(string code, string? datePattern, string? timePattern)
     {
-        CultureInfo.DefaultThreadCurrentCulture = Cultures[code].Culture;
-        CultureInfo.DefaultThreadCurrentUICulture = Cultures[code].Culture;
+        CultureInfo uiCulture = Cultures[code].Culture;
+        CultureInfo culture = CreateFormattingCulture(uiCulture, datePattern, timePattern);
 
-        CultureInfo.CurrentCulture = Cultures[code].Culture;
-        CultureInfo.CurrentUICulture = Cultures[code].Culture;
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = uiCulture;
+
+        CultureInfo.CurrentCulture = culture;
+        CultureInfo.CurrentUICulture = uiCulture;
+    }
+
+    internal static CultureInfo CreateFormattingCulture(CultureInfo language, string? datePattern, string? timePattern)
+    {
+        CultureInfo culture = (CultureInfo)language.Clone();
+
+        if (!string.IsNullOrEmpty(datePattern))
+        {
+            culture.DateTimeFormat.ShortDatePattern = LiteralSeparators(datePattern);
+        }
+
+        if (!string.IsNullOrEmpty(timePattern))
+        {
+            string shortTime = LiteralSeparators(timePattern);
+
+            culture.DateTimeFormat.ShortTimePattern = shortTime;
+            culture.DateTimeFormat.LongTimePattern = shortTime.Replace("mm", "mm':'ss");
+        }
+
+        return culture;
+    }
+
+    // '/' and ':' are placeholders for the culture's separators, so they are quoted to stay literal.
+    internal static string LiteralSeparators(string pattern)
+    {
+        StringBuilder result = new();
+        bool quoted = false;
+
+        for (int i = 0; i < pattern.Length; i++)
+        {
+            char c = pattern[i];
+
+            if (c == '\\' && i + 1 < pattern.Length)
+            {
+                result.Append(c).Append(pattern[++i]);
+                continue;
+            }
+
+            if (c == '\'')
+                quoted = !quoted;
+
+            if (!quoted && (c == '/' || c == ':'))
+                result.Append('\'').Append(c).Append('\'');
+            else
+                result.Append(c);
+        }
+
+        return result.ToString();
     }
 }

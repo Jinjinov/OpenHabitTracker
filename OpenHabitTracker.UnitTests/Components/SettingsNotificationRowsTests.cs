@@ -61,7 +61,7 @@ public class SettingsNotificationRowsTests
 
         IRenderedComponent<Blazor.Pages.Settings> settings = _ctx.Render<Blazor.Pages.Settings>();
 
-        for (int step = 27; step <= 32; step++)
+        for (int step = 29; step <= 34; step++)
             Assert.That(settings.Markup, Does.Contain($"data-settings-step-{step}"), $"step {step}");
     }
 
@@ -72,10 +72,10 @@ public class SettingsNotificationRowsTests
 
         IRenderedComponent<Blazor.Pages.Settings> settings = _ctx.Render<Blazor.Pages.Settings>();
 
-        for (int step = 27; step <= 32; step++)
+        for (int step = 29; step <= 34; step++)
             Assert.That(settings.Markup, Does.Not.Contain($"data-settings-step-{step}"), $"step {step}");
 
         // The rows above them are untouched.
-        Assert.That(settings.Markup, Does.Contain("data-settings-step-26"));
+        Assert.That(settings.Markup, Does.Contain("data-settings-step-28"));
     }
 }

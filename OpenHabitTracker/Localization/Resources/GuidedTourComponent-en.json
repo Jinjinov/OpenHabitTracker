@@ -112,6 +112,8 @@
   "Show the created date and the updated date in Notes, Tasks and Habits.": "Show the created date and the updated date in Notes, Tasks and Habits.",
   "Choose a language.": "Choose a language.",
   "Choose the start of the week in the large calendar in Habits.": "Choose the start of the week in the large calendar in Habits.",
+  "Choose how dates are written. Auto follows the date format of this device.": "Choose how dates are written. Auto follows the date format of this device.",
+  "Choose between the 12 hour and the 24 hour clock. Auto follows the time format of this device.": "Choose between the 12 hour and the 24 hour clock. Auto follows the time format of this device.",
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "Pressing the TAB key inserts a tab in the content when writing the text in Notes.",
   "You can use Markdown to format the content in Notes.": "You can use Markdown to format the content in Notes.",
   "Resetting the habit when it is completed will uncheck all items.": "Resetting the habit when it is completed will uncheck all items.",

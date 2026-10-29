@@ -1,6 +1,7 @@
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Localization;
 
 namespace OpenHabitTracker.App;
 
@@ -36,6 +37,15 @@ public class ClientState
     public IDataAccess DataAccess { get; set; }
 
     public bool IsRefreshing { get; private set; }
+
+    public string? AutomaticDateFormat { get; set; }
+
+    public string? AutomaticTimeFormat { get; set; }
+
+    public void SetCulture()
+    {
+        Loc.SetCulture(Settings.Culture, Settings.DateFormat ?? AutomaticDateFormat, Settings.TimeFormat ?? AutomaticTimeFormat);
+    }
 
     public UserModel User
     {

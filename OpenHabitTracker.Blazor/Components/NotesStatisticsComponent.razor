@@ -40,11 +40,11 @@
                 </div>
                 @if (latestCreated is not null)
                 {
-                    <small class="text-muted d-block">@Loc["Created"]: @($"{latestCreated.Value.ToShortDateString()} {latestCreated.Value:HH:mm}")</small>
+                    <small class="text-muted d-block">@Loc["Created"]: @($"{latestCreated.Value.ToShortDateString()} {latestCreated.Value:t}")</small>
                 }
                 @if (latestUpdated is not null && latestUpdated != latestCreated)
                 {
-                    <small class="text-muted d-block">@Loc["Updated"]: @($"{latestUpdated.Value.ToShortDateString()} {latestUpdated.Value:HH:mm}")</small>
+                    <small class="text-muted d-block">@Loc["Updated"]: @($"{latestUpdated.Value.ToShortDateString()} {latestUpdated.Value:t}")</small>
                 }
             </div>
         }

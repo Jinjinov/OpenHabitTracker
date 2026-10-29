@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using OpenHabitTracker.Localization;
 using System.Text;
 
 namespace OpenHabitTracker.Blazor;
@@ -34,6 +35,12 @@ public sealed class JsInterop(IJSRuntime jsRuntime) : IJsInterop, IAsyncDisposab
     {
         IJSObjectReference module = await _moduleTask.Value;
         await module.InvokeVoidAsync("setLang", lang);
+    }
+
+    public async ValueTask<BrowserDateTimeParts> GetDateTimeParts()
+    {
+        IJSObjectReference module = await _moduleTask.Value;
+        return await module.InvokeAsync<BrowserDateTimeParts>("getDateTimeParts");
     }
 
     public async ValueTask SetTheme(string theme)

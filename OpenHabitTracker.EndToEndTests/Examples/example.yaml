@@ -6,6 +6,8 @@ Settings:
   StartSidebar: Menu
   Culture: en
   FirstDayOfWeek: Monday
+  DateFormat:
+  TimeFormat:
   SelectedRatio: ElapsedToDesired
   BaseUrl: ''
   Username: ''

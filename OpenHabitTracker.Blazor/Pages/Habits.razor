@@ -158,7 +158,7 @@
                 }
                 @if (ClientState.Settings.ShowLastTimeDone && categoryLastDone is not null && group.Category?.IsCollapsed != true)
                 {
-                    <small class="d-block">@Loc["Last done"]: @($"{categoryLastDone.Value.ToShortDateString()} {categoryLastDone.Value:HH:mm}")</small>
+                    <small class="d-block">@Loc["Last done"]: @($"{categoryLastDone.Value.ToShortDateString()} {categoryLastDone.Value:t}")</small>
                 }
             }
 

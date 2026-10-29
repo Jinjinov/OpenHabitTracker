@@ -13,6 +13,18 @@ export function setLang(lang) {
     document.documentElement.setAttribute('lang', lang);
 }
 
+// The single-digit day, month and hour show whether the locale pads them.
+export function getDateTimeParts() {
+    const sample = new Date(2026, 0, 5, 9, 5);
+    const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'short' });
+    const timeFormat = new Intl.DateTimeFormat(undefined, { timeStyle: 'short' });
+    return {
+        date: dateFormat.formatToParts(sample),
+        time: timeFormat.formatToParts(sample),
+        hourCycle: timeFormat.resolvedOptions().hourCycle ?? ''
+    };
+}
+
 export function setTheme(theme) {
     document.getElementById("theme-link").href = `_content/OpenHabitTracker.Blazor/bootstrap/${theme}/bootstrap.min.css`;
 }

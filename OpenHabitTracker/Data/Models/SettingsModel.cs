@@ -18,6 +18,10 @@ public class SettingsModel
 
     public DayOfWeek FirstDayOfWeek { get; set; } = DayOfWeek.Monday;
 
+    public string? DateFormat { get; set; }
+
+    public string? TimeFormat { get; set; }
+
     public Ratio SelectedRatio { get; set; }
 
     public string BaseUrl { get; set; } = string.Empty;
@@ -170,6 +174,8 @@ public class SettingsModel
             StartSidebar = "",
             Culture = "en",
             FirstDayOfWeek = DayOfWeek.Monday,
+            DateFormat = null,
+            TimeFormat = null,
             SelectedRatio = Ratio.ElapsedToDesired,
             BaseUrl = "",
             Username = "",

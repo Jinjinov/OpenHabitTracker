@@ -7,6 +7,8 @@
     "StartSidebar": "Menu",
     "Culture": "en",
     "FirstDayOfWeek": 1,
+    "DateFormat": null,
+    "TimeFormat": null,
     "SelectedRatio": 1,
     "BaseUrl": "",
     "Username": "",

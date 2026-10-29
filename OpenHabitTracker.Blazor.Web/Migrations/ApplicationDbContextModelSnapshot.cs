@@ -363,6 +363,9 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("DateFormat")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("DisplayNoteContentAsMarkdown")
                         .HasColumnType("INTEGER");
 
@@ -513,6 +516,9 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
 
                     b.Property<string>("Theme")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TimeFormat")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("UncheckAllItemsOnHabitDone")

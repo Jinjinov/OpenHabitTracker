@@ -29,7 +29,7 @@ public class NotificationSettingsTests : BaseTest
 
         await OpenSettingsAsync();
 
-        await Page.Locator("[data-settings-step-27] input[type='time']").FillAsync("09:00");
+        await Page.Locator("[data-settings-step-29] input[type='time']").FillAsync("09:00");
 
         // TimeOnly is persisted as a string, so match the prefix rather than a serialized shape.
         await WaitForIndexedDbAsync("SettingsEntity", "settings => settings.some(s => String(s.notificationTime ?? s.NotificationTime).startsWith('09:00'))");
@@ -37,7 +37,7 @@ public class NotificationSettingsTests : BaseTest
         await Page.ReloadAsync();
         await OpenSettingsAsync();
 
-        await Expect(Page.Locator("[data-settings-step-27] input[type='time']")).ToHaveValueAsync("09:00");
+        await Expect(Page.Locator("[data-settings-step-29] input[type='time']")).ToHaveValueAsync("09:00");
     }
 
     [Test]
@@ -48,17 +48,17 @@ public class NotificationSettingsTests : BaseTest
         await OpenSettingsAsync();
 
         // The lead time is hours and minutes in two selects, and setting either one turns the reminder on.
-        await Page.Locator("[data-settings-step-31] select").Nth(0).SelectOptionAsync("1");
-        await Page.Locator("[data-settings-step-31] select").Nth(1).SelectOptionAsync("30");
+        await Page.Locator("[data-settings-step-33] select").Nth(0).SelectOptionAsync("1");
+        await Page.Locator("[data-settings-step-33] select").Nth(1).SelectOptionAsync("30");
 
         await WaitForIndexedDbAsync("SettingsEntity", "settings => settings.some(s => (s.notificationLeadMinutes ?? s.NotificationLeadMinutes) === 90)");
 
         await Page.ReloadAsync();
         await OpenSettingsAsync();
 
-        await Expect(Page.Locator("[data-settings-step-31] input[type='checkbox']")).ToBeCheckedAsync();
-        await Expect(Page.Locator("[data-settings-step-31] select").Nth(0)).ToHaveValueAsync("1");
-        await Expect(Page.Locator("[data-settings-step-31] select").Nth(1)).ToHaveValueAsync("30");
+        await Expect(Page.Locator("[data-settings-step-33] input[type='checkbox']")).ToBeCheckedAsync();
+        await Expect(Page.Locator("[data-settings-step-33] select").Nth(0)).ToHaveValueAsync("1");
+        await Expect(Page.Locator("[data-settings-step-33] select").Nth(1)).ToHaveValueAsync("30");
     }
 
     [Test]
@@ -68,9 +68,9 @@ public class NotificationSettingsTests : BaseTest
 
         await OpenSettingsAsync();
 
-        await Page.Locator("[data-settings-step-27] input[type='time']").FillAsync("09:00");
+        await Page.Locator("[data-settings-step-29] input[type='time']").FillAsync("09:00");
 
         // A setting that reads on while nothing can fire is the one outcome to avoid.
-        await Expect(Page.Locator("[data-settings-step-27] input[type='time']")).ToHaveValueAsync("");
+        await Expect(Page.Locator("[data-settings-step-29] input[type='time']")).ToHaveValueAsync("");
     }
 }
