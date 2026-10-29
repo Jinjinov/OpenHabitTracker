@@ -91,6 +91,8 @@
   "Show created & updated": "생성/수정일 표시",
   "Language": "언어",
   "Week start": "주 시작일",
+  "Date format": "날짜 형식",
+  "Time format": "시간 형식",
   "Display category filter as": "카테고리 필터 표시 형식",
   "Display priority filter as": "우선순위 필터 표시 형식",
   "Check boxes": "체크박스",

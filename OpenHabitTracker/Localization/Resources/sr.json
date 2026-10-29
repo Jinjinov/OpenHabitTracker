@@ -91,6 +91,8 @@
   "Show created & updated": "Prikaži datum kreiranja i ažuriranja",
   "Language": "Jezik",
   "Week start": "Početak nedelje",
+  "Date format": "Format datuma",
+  "Time format": "Format vremena",
   "Display category filter as": "Prikaži filter kategorija kao",
   "Display priority filter as": "Prikaži filter prioriteta kao",
   "Check boxes": "Potvrdni okviri",

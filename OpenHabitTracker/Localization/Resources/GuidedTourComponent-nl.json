@@ -112,6 +112,8 @@
   "Show the created date and the updated date in Notes, Tasks and Habits.": "De aanmaakdatum en de datum van de laatste wijziging tonen.",
   "Choose a language.": "Een taal kiezen.",
   "Choose the start of the week in the large calendar in Habits.": "Kies de eerste dag van de week in de grote kalender in gewoontes.",
+  "Choose how dates are written. Auto follows the date format of this device.": "Kies hoe datums worden geschreven. Automatisch volgt de datumnotatie van dit apparaat.",
+  "Choose between the 12 hour and the 24 hour clock. Auto follows the time format of this device.": "Kies tussen de 12-uursklok en de 24-uursklok. Automatisch volgt de tijdnotatie van dit apparaat.",
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "De TAB-toets invoegen in de inhoud bij het schrijven in notities.",
   "You can use Markdown to format the content in Notes.": "Je kunt Markdown gebruiken om de inhoud van notities op te maken.",
   "Resetting the habit when it is completed will uncheck all items.": "De gewoonte resetten bij voltooiing verwijdert het vinkje bij alle items.",

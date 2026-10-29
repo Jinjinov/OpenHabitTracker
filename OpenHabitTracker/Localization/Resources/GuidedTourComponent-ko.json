@@ -112,6 +112,8 @@
   "Show the created date and the updated date in Notes, Tasks and Habits.": "생성일과 수정일을 표시합니다.",
   "Choose a language.": "언어를 선택합니다.",
   "Choose the start of the week in the large calendar in Habits.": "습관 대형 달력의 주 시작일을 선택합니다.",
+  "Choose how dates are written. Auto follows the date format of this device.": "날짜 표기 방식을 선택합니다. 자동은 이 기기의 날짜 형식을 따릅니다.",
+  "Choose between the 12 hour and the 24 hour clock. Auto follows the time format of this device.": "12시간제와 24시간제 중에서 선택합니다. 자동은 이 기기의 시간 형식을 따릅니다.",
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "메모 입력 시 TAB 키를 누르면 탭이 삽입됩니다.",
   "You can use Markdown to format the content in Notes.": "메모 내용을 Markdown으로 서식 지정할 수 있습니다.",
   "Resetting the habit when it is completed will uncheck all items.": "완료 시 습관을 초기화하면 모든 항목의 체크가 해제됩니다.",

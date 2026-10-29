@@ -91,6 +91,8 @@
   "Show created & updated": "作成・更新日を表示",
   "Language": "言語",
   "Week start": "週の開始",
+  "Date format": "日付の形式",
+  "Time format": "時刻の形式",
   "Display category filter as": "カテゴリフィルターの表示形式",
   "Display priority filter as": "優先度フィルターの表示形式",
   "Check boxes": "チェックボックス",

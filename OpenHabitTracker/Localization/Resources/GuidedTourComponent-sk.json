@@ -112,6 +112,8 @@
   "Show the created date and the updated date in Notes, Tasks and Habits.": "Zobraziť dátum vytvorenia a aktualizácie v poznámkach, úlohách a návykoch.",
   "Choose a language.": "Zvoľ jazyk.",
   "Choose the start of the week in the large calendar in Habits.": "Zvoľ začiatok týždňa vo veľkom kalendári v návykoch.",
+  "Choose how dates are written. Auto follows the date format of this device.": "Zvoľ, ako sa zapisuje dátum. Automaticky použije formát dátumu tohto zariadenia.",
+  "Choose between the 12 hour and the 24 hour clock. Auto follows the time format of this device.": "Zvoľ 12-hodinový alebo 24-hodinový čas. Automaticky použije formát času tohto zariadenia.",
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "Stlačenie klávesu TAB vloží tabulátor do obsahu pri písaní poznámok.",
   "You can use Markdown to format the content in Notes.": "Obsah poznámok môžeš formátovať pomocou Markdown.",
   "Resetting the habit when it is completed will uncheck all items.": "Resetovanie návyku po dokončení odstraní začiarknutie všetkých položiek.",

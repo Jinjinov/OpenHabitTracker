@@ -112,6 +112,8 @@
   "Show the created date and the updated date in Notes, Tasks and Habits.": "显示创建日期和更新日期。",
   "Choose a language.": "选择语言。",
   "Choose the start of the week in the large calendar in Habits.": "选择习惯大日历中的周起始日。",
+  "Choose how dates are written. Auto follows the date format of this device.": "选择日期的书写方式。自动会跟随此设备的日期格式。",
+  "Choose between the 12 hour and the 24 hour clock. Auto follows the time format of this device.": "选择12小时制或24小时制。自动会跟随此设备的时间格式。",
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "在笔记中输入文本时，按TAB键插入制表符。",
   "You can use Markdown to format the content in Notes.": "可以使用Markdown格式化笔记内容。",
   "Resetting the habit when it is completed will uncheck all items.": "完成时重置习惯将取消所有项目的勾选。",

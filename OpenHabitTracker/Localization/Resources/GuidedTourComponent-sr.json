@@ -112,6 +112,8 @@
   "Show the created date and the updated date in Notes, Tasks and Habits.": "Prikaži datum kreiranja i ažuriranja u beleškami, zadacima i navikama.",
   "Choose a language.": "Odaberite jezik.",
   "Choose the start of the week in the large calendar in Habits.": "Odaberite početak nedelje u velikom kalendaru u navikama.",
+  "Choose how dates are written. Auto follows the date format of this device.": "Odaberite kako se pišu datumi. Automatski prati format datuma ovog uređaja.",
+  "Choose between the 12 hour and the 24 hour clock. Auto follows the time format of this device.": "Odaberite između 12-časovnog i 24-časovnog prikaza vremena. Automatski prati format vremena ovog uređaja.",
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "Pritisak tipke TAB umetne tabulator u sadržaj pri pisanju beleški.",
   "You can use Markdown to format the content in Notes.": "Sadržaj beleški možete oblikovati pomoću Markdowna.",
   "Resetting the habit when it is completed will uncheck all items.": "Resetovanje navike po završetku uklonit će označavanje svih stavki.",

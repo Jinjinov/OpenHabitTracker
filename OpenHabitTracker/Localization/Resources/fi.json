@@ -91,6 +91,8 @@
   "Show created & updated": "Näytä luomis- ja päivityspäivä",
   "Language": "Kieli",
   "Week start": "Viikon aloituspäivä",
+  "Date format": "Päivämäärän muoto",
+  "Time format": "Ajan muoto",
   "Display category filter as": "Näytä kategoriäsuodatin muodossa",
   "Display priority filter as": "Näytä prioriteettisuodatin muodossa",
   "Check boxes": "Valintaruudut",

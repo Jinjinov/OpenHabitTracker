@@ -112,6 +112,8 @@
   "Show the created date and the updated date in Notes, Tasks and Habits.": "Vis opprettelsesdato og oppdateringsdato.",
   "Choose a language.": "Velg et språk.",
   "Choose the start of the week in the large calendar in Habits.": "Velg ukestart i den store kalenderen i vaner.",
+  "Choose how dates are written. Auto follows the date format of this device.": "Velg hvordan datoer skrives. Automatisk følger datoformatet på denne enheten.",
+  "Choose between the 12 hour and the 24 hour clock. Auto follows the time format of this device.": "Velg mellom 12-timers og 24-timers klokke. Automatisk følger tidsformatet på denne enheten.",
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "TAB-tasten setter inn en tabulator i innholdet ved skriving i notater.",
   "You can use Markdown to format the content in Notes.": "Du kan bruke Markdown til å formatere innholdet i notater.",
   "Resetting the habit when it is completed will uncheck all items.": "Tilbakestilling av vanen ved fullføring fjerner avkrysning av alle elementer.",

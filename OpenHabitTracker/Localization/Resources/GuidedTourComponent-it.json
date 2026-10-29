@@ -112,6 +112,8 @@
   "Show the created date and the updated date in Notes, Tasks and Habits.": "Mostra le date di creazione e aggiornamento.",
   "Choose a language.": "Scegli una lingua.",
   "Choose the start of the week in the large calendar in Habits.": "Scegli l'inizio della settimana nel calendario grande delle abitudini.",
+  "Choose how dates are written. Auto follows the date format of this device.": "Scegli come vengono scritte le date. Automatico segue il formato della data di questo dispositivo.",
+  "Choose between the 12 hour and the 24 hour clock. Auto follows the time format of this device.": "Scegli tra l'orologio a 12 ore e quello a 24 ore. Automatico segue il formato dell'ora di questo dispositivo.",
   "Pressing the TAB key inserts a tab in the content when writing the text in Notes.": "Il tasto TAB inserisce una tabulazione nel contenuto delle note.",
   "You can use Markdown to format the content in Notes.": "Puoi usare Markdown per formattare il contenuto delle note.",
   "Resetting the habit when it is completed will uncheck all items.": "Reimpostare l'abitudine al completamento deselezionerà tutti gli elementi.",
