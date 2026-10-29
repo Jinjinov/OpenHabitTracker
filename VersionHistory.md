@@ -1,3 +1,8 @@
+# 1.2.6
+
+- Added date format and time format settings
+- Fixed dates and times ignoring the device's regional format
+
 # 1.2.5 - Sep 9, 2026
 
 - Added habit statistics charts: target, history, calendar, best streaks and frequency
