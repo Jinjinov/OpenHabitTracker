@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpenHabitTracker;
@@ -79,7 +79,9 @@ builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo(databaseFolder));
 
 // AddIdentity internally registers a cookie auth handler for scheme "Identity.Application" (IdentityConstants.ApplicationScheme).
-// SignInManager.PasswordSignInAsync always signs in using that scheme, regardless of DefaultScheme below.
+// SignInManager.PasswordSignInAsync always signs in using that scheme.
+// AddIdentity also makes that cookie the default authenticate scheme, so [Authorize] without an explicit
+// scheme reads the cookie and ignores a bearer token.
 // Default settings for the "Identity.Application" cookie: ExpireTimeSpan = 14 days, SlidingExpiration = true.
 // To override those defaults, use ConfigureApplicationCookie() AFTER AddIdentity():
 //   builder.Services.ConfigureApplicationCookie(options =>
@@ -102,16 +104,8 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 
 builder.Services.AddAuthentication(options =>
     {
-        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        // An unauthenticated request gets a 401 rather than a redirect. Pages redirect to /login in Routes.razor.
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    // AddCookie configures a separate "Cookies" scheme (CookieAuthenticationDefaults.AuthenticationScheme).
-    // This is NOT the same cookie that SignInManager uses ("Identity.Application").
-    // It is used here only to set DefaultScheme for requests that go through the generic auth middleware
-    // (e.g. [Authorize] without an explicit scheme on Blazor pages).
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/login";
     })
     .AddJwtBearer(options =>
     {
@@ -253,6 +247,11 @@ app.UseWatchDog(opt => // https://localhost:7042/watchdog
 {
     opt.WatchPageUsername = appSettings.UserName;
     opt.WatchPagePassword = appSettings.Password;
+
+    // WatchDog stores request and response bodies as plain text, so nothing that carries a password or a
+    // token may reach it: the login form, the auth API and the account endpoints.
+    opt.UseRegexForBlacklisting = true;
+    opt.Blacklist = @"(?i)^/?(login|api/auth(/|$)|api/dataaccess/users?(/|$))";
 });
 
 // API routes (typically under /api/*) should be handled first
@@ -323,6 +322,15 @@ static async Task CreateDefaultUserAsync(WebApplication app)
     if (defaultUser is not null && !await userManager.IsInRoleAsync(defaultUser, RoleNames.Administrator))
     {
         PrintErrors(await userManager.AddToRoleAsync(defaultUser, RoleNames.Administrator));
+    }
+
+    if (defaultUser is not null)
+    {
+        IDbContextFactory<ApplicationDbContext> dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<ApplicationDbContext>>();
+
+        using ApplicationDbContext context = dbContextFactory.CreateDbContext();
+
+        await context.AssignUnownedRows(defaultUser.Id);
     }
 
     static void PrintErrors(IdentityResult result)

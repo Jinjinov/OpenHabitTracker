@@ -3824,6 +3824,13 @@
           "Saturday"
         ]
       },
+      "DigestContent": {
+        "enum": [
+          "Both",
+          "Tasks",
+          "Habits"
+        ]
+      },
       "DisplayMetric": {
         "enum": [
           "Repetitions",
@@ -3893,6 +3900,14 @@
             "format": "date-time"
           },
           "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
+          },
+          "userId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
               "integer",
@@ -4035,6 +4050,14 @@
             ],
             "format": "int64"
           },
+          "userId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
+          },
           "parentId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
@@ -4092,6 +4115,14 @@
             "type": "string"
           },
           "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
+          },
+          "userId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
               "integer",
@@ -4387,10 +4418,25 @@
           "firstDayOfWeek": {
             "$ref": "#/components/schemas/DayOfWeek"
           },
+          "dateFormat": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "timeFormat": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
           "selectedRatio": {
             "$ref": "#/components/schemas/Ratio"
           },
           "baseUrl": {
+            "type": "string"
+          },
+          "username": {
             "type": "string"
           },
           "refreshToken": {
@@ -4426,6 +4472,9 @@
             "type": "boolean"
           },
           "showHabitStatistics": {
+            "type": "boolean"
+          },
+          "showHabitCharts": {
             "type": "boolean"
           },
           "showCategory": {
@@ -4528,6 +4577,39 @@
               "string"
             ],
             "format": "int32"
+          },
+          "notificationTime": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "time"
+          },
+          "notificationLeadMinutes": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "notificationContent": {
+            "$ref": "#/components/schemas/DigestContent"
+          },
+          "notificationMinimumPriority": {
+            "$ref": "#/components/schemas/Priority"
+          },
+          "notificationHabitThreshold": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "notificationIncludeOverdueTasks": {
+            "type": "boolean"
           },
           "categoryFilterDisplay": {
             "$ref": "#/components/schemas/FilterDisplay"
@@ -4639,6 +4721,14 @@
             ],
             "format": "int64"
           },
+          "userId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
+          },
           "categoryId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
@@ -4742,6 +4832,14 @@
             ],
             "format": "int64"
           },
+          "userId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
+          },
           "habitId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
@@ -4798,7 +4896,8 @@
       "TokenResponse": {
         "required": [
           "jwtToken",
-          "refreshToken"
+          "refreshToken",
+          "jwtTokenExpiresAt"
         ],
         "type": "object",
         "properties": {
@@ -4807,6 +4906,10 @@
           },
           "refreshToken": {
             "type": "string"
+          },
+          "jwtTokenExpiresAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

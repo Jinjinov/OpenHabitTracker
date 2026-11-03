@@ -43,9 +43,8 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
                 await _remoteDataSync.SetDataLocation(DataLocation.Remote);
 
-                UserEntity user = await _authClient.GetCurrentUserAsync();
+                await ShowCurrentUser();
 
-                Login = $"{_loc["User"]}: {user.Email}";
                 Error = "";
 
                 return true;
@@ -83,6 +82,22 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         return false;
     }
 
+    // The login is complete by now, so a failure here only leaves out the "User: email" line. Servers
+    // older than 1.2.6 always answer 401 to this call, because the endpoint ignored the bearer token.
+    private async Task ShowCurrentUser()
+    {
+        try
+        {
+            UserEntity user = await _authClient.GetCurrentUserAsync();
+
+            Login = $"{_loc["User"]}: {user.Email}";
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
+        {
+            Login = "";
+        }
+    }
+
     public async Task<bool> TryRefreshTokenLogin()
     {
         if (_clientState.DataLocation == DataLocation.Local && _clientState.Settings.RememberMe && !string.IsNullOrEmpty(_clientState.Settings.RefreshToken))
@@ -113,9 +128,8 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
                 await _remoteDataSync.SetDataLocation(DataLocation.Remote);
 
-                UserEntity user = await _authClient.GetCurrentUserAsync();
+                await ShowCurrentUser();
 
-                Login = $"{_loc["User"]}: {user.Email}";
                 Error = "";
 
                 return true;

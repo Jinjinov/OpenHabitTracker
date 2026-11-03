@@ -31,14 +31,11 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                 nullable: false,
                 defaultValue: 0L);
 
-            // Every existing row belonged to the single account, which startup creates before anything
-            // else can, so it has the lowest id. Categories and settings are included because their
-            // UserId was written by clients and may hold a device's local id. Rows left at zero are never
-            // shown once queries filter by owner.
-            foreach (string table in new[] { "Contents", "Items", "Times", "Categories", "Settings" })
-            {
-                migrationBuilder.Sql($"UPDATE \"{table}\" SET \"UserId\" = (SELECT MIN(\"Id\") FROM \"AspNetUsers\") WHERE EXISTS (SELECT 1 FROM \"AspNetUsers\");");
-            }
+            // The UserId of these two was written by clients and may hold a device's local id. Zero marks
+            // them as unowned like the new columns, and startup gives every unowned row to the configured
+            // account, which a migration cannot read.
+            migrationBuilder.Sql("UPDATE \"Categories\" SET \"UserId\" = 0;");
+            migrationBuilder.Sql("UPDATE \"Settings\" SET \"UserId\" = 0;");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Times_UserId_HabitId",

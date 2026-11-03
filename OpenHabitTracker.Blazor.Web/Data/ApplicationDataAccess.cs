@@ -141,7 +141,7 @@ public class ApplicationDataAccess(IDbContextFactory<ApplicationDbContext> dbCon
 
         if (applicationUser is not null)
         {
-            await _userManager.DeleteAsync(applicationUser);
+            await RemoveAccount(applicationUser);
         }
     }
 
@@ -151,7 +151,20 @@ public class ApplicationDataAccess(IDbContextFactory<ApplicationDbContext> dbCon
 
         foreach (ApplicationUser applicationUser in _userManager.Users)
         {
-            await _userManager.DeleteAsync(applicationUser);
+            await RemoveAccount(applicationUser);
         }
+    }
+
+    // Refresh tokens are keyed by username, so one left behind would sign its device in to a new account
+    // created with the same name.
+    private async Task RemoveAccount(ApplicationUser applicationUser)
+    {
+        string? userName = applicationUser.UserName;
+
+        await _userManager.DeleteAsync(applicationUser);
+
+        using ApplicationDbContext context = _dbContextFactory.CreateDbContext();
+
+        await context.RefreshTokens.Where(x => x.Username == userName).ExecuteDeleteAsync();
     }
 }

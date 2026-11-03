@@ -73,6 +73,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         base.OnModelCreating(modelBuilder);
     }
 
+    // Rows from before accounts existed are at zero. Nothing else can leave a row there, because a write
+    // without an account throws, so this finds nothing on every start after the first.
+    public async Task AssignUnownedRows(long userId)
+    {
+        await Contents.IgnoreQueryFilters().Where(x => x.UserId == 0).ExecuteUpdateAsync(setters => setters.SetProperty(x => x.UserId, userId));
+        await Items.IgnoreQueryFilters().Where(x => x.UserId == 0).ExecuteUpdateAsync(setters => setters.SetProperty(x => x.UserId, userId));
+        await Times.IgnoreQueryFilters().Where(x => x.UserId == 0).ExecuteUpdateAsync(setters => setters.SetProperty(x => x.UserId, userId));
+        await Categories.IgnoreQueryFilters().Where(x => x.UserId == 0).ExecuteUpdateAsync(setters => setters.SetProperty(x => x.UserId, userId));
+        await Settings.IgnoreQueryFilters().Where(x => x.UserId == 0).ExecuteUpdateAsync(setters => setters.SetProperty(x => x.UserId, userId));
+    }
+
     // Query filters do not apply to writes, so every write to a row that belongs to an account is
     // checked here. The API saves entities straight from the request body, so neither the submitted
     // UserId nor the submitted Id can be trusted.

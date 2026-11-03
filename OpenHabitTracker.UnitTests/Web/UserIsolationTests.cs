@@ -398,6 +398,71 @@ public class UserIsolationTests
     }
 
     [Test]
+    public async Task RemoveUser_Administrator_DeletesOnlyThatAccountsRefreshTokens()
+    {
+        using (ApplicationDbContext context = CreateContext(0))
+        {
+            context.RefreshTokens.AddRange(
+                new RefreshToken { Username = "a", Token = "token a", ExpiryDate = DateTime.UtcNow.AddDays(1) },
+                new RefreshToken { Username = "b", Token = "token b", ExpiryDate = DateTime.UtcNow.AddDays(1) });
+
+            await context.SaveChangesAsync();
+        }
+
+        UserManager<ApplicationUser> userManager = CreateUserManager();
+        userManager.Users.Returns(new[] { new ApplicationUser { Id = UserB, UserName = "b" } }.AsQueryable());
+
+        ApplicationDataAccess dataAccess = CreateDataAccess(UserA, isAdministrator: true, userManager);
+
+        await dataAccess.RemoveUser(UserB);
+
+        using ApplicationDbContext verifyContext = CreateContext(0);
+
+        List<string> remaining = await verifyContext.RefreshTokens.Select(x => x.Username).ToListAsync();
+
+        Assert.That(remaining, Is.EqualTo(new[] { "a" }));
+    }
+
+    // --- rows from before accounts existed ---
+
+    [Test]
+    public async Task AssignUnownedRows_RowsAtZero_GivesThemToTheAccountAndLeavesOwnedRowsAlone()
+    {
+        using (ApplicationDbContext context = CreateContext(0))
+        {
+            await context.Database.ExecuteSqlRawAsync("""
+                INSERT INTO "Contents" ("UserId", "CategoryId", "Title", "Color", "Priority", "IsDeleted", "CreatedAt", "UpdatedAt", "Discriminator")
+                VALUES (0, 0, 'old note', 'bg-body-secondary', 0, 0, '2026-01-01', '2026-01-01', 'NoteEntity');
+                INSERT INTO "Items" ("UserId", "ParentId", "Title") VALUES (0, 0, 'old item');
+                INSERT INTO "Times" ("UserId", "HabitId", "StartedAt", "Quantity") VALUES (0, 0, '2026-01-01', 0);
+                INSERT INTO "Categories" ("UserId", "Title", "CompletionRule", "IsCollapsed") VALUES (0, 'old category', 0, 0);
+                """);
+
+            await context.AssignUnownedRows(UserB);
+        }
+
+        using ApplicationDbContext verifyContext = CreateContext(UserB);
+
+        List<string> contentTitles = await verifyContext.Contents.Select(x => x.Title).ToListAsync();
+        List<string> itemTitles = await verifyContext.Items.Select(x => x.Title).ToListAsync();
+        int times = await verifyContext.Times.CountAsync();
+        List<string> categoryTitles = await verifyContext.Categories.Select(x => x.Title).ToListAsync();
+
+        using ApplicationDbContext otherContext = CreateContext(UserA);
+
+        int otherContents = await otherContext.Contents.CountAsync();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(contentTitles, Does.Contain("old note"));
+            Assert.That(itemTitles, Does.Contain("old item"));
+            Assert.That(times, Is.EqualTo(2));
+            Assert.That(categoryTitles, Does.Contain("old category"));
+            Assert.That(otherContents, Is.EqualTo(3));
+        });
+    }
+
+    [Test]
     public async Task UpdateHabit_ThroughApplicationDataAccess_AnotherAccountsRowId_Throws()
     {
         long otherHabitId = await GetHabitId(UserB);
