@@ -260,6 +260,8 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Categories");
                 });
 
@@ -297,9 +299,14 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Contents");
 
@@ -324,9 +331,14 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ParentId");
+
+                    b.HasIndex("UserId", "ParentId");
 
                     b.ToTable("Items");
                 });
@@ -536,6 +548,8 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Settings");
                 });
 
@@ -557,9 +571,14 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HabitId");
+
+                    b.HasIndex("UserId", "HabitId");
 
                     b.ToTable("Times");
                 });

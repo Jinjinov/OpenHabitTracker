@@ -1,8 +1,10 @@
 ﻿namespace OpenHabitTracker.Data.Entities;
 
-public class ItemEntity
+public class ItemEntity : IUserScopedEntity
 {
     public long Id { get; set; }
+
+    public long UserId { get; set; }
 
     public long ParentId { get; set; }
 

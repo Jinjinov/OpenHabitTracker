@@ -13,6 +13,8 @@ public static class Startup
 
         //services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<OpenHabitTracker.Blazor.Web.Data.ApplicationDbContext>());
 
+        services.AddScoped<OpenHabitTracker.Blazor.Web.Data.ICurrentUser, OpenHabitTracker.Blazor.Web.Data.CurrentUser>();
+
         services.AddScoped<IDataAccess, OpenHabitTracker.Blazor.Web.Data.ApplicationDataAccess>();
 
         return services;

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using OpenHabitTracker.Blazor.Web.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Dto;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -50,7 +52,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
             return Unauthorized();
         }
 
-        TokenResponse tokenResponse = GetTokenResponse(user.UserName);
+        TokenResponse tokenResponse = await GetTokenResponse(user);
 
         // a row per login, rotated in place and never removed otherwise
         await _dbContext.RefreshTokens
@@ -71,17 +73,25 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         return Ok(tokenResponse);
     }
 
-    private TokenResponse GetTokenResponse(string username)
+    private async Task<TokenResponse> GetTokenResponse(ApplicationUser user)
     {
         string issuer = "https://app.openhabittracker.net";
         string audience = "OpenHabitTracker";
         string secret = _appSettings.JwtSecret;
 
-        Claim[] claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, username),
+        List<Claim> claims =
+        [
+            // The id rather than the username, because data access resolves the caller from it and a
+            // username can change.
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString(CultureInfo.InvariantCulture)),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+        ];
+
+        // Roles are read from the token, so a changed role reaches a device with its next renewal.
+        foreach (string role in await _userManager.GetRolesAsync(user))
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(secret));
         SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha256);
@@ -150,7 +160,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
             return Unauthorized();
         }
 
-        TokenResponse tokenResponse = GetTokenResponse(user.UserName);
+        TokenResponse tokenResponse = await GetTokenResponse(user);
 
         if (withinGracePeriod)
         {
@@ -173,7 +183,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         return Ok(tokenResponse);
     }
 
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("current-user")]
     [EndpointName("GetCurrentUser")]
     public async Task<ActionResult<UserEntity>> GetCurrentUser()

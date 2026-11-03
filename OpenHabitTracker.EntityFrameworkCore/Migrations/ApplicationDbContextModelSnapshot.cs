@@ -75,6 +75,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -101,6 +104,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -334,6 +340,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

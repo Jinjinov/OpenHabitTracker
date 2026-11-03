@@ -17,6 +17,7 @@ using OpenHabitTracker.Data;
 using OpenHabitTracker.SelfTest;
 using OpenHabitTracker.Services;
 using Scalar.AspNetCore;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 using WatchDog;
@@ -127,16 +128,29 @@ builder.Services.AddAuthentication(options =>
             ValidAudience = audience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
         };
+
+        // Tokens issued before the id moved into "sub" carry the username there. Failing them here ends
+        // in a 401, which devices renew on; an authorization requirement would give a 403, which they do not.
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = context =>
+            {
+                if (!long.TryParse(context.Principal?.FindFirstValue(ClaimTypes.NameIdentifier), out _))
+                {
+                    context.Fail("The token carries no user id.");
+                }
+
+                return Task.CompletedTask;
+            }
+        };
     });
 //builder.Services.AddAuthorization();
 builder.Services.AddAuthorization(options =>
 {
-    // Only authenticated users can access Scalar UI
+    // Only the administrator can open the API description and the Scalar UI.
     options.AddPolicy("OpenApiPolicy", policy =>
     {
-        policy.RequireAuthenticatedUser();
-        // Optionally, require a specific role:
-        // policy.RequireRole("ApiDocsViewer");
+        policy.RequireRole(RoleNames.Administrator);
     });
 });
 
@@ -271,8 +285,14 @@ static async Task CreateDefaultUserAsync(WebApplication app)
     logger.LogInformation("Running app");
 
     UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    RoleManager<ApplicationRole> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
     IOptions<AppSettings> options = scope.ServiceProvider.GetRequiredService<IOptions<AppSettings>>();
     AppSettings appSettings = options.Value;
+
+    if (!await roleManager.RoleExistsAsync(RoleNames.Administrator))
+    {
+        PrintErrors(await roleManager.CreateAsync(new ApplicationRole { Name = RoleNames.Administrator }));
+    }
 
     ApplicationUser? defaultUser = await userManager.FindByNameAsync(appSettings.UserName);
 
@@ -289,13 +309,27 @@ static async Task CreateDefaultUserAsync(WebApplication app)
         if (result.Succeeded)
         {
             Console.WriteLine("Default user created successfully.");
+
+            defaultUser = user;
         }
         else
         {
-            foreach (IdentityError error in result.Errors)
-            {
-                Console.WriteLine($"Error: {error.Description}");
-            }
+            PrintErrors(result);
+        }
+    }
+
+    // On every start rather than only when the account is created, so an install from before roles
+    // existed gives its only account the role on the first start after the update.
+    if (defaultUser is not null && !await userManager.IsInRoleAsync(defaultUser, RoleNames.Administrator))
+    {
+        PrintErrors(await userManager.AddToRoleAsync(defaultUser, RoleNames.Administrator));
+    }
+
+    static void PrintErrors(IdentityResult result)
+    {
+        foreach (IdentityError error in result.Errors)
+        {
+            Console.WriteLine($"Error: {error.Description}");
         }
     }
 }

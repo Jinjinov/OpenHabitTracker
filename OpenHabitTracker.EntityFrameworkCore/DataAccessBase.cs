@@ -9,7 +9,7 @@ public abstract class DataAccessBase
 
     protected abstract Task<T> ExecuteWithDbContext<T>(Func<IApplicationDbContext, Task<T>> action);
 
-    protected async Task SaveChanges(IApplicationDbContext dataContext)
+    protected virtual async Task SaveChanges(IApplicationDbContext dataContext)
     {
         if (dataContext.Users.FirstOrDefault() is IUserEntity user)
         {

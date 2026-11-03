@@ -1,6 +1,6 @@
 namespace OpenHabitTracker.Data.Entities;
 
-public class CategoryEntity
+public class CategoryEntity : IUserScopedEntity
 {
     public long Id { get; set; }
 

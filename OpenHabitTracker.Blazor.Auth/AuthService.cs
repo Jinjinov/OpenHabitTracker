@@ -113,9 +113,9 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
                 await _remoteDataSync.SetDataLocation(DataLocation.Remote);
 
-                //UserEntity user = await _authClient.GetCurrentUserAsync();
+                UserEntity user = await _authClient.GetCurrentUserAsync();
 
-                //Login = $"{_loc["User"]}: {user.Email}";
+                Login = $"{_loc["User"]}: {user.Email}";
                 Error = "";
 
                 return true;

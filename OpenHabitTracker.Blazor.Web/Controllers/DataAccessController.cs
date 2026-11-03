@@ -14,6 +14,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
 {
     private readonly IDataAccess _dataAccess = dataAccess;
 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpPost("user")]
     [EndpointName("AddUser")]
     public async Task<ActionResult<long>> AddUser([FromBody] UserEntity user)
@@ -78,6 +79,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         return Ok(settings.Id);
     }
 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpPost("users")]
     [EndpointName("AddUsers")]
     public async Task<ActionResult<IReadOnlyList<long>>> AddUsers([FromBody] IReadOnlyList<UserEntity> users)
@@ -270,6 +272,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         return result != null ? Ok(result) : NotFound();
     }
 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpPut("users")]
     [EndpointName("UpdateUser")]
     public async Task<IActionResult> UpdateUser([FromBody] UserEntity user)
@@ -334,6 +337,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         return Ok();
     }
 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpDelete("users/{id}")]
     [EndpointName("RemoveUser")]
     public async Task<IActionResult> RemoveUser(long id)
@@ -398,6 +402,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         return Ok();
     }
 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpDelete("users")]
     [EndpointName("RemoveUsers")]
     public async Task<IActionResult> RemoveUsers()
