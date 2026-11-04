@@ -15,6 +15,7 @@ namespace OpenHabitTracker.UnitTests.ApiClient;
 public class AuthServiceLoginTests
 {
     private AuthClient _authClient = null!;
+    private IDataAccess _remoteDataAccess = null!;
     private ClientState _clientState = null!;
     private RemoteDataSync _remoteDataSync = null!;
     private AuthService _sut = null!;
@@ -46,7 +47,9 @@ public class AuthServiceLoginTests
 
         MarkdownToHtml markdownToHtml = new(new MarkdownPipelineBuilder().Build());
 
-        _clientState = new([CreateDataAccess(DataLocation.Local), CreateDataAccess(DataLocation.Remote)], markdownToHtml);
+        _remoteDataAccess = CreateDataAccess(DataLocation.Remote);
+
+        _clientState = new([CreateDataAccess(DataLocation.Local), _remoteDataAccess], markdownToHtml);
         _remoteDataSync = new(_clientState);
 
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
@@ -119,6 +122,40 @@ public class AuthServiceLoginTests
             Assert.That(_sut.Login, Is.Empty);
             Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Remote));
         });
+    }
+
+    [Test]
+    public async Task CredentialsLogin_AccountHasNoSettings_RunsTheNewAccountAction()
+    {
+        _remoteDataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([]));
+
+        int newAccounts = 0;
+
+        _clientState.SetNewAccountAction(() =>
+        {
+            newAccounts++;
+            return Task.CompletedTask;
+        });
+
+        await _sut.CredentialsLogin("https://example.com", "a", "password");
+
+        Assert.That(newAccounts, Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task CredentialsLogin_AccountHasSettings_DoesNotRunTheNewAccountAction()
+    {
+        int newAccounts = 0;
+
+        _clientState.SetNewAccountAction(() =>
+        {
+            newAccounts++;
+            return Task.CompletedTask;
+        });
+
+        await _sut.CredentialsLogin("https://example.com", "a", "password");
+
+        Assert.That(newAccounts, Is.Zero);
     }
 
     [Test]

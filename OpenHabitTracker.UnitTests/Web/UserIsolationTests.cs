@@ -425,6 +425,22 @@ public class UserIsolationTests
     }
 
     [Test]
+    public async Task RemoveUser_TheAdministratorsId_KeepsTheAccount()
+    {
+        ApplicationUser administrator = new() { Id = UserA, UserName = "a" };
+
+        UserManager<ApplicationUser> userManager = CreateUserManager();
+        userManager.Users.Returns(new[] { administrator }.AsQueryable());
+        userManager.IsInRoleAsync(administrator, RoleNames.Administrator).Returns(true);
+
+        ApplicationDataAccess dataAccess = CreateDataAccess(UserA, isAdministrator: true, userManager);
+
+        await dataAccess.RemoveUser(UserA);
+
+        await userManager.DidNotReceive().DeleteAsync(administrator);
+    }
+
+    [Test]
     public async Task RemoveUsers_Administrator_KeepsTheAdministratorAccount()
     {
         ApplicationUser administrator = new() { Id = UserA, UserName = "a" };

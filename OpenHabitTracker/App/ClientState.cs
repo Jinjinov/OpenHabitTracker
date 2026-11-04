@@ -116,6 +116,13 @@ public class ClientState
             await _onDataReplaced();
     }
 
+    private Func<Task>? _onNewAccount;
+
+    public void SetNewAccountAction(Func<Task> onNewAccount)
+    {
+        _onNewAccount = onNewAccount;
+    }
+
     public async Task SetDataLocationAndRefresh(DataLocation dataLocation)
     {
         DataLocation = dataLocation;
@@ -129,6 +136,10 @@ public class ClientState
         {
             User = new();
             await LoadUsers();
+
+            Settings = new();
+            if (await LoadSettings() && _onNewAccount is not null)
+                await _onNewAccount();
         }
 
         await RefreshState();

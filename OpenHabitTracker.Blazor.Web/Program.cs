@@ -102,6 +102,9 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+// The default of 30 minutes keeps a deleted account's cookie working, and its page load ends on the error screen.
+builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromMinutes(1));
+
 builder.Services.AddAuthentication(options =>
     {
         // An unauthenticated request gets a 401 rather than a redirect. Pages redirect to /login in Routes.razor.
@@ -184,8 +187,6 @@ WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseWatchDogExceptionLogger();
-
 //ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
 // Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider
 // Microsoft.Extensions.Logging.Debug.DebugLoggerProvider
@@ -229,6 +230,9 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+// Inside UseExceptionHandler, which would otherwise catch every exception before this logger sees it.
+app.UseWatchDogExceptionLogger();
 
 app.UseHttpsRedirection();
 

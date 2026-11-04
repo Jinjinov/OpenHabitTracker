@@ -253,6 +253,8 @@
 
         RemoteDataSync.SetRefreshAction(() => StateHasChanged());
 
+        ClientState.SetNewAccountAction(() => Examples.AddWelcomeNote(ClientState.User));
+
         bool loginSuccessful = await AuthFragment.TryRefreshTokenLogin();
 
         if (!loginSuccessful && ClientState.DataAccess.MultipleServicesCanModifyData)

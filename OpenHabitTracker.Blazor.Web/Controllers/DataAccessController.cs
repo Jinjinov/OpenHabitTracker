@@ -64,6 +64,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         await _dataAccess.AddCategory(category);
         return Ok(category.Id);
     }
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpPost("priority")]
     [EndpointName("AddPriority")]
     public async Task<ActionResult<long>> AddPriority([FromBody] PriorityEntity priority)
@@ -129,6 +130,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         await _dataAccess.AddCategories(categories);
         return Ok(categories.Select(x => x.Id).ToList());
     }
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpPost("priorities")]
     [EndpointName("AddPriorities")]
     public async Task<ActionResult<IReadOnlyList<long>>> AddPriorities([FromBody] IReadOnlyList<PriorityEntity> priorities)
@@ -193,6 +195,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         var result = await _dataAccess.GetCategories();
         return Ok(result);
     }
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpGet("priorities")]
     [EndpointName("GetPriorities")]
     public async Task<ActionResult<IReadOnlyList<PriorityEntity>>> GetPriorities()
@@ -257,6 +260,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         var result = await _dataAccess.GetCategory(id);
         return result != null ? Ok(result) : NotFound();
     }
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpGet("priorities/{id}")]
     [EndpointName("GetPriority")]
     public async Task<ActionResult<PriorityEntity?>> GetPriority(long id)
@@ -322,6 +326,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         await _dataAccess.UpdateCategory(category);
         return Ok();
     }
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpPut("priorities")]
     [EndpointName("UpdatePriority")]
     public async Task<IActionResult> UpdatePriority([FromBody] PriorityEntity priority)
@@ -387,6 +392,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         await _dataAccess.RemoveCategory(id);
         return Ok();
     }
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpDelete("priorities/{id}")]
     [EndpointName("RemovePriority")]
     public async Task<IActionResult> RemovePriority(long id)
@@ -452,6 +458,7 @@ public class DataAccessController(IDataAccess dataAccess) : ControllerBase
         await _dataAccess.RemoveCategories();
         return Ok();
     }
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleNames.Administrator)]
     [HttpDelete("priorities")]
     [EndpointName("RemovePriorities")]
     public async Task<IActionResult> RemovePriorities()

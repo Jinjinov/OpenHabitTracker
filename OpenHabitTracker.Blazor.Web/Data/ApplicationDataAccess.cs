@@ -152,10 +152,6 @@ public class ApplicationDataAccess(IDbContextFactory<ApplicationDbContext> dbCon
         // A list, because an open reader here would block the second connection in RemoveAccount.
         foreach (ApplicationUser applicationUser in _userManager.Users.ToList())
         {
-            // Startup would recreate the administrator under a new id, which orphans its rows.
-            if (await _userManager.IsInRoleAsync(applicationUser, RoleNames.Administrator))
-                continue;
-
             await RemoveAccount(applicationUser);
         }
     }
@@ -164,6 +160,10 @@ public class ApplicationDataAccess(IDbContextFactory<ApplicationDbContext> dbCon
     // created with the same name.
     private async Task RemoveAccount(ApplicationUser applicationUser)
     {
+        // Startup would recreate the administrator under a new id, which orphans its rows.
+        if (await _userManager.IsInRoleAsync(applicationUser, RoleNames.Administrator))
+            return;
+
         string? userName = applicationUser.UserName;
 
         await _userManager.DeleteAsync(applicationUser);
