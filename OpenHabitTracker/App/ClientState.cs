@@ -124,6 +124,13 @@ public class ClientState
 
         DataAccess = _dataAccessByLocation[DataLocation];
 
+        // Every login can be a different account.
+        if (DataLocation == DataLocation.Remote)
+        {
+            User = new();
+            await LoadUsers();
+        }
+
         await RefreshState();
     }
 

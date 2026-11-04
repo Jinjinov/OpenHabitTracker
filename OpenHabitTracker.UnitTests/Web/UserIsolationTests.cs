@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
+using OpenHabitTracker.Blazor.Web;
 using OpenHabitTracker.Blazor.Web.Data;
 using OpenHabitTracker.Data.Entities;
 
@@ -421,6 +422,24 @@ public class UserIsolationTests
         List<string> remaining = await verifyContext.RefreshTokens.Select(x => x.Username).ToListAsync();
 
         Assert.That(remaining, Is.EqualTo(new[] { "a" }));
+    }
+
+    [Test]
+    public async Task RemoveUsers_Administrator_KeepsTheAdministratorAccount()
+    {
+        ApplicationUser administrator = new() { Id = UserA, UserName = "a" };
+        ApplicationUser other = new() { Id = UserB, UserName = "b" };
+
+        UserManager<ApplicationUser> userManager = CreateUserManager();
+        userManager.Users.Returns(new[] { administrator, other }.AsQueryable());
+        userManager.IsInRoleAsync(administrator, RoleNames.Administrator).Returns(true);
+
+        ApplicationDataAccess dataAccess = CreateDataAccess(UserA, isAdministrator: true, userManager);
+
+        await dataAccess.RemoveUsers();
+
+        await userManager.Received(1).DeleteAsync(other);
+        await userManager.DidNotReceive().DeleteAsync(administrator);
     }
 
     // --- rows from before accounts existed ---

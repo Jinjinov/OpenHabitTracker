@@ -61,16 +61,13 @@ public class AuthServiceLoginTests
         await _remoteDataSync.DisposeAsync();
     }
 
-    private static TokenResponse Response() =>
-        new() { JwtToken = "jwt", RefreshToken = "refresh", JwtTokenExpiresAt = DateTimeOffset.UtcNow.AddDays(1) };
-
-    private void CurrentUserFails() =>
-        _authClient.GetCurrentUserAsync().ThrowsAsync(new ApiException("Unauthorized", 401, "", new Dictionary<string, IEnumerable<string>>(), null));
+    private static TokenResponse Response(string email = "") =>
+        new() { JwtToken = "jwt", RefreshToken = "refresh", JwtTokenExpiresAt = DateTimeOffset.UtcNow.AddDays(1), Email = email };
 
     [Test]
-    public async Task CredentialsLogin_CurrentUserSucceeds_ShowsTheEmail()
+    public async Task CredentialsLogin_ResponseCarriesTheEmail_ShowsTheEmail()
     {
-        _authClient.GetCurrentUserAsync().Returns(new UserEntity { Email = "a@example.com" });
+        _authClient.GetJwtTokenAsync(Arg.Any<LoginCredentials>()).Returns(Response("a@example.com"));
 
         bool loggedIn = await _sut.CredentialsLogin("https://example.com", "a", "password");
 
@@ -82,10 +79,8 @@ public class AuthServiceLoginTests
     }
 
     [Test]
-    public async Task CredentialsLogin_CurrentUserFails_IsStillALogin()
+    public async Task CredentialsLogin_OlderServerSendsNoEmail_IsStillALogin()
     {
-        CurrentUserFails();
-
         bool loggedIn = await _sut.CredentialsLogin("https://example.com", "a", "password");
 
         Assert.Multiple(() =>
@@ -98,18 +93,45 @@ public class AuthServiceLoginTests
     }
 
     [Test]
-    public async Task RefreshTokenLogin_CurrentUserFails_IsStillALogin()
+    public async Task RefreshTokenLogin_ResponseCarriesTheEmail_ShowsTheEmail()
     {
-        CurrentUserFails();
+        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>()).Returns(Response("a@example.com"));
 
         bool loggedIn = await _sut.RefreshTokenLogin("https://example.com", "refresh");
 
         Assert.Multiple(() =>
         {
             Assert.That(loggedIn, Is.True);
-            Assert.That(_sut.Error, Is.Empty);
+            Assert.That(_sut.Login, Does.Contain("a@example.com"));
             Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Remote));
         });
+    }
+
+    [Test]
+    public async Task RefreshTokenLogin_OlderServerSendsNoEmail_IsStillALogin()
+    {
+        bool loggedIn = await _sut.RefreshTokenLogin("https://example.com", "refresh");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(loggedIn, Is.True);
+            Assert.That(_sut.Error, Is.Empty);
+            Assert.That(_sut.Login, Is.Empty);
+            Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Remote));
+        });
+    }
+
+    [Test]
+    public async Task CredentialsLogin_SecondLoginIsAnotherAccount_ReloadsTheUser()
+    {
+        await _sut.CredentialsLogin("https://example.com", "a", "password");
+
+        _clientState.DataAccess.GetUsers().Returns(Task.FromResult<IReadOnlyList<UserEntity>>([new UserEntity { Id = 2 }]));
+
+        await _sut.Logout();
+        await _sut.CredentialsLogin("https://example.com", "b", "password");
+
+        Assert.That(_clientState.User.Id, Is.EqualTo(2));
     }
 
     [Test]

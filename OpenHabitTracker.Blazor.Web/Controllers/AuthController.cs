@@ -109,7 +109,8 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
         {
             JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
             RefreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-            JwtTokenExpiresAt = expires
+            JwtTokenExpiresAt = expires,
+            Email = user.Email ?? string.Empty
         };
 
         return tokenResponse;

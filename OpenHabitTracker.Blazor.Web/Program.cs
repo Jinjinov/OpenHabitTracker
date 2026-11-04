@@ -204,15 +204,13 @@ if (!app.Environment.IsDevelopment())
                 IExceptionHandlerFeature? exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
                 Exception? exception = exceptionHandlerFeature?.Error;
 
-                // Handle API exceptions with detailed JSON response
+                // Handle API exceptions with JSON response
                 context.Response.StatusCode = 500;
                 context.Response.ContentType = "application/json";
 
                 var errorDetails = new
                 {
                     error = "An error occurred in the API",
-                    message = exception?.Message,
-                    stackTrace = exception?.StackTrace,
                     type = exception?.GetType().FullName
                 };
 

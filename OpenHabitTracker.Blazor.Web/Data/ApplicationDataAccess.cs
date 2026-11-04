@@ -37,17 +37,17 @@ public class ApplicationDataAccess(IDbContextFactory<ApplicationDbContext> dbCon
     }
 
     // Each device polls its own account's LastChangeAt, so a change stamps the account that made it
-    // rather than whichever account happens to come first.
+    // rather than whichever account happens to come first. Not through a tracked user, whose
+    // ConcurrencyStamp would fail this save whenever UserManager wrote that row in the meantime.
     protected override async Task SaveChanges(IApplicationDbContext dataContext)
     {
         ApplicationDbContext context = (ApplicationDbContext)dataContext;
 
-        if (await context.Users.FindAsync(context.CurrentUserId) is ApplicationUser user)
-        {
-            user.LastChangeAt = DateTime.UtcNow;
-        }
-
         await context.SaveChangesAsync();
+
+        DateTime changedAt = DateTime.UtcNow;
+
+        await context.Users.Where(x => x.Id == context.CurrentUserId).ExecuteUpdateAsync(setters => setters.SetProperty(x => x.LastChangeAt, changedAt));
     }
 
     // The server's own UI calls the account methods from the circuit, past the controller's attributes,
@@ -149,8 +149,13 @@ public class ApplicationDataAccess(IDbContextFactory<ApplicationDbContext> dbCon
     {
         await EnsureAdministrator();
 
-        foreach (ApplicationUser applicationUser in _userManager.Users)
+        // A list, because an open reader here would block the second connection in RemoveAccount.
+        foreach (ApplicationUser applicationUser in _userManager.Users.ToList())
         {
+            // Startup would recreate the administrator under a new id, which orphans its rows.
+            if (await _userManager.IsInRoleAsync(applicationUser, RoleNames.Administrator))
+                continue;
+
             await RemoveAccount(applicationUser);
         }
     }

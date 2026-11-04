@@ -130,8 +130,9 @@ Timezone strings: [List of tz database time zones](https://en.wikipedia.org/wiki
 
 The default port is `5050`. You can change it to `80` to avoid typing the port in the address, or to any other free port if `5050` is already in use - update the port in `docker-compose.yml` accordingly.
 
-After you login at http://localhost:5050/login you can use the same browser tab to access:
-- logs: http://localhost:5050/watchdog
+Logs are at http://localhost:5050/watchdog and ask for the username and password from `.env`.
+
+After you login at http://localhost:5050/login with the account from `.env` you can use the same browser tab to access:
 - OpenAPI json: http://localhost:5050/openapi/v1.json
 - OpenAPI UI: http://localhost:5050/scalar/v1
 

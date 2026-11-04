@@ -4910,6 +4910,9 @@
           "jwtTokenExpiresAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "email": {
+            "type": "string"
           }
         }
       },

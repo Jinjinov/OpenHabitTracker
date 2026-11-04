@@ -2,7 +2,6 @@ using Microsoft.Extensions.Localization;
 using OpenHabitTracker.App;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
-using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Dto;
 
 namespace OpenHabitTracker.Blazor.Auth;
@@ -43,7 +42,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
                 await _remoteDataSync.SetDataLocation(DataLocation.Remote);
 
-                await ShowCurrentUser();
+                ShowEmail(tokenResponse.Email);
 
                 Error = "";
 
@@ -82,20 +81,10 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         return false;
     }
 
-    // The login is complete by now, so a failure here only leaves out the "User: email" line. Servers
-    // older than 1.2.6 always answer 401 to this call, because the endpoint ignored the bearer token.
-    private async Task ShowCurrentUser()
+    // Servers older than 1.2.6 send no email, which only leaves out the "User: email" line.
+    private void ShowEmail(string email)
     {
-        try
-        {
-            UserEntity user = await _authClient.GetCurrentUserAsync();
-
-            Login = $"{_loc["User"]}: {user.Email}";
-        }
-        catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
-        {
-            Login = "";
-        }
+        Login = string.IsNullOrEmpty(email) ? "" : $"{_loc["User"]}: {email}";
     }
 
     public async Task<bool> TryRefreshTokenLogin()
@@ -128,7 +117,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
                 await _remoteDataSync.SetDataLocation(DataLocation.Remote);
 
-                await ShowCurrentUser();
+                ShowEmail(tokenResponse.Email);
 
                 Error = "";
 
