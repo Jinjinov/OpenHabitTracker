@@ -249,7 +249,12 @@
             return;
         }
 
-        RemoteDataSync.SetRefreshAction(() => StateHasChanged());
+        // The poller repaints outside any browser event, so it has to set the culture itself.
+        RemoteDataSync.SetRefreshAction(() =>
+        {
+            ClientState.SetCulture();
+            StateHasChanged();
+        });
         RemoteDataSync.SetSignedOutAction(OnSignedOut);
 
         ClientState.SetNewAccountAction(() => Examples.AddWelcomeNote(ClientState.User));

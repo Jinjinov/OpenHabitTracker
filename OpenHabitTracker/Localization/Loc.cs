@@ -34,16 +34,11 @@ public class Loc
     };
 
     // The UI culture picks the translation file; the formatting culture only replaces the date and time patterns.
-    public static void SetCulture(string code, string? datePattern, string? timePattern)
+    public static void SetCulture(ICultureTarget target, string code, string? datePattern, string? timePattern)
     {
         CultureInfo uiCulture = Cultures[code].Culture;
-        CultureInfo culture = CreateFormattingCulture(uiCulture, datePattern, timePattern);
 
-        CultureInfo.DefaultThreadCurrentCulture = culture;
-        CultureInfo.DefaultThreadCurrentUICulture = uiCulture;
-
-        CultureInfo.CurrentCulture = culture;
-        CultureInfo.CurrentUICulture = uiCulture;
+        target.Apply(CreateFormattingCulture(uiCulture, datePattern, timePattern), uiCulture);
     }
 
     internal static CultureInfo CreateFormattingCulture(CultureInfo language, string? datePattern, string? timePattern)

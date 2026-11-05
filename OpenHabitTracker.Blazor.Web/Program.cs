@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,7 @@ using OpenHabitTracker.Blazor.Web;
 using OpenHabitTracker.Blazor.Web.Components;
 using OpenHabitTracker.Blazor.Web.Data;
 using OpenHabitTracker.Data;
+using OpenHabitTracker.Localization;
 using OpenHabitTracker.SelfTest;
 using OpenHabitTracker.Services;
 using Scalar.AspNetCore;
@@ -173,6 +175,9 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddBackup();
 builder.Services.AddBlazor();
+builder.Services.AddScoped<CircuitCulture>();
+builder.Services.AddScoped<ICultureTarget>(serviceProvider => serviceProvider.GetRequiredService<CircuitCulture>());
+builder.Services.AddScoped<CircuitHandler>(serviceProvider => serviceProvider.GetRequiredService<CircuitCulture>());
 builder.Services.AddScoped<IAppReview, AppReview>(); // different in Maui
 builder.Services.AddScoped<INotifications, Notifications>();
 builder.Services.AddScoped<IOpenFile, OpenFile>();

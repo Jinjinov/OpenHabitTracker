@@ -30,6 +30,7 @@ public static class Startup
 
     private static void AddDefaultServices(IServiceCollection services)
     {
+        services.AddScoped<ICultureTarget, ProcessCulture>(); // different in Web
         services.AddScoped<ClientState>();
         services.AddScoped<RemoteDataSync>();
         services.AddScoped<MarkdownToHtml>();

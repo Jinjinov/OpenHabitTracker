@@ -9,14 +9,16 @@ public class ClientState
 {
     private readonly Dictionary<DataLocation, IDataAccess> _dataAccessByLocation;
     private readonly MarkdownToHtml _markdownToHtml;
+    private readonly ICultureTarget _cultureTarget;
 
     private readonly Dictionary<DataLocation, ClientData> _clientDataByLocation;
     private ClientData _clientData;
 
-    public ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml)
+    public ClientState(IEnumerable<IDataAccess> dataAccess, MarkdownToHtml markdownToHtml, ICultureTarget? cultureTarget = null)
     {
         _dataAccessByLocation = dataAccess.ToDictionary(x => x.DataLocation);
         _markdownToHtml = markdownToHtml;
+        _cultureTarget = cultureTarget ?? new ProcessCulture();
 
         DataLocation = DataLocation.Local;
 
@@ -44,7 +46,7 @@ public class ClientState
 
     public void SetCulture()
     {
-        Loc.SetCulture(Settings.Culture, Settings.DateFormat ?? AutomaticDateFormat, Settings.TimeFormat ?? AutomaticTimeFormat);
+        Loc.SetCulture(_cultureTarget, Settings.Culture, Settings.DateFormat ?? AutomaticDateFormat, Settings.TimeFormat ?? AutomaticTimeFormat);
     }
 
     public UserModel User
