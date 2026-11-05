@@ -3,6 +3,7 @@
 - Added date format and time format settings
 - Fixed dates and times ignoring the device's regional format
 - Fixed a crash in the Linux version when opening the web inspector
+- Fixed online sync not connecting until restart when the app was opened with no connection
 
 # 1.2.5 - Sep 9, 2026
 

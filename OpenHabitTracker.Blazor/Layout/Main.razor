@@ -249,12 +249,7 @@
             return;
         }
 
-        // The poller repaints outside any browser event, so it has to set the culture itself.
-        RemoteDataSync.SetRefreshAction(() =>
-        {
-            ClientState.SetCulture();
-            StateHasChanged();
-        });
+        RemoteDataSync.SetRefreshAction(RepaintReplacedData);
         RemoteDataSync.SetSignedOutAction(OnSignedOut);
 
         ClientState.SetNewAccountAction(() => Examples.AddWelcomeNote(ClientState.User));
@@ -307,8 +302,7 @@
 
         if (loggedIn || AuthFragment.IsSignedOut)
         {
-            ClientState.SetCulture();
-            await InvokeAsync(StateHasChanged);
+            await InvokeAsync(RepaintReplacedData);
 
             return true;
         }
@@ -323,7 +317,19 @@
 
         SelectComponent<Data>();
 
-        await InvokeAsync(StateHasChanged);
+        await InvokeAsync(RepaintReplacedData);
+    }
+
+    // Runs outside any browser event, so it has to set the culture itself. The flip reaches the
+    // components that have no data parameter, like the statistics and the login form, which a plain
+    // render skips.
+    private void RepaintReplacedData()
+    {
+        ClientState.SetCulture();
+
+        _stateChanged.Value = !_stateChanged.Value;
+
+        StateHasChanged();
     }
 
     void OnNotificationActivated(string route)
