@@ -12,10 +12,13 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
     private PeriodicTimer? _timer;
     private Task? _timerTask;
     private CancellationTokenSource? _cts;
-    private readonly TimeSpan _interval = TimeSpan.FromSeconds(10);
     private readonly TimeSpan _unreachableInterval = TimeSpan.FromSeconds(60);
 
     private Action? _refresh;
+    private Func<Task>? _signedOut;
+    private bool _signingOut;
+
+    public TimeSpan PollInterval { get; init; } = TimeSpan.FromSeconds(10);
 
     // True once a tick has failed, false again after one succeeds. The nav icon renders from it.
     public bool ServerUnreachable { get; private set; }
@@ -30,6 +33,11 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
         _refresh = refresh;
     }
 
+    public void SetSignedOutAction(Func<Task> signedOut)
+    {
+        _signedOut = signedOut;
+    }
+
     public void StartPolling()
     {
         // Don't start if already running
@@ -38,7 +46,7 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
 
         // Create new instances for each start
         _cts = new CancellationTokenSource();
-        _timer = new PeriodicTimer(_interval);
+        _timer = new PeriodicTimer(PollInterval);
 
         // Start the timer task
         _timerTask = ShortPolling();
@@ -67,6 +75,8 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
 
     private async Task ShortPolling()
     {
+        bool signedOut = false;
+
         try
         {
             if (_timer == null || _cts == null)
@@ -93,9 +103,14 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
                         }
                     }
 
-                    _timer.Period = _interval;
+                    _timer.Period = PollInterval;
 
                     SetServerUnreachable(false);
+                }
+                catch (SignedOutException)
+                {
+                    signedOut = true;
+                    break;
                 }
                 // The tick failed, most likely an unreachable server. Skip it, slow down, let the
                 // next tick retry. The filter keeps a real cancellation falling through to the
@@ -112,10 +127,36 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
         {
             // Task was canceled, clean up if necessary
         }
+        catch (Exception) when (_cts?.IsCancellationRequested == true)
+        {
+            // A request that was in flight when polling stopped, which nobody is waiting for any more.
+        }
+
+        // Not awaited: the action stops polling, which waits for this method to finish.
+        if (signedOut)
+            _ = ReportSignedOut();
     }
 
     // A call that failed outside the poller knows before the next tick does.
     public void ReportServerUnreachable() => SetServerUnreachable(true);
+
+    // The poller and a user action can both find out at the same time.
+    public async Task ReportSignedOut()
+    {
+        if (_signingOut || _signedOut is null || _clientState.DataLocation != DataLocation.Remote)
+            return;
+
+        _signingOut = true;
+
+        try
+        {
+            await _signedOut();
+        }
+        finally
+        {
+            _signingOut = false;
+        }
+    }
 
     // Only a change repaints, or the UI re-renders on every tick.
     private void SetServerUnreachable(bool serverUnreachable)

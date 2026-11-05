@@ -1,4 +1,5 @@
 using NSubstitute;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using System.Net;
 using System.Text;
@@ -115,20 +116,29 @@ public class RefreshTokenHandlerTests
     }
 
     [Test]
-    public async Task Send_RetryAlsoUnauthorized_DoesNotRetryAgain()
+    public async Task Send_RetryAlsoUnauthorized_ThrowsSignedOutWithoutRetryingAgain()
     {
         _inner.Enqueue(HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized);
         RefreshSucceedsWith("new-token");
 
-        HttpResponseMessage response = await CreateClient().GetAsync("data");
+        HttpClient client = CreateClient();
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
-            Assert.That(_inner.Requests, Has.Count.EqualTo(2));
-        });
+        Assert.ThrowsAsync<SignedOutException>(async () => await client.GetAsync("data"));
+
+        Assert.That(_inner.Requests, Has.Count.EqualTo(2));
 
         await _tokenRefresher.Received(1).TryRefresh();
+    }
+
+    [Test]
+    public void Send_RenewalRejected_ThrowsSignedOut()
+    {
+        _inner.Enqueue(HttpStatusCode.Unauthorized);
+        _tokenRefresher.TryRefresh().Returns<bool>(_ => throw new SignedOutException());
+
+        HttpClient client = CreateClient();
+
+        Assert.ThrowsAsync<SignedOutException>(async () => await client.GetAsync("data"));
     }
 
     [Test]

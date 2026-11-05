@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Dto;
@@ -51,10 +52,13 @@ public class TokenRefresher(AuthClient authClient, ApiClientOptions options, [Fr
 
             return true;
         }
+        catch (ApiException exception) when (exception.StatusCode == 401)
+        {
+            throw new SignedOutException();
+        }
         catch (Exception)
         {
-            // Unreachable server, or a refresh token the server no longer accepts. Either way the
-            // original failure stands and the caller reports it.
+            // An unreachable server, so the original failure stands and the caller reports it.
             return false;
         }
         finally

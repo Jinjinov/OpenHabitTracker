@@ -6,6 +6,8 @@ public interface IAuthService
 
     string? Error { get; set; }
 
+    bool IsSignedOut { get; }
+
     Task<bool> CredentialsLogin(string address, string username, string password);
 
     Task<bool> RefreshTokenLogin(string address, string refreshToken);
@@ -13,4 +15,6 @@ public interface IAuthService
     Task<bool> TryRefreshTokenLogin();
 
     Task Logout();
+
+    Task SignedOut();
 }

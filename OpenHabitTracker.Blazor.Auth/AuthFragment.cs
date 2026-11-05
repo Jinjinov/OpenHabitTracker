@@ -7,7 +7,11 @@ public class AuthFragment(IAuthService authService) : IAuthFragment
 {
     public bool IsAuthAvailable => true;
 
+    public bool IsSignedOut => authService.IsSignedOut;
+
     public Task<bool> TryRefreshTokenLogin() => authService.TryRefreshTokenLogin();
+
+    public Task SignedOut() => authService.SignedOut();
 
     public RenderFragment GetAuthFragment(bool stateChanged, EventCallback<bool> stateChangedChanged)
     {

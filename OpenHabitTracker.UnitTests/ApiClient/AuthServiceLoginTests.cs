@@ -172,6 +172,61 @@ public class AuthServiceLoginTests
     }
 
     [Test]
+    public async Task RefreshTokenLogin_ServerRejectsTheToken_BlanksItAndShowsSignedOut()
+    {
+        _clientState.Settings.RefreshToken = "revoked";
+
+        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>())
+            .ThrowsAsync(new ApiException("Unauthorized", 401, "", new Dictionary<string, IEnumerable<string>>(), null));
+
+        bool loggedIn = await _sut.RefreshTokenLogin("https://example.com", "revoked");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(loggedIn, Is.False);
+            Assert.That(_sut.IsSignedOut, Is.True);
+            Assert.That(_sut.Error, Is.EqualTo("Signed out - log in again"));
+            Assert.That(_clientState.Settings.RefreshToken, Is.Empty);
+            Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Local));
+        });
+    }
+
+    [Test]
+    public async Task RefreshTokenLogin_ServerUnreachable_KeepsTheToken()
+    {
+        await _clientState.LoadSettings();
+
+        _clientState.Settings.RefreshToken = "still-good";
+
+        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>())
+            .ThrowsAsync(new HttpRequestException("no route", null, System.Net.HttpStatusCode.BadGateway));
+
+        await _sut.RefreshTokenLogin("https://example.com", "still-good");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.IsSignedOut, Is.False);
+            Assert.That(_clientState.Settings.RefreshToken, Is.EqualTo("still-good"));
+        });
+    }
+
+    [Test]
+    public async Task SignedOut_FromRemote_FallsBackToLocalDataWithTheMessage()
+    {
+        await _sut.CredentialsLogin("https://example.com", "a", "password");
+
+        await _sut.SignedOut();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Local));
+            Assert.That(_sut.Error, Is.EqualTo("Signed out - log in again"));
+            Assert.That(_sut.Login, Is.Empty);
+            Assert.That(_clientState.Settings.RefreshToken, Is.Empty);
+        });
+    }
+
+    [Test]
     public async Task CredentialsLogin_WrongPassword_ReportsInvalidCredentials()
     {
         _authClient.GetJwtTokenAsync(Arg.Any<LoginCredentials>())

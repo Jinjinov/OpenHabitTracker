@@ -16,6 +16,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
     public string? Login { get; set; } = string.Empty;
     public string? Error { get; set; } = string.Empty;
+    public bool IsSignedOut { get; private set; }
 
     public async Task<bool> CredentialsLogin(string address, string username, string password)
     {
@@ -48,6 +49,10 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
                 return true;
             }
+        }
+        catch (SignedOutException)
+        {
+            await SignedOut();
         }
         catch (ApiException ex) when (ex.StatusCode == 401)
         {
@@ -124,9 +129,13 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
                 return true;
             }
         }
+        catch (SignedOutException)
+        {
+            await SignedOut();
+        }
         catch (ApiException ex) when (ex.StatusCode == 401)
         {
-            Error = _loc["Invalid credentials"];
+            await SignedOut();
         }
         catch (ApiException ex) when (ex.StatusCode == 404 || ex.StatusCode == 405)
         {
@@ -156,8 +165,19 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         return false;
     }
 
+    // The server rejected the session, so the device falls back to its local data and asks for a login.
+    public async Task SignedOut()
+    {
+        await Logout();
+
+        IsSignedOut = true;
+        Error = _loc["Signed out - log in again"];
+    }
+
     private void SetTokens(TokenResponse tokenResponse)
     {
+        IsSignedOut = false;
+
         _apiClientOptions.BearerToken = tokenResponse.JwtToken;
         _apiClientOptions.RefreshToken = tokenResponse.RefreshToken;
         _apiClientOptions.BearerTokenExpiresAt = tokenResponse.JwtTokenExpiresAt;

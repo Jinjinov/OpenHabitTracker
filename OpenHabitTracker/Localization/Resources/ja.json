@@ -126,6 +126,7 @@
   "Invalid address": "アドレスが無効です",
   "Invalid credentials": "認証情報が無効です",
   "Connection error": "接続エラー",
+  "Signed out - log in again": "ログアウトされました - もう一度ログインしてください",
   "Planned": "予定",
   "Done": "完了",
   "All": "すべて",

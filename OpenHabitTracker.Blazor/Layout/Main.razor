@@ -250,6 +250,7 @@
         }
 
         RemoteDataSync.SetRefreshAction(() => StateHasChanged());
+        RemoteDataSync.SetSignedOutAction(OnSignedOut);
 
         ClientState.SetNewAccountAction(() => Examples.AddWelcomeNote(ClientState.User));
 
@@ -266,7 +267,9 @@
 
         SetDynamicComponentParameters();
 
-        if (!string.IsNullOrEmpty(ClientState.Settings.StartSidebar))
+        if (AuthFragment.IsSignedOut)
+            SelectComponent<Data>();
+        else if (!string.IsNullOrEmpty(ClientState.Settings.StartSidebar))
             SelectComponent(ClientState.Settings.StartSidebar);
 
         // Tapping a notification navigates to what it was about.
@@ -279,6 +282,16 @@
         await NotificationScheduler.Rebuild();
 
         Logger.LogInformation("MainLayout.OnInitializedAsync end");
+    }
+
+    // The lists flip to the device's own data, so the reason has to be on screen.
+    private async Task OnSignedOut()
+    {
+        await AuthFragment.SignedOut();
+
+        SelectComponent<Data>();
+
+        await InvokeAsync(StateHasChanged);
     }
 
     void OnNotificationActivated(string route)

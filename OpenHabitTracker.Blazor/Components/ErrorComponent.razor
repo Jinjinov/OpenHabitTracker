@@ -4,7 +4,11 @@
 @inject NavigationManager NavigationManager
 @inject RemoteDataSync RemoteDataSync
 
-@if (IsServerError)
+@if (Exception is SignedOutException)
+{
+    <p role="alert">Signed out.</p>
+}
+else if (IsServerError)
 {
     <p role="alert">Cannot reach the server.</p>
 }
@@ -35,10 +39,20 @@ else
     private bool IsServerError => Exception is HttpRequestException || Exception.GetType().Name == "ApiException";
 
     // The poller would not notice until its next tick, up to a minute away.
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && IsServerError)
+        if (!firstRender)
+            return;
+
+        if (Exception is SignedOutException)
+        {
+            await RemoteDataSync.ReportSignedOut();
+            await OnRetry.InvokeAsync();
+        }
+        else if (IsServerError)
+        {
             RemoteDataSync.ReportServerUnreachable();
+        }
     }
 
     private void Reload() => NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);

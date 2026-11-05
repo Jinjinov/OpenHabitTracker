@@ -1,4 +1,5 @@
 using NSubstitute;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
@@ -99,6 +100,24 @@ public class TokenRefresherTests
 
         Assert.That(refreshed, Is.False);
         Assert.That(_options.BearerToken, Is.Empty);
+    }
+
+    [Test]
+    public void TryRefresh_ServerRejectsTheRefreshToken_ThrowsSignedOut()
+    {
+        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>())
+            .Returns<TokenResponse>(_ => throw new ApiException("Unauthorized", 401, "", new Dictionary<string, IEnumerable<string>>(), null));
+
+        Assert.ThrowsAsync<SignedOutException>(async () => await _sut.TryRefresh());
+    }
+
+    [Test]
+    public async Task TryRefresh_ServerError_ReturnsFalseBecauseTheSessionMayStillBeValid()
+    {
+        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>())
+            .Returns<TokenResponse>(_ => throw new ApiException("Server error", 500, "", new Dictionary<string, IEnumerable<string>>(), null));
+
+        Assert.That(await _sut.TryRefresh(), Is.False);
     }
 
     [Test]

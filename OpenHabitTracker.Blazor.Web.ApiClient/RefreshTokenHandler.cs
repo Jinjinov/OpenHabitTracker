@@ -1,3 +1,4 @@
+using OpenHabitTracker.App;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -47,7 +48,14 @@ public class RefreshTokenHandler(ApiClientOptions options, ITokenRefresher token
 
         SetBearerToken(retry);
 
-        return await base.SendAsync(retry, cancellationToken).ConfigureAwait(false);
+        HttpResponseMessage retried = await base.SendAsync(retry, cancellationToken).ConfigureAwait(false);
+
+        if (retried.StatusCode != HttpStatusCode.Unauthorized)
+            return retried;
+
+        retried.Dispose();
+
+        throw new SignedOutException();
     }
 
     private void SetBearerToken(HttpRequestMessage request)
