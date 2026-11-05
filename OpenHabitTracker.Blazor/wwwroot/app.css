@@ -160,6 +160,14 @@ html, body {
     max-height: none !important;
 }
 
+/* The top bar has no room for its last icon on narrow phones. */
+@media (max-width: 380px) {
+
+    nav .ms-3 {
+        margin-left: .5rem !important;
+    }
+}
+
 @media (min-width: 768px) {
 
     /* Desktop: hide scrollbar in parent row */

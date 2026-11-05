@@ -1,0 +1,160 @@
+@page "/account"
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using OpenHabitTracker.Blazor.Web.Data
+
+@attribute [Authorize(Policy = "AccountPolicy")]
+@attribute [ExcludeFromInteractiveRouting]
+
+@layout LoginLayout
+
+@inject NavigationManager NavigationManager
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IDbContextFactory<ApplicationDbContext> DbContextFactory
+
+<PageTitle>Account</PageTitle>
+
+<h3 class="mb-3">Account</h3>
+
+<p class="text-break">@_user?.UserName</p>
+
+<h4 class="mb-3">Change password</h4>
+
+<EditForm FormName="password" Model="@Input" OnValidSubmit="@ChangePassword" OnInvalidSubmit="@ClearPasswords">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="alert alert-danger" />
+
+    <div class="mb-3">
+        <label for="current-password" class="form-label">Current password:</label>
+        <InputText id="current-password" class="form-control" autocomplete="current-password" @bind-Value="Input.CurrentPassword" type="password" />
+    </div>
+
+    <div class="mb-3">
+        <label for="new-password" class="form-label">New password:</label>
+        <InputText id="new-password" class="form-control" autocomplete="new-password" @bind-Value="Input.NewPassword" type="password" />
+    </div>
+
+    <div class="mb-3">
+        <label for="confirm-password" class="form-label">Repeat new password:</label>
+        <InputText id="confirm-password" class="form-control" autocomplete="new-password" @bind-Value="Input.ConfirmPassword" type="password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Change password</button>
+
+    @foreach (string error in _errors)
+    {
+        <div class="alert alert-danger mt-3">
+            @error
+        </div>
+    }
+
+    @if (_passwordChanged)
+    {
+        <div class="alert alert-success mt-3">
+            Password changed. Your devices have to log in again.
+        </div>
+    }
+</EditForm>
+
+<hr />
+
+@if (HttpContext.User.IsInRole(RoleNames.Administrator))
+{
+    <a href="/accounts" class="btn btn-secondary w-100 mb-3" data-enhance-nav="false">Accounts</a>
+}
+
+<form method="post" @formname="logout" @onsubmit="LogOut" data-enhance="false">
+    <AntiforgeryToken />
+    <button type="submit" class="btn btn-secondary w-100">Log out</button>
+</form>
+
+<a href="/" class="btn btn-secondary w-100 mt-3" data-enhance-nav="false">Back</a>
+
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    // no property initializer: a form post can bind null over it (BL0008); OnInitialized runs after form binding
+    [SupplyParameterFromForm(FormName = "password")]
+    private InputModel Input { get; set; } = default!;
+
+    private ApplicationUser? _user;
+
+    private List<string> _errors = [];
+
+    private bool _passwordChanged;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Input ??= new();
+
+        _user = await UserManager.GetUserAsync(HttpContext.User);
+    }
+
+    private async Task ChangePassword()
+    {
+        if (_user is null)
+            return;
+
+        IdentityResult result = await UserManager.ChangePasswordAsync(_user, Input.CurrentPassword, Input.NewPassword);
+
+        if (result.Succeeded)
+        {
+            await RemoveRefreshTokens(_user);
+
+            // The new security stamp would otherwise end this browser's session too.
+            await SignInManager.RefreshSignInAsync(_user);
+
+            _passwordChanged = true;
+        }
+        else
+        {
+            _errors = result.Errors.Select(x => x.Description).ToList();
+        }
+
+        ClearPasswords();
+    }
+
+    // A device signed in under the old password would otherwise keep renewing its token.
+    private async Task RemoveRefreshTokens(ApplicationUser user)
+    {
+        using ApplicationDbContext context = DbContextFactory.CreateDbContext();
+
+        await context.RefreshTokens.Where(x => x.Username == user.UserName).ExecuteDeleteAsync();
+    }
+
+    // A posted form renders its values back, and this one would put the passwords into the page.
+    private void ClearPasswords()
+    {
+        Input.CurrentPassword = string.Empty;
+        Input.NewPassword = string.Empty;
+        Input.ConfirmPassword = string.Empty;
+    }
+
+    // Ends this browser's session only: devices hold their own, which the password change revokes.
+    private async Task LogOut()
+    {
+        await SignInManager.SignOutAsync();
+
+        NavigationManager.NavigateTo("/login");
+    }
+
+    public class InputModel
+    {
+        [Required]
+        public string CurrentPassword { get; set; } = string.Empty;
+
+        [Required]
+        public string NewPassword { get; set; } = string.Empty;
+
+        [Required]
+        [Compare(nameof(NewPassword), ErrorMessage = "The new passwords do not match.")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+    }
+}

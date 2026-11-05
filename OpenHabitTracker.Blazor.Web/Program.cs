@@ -102,7 +102,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-// Only AccountsPolicy challenges the cookie scheme: everything else gets the JWT 401 below.
+// Only the two account policies challenge the cookie scheme: everything else gets the JWT 401 below.
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/login";
@@ -157,11 +157,17 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole(RoleNames.Administrator);
     });
 
-    // The scheme is here because a component's [Authorize] may not name one. Without it the challenge is the JWT 401.
+    // The schemes are here because a component's [Authorize] may not name one. Without them the challenge is the JWT 401.
     options.AddPolicy("AccountsPolicy", policy =>
     {
         policy.AddAuthenticationSchemes(IdentityConstants.ApplicationScheme);
         policy.RequireRole(RoleNames.Administrator);
+    });
+
+    options.AddPolicy("AccountPolicy", policy =>
+    {
+        policy.AddAuthenticationSchemes(IdentityConstants.ApplicationScheme);
+        policy.RequireAuthenticatedUser();
     });
 });
 
@@ -171,7 +177,7 @@ builder.Services.AddScoped<IAppReview, AppReview>(); // different in Maui
 builder.Services.AddScoped<INotifications, Notifications>();
 builder.Services.AddScoped<IOpenFile, OpenFile>();
 builder.Services.AddScoped<ISaveFile, SaveFile>();
-builder.Services.AddScoped<INavBarFragment, NavBarFragment>();
+builder.Services.AddScoped<INavBarFragment, AccountNavBarFragment>();
 builder.Services.AddScoped<IAssemblyProvider, OpenHabitTracker.Blazor.Web.Components.AssemblyProvider>();
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddHttpContextAccessor();

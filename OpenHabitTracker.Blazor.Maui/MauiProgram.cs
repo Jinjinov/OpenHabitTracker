@@ -73,7 +73,7 @@ public static class MauiProgram
         builder.Services.AddScoped<IAppReview, AppReview>(); // different in Maui
         builder.Services.AddScoped<IOpenFile, OpenFile>(); // different in Maui, WinForms, Wpf
         builder.Services.AddScoped<ISaveFile, SaveFile>(); // different in Maui, WinForms, Wpf
-        builder.Services.AddScoped<INavBarFragment, NavBarFragment>(); // different in Wasm
+        builder.Services.AddScoped<INavBarFragment, NavBarFragment>(); // different in Web
         builder.Services.AddScoped<IAssemblyProvider, AssemblyProvider>(); // different in Wasm, Web
         builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>(); // different in Photino
         builder.Services.AddScoped<IPreRenderService, PreRenderService>(); // different in Web
