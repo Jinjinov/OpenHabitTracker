@@ -303,6 +303,13 @@ static async Task CreateDefaultUserAsync(WebApplication app)
     IDataAccess dataAccess = scope.ServiceProvider.GetServices<IDataAccess>().First(x => x.DataLocation == DataLocation.Local);
     await dataAccess.Initialize();
 
+    IDbContextFactory<ApplicationDbContext> dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<ApplicationDbContext>>();
+
+    using ApplicationDbContext context = dbContextFactory.CreateDbContext();
+
+    // Concurrent writes fail with "database is locked" in the default rollback journal.
+    await context.Database.ExecuteSqlRawAsync("PRAGMA journal_mode=WAL");
+
     logger.LogInformation("Running app");
 
     UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -348,10 +355,6 @@ static async Task CreateDefaultUserAsync(WebApplication app)
 
     if (defaultUser is not null)
     {
-        IDbContextFactory<ApplicationDbContext> dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<ApplicationDbContext>>();
-
-        using ApplicationDbContext context = dbContextFactory.CreateDbContext();
-
         await context.AssignUnownedRows(defaultUser.Id);
     }
 

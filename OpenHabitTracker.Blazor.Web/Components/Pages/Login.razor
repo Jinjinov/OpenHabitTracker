@@ -67,7 +67,7 @@
 
     private async Task HandleValidSubmit()
     {
-        SignInResult result = await SignInManager.PasswordSignInAsync(Input.Username, Input.Password, isPersistent: true, lockoutOnFailure: false);
+        SignInResult result = await SignInManager.PasswordSignInAsync(Input.Username, Input.Password, isPersistent: true, lockoutOnFailure: true);
 
         if (result.Succeeded)
         {

@@ -38,7 +38,7 @@ public class AuthController(SignInManager<ApplicationUser> signInManager, UserMa
     [EndpointName("GetJwtToken")]
     public async Task<ActionResult<TokenResponse>> GetJwtToken([FromBody] LoginCredentials loginCredentials)
     {
-        Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(loginCredentials.Username, loginCredentials.Password, isPersistent: false, lockoutOnFailure: false);
+        Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(loginCredentials.Username, loginCredentials.Password, isPersistent: false, lockoutOnFailure: true);
 
         if (!result.Succeeded)
         {
