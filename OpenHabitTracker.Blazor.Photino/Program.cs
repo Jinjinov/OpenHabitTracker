@@ -115,6 +115,9 @@ public class Program
         app.MainWindow.SetTitle("OpenHabitTracker");
         app.MainWindow.SetUseOsDefaultSize(false);
         app.MainWindow.SetUseOsDefaultLocation(false);
+#if !DEBUG
+        app.MainWindow.SetDevToolsEnabled(false);
+#endif
 
         string windowSettingsPath = Path.Combine(databaseDirectory, WindowSettings.FileName);
 

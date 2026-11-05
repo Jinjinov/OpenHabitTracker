@@ -2,6 +2,7 @@
 
 - Added date format and time format settings
 - Fixed dates and times ignoring the device's regional format
+- Fixed a crash in the Linux version when opening the web inspector
 
 # 1.2.5 - Sep 9, 2026
 
