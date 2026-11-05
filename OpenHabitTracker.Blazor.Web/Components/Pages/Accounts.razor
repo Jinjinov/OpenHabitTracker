@@ -1,0 +1,126 @@
+@page "/accounts"
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Identity
+@using OpenHabitTracker.Blazor.Web.Data
+
+@attribute [Authorize(Policy = "AccountsPolicy")]
+@attribute [ExcludeFromInteractiveRouting]
+
+@layout LoginLayout
+
+@inject NavigationManager NavigationManager
+@inject UserManager<ApplicationUser> UserManager
+
+<PageTitle>Accounts</PageTitle>
+
+<h3 class="mb-3">Accounts</h3>
+
+<table class="table table-sm mb-4">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ApplicationUser account in _accounts)
+        {
+            <tr>
+                <td class="text-break">@account.UserName</td>
+                <td class="text-break">@account.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4 class="mb-3">New account</h4>
+
+<EditForm FormName="account" Model="@Input" OnValidSubmit="@CreateAccount" OnInvalidSubmit="@ClearPassword">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="alert alert-danger" />
+
+    <div class="mb-3">
+        <label for="username" class="form-label">Username:</label>
+        <InputText id="username" class="form-control" autocomplete="off" @bind-Value="Input.Username" />
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <InputText id="email" class="form-control" autocomplete="off" @bind-Value="Input.Email" />
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">Initial password:</label>
+        <InputText id="password" class="form-control" autocomplete="new-password" @bind-Value="Input.Password" type="password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Create account</button>
+
+    @foreach (string error in _errors)
+    {
+        <div class="alert alert-danger mt-3">
+            @error
+        </div>
+    }
+</EditForm>
+
+<a href="/" class="btn btn-secondary w-100 mt-3" data-enhance-nav="false">Back</a>
+
+@code {
+    // no property initializer: a form post can bind null over it (BL0008); OnInitialized runs after form binding
+    [SupplyParameterFromForm]
+    private InputModel Input { get; set; } = default!;
+
+    private List<ApplicationUser> _accounts = [];
+
+    private List<string> _errors = [];
+
+    protected override void OnInitialized()
+    {
+        Input ??= new();
+
+        _accounts = UserManager.Users.OrderBy(x => x.Id).ToList();
+    }
+
+    private async Task CreateAccount()
+    {
+        ApplicationUser account = new()
+        {
+            UserName = Input.Username,
+            Email = Input.Email,
+        };
+
+        IdentityResult result = await UserManager.CreateAsync(account, Input.Password);
+
+        if (result.Succeeded)
+        {
+            NavigationManager.NavigateTo("/accounts");
+        }
+        else
+        {
+            _errors = result.Errors.Select(x => x.Description).ToList();
+
+            ClearPassword();
+        }
+    }
+
+    // A posted form renders its values back, and this one would put the password into the page.
+    private void ClearPassword() => Input.Password = string.Empty;
+
+    public class InputModel
+    {
+        [Required]
+        public string Username { get; set; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
+    }
+}

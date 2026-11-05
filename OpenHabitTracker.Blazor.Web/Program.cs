@@ -102,6 +102,13 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+// Only AccountsPolicy challenges the cookie scheme: everything else gets the JWT 401 below.
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login";
+    options.AccessDeniedPath = "/";
+});
+
 // The default of 30 minutes keeps a deleted account's cookie working, and its page load ends on the error screen.
 builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromMinutes(1));
 
@@ -147,6 +154,13 @@ builder.Services.AddAuthorization(options =>
     // Only the administrator can open the API description and the Scalar UI.
     options.AddPolicy("OpenApiPolicy", policy =>
     {
+        policy.RequireRole(RoleNames.Administrator);
+    });
+
+    // The scheme is here because a component's [Authorize] may not name one. Without it the challenge is the JWT 401.
+    options.AddPolicy("AccountsPolicy", policy =>
+    {
+        policy.AddAuthenticationSchemes(IdentityConstants.ApplicationScheme);
         policy.RequireRole(RoleNames.Administrator);
     });
 });
@@ -251,9 +265,9 @@ app.UseWatchDog(opt => // https://localhost:7042/watchdog
     opt.WatchPagePassword = appSettings.Password;
 
     // WatchDog stores request and response bodies as plain text, so nothing that carries a password or a
-    // token may reach it: the login form, the auth API and the account endpoints.
+    // token may reach it: the login form, the account pages, the auth API and the account endpoints.
     opt.UseRegexForBlacklisting = true;
-    opt.Blacklist = @"(?i)^/?(login|api/auth(/|$)|api/dataaccess/users?(/|$))";
+    opt.Blacklist = @"(?i)^/?(login|accounts?(/|$)|api/auth(/|$)|api/dataaccess/users?(/|$))";
 });
 
 // API routes (typically under /api/*) should be handled first
