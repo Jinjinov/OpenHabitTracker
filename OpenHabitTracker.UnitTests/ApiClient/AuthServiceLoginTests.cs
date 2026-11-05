@@ -211,6 +211,35 @@ public class AuthServiceLoginTests
     }
 
     [Test]
+    public void CanRefreshTokenLogin_StoredTokenAndRememberMeOnLocal_IsTrue()
+    {
+        _clientState.Settings.RememberMe = true;
+        _clientState.Settings.RefreshToken = "stored";
+
+        Assert.That(_sut.CanRefreshTokenLogin, Is.True);
+    }
+
+    [Test]
+    public void CanRefreshTokenLogin_NoStoredToken_IsFalse()
+    {
+        _clientState.Settings.RememberMe = true;
+        _clientState.Settings.RefreshToken = "";
+
+        Assert.That(_sut.CanRefreshTokenLogin, Is.False);
+    }
+
+    [Test]
+    public async Task CanRefreshTokenLogin_AfterLogin_IsFalse()
+    {
+        _clientState.Settings.RememberMe = true;
+        _clientState.Settings.RefreshToken = "stored";
+
+        await _sut.RefreshTokenLogin("https://example.com", "stored");
+
+        Assert.That(_sut.CanRefreshTokenLogin, Is.False);
+    }
+
+    [Test]
     public async Task SignedOut_FromRemote_FallsBackToLocalDataWithTheMessage()
     {
         await _sut.CredentialsLogin("https://example.com", "a", "password");

@@ -92,9 +92,11 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         Login = string.IsNullOrEmpty(email) ? "" : $"{_loc["User"]}: {email}";
     }
 
+    public bool CanRefreshTokenLogin => _clientState.DataLocation == DataLocation.Local && _clientState.Settings.RememberMe && !string.IsNullOrEmpty(_clientState.Settings.RefreshToken);
+
     public async Task<bool> TryRefreshTokenLogin()
     {
-        if (_clientState.DataLocation == DataLocation.Local && _clientState.Settings.RememberMe && !string.IsNullOrEmpty(_clientState.Settings.RefreshToken))
+        if (CanRefreshTokenLogin)
         {
             return await RefreshTokenLogin(_clientState.Settings.BaseUrl, _clientState.Settings.RefreshToken);
         }

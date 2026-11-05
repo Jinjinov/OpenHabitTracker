@@ -8,6 +8,8 @@ public interface IAuthFragment
 
     bool IsSignedOut { get; }
 
+    bool CanRefreshTokenLogin { get; }
+
     Task<bool> TryRefreshTokenLogin();
 
     Task SignedOut();

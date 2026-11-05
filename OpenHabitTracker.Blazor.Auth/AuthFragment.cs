@@ -9,6 +9,8 @@ public class AuthFragment(IAuthService authService) : IAuthFragment
 
     public bool IsSignedOut => authService.IsSignedOut;
 
+    public bool CanRefreshTokenLogin => authService.CanRefreshTokenLogin;
+
     public Task<bool> TryRefreshTokenLogin() => authService.TryRefreshTokenLogin();
 
     public Task SignedOut() => authService.SignedOut();

@@ -8,6 +8,8 @@ public class AuthFragment : IAuthFragment
 
     public bool IsSignedOut => false;
 
+    public bool CanRefreshTokenLogin => false;
+
     public Task<bool> TryRefreshTokenLogin() => Task.FromResult(false);
 
     public Task SignedOut() => Task.CompletedTask;

@@ -266,6 +266,11 @@
             RemoteDataSync.StartPolling();
         }
 
+        if (AuthFragment.CanRefreshTokenLogin)
+        {
+            RemoteDataSync.StartLoginRetry(RetryLogin);
+        }
+
         ClientState.SetCulture();
 
         _contentDeleted = EventCallback.Factory.Create(this, OnContentDeleted);
@@ -287,6 +292,28 @@
         await NotificationScheduler.Rebuild();
 
         Logger.LogInformation("MainLayout.OnInitializedAsync end");
+    }
+
+    // Stops at a login or a rejected token, and when a manual login or log out made the retry pointless.
+    private async Task<bool> RetryLogin()
+    {
+        if (!AuthFragment.CanRefreshTokenLogin)
+            return true;
+
+        bool loggedIn = await AuthFragment.TryRefreshTokenLogin();
+
+        if (AuthFragment.IsSignedOut)
+            SelectComponent<Data>();
+
+        if (loggedIn || AuthFragment.IsSignedOut)
+        {
+            ClientState.SetCulture();
+            await InvokeAsync(StateHasChanged);
+
+            return true;
+        }
+
+        return false;
     }
 
     // The lists flip to the device's own data, so the reason has to be on screen.

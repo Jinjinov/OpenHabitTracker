@@ -8,6 +8,8 @@ public interface IAuthService
 
     bool IsSignedOut { get; }
 
+    bool CanRefreshTokenLogin { get; }
+
     Task<bool> CredentialsLogin(string address, string username, string password);
 
     Task<bool> RefreshTokenLogin(string address, string refreshToken);

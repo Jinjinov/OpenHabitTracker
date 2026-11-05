@@ -18,6 +18,9 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
     private Func<Task>? _signedOut;
     private bool _signingOut;
 
+    private Task? _loginRetryTask;
+    private CancellationTokenSource? _loginRetryCts;
+
     public TimeSpan PollInterval { get; init; } = TimeSpan.FromSeconds(10);
 
     // True once a tick has failed, false again after one succeeds. The nav icon renders from it.
@@ -26,6 +29,52 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         await StopPolling();
+
+        if (_loginRetryTask is null || _loginRetryCts is null)
+            return;
+
+        _loginRetryCts.Cancel();
+        await _loginRetryTask;
+
+        _loginRetryCts.Dispose();
+
+        _loginRetryCts = null;
+        _loginRetryTask = null;
+    }
+
+    // For an app that started with no connection. The attempt returns true when there is nothing left to retry.
+    public void StartLoginRetry(Func<Task<bool>> attempt)
+    {
+        if (_loginRetryTask is not null && !_loginRetryTask.IsCompleted)
+            return;
+
+        _loginRetryCts = new CancellationTokenSource();
+        _loginRetryTask = RetryLogin(attempt, _loginRetryCts.Token);
+    }
+
+    private async Task RetryLogin(Func<Task<bool>> attempt, CancellationToken cancellationToken)
+    {
+        using PeriodicTimer timer = new(PollInterval);
+
+        try
+        {
+            while (await timer.WaitForNextTickAsync(cancellationToken))
+            {
+                try
+                {
+                    if (await attempt())
+                        return;
+                }
+                catch (Exception) when (!cancellationToken.IsCancellationRequested)
+                {
+                    // Still no working connection, so the next tick tries again.
+                }
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Task was canceled, clean up if necessary
+        }
     }
 
     public void SetRefreshAction(Action refresh)

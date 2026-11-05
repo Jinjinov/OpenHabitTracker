@@ -118,6 +118,100 @@ public class RemoteDataSyncTests
     }
 
     [Test]
+    public async Task StartLoginRetry_KeepsTryingUntilTheAttemptSaysStop()
+    {
+        int attempts = 0;
+        TaskCompletionSource finished = new();
+
+        _sut.StartLoginRetry(() =>
+        {
+            attempts++;
+
+            if (attempts == 3)
+                finished.SetResult();
+
+            return Task.FromResult(attempts == 3);
+        });
+
+        await finished.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        await Task.Delay(100);
+
+        Assert.That(attempts, Is.EqualTo(3));
+    }
+
+    [Test]
+    public async Task StartLoginRetry_AttemptThrows_TriesAgain()
+    {
+        int attempts = 0;
+        TaskCompletionSource finished = new();
+
+        _sut.StartLoginRetry(() =>
+        {
+            attempts++;
+
+            if (attempts == 1)
+                throw new HttpRequestException("no route");
+
+            finished.TrySetResult();
+
+            return Task.FromResult(true);
+        });
+
+        await finished.Task.WaitAsync(TimeSpan.FromSeconds(5));
+
+        Assert.That(attempts, Is.EqualTo(2));
+    }
+
+    [Test]
+    public async Task StartLoginRetry_AlreadyRunning_DoesNotStartASecondLoop()
+    {
+        int first = 0, second = 0;
+        TaskCompletionSource started = new();
+
+        _sut.StartLoginRetry(() =>
+        {
+            first++;
+            started.TrySetResult();
+            return Task.FromResult(false);
+        });
+
+        _sut.StartLoginRetry(() =>
+        {
+            second++;
+            return Task.FromResult(true);
+        });
+
+        await started.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        await Task.Delay(100);
+
+        Assert.That(second, Is.Zero);
+    }
+
+    [Test]
+    public async Task Dispose_WhileRetrying_StopsTheLoop()
+    {
+        int attempts = 0;
+        TaskCompletionSource started = new();
+
+        _sut.StartLoginRetry(() =>
+        {
+            attempts++;
+            started.TrySetResult();
+            return Task.FromResult(false);
+        });
+
+        await started.Task.WaitAsync(TimeSpan.FromSeconds(5));
+
+        await _sut.DisposeAsync();
+
+        int stoppedAt = attempts;
+
+        await Task.Delay(100);
+
+        Assert.That(attempts, Is.EqualTo(stoppedAt));
+    }
+
+    [Test]
     public async Task ReportSignedOut_TwoCallersAtOnce_RunsTheActionOnce()
     {
         int calls = 0;
