@@ -133,18 +133,8 @@ public class ClientState
 
         DataAccess = _dataAccessByLocation[DataLocation];
 
-        // Every login can be a different account.
-        if (DataLocation == DataLocation.Remote)
-        {
-            User = new();
-            await LoadUsers();
-
-            Settings = new();
-            if (await LoadSettings() && _onNewAccount is not null)
-                await _onNewAccount();
-        }
-
-        await RefreshState();
+        if (await RefreshState(reloadUser: DataLocation == DataLocation.Remote) && _onNewAccount is not null)
+            await _onNewAccount();
     }
 
     public async Task LoadUsers()
@@ -339,7 +329,7 @@ public class ClientState
         await RefreshState();
     }
 
-    public async Task RefreshState()
+    public async Task<bool> RefreshState(bool reloadUser = false)
     {
         SettingsModel settings = Settings;
         Dictionary<long, HabitModel>? habits = Habits;
@@ -353,13 +343,10 @@ public class ClientState
         List<TaskModel>? trashedTasks = TrashedTasks;
 
         IsRefreshing = true;
+        bool loadWelcomeNote = false;
 
         try
         {
-            Settings = new();
-
-            await LoadSettings();
-
             Habits = null;
             Notes = null;
             Tasks = null;
@@ -369,6 +356,16 @@ public class ClientState
             TrashedHabits = null;
             TrashedNotes = null;
             TrashedTasks = null;
+
+            if (reloadUser)
+            {
+                User = new();
+                await LoadUsers();
+            }
+
+            Settings = new();
+
+            loadWelcomeNote = await LoadSettings();
 
             await LoadContent();
         }
@@ -395,6 +392,8 @@ public class ClientState
         }
 
         await DataReplaced();
+
+        return loadWelcomeNote;
     }
 
     public async Task<UserImportExportData> GetUserData()

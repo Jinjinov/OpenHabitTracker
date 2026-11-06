@@ -172,6 +172,48 @@ public class AuthServiceLoginTests
     }
 
     [Test]
+    public async Task CredentialsLogin_LoadsTheRemoteSettingsOnce()
+    {
+        await _sut.CredentialsLogin("https://example.com", "a", "password");
+
+        await _remoteDataAccess.Received(1).GetSettings();
+    }
+
+    [Test]
+    public async Task CredentialsLogin_PageLoadsDuringTheLogin_KeepsItsDataAndLoadsTheRest()
+    {
+        _remoteDataAccess.GetUsers().Returns(_ => LoadNotesThenReturnUsers());
+
+        await _sut.CredentialsLogin("https://example.com", "a", "password");
+
+        await _remoteDataAccess.Received(1).GetCategories();
+        await _remoteDataAccess.Received(1).GetNotes();
+        await _remoteDataAccess.Received(1).GetTimes();
+        await _remoteDataAccess.Received(1).GetHabits();
+        await _remoteDataAccess.Received(1).GetTasks();
+    }
+
+    private async Task<IReadOnlyList<UserEntity>> LoadNotesThenReturnUsers()
+    {
+        await _clientState.LoadNotes();
+
+        return [new UserEntity { Id = 1 }];
+    }
+
+    [Test]
+    public async Task CredentialsLogin_SecondLoginIsAnotherAccount_ReplacesTheContent()
+    {
+        await _sut.CredentialsLogin("https://example.com", "a", "password");
+
+        _remoteDataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 2 }]));
+
+        await _sut.Logout();
+        await _sut.CredentialsLogin("https://example.com", "b", "password");
+
+        Assert.That(_clientState.Categories!.Keys, Is.EquivalentTo(new long[] { 2 }));
+    }
+
+    [Test]
     public async Task RefreshTokenLogin_ServerRejectsTheToken_BlanksItAndShowsSignedOut()
     {
         _clientState.Settings.RefreshToken = "revoked";
