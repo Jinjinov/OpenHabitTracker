@@ -2,7 +2,7 @@ using YamlDotNet.Serialization;
 
 namespace OpenHabitTracker.App;
 
-// Desktop-only, machine-local window geometry, persisted next to the db as Window.yaml.
+// Machine-local window geometry, persisted next to the db as Window.yaml.
 // Each host reads/writes in its own native units (DIPs for WPF/MAUI, pixels for Photino/WinForms).
 public class WindowSettings
 {

@@ -75,7 +75,7 @@ public partial class App : Application
 
     private static void SaveWindowSettings(Window window, string path)
     {
-        // Geometry is NaN until the window is laid out (and on mobile, where it is not applicable).
+        // Geometry is NaN until the window is laid out.
         if (double.IsNaN(window.Width) || double.IsNaN(window.Height) || double.IsNaN(window.X) || double.IsNaN(window.Y))
             return;
 
