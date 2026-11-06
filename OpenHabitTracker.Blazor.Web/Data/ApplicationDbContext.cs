@@ -73,6 +73,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         base.OnModelCreating(modelBuilder);
     }
 
+    // A device signed in under the old password would otherwise keep renewing its token.
+    public async Task RemoveRefreshTokens(string? userName)
+    {
+        await RefreshTokens.Where(x => x.Username == userName).ExecuteDeleteAsync();
+    }
+
     // Rows from before accounts existed are at zero. Nothing else can leave a row there, because a write
     // without an account throws, so this finds nothing on every start after the first.
     public async Task AssignUnownedRows(long userId)

@@ -199,6 +199,18 @@ public class AccountPageTests
     }
 
     [Test]
+    public void Render_Administrator_HasNoPasswordForm()
+    {
+        IRenderedComponent<Account> cut = RenderPage(RoleNames.Administrator);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.FindAll("#current-password"), Is.Empty);
+            Assert.That(cut.FindAll("form"), Has.Count.EqualTo(1), "only the log out form");
+        });
+    }
+
+    [Test]
     public void Render_NotAdministrator_DoesNotLinkToAccounts()
     {
         Assert.That(RenderPage().FindAll("a[href='/accounts']"), Is.Empty);

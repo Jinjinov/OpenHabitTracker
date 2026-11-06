@@ -24,49 +24,51 @@
 
 <p class="text-break">@_user?.UserName</p>
 
-<h4 class="mb-3">Change password</h4>
-
-<EditForm FormName="password" Model="@Input" OnValidSubmit="@ChangePassword" OnInvalidSubmit="@ClearPasswords">
-    <DataAnnotationsValidator />
-    <ValidationSummary class="alert alert-danger" />
-
-    <div class="mb-3">
-        <label for="current-password" class="form-label">Current password:</label>
-        <InputText id="current-password" class="form-control" autocomplete="current-password" @bind-Value="Input.CurrentPassword" type="password" />
-    </div>
-
-    <div class="mb-3">
-        <label for="new-password" class="form-label">New password:</label>
-        <InputText id="new-password" class="form-control" autocomplete="new-password" @bind-Value="Input.NewPassword" type="password" />
-    </div>
-
-    <div class="mb-3">
-        <label for="confirm-password" class="form-label">Repeat new password:</label>
-        <InputText id="confirm-password" class="form-control" autocomplete="new-password" @bind-Value="Input.ConfirmPassword" type="password" />
-    </div>
-
-    <button type="submit" class="btn btn-primary w-100">Change password</button>
-
-    @foreach (string error in _errors)
-    {
-        <div class="alert alert-danger mt-3">
-            @error
-        </div>
-    }
-
-    @if (_passwordChanged)
-    {
-        <div class="alert alert-success mt-3">
-            Password changed. Your devices have to log in again.
-        </div>
-    }
-</EditForm>
-
-<hr />
-
-@if (HttpContext.User.IsInRole(RoleNames.Administrator))
+@if (_isAdministrator)
 {
     <a href="/accounts" class="btn btn-secondary w-100 mb-3" data-enhance-nav="false">Accounts</a>
+}
+else
+{
+    <h4 class="mb-3">Change password</h4>
+
+    <EditForm FormName="password" Model="@Input" OnValidSubmit="@ChangePassword" OnInvalidSubmit="@ClearPasswords">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="alert alert-danger" />
+
+        <div class="mb-3">
+            <label for="current-password" class="form-label">Current password:</label>
+            <InputText id="current-password" class="form-control" autocomplete="current-password" @bind-Value="Input.CurrentPassword" type="password" />
+        </div>
+
+        <div class="mb-3">
+            <label for="new-password" class="form-label">New password:</label>
+            <InputText id="new-password" class="form-control" autocomplete="new-password" @bind-Value="Input.NewPassword" type="password" />
+        </div>
+
+        <div class="mb-3">
+            <label for="confirm-password" class="form-label">Repeat new password:</label>
+            <InputText id="confirm-password" class="form-control" autocomplete="new-password" @bind-Value="Input.ConfirmPassword" type="password" />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Change password</button>
+
+        @foreach (string error in _errors)
+        {
+            <div class="alert alert-danger mt-3">
+                @error
+            </div>
+        }
+
+        @if (_passwordChanged)
+        {
+            <div class="alert alert-success mt-3">
+                Password changed. Your devices have to log in again.
+            </div>
+        }
+    </EditForm>
+
+    <hr />
 }
 
 <form method="post" @formname="logout" @onsubmit="LogOut" data-enhance="false">
@@ -90,6 +92,8 @@
 
     private bool _passwordChanged;
 
+    private bool _isAdministrator => HttpContext.User.IsInRole(RoleNames.Administrator);
+
     protected override async Task OnInitializedAsync()
     {
         Input ??= new();
@@ -106,7 +110,9 @@
 
         if (result.Succeeded)
         {
-            await RemoveRefreshTokens(_user);
+            using ApplicationDbContext context = DbContextFactory.CreateDbContext();
+
+            await context.RemoveRefreshTokens(_user.UserName);
 
             // The new security stamp would otherwise end this browser's session too.
             await SignInManager.RefreshSignInAsync(_user);
@@ -119,14 +125,6 @@
         }
 
         ClearPasswords();
-    }
-
-    // A device signed in under the old password would otherwise keep renewing its token.
-    private async Task RemoveRefreshTokens(ApplicationUser user)
-    {
-        using ApplicationDbContext context = DbContextFactory.CreateDbContext();
-
-        await context.RefreshTokens.Where(x => x.Username == user.UserName).ExecuteDeleteAsync();
     }
 
     // A posted form renders its values back, and this one would put the passwords into the page.

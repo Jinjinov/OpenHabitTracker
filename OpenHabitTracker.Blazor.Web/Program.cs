@@ -350,6 +350,22 @@ static async Task CreateDefaultUserAsync(WebApplication app)
             PrintErrors(result);
         }
     }
+    // The administrator has no password form, so this is how their password changes.
+    else if (!await userManager.CheckPasswordAsync(defaultUser, appSettings.Password))
+    {
+        string token = await userManager.GeneratePasswordResetTokenAsync(defaultUser);
+
+        IdentityResult result = await userManager.ResetPasswordAsync(defaultUser, token, appSettings.Password);
+
+        if (result.Succeeded)
+        {
+            await context.RemoveRefreshTokens(defaultUser.UserName);
+        }
+        else
+        {
+            PrintErrors(result);
+        }
+    }
 
     // On every start rather than only when the account is created, so an install from before roles
     // existed gives its only account the role on the first start after the update.

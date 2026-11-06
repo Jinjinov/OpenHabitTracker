@@ -72,9 +72,9 @@ OpenHabitTracker Blazor Server:
 
 <br>
 
-## This Docker image contains OpenHabitTracker Blazor Server app for one user.
+## This Docker image contains OpenHabitTracker Blazor Server app for one person or a household.
 
-Set your username and password with environment variables:
+Set the administrator's username and password with environment variables:
 
 .env
 ```
@@ -123,6 +123,30 @@ After you login at http://localhost:5050/login with the account from `.env` you 
 - OpenAPI json: http://localhost:5050/openapi/v1.json
 - OpenAPI UI: http://localhost:5050/scalar/v1
 
+## Accounts for a household
+
+The account from `.env` is the administrator, and its password is the one in `.env`.
+
+### Add a person
+
+1. Log in at http://localhost:5050/login with the account from `.env`
+2. Click the person icon in the top bar, then **Accounts**
+3. Enter a username, an email and an initial password, then click **Create account**
+
+### Change a password
+
+Every account (except the administrator's) changes its password in a browser, on any device, at http://localhost:5050/account, which the person icon opens.
+
+The administrator changes `APPSETTINGS_PASSWORD` in `.env` and runs `docker-compose up -d`.
+
+### Reset a forgotten password
+
+1. Log in at http://localhost:5050/login with the account from `.env`
+2. Click the person icon in the top bar, then **Accounts**
+3. Under **Reset password**, choose the account, enter a new password, then click **Reset password**
+
+Five wrong passwords lock an account for five minutes, and a reset unlocks it.
+
 ## Sync desktop or mobile app with Docker
 
 ### Run the Docker container
@@ -168,6 +192,6 @@ Choose the platform where you want to host the OpenHabitTracker server:
 2. Open the menu and click **Data**
 3. Scroll down to **Online sync**
 4. Enter the **Address**: `http://` + the IP from your scenario above + `:5050` or whichever port you chose (omit the port entirely if you chose `80`)
-5. Enter your **Username** and **Password** from `.env`
+5. Enter your **Username** and **Password**
 6. Check **Remember me** to stay logged in across app restarts
 7. Click **Log in**

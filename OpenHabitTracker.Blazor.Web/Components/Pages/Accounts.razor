@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
 @using OpenHabitTracker.Blazor.Web.Data
 
 @attribute [Authorize(Policy = "AccountsPolicy")]
@@ -14,6 +15,7 @@
 
 @inject NavigationManager NavigationManager
 @inject UserManager<ApplicationUser> UserManager
+@inject IDbContextFactory<ApplicationDbContext> DbContextFactory
 
 <PageTitle>Accounts</PageTitle>
 
@@ -68,22 +70,78 @@
     }
 </EditForm>
 
+@if (_resettableAccounts.Count > 0)
+{
+    <h4 class="mb-3 mt-4">Reset password</h4>
+
+    <EditForm FormName="reset" Model="@Reset" OnValidSubmit="@ResetPassword" OnInvalidSubmit="@ClearResetPassword">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="alert alert-danger" />
+
+        <div class="mb-3">
+            <label for="reset-account" class="form-label">Account:</label>
+            <InputSelect id="reset-account" class="form-select" @bind-Value="Reset.Username">
+                <option value=""></option>
+                @foreach (ApplicationUser account in _resettableAccounts)
+                {
+                    <option value="@account.UserName">@account.UserName</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="mb-3">
+            <label for="reset-password" class="form-label">New password:</label>
+            <InputText id="reset-password" class="form-control" autocomplete="new-password" @bind-Value="Reset.Password" type="password" />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Reset password</button>
+
+        @foreach (string error in _resetErrors)
+        {
+            <div class="alert alert-danger mt-3">
+                @error
+            </div>
+        }
+
+        @if (_passwordResetFor is not null)
+        {
+            <div class="alert alert-success mt-3">
+                Password reset for @_passwordResetFor. Their devices have to log in again.
+            </div>
+        }
+    </EditForm>
+}
+
 <a href="/" class="btn btn-secondary w-100 mt-3" data-enhance-nav="false">Back</a>
 
 @code {
     // no property initializer: a form post can bind null over it (BL0008); OnInitialized runs after form binding
-    [SupplyParameterFromForm]
+    [SupplyParameterFromForm(FormName = "account")]
     private InputModel Input { get; set; } = default!;
+
+    [SupplyParameterFromForm(FormName = "reset")]
+    private ResetModel Reset { get; set; } = default!;
 
     private List<ApplicationUser> _accounts = [];
 
+    private List<ApplicationUser> _resettableAccounts = [];
+
     private List<string> _errors = [];
 
-    protected override void OnInitialized()
+    private List<string> _resetErrors = [];
+
+    private string? _passwordResetFor;
+
+    protected override async Task OnInitializedAsync()
     {
         Input ??= new();
+        Reset ??= new();
 
         _accounts = UserManager.Users.OrderBy(x => x.Id).ToList();
+
+        IList<ApplicationUser> administrators = await UserManager.GetUsersInRoleAsync(RoleNames.Administrator);
+
+        _resettableAccounts = _accounts.Where(account => administrators.All(administrator => administrator.Id != account.Id)).ToList();
     }
 
     private async Task CreateAccount()
@@ -108,8 +166,58 @@
         }
     }
 
+    private async Task ResetPassword()
+    {
+        // Checked against the list, because a hand-made post can name an account the page does not offer.
+        ApplicationUser? account = _resettableAccounts.FirstOrDefault(x => x.UserName == Reset.Username);
+
+        if (account is null)
+        {
+            _resetErrors = ["This account cannot be reset."];
+
+            ClearResetPassword();
+
+            return;
+        }
+
+        string token = await UserManager.GeneratePasswordResetTokenAsync(account);
+
+        IdentityResult result = await UserManager.ResetPasswordAsync(account, token, Reset.Password);
+
+        if (result.Succeeded)
+        {
+            await UserManager.SetLockoutEndDateAsync(account, null);
+            await UserManager.ResetAccessFailedCountAsync(account);
+
+            using ApplicationDbContext context = DbContextFactory.CreateDbContext();
+
+            await context.RemoveRefreshTokens(account.UserName);
+
+            _passwordResetFor = account.UserName;
+
+            Reset.Username = string.Empty;
+        }
+        else
+        {
+            _resetErrors = result.Errors.Select(x => x.Description).ToList();
+        }
+
+        ClearResetPassword();
+    }
+
     // A posted form renders its values back, and this one would put the password into the page.
     private void ClearPassword() => Input.Password = string.Empty;
+
+    private void ClearResetPassword() => Reset.Password = string.Empty;
+
+    public class ResetModel
+    {
+        [Required]
+        public string Username { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
+    }
 
     public class InputModel
     {
