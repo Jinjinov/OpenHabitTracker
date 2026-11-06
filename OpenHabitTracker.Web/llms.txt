@@ -84,7 +84,7 @@ Import and export cover JSON, YAML, TSV and Markdown, plus import from a Google 
 ## Source and self-hosting
 
 - [GitHub repository](https://github.com/Jinjinov/OpenHabitTracker): GPL-3.0, written in C# and Blazor, one UI codebase running in six .NET hosts
-- [Docker image](https://hub.docker.com/r/jinjinov/openhabittracker): single-user Blazor Server instance, amd64 and arm64, with JWT auth and a REST API
+- [Docker image](https://hub.docker.com/r/jinjinov/openhabittracker): multi-user Blazor Server instance, amd64 and arm64, with JWT auth and a REST API
 - [GitHub Container Registry](https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker): the same image on ghcr.io
 
 ## Install

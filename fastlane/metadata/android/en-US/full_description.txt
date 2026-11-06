@@ -19,7 +19,7 @@ YOUR DATA STAYS YOURS
 • All data is stored locally on your device
 • Export and import: Markdown, JSON, YAML, TSV
 • Import your notes from Google Keep
-• Optional sync: host the Docker image on your own server and every app, desktop or mobile, can log in and sync
+• Optional sync for multiple users: host the Docker image on your own server and every app, desktop or mobile, can log in and sync
 
 MADE TO FIT YOU
 

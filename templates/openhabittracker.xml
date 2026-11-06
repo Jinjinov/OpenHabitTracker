@@ -11,7 +11,7 @@
   <!-- The port in the WebUI entry always refers to the container port -->
   <WebUI>http://[IP]:[PORT:8080]</WebUI>
 
-  <Overview>Take notes, plan tasks and track habits - free, ad-free, open source, no account, all data on your server. This container is the self-hosted sync server: native apps for Windows, Linux, Android, iOS and macOS log into it and sync. Single user; log in at /login with the credentials you set below. Includes a REST API with OpenAPI UI at /scalar/v1. Habits show how overdue you are instead of guilt-driven streaks.</Overview>
+  <Overview>Take notes, plan tasks and track habits - free, ad-free, open source, no account, all data on your server. This container is the self-hosted sync server: native apps for Windows, Linux, Android, iOS and macOS log into it and sync. Multiple users; log in at /login with the administrator credentials you set below. Includes a REST API with OpenAPI UI at /scalar/v1. Habits show how overdue you are instead of guilt-driven streaks.</Overview>
 
   <Support>https://github.com/Jinjinov/OpenHabitTracker/issues</Support>
   <Project>https://openhabittracker.net</Project>
@@ -33,9 +33,9 @@
 
   <Config Name="WebUI Port" Target="8080" Default="5050" Mode="tcp" Description="Host port for the web interface." Type="Port" Display="always" Required="true" Mask="false"/>
   <Config Name="Appdata" Target="/app/.OpenHabitTracker" Default="/mnt/user/appdata/openhabittracker" Mode="rw" Description="SQLite data: notes, tasks, habits, settings." Type="Path" Display="always" Required="true" Mask="false"/>
-  <Config Name="Username" Target="AppSettings__UserName" Default="admin" Description="Login username for the single user." Type="Variable" Display="always" Required="true" Mask="false"/>
-  <Config Name="Email" Target="AppSettings__Email" Default="admin@example.com" Description="Login email for the single user." Type="Variable" Display="always" Required="true" Mask="false"/>
-  <Config Name="Password" Target="AppSettings__Password" Default="" Description="Login password for the single user." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Username" Target="AppSettings__UserName" Default="admin" Description="Login username for the administrator." Type="Variable" Display="always" Required="true" Mask="false"/>
+  <Config Name="Email" Target="AppSettings__Email" Default="admin@example.com" Description="Login email for the administrator." Type="Variable" Display="always" Required="true" Mask="false"/>
+  <Config Name="Password" Target="AppSettings__Password" Default="" Description="Login password for the administrator." Type="Variable" Display="always" Required="true" Mask="true"/>
   <Config Name="JWT Secret" Target="AppSettings__JwtSecret" Default="" Description="Secret used to sign login tokens. Generate one in the Unraid terminal with: openssl rand -base64 32" Type="Variable" Display="always" Required="true" Mask="true"/>
   <Config Name="Timezone" Target="TZ" Default="Etc/UTC" Description="tz database name, e.g. Europe/Berlin - sets the day boundary for habit tracking." Type="Variable" Display="always" Required="false" Mask="false"/>
 </Container>

@@ -1,5 +1,6 @@
 # 1.2.6
 
+- Added multiple user accounts with separate data on the self-hosted server
 - Added date format and time format settings
 - Fixed dates and times ignoring the device's regional format
 - Fixed a crash in the Linux version when opening the web inspector

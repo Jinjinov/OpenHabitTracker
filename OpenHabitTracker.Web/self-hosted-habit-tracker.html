@@ -7,21 +7,21 @@
 
     <meta name="theme-color" content="#FFFFFF">
     <meta name="application-name" content="OpenHabitTracker">
-    <meta name="description" content="Self-hosted habit tracker you run in Docker, with native Windows, Linux, macOS, iOS and Android apps that sync to it. Compared honestly with Beaver Habits, HabitTrove and HabitSync.">
+    <meta name="description" content="Self-hosted habit tracker for multiple users, with native Windows, Linux, macOS, iOS and Android apps that sync to it. Compared honestly with Beaver Habits, HabitTrove and HabitSync.">
 
     <link rel="canonical" href="https://openhabittracker.net/self-hosted-habit-tracker.html">
 
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="OpenHabitTracker" />
     <meta property="og:title" content="Self-hosted habit tracker with native apps" />
-    <meta property="og:description" content="Self-hosted habit tracker you run in Docker, with native Windows, Linux, macOS, iOS and Android apps that sync to it. Compared honestly with Beaver Habits, HabitTrove and HabitSync." />
+    <meta property="og:description" content="Self-hosted habit tracker for multiple users, with native Windows, Linux, macOS, iOS and Android apps that sync to it. Compared honestly with Beaver Habits, HabitTrove and HabitSync." />
     <meta property="og:image" content="https://openhabittracker.net/icons/thumbnail.png" />
     <meta property="og:url" content="https://openhabittracker.net/self-hosted-habit-tracker.html" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@dzindzinovic">
     <meta name="twitter:title" content="Self-hosted habit tracker with native apps">
-    <meta name="twitter:description" content="Self-hosted habit tracker you run in Docker, with native Windows, Linux, macOS, iOS and Android apps that sync to it. Compared honestly with Beaver Habits, HabitTrove and HabitSync.">
+    <meta name="twitter:description" content="Self-hosted habit tracker for multiple users, with native Windows, Linux, macOS, iOS and Android apps that sync to it. Compared honestly with Beaver Habits, HabitTrove and HabitSync.">
     <meta name="twitter:image" content="https://openhabittracker.net/icons/thumbnail.png">
 
     <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png" />
@@ -203,6 +203,7 @@
           <ul>
             <li>Data is a single SQLite file in the mounted volume - back it up by copying it</li>
             <li>Log in at <code>/login</code>, read the logs at <code>/watchdog</code></li>
+            <li>Add users at <code>/accounts</code></li>
             <li>A REST API with an OpenAPI document and a Scalar UI sits at <code>/scalar/v1</code>, behind the same login</li>
             <li>Set <code>TZ</code> to your own timezone - it decides when a day ends, which is not a detail for a habit tracker</li>
             <li>Install the app on each device, point it at your server, log in, and it syncs</li>
@@ -238,7 +239,7 @@
                 <tr><th scope="row">Notifications</th><td>via API integrations</td><td>&#10060;</td><td>&#9989; Apprise, 80+ services</td><td>&#9989; daily summary and task reminders, on the device</td></tr>
                 <tr><th scope="row">Shared habits, challenges</th><td>&#10060;</td><td>&#10060;</td><td>&#9989; friends and leaderboards</td><td>&#10060;</td></tr>
                 <tr><th scope="row">Gamification</th><td>&#10060;</td><td>&#9989; coins and rewards</td><td>&#9989; achievements</td><td>&#10060;</td></tr>
-                <tr><th scope="row">Multiple users</th><td>&#9989;</td><td>not documented</td><td>&#9989; with approval or SSO</td><td>&#10060; single user</td></tr>
+                <tr><th scope="row">Multiple users</th><td>&#9989;</td><td>not documented</td><td>&#9989; with approval or SSO</td><td>&#9989;</td></tr>
                 <tr><th scope="row">Hosted option</th><td>&#9989; beaverhabits.com</td><td>&#10060;</td><td>&#10060;</td><td>&#9989; PWA, but without sync</td></tr>
                 <tr><th scope="row">Import and export</th><td>JSON</td><td>not documented</td><td>not documented</td><td>JSON, YAML, TSV, Markdown, Google Keep</td></tr>
               </tbody>

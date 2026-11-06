@@ -19,7 +19,7 @@ DINE DATA ER DINE
 • Alle data gemmes lokalt på din enhed
 • Eksport og import: Markdown, JSON, YAML, TSV
 • Importér dine noter fra Google Keep
-• Valgfri synkronisering: host Docker-imaget på din egen server, og alle apps, desktop eller mobil, kan logge ind og synkronisere
+• Valgfri synkronisering for flere brugere: host Docker-imaget på din egen server, og alle apps, desktop eller mobil, kan logge ind og synkronisere
 
 TILPASSET DIG
 

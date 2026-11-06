@@ -19,7 +19,7 @@ VAŠE DATA JSOU VAŠE
 • Všechna data se ukládají lokálně ve vašem zařízení
 • Export a import: Markdown, JSON, YAML, TSV
 • Import poznámek z Google Keep
-• Volitelná synchronizace: provozujte Docker image na vlastním serveru a každá aplikace, desktopová i mobilní, se může přihlásit a synchronizovat
+• Volitelná synchronizace pro více uživatelů: provozujte Docker image na vlastním serveru a každá aplikace, desktopová i mobilní, se může přihlásit a synchronizovat
 
 PŘIZPŮSOBÍ SE VÁM
 

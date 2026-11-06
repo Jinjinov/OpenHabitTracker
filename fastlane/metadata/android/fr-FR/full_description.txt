@@ -19,7 +19,7 @@ VOS DONNÉES VOUS APPARTIENNENT
 • Toutes les données sont stockées localement sur votre appareil
 • Export et import : Markdown, JSON, YAML, TSV
 • Importez vos notes depuis Google Keep
-• Synchronisation optionnelle : hébergez l'image Docker sur votre propre serveur et chaque application, bureau ou mobile, peut se connecter et se synchroniser
+• Synchronisation optionnelle pour plusieurs utilisateurs : hébergez l'image Docker sur votre propre serveur et chaque application, bureau ou mobile, peut se connecter et se synchroniser
 
 À VOTRE IMAGE
 

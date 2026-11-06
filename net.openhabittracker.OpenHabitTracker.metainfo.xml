@@ -249,26 +249,26 @@
       <li xml:lang="sk">Import poznámok z Google Keep</li>
       <li xml:lang="hr">Uvezite bilješke iz Google Keepa</li>
       <li xml:lang="sr">Uvezite beleške iz Google Keepa</li>
-      <li>Optional sync: host the Docker image on your own server and every app, desktop or mobile, can log in and sync</li>
-      <li xml:lang="de">Optionale Synchronisierung: Hoste das Docker-Image auf deinem eigenen Server - jede App, ob Desktop oder Mobil, kann sich anmelden und synchronisieren</li>
-      <li xml:lang="es">Sincronización opcional: aloja la imagen Docker en tu propio servidor y cualquier aplicación, de escritorio o móvil, puede iniciar sesión y sincronizarse</li>
-      <li xml:lang="sl">Neobvezna sinhronizacija: gosti sliko Docker na svojem strežniku in vsaka aplikacija, namizna ali mobilna, se lahko prijavi in sinhronizira</li>
-      <li xml:lang="fr">Synchronisation optionnelle : hébergez l'image Docker sur votre propre serveur et chaque application, bureau ou mobile, peut se connecter et se synchroniser</li>
-      <li xml:lang="pt">Sincronização opcional: aloje a imagem Docker no seu próprio servidor e qualquer aplicação, de secretária ou móvel, pode iniciar sessão e sincronizar</li>
-      <li xml:lang="it">Sincronizzazione opzionale: ospita l'immagine Docker sul tuo server e ogni app, desktop o mobile, può accedere e sincronizzarsi</li>
-      <li xml:lang="ja">任意の同期:Dockerイメージを自分のサーバーでホストすれば、デスクトップ版もモバイル版もログインして同期できます</li>
-      <li xml:lang="zh_CN">可选同步:在自己的服务器上运行 Docker 镜像,桌面和移动端应用都能登录同步</li>
-      <li xml:lang="ko">선택적 동기화: Docker 이미지를 내 서버에 올리면 데스크톱과 모바일 앱 모두 로그인하여 동기화할 수 있습니다</li>
-      <li xml:lang="nl">Optionele synchronisatie: host de Docker-image op je eigen server en elke app, desktop of mobiel, kan inloggen en synchroniseren</li>
-      <li xml:lang="da">Valgfri synkronisering: host Docker-imaget på din egen server, og alle apps, desktop eller mobil, kan logge ind og synkronisere</li>
-      <li xml:lang="no">Valgfri synkronisering: kjør Docker-imaget på din egen server, og alle appene, desktop eller mobil, kan logge inn og synkronisere</li>
-      <li xml:lang="sv">Valfri synkronisering: kör Docker-avbilden på din egen server så kan alla appar, dator eller mobil, logga in och synkronisera</li>
-      <li xml:lang="fi">Valinnainen synkronointi: aja Docker-levykuva omalla palvelimellasi, niin jokainen sovellus, työpöytä tai mobiili, voi kirjautua ja synkronoida</li>
-      <li xml:lang="pl">Opcjonalna synchronizacja: uruchom obraz Dockera na własnym serwerze, a każda aplikacja, desktopowa czy mobilna, może się zalogować i synchronizować</li>
-      <li xml:lang="cs">Volitelná synchronizace: provozujte Docker image na vlastním serveru a každá aplikace, desktopová i mobilní, se může přihlásit a synchronizovat</li>
-      <li xml:lang="sk">Voliteľná synchronizácia: prevádzkujte Docker image na vlastnom serveri a každá aplikácia, desktopová aj mobilná, sa môže prihlásiť a synchronizovať</li>
-      <li xml:lang="hr">Neobavezna sinkronizacija: pokrenite Docker image na vlastitom poslužitelju i svaka aplikacija, stolna ili mobilna, može se prijaviti i sinkronizirati</li>
-      <li xml:lang="sr">Opciona sinhronizacija: pokrenite Docker image na sopstvenom serveru i svaka aplikacija, desktop ili mobilna, može da se prijavi i sinhronizuje</li>
+      <li>Optional sync for multiple users: host the Docker image on your own server and every app, desktop or mobile, can log in and sync</li>
+      <li xml:lang="de">Optionale Synchronisierung für mehrere Benutzer: Hoste das Docker-Image auf deinem eigenen Server - jede App, ob Desktop oder Mobil, kann sich anmelden und synchronisieren</li>
+      <li xml:lang="es">Sincronización opcional para varios usuarios: aloja la imagen Docker en tu propio servidor y cualquier aplicación, de escritorio o móvil, puede iniciar sesión y sincronizarse</li>
+      <li xml:lang="sl">Neobvezna sinhronizacija za več uporabnikov: gosti sliko Docker na svojem strežniku in vsaka aplikacija, namizna ali mobilna, se lahko prijavi in sinhronizira</li>
+      <li xml:lang="fr">Synchronisation optionnelle pour plusieurs utilisateurs : hébergez l'image Docker sur votre propre serveur et chaque application, bureau ou mobile, peut se connecter et se synchroniser</li>
+      <li xml:lang="pt">Sincronização opcional para vários utilizadores: aloje a imagem Docker no seu próprio servidor e qualquer aplicação, de secretária ou móvel, pode iniciar sessão e sincronizar</li>
+      <li xml:lang="it">Sincronizzazione opzionale per più utenti: ospita l'immagine Docker sul tuo server e ogni app, desktop o mobile, può accedere e sincronizzarsi</li>
+      <li xml:lang="ja">複数ユーザー対応の任意の同期:Dockerイメージを自分のサーバーでホストすれば、デスクトップ版もモバイル版もログインして同期できます</li>
+      <li xml:lang="zh_CN">可选的多用户同步:在自己的服务器上运行 Docker 镜像,桌面和移动端应用都能登录同步</li>
+      <li xml:lang="ko">여러 사용자를 위한 선택적 동기화: Docker 이미지를 내 서버에 올리면 데스크톱과 모바일 앱 모두 로그인하여 동기화할 수 있습니다</li>
+      <li xml:lang="nl">Optionele synchronisatie voor meerdere gebruikers: host de Docker-image op je eigen server en elke app, desktop of mobiel, kan inloggen en synchroniseren</li>
+      <li xml:lang="da">Valgfri synkronisering for flere brugere: host Docker-imaget på din egen server, og alle apps, desktop eller mobil, kan logge ind og synkronisere</li>
+      <li xml:lang="no">Valgfri synkronisering for flere brukere: kjør Docker-imaget på din egen server, og alle appene, desktop eller mobil, kan logge inn og synkronisere</li>
+      <li xml:lang="sv">Valfri synkronisering för flera användare: kör Docker-avbilden på din egen server så kan alla appar, dator eller mobil, logga in och synkronisera</li>
+      <li xml:lang="fi">Valinnainen synkronointi usealle käyttäjälle: aja Docker-levykuva omalla palvelimellasi, niin jokainen sovellus, työpöytä tai mobiili, voi kirjautua ja synkronoida</li>
+      <li xml:lang="pl">Opcjonalna synchronizacja dla wielu użytkowników: uruchom obraz Dockera na własnym serwerze, a każda aplikacja, desktopowa czy mobilna, może się zalogować i synchronizować</li>
+      <li xml:lang="cs">Volitelná synchronizace pro více uživatelů: provozujte Docker image na vlastním serveru a každá aplikace, desktopová i mobilní, se může přihlásit a synchronizovat</li>
+      <li xml:lang="sk">Voliteľná synchronizácia pre viacerých používateľov: prevádzkujte Docker image na vlastnom serveri a každá aplikácia, desktopová aj mobilná, sa môže prihlásiť a synchronizovať</li>
+      <li xml:lang="hr">Neobavezna sinkronizacija za više korisnika: pokrenite Docker image na vlastitom poslužitelju i svaka aplikacija, stolna ili mobilna, može se prijaviti i sinkronizirati</li>
+      <li xml:lang="sr">Opciona sinhronizacija za više korisnika: pokrenite Docker image na sopstvenom serveru i svaka aplikacija, desktop ili mobilna, može da se prijavi i sinhronizuje</li>
       <li>26 themes with dark and light mode</li>
       <li xml:lang="de">26 Themes mit Dunkel- und Hellmodus</li>
       <li xml:lang="es">26 temas con modo oscuro y claro</li>

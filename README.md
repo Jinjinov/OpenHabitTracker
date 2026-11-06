@@ -81,13 +81,13 @@ Android - GitHub, auto-updating with [<img src="OpenHabitTracker.Web/icons/Obtai
 Windows - winget (installs the Microsoft Store version):  
 `winget install OpenHabitTracker`
 
-## Docker image contains a Blazor Server app for one user
+## Docker image contains a Blazor Server app for one person or a household
 
 https://hub.docker.com/r/jinjinov/openhabittracker
 
 https://github.com/Jinjinov/OpenHabitTracker/pkgs/container/openhabittracker
 
-Set your username and password with environment variables:
+Set the administrator's username and password with environment variables:
 
 .env
 ```
@@ -135,6 +135,30 @@ Logs are at http://localhost:5050/watchdog and ask for the username and password
 After you login at http://localhost:5050/login with the account from `.env` you can use the same browser tab to access:
 - OpenAPI json: http://localhost:5050/openapi/v1.json
 - OpenAPI UI: http://localhost:5050/scalar/v1
+
+## Accounts for a household
+
+The account from `.env` is the administrator, and its password is the one in `.env`.
+
+### Add a person
+
+1. Log in at http://localhost:5050/login with the account from `.env`
+2. Click the person icon in the top bar, then **Accounts**
+3. Enter a username, an email and an initial password, then click **Create account**
+
+### Change a password
+
+Every account (except the administrator's) changes its password in a browser, on any device, at http://localhost:5050/account, which the person icon opens.
+
+The administrator changes `APPSETTINGS_PASSWORD` in `.env` and runs `docker-compose up -d`.
+
+### Reset a forgotten password
+
+1. Log in at http://localhost:5050/login with the account from `.env`
+2. Click the person icon in the top bar, then **Accounts**
+3. Under **Reset password**, choose the account, enter a new password, then click **Reset password**
+
+Five wrong passwords lock an account for five minutes, and a reset unlocks it.
 
 ## Sync desktop or mobile app with Docker
 

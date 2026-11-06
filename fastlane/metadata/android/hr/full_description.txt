@@ -19,7 +19,7 @@ VAŠI PODACI SU VAŠI
 • Svi podaci spremaju se lokalno na vašem uređaju
 • Izvoz i uvoz: Markdown, JSON, YAML, TSV
 • Uvezite bilješke iz Google Keepa
-• Neobavezna sinkronizacija: pokrenite Docker image na vlastitom poslužitelju i svaka aplikacija, stolna ili mobilna, može se prijaviti i sinkronizirati
+• Neobavezna sinkronizacija za više korisnika: pokrenite Docker image na vlastitom poslužitelju i svaka aplikacija, stolna ili mobilna, može se prijaviti i sinkronizirati
 
 PRILAGOĐENO VAMA
 
