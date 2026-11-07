@@ -1,4 +1,4 @@
-# 1.2.6
+# 1.2.6 - Nov 11, 2026
 
 - Added multiple user accounts with separate data on the self-hosted server
 - Added date format and time format settings
