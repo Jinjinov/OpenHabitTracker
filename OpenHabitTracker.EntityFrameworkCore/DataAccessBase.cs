@@ -237,6 +237,14 @@ public abstract class DataAccessBase
         await SaveChanges(dataContext);
     });
 
+    public async Task UpdateLoginSettings(long settingsId, string baseUrl, string username, string refreshToken) => await ExecuteWithDbContext(async dataContext =>
+    {
+        await dataContext.Settings.Where(x => x.Id == settingsId).ExecuteUpdateAsync(setters => setters
+            .SetProperty(x => x.BaseUrl, baseUrl)
+            .SetProperty(x => x.Username, username)
+            .SetProperty(x => x.RefreshToken, refreshToken));
+    });
+
     public async Task RemoveHabit(long id) => await ExecuteWithDbContext(async dataContext =>
     {
         var entity = dataContext.Habits.Find(id);

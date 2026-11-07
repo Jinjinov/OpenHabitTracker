@@ -170,6 +170,9 @@ public class DataAccess(DataAccessClient client) : IDataAccess
     public Task UpdatePriority(PriorityEntity priority) => _client.UpdatePriorityAsync(priority);
     public Task UpdateSettings(SettingsEntity settings) => _client.UpdateSettingsAsync(settings);
 
+    // The login fields belong to the device and are never sent to the server.
+    public Task UpdateLoginSettings(long settingsId, string baseUrl, string username, string refreshToken) => throw new NotSupportedException();
+
     // Remove by ID
     public Task RemoveUser(long id) => _client.RemoveUserAsync(id);
     public Task RemoveHabit(long id) => _client.RemoveHabitAsync(id);

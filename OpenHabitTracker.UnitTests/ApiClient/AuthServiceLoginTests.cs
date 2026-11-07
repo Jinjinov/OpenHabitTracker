@@ -15,6 +15,7 @@ namespace OpenHabitTracker.UnitTests.ApiClient;
 public class AuthServiceLoginTests
 {
     private AuthClient _authClient = null!;
+    private IDataAccess _localDataAccess = null!;
     private IDataAccess _remoteDataAccess = null!;
     private ClientState _clientState = null!;
     private RemoteDataSync _remoteDataSync = null!;
@@ -47,9 +48,10 @@ public class AuthServiceLoginTests
 
         MarkdownToHtml markdownToHtml = new(new MarkdownPipelineBuilder().Build());
 
+        _localDataAccess = CreateDataAccess(DataLocation.Local);
         _remoteDataAccess = CreateDataAccess(DataLocation.Remote);
 
-        _clientState = new([CreateDataAccess(DataLocation.Local), _remoteDataAccess], markdownToHtml);
+        _clientState = new([_localDataAccess, _remoteDataAccess], markdownToHtml);
         _remoteDataSync = new(_clientState);
 
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
@@ -169,6 +171,28 @@ public class AuthServiceLoginTests
         await _sut.CredentialsLogin("https://example.com", "b", "password");
 
         Assert.That(_clientState.User.Id, Is.EqualTo(2));
+    }
+
+    [Test]
+    public async Task RefreshTokenLogin_StoresTheRotatedTokenWithoutRewritingTheSettingsRow()
+    {
+        await _clientState.LoadSettings();
+
+        await _sut.RefreshTokenLogin("https://example.com", "old");
+
+        await _localDataAccess.Received(1).UpdateLoginSettings(Arg.Is(1L), Arg.Any<string>(), Arg.Any<string>(), Arg.Is("refresh"));
+        await _localDataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+    }
+
+    [Test]
+    public async Task CredentialsLogin_RememberMeOn_StoresTheLoginWithoutRewritingTheSettingsRow()
+    {
+        await _clientState.LoadSettings();
+
+        await _sut.CredentialsLogin("https://example.com", "a", "password");
+
+        await _localDataAccess.Received(1).UpdateLoginSettings(Arg.Is(1L), Arg.Is("https://example.com"), Arg.Is("a"), Arg.Is("refresh"));
+        await _localDataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
     }
 
     [Test]

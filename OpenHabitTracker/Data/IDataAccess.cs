@@ -60,6 +60,9 @@ public interface IDataAccess
     Task UpdatePriority(PriorityEntity priority);
     Task UpdateSettings(SettingsEntity settings);
 
+    // Writes only the device's login fields, so a login does not read and rewrite the whole settings row.
+    Task UpdateLoginSettings(long settingsId, string baseUrl, string username, string refreshToken);
+
     Task RemoveUser(long id);
     Task RemoveHabit(long id);
     Task RemoveNote(long id);

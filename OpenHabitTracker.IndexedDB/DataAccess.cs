@@ -307,6 +307,18 @@ public class DataAccess(IndexedDb indexedDb) : IDataAccess
         await _indexedDb.UpdateItems(new List<SettingsEntity> { settings });
     }
 
+    public async Task UpdateLoginSettings(long settingsId, string baseUrl, string username, string refreshToken)
+    {
+        if (await GetSettings(settingsId) is SettingsEntity settings)
+        {
+            settings.BaseUrl = baseUrl;
+            settings.Username = username;
+            settings.RefreshToken = refreshToken;
+
+            await UpdateSettings(settings);
+        }
+    }
+
     public async Task RemoveUser(long id)
     {
         await _indexedDb.DeleteByKey<long, UserEntity>(id);

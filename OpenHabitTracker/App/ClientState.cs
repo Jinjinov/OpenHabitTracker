@@ -205,6 +205,11 @@ public class ClientState
         }
     }
 
+    public async Task UpdateLoginSettings()
+    {
+        await DataAccess.UpdateLoginSettings(Settings.Id, Settings.BaseUrl, Settings.Username, Settings.RefreshToken);
+    }
+
     public async Task LoadHabits()
     {
         if (Habits is null)

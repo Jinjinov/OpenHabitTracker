@@ -38,7 +38,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
                     _clientState.Settings.Username = username;
                     _clientState.Settings.RefreshToken = tokenResponse.RefreshToken;
 
-                    await _clientState.UpdateSettings();
+                    await _clientState.UpdateLoginSettings();
                 }
 
                 await _remoteDataSync.SetDataLocation(DataLocation.Remote);
@@ -120,7 +120,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
                 _clientState.Settings.RefreshToken = tokenResponse.RefreshToken;
 
-                await _clientState.UpdateSettings();
+                await _clientState.UpdateLoginSettings();
 
                 await _remoteDataSync.SetDataLocation(DataLocation.Remote);
 
@@ -198,6 +198,6 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
         _clientState.Settings.RefreshToken = "";
 
-        await _clientState.UpdateSettings();
+        await _clientState.UpdateLoginSettings();
     }
 }
