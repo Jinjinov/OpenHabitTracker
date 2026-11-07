@@ -5,14 +5,17 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient;
 
 public static class Startup
 {
+    // Both clients use this one name, because IHttpClientFactory keeps one handler chain, and with it
+    // one connection pool, per name. With a name each, a login opened a second connection and paid a
+    // second TLS handshake.
+    private const string ServerClientName = "Server";
+
     public static IServiceCollection AddHttpClients(this IServiceCollection services)
     {
-        IHttpClientBuilder authClientBuilder = services.AddHttpClient<AuthClient>();
-        IHttpClientBuilder dataAccessClientBuilder = services.AddHttpClient(nameof(DataAccessClient));
+        IHttpClientBuilder serverClientBuilder = services.AddHttpClient<AuthClient>(ServerClientName);
 
 #if DEBUG
-        authClientBuilder.AddHttpMessageHandler<DebugResponseHandler>();
-        dataAccessClientBuilder.AddHttpMessageHandler<DebugResponseHandler>();
+        serverClientBuilder.AddHttpMessageHandler<DebugResponseHandler>();
 
         services.AddTransient<DebugResponseHandler>();
 #endif
@@ -31,7 +34,7 @@ public static class Startup
 
             RefreshTokenHandler refreshTokenHandler = new(apiClientOptions, serviceProvider.GetRequiredService<ITokenRefresher>())
             {
-                InnerHandler = serviceProvider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(nameof(DataAccessClient))
+                InnerHandler = serviceProvider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(ServerClientName)
             };
 
             return new DataAccessClient(new HttpClient(refreshTokenHandler), apiClientOptions);

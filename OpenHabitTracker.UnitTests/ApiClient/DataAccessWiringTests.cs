@@ -66,4 +66,30 @@ public class DataAccessWiringTests
 
         Assert.That(keyed, Is.SameAs(unkeyed));
     }
+
+    [Test]
+    public void Resolve_AuthClientAndDataAccessClient_ShareOnePrimaryHandler()
+    {
+        ServiceCollection services = new();
+
+        services.AddServices();
+        services.AddDataAccess(Path.Combine(Path.GetTempPath(), "OpenHabitTrackerWiringTests.db"));
+        services.AddHttpClients();
+
+        int primaryHandlers = 0;
+
+        services.ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(() =>
+        {
+            primaryHandlers++;
+            return new SocketsHttpHandler();
+        }));
+
+        using ServiceProvider serviceProvider = services.BuildServiceProvider(validateScopes: true);
+        using IServiceScope scope = serviceProvider.CreateScope();
+
+        scope.ServiceProvider.GetRequiredService<AuthClient>();
+        scope.ServiceProvider.GetRequiredService<DataAccessClient>();
+
+        Assert.That(primaryHandlers, Is.EqualTo(1));
+    }
 }
