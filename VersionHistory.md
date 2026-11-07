@@ -2,6 +2,7 @@
 
 - Added multiple user accounts with separate data on the self-hosted server
 - Added date format and time format settings
+- Improved app start speed and online sync login speed
 - Fixed dates and times ignoring the device's regional format
 - Fixed a crash in the Linux version when opening the web inspector
 - Fixed online sync not connecting until restart when the app was opened with no connection
