@@ -75,7 +75,7 @@ public class MarkdownImportExport(ClientState clientState)
 
         using StringReader stringReader = new(content);
 
-        UserImportExportData userData = new();
+        List<CategoryModel> categories = [];
 
         CategoryModel category = new();
         NoteModel? note = null;
@@ -93,7 +93,7 @@ public class MarkdownImportExport(ClientState clientState)
             {
                 category = new() { Title = line[2..] };
 
-                userData.Categories.Add(category);
+                categories.Add(category);
 
                 continue;
             }
@@ -146,6 +146,6 @@ public class MarkdownImportExport(ClientState clientState)
             }
         }
 
-        await _clientState.SetUserData(userData);
+        await _clientState.AddUserData(categories);
     }
 }

@@ -347,6 +347,6 @@ public partial class Examples(ClientState clientState, MarkdownToHtml markdownTo
         UserImportExportData userData = GetExamples(user, settings);
 #endif
 
-        await _clientState.SetUserData(userData);
+        await _clientState.AddUserData(userData.Categories);
     }
 }

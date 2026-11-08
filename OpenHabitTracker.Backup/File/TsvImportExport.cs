@@ -129,7 +129,7 @@ public class TsvImportExport(ClientState clientState)
 
     public async Task ImportDataFile(Stream stream)
     {
-        UserImportExportData userData = new();
+        List<CategoryModel> categories = [];
 
         using StreamReader reader = new(stream);
 
@@ -145,11 +145,11 @@ public class TsvImportExport(ClientState clientState)
 
         await foreach (Record record in records)
         {
-            if (userData.Categories.FirstOrDefault(x => x.Title == record.Category) is not CategoryModel category)
+            if (categories.FirstOrDefault(x => x.Title == record.Category) is not CategoryModel category)
             {
                 category = new() { Title = record.Category };
 
-                userData.Categories.Add(category);
+                categories.Add(category);
             }
 
             ItemsModel? items = null;
@@ -230,7 +230,7 @@ public class TsvImportExport(ClientState clientState)
             }
         }
 
-        await _clientState.SetUserData(userData);
+        await _clientState.AddUserData(categories);
     }
 
     class Record

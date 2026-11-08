@@ -521,21 +521,27 @@ public class ClientState
             Settings = userData.Settings;
         }
 
-        if (userData.Categories.Count == 0)
+        await AddUserData(userData.Categories);
+    }
+
+    // Adds the categories with their notes, tasks and habits and leaves the settings as they are.
+    public async Task AddUserData(List<CategoryModel> categoryModels)
+    {
+        if (categoryModels.Count == 0)
         {
             await DataReplaced();
 
             return;
         }
 
-        foreach (CategoryModel category in userData.Categories)
+        foreach (CategoryModel category in categoryModels)
         {
             category.UserId = User.Id;
         }
 
         // add categories to DB
 
-        List<(CategoryModel Model, CategoryEntity Entity)> categories = userData.Categories
+        List<(CategoryModel Model, CategoryEntity Entity)> categories = categoryModels
             .Where(x => !string.IsNullOrEmpty(x.Title)) // don't add the default category with no Title
             .Select(x => (Model: x, Entity: x.ToEntity()))
             .ToList();
@@ -555,9 +561,9 @@ public class ClientState
 
         // add all items to DB, including those from the default category that have CategoryId 0
 
-        List<(NoteModel Model, NoteEntity Entity)> notes = userData.Categories.SelectMany(x => x.Notes).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
-        List<(TaskModel Model, TaskEntity Entity)> tasks = userData.Categories.SelectMany(x => x.Tasks).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
-        List<(HabitModel Model, HabitEntity Entity)> habits = userData.Categories.SelectMany(x => x.Habits).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(NoteModel Model, NoteEntity Entity)> notes = categoryModels.SelectMany(x => x.Notes).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(TaskModel Model, TaskEntity Entity)> tasks = categoryModels.SelectMany(x => x.Tasks).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(HabitModel Model, HabitEntity Entity)> habits = categoryModels.SelectMany(x => x.Habits).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
         await DataAccess.AddNotes(notes.Select(x => x.Entity).ToList());
         await DataAccess.AddTasks(tasks.Select(x => x.Entity).ToList());

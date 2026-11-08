@@ -315,6 +315,28 @@ public class ClientStateTests
     }
 
     [Test]
+    public async Task AddUserData_LeavesTheSettingsAsTheyAre()
+    {
+        StubAddMethodsToAssignIds();
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>(
+            [new SettingsEntity { Id = 1, IsDarkMode = false, Culture = "sl", FirstDayOfWeek = DayOfWeek.Sunday }]));
+
+        await _sut.LoadSettings();
+
+        await _sut.AddUserData([new CategoryModel { Title = "Work", Notes = [new NoteModel { Title = "Meeting" }] }]);
+
+        await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
+        await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+        await _dataAccess.Received(1).AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>());
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Settings.IsDarkMode, Is.False);
+            Assert.That(_sut.Settings.Culture, Is.EqualTo("sl"));
+            Assert.That(_sut.Settings.FirstDayOfWeek, Is.EqualTo(DayOfWeek.Sunday));
+        });
+    }
+
+    [Test]
     public async Task SetUserData_WithCategoriesNotesTasksHabitsTimesItems_CallsAllAddMethods()
     {
         StubAddMethodsToAssignIds();

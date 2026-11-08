@@ -82,6 +82,27 @@ public class GoogleKeepImportTests
     }
 
     [Test]
+    public async Task Import_LeavesTheSettingsAsTheyAre()
+    {
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>(
+            [new SettingsEntity { Id = 1, IsDarkMode = false, Culture = "sl" }]));
+
+        await _clientState.LoadSettings();
+
+        await using Stream stream = Takeout();
+
+        await new GoogleKeepImport(_clientState).ImportDataFile(stream);
+
+        await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+        await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
+        Assert.Multiple(() =>
+        {
+            Assert.That(_clientState.Settings.IsDarkMode, Is.False);
+            Assert.That(_clientState.Settings.Culture, Is.EqualTo("sl"));
+        });
+    }
+
+    [Test]
     public async Task Import_EveryKeepColor_MapsToABootstrapClass()
     {
         await _clientState.LoadSettings();

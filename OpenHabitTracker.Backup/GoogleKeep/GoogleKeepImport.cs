@@ -1,5 +1,4 @@
 using OpenHabitTracker.App;
-using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
 using System.IO.Compression;
 using System.Text.Json;
@@ -46,7 +45,7 @@ public class GoogleKeepImport(ClientState clientState)
     {
         List<GoogleKeepNote> googleKeepNotes = await GetGoogleKeepNotes(stream);
 
-        UserImportExportData userData = new();
+        List<CategoryModel> categories = [];
 
         CategoryModel? uncategorized = null;
         NoteModel? note = null;
@@ -63,7 +62,7 @@ public class GoogleKeepImport(ClientState clientState)
             {
                 Label label = googleKeepNote.Labels.First();
 
-                if (userData.Categories.FirstOrDefault(x => x.Title == label.Name) is CategoryModel categoryModel)
+                if (categories.FirstOrDefault(x => x.Title == label.Name) is CategoryModel categoryModel)
                 {
                     category = categoryModel;
                 }
@@ -71,7 +70,7 @@ public class GoogleKeepImport(ClientState clientState)
                 {
                     category = new() { Title = label.Name };
 
-                    userData.Categories.Add(category);
+                    categories.Add(category);
                 }
             }
             else
@@ -80,7 +79,7 @@ public class GoogleKeepImport(ClientState clientState)
                 {
                     uncategorized = new();
 
-                    userData.Categories.Add(uncategorized);
+                    categories.Add(uncategorized);
                 }
 
                 category = uncategorized;
@@ -131,7 +130,7 @@ public class GoogleKeepImport(ClientState clientState)
             }
         }
 
-        await _clientState.SetUserData(userData);
+        await _clientState.AddUserData(categories);
     }
 
     // A color name Keep adds later falls back to the default instead of failing the whole import.

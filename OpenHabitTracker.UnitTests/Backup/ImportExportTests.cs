@@ -226,6 +226,19 @@ public class ImportExportTests
     }
 
     [Test]
+    public async Task Tsv_Import_LeavesTheSettingsAsTheyAre()
+    {
+        await _sut.LoadSettings();
+        _dataAccess.ClearReceivedCalls();
+
+        await new TsvImportExport(_sut).ImportDataFile(ToStream("ContentType\tCategory\tTitle\tContent\tPriority\tDuration\tPlannedAt\tRepeatCount\tRepeatInterval\tRepeatPeriod\nNote\tWork\tIdeas\tWrite more tests\tNone\t\t\t\t\t\n"));
+
+        await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
+        await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+        await _dataAccess.Received(1).AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>());
+    }
+
+    [Test]
     public async Task Tsv_ExportThenImport_DateOnlyTaskStaysDateOnly()
     {
         // TSV writes DateTime without milliseconds; the whole-second sentinel has none to lose.
@@ -307,6 +320,19 @@ public class ImportExportTests
     }
 
     // --- Markdown ---
+
+    [Test]
+    public async Task Markdown_Import_LeavesTheSettingsAsTheyAre()
+    {
+        await _sut.LoadSettings();
+        _dataAccess.ClearReceivedCalls();
+
+        await new MarkdownImportExport(_sut).ImportDataFile(ToStream("# Work\n\n## Ideas\n\nWrite more tests\n"));
+
+        await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
+        await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+        await _dataAccess.Received(1).AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>());
+    }
 
     [Test]
     public async Task Markdown_Export_ContainsExpectedStructure()

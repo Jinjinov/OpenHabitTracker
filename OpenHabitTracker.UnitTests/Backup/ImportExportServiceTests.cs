@@ -49,6 +49,6 @@ public class ImportExportServiceTests
     [Test]
     public async Task Import_TsvBackupWithWrongTypes_IsUnreadable()
     {
-        Assert.That(await _service.ImportDataFile("backup.tsv", Text("ContentType\tCategory\tTitle\nNotAType\tWork\tTitle\n")), Is.EqualTo(ImportResult.UnreadableContent));
+        Assert.That(await _service.ImportDataFile("backup.tsv", Text("ContentType\tCategory\tTitle\tContent\tPriority\tDuration\tPlannedAt\tRepeatCount\tRepeatInterval\tRepeatPeriod\nNotAType\tWork\tIdeas\t\tNone\t\t\t\t\t\n")), Is.EqualTo(ImportResult.UnreadableContent));
     }
 }
