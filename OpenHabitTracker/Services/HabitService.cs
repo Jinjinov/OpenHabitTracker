@@ -195,7 +195,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         }
     }
 
-    public async Task MarkAsDone(HabitModel habit, long? quantity = null)
+    public async Task MarkAsDone(HabitModel habit, double? quantity = null)
     {
         if (Habits is null)
             return;
@@ -266,7 +266,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         }
     }
 
-    public async Task AddTimeDone(HabitModel habit, DateTime dateTime, long? quantity = null)
+    public async Task AddTimeDone(HabitModel habit, DateTime dateTime, double? quantity = null)
     {
         habit.TimesDone ??= [];
 

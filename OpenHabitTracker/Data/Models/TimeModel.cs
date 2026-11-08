@@ -10,5 +10,5 @@ public class TimeModel
 
     public DateTime? CompletedAt { get; set; }
 
-    public long Quantity { get; set; } = 1;
+    public double Quantity { get; set; } = 1;
 }

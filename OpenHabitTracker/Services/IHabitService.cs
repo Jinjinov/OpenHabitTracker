@@ -16,8 +16,8 @@ public interface IHabitService
     Task UpdateHabit();
     Task Start(HabitModel habit);
     Task SetStartTime(HabitModel habit, DateTime startedAt);
-    Task MarkAsDone(HabitModel habit, long? quantity = null);
-    Task AddTimeDone(HabitModel habit, DateTime dateTime, long? quantity = null);
+    Task MarkAsDone(HabitModel habit, double? quantity = null);
+    Task AddTimeDone(HabitModel habit, DateTime dateTime, double? quantity = null);
     Task RemoveTimeDone(HabitModel habit, TimeModel timeModel);
     Task UpdateTimeDone(HabitModel habit, TimeModel time);
     Task UpdateQuantity(HabitModel habit, TimeModel time);

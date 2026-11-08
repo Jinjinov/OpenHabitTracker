@@ -12,5 +12,5 @@ public class TimeEntity : IUserScopedEntity
 
     public DateTime? CompletedAt { get; set; }
 
-    public long Quantity { get; set; }
+    public double Quantity { get; set; }
 }

@@ -95,7 +95,7 @@
     {
         <div class="input-group" data-habits-step-18>
             <span class="input-group-text bg-transparent col-4">@Loc["Target quantity"]</span>
-            <InputNumber class="form-control" aria-label="@Loc["Target quantity"]" Value="Habit.TargetQuantity" ValueExpression="() => Habit.TargetQuantity" ValueChanged="(long targetQuantity) => SaveTargetQuantity(Habit, targetQuantity)" />
+            <InputNumber class="form-control" aria-label="@Loc["Target quantity"]" Value="Habit.TargetQuantity" ValueExpression="() => Habit.TargetQuantity" ValueChanged="(double targetQuantity) => SaveTargetQuantity(Habit, targetQuantity)" />
         </div>
     }
 
@@ -414,14 +414,14 @@
         await HabitService.UpdateHabit();
     }
 
-    async Task SaveTargetQuantity(HabitModel habit, long targetQuantity)
+    async Task SaveTargetQuantity(HabitModel habit, double targetQuantity)
     {
         habit.TargetQuantity = targetQuantity;
 
         await HabitService.UpdateHabit();
     }
 
-    async Task OnModalConfirm(long quantity)
+    async Task OnModalConfirm(double quantity)
     {
         if (_isTimerStopModal)
         {

@@ -131,7 +131,7 @@
     string CellAriaLabel(DateTime date, DayStatus status) => Habit.DisplayMetric switch
     {
         DisplayMetric.Time => $"{date:dddd, MMMM d} — {status.Label}",
-        DisplayMetric.Quantity => $"{date:dddd, MMMM d} — {status.Quantity} {Loc["Quantity"]}",
+        DisplayMetric.Quantity => $"{date:dddd, MMMM d} — {status.Quantity:0.##} {Loc["Quantity"]}",
         _ => $"{date:dddd, MMMM d} — {status.Count} {Loc["times done"]}"
     };
 

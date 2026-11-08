@@ -565,8 +565,8 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.Property<long>("HabitId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("Quantity")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Quantity")
+                        .HasColumnType("REAL");
 
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("TEXT");
@@ -608,8 +608,8 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.Property<DateTime?>("StartAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("TargetQuantity")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("TargetQuantity")
+                        .HasColumnType("REAL");
 
                     b.HasDiscriminator().HasValue("HabitEntity");
                 });

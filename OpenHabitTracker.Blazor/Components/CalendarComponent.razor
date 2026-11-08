@@ -59,7 +59,7 @@
                     string ariaLabel = Habit.DisplayMetric switch
                     {
                         DisplayMetric.Time => $"{dateTime:dddd, MMMM d} \u2014 {timesDone}",
-                        DisplayMetric.Quantity => $"{dateTime:dddd, MMMM d} \u2014 {dayStatus.Quantity} {Loc["Quantity"]}",
+                        DisplayMetric.Quantity => $"{dateTime:dddd, MMMM d} \u2014 {dayStatus.Quantity:0.##} {Loc["Quantity"]}",
                         _ => $"{dateTime:dddd, MMMM d} \u2014 {dayStatus.Count} {Loc["times done"]}"
                     };
 
@@ -100,7 +100,7 @@
                 {
                     <div class="input-group mb-1">
                         <span class="input-group-text bg-transparent col-4">@Loc["Quantity"]</span>
-                        <InputNumber class="form-control" aria-label="@Loc["Quantity"]" Value="time.Quantity" ValueExpression="() => time.Quantity" ValueChanged="(long quantity) => UpdateQuantity(time, quantity)" />
+                        <InputNumber class="form-control" aria-label="@Loc["Quantity"]" Value="time.Quantity" ValueExpression="() => time.Quantity" ValueChanged="(double quantity) => UpdateQuantity(time, quantity)" />
                     </div>
                 }
             }
@@ -387,7 +387,7 @@
         await HabitChanged.InvokeAsync(Habit);
     }
 
-    async Task ConfirmQuantity(long quantity)
+    async Task ConfirmQuantity(double quantity)
     {
         _showQuantityModal = false;
 
@@ -409,7 +409,7 @@
         _showQuantityModal = false;
     }
 
-    async Task UpdateQuantity(TimeModel time, long quantity)
+    async Task UpdateQuantity(TimeModel time, double quantity)
     {
         time.Quantity = quantity;
         await HabitService.UpdateQuantity(Habit!, time);

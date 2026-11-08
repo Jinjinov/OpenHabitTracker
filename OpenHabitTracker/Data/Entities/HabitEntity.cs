@@ -10,7 +10,7 @@ public class HabitEntity : ContentEntity
 
     public DisplayMetric DisplayMetric { get; set; }
 
-    public long TargetQuantity { get; set; }
+    public double TargetQuantity { get; set; }
 
     public TimeOnly? Duration { get; set; }
 

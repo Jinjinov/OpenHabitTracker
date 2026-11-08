@@ -11,7 +11,7 @@ public class DayStatus
 
     public required int Count { get; init; }
 
-    public required long Quantity { get; init; }
+    public required double Quantity { get; init; }
 
     public required TimeSpan TotalTime { get; init; }
 }

@@ -13,7 +13,7 @@ public static class HabitStatistics
     public static double GetValue(HabitModel habit, IEnumerable<TimeModel> times) => habit.DisplayMetric switch
     {
         DisplayMetric.Time => times.Where(t => t.CompletedAt.HasValue).Sum(t => (t.CompletedAt!.Value - t.StartedAt).TotalMinutes),
-        DisplayMetric.Quantity => times.Where(t => t.CompletedAt.HasValue).Sum(t => (double)t.Quantity),
+        DisplayMetric.Quantity => times.Where(t => t.CompletedAt.HasValue).Sum(t => t.Quantity),
         _ => times.Count(t => t.CompletedAt.HasValue)
     };
 
@@ -93,11 +93,12 @@ public static class HabitStatistics
 
         if (habit.DisplayMetric == DisplayMetric.Quantity)
         {
-            long sum = times.Sum(t => t.Quantity);
+            // Rounded, because 0.7 plus 0.1 sums to 0.7999999999999999 and would miss a target of 0.8.
+            double sum = Math.Round(times.Sum(t => t.Quantity), 9);
 
             string background = sum >= habit.TargetQuantity ? "bg-success-subtle" : "bg-warning-subtle";
 
-            return new DayStatus { Background = background, Label = $"({sum})", Count = times.Count, Quantity = sum, TotalTime = TimeSpan.Zero };
+            return new DayStatus { Background = background, Label = $"({sum:0.##})", Count = times.Count, Quantity = sum, TotalTime = TimeSpan.Zero };
         }
 
         bool reached = habit.RepeatPeriod == Period.Day ? times.Count >= habit.RepeatCount : habit.RepeatCountReached(date);
@@ -314,10 +315,11 @@ public static class HabitStatistics
     // The display metric decides how a raw value reads: minutes become h:mm, everything else is a plain number.
     public static string Format(HabitModel habit, double value)
     {
-        // Two decimals for anything fractional: a window shorter than the habit repeat period asks
-        // for a fraction of a completion, and one decimal rounds a monthly habit down to "0.0" today.
+        // Up to two decimals: a window shorter than the habit repeat period asks for a fraction of a
+        // completion, and one decimal rounds a monthly habit down to "0" today; a quantity of 2.5 reads
+        // as "2.5", not "2.50".
         if (habit.DisplayMetric != DisplayMetric.Time)
-            return value % 1 == 0 ? value.ToString("N0") : value.ToString("N2");
+            return value.ToString("#,0.##");
 
         TimeSpan span = TimeSpan.FromMinutes(value);
 

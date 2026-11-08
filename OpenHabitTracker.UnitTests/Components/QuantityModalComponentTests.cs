@@ -55,16 +55,16 @@ public class QuantityModalComponentTests
     [Test]
     public async Task OkButton_Click_InvokesOnOKWithInitialQuantity()
     {
-        long receivedQuantity = 0;
+        double receivedQuantity = 0;
         IRenderedComponent<QuantityModalComponent> cut = _ctx.Render<QuantityModalComponent>(
             parameters => parameters
                 .Add(p => p.IsVisible, true)
-                .Add(p => p.InitialQuantity, 7L)
-                .Add(p => p.OnOK, EventCallback.Factory.Create<long>(this, q => receivedQuantity = q)));
+                .Add(p => p.InitialQuantity, 7.5)
+                .Add(p => p.OnOK, EventCallback.Factory.Create<double>(this, q => receivedQuantity = q)));
 
         await cut.Find("button.btn-primary").ClickAsync(new MouseEventArgs());
 
-        Assert.That(receivedQuantity, Is.EqualTo(7L));
+        Assert.That(receivedQuantity, Is.EqualTo(7.5));
     }
 
     [Test]
@@ -110,7 +110,7 @@ public class QuantityModalComponentTests
         IRenderedComponent<QuantityModalComponent> cut = _ctx.Render<QuantityModalComponent>(
             parameters => parameters
                 .Add(p => p.IsVisible, true)
-                .Add(p => p.InitialQuantity, 42L));
+                .Add(p => p.InitialQuantity, 42.0));
 
         AngleSharp.Dom.IElement input = cut.Find("input[aria-label='Quantity']");
         Assert.That(input.GetAttribute("value"), Is.EqualTo("42"));

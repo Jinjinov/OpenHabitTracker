@@ -10,7 +10,7 @@ public class HabitModel : ItemsModel
 
     public DisplayMetric DisplayMetric { get; set; } = DisplayMetric.Repetitions;
 
-    public long TargetQuantity { get; set; } = 1;
+    public double TargetQuantity { get; set; } = 1;
 
     public DateTime? LastTimeDoneAt { get; set; }
 
