@@ -1,0 +1,66 @@
+using OpenHabitTracker.Backup;
+
+namespace OpenHabitTracker.UnitTests.Backup;
+
+[TestFixture]
+public class ImportFormatDetectorTests
+{
+    private static byte[] Fixture(string path) =>
+        File.ReadAllBytes(Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", path));
+
+    [TestCase("example.json", ImportFormat.Json)]
+    [TestCase("example.tsv", ImportFormat.Tsv)]
+    [TestCase("example.yaml", ImportFormat.Yaml)]
+    [TestCase("example.md", ImportFormat.Markdown)]
+    public void Detect_OwnExport_IsItsFormat(string file, ImportFormat expected)
+    {
+        Assert.That(ImportFormatDetector.Detect(file, Fixture($"Examples/{file}")), Is.EqualTo(expected));
+    }
+
+    [TestCase("example.json", ImportFormat.Json)]
+    [TestCase("example.tsv", ImportFormat.Tsv)]
+    [TestCase("example.yaml", ImportFormat.Yaml)]
+    [TestCase("example.md", ImportFormat.Markdown)]
+    public void Detect_OwnExportWithoutExtension_IsStillItsFormat(string file, ImportFormat expected)
+    {
+        Assert.That(ImportFormatDetector.Detect("backup", Fixture($"Examples/{file}")), Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void Detect_YamlRenamedToMarkdown_IsYaml()
+    {
+        Assert.That(ImportFormatDetector.Detect("backup.md", Fixture("Examples/example.yaml")), Is.EqualTo(ImportFormat.Yaml));
+    }
+
+    [Test]
+    public void Detect_MarkdownWithAYamlLookingLine_FollowsTheExtension()
+    {
+        byte[] content = "Settings: dark\n\n# Work\n\n## Ideas\n\nWrite more tests\n"u8.ToArray();
+
+        Assert.That(ImportFormatDetector.Detect("notes.md", content), Is.EqualTo(ImportFormat.Markdown));
+    }
+
+    [TestCase("takeout.zip")]
+    [TestCase("notes")]
+    public void Detect_GoogleKeepTakeout_IsGoogleKeep(string filename)
+    {
+        Assert.That(ImportFormatDetector.Detect(filename, Fixture("Importers/GoogleKeep/takeout.zip")), Is.EqualTo(ImportFormat.GoogleKeep));
+    }
+
+    [TestCase("Loop/Phone/export.zip")]
+    [TestCase("Loop/Phone/backup.db")]
+    [TestCase("HabitNow/backup-other-years.hn")]
+    [TestCase("Habitica/userdata.json")]
+    [TestCase("Habitify/backup.db")]
+    [TestCase("Habitify/export.csv")]
+    public void Detect_FormatWithoutAnImporter_IsUnknown(string path)
+    {
+        Assert.That(ImportFormatDetector.Detect(Path.GetFileName(path), Fixture($"Importers/{path}")), Is.EqualTo(ImportFormat.Unknown));
+    }
+
+    [Test]
+    public void Detect_EmptyFile_IsUnknown()
+    {
+        Assert.That(ImportFormatDetector.Detect("backup.json", []), Is.EqualTo(ImportFormat.Unknown));
+    }
+}

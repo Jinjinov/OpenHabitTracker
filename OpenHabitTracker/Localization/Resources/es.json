@@ -111,6 +111,7 @@
   "Export YAML": "Exportar YAML",
   "Export Markdown": "Exportar Markdown",
   "Import": "Importar",
+  "The file is not in a supported format.": "El archivo no está en un formato compatible.",
   "Online sync": "Sincronización en línea",
   "Online sync is enabled": "La sincronización en línea está habilitada",
   "Online sync is not working": "La sincronización en línea no funciona",

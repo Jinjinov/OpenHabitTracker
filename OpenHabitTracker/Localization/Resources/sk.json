@@ -111,6 +111,7 @@
   "Export YAML": "Exportuj YAML",
   "Export Markdown": "Exportuj Markdown",
   "Import": "Importuj",
+  "The file is not in a supported format.": "Súbor nie je v podporovanom formáte.",
   "Online sync": "Online synchronizácia",
   "Online sync is enabled": "Online synchronizácia je povolená",
   "Online sync is not working": "Online synchronizácia nefunguje",

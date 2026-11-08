@@ -23,27 +23,36 @@ public class ImportExportService(JsonImportExport jsonImportExport, TsvImportExp
         };
     }
 
-    public async Task ImportDataFile(string filename, Stream stream)
+    // Returns false when the file is in none of the supported formats.
+    public async Task<bool> ImportDataFile(string filename, Stream stream)
     {
-        if (filename.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+        using MemoryStream memoryStream = new();
+
+        await stream.CopyToAsync(memoryStream);
+
+        ImportFormat importFormat = ImportFormatDetector.Detect(filename, memoryStream.ToArray());
+
+        memoryStream.Position = 0;
+
+        switch (importFormat)
         {
-            await _jsonImportExport.ImportDataFile(stream);
+            case ImportFormat.Json:
+                await _jsonImportExport.ImportDataFile(memoryStream);
+                break;
+            case ImportFormat.Tsv:
+                await _tsvImportExport.ImportDataFile(memoryStream);
+                break;
+            case ImportFormat.Yaml:
+                await _yamlImportExport.ImportDataFile(memoryStream);
+                break;
+            case ImportFormat.Markdown:
+                await _markdownImportExport.ImportDataFile(memoryStream);
+                break;
+            case ImportFormat.GoogleKeep:
+                await _googleKeepImport.ImportDataFile(memoryStream);
+                break;
         }
-        else if (filename.EndsWith(".tsv", StringComparison.OrdinalIgnoreCase))
-        {
-            await _tsvImportExport.ImportDataFile(stream);
-        }
-        else if (filename.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
-        {
-            await _yamlImportExport.ImportDataFile(stream);
-        }
-        else if (filename.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
-        {
-            await _markdownImportExport.ImportDataFile(stream);
-        }
-        else if (filename.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
-        {
-            await _googleKeepImport.ImportDataFile(stream);
-        }
+
+        return importFormat != ImportFormat.Unknown;
     }
 }

@@ -111,6 +111,7 @@
   "Export YAML": "YAMLエクスポート",
   "Export Markdown": "Markdownエクスポート",
   "Import": "インポート",
+  "The file is not in a supported format.": "このファイルはサポートされている形式ではありません。",
   "Online sync": "オンライン同期",
   "Online sync is enabled": "オンライン同期が有効です",
   "Online sync is not working": "オンライン同期が機能していません",

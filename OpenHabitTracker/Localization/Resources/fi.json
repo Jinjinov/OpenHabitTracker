@@ -111,6 +111,7 @@
   "Export YAML": "Vie YAML",
   "Export Markdown": "Vie Markdown",
   "Import": "Tuo",
+  "The file is not in a supported format.": "Tiedosto ei ole tuetussa muodossa.",
   "Online sync": "Online-synkronointi",
   "Online sync is enabled": "Online-synkronointi on käytössä",
   "Online sync is not working": "Online-synkronointi ei toimi",

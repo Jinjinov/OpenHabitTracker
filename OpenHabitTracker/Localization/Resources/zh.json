@@ -111,6 +111,7 @@
   "Export YAML": "导出YAML",
   "Export Markdown": "导出Markdown",
   "Import": "导入",
+  "The file is not in a supported format.": "该文件不是受支持的格式。",
   "Online sync": "在线同步",
   "Online sync is enabled": "在线同步已启用",
   "Online sync is not working": "在线同步不可用",
