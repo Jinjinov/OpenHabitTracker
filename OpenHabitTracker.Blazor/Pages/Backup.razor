@@ -26,6 +26,11 @@
             @OpenFile.OpenFileDialog("list-group-item list-group-item-action", Loc["Import"], OnFileOpened)
         </div>
 
+        @if (_unsupportedFile)
+        {
+            <small class="d-block m-1 text-danger" role="alert">@Loc["The file is not in a supported format."]</small>
+        }
+
     </div>
 
     <div class="m-1">
@@ -69,6 +74,8 @@
     string _filename = string.Empty;
 
     string _fileContent = string.Empty;
+
+    bool _unsupportedFile;
 
     private ElementReference WrapperElement;
 
@@ -117,7 +124,7 @@
         stream = memoryStream;
 #endif
 
-        await ImportExportService.ImportDataFile(filename, stream);
+        _unsupportedFile = !await ImportExportService.ImportDataFile(filename, stream);
 
         await OnStateChanged();
     }

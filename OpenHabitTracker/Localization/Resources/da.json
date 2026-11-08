@@ -111,6 +111,7 @@
   "Export YAML": "Eksportér YAML",
   "Export Markdown": "Eksportér Markdown",
   "Import": "Importér",
+  "The file is not in a supported format.": "Filen er ikke i et understøttet format.",
   "Online sync": "Online synkronisering",
   "Online sync is enabled": "Online synkronisering er aktiveret",
   "Online sync is not working": "Online synkronisering virker ikke",

@@ -111,6 +111,7 @@
   "Export YAML": "YAML exporteren",
   "Export Markdown": "Markdown exporteren",
   "Import": "Importeren",
+  "The file is not in a supported format.": "Het bestand heeft geen ondersteunde indeling.",
   "Online sync": "Online synchronisatie",
   "Online sync is enabled": "Online synchronisatie ingeschakeld",
   "Online sync is not working": "Online synchronisatie werkt niet",

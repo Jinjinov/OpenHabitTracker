@@ -111,6 +111,7 @@
   "Export YAML": "Izvozi YAML",
   "Export Markdown": "Izvozi Markdown",
   "Import": "Uvozi",
+  "The file is not in a supported format.": "Datoteka ni v podprti obliki.",
   "Online sync": "Spletna sinhronizacija",
   "Online sync is enabled": "Spletna sinhronizacija je omogočena",
   "Online sync is not working": "Spletna sinhronizacija ne deluje",
