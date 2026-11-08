@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace OpenHabitTracker.Backup.GoogleKeep;
 
@@ -66,4 +67,19 @@ public class GoogleKeepNote
 
     [JsonPropertyName("labels")]
     public List<Label> Labels { get; set; } = [];
+
+    // A Takeout also holds JSON of other Google products, such as Tasks.json, which is not a note.
+    internal static bool IsNote(string json)
+    {
+        try
+        {
+            using JsonDocument document = JsonDocument.Parse(json);
+
+            return document.RootElement.ValueKind == JsonValueKind.Object && document.RootElement.TryGetProperty("userEditedTimestampUsec", out _);
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
 }

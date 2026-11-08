@@ -1,5 +1,8 @@
-﻿using OpenHabitTracker.Backup.File;
+﻿using CsvHelper;
+using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
+using System.Text.Json;
+using YamlDotNet.Core;
 
 namespace OpenHabitTracker.Backup;
 
@@ -23,8 +26,7 @@ public class ImportExportService(JsonImportExport jsonImportExport, TsvImportExp
         };
     }
 
-    // Returns false when the file is in none of the supported formats.
-    public async Task<bool> ImportDataFile(string filename, Stream stream)
+    public async Task<ImportResult> ImportDataFile(string filename, Stream stream)
     {
         using MemoryStream memoryStream = new();
 
@@ -34,25 +36,35 @@ public class ImportExportService(JsonImportExport jsonImportExport, TsvImportExp
 
         memoryStream.Position = 0;
 
-        switch (importFormat)
+        // Only the parse errors of the file formats are caught, so a failure to save still surfaces.
+        try
         {
-            case ImportFormat.Json:
-                await _jsonImportExport.ImportDataFile(memoryStream);
-                break;
-            case ImportFormat.Tsv:
-                await _tsvImportExport.ImportDataFile(memoryStream);
-                break;
-            case ImportFormat.Yaml:
-                await _yamlImportExport.ImportDataFile(memoryStream);
-                break;
-            case ImportFormat.Markdown:
-                await _markdownImportExport.ImportDataFile(memoryStream);
-                break;
-            case ImportFormat.GoogleKeep:
-                await _googleKeepImport.ImportDataFile(memoryStream);
-                break;
+            switch (importFormat)
+            {
+                case ImportFormat.Json:
+                    await _jsonImportExport.ImportDataFile(memoryStream);
+                    break;
+                case ImportFormat.Tsv:
+                    await _tsvImportExport.ImportDataFile(memoryStream);
+                    break;
+                case ImportFormat.Yaml:
+                    await _yamlImportExport.ImportDataFile(memoryStream);
+                    break;
+                case ImportFormat.Markdown:
+                    await _markdownImportExport.ImportDataFile(memoryStream);
+                    break;
+                case ImportFormat.GoogleKeep:
+                    await _googleKeepImport.ImportDataFile(memoryStream);
+                    break;
+                default:
+                    return ImportResult.UnsupportedFormat;
+            }
+        }
+        catch (Exception exception) when (exception is JsonException or YamlException or CsvHelperException or InvalidDataException)
+        {
+            return ImportResult.UnreadableContent;
         }
 
-        return importFormat != ImportFormat.Unknown;
+        return ImportResult.Imported;
     }
 }

@@ -93,7 +93,7 @@ public class GoogleKeepImport(ClientState clientState)
                     Title = googleKeepNote.Title,
                     Content = googleKeepNote.TextContent,
                     IsDeleted = googleKeepNote.IsTrashed,
-                    Color = _bootstrapClass[googleKeepNote.Color],
+                    Color = GetBootstrapClass(googleKeepNote.Color),
                     CreatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.CreatedTimestampUsec * 10).ToLocalTime(),
                     UpdatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.UserEditedTimestampUsec * 10).ToLocalTime()
                 };
@@ -106,7 +106,7 @@ public class GoogleKeepImport(ClientState clientState)
                 {
                     Title = googleKeepNote.Title,
                     IsDeleted = googleKeepNote.IsTrashed,
-                    Color = _bootstrapClass[googleKeepNote.Color],
+                    Color = GetBootstrapClass(googleKeepNote.Color),
                     CreatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.CreatedTimestampUsec * 10).ToLocalTime(),
                     UpdatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.UserEditedTimestampUsec * 10).ToLocalTime()
                 };
@@ -134,6 +134,12 @@ public class GoogleKeepImport(ClientState clientState)
         await _clientState.SetUserData(userData);
     }
 
+    // A color name Keep adds later falls back to the default instead of failing the whole import.
+    private string GetBootstrapClass(string color)
+    {
+        return _bootstrapClass.GetValueOrDefault(color, _bootstrapClass["DEFAULT"]);
+    }
+
     private static async Task<List<GoogleKeepNote>> GetGoogleKeepNotes(Stream stream)
     {
         using MemoryStream memoryStream = new();
@@ -153,6 +159,9 @@ public class GoogleKeepImport(ClientState clientState)
                 using StreamReader streamReader = new(jsonStream);
 
                 string jsonText = await streamReader.ReadToEndAsync();
+
+                if (!GoogleKeepNote.IsNote(jsonText))
+                    continue;
 
                 GoogleKeepNote? googleKeepNote = JsonSerializer.Deserialize<GoogleKeepNote>(jsonText);
 

@@ -112,6 +112,7 @@
   "Export Markdown": "Markdown 내보내기",
   "Import": "가져오기",
   "The file is not in a supported format.": "지원되는 형식의 파일이 아닙니다.",
+  "The file could not be read.": "파일을 읽을 수 없습니다.",
   "Online sync": "온라인 동기화",
   "Online sync is enabled": "온라인 동기화 활성화됨",
   "Online sync is not working": "온라인 동기화 작동 안 함",

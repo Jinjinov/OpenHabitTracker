@@ -112,6 +112,7 @@
   "Export Markdown": "Exportera Markdown",
   "Import": "Importera",
   "The file is not in a supported format.": "Filen har inte ett format som stöds.",
+  "The file could not be read.": "Filen kunde inte läsas.",
   "Online sync": "Onlinesynkronisering",
   "Online sync is enabled": "Onlinesynkronisering är aktiverad",
   "Online sync is not working": "Onlinesynkronisering fungerar inte",

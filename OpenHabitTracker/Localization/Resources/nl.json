@@ -112,6 +112,7 @@
   "Export Markdown": "Markdown exporteren",
   "Import": "Importeren",
   "The file is not in a supported format.": "Het bestand heeft geen ondersteunde indeling.",
+  "The file could not be read.": "Het bestand kon niet worden gelezen.",
   "Online sync": "Online synchronisatie",
   "Online sync is enabled": "Online synchronisatie ingeschakeld",
   "Online sync is not working": "Online synchronisatie werkt niet",

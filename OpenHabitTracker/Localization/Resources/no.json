@@ -112,6 +112,7 @@
   "Export Markdown": "Eksporter Markdown",
   "Import": "Importer",
   "The file is not in a supported format.": "Filen har ikke et støttet format.",
+  "The file could not be read.": "Filen kunne ikke leses.",
   "Online sync": "Nettsynkronisering",
   "Online sync is enabled": "Nettsynkronisering er aktivert",
   "Online sync is not working": "Nettsynkronisering virker ikke",

@@ -1,3 +1,4 @@
+using OpenHabitTracker.Backup.GoogleKeep;
 using System.IO.Compression;
 using System.Text.Json;
 
@@ -97,27 +98,13 @@ public static class ImportFormatDetector
             {
                 using StreamReader streamReader = new(entry.Open());
 
-                if (IsGoogleKeepNote(streamReader.ReadToEnd()))
+                if (GoogleKeepNote.IsNote(streamReader.ReadToEnd()))
                     return true;
             }
 
             return false;
         }
         catch (InvalidDataException)
-        {
-            return false;
-        }
-    }
-
-    private static bool IsGoogleKeepNote(string text)
-    {
-        try
-        {
-            using JsonDocument document = JsonDocument.Parse(text);
-
-            return document.RootElement.ValueKind == JsonValueKind.Object && document.RootElement.TryGetProperty("userEditedTimestampUsec", out _);
-        }
-        catch (JsonException)
         {
             return false;
         }

@@ -112,6 +112,7 @@
   "Export Markdown": "Eksportuj Markdown",
   "Import": "Importuj",
   "The file is not in a supported format.": "Plik nie jest w obsługiwanym formacie.",
+  "The file could not be read.": "Nie można odczytać pliku.",
   "Online sync": "Synchronizacja online",
   "Online sync is enabled": "Synchronizacja online jest włączona",
   "Online sync is not working": "Synchronizacja online nie działa",
