@@ -4,11 +4,6 @@
     "title": "OpenHT | v1",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "http://localhost:5260/"
-    }
-  ],
   "paths": {
     "/api/Auth/jwt-token": {
       "post": {
@@ -3871,12 +3866,12 @@
             "$ref": "#/components/schemas/DisplayMetric"
           },
           "targetQuantity": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
             "type": [
-              "integer",
+              "number",
               "string"
             ],
-            "format": "int64"
+            "format": "double"
           },
           "duration": {
             "type": [
@@ -3971,12 +3966,12 @@
             "$ref": "#/components/schemas/DisplayMetric"
           },
           "targetQuantity": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
             "type": [
-              "integer",
+              "number",
               "string"
             ],
-            "format": "int64"
+            "format": "double"
           },
           "lastTimeDoneAt": {
             "type": [
@@ -4860,12 +4855,12 @@
             "format": "date-time"
           },
           "quantity": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
             "type": [
-              "integer",
+              "number",
               "string"
             ],
-            "format": "int64"
+            "format": "double"
           }
         }
       },
@@ -4884,12 +4879,12 @@
             "format": "date-time"
           },
           "quantity": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
             "type": [
-              "integer",
+              "number",
               "string"
             ],
-            "format": "int64"
+            "format": "double"
           }
         }
       },
