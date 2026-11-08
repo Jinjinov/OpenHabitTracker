@@ -1,0 +1,374 @@
+{
+  "preferences": {
+    "dayStart": 0,
+    "timezoneOffset": -60
+  },
+  "lastCron": "2026-11-08T09:28:57.897Z",
+  "tags": [],
+  "tasks": {
+    "rewards": [
+      {
+        "_id": "f9a9c9e5-f3c6-4830-9e2f-66e2d76db5a5",
+        "type": "reward",
+        "text": "Reward yourself",
+        "notes": "Watch TV, play a game, eat a treat, it’s up to you!",
+        "tags": [],
+        "value": 0,
+        "priority": 1,
+        "attribute": "str",
+        "challenge": {},
+        "group": {
+          "completedBy": {},
+          "assignedUsers": []
+        },
+        "byHabitica": false,
+        "reminders": [],
+        "createdAt": "2026-11-08T09:29:15.597Z",
+        "updatedAt": "2026-11-08T09:29:15.597Z",
+        "__v": 0
+      }
+    ],
+    "todos": [
+      {
+        "_id": "31f671aa-2062-444c-92ad-ae61b04c47d1",
+        "type": "todo",
+        "text": "Join Habitica (Check me off!)",
+        "notes": "You can either complete this To Do, edit it, or remove it.",
+        "tags": [],
+        "value": 0,
+        "priority": 1,
+        "attribute": "str",
+        "challenge": {},
+        "group": {
+          "completedBy": {},
+          "assignedUsers": []
+        },
+        "reminders": [],
+        "byHabitica": false,
+        "date": null,
+        "completed": false,
+        "collapseChecklist": false,
+        "checklist": [],
+        "createdAt": "2026-11-08T09:29:15.598Z",
+        "updatedAt": "2026-11-08T09:29:15.598Z",
+        "__v": 0
+      },
+      {
+        "_id": "47edb74d-3948-4a32-bf78-481366aa4eeb",
+        "type": "todo",
+        "text": "Buy groceries",
+        "notes": "",
+        "tags": [],
+        "value": 0,
+        "priority": 1,
+        "attribute": "str",
+        "challenge": {},
+        "group": {
+          "completedBy": {},
+          "assignedUsers": []
+        },
+        "reminders": [],
+        "byHabitica": false,
+        "date": "2026-11-10T10:34:33.778Z",
+        "completed": false,
+        "collapseChecklist": false,
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Milk",
+            "id": "bcef6ee1-93da-4ced-9463-3f7962d233f9"
+          },
+          {
+            "completed": false,
+            "text": "Bread",
+            "id": "3c2264ff-f493-4803-a90f-857157da1417"
+          }
+        ],
+        "createdAt": "2026-11-08T10:35:18.245Z",
+        "updatedAt": "2026-11-08T10:35:18.245Z",
+        "__v": 0
+      },
+      {
+        "_id": "332568f0-9239-4abd-a382-686ec69eb68d",
+        "type": "todo",
+        "text": "Call mom",
+        "notes": "Her birthday",
+        "tags": [],
+        "value": 1,
+        "priority": 1,
+        "attribute": "str",
+        "challenge": {},
+        "group": {
+          "completedBy": {},
+          "assignedUsers": []
+        },
+        "reminders": [],
+        "byHabitica": false,
+        "date": null,
+        "completed": true,
+        "collapseChecklist": false,
+        "checklist": [],
+        "createdAt": "2026-11-08T10:35:30.554Z",
+        "updatedAt": "2026-11-08T10:35:44.735Z",
+        "__v": 0,
+        "dateCompleted": "2026-11-08T10:35:44.732Z"
+      }
+    ],
+    "habits": [
+      {
+        "_id": "127c7045-1a85-4c14-8f6c-2f01eaf099d3",
+        "type": "habit",
+        "text": "Add a task to Habitica",
+        "notes": "Either a Habit, a Daily or a To Do",
+        "tags": [],
+        "value": 0,
+        "priority": 1,
+        "attribute": "str",
+        "challenge": {},
+        "group": {
+          "completedBy": {},
+          "assignedUsers": []
+        },
+        "byHabitica": false,
+        "up": true,
+        "down": false,
+        "counterUp": 0,
+        "counterDown": 0,
+        "frequency": "daily",
+        "history": [],
+        "reminders": [],
+        "createdAt": "2026-11-08T09:29:15.596Z",
+        "updatedAt": "2026-11-08T09:29:15.596Z",
+        "__v": 0
+      },
+      {
+        "_id": "c6a64e5a-9166-43a1-97d9-c578043a77e1",
+        "type": "habit",
+        "text": "Tap here to edit this into a bad habit you'd like to quit",
+        "notes": "Or delete it from the edit screen",
+        "tags": [],
+        "value": 0,
+        "priority": 1,
+        "attribute": "str",
+        "challenge": {},
+        "group": {
+          "completedBy": {},
+          "assignedUsers": []
+        },
+        "byHabitica": false,
+        "up": false,
+        "down": true,
+        "counterUp": 0,
+        "counterDown": 0,
+        "frequency": "daily",
+        "history": [],
+        "reminders": [],
+        "createdAt": "2026-11-08T09:29:15.596Z",
+        "updatedAt": "2026-11-08T09:29:15.596Z",
+        "__v": 0
+      },
+      {
+        "_id": "8f7efeaf-5fa2-48dc-85b0-ae00ba1cc9fa",
+        "type": "habit",
+        "text": "Drink water",
+        "notes": "Two liters a day",
+        "tags": [],
+        "value": 1.000000374539647,
+        "priority": 2,
+        "attribute": "str",
+        "challenge": {},
+        "group": {
+          "completedBy": {},
+          "assignedUsers": []
+        },
+        "byHabitica": false,
+        "up": true,
+        "down": true,
+        "counterUp": 2,
+        "counterDown": 1,
+        "frequency": "daily",
+        "history": [
+          {
+            "date": 1794133773682,
+            "value": 1.000000374539647,
+            "scoredUp": 2,
+            "scoredDown": 1
+          }
+        ],
+        "reminders": [],
+        "createdAt": "2026-11-08T10:28:17.457Z",
+        "updatedAt": "2026-11-08T10:29:33.683Z",
+        "__v": 1
+      }
+    ],
+    "dailys": [
+      {
+        "_id": "f58a8ff9-d7ba-4d19-b72c-7d0ce6cd52ff",
+        "type": "daily",
+        "text": "Read a book",
+        "notes": "",
+        "tags": [],
+        "value": 0,
+        "priority": 1,
+        "attribute": "str",
+        "challenge": {},
+        "group": {
+          "completedBy": {},
+          "assignedUsers": []
+        },
+        "reminders": [],
+        "byHabitica": false,
+        "frequency": "weekly",
+        "everyX": 1,
+        "startDate": "2026-11-07T23:00:00.000Z",
+        "repeat": {
+          "m": true,
+          "t": false,
+          "w": true,
+          "th": false,
+          "f": true,
+          "s": false,
+          "su": false
+        },
+        "streak": 0,
+        "daysOfMonth": [],
+        "weeksOfMonth": [],
+        "nextDue": [
+          "2026-11-08T23:00:00.000Z",
+          "2026-11-10T23:00:00.000Z",
+          "2026-11-12T23:00:00.000Z",
+          "2026-11-15T23:00:00.000Z",
+          "2026-11-17T23:00:00.000Z",
+          "2026-11-19T23:00:00.000Z"
+        ],
+        "yesterDaily": true,
+        "history": [],
+        "completed": false,
+        "collapseChecklist": false,
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Chapter one",
+            "id": "1c3e4979-8fc2-45c4-90cd-8a4c237956ba"
+          },
+          {
+            "completed": false,
+            "text": "Chapter two",
+            "id": "8b23714d-e031-418f-9842-dd8b03c8fb46"
+          }
+        ],
+        "createdAt": "2026-11-08T10:31:51.065Z",
+        "updatedAt": "2026-11-08T10:31:51.065Z",
+        "isDue": false,
+        "__v": 0
+      },
+      {
+        "_id": "f87dab8c-314a-4d5a-8774-0a5c7cb26469",
+        "type": "daily",
+        "text": "Water plants",
+        "notes": "",
+        "tags": [],
+        "value": 0,
+        "priority": 1,
+        "attribute": "str",
+        "challenge": {},
+        "group": {
+          "completedBy": {},
+          "assignedUsers": []
+        },
+        "reminders": [],
+        "byHabitica": false,
+        "frequency": "daily",
+        "everyX": 3,
+        "startDate": "2026-10-31T23:00:00.000Z",
+        "repeat": {
+          "m": true,
+          "t": true,
+          "w": true,
+          "th": true,
+          "f": true,
+          "s": true,
+          "su": true
+        },
+        "streak": 0,
+        "daysOfMonth": [],
+        "weeksOfMonth": [],
+        "nextDue": [
+          "2026-11-09T23:00:00.000Z",
+          "2026-11-12T23:00:00.000Z",
+          "2026-11-15T23:00:00.000Z",
+          "2026-11-18T23:00:00.000Z",
+          "2026-11-21T23:00:00.000Z",
+          "2026-11-24T23:00:00.000Z"
+        ],
+        "yesterDaily": true,
+        "history": [],
+        "completed": false,
+        "collapseChecklist": false,
+        "checklist": [],
+        "createdAt": "2026-11-08T10:33:05.957Z",
+        "updatedAt": "2026-11-08T10:33:05.957Z",
+        "isDue": false,
+        "__v": 0
+      },
+      {
+        "_id": "b63ad4a8-9810-441f-b5e6-660c56df61e4",
+        "type": "daily",
+        "text": "Pay bills",
+        "notes": "",
+        "tags": [],
+        "value": 1,
+        "priority": 1,
+        "attribute": "str",
+        "challenge": {},
+        "group": {
+          "completedBy": {},
+          "assignedUsers": []
+        },
+        "reminders": [],
+        "byHabitica": false,
+        "frequency": "monthly",
+        "everyX": 1,
+        "startDate": "2026-10-31T23:00:00.000Z",
+        "repeat": {
+          "m": true,
+          "t": true,
+          "w": true,
+          "th": true,
+          "f": true,
+          "s": true,
+          "su": true
+        },
+        "streak": 1,
+        "daysOfMonth": [
+          8
+        ],
+        "weeksOfMonth": [],
+        "nextDue": [
+          "2026-11-30T23:00:00.000Z",
+          "2026-12-31T23:00:00.000Z",
+          "2027-01-31T23:00:00.000Z",
+          "2027-02-28T23:00:00.000Z",
+          "2027-03-31T23:00:00.000Z",
+          "2027-04-30T23:00:00.000Z"
+        ],
+        "yesterDaily": true,
+        "history": [
+          {
+            "date": 1794134046069,
+            "value": 1,
+            "isDue": true,
+            "completed": true
+          }
+        ],
+        "completed": true,
+        "collapseChecklist": false,
+        "checklist": [],
+        "createdAt": "2026-11-08T10:33:48.098Z",
+        "updatedAt": "2026-11-08T10:34:06.073Z",
+        "isDue": true,
+        "__v": 1
+      }
+    ]
+  }
+}
