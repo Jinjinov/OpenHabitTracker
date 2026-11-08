@@ -311,5 +311,15 @@
   "Exact notification timing": "Exact notification timing",
   "Open alarms & reminders": "Open alarms & reminders",
   "On": "On",
-  "Off": "Off"
+  "Off": "Off",
+  "Check-in saved. Could not refresh the pending list.": "Check-in saved. Could not refresh the pending list.",
+  "Check-ins are saved on this device and sent when you reconnect to your saved server.": "Check-ins are saved on this device and sent when you reconnect to your saved server.",
+  "Could not access offline records on this device.": "Could not access offline records on this device.",
+  "Could not save this check-in on this device. Please try again.": "Could not save this check-in on this device. Please try again.",
+  "Could not synchronize. Saved check-ins remain on this device.": "Could not synchronize. Saved check-ins remain on this device.",
+  "Offline check-ins could not be saved or synchronized. Pending records remain on this device.": "Offline check-ins could not be saved or synchronized. Pending records remain on this device.",
+  "Offline habit check-ins": "Offline habit check-ins",
+  "Pending check-ins": "Pending check-ins",
+  "Saved habits": "Saved habits",
+  "Sync now": "Sync now"
 }

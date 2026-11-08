@@ -3,7 +3,7 @@ using OpenHabitTracker.Data.Entities;
 
 namespace OpenHabitTracker.App;
 
-public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
+public class RemoteDataSync(ClientState clientState, IOfflineHabitCompletions? offlineHabits = null) : IAsyncDisposable
 {
     private readonly ClientState _clientState = clientState;
 
@@ -25,6 +25,33 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
 
     // True once a tick has failed, false again after one succeeds. The nav icon renders from it.
     public bool ServerUnreachable { get; private set; }
+    public bool OfflineSyncFailed { get; private set; }
+
+    private async Task SyncOfflineHabits()
+    {
+        if (offlineHabits is null)
+            return;
+        bool previouslyFailed = OfflineSyncFailed;
+        try
+        {
+            await offlineHabits.RefreshAndSync(_clientState);
+            OfflineSyncFailed = false;
+        }
+        catch (SignedOutException)
+        {
+            throw;
+        }
+        catch (Exception)
+        {
+            // A failed cache write or upload must not erase the durable queue or break online use.
+            OfflineSyncFailed = true;
+        }
+        finally
+        {
+            if (previouslyFailed != OfflineSyncFailed)
+                _refresh?.Invoke();
+        }
+    }
 
     public async ValueTask DisposeAsync()
     {
@@ -152,6 +179,8 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
                         }
                     }
 
+                    await SyncOfflineHabits();
+
                     _timer.Period = PollInterval;
 
                     SetServerUnreachable(false);
@@ -232,6 +261,7 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
 
         if (_clientState.DataLocation == DataLocation.Remote)
         {
+            await SyncOfflineHabits();
             StartPolling();
         }
     }

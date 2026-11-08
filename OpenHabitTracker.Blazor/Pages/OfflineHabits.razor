@@ -1,0 +1,114 @@
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Data
+@inject IEnumerable<IOfflineHabitCompletions> CompletionServices
+@inject IEnumerable<IDataAccess> DataSources
+@inject IStringLocalizer Loc
+
+@if (_snapshot is not null)
+{
+    <section class="my-3" aria-label="@Loc["Offline habit check-ins"]">
+        <h6>@Loc["Offline habit check-ins"]</h6>
+        <p class="small text-body-secondary">
+            @Loc["Saved habits"]: @_snapshot.SavedAt.ToLocalTime().ToString("g")<br />
+            @Loc["Pending check-ins"]: @_pending.Count
+        </p>
+        <p class="small">@Loc["Check-ins are saved on this device and sent when you reconnect to your saved server."]</p>
+        @if (!string.IsNullOrEmpty(_error))
+        {
+            <div class="alert alert-warning" role="alert">@_error</div>
+        }
+        <ul class="list-group">
+            @foreach (SavedHabit habit in _snapshot.Habits)
+            {
+                <li class="list-group-item d-flex align-items-center justify-content-between gap-2">
+                    <span>@habit.Title</span>
+                    <button type="button" class="btn btn-sm btn-outline-success" disabled="@(_busy || habit.TargetQuantity <= 0)" @onclick="() => Record(habit)">
+                        @Loc["Mark as done"]
+                    </button>
+                </li>
+            }
+        </ul>
+        <button type="button" class="btn btn-sm btn-outline-primary mt-2" disabled="@(_busy || _pending.Count == 0)" @onclick="Synchronize">@Loc["Sync now"]</button>
+    </section>
+}
+else if (!string.IsNullOrEmpty(_error))
+{
+    <div class="alert alert-warning" role="alert">@_error</div>
+}
+
+@code {
+    [Parameter] public bool StateChanged { get; set; }
+    private IOfflineHabitCompletions? _completions;
+    private OfflineHabitSnapshot? _snapshot;
+    private IReadOnlyList<HabitCompletion> _pending = [];
+    private bool _busy;
+    private string? _error;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _snapshot = null;
+        _pending = [];
+        _completions = CompletionServices.FirstOrDefault();
+        IDataAccess? local = DataSources.FirstOrDefault(x => x.DataLocation == DataLocation.Local);
+        if (_completions is null || local is null)
+            return;
+        try
+        {
+            var settings = (await local.GetSettings()).FirstOrDefault();
+            _snapshot = settings is not null && settings.RememberMe && !string.IsNullOrEmpty(settings.RefreshToken) &&
+                !string.IsNullOrEmpty(settings.BaseUrl) && !string.IsNullOrEmpty(settings.Username)
+                ? await _completions.ReadSnapshot(settings.BaseUrl, settings.Username) : null;
+            _pending = _snapshot is null ? [] : await _completions.ReadPending(_snapshot);
+        }
+        catch (Exception)
+        {
+            _error = Loc["Could not access offline records on this device."];
+        }
+    }
+
+    private async Task Record(SavedHabit habit)
+    {
+        if (_busy || _snapshot is null || _completions is null)
+            return;
+        _busy = true;
+        _error = null;
+        bool saved = false;
+        try
+        {
+            await _completions.Record(_snapshot, habit);
+            saved = true;
+            _pending = await _completions.ReadPending(_snapshot);
+        }
+        catch (Exception)
+        {
+            _error = saved ? Loc["Check-in saved. Could not refresh the pending list."] : Loc["Could not save this check-in on this device. Please try again."];
+        }
+        finally { _busy = false; }
+    }
+
+    private async Task Synchronize()
+    {
+        if (_busy || _snapshot is null || _completions is null)
+            return;
+        _busy = true;
+        _error = null;
+        try
+        {
+            await _completions.Synchronize(_snapshot);
+        }
+        catch (SignedOutException)
+        {
+            _error = Loc["Signed out - log in again"];
+        }
+        catch (Exception)
+        {
+            _error = Loc["Could not synchronize. Saved check-ins remain on this device."];
+        }
+        finally
+        {
+            _busy = false;
+            try { _pending = await _completions.ReadPending(_snapshot); }
+            catch (Exception) { _error = Loc["Could not access offline records on this device."]; }
+        }
+    }
+}

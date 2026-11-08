@@ -211,6 +211,26 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("OpenHabitTracker.Blazor.Web.Data.HabitCompletionReceipt", b =>
+                {
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("OperationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("TimeId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("UserId", "OperationId");
+
+                    b.ToTable("HabitCompletionReceipts");
+                });
+
             modelBuilder.Entity("OpenHabitTracker.Blazor.Web.Data.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
@@ -693,6 +713,15 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
+                {
+                    b.HasOne("OpenHabitTracker.Blazor.Web.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OpenHabitTracker.Blazor.Web.Data.HabitCompletionReceipt", b =>
                 {
                     b.HasOne("OpenHabitTracker.Blazor.Web.Data.ApplicationUser", null)
                         .WithMany()

@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<SettingsEntity> Settings { get; set; }
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<HabitCompletionReceipt> HabitCompletionReceipts { get; set; }
 
     IQueryable<IUserEntity> IApplicationDbContext.Users => Users;
 
@@ -48,6 +49,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.OnModelCreating();
+
+        modelBuilder.Entity<HabitCompletionReceipt>().HasKey(x => new { x.UserId, x.OperationId });
+        modelBuilder.Entity<HabitCompletionReceipt>().HasOne<ApplicationUser>().WithMany()
+            .HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<HabitCompletionReceipt>().HasQueryFilter(x => x.UserId == CurrentUserId);
 
         // Only the server filters by owner, so only the server indexes the owner column.
         modelBuilder.Entity<ContentEntity>().HasIndex(x => x.UserId);

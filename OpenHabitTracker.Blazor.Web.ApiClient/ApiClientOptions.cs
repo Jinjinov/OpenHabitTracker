@@ -15,6 +15,8 @@ public class ApiClientOptions
         }
     }
 
+    public string Username { get; set; } = string.Empty;
+
     public string BearerToken { get; set; } = string.Empty;
 
     public string RefreshToken { get; set; } = string.Empty;

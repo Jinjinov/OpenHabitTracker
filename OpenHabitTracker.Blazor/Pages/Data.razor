@@ -4,6 +4,7 @@
 @using OpenHabitTracker.Services
 
 @inject ClientState ClientState
+@inject RemoteDataSync RemoteDataSync
 @inject Examples Examples
 @inject IStringLocalizer Loc
 @inject ILinkAttributeService LinkAttributeService
@@ -34,6 +35,11 @@
 
     <div data-data-step-12>
         @AuthFragment.GetAuthFragment(StateChanged.Value, StateChangedChanged)
+        @if (RemoteDataSync.OfflineSyncFailed)
+        {
+            <div class="alert alert-warning" role="alert">@Loc["Offline check-ins could not be saved or synchronized. Pending records remain on this device."]</div>
+        }
+        <OfflineHabits StateChanged="StateChanged.Value" />
     </div>
 }
 

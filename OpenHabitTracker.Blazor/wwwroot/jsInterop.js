@@ -265,3 +265,11 @@ export function showNotification(title, body, route, dotnetRef) {
         dotnetRef.invokeMethodAsync("OnNotificationActivated", route).catch(() => { });
     };
 }
+
+// Each operation has its own key: appending in another tab cannot replace this tab's queue.
+export function readOfflineHabitCompletions(prefix) {
+    return Object.keys(localStorage)
+        .filter(key => key.startsWith(prefix))
+        .map(key => localStorage.getItem(key))
+        .filter(value => value !== null);
+}

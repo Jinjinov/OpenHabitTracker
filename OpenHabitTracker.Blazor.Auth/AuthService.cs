@@ -31,6 +31,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
             if (!string.IsNullOrEmpty(tokenResponse.JwtToken))
             {
                 SetTokens(tokenResponse);
+                _apiClientOptions.Username = username;
 
                 if (_clientState.Settings.RememberMe)
                 {
@@ -117,6 +118,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
             if (!string.IsNullOrEmpty(tokenResponse.JwtToken))
             {
                 SetTokens(tokenResponse);
+                _apiClientOptions.Username = _clientState.Settings.Username;
 
                 _clientState.Settings.RefreshToken = tokenResponse.RefreshToken;
 
@@ -187,6 +189,7 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
     public async Task Logout()
     {
+        _apiClientOptions.Username = "";
         _apiClientOptions.BearerToken = "";
         _apiClientOptions.RefreshToken = "";
         _apiClientOptions.BearerTokenExpiresAt = default;

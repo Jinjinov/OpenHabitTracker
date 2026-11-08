@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using OpenHabitTracker.Data;
+using OpenHabitTracker.App;
 
 namespace OpenHabitTracker.Blazor.Web.ApiClient;
 
@@ -41,6 +42,7 @@ public static class Startup
         });
 
         services.AddScoped<IDataAccess, DataAccess>();
+        services.AddScoped<IOfflineHabitCompletions, OfflineHabitCompletions>();
 
         return services;
     }

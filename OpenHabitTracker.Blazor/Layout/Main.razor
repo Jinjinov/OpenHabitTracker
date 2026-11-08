@@ -272,7 +272,7 @@
 
         SetDynamicComponentParameters();
 
-        if (AuthFragment.IsSignedOut)
+        if (AuthFragment.IsSignedOut || (!loginSuccessful && AuthFragment.CanRefreshTokenLogin))
             SelectComponent<Data>();
         else if (!string.IsNullOrEmpty(ClientState.Settings.StartSidebar))
             SelectComponent(ClientState.Settings.StartSidebar);

@@ -9,6 +9,7 @@ public static class Startup
     public static IServiceCollection AddBlazor(this IServiceCollection services)
     {
         services.AddScoped<IJsInterop, JsInterop>();
+        services.AddScoped<IOfflineHabitStore, OfflineHabitStore>();
         services.AddScoped<IRuntimeClientData, RuntimeClientData>();
 
         services.UseGTour();

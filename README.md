@@ -203,6 +203,12 @@ Choose the platform where you want to host the OpenHabitTracker server:
 6. Check **Remember me** to stay logged in across app restarts
 7. Click **Log in**
 
+### Offline habit check-ins
+
+After signing in to your server with **Remember me**, desktop and mobile clients keep a device-local copy of the synced habit list. In **Data → Offline habit check-ins**, you can record completed habits even when the server is unavailable, including after restarting the app. Pending check-ins are sent after reconnecting, or with **Sync now**. Retrying an upload does not count it twice.
+
+This first offline workflow supports adding completions for existing habits; it does not reset their checklists. Other edits still require a connection. Update the self-hosted server alongside the client to enable the new upload endpoint. Keep the app's local data until all pending check-ins have synced; clearing browser/WebView storage removes them. Each saved server/account has its own records, and signing out hides its offline list.
+
 ## Made with:
 
 *   [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor)
