@@ -22,17 +22,20 @@ public class RefreshTokenHandler(ApiClientOptions options, ITokenRefresher token
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
+        EnsureOfflineAccount(request);
+
         if (string.IsNullOrEmpty(_options.BearerToken))
             return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
         if (_options.BearerTokenExpiresAt - RenewBefore <= DateTimeOffset.UtcNow)
             await _tokenRefresher.TryRefresh().ConfigureAwait(false);
 
-        // PrepareRequest stamped the header before this handler ran, so a renewal above has to replace it.
-        SetBearerToken(request);
-
         // Captured before sending, because HttpClient disposes the request content afterwards.
         byte[]? content = request.Content is null ? null : await request.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
+
+        // Refreshing or reading the body can yield while the user changes account/server.
+        EnsureOfflineAccount(request);
+        SetBearerToken(request);
 
         HttpResponseMessage response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
@@ -44,6 +47,7 @@ public class RefreshTokenHandler(ApiClientOptions options, ITokenRefresher token
 
         response.Dispose();
 
+        EnsureOfflineAccount(request);
         HttpRequestMessage retry = Clone(request, content);
 
         SetBearerToken(retry);
@@ -56,6 +60,15 @@ public class RefreshTokenHandler(ApiClientOptions options, ITokenRefresher token
         retried.Dispose();
 
         throw new SignedOutException();
+    }
+
+    private void EnsureOfflineAccount(HttpRequestMessage request)
+    {
+        if (request.Options.TryGetValue(DataAccessClient.OfflineAccount, out var account) &&
+            (string.IsNullOrEmpty(_options.BearerToken) ||
+             !string.Equals(account.Server, _options.BaseUrl, StringComparison.Ordinal) ||
+             !string.Equals(account.Username, _options.Username, StringComparison.OrdinalIgnoreCase)))
+            throw new InvalidOperationException("The account changed while uploading offline check-ins.");
     }
 
     private void SetBearerToken(HttpRequestMessage request)

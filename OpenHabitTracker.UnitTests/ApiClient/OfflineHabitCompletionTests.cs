@@ -149,6 +149,88 @@ public class OfflineHabitCompletionTests
     }
 
     [Test]
+    public async Task AccountChangesDuringUpload_LeavesRemainingRecordsForTheirOriginalAccount()
+    {
+        JsonStore store = new();
+        ApiClientOptions options = Session();
+        int attempts = 0;
+        using HttpClient http = new(new Handler(_ =>
+        {
+            attempts++;
+            options.BaseUrl = "https://another.example/";
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = JsonContent.Create(21L) });
+        }));
+        var service = Service(store, http, options);
+        var snapshot = Snapshot();
+        await service.Record(snapshot, snapshot.Habits[0]);
+        await service.Record(snapshot, snapshot.Habits[0]);
+        Assert.ThrowsAsync<InvalidOperationException>(() => service.Synchronize(snapshot));
+        Assert.That(attempts, Is.EqualTo(1));
+        Assert.That(await store.ReadPending(snapshot), Has.Count.EqualTo(1));
+    }
+
+    [Test]
+    public async Task QueuedSync_RechecksTheAccountAfterWaitingForAnUpload()
+    {
+        JsonStore store = new();
+        ApiClientOptions options = Session();
+        var entered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        int attempts = 0;
+        using HttpClient http = new(new Handler(async _ =>
+        {
+            attempts++;
+            entered.TrySetResult();
+            await release.Task;
+            return new(HttpStatusCode.OK) { Content = JsonContent.Create(21L) };
+        }));
+        var service = Service(store, http, options);
+        var snapshot = Snapshot();
+        await service.Record(snapshot, snapshot.Habits[0]);
+        Task first = service.Synchronize(snapshot);
+        await entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        await service.Record(snapshot, snapshot.Habits[0]);
+        Task queued = service.Synchronize(snapshot);
+        options.Username = "bob";
+        release.SetResult();
+        await first;
+        Assert.ThrowsAsync<InvalidOperationException>(() => queued);
+        Assert.That(attempts, Is.EqualTo(1));
+        Assert.That(await store.ReadPending(snapshot), Has.Count.EqualTo(1));
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task AccountChangesDuringTokenRefresh_DoesNotSendOrRetryWithTheOtherSession(bool afterUnauthorized)
+    {
+        JsonStore store = new();
+        ApiClientOptions options = Session();
+        options.BearerTokenExpiresAt = afterUnauthorized ? DateTimeOffset.UtcNow.AddDays(1) : DateTimeOffset.UtcNow.AddMinutes(1);
+        int attempts = 0;
+        var refresher = Substitute.For<ITokenRefresher>();
+        refresher.TryRefresh().Returns(_ =>
+        {
+            options.Username = "bob";
+            options.BearerToken = "other-account-token";
+            return Task.FromResult(true);
+        });
+        using HttpClient http = new(new RefreshTokenHandler(options, refresher)
+        {
+            InnerHandler = new Handler(_ =>
+            {
+                attempts++;
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            })
+        });
+        var service = Service(store, http, options);
+        var snapshot = Snapshot();
+        await service.Record(snapshot, snapshot.Habits[0]);
+        Assert.ThrowsAsync<InvalidOperationException>(() => service.Synchronize(snapshot));
+        Assert.That(attempts, Is.EqualTo(afterUnauthorized ? 1 : 0));
+        Assert.That(await store.ReadPending(snapshot), Has.Count.EqualTo(1));
+    }
+
+    [Test]
     public void FailedDurableWrite_IsReportedInsteadOfPretendingTheCheckInWasSaved()
     {
         JsonStore store = new() { FailWrite = true };

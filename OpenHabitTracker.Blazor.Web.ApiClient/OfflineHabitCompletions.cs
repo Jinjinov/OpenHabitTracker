@@ -65,14 +65,12 @@ public sealed class OfflineHabitCompletions(IOfflineHabitStore store, DataAccess
 
     public async Task Synchronize(OfflineHabitSnapshot snapshot)
     {
-        if (string.IsNullOrEmpty(options.BearerToken) ||
-            !SameServer(snapshot.Server, options.BaseUrl) ||
-            !string.Equals(snapshot.Username, options.Username, StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("Connect to the saved account before synchronizing its check-ins.");
+        EnsureConnectedAccount(snapshot);
 
         await _syncLock.WaitAsync();
         try
         {
+            EnsureConnectedAccount(snapshot);
             // Restore the durable, immutable operation log. A new remote starts at its first
             // unacknowledged commit; acknowledgements are removed only after the server replies.
             Repository<HabitCompletion> repository = new();
@@ -90,6 +88,7 @@ public sealed class OfflineHabitCompletions(IOfflineHabitStore store, DataAccess
                 {
                     if (commit.Item.UserId != snapshot.UserId)
                         throw new InvalidOperationException("A pending check-in belongs to another account.");
+                    EnsureConnectedAccount(snapshot);
                     await client.RecordHabitCompletion(commit.Item);
                     await store.RemovePending(snapshot, commit.Item.OperationId);
                 }
@@ -103,6 +102,14 @@ public sealed class OfflineHabitCompletions(IOfflineHabitStore store, DataAccess
         {
             _syncLock.Release();
         }
+    }
+
+    private void EnsureConnectedAccount(OfflineHabitSnapshot snapshot)
+    {
+        if (string.IsNullOrEmpty(options.BearerToken) ||
+            !SameServer(snapshot.Server, options.BaseUrl) ||
+            !string.Equals(snapshot.Username, options.Username, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("Connect to the saved account before synchronizing its check-ins.");
     }
 
     private static bool SameServer(string first, string second) =>
@@ -123,6 +130,8 @@ public sealed class OfflineHabitCompletions(IOfflineHabitStore store, DataAccess
 
 public partial class DataAccessClient
 {
+    internal static readonly HttpRequestOptionsKey<(string Server, string Username)> OfflineAccount = new("OfflineHabitAccount");
+
     // Uses the existing token-refresh handler and base address, just like the generated methods.
     internal async Task<long> RecordHabitCompletion(HabitCompletion completion)
     {
@@ -130,6 +139,7 @@ public partial class DataAccessClient
         {
             Content = JsonContent.Create(completion)
         };
+        request.Options.Set(OfflineAccount, (_options.BaseUrl, _options.Username));
         StringBuilder url = new("api/habit-completions");
         PrepareRequest(_httpClient, request, url);
         request.RequestUri = new Uri(url.ToString(), UriKind.RelativeOrAbsolute);
