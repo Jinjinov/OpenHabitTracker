@@ -9,5 +9,6 @@ public enum ImportFormat
     Markdown,
     GoogleKeep,
     LoopDatabase,
-    LoopCsv
+    LoopCsv,
+    HabitNow
 }

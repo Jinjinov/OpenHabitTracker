@@ -5,6 +5,7 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
+using OpenHabitTracker.Backup.HabitNow;
 using OpenHabitTracker.Backup.Loop;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
@@ -73,7 +74,7 @@ public class GoogleKeepImportTests
         File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "Importers", "GoogleKeep", "takeout.zip"));
 
     private ImportExportService CreateService() =>
-        new(_clientState, new JsonImportExport(_clientState), new TsvImportExport(_clientState), new YamlImportExport(_clientState), new MarkdownImportExport(_clientState), new GoogleKeepImport(), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()));
+        new(_clientState, new JsonImportExport(_clientState), new TsvImportExport(_clientState), new YamlImportExport(_clientState), new MarkdownImportExport(_clientState), new GoogleKeepImport(), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()), new HabitNowImport(Substitute.For<IStringLocalizer>()));
 
     [Test]
     public async Task Read_TakeoutWithTasks_ReadsTheNotesAndSkipsTasksJson()

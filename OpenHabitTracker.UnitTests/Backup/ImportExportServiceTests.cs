@@ -5,6 +5,7 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
+using OpenHabitTracker.Backup.HabitNow;
 using OpenHabitTracker.Backup.Loop;
 using OpenHabitTracker.Data;
 
@@ -23,7 +24,7 @@ public class ImportExportServiceTests
 
         ClientState clientState = new(new[] { dataAccess }, new MarkdownToHtml(new MarkdownPipelineBuilder().Build()));
 
-        _service = new(clientState, new JsonImportExport(clientState), new TsvImportExport(clientState), new YamlImportExport(clientState), new MarkdownImportExport(clientState), new GoogleKeepImport(), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()));
+        _service = new(clientState, new JsonImportExport(clientState), new TsvImportExport(clientState), new YamlImportExport(clientState), new MarkdownImportExport(clientState), new GoogleKeepImport(), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()), new HabitNowImport(Substitute.For<IStringLocalizer>()));
     }
 
     private static Stream Text(string content) => new MemoryStream(System.Text.Encoding.UTF8.GetBytes(content));

@@ -31,6 +31,10 @@ public static class ImportFormatDetector
         using StreamReader streamReader = new(new MemoryStream(content));
 
         string text = streamReader.ReadToEnd();
+
+        if (IsHabitNowBackup(text))
+            return ImportFormat.HabitNow;
+
         string[] lines = text.Split('\n').Select(line => line.TrimEnd('\r')).ToArray();
 
         ImportFormat hint = GetExtensionHint(filename);
@@ -103,6 +107,12 @@ public static class ImportFormatDetector
     private static bool IsLoopDatabase(byte[] content)
     {
         return content.AsSpan().IndexOf("CREATE TABLE Repetitions"u8) >= 0 && content.AsSpan().IndexOf("freq_num"u8) >= 0;
+    }
+
+    // C, the backup time as yyyyMMddHHmmss, 1, and the categories section.
+    private static bool IsHabitNowBackup(string text)
+    {
+        return text.Length >= 18 && text[0] == 'C' && !text.AsSpan(1, 15).ContainsAnyExceptInRange('0', '9') && text.AsSpan(16, 2).SequenceEqual("{C");
     }
 
     private static bool IsLoopCsvExport(byte[] content)
