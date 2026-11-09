@@ -17,6 +17,9 @@ public static class ImportFormatDetector
     {
         if (content.AsSpan().StartsWith(_zipSignature))
         {
+            if (IsLoopCsvExport(content))
+                return ImportFormat.LoopCsv;
+
             return IsGoogleKeepTakeout(content) ? ImportFormat.GoogleKeep : ImportFormat.Unknown;
         }
 
@@ -100,6 +103,20 @@ public static class ImportFormatDetector
     private static bool IsLoopDatabase(byte[] content)
     {
         return content.AsSpan().IndexOf("CREATE TABLE Repetitions"u8) >= 0 && content.AsSpan().IndexOf("freq_num"u8) >= 0;
+    }
+
+    private static bool IsLoopCsvExport(byte[] content)
+    {
+        try
+        {
+            using ZipArchive archive = new(new MemoryStream(content));
+
+            return archive.GetEntry("Habits.csv") is not null && archive.GetEntry("Checkmarks.csv") is not null;
+        }
+        catch (InvalidDataException)
+        {
+            return false;
+        }
     }
 
     private static bool IsGoogleKeepTakeout(byte[] content)

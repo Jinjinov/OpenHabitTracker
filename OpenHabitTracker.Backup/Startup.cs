@@ -16,6 +16,7 @@ public static class Startup
 
         services.AddScoped<GoogleKeepImport>();
         services.AddScoped<LoopImport>();
+        services.AddScoped<LoopCsvImport>();
 
         services.AddScoped<ImportExportService>();
 

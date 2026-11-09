@@ -14,34 +14,6 @@ public class LoopImport(IStringLocalizer loc)
     private const long YesManual = 2;
     private const long Skip = 3;
 
-    // Numerical entries are stored in thousandths.
-    private const double NumericalScale = 1000.0;
-
-    // Loop's light palette by index, from uhabits-core Themes.kt, each with the class nearest in meaning.
-    private static readonly (int Rgb, string Color)[] _palette =
-    [
-        (0xD32F2F, "bg-danger-subtle"),    // red
-        (0xE64A19, "bg-warning-subtle"),   // deep orange
-        (0xF57C00, "bg-warning-subtle"),   // orange
-        (0xFF8F00, "bg-warning-subtle"),   // amber
-        (0xF9A825, "bg-warning-subtle"),   // yellow
-        (0xAFB42B, "bg-success-subtle"),   // lime
-        (0x7CB342, "bg-success-subtle"),   // light green
-        (0x388E3C, "bg-success-subtle"),   // green
-        (0x00897B, "bg-info-subtle"),      // teal
-        (0x00ACC1, "bg-info-subtle"),      // cyan
-        (0x039BE5, "bg-info-subtle"),      // light blue
-        (0x1976D2, "bg-primary-subtle"),   // blue
-        (0x303F9F, "bg-primary-subtle"),   // indigo
-        (0x5E35B1, "bg-primary-subtle"),   // deep purple
-        (0x8E24AA, "bg-primary-subtle"),   // purple
-        (0xD81B60, "bg-danger-subtle"),    // pink
-        (0x5D4037, "bg-dark-subtle"),      // brown
-        (0x424242, "bg-dark-subtle"),      // dark grey
-        (0x757575, "bg-secondary-subtle"), // grey
-        (0x9E9E9E, "bg-secondary-subtle"), // light grey
-    ];
-
     private readonly IStringLocalizer _loc = loc;
 
     public async Task<ImportedData> ReadDataFile(Stream stream)
@@ -98,11 +70,11 @@ public class LoopImport(IStringLocalizer loc)
                 bool isNumerical = hasNumericalHabits && !reader.IsDBNull(6) && reader.GetInt64(6) == 1;
                 string unit = isNumerical && !reader.IsDBNull(8) ? reader.GetString(8).Trim() : string.Empty;
 
-                (int repeatCount, int repeatInterval, Period repeatPeriod) = Frequency(GetInt64(reader, 4, 1), GetInt64(reader, 5, 1));
+                (int repeatCount, int repeatInterval, Period repeatPeriod) = LoopFormat.Frequency(GetInt64(reader, 4, 1), GetInt64(reader, 5, 1));
 
                 HabitModel habit = new()
                 {
-                    Title = unit.Length > 0 ? $"{name} ({unit})" : name,
+                    Title = LoopFormat.Title(name, unit),
                     Color = Color(GetInt64(reader, 2, 0)),
                     RepeatCount = repeatCount,
                     RepeatInterval = repeatInterval,
@@ -151,7 +123,7 @@ public class LoopImport(IStringLocalizer loc)
                     if (value == Skip || value <= 0)
                         continue;
 
-                    quantity = value / NumericalScale;
+                    quantity = value / LoopFormat.NumericalScale;
                 }
                 else
                 {
@@ -161,7 +133,8 @@ public class LoopImport(IStringLocalizer loc)
                     quantity = 1;
                 }
 
-                DateTime day = Midday(reader.GetInt64(1));
+                // The day is stored as UTC midnight in milliseconds.
+                DateTime day = LoopFormat.Midday(DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(1)).UtcDateTime);
 
                 entry.Habit.TimesDone!.Add(new TimeModel { StartedAt = day, CompletedAt = day, Quantity = quantity });
 
@@ -204,45 +177,9 @@ public class LoopImport(IStringLocalizer loc)
         return reader.IsDBNull(ordinal) ? fallback : reader.GetInt64(ordinal);
     }
 
-    // freq_num times in freq_den days, which is exact as a count per days, and reads better per week or month.
-    private static (int RepeatCount, int RepeatInterval, Period RepeatPeriod) Frequency(long times, long days)
-    {
-        int count = (int)Math.Max(1, times);
-
-        return days switch
-        {
-            7 => (count, 1, Period.Week),
-            30 or 31 => (count, 1, Period.Month),
-            _ => (count, (int)Math.Max(1, days), Period.Day)
-        };
-    }
-
-    // The day is stored as UTC midnight in milliseconds, and a completion that only has a day is recorded at
-    // midday, because midnight belongs ambiguously to two days.
-    private static DateTime Midday(long timestamp)
-    {
-        DateTime day = DateTimeOffset.FromUnixTimeMilliseconds(timestamp).UtcDateTime.Date;
-
-        return new DateTime(day.Year, day.Month, day.Day, 12, 0, 0, DateTimeKind.Unspecified);
-    }
-
     // Old schemas, such as 12, store the color itself, later ones the palette index.
     private static string Color(long stored)
     {
-        if (stored is >= 0 and < 20)
-            return _palette[(int)stored].Color;
-
-        int rgb = (int)(stored & 0xFFFFFF);
-
-        return _palette.MinBy(x => Distance(x.Rgb, rgb)).Color;
-    }
-
-    private static int Distance(int a, int b)
-    {
-        int red = ((a >> 16) & 0xFF) - ((b >> 16) & 0xFF);
-        int green = ((a >> 8) & 0xFF) - ((b >> 8) & 0xFF);
-        int blue = (a & 0xFF) - (b & 0xFF);
-
-        return red * red + green * green + blue * blue;
+        return LoopFormat.IsPaletteIndex(stored) ? LoopFormat.ColorOfPaletteIndex((int)stored) : LoopFormat.ColorOfRgb((int)(stored & 0xFFFFFF));
     }
 }

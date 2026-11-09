@@ -57,6 +57,12 @@ public class ImportFormatDetectorTests
     }
 
     [TestCase("Loop/Phone/export.zip")]
+    [TestCase("Loop/TableHabit/loop_habits_csv_v2.3.1.zip")]
+    public void Detect_LoopCsvExport_IsLoopCsv(string path)
+    {
+        Assert.That(ImportFormatDetector.Detect("export.zip", Fixture($"Importers/{path}")), Is.EqualTo(ImportFormat.LoopCsv));
+    }
+
     [TestCase("HabitNow/backup-other-years.hn")]
     [TestCase("Habitica/userdata.json")]
     [TestCase("Habitify/backup.db")]

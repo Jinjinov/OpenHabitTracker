@@ -11,7 +11,7 @@ using YamlDotNet.Core;
 
 namespace OpenHabitTracker.Backup;
 
-public class ImportExportService(ClientState clientState, JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport, LoopImport loopImport)
+public class ImportExportService(ClientState clientState, JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport, LoopImport loopImport, LoopCsvImport loopCsvImport)
 {
     private readonly ClientState _clientState = clientState;
     private readonly JsonImportExport _jsonImportExport = jsonImportExport;
@@ -20,6 +20,7 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
     private readonly MarkdownImportExport _markdownImportExport = markdownImportExport;
     private readonly GoogleKeepImport _googleKeepImport = googleKeepImport;
     private readonly LoopImport _loopImport = loopImport;
+    private readonly LoopCsvImport _loopCsvImport = loopCsvImport;
 
     public async Task<string> GetDataExportFileString(FileFormat fileFormat)
     {
@@ -78,6 +79,9 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
                     break;
                 case ImportFormat.LoopDatabase:
                     (categories, options) = await _loopImport.ReadDataFile(memoryStream);
+                    break;
+                case ImportFormat.LoopCsv:
+                    (categories, options) = await _loopCsvImport.ReadDataFile(memoryStream);
                     break;
                 default:
                     return (ImportResult.UnsupportedFormat, null);

@@ -8,5 +8,6 @@ public enum ImportFormat
     Yaml,
     Markdown,
     GoogleKeep,
-    LoopDatabase
+    LoopDatabase,
+    LoopCsv
 }
