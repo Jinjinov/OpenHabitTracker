@@ -3,6 +3,7 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
 using System.IO.Compression;
+using System.Text;
 using System.Text.Json;
 
 namespace OpenHabitTracker.Backup.GoogleKeep;
@@ -45,7 +46,7 @@ public class GoogleKeepImport(IStringLocalizer loc)
 
     public async Task<ImportedData> ReadDataFile(Stream stream)
     {
-        List<GoogleKeepNote> googleKeepNotes = await GetGoogleKeepNotes(stream);
+        (List<GoogleKeepNote> googleKeepNotes, Dictionary<string, Reminder> reminders) = await GetGoogleKeepNotes(stream);
 
         List<CategoryModel> categories = [];
         Dictionary<NoteModel, string> formerContents = [];
@@ -54,7 +55,7 @@ public class GoogleKeepImport(IStringLocalizer loc)
         CategoryModel? archived = null;
         NoteModel? note = null;
         TaskModel? task = null;
-        //HabitModel? habit = null;
+        HabitModel? habit = null;
 
         DateTime now = DateTime.Now;
 
@@ -100,7 +101,28 @@ public class GoogleKeepImport(IStringLocalizer loc)
                 category = uncategorized;
             }
 
-            if (googleKeepNote.ListContent.Count == 0)
+            // Without Tasks.json in the Takeout, a note with a reminder is imported without it.
+            Reminder? reminder = googleKeepNote.Tasks.Select(x => reminders.GetValueOrDefault(GetTaskId(x.Id))).FirstOrDefault(x => x is not null);
+
+            if (reminder?.Interval is Interval interval)
+            {
+                habit = new()
+                {
+                    Title = googleKeepNote.Title,
+                    Priority = googleKeepNote.IsPinned ? Priority.VeryHigh : Priority.None,
+                    IsDeleted = googleKeepNote.IsTrashed,
+                    Color = GetBootstrapClass(googleKeepNote.Color),
+                    CreatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.CreatedTimestampUsec * 10).ToLocalTime(),
+                    UpdatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.UserEditedTimestampUsec * 10).ToLocalTime(),
+                    StartAt = GetLocalTime(reminder.Start),
+                    Items = GetItems(googleKeepNote, now)
+                };
+
+                SetRepeat(habit, interval);
+
+                category.Habits.Add(habit);
+            }
+            else if (googleKeepNote.ListContent.Count == 0 && reminder is null)
             {
                 note = new()
                 {
@@ -128,25 +150,10 @@ public class GoogleKeepImport(IStringLocalizer loc)
                     IsDeleted = googleKeepNote.IsTrashed,
                     Color = GetBootstrapClass(googleKeepNote.Color),
                     CreatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.CreatedTimestampUsec * 10).ToLocalTime(),
-                    UpdatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.UserEditedTimestampUsec * 10).ToLocalTime()
+                    UpdatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.UserEditedTimestampUsec * 10).ToLocalTime(),
+                    PlannedAt = reminder is null ? null : GetPlannedAt(reminder.Start),
+                    Items = GetItems(googleKeepNote, now)
                 };
-
-                if (googleKeepNote.ListContent.Count > 0)
-                {
-                    task.Items = [];
-
-                    // Keep keeps an empty item at the end of a checklist for the next entry.
-                    foreach (ListContent listContent in googleKeepNote.ListContent.Where(x => !string.IsNullOrWhiteSpace(x.Text)))
-                    {
-                        ItemModel item = new()
-                        {
-                            Title = listContent.Text,
-                            DoneAt = listContent.IsChecked ? now : null
-                        };
-
-                        task.Items.Add(item);
-                    }
-                }
 
                 category.Tasks.Add(task);
             }
@@ -159,6 +166,56 @@ public class GoogleKeepImport(IStringLocalizer loc)
         };
 
         return new(categories, options);
+    }
+
+    // Tasks and habits have no text, so a text note brings its lines as items.
+    private static List<ItemModel> GetItems(GoogleKeepNote googleKeepNote, DateTime now)
+    {
+        if (googleKeepNote.ListContent.Count == 0)
+            return googleKeepNote.TextContent.Split('\n').Select(x => x.Trim()).Where(x => x.Length > 0).Select(x => new ItemModel { Title = x }).ToList();
+
+        // Keep keeps an empty item at the end of a checklist for the next entry.
+        return googleKeepNote.ListContent
+            .Where(x => !string.IsNullOrWhiteSpace(x.Text))
+            .Select(x => new ItemModel { Title = x.Text, DoneAt = x.IsChecked ? now : null })
+            .ToList();
+    }
+
+    // Tasks.json names the task of a reminder by the id the note gives it, in base64url without padding.
+    private static string GetTaskId(string keepTaskId)
+    {
+        return Convert.ToBase64String(Encoding.UTF8.GetBytes(keepTaskId)).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+    }
+
+    // The start is in UTC, with a fraction of a second the app does not show.
+    private static DateTime GetLocalTime(DateTime start)
+    {
+        DateTime local = start.ToLocalTime();
+
+        return local.AddTicks(-(local.Ticks % TimeSpan.TicksPerMinute));
+    }
+
+    // An all-day reminder starts at local midnight.
+    private static DateTime GetPlannedAt(DateTime start)
+    {
+        DateTime local = GetLocalTime(start);
+
+        return local.TimeOfDay == TimeSpan.Zero ? local.Date + TaskModel.DateOnlySentinel : local;
+    }
+
+    // A habit repeats a number of times per interval, so the weekdays of a weekly reminder become its count,
+    // and the day of the month, the day of the year and the end of the repeat are left out.
+    private static void SetRepeat(HabitModel habit, Interval interval)
+    {
+        habit.RepeatInterval = Math.Max(1, interval.IntervalMultiplier);
+
+        (habit.RepeatCount, habit.RepeatPeriod) = interval switch
+        {
+            { Weekly: WeeklyInterval weekly } => (Math.Max(1, weekly.DayOfWeek.Count), Period.Week),
+            { Monthly: not null } => (1, Period.Month),
+            { Yearly: not null } => (1, Period.Year),
+            _ => (1, Period.Day)
+        };
     }
 
     private static string GetContent(GoogleKeepNote googleKeepNote)
@@ -206,7 +263,7 @@ public class GoogleKeepImport(IStringLocalizer loc)
         return _bootstrapClass.GetValueOrDefault(color, _bootstrapClass["DEFAULT"]);
     }
 
-    private static async Task<List<GoogleKeepNote>> GetGoogleKeepNotes(Stream stream)
+    private static async Task<(List<GoogleKeepNote> Notes, Dictionary<string, Reminder> Reminders)> GetGoogleKeepNotes(Stream stream)
     {
         using MemoryStream memoryStream = new();
 
@@ -215,6 +272,7 @@ public class GoogleKeepImport(IStringLocalizer loc)
         using ZipArchive archive = new(memoryStream);
 
         List<GoogleKeepNote> googleKeepNotes = [];
+        Dictionary<string, Reminder> reminders = [];
 
         foreach (ZipArchiveEntry entry in archive.Entries)
         {
@@ -226,18 +284,46 @@ public class GoogleKeepImport(IStringLocalizer loc)
 
                 string jsonText = await streamReader.ReadToEndAsync();
 
-                if (!GoogleKeepNote.IsNote(jsonText))
-                    continue;
-
-                GoogleKeepNote? googleKeepNote = JsonSerializer.Deserialize<GoogleKeepNote>(jsonText);
-
-                if (googleKeepNote is not null)
+                if (GoogleKeepNote.IsNote(jsonText))
                 {
-                    googleKeepNotes.Add(googleKeepNote);
+                    GoogleKeepNote? googleKeepNote = JsonSerializer.Deserialize<GoogleKeepNote>(jsonText);
+
+                    if (googleKeepNote is not null)
+                    {
+                        googleKeepNotes.Add(googleKeepNote);
+                    }
+                }
+                else if (GoogleTaskLists.IsTaskLists(jsonText) && JsonSerializer.Deserialize<GoogleTaskLists>(jsonText) is GoogleTaskLists taskLists)
+                {
+                    AddReminders(taskLists, reminders);
                 }
             }
         }
 
-        return googleKeepNotes;
+        return (googleKeepNotes, reminders);
     }
+
+    // A repeating task names its repeat rule among the recurrences of its list.
+    private static void AddReminders(GoogleTaskLists taskLists, Dictionary<string, Reminder> reminders)
+    {
+        foreach (GoogleTaskList taskList in taskLists.Items)
+        {
+            Dictionary<string, Interval> intervals = [];
+
+            foreach (GoogleTaskRecurrence recurrence in taskList.Recurrences)
+                intervals[recurrence.Id] = recurrence.Schedule.Interval;
+
+            foreach (GoogleTask googleTask in taskList.Items)
+            {
+                if ((googleTask.ScheduledTime.FirstOrDefault(x => x.Current) ?? googleTask.ScheduledTime.FirstOrDefault()) is ScheduledTime scheduledTime)
+                {
+                    Interval? interval = googleTask.TaskRecurrenceId is string recurrenceId ? intervals.GetValueOrDefault(recurrenceId) : null;
+
+                    reminders[googleTask.Id] = new(scheduledTime.Start, interval);
+                }
+            }
+        }
+    }
+
+    private sealed record Reminder(DateTime Start, Interval? Interval);
 }

@@ -61,6 +61,13 @@ public class GoogleKeepImportTests
                 foreach (TaskEntity entity in callInfo.RequiredArg<IReadOnlyList<TaskEntity>>())
                     entity.Id = nextId++;
             });
+        _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>()))
+            .Do(callInfo =>
+            {
+                long nextId = 400;
+                foreach (HabitEntity entity in callInfo.RequiredArg<IReadOnlyList<HabitEntity>>())
+                    entity.Id = nextId++;
+            });
         _dataAccess.When(x => x.AddItems(Arg.Any<IReadOnlyList<ItemEntity>>()))
             .Do(callInfo =>
             {
@@ -80,16 +87,92 @@ public class GoogleKeepImportTests
         new(_clientState, new JsonImportExport(_clientState), new TsvImportExport(_clientState), new YamlImportExport(_clientState), new MarkdownImportExport(_clientState), new GoogleKeepImport(Localizer()), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()), new HabitNowImport(Substitute.For<IStringLocalizer>()), new HabiticaImport(), new HabitifyImport(Substitute.For<IStringLocalizer>()));
 
     [Test]
-    public async Task Read_TakeoutWithTasks_ReadsTheNotesAndSkipsTasksJson()
+    public async Task Read_TakeoutWithTasks_ReadsTheNotesWithTheirReminders()
     {
         List<CategoryModel> categories = await ReadTakeout();
 
-        // 30 Keep notes: the two checklists become tasks, the other 28 notes.
+        // 30 Keep notes: two checklists and three notes with a one-time reminder become tasks,
+        // seven notes with a repeating reminder become habits, and the other 18 stay notes.
         Assert.Multiple(() =>
         {
-            Assert.That(categories.Sum(x => x.Notes.Count), Is.EqualTo(28));
-            Assert.That(categories.Sum(x => x.Tasks.Count), Is.EqualTo(2));
+            Assert.That(categories.Sum(x => x.Notes.Count), Is.EqualTo(18));
+            Assert.That(categories.Sum(x => x.Tasks.Count), Is.EqualTo(5));
+            Assert.That(categories.Sum(x => x.Habits.Count), Is.EqualTo(7));
         });
+    }
+
+    [Test]
+    public async Task Read_NoteWithAReminder_BecomesAPlannedTaskWithItsLinesAsItems()
+    {
+        List<CategoryModel> categories = await ReadTakeout();
+
+        TaskModel task = categories.SelectMany(x => x.Tasks).Single(x => x.Title == "Formatted text");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(task.PlannedAt, Is.EqualTo(new DateTime(2026, 11, 15, 7, 0, 0, DateTimeKind.Utc).ToLocalTime()));
+            Assert.That(task.Items!.Select(x => x.Title), Is.EqualTo(new[] { "Heading", "Plain bold italic underline" }));
+        });
+    }
+
+    [Test]
+    public async Task Read_AllDayReminder_PlansTheDateWithoutATime()
+    {
+        DateTime start = new DateTime(2026, 11, 24, 23, 0, 0, DateTimeKind.Utc).ToLocalTime();
+
+        Assume.That(start.TimeOfDay, Is.EqualTo(TimeSpan.Zero), "The fixture was exported at UTC+1, where the reminder starts at midnight.");
+
+        List<CategoryModel> categories = await ReadTakeout();
+
+        TaskModel task = categories.SelectMany(x => x.Tasks).Single(x => x.Title == "Reminder all day");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(task.IsPlannedDateOnly, Is.True);
+            Assert.That(task.PlannedDate, Is.EqualTo(start.Date));
+        });
+    }
+
+    [TestCase("Reminder daily", 1, 1, Period.Day)]
+    [TestCase("Reminder weekly", 1, 1, Period.Week)]
+    [TestCase("Reminder monthly", 1, 1, Period.Month)]
+    [TestCase("Reminder yearly", 1, 1, Period.Year)]
+    [TestCase("Reminder custom forever", 2, 2, Period.Week)]
+    [TestCase("Reminder custom until", 1, 1, Period.Month)]
+    [TestCase("Reminder custom count", 1, 3, Period.Day)]
+    public async Task Read_RepeatingReminder_BecomesAHabit(string title, int repeatCount, int repeatInterval, Period repeatPeriod)
+    {
+        List<CategoryModel> categories = await ReadTakeout();
+
+        HabitModel habit = categories.SelectMany(x => x.Habits).Single(x => x.Title == title);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.RepeatCount, Is.EqualTo(repeatCount));
+            Assert.That(habit.RepeatInterval, Is.EqualTo(repeatInterval));
+            Assert.That(habit.RepeatPeriod, Is.EqualTo(repeatPeriod));
+            Assert.That(habit.Items, Has.Count.EqualTo(1));
+        });
+    }
+
+    [Test]
+    public async Task Read_RepeatingReminder_StartsTheHabitAtTheFirstReminder()
+    {
+        List<CategoryModel> categories = await ReadTakeout();
+
+        HabitModel habit = categories.SelectMany(x => x.Habits).Single(x => x.Title == "Reminder daily");
+
+        Assert.That(habit.StartAt, Is.EqualTo(new DateTime(2026, 11, 10, 6, 15, 0, DateTimeKind.Utc).ToLocalTime()));
+    }
+
+    [Test]
+    public async Task Read_ReminderWithoutTasksJson_StaysANote()
+    {
+        List<CategoryModel> categories = await ReadNote("""
+            {"color":"DEFAULT","title":"Reminder","textContent":"Call back.","userEditedTimestampUsec":1,"createdTimestampUsec":1,"tasks":[{"id":"oyrCiAmJxpOXRTEv"}]}
+            """);
+
+        Assert.That(categories.Single().Notes.Single().Content, Is.EqualTo("Call back."));
     }
 
     private static IStringLocalizer Localizer()
@@ -130,7 +213,6 @@ public class GoogleKeepImportTests
         return (await new GoogleKeepImport(Localizer()).ReadDataFile(stream)).Categories;
     }
 
-    [TestCase("Formatted text", "# Heading\nPlain **bold** *italic* ++underline++")]
     [TestCase("H2 and cleared formatting", "## Subheading\nFormatting cleared")]
     [TestCase("Plain note", "First line\nSecond line")]
     public async Task Read_FormattedNote_ConvertsTheHtmlToMarkdown(string title, string content)
@@ -164,6 +246,18 @@ public class GoogleKeepImportTests
         Assert.That(task.Items!.Select(x => x.Title), Is.EqualTo(new[] { "Bread", "Milk", "Eggs" }));
     }
 
+    // "Formatted text" in the fixture has a reminder, so it becomes a task, and its HTML is tested here.
+    [Test]
+    public async Task Read_HeadingBoldItalicUnderline_ConvertsToMarkdown()
+    {
+        List<CategoryModel> categories = await ReadNote("""
+            {"color":"DEFAULT","title":"Formatted","textContent":"","userEditedTimestampUsec":1,"createdTimestampUsec":1,
+             "textContentHtml":"<h1><span style=\"font-weight:400;\">Heading</span></h1><p><span style=\"font-weight:400;\">Plain </span><span style=\"font-weight:700;\">bold</span><span> </span><span style=\"font-style:italic;\">italic</span><span> </span><span style=\"text-decoration:underline;\">underline</span></p>"}
+            """);
+
+        Assert.That(categories.Single().Notes.Single().Content, Is.EqualTo("# Heading\nPlain **bold** *italic* ++underline++"));
+    }
+
     [Test]
     public async Task Read_LineBreaksEmptyLinesAndEntities_KeepsTheLines()
     {
@@ -192,9 +286,9 @@ public class GoogleKeepImportTests
     public async Task Read_NoteImportedByTheEarlierVersion_IsNotNew()
     {
         _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>(
-            [new CategoryEntity { Id = 1, Title = "OHT Test B" }]));
+            [new CategoryEntity { Id = 1, Title = "OHT Test A" }]));
         _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>(
-            [new NoteEntity { Id = 1, CategoryId = 1, Title = "Formatted text", Content = "Heading\nPlain bold italic underline" }]));
+            [new NoteEntity { Id = 1, CategoryId = 1, Title = "H2 and cleared formatting", Content = "Subheading\nFormatting cleared" }]));
 
         await _clientState.LoadSettings();
 
@@ -258,7 +352,7 @@ public class GoogleKeepImportTests
 
         await service.Import(pendingImport!);
 
-        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.Count == 28));
+        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.Count == 18));
         // The settings are updated only to hide the new Archived category.
         await _dataAccess.Received(1).UpdateSettings(Arg.Is<SettingsEntity>(x => x != null && x.IsDarkMode == false && x.Culture == "sl"));
         await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
@@ -284,7 +378,7 @@ public class GoogleKeepImportTests
         {
             Assert.That(result, Is.EqualTo(ImportResult.Read));
             Assert.That(pendingImport!.Format, Is.EqualTo(ImportFormat.GoogleKeep));
-            Assert.That(pendingImport.Found, Is.EqualTo(new ImportCounts(Categories: 3, Notes: 28, Tasks: 2, Habits: 0, Items: 6, Completions: 0)));
+            Assert.That(pendingImport.Found, Is.EqualTo(new ImportCounts(Categories: 3, Notes: 18, Tasks: 5, Habits: 7, Items: 17, Completions: 0)));
             Assert.That(pendingImport.New, Is.EqualTo(pendingImport.Found));
         });
 

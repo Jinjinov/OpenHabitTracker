@@ -33,6 +33,12 @@ public class ListContent
     public bool IsChecked { get; set; }
 }
 
+public class KeepTask
+{
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = string.Empty;
+}
+
 public class GoogleKeepNote
 {
     [JsonPropertyName("color")]
@@ -70,6 +76,10 @@ public class GoogleKeepNote
 
     [JsonPropertyName("labels")]
     public List<Label> Labels { get; set; } = [];
+
+    // The reminder of the note, which is a task in Tasks.json.
+    [JsonPropertyName("tasks")]
+    public List<KeepTask> Tasks { get; set; } = [];
 
     // A Takeout also holds JSON of other Google products, such as Tasks.json, which is not a note.
     internal static bool IsNote(string json)
