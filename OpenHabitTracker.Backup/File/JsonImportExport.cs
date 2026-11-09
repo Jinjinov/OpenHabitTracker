@@ -17,14 +17,12 @@ public class JsonImportExport(ClientState clientState)
         return JsonSerializer.Serialize(userData, _options);
     }
 
-    public async Task ImportDataFile(Stream stream)
+    public async Task<UserImportExportData> ReadDataFile(Stream stream)
     {
         using StreamReader streamReader = new(stream);
 
         string content = await streamReader.ReadToEndAsync();
 
-        UserImportExportData userData = JsonSerializer.Deserialize<UserImportExportData>(content, _options) ?? throw new InvalidDataException("Can't deserialize JSON");
-
-        await _clientState.SetUserData(userData);
+        return JsonSerializer.Deserialize<UserImportExportData>(content, _options) ?? throw new InvalidDataException("Can't deserialize JSON");
     }
 }

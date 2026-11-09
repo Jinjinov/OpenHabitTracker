@@ -1,7 +1,9 @@
 using Markdig;
 using NSubstitute;
 using OpenHabitTracker.App;
+using OpenHabitTracker.Backup;
 using OpenHabitTracker.Backup.File;
+using OpenHabitTracker.Backup.GoogleKeep;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
@@ -101,14 +103,33 @@ public class ImportExportTests
         return stream;
     }
 
-    private void ResetState()
+    // The exported data is gone, as on a new device, so the import adds all of it.
+    private void EmptyTheData()
     {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([]));
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([]));
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>([]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>([]));
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
+        _dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([]));
+
         _sut.Habits = null;
         _sut.Notes = null;
         _sut.Tasks = null;
         _sut.Times = null;
         _sut.Items = null;
         _sut.Categories = null;
+    }
+
+    private async Task Import(string filename, string content)
+    {
+        ImportExportService service = new(_sut, new JsonImportExport(_sut), new TsvImportExport(_sut), new YamlImportExport(_sut), new MarkdownImportExport(_sut), new GoogleKeepImport());
+
+        (ImportResult result, PendingImport? pendingImport) = await service.ReadDataFile(filename, ToStream(content));
+
+        Assert.That(result, Is.EqualTo(ImportResult.Read));
+
+        await service.Import(pendingImport!);
     }
 
     // --- JSON ---
@@ -133,9 +154,7 @@ public class ImportExportTests
         JsonSerializerOptions options = new() { WriteIndented = true };
         string json = JsonSerializer.Serialize(userData, options);
 
-        JsonImportExport service = new(_sut);
-
-        await service.ImportDataFile(ToStream(json));
+        await Import("backup.json", json);
 
         await _dataAccess.Received(1).AddCategories(Arg.Any<IReadOnlyList<CategoryEntity>>());
         await _dataAccess.Received(1).AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>());
@@ -150,13 +169,11 @@ public class ImportExportTests
         _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
             [new HabitEntity { Id = 1, CategoryId = 1, Title = "Exercise" }]));
 
-        JsonImportExport service = new(_sut);
+        string json = await new JsonImportExport(_sut).GetDataExportFileString();
 
-        string json = await service.GetDataExportFileString();
+        EmptyTheData();
 
-        ResetState();
-
-        await service.ImportDataFile(ToStream(json));
+        await Import("backup.json", json);
 
         await _dataAccess.Received(1).AddHabits(Arg.Is<IReadOnlyList<HabitEntity>>(list => list != null && list.Any(h => h.Title == "Exercise")));
     }
@@ -192,13 +209,11 @@ public class ImportExportTests
         _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>(
             [new NoteEntity { Id = 1, CategoryId = 1, Title = "Ideas", Content = "Write more tests" }]));
 
-        YamlImportExport service = new(_sut);
+        string yaml = await new YamlImportExport(_sut).GetDataExportFileString();
 
-        string yaml = await service.GetDataExportFileString();
+        EmptyTheData();
 
-        ResetState();
-
-        await service.ImportDataFile(ToStream(yaml));
+        await Import("backup.yaml", yaml);
 
         await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.Any(n => n.Title == "Ideas")));
     }
@@ -214,13 +229,11 @@ public class ImportExportTests
         _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
             [new HabitEntity { Id = 1, CategoryId = 1, Title = "Morning Run" }]));
 
-        TsvImportExport service = new(_sut);
+        string tsv = await new TsvImportExport(_sut).GetDataExportFileString();
 
-        string tsv = await service.GetDataExportFileString();
+        EmptyTheData();
 
-        ResetState();
-
-        await service.ImportDataFile(ToStream(tsv));
+        await Import("backup.tsv", tsv);
 
         await _dataAccess.Received(1).AddHabits(Arg.Is<IReadOnlyList<HabitEntity>>(list => list != null && list.Any(h => h.Title == "Morning Run")));
     }
@@ -231,7 +244,7 @@ public class ImportExportTests
         await _sut.LoadSettings();
         _dataAccess.ClearReceivedCalls();
 
-        await new TsvImportExport(_sut).ImportDataFile(ToStream("ContentType\tCategory\tTitle\tContent\tPriority\tDuration\tPlannedAt\tRepeatCount\tRepeatInterval\tRepeatPeriod\nNote\tWork\tIdeas\tWrite more tests\tNone\t\t\t\t\t\n"));
+        await Import("backup.tsv", "ContentType\tCategory\tTitle\tContent\tPriority\tDuration\tPlannedAt\tRepeatCount\tRepeatInterval\tRepeatPeriod\nNote\tWork\tIdeas\tWrite more tests\tNone\t\t\t\t\t\n");
 
         await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
         await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
@@ -242,7 +255,7 @@ public class ImportExportTests
     public async Task Tsv_ExportThenImport_DateOnlyTaskStaysDateOnly()
     {
         // TSV writes DateTime without milliseconds; the whole-second sentinel has none to lose.
-        await AssertDateOnlyRoundTrips(clientState => new TsvImportExport(clientState));
+        await AssertDateOnlyRoundTrips(clientState => new TsvImportExport(clientState), "backup.tsv");
     }
 
     // --- date-only sentinel round-trip ---
@@ -250,16 +263,16 @@ public class ImportExportTests
     [Test]
     public async Task Json_ExportThenImport_DateOnlyTaskStaysDateOnly()
     {
-        await AssertDateOnlyRoundTrips(clientState => new JsonImportExport(clientState));
+        await AssertDateOnlyRoundTrips(clientState => new JsonImportExport(clientState), "backup.json");
     }
 
     [Test]
     public async Task Yaml_ExportThenImport_DateOnlyTaskStaysDateOnly()
     {
-        await AssertDateOnlyRoundTrips(clientState => new YamlImportExport(clientState));
+        await AssertDateOnlyRoundTrips(clientState => new YamlImportExport(clientState), "backup.yaml");
     }
 
-    private async Task AssertDateOnlyRoundTrips(Func<ClientState, dynamic> makeService)
+    private async Task AssertDateOnlyRoundTrips(Func<ClientState, dynamic> makeService, string filename)
     {
         await _sut.LoadSettings();
 
@@ -274,9 +287,9 @@ public class ImportExportTests
 
         string exported = await service.GetDataExportFileString();
 
-        ResetState();
+        EmptyTheData();
 
-        await service.ImportDataFile(ToStream(exported));
+        await Import(filename, exported);
 
         await _dataAccess.Received(1).AddTasks(Arg.Is<IReadOnlyList<TaskEntity>>(list =>
             list != null && list.Any(t =>
@@ -294,13 +307,11 @@ public class ImportExportTests
         _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>(
             [new NoteEntity { Id = 1, CategoryId = 0, Title = "Floating Note", Content = "No category" }]));
 
-        TsvImportExport service = new(_sut);
+        string tsv = await new TsvImportExport(_sut).GetDataExportFileString();
 
-        string tsv = await service.GetDataExportFileString();
+        EmptyTheData();
 
-        ResetState();
-
-        await service.ImportDataFile(ToStream(tsv));
+        await Import("backup.tsv", tsv);
 
         // The note is still imported even though its category has an empty title
         await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.Any(n => n.Title == "Floating Note")));
@@ -327,7 +338,7 @@ public class ImportExportTests
         await _sut.LoadSettings();
         _dataAccess.ClearReceivedCalls();
 
-        await new MarkdownImportExport(_sut).ImportDataFile(ToStream("# Work\n\n## Ideas\n\nWrite more tests\n"));
+        await Import("backup.md", "# Work\n\n## Ideas\n\nWrite more tests\n");
 
         await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
         await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());

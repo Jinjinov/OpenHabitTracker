@@ -1,14 +1,11 @@
-using OpenHabitTracker.App;
 using OpenHabitTracker.Data.Models;
 using System.IO.Compression;
 using System.Text.Json;
 
 namespace OpenHabitTracker.Backup.GoogleKeep;
 
-public class GoogleKeepImport(ClientState clientState)
+public class GoogleKeepImport
 {
-    private readonly ClientState _clientState = clientState;
-
     //readonly Dictionary<string, string> _namedColors = new()
     //{
     //    { "DEFAULT", "transparent" },
@@ -41,7 +38,7 @@ public class GoogleKeepImport(ClientState clientState)
         { "YELLOW", "bg-warning-subtle" },
     };
 
-    public async Task ImportDataFile(Stream stream)
+    public async Task<List<CategoryModel>> ReadDataFile(Stream stream)
     {
         List<GoogleKeepNote> googleKeepNotes = await GetGoogleKeepNotes(stream);
 
@@ -130,7 +127,7 @@ public class GoogleKeepImport(ClientState clientState)
             }
         }
 
-        await _clientState.AddUserData(categories);
+        return categories;
     }
 
     // A color name Keep adds later falls back to the default instead of failing the whole import.

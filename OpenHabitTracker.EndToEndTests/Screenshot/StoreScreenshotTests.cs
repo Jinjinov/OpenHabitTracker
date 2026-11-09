@@ -111,6 +111,7 @@ public class StoreScreenshotTests : PlaywrightTest
         await OpenDataSidebarAsync(page);
         await page.Locator("[data-data-step-2]").ClickAsync(); // delete all, so a rerun does not stack data
         await page.Locator("input[type='file'].d-none").SetInputFilesAsync(seedFile);
+        await page.Locator("[data-import-summary] button.btn-primary").ClickAsync();
         await page.WaitForTimeoutAsync(3000); // IndexedDB writes have no observable completion signal here
         await page.Locator("#closeSidebar").ClickAsync();
         await Assertions.Expect(page.Locator("main#main-content")).ToBeVisibleAsync();

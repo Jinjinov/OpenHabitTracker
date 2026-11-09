@@ -492,56 +492,85 @@ public class ClientState
 
     public async Task SetUserData(UserImportExportData userData)
     {
-        userData.Settings.UserId = User.Id;
+        await ReplaceSettings(userData.Settings);
+
+        await AddUserData(userData.Categories);
+    }
+
+    public async Task ReplaceSettings(SettingsModel settingsModel)
+    {
+        settingsModel.UserId = User.Id;
 
         // keep this device's block - the file carries the blanks written by the export above
-        userData.Settings.BaseUrl = Settings.BaseUrl;
-        userData.Settings.Username = Settings.Username;
-        userData.Settings.RefreshToken = Settings.RefreshToken;
-        userData.Settings.RememberMe = Settings.RememberMe;
+        settingsModel.BaseUrl = Settings.BaseUrl;
+        settingsModel.Username = Settings.Username;
+        settingsModel.RefreshToken = Settings.RefreshToken;
+        settingsModel.RememberMe = Settings.RememberMe;
 
         if (Settings.Id == 0)
         {
-            SettingsEntity settings = userData.Settings.ToEntity();
+            SettingsEntity settings = settingsModel.ToEntity();
 
             await DataAccess.AddSettings(settings);
 
-            userData.Settings.Id = settings.Id;
+            settingsModel.Id = settings.Id;
 
-            Settings = userData.Settings;
+            Settings = settingsModel;
         }
         else if (await DataAccess.GetSettings(Settings.Id) is SettingsEntity settings)
         {
-            userData.Settings.Id = Settings.Id;
+            settingsModel.Id = Settings.Id;
 
-            userData.Settings.CopyToEntity(settings);
+            settingsModel.CopyToEntity(settings);
 
             await DataAccess.UpdateSettings(settings);
 
-            Settings = userData.Settings;
+            Settings = settingsModel;
         }
-
-        await AddUserData(userData.Categories);
     }
 
     // Adds the categories with their notes, tasks and habits and leaves the settings as they are.
     public async Task AddUserData(List<CategoryModel> categoryModels)
     {
-        if (categoryModels.Count == 0)
+        await AddUserData(UserDataMerge.AllNew(categoryModels));
+    }
+
+    // Matches the categories against the data already there and writes nothing.
+    public async Task<UserDataMerge> MergeUserData(List<CategoryModel> categoryModels)
+    {
+        await LoadContent();
+
+        IReadOnlyList<ItemEntity> items = await DataAccess.GetItems();
+        IReadOnlyList<TimeEntity> times = await DataAccess.GetTimes();
+
+        return UserDataMerge.Create(
+            categoryModels,
+            Categories!.Values,
+            Notes!.Values,
+            Tasks!.Values,
+            Habits!.Values,
+            items.Select(x => x.ToModel()),
+            times.Select(x => x.ToModel()));
+    }
+
+    // Adds what the merge holds and leaves the settings as they are.
+    public async Task AddUserData(UserDataMerge merge)
+    {
+        if (merge.New.IsEmpty)
         {
             await DataReplaced();
 
             return;
         }
 
-        foreach (CategoryModel category in categoryModels)
+        foreach (CategoryModel category in merge.Categories)
         {
             category.UserId = User.Id;
         }
 
         // add categories to DB
 
-        List<(CategoryModel Model, CategoryEntity Entity)> categories = categoryModels
+        List<(CategoryModel Model, CategoryEntity Entity)> categories = merge.Categories
             .Where(x => !string.IsNullOrEmpty(x.Title)) // don't add the default category with no Title
             .Select(x => (Model: x, Entity: x.ToEntity()))
             .ToList();
@@ -559,11 +588,12 @@ public class ClientState
             Model.Habits.ForEach(x => x.CategoryId = Model.Id);
         }
 
-        // add all items to DB, including those from the default category that have CategoryId 0
+        // add all items to DB, including those from the default category that have CategoryId 0,
+        // and those of categories that already exist
 
-        List<(NoteModel Model, NoteEntity Entity)> notes = categoryModels.SelectMany(x => x.Notes).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
-        List<(TaskModel Model, TaskEntity Entity)> tasks = categoryModels.SelectMany(x => x.Tasks).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
-        List<(HabitModel Model, HabitEntity Entity)> habits = categoryModels.SelectMany(x => x.Habits).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(NoteModel Model, NoteEntity Entity)> notes = merge.Categories.SelectMany(x => x.Notes).Concat(merge.Notes).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(TaskModel Model, TaskEntity Entity)> tasks = merge.Categories.SelectMany(x => x.Tasks).Concat(merge.Tasks).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(HabitModel Model, HabitEntity Entity)> habits = merge.Categories.SelectMany(x => x.Habits).Concat(merge.Habits).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
         await DataAccess.AddNotes(notes.Select(x => x.Entity).ToList());
         await DataAccess.AddTasks(tasks.Select(x => x.Entity).ToList());
@@ -600,7 +630,8 @@ public class ClientState
         List<(ItemModel Model, ItemEntity Entity)> items =
             [
                 .. tasks.Where(x => x.Model.Items is not null).SelectMany(x => x.Model.Items!).Select(x => (Model: x, Entity: x.ToEntity())),
-                .. habits.Where(x => x.Model.Items is not null).SelectMany(x => x.Model.Items!).Select(x => (Model: x, Entity: x.ToEntity()))
+                .. habits.Where(x => x.Model.Items is not null).SelectMany(x => x.Model.Items!).Select(x => (Model: x, Entity: x.ToEntity())),
+                .. merge.Items.Select(x => (Model: x, Entity: x.ToEntity()))
             ];
 
         await DataAccess.AddItems(items.Select(x => x.Entity).ToList());
@@ -611,7 +642,7 @@ public class ClientState
 
         // add all habit times done to DB
 
-        List<(TimeModel Model, TimeEntity Entity)> times = habits.Where(x => x.Model.TimesDone is not null).SelectMany(x => x.Model.TimesDone!).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
+        List<(TimeModel Model, TimeEntity Entity)> times = habits.Where(x => x.Model.TimesDone is not null).SelectMany(x => x.Model.TimesDone!).Concat(merge.Times).Select(x => (Model: x, Entity: x.ToEntity())).ToList();
 
         await DataAccess.AddTimes(times.Select(x => x.Entity).ToList());
 
@@ -639,12 +670,75 @@ public class ClientState
         if (Categories is null) Categories = categories.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in categories.ToDictionary(x => x.Model.Id, x => x.Model)) Categories[pair.Key] = pair.Value;
 
-        // no CategoryModel sub-list wiring here, unlike LoadNotes / LoadTasks / LoadHabits.
+        // no CategoryModel sub-list wiring for the new categories, unlike LoadNotes / LoadTasks / LoadHabits.
         // those build fresh models out of entities, so the sub-lists start empty;
         // here notes, tasks and habits are the flattened sub-lists themselves (SelectMany above),
         // and they came from the CategoryModel instances just put into Categories,
         // so every model is already in its category - adding it again renders it twice in grouped view.
 
+        await WireIntoExistingData(merge);
+
         await DataReplaced();
+    }
+
+    // The new models of a merge belong to categories, tasks and habits that are already loaded, and
+    // whose lists are filled only once, so the new ones are added to those lists.
+    private async Task WireIntoExistingData(UserDataMerge merge)
+    {
+        foreach (NoteModel note in merge.Notes)
+        {
+            if (Categories!.TryGetValue(note.CategoryId, out CategoryModel? category))
+                category.Notes.Add(note);
+        }
+
+        foreach (TaskModel task in merge.Tasks)
+        {
+            if (Categories!.TryGetValue(task.CategoryId, out CategoryModel? category))
+                category.Tasks.Add(task);
+        }
+
+        foreach (HabitModel habit in merge.Habits)
+        {
+            if (Categories!.TryGetValue(habit.CategoryId, out CategoryModel? category))
+                category.Habits.Add(habit);
+        }
+
+        // A list that is still null is loaded later, with the new items and completions in it.
+
+        foreach (ItemModel item in merge.Items)
+        {
+            if (Tasks!.TryGetValue(item.ParentId, out TaskModel? task))
+                task.Items?.Add(item);
+            else if (Habits!.TryGetValue(item.ParentId, out HabitModel? habit))
+                habit.Items?.Add(item);
+        }
+
+        foreach (IGrouping<long, TimeModel> timesOfHabit in merge.Times.GroupBy(x => x.HabitId))
+        {
+            if (!Habits!.TryGetValue(timesOfHabit.Key, out HabitModel? habit))
+                continue;
+
+            if (habit.TimesDone is not null)
+            {
+                habit.TimesDone.AddRange(timesOfHabit);
+
+                habit.RefreshTimesDoneByDay();
+            }
+
+            // LastTimeDoneAt is the latest completion, which an imported completion can be.
+            DateTime lastTimeDoneAt = timesOfHabit.Max(x => x.CompletedAt ?? x.StartedAt);
+
+            if (habit.LastTimeDoneAt is null || habit.LastTimeDoneAt < lastTimeDoneAt)
+            {
+                habit.LastTimeDoneAt = lastTimeDoneAt;
+
+                if (await DataAccess.GetHabit(habit.Id) is HabitEntity habitEntity)
+                {
+                    habitEntity.LastTimeDoneAt = lastTimeDoneAt;
+
+                    await DataAccess.UpdateHabit(habitEntity);
+                }
+            }
+        }
     }
 }

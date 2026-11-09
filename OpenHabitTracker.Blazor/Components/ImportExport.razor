@@ -26,6 +26,11 @@
             @OpenFile.OpenFileDialog("list-group-item list-group-item-action", Loc["Import"], OnFileOpened)
         </div>
 
+        @if (_pendingImport is not null)
+        {
+            <ImportSummary PendingImport="_pendingImport" OnImport="ConfirmImport" OnCancel="CancelImport" />
+        }
+
         @if (_importResult == ImportResult.UnsupportedFormat)
         {
             <small class="d-block m-1 text-danger" role="alert">@Loc["The file is not in a supported format."]</small>
@@ -81,6 +86,8 @@
 
     ImportResult? _importResult;
 
+    PendingImport? _pendingImport;
+
     private ElementReference WrapperElement;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -128,8 +135,23 @@
         stream = memoryStream;
 #endif
 
-        _importResult = await ImportExportService.ImportDataFile(filename, stream);
+        (_importResult, _pendingImport) = await ImportExportService.ReadDataFile(filename, stream);
+    }
+
+    private async Task ConfirmImport()
+    {
+        if (_pendingImport is null)
+            return;
+
+        await ImportExportService.Import(_pendingImport);
+
+        _pendingImport = null;
 
         await OnStateChanged();
+    }
+
+    private void CancelImport()
+    {
+        _pendingImport = null;
     }
 }

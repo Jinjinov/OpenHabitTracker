@@ -1,9 +1,12 @@
 using Markdig;
 using NSubstitute;
 using OpenHabitTracker.App;
+using OpenHabitTracker.Backup;
+using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
+using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.UnitTests.Backup;
 
@@ -67,18 +70,32 @@ public class GoogleKeepImportTests
     private static Stream Takeout() =>
         File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "Importers", "GoogleKeep", "takeout.zip"));
 
-    [Test]
-    public async Task Import_TakeoutWithTasks_ImportsTheNotesAndSkipsTasksJson()
-    {
-        await _clientState.LoadSettings();
+    private ImportExportService CreateService() =>
+        new(_clientState, new JsonImportExport(_clientState), new TsvImportExport(_clientState), new YamlImportExport(_clientState), new MarkdownImportExport(_clientState), new GoogleKeepImport());
 
+    [Test]
+    public async Task Read_TakeoutWithTasks_ReadsTheNotesAndSkipsTasksJson()
+    {
         await using Stream stream = Takeout();
 
-        await new GoogleKeepImport(_clientState).ImportDataFile(stream);
+        List<CategoryModel> categories = await new GoogleKeepImport().ReadDataFile(stream);
 
         // 30 Keep notes: the two checklists become tasks, the other 28 notes.
-        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.Count == 28));
-        await _dataAccess.Received(1).AddTasks(Arg.Is<IReadOnlyList<TaskEntity>>(list => list != null && list.Count == 2));
+        Assert.Multiple(() =>
+        {
+            Assert.That(categories.Sum(x => x.Notes.Count), Is.EqualTo(28));
+            Assert.That(categories.Sum(x => x.Tasks.Count), Is.EqualTo(2));
+        });
+    }
+
+    [Test]
+    public async Task Read_EveryKeepColor_MapsToABootstrapClass()
+    {
+        await using Stream stream = Takeout();
+
+        List<CategoryModel> categories = await new GoogleKeepImport().ReadDataFile(stream);
+
+        Assert.That(categories.SelectMany(x => x.Notes), Has.All.Matches<NoteModel>(note => note.Color.StartsWith("bg-")));
     }
 
     [Test]
@@ -89,28 +106,42 @@ public class GoogleKeepImportTests
 
         await _clientState.LoadSettings();
 
+        ImportExportService service = CreateService();
+
         await using Stream stream = Takeout();
 
-        await new GoogleKeepImport(_clientState).ImportDataFile(stream);
+        (ImportResult _, PendingImport? pendingImport) = await service.ReadDataFile("takeout.zip", stream);
 
+        await service.Import(pendingImport!);
+
+        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.Count == 28));
         await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
         await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
         Assert.Multiple(() =>
         {
+            Assert.That(pendingImport!.Settings, Is.Null);
             Assert.That(_clientState.Settings.IsDarkMode, Is.False);
             Assert.That(_clientState.Settings.Culture, Is.EqualTo("sl"));
         });
     }
 
     [Test]
-    public async Task Import_EveryKeepColor_MapsToABootstrapClass()
+    public async Task Read_Takeout_CountsWhatTheTakeoutHolds()
     {
         await _clientState.LoadSettings();
 
         await using Stream stream = Takeout();
 
-        await new GoogleKeepImport(_clientState).ImportDataFile(stream);
+        (ImportResult result, PendingImport? pendingImport) = await CreateService().ReadDataFile("takeout.zip", stream);
 
-        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.All(note => note.Color.StartsWith("bg-"))));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EqualTo(ImportResult.Read));
+            Assert.That(pendingImport!.Format, Is.EqualTo(ImportFormat.GoogleKeep));
+            Assert.That(pendingImport.Found, Is.EqualTo(new ImportCounts(Categories: 2, Notes: 28, Tasks: 2, Habits: 0, Items: 7, Completions: 0)));
+            Assert.That(pendingImport.New, Is.EqualTo(pendingImport.Found));
+        });
+
+        await _dataAccess.DidNotReceive().AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>());
     }
 }

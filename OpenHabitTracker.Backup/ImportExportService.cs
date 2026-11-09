@@ -1,13 +1,17 @@
 ﻿using CsvHelper;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
+using OpenHabitTracker.Data;
+using OpenHabitTracker.Data.Models;
 using System.Text.Json;
 using YamlDotNet.Core;
 
 namespace OpenHabitTracker.Backup;
 
-public class ImportExportService(JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport)
+public class ImportExportService(ClientState clientState, JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport)
 {
+    private readonly ClientState _clientState = clientState;
     private readonly JsonImportExport _jsonImportExport = jsonImportExport;
     private readonly TsvImportExport _tsvImportExport = tsvImportExport;
     private readonly YamlImportExport _yamlImportExport = yamlImportExport;
@@ -26,7 +30,8 @@ public class ImportExportService(JsonImportExport jsonImportExport, TsvImportExp
         };
     }
 
-    public async Task<ImportResult> ImportDataFile(string filename, Stream stream)
+    // Reads the file and counts what an import would add, without writing anything.
+    public async Task<(ImportResult Result, PendingImport? PendingImport)> ReadDataFile(string filename, Stream stream)
     {
         using MemoryStream memoryStream = new();
 
@@ -36,35 +41,65 @@ public class ImportExportService(JsonImportExport jsonImportExport, TsvImportExp
 
         memoryStream.Position = 0;
 
-        // Only the parse errors of the file formats are caught, so a failure to save still surfaces.
+        List<CategoryModel> categories;
+        SettingsModel? settings = null;
+
+        // Only the parse errors of the file formats are caught, so any other failure still surfaces.
         try
         {
             switch (importFormat)
             {
                 case ImportFormat.Json:
-                    await _jsonImportExport.ImportDataFile(memoryStream);
+                    UserImportExportData jsonData = await _jsonImportExport.ReadDataFile(memoryStream);
+                    categories = jsonData.Categories;
+                    settings = jsonData.Settings;
                     break;
                 case ImportFormat.Tsv:
-                    await _tsvImportExport.ImportDataFile(memoryStream);
+                    categories = await _tsvImportExport.ReadDataFile(memoryStream);
                     break;
                 case ImportFormat.Yaml:
-                    await _yamlImportExport.ImportDataFile(memoryStream);
+                    UserImportExportData yamlData = await _yamlImportExport.ReadDataFile(memoryStream);
+                    categories = yamlData.Categories;
+                    settings = yamlData.Settings;
                     break;
                 case ImportFormat.Markdown:
-                    await _markdownImportExport.ImportDataFile(memoryStream);
+                    categories = await _markdownImportExport.ReadDataFile(memoryStream);
                     break;
                 case ImportFormat.GoogleKeep:
-                    await _googleKeepImport.ImportDataFile(memoryStream);
+                    categories = await _googleKeepImport.ReadDataFile(memoryStream);
                     break;
                 default:
-                    return ImportResult.UnsupportedFormat;
+                    return (ImportResult.UnsupportedFormat, null);
             }
         }
         catch (Exception exception) when (exception is JsonException or YamlException or CsvHelperException or InvalidDataException)
         {
-            return ImportResult.UnreadableContent;
+            return (ImportResult.UnreadableContent, null);
         }
 
-        return ImportResult.Imported;
+        UserDataMerge merge = await _clientState.MergeUserData(categories);
+
+        PendingImport pendingImport = new()
+        {
+            Format = importFormat,
+            Filename = filename,
+            Categories = categories,
+            Settings = settings,
+            Found = merge.Found,
+            New = merge.New
+        };
+
+        return (ImportResult.Read, pendingImport);
+    }
+
+    // The data can change while the import waits, so what is new is matched again here.
+    public async Task Import(PendingImport pendingImport)
+    {
+        if (pendingImport.Settings is not null)
+            await _clientState.ReplaceSettings(pendingImport.Settings);
+
+        UserDataMerge merge = await _clientState.MergeUserData(pendingImport.Categories);
+
+        await _clientState.AddUserData(merge);
     }
 }

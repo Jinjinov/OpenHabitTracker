@@ -24,14 +24,12 @@ public class YamlImportExport(ClientState clientState)
         return stringWriter.ToString();
     }
 
-    public async Task ImportDataFile(Stream stream)
+    public async Task<UserImportExportData> ReadDataFile(Stream stream)
     {
         using StreamReader streamReader = new(stream);
 
         string content = await streamReader.ReadToEndAsync();
 
-        UserImportExportData userData = _deserializer.Deserialize<UserImportExportData>(content);
-
-        await _clientState.SetUserData(userData);
+        return _deserializer.Deserialize<UserImportExportData>(content);
     }
 }

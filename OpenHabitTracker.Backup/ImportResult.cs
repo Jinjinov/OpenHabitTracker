@@ -2,7 +2,7 @@ namespace OpenHabitTracker.Backup;
 
 public enum ImportResult
 {
-    Imported,
+    Read,
     UnsupportedFormat,
     UnreadableContent
 }

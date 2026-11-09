@@ -1,0 +1,88 @@
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Backup
+
+@inject IStringLocalizer Loc
+
+<div class="m-1" data-import-summary>
+    <small class="d-block text-break">@FormatName(PendingImport.Format): @PendingImport.Filename</small>
+
+    <table class="table table-sm small my-1">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col" class="text-end">@Loc["Found"]</th>
+                <th scope="col" class="text-end">@Loc["New"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ((string label, int found, int added) in Rows)
+            {
+                <tr>
+                    <th scope="row" class="fw-normal">@Loc[label]</th>
+                    <td class="text-end">@found</td>
+                    <td class="text-end">@added</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (PendingImport.Settings is not null)
+    {
+        <small class="d-block">@Loc["The settings will be replaced."]</small>
+    }
+    else if (PendingImport.New.IsEmpty)
+    {
+        <small class="d-block">@Loc["Nothing new to import."]</small>
+    }
+
+    <div class="d-flex gap-1 my-1">
+        @if (PendingImport.Settings is not null || !PendingImport.New.IsEmpty)
+        {
+            <button class="btn btn-primary" @onclick="OnImport">@Loc["Import"]</button>
+        }
+        <button class="btn btn-secondary" @onclick="OnCancel">@Loc["Cancel"]</button>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public PendingImport PendingImport { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback OnImport { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    private static string FormatName(ImportFormat format) => format switch
+    {
+        ImportFormat.Json => "JSON (.json)",
+        ImportFormat.Tsv => "TSV (.tsv)",
+        ImportFormat.Yaml => "YAML (.yaml)",
+        ImportFormat.Markdown => "Markdown (.md)",
+        ImportFormat.GoogleKeep => "Google Keep (.zip)",
+        _ => format.ToString()
+    };
+
+    // A row the file has nothing of is left out.
+    private IEnumerable<(string Label, int Found, int New)> Rows
+    {
+        get
+        {
+            ImportCounts found = PendingImport.Found;
+            ImportCounts added = PendingImport.New;
+
+            (string Label, int Found, int New)[] rows =
+            [
+                ("Categories", found.Categories, added.Categories),
+                ("Notes", found.Notes, added.Notes),
+                ("Tasks", found.Tasks, added.Tasks),
+                ("Habits", found.Habits, added.Habits),
+                ("Items", found.Items, added.Items),
+                ("Completions", found.Completions, added.Completions)
+            ];
+
+            return rows.Where(x => x.Found > 0);
+        }
+    }
+}

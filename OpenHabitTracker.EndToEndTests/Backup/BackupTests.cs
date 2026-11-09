@@ -42,6 +42,7 @@ public class BackupTests : BaseTest
         // Import the exported file
         await OpenSidebarAsync("bi-database");
         await Page.Locator("input[type='file'].d-none").SetInputFilesAsync(exportedFilePath);
+        await Page.Locator("[data-import-summary] button.btn-primary").ClickAsync();
         await Page.WaitForTimeoutAsync(2000); // allow all async DB writes to complete
         await CloseSidebarAsync();
 
@@ -70,6 +71,7 @@ public class BackupTests : BaseTest
         await Page.Locator("[data-data-step-2]").ClickAsync();
 
         await Page.Locator("input[type='file'].d-none").SetInputFilesAsync(exportedFilePath);
+        await Page.Locator("[data-import-summary] button.btn-primary").ClickAsync();
         await Page.WaitForTimeoutAsync(2000); // allow all async DB writes to complete
         await CloseSidebarAsync();
 
@@ -119,6 +121,7 @@ public class BackupTests : BaseTest
         // Import the exported file
         await OpenSidebarAsync("bi-database");
         await Page.Locator("input[type='file'].d-none").SetInputFilesAsync(exportedFilePath);
+        await Page.Locator("[data-import-summary] button.btn-primary").ClickAsync();
         await Page.WaitForTimeoutAsync(2000); // allow all async DB writes to complete
         await CloseSidebarAsync();
 

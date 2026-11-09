@@ -402,6 +402,99 @@ public class ClientStateTests
         Assert.That(category.Habits, Has.Count.EqualTo(1));
     }
 
+    // --- MergeUserData and AddUserData(UserDataMerge) tests ---
+
+    private static readonly DateTime _doneAt = new(2026, 11, 1, 8, 0, 0);
+    private static readonly DateTime _laterDoneAt = new(2026, 11, 2, 8, 0, 0);
+
+    private void StubExistingWorkCategory()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>(
+            [new CategoryEntity { Id = 5, Title = "Work" }]));
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>(
+            [new NoteEntity { Id = 6, CategoryId = 5, Title = "Meeting", Content = "Discuss Q3" }]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
+            [new HabitEntity { Id = 7, CategoryId = 5, Title = "Exercise", LastTimeDoneAt = _doneAt }]));
+        _dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>(
+            [new TimeEntity { Id = 8, HabitId = 7, StartedAt = _doneAt, CompletedAt = _doneAt }]));
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
+        _dataAccess.GetHabit(7).Returns(Task.FromResult<HabitEntity?>(
+            new HabitEntity { Id = 7, CategoryId = 5, Title = "Exercise", LastTimeDoneAt = _doneAt }));
+    }
+
+    [Test]
+    public async Task MergeThenAdd_IntoAnExistingCategoryAndHabit_AddsOnlyWhatIsNewAndWiresItIn()
+    {
+        StubAddMethodsToAssignIds();
+        StubExistingWorkCategory();
+
+        await _sut.LoadSettings();
+
+        List<CategoryModel> imported =
+        [
+            new CategoryModel
+            {
+                Title = "work",
+                Notes = [new NoteModel { Title = "Meeting", Content = "Discuss Q3" }, new NoteModel { Title = "Lunch" }],
+                Habits =
+                [
+                    new HabitModel
+                    {
+                        Title = "Exercise",
+                        TimesDone = [new TimeModel { StartedAt = _doneAt, CompletedAt = _doneAt }, new TimeModel { StartedAt = _laterDoneAt, CompletedAt = _laterDoneAt }]
+                    }
+                ]
+            }
+        ];
+
+        await _sut.AddUserData(await _sut.MergeUserData(imported));
+
+        await _dataAccess.DidNotReceive().AddCategories(Arg.Is<IReadOnlyList<CategoryEntity>>(list => list != null && list.Count > 0));
+        await _dataAccess.DidNotReceive().AddHabits(Arg.Is<IReadOnlyList<HabitEntity>>(list => list != null && list.Count > 0));
+        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.Count == 1 && list[0].Title == "Lunch" && list[0].CategoryId == 5));
+        await _dataAccess.Received(1).AddTimes(Arg.Is<IReadOnlyList<TimeEntity>>(list => list != null && list.Count == 1 && list[0].HabitId == 7 && list[0].StartedAt == _laterDoneAt));
+        await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(habit => habit != null && habit.Id == 7 && habit.LastTimeDoneAt == _laterDoneAt));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Categories![5].Notes.Select(x => x.Title), Is.EquivalentTo(new[] { "Meeting", "Lunch" }));
+            Assert.That(_sut.Habits![7].TimesDone, Has.Count.EqualTo(2));
+            Assert.That(_sut.Habits![7].LastTimeDoneAt, Is.EqualTo(_laterDoneAt));
+        });
+    }
+
+    [Test]
+    public async Task Merge_OfWhatIsAlreadyThere_FindsNothingNew()
+    {
+        StubAddMethodsToAssignIds();
+        StubExistingWorkCategory();
+
+        await _sut.LoadSettings();
+
+        List<CategoryModel> imported =
+        [
+            new CategoryModel
+            {
+                Title = "Work",
+                Notes = [new NoteModel { Title = "Meeting", Content = "Discuss Q3" }],
+                Habits = [new HabitModel { Title = "Exercise", TimesDone = [new TimeModel { StartedAt = _doneAt, CompletedAt = _doneAt }] }]
+            }
+        ];
+
+        UserDataMerge merge = await _sut.MergeUserData(imported);
+
+        await _sut.AddUserData(merge);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(merge.Found, Is.EqualTo(new ImportCounts(Categories: 1, Notes: 1, Tasks: 0, Habits: 1, Items: 0, Completions: 1)));
+            Assert.That(merge.New.IsEmpty, Is.True);
+        });
+        await _dataAccess.DidNotReceive().AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>());
+        await _dataAccess.DidNotReceive().AddTimes(Arg.Any<IReadOnlyList<TimeEntity>>());
+        await _dataAccess.DidNotReceive().UpdateHabit(Arg.Any<HabitEntity>());
+    }
+
     [Test]
     public async Task RefreshState_ClearsHabits_Notes_Tasks_Times_Items_Categories_Trash()
     {

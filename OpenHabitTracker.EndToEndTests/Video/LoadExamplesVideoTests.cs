@@ -126,6 +126,7 @@ public class LoadExamplesVideoTests : PlaywrightTest
         await Assertions.Expect(page.Locator("[data-data-step-1]")).ToBeVisibleAsync();
         await page.Locator("[data-data-step-2]").ClickAsync(); // delete all, so a retake does not stack
         await page.Locator("input[type='file'].d-none").SetInputFilesAsync(seedFile);
+        await page.Locator("[data-import-summary] button.btn-primary").ClickAsync();
         await page.WaitForTimeoutAsync(3000); // IndexedDB writes have no observable completion signal
         await page.Locator("#closeSidebar").ClickAsync();
         await Assertions.Expect(page.Locator("main#main-content")).ToBeVisibleAsync();

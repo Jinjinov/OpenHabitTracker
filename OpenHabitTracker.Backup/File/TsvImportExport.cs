@@ -127,7 +127,7 @@ public class TsvImportExport(ClientState clientState)
         return stringWriter.ToString();
     }
 
-    public async Task ImportDataFile(Stream stream)
+    public async Task<List<CategoryModel>> ReadDataFile(Stream stream)
     {
         List<CategoryModel> categories = [];
 
@@ -230,7 +230,7 @@ public class TsvImportExport(ClientState clientState)
             }
         }
 
-        await _clientState.AddUserData(categories);
+        return categories;
     }
 
     class Record

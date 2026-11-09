@@ -67,7 +67,7 @@ public class MarkdownImportExport(ClientState clientState)
         return stringBuilder.ToString();
     }
 
-    public async Task ImportDataFile(Stream stream)
+    public async Task<List<CategoryModel>> ReadDataFile(Stream stream)
     {
         using StreamReader streamReader = new(stream);
 
@@ -146,6 +146,6 @@ public class MarkdownImportExport(ClientState clientState)
             }
         }
 
-        await _clientState.AddUserData(categories);
+        return categories;
     }
 }
