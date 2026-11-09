@@ -56,6 +56,9 @@ public class GoogleKeepNote
     [JsonPropertyName("textContent")]
     public string TextContent { get; set; } = string.Empty;
 
+    [JsonPropertyName("textContentHtml")]
+    public string TextContentHtml { get; set; } = string.Empty;
+
     [JsonPropertyName("title")]
     public string Title { get; set; } = string.Empty;
 

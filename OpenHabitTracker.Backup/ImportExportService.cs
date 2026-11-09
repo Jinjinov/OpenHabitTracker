@@ -81,7 +81,7 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
                     categories = await _markdownImportExport.ReadDataFile(memoryStream);
                     break;
                 case ImportFormat.GoogleKeep:
-                    categories = await _googleKeepImport.ReadDataFile(memoryStream);
+                    (categories, options) = await _googleKeepImport.ReadDataFile(memoryStream);
                     break;
                 case ImportFormat.LoopDatabase:
                     (categories, options) = await _loopImport.ReadDataFile(memoryStream);

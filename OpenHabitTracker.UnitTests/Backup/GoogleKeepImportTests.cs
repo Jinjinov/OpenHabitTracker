@@ -12,6 +12,7 @@ using OpenHabitTracker.Backup.Loop;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
+using System.IO.Compression;
 
 namespace OpenHabitTracker.UnitTests.Backup;
 
@@ -81,9 +82,7 @@ public class GoogleKeepImportTests
     [Test]
     public async Task Read_TakeoutWithTasks_ReadsTheNotesAndSkipsTasksJson()
     {
-        await using Stream stream = Takeout();
-
-        List<CategoryModel> categories = await new GoogleKeepImport().ReadDataFile(stream);
+        List<CategoryModel> categories = await ReadTakeout();
 
         // 30 Keep notes: the two checklists become tasks, the other 28 notes.
         Assert.Multiple(() =>
@@ -93,12 +92,98 @@ public class GoogleKeepImportTests
         });
     }
 
-    [Test]
-    public async Task Read_EveryKeepColor_MapsToABootstrapClass()
+    private static async Task<List<CategoryModel>> ReadTakeout()
     {
         await using Stream stream = Takeout();
 
-        List<CategoryModel> categories = await new GoogleKeepImport().ReadDataFile(stream);
+        return (await new GoogleKeepImport().ReadDataFile(stream)).Categories;
+    }
+
+    private static async Task<List<CategoryModel>> ReadNote(string json)
+    {
+        using MemoryStream stream = new();
+
+        using (ZipArchive archive = new(stream, ZipArchiveMode.Create, leaveOpen: true))
+        {
+            ZipArchiveEntry entry = archive.CreateEntry("Takeout/Keep/Note.json");
+
+            await using StreamWriter writer = new(entry.Open());
+
+            await writer.WriteAsync(json);
+        }
+
+        stream.Position = 0;
+
+        return (await new GoogleKeepImport().ReadDataFile(stream)).Categories;
+    }
+
+    [TestCase("Formatted text", "# Heading\nPlain **bold** *italic* ++underline++")]
+    [TestCase("H2 and cleared formatting", "## Subheading\nFormatting cleared")]
+    [TestCase("Plain note", "First line\nSecond line")]
+    public async Task Read_FormattedNote_ConvertsTheHtmlToMarkdown(string title, string content)
+    {
+        List<CategoryModel> categories = await ReadTakeout();
+
+        NoteModel note = categories.SelectMany(x => x.Notes).Single(x => x.Title == title);
+
+        Assert.That(note.Content, Is.EqualTo(content));
+    }
+
+    [Test]
+    public async Task Read_Checklist_SkipsTheEmptyItem()
+    {
+        List<CategoryModel> categories = await ReadTakeout();
+
+        TaskModel task = categories.SelectMany(x => x.Tasks).Single(x => x.Title == "Checklist");
+
+        Assert.That(task.Items!.Select(x => x.Title), Is.EqualTo(new[] { "Bread", "Milk", "Eggs" }));
+    }
+
+    [Test]
+    public async Task Read_LineBreaksEmptyLinesAndEntities_KeepsTheLines()
+    {
+        List<CategoryModel> categories = await ReadNote("""
+            {"color":"DEFAULT","title":"Lines","textContent":"","userEditedTimestampUsec":1,"createdTimestampUsec":1,
+             "textContentHtml":"<p><span style=\"font-weight:700;\">Salt &amp; pepper</span><br>Second</p><p><br></p><p>Fourth &lt;b&gt;</p>"}
+            """);
+
+        Assert.That(categories.Single().Notes.Single().Content, Is.EqualTo("**Salt & pepper**\nSecond\n\nFourth <b>"));
+    }
+
+    [Test]
+    public async Task Read_Annotation_AppendsTheLinksTheTextDoesNotHave()
+    {
+        List<CategoryModel> categories = await ReadNote("""
+            {"color":"DEFAULT","title":"Link","textContent":"See openhabittracker.net.","userEditedTimestampUsec":1,"createdTimestampUsec":1,
+             "annotations":[{"description":"","source":"WEBLINK","title":"OpenHabitTracker","url":"https://www.openhabittracker.net/"},
+                            {"description":"","source":"WEBLINK","title":"Example [docs]","url":"https://example.com/docs"},
+                            {"description":"","source":"WEBLINK","title":"","url":"https://example.org"}]}
+            """);
+
+        Assert.That(categories.Single().Notes.Single().Content, Is.EqualTo("See openhabittracker.net.\n[Example \\[docs\\]](https://example.com/docs)\nhttps://example.org"));
+    }
+
+    [Test]
+    public async Task Read_NoteImportedByTheEarlierVersion_IsNotNew()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>(
+            [new CategoryEntity { Id = 1, Title = "OHT Test B" }]));
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>(
+            [new NoteEntity { Id = 1, CategoryId = 1, Title = "Formatted text", Content = "Heading\nPlain bold italic underline" }]));
+
+        await _clientState.LoadSettings();
+
+        await using Stream stream = Takeout();
+
+        (ImportResult _, PendingImport? pendingImport) = await CreateService().ReadDataFile("takeout.zip", stream);
+
+        Assert.That(pendingImport!.New.Notes, Is.EqualTo(pendingImport.Found.Notes - 1));
+    }
+
+    [Test]
+    public async Task Read_EveryKeepColor_MapsToABootstrapClass()
+    {
+        List<CategoryModel> categories = await ReadTakeout();
 
         Assert.That(categories.SelectMany(x => x.Notes), Has.All.Matches<NoteModel>(note => note.Color.StartsWith("bg-")));
     }
@@ -143,7 +228,7 @@ public class GoogleKeepImportTests
         {
             Assert.That(result, Is.EqualTo(ImportResult.Read));
             Assert.That(pendingImport!.Format, Is.EqualTo(ImportFormat.GoogleKeep));
-            Assert.That(pendingImport.Found, Is.EqualTo(new ImportCounts(Categories: 2, Notes: 28, Tasks: 2, Habits: 0, Items: 7, Completions: 0)));
+            Assert.That(pendingImport.Found, Is.EqualTo(new ImportCounts(Categories: 2, Notes: 28, Tasks: 2, Habits: 0, Items: 6, Completions: 0)));
             Assert.That(pendingImport.New, Is.EqualTo(pendingImport.Found));
         });
 

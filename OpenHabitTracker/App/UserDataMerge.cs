@@ -102,7 +102,9 @@ public class UserDataMerge
 
             foreach (NoteModel note in category.Notes)
             {
-                if (Take(notePool, x => SameTitle(x.Title, note.Title) && SameContent(x.Content, note.Content)) is null)
+                string? formerContent = options.FormerContents.GetValueOrDefault(note);
+
+                if (Take(notePool, x => SameTitle(x.Title, note.Title) && (SameContent(x.Content, note.Content) || (formerContent is not null && SameContent(x.Content, formerContent)))) is null)
                 {
                     note.CategoryId = categoryId;
 

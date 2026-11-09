@@ -1,3 +1,4 @@
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data.Models;
 using System.IO.Compression;
 using System.Text.Json;
@@ -38,11 +39,12 @@ public class GoogleKeepImport
         { "YELLOW", "bg-warning-subtle" },
     };
 
-    public async Task<List<CategoryModel>> ReadDataFile(Stream stream)
+    public async Task<ImportedData> ReadDataFile(Stream stream)
     {
         List<GoogleKeepNote> googleKeepNotes = await GetGoogleKeepNotes(stream);
 
         List<CategoryModel> categories = [];
+        Dictionary<NoteModel, string> formerContents = [];
 
         CategoryModel? uncategorized = null;
         NoteModel? note = null;
@@ -87,12 +89,16 @@ public class GoogleKeepImport
                 note = new()
                 {
                     Title = googleKeepNote.Title,
-                    Content = googleKeepNote.TextContent,
+                    Content = GetContent(googleKeepNote),
                     IsDeleted = googleKeepNote.IsTrashed,
                     Color = GetBootstrapClass(googleKeepNote.Color),
                     CreatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.CreatedTimestampUsec * 10).ToLocalTime(),
                     UpdatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.UserEditedTimestampUsec * 10).ToLocalTime()
                 };
+
+                // The importer used to take textContent as it is, without the formatting and the links.
+                if (note.Content != googleKeepNote.TextContent)
+                    formerContents[note] = googleKeepNote.TextContent;
 
                 category.Notes.Add(note);
             }
@@ -111,7 +117,8 @@ public class GoogleKeepImport
                 {
                     task.Items = [];
 
-                    foreach (ListContent listContent in googleKeepNote.ListContent)
+                    // Keep keeps an empty item at the end of a checklist for the next entry.
+                    foreach (ListContent listContent in googleKeepNote.ListContent.Where(x => !string.IsNullOrWhiteSpace(x.Text)))
                     {
                         ItemModel item = new()
                         {
@@ -127,7 +134,41 @@ public class GoogleKeepImport
             }
         }
 
-        return categories;
+        return new(categories, new MergeOptions { FormerContents = formerContents });
+    }
+
+    private static string GetContent(GoogleKeepNote googleKeepNote)
+    {
+        // textContent is the same text without the formatting.
+        string text = string.IsNullOrEmpty(googleKeepNote.TextContentHtml) ? googleKeepNote.TextContent : GoogleKeepMarkdown.FromHtml(googleKeepNote.TextContentHtml);
+
+        // Keep stores the preview of a link as an annotation, mostly of a link that is in the text already.
+        IEnumerable<string> links = googleKeepNote.Annotations
+            .Where(annotation => !string.IsNullOrWhiteSpace(annotation.Url) && !ContainsUrl(text, annotation.Url))
+            .Select(annotation => string.IsNullOrWhiteSpace(annotation.Title) ? annotation.Url : $"[{EscapeLinkText(annotation.Title)}]({annotation.Url})");
+
+        return string.Join("\n", new[] { text }.Concat(links).Where(line => !string.IsNullOrEmpty(line)));
+    }
+
+    // The text can hold the link without its scheme, www or the trailing slash.
+    private static bool ContainsUrl(string text, string url)
+    {
+        string address = url.Trim().TrimEnd('/');
+
+        int scheme = address.IndexOf("://", StringComparison.Ordinal);
+
+        if (scheme >= 0)
+            address = address[(scheme + 3)..];
+
+        if (address.StartsWith("www.", StringComparison.OrdinalIgnoreCase))
+            address = address[4..];
+
+        return text.Contains(address, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string EscapeLinkText(string text)
+    {
+        return text.Replace("[", "\\[").Replace("]", "\\]");
     }
 
     // A color name Keep adds later falls back to the default instead of failing the whole import.

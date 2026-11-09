@@ -10,4 +10,8 @@ public class MergeOptions
 
     // Categories that are hidden from the lists when the import creates them, such as archived habits.
     public IReadOnlyCollection<CategoryModel> HiddenCategories { get; init; } = [];
+
+    // The content an earlier version of the importer gave a note, so a note imported by that version
+    // matches instead of being added again.
+    public IReadOnlyDictionary<NoteModel, string> FormerContents { get; init; } = new Dictionary<NoteModel, string>();
 }
