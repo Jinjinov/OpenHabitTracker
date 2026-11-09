@@ -19,7 +19,7 @@ public class OpenFile : IOpenFile
             {
                 OpenFileDialog openFileDialog = new()
                 {
-                    Filter = "JSON|*.json|TSV|*.tsv|YAML|*.yaml|Markdown|*.md|Google Keep Takeout ZIP|*.zip"
+                    Filter = "JSON|*.json|TSV|*.tsv|YAML|*.yaml|Markdown|*.md|Google Keep Takeout ZIP|*.zip|Loop Habit Tracker|*.db;*.zip|HabitNow|*.hn|Habitica|*.json|Habitify|*.db"
                 };
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)

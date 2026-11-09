@@ -17,7 +17,11 @@ public class OpenFile(PhotinoWindow mainWindow) : IOpenFile
         ("TSV", new string[] { ".tsv" }),
         ("YAML", new string[] { ".yaml" }),
         ("Markdown", new string[] { ".md" }),
-        ("Google Keep Takeout ZIP", new string[] { ".zip" })
+        ("Google Keep Takeout ZIP", new string[] { ".zip" }),
+        ("Loop Habit Tracker", new string[] { ".db", ".zip" }),
+        ("HabitNow", new string[] { ".hn" }),
+        ("Habitica", new string[] { ".json" }),
+        ("Habitify", new string[] { ".db" })
     ];
 
     public RenderFragment OpenFileDialog(string css, string content, Func<string, Stream, Task> onFileOpened)

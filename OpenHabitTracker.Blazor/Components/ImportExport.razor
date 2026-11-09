@@ -50,6 +50,14 @@
             <li data-data-step-9><small>YAML (.yaml)</small></li>
             <li data-data-step-10><small>Markdown (.md)</small></li>
             <li data-data-step-11><small><a href="https://takeout.google.com/">Google Keep (.zip)</a></small></li>
+            @* The browser ships no SQLite, so it reads no databases. *@
+            <li><small>@(OperatingSystem.IsBrowser() ? "Loop Habit Tracker (.zip)" : "Loop Habit Tracker (.db, .zip)")</small></li>
+            <li><small>HabitNow (.hn)</small></li>
+            <li><small><a href="https://habitica.com/export/userdata.json">Habitica (.json)</a></small></li>
+            @if (!OperatingSystem.IsBrowser())
+            {
+                <li><small>Habitify (.db)</small></li>
+            }
         </ul>
     </div>
 
