@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Localization;
 using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
@@ -6,8 +7,10 @@ using System.Text.Json;
 
 namespace OpenHabitTracker.Backup.GoogleKeep;
 
-public class GoogleKeepImport
+public class GoogleKeepImport(IStringLocalizer loc)
 {
+    private readonly IStringLocalizer _loc = loc;
+
     //readonly Dictionary<string, string> _namedColors = new()
     //{
     //    { "DEFAULT", "transparent" },
@@ -48,6 +51,7 @@ public class GoogleKeepImport
         Dictionary<NoteModel, string> formerContents = [];
 
         CategoryModel? uncategorized = null;
+        CategoryModel? archived = null;
         NoteModel? note = null;
         TaskModel? task = null;
         //HabitModel? habit = null;
@@ -58,7 +62,18 @@ public class GoogleKeepImport
         {
             CategoryModel category;
 
-            if (googleKeepNote.Labels.Count > 0)
+            if (googleKeepNote.IsArchived)
+            {
+                if (archived is null)
+                {
+                    archived = new() { Title = _loc["Archived"] };
+
+                    categories.Add(archived);
+                }
+
+                category = archived;
+            }
+            else if (googleKeepNote.Labels.Count > 0)
             {
                 Label label = googleKeepNote.Labels.First();
 
@@ -137,7 +152,13 @@ public class GoogleKeepImport
             }
         }
 
-        return new(categories, new MergeOptions { FormerContents = formerContents });
+        MergeOptions options = new()
+        {
+            HiddenCategories = archived is null ? [] : [archived],
+            FormerContents = formerContents
+        };
+
+        return new(categories, options);
     }
 
     private static string GetContent(GoogleKeepNote googleKeepNote)

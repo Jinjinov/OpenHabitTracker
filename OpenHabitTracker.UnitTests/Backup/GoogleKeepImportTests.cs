@@ -77,7 +77,7 @@ public class GoogleKeepImportTests
         File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "Importers", "GoogleKeep", "takeout.zip"));
 
     private ImportExportService CreateService() =>
-        new(_clientState, new JsonImportExport(_clientState), new TsvImportExport(_clientState), new YamlImportExport(_clientState), new MarkdownImportExport(_clientState), new GoogleKeepImport(), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()), new HabitNowImport(Substitute.For<IStringLocalizer>()), new HabiticaImport(), new HabitifyImport(Substitute.For<IStringLocalizer>()));
+        new(_clientState, new JsonImportExport(_clientState), new TsvImportExport(_clientState), new YamlImportExport(_clientState), new MarkdownImportExport(_clientState), new GoogleKeepImport(Localizer()), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()), new HabitNowImport(Substitute.For<IStringLocalizer>()), new HabiticaImport(), new HabitifyImport(Substitute.For<IStringLocalizer>()));
 
     [Test]
     public async Task Read_TakeoutWithTasks_ReadsTheNotesAndSkipsTasksJson()
@@ -92,11 +92,24 @@ public class GoogleKeepImportTests
         });
     }
 
-    private static async Task<List<CategoryModel>> ReadTakeout()
+    private static IStringLocalizer Localizer()
+    {
+        IStringLocalizer loc = Substitute.For<IStringLocalizer>();
+        loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.RequiredArg<string>(), callInfo.RequiredArg<string>()));
+
+        return loc;
+    }
+
+    private static async Task<ImportedData> ReadTakeoutData()
     {
         await using Stream stream = Takeout();
 
-        return (await new GoogleKeepImport().ReadDataFile(stream)).Categories;
+        return await new GoogleKeepImport(Localizer()).ReadDataFile(stream);
+    }
+
+    private static async Task<List<CategoryModel>> ReadTakeout()
+    {
+        return (await ReadTakeoutData()).Categories;
     }
 
     private static async Task<List<CategoryModel>> ReadNote(string json)
@@ -114,7 +127,7 @@ public class GoogleKeepImportTests
 
         stream.Position = 0;
 
-        return (await new GoogleKeepImport().ReadDataFile(stream)).Categories;
+        return (await new GoogleKeepImport(Localizer()).ReadDataFile(stream)).Categories;
     }
 
     [TestCase("Formatted text", "# Heading\nPlain **bold** *italic* ++underline++")]
@@ -181,6 +194,21 @@ public class GoogleKeepImportTests
     }
 
     [Test]
+    public async Task Read_ArchivedNote_GoesIntoTheHiddenArchivedCategory()
+    {
+        ImportedData data = await ReadTakeoutData();
+
+        CategoryModel archived = data.Categories.Single(x => x.Title == "Archived");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(archived.Notes.Select(x => x.Title), Is.EqualTo(new[] { "Archived note" }));
+            Assert.That(archived.Tasks, Is.Empty);
+            Assert.That(data.Options.HiddenCategories, Is.EqualTo(new[] { archived }));
+        });
+    }
+
+    [Test]
     public async Task Read_PinnedNote_GetsTheHighestPriority()
     {
         List<CategoryModel> categories = await ReadTakeout();
@@ -219,11 +247,13 @@ public class GoogleKeepImportTests
         await service.Import(pendingImport!);
 
         await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(list => list != null && list.Count == 28));
-        await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+        // The settings are updated only to hide the new Archived category.
+        await _dataAccess.Received(1).UpdateSettings(Arg.Is<SettingsEntity>(x => x != null && x.IsDarkMode == false && x.Culture == "sl"));
         await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
         Assert.Multiple(() =>
         {
             Assert.That(pendingImport!.Settings, Is.Null);
+            Assert.That(_clientState.Settings.HiddenCategoryIds, Has.Count.EqualTo(1));
             Assert.That(_clientState.Settings.IsDarkMode, Is.False);
             Assert.That(_clientState.Settings.Culture, Is.EqualTo("sl"));
         });
@@ -242,7 +272,7 @@ public class GoogleKeepImportTests
         {
             Assert.That(result, Is.EqualTo(ImportResult.Read));
             Assert.That(pendingImport!.Format, Is.EqualTo(ImportFormat.GoogleKeep));
-            Assert.That(pendingImport.Found, Is.EqualTo(new ImportCounts(Categories: 2, Notes: 28, Tasks: 2, Habits: 0, Items: 6, Completions: 0)));
+            Assert.That(pendingImport.Found, Is.EqualTo(new ImportCounts(Categories: 3, Notes: 28, Tasks: 2, Habits: 0, Items: 6, Completions: 0)));
             Assert.That(pendingImport.New, Is.EqualTo(pendingImport.Found));
         });
 

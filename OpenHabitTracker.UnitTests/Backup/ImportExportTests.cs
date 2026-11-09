@@ -128,7 +128,7 @@ public class ImportExportTests
 
     private async Task Import(string filename, string content)
     {
-        ImportExportService service = new(_sut, new JsonImportExport(_sut), new TsvImportExport(_sut), new YamlImportExport(_sut), new MarkdownImportExport(_sut), new GoogleKeepImport(), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()), new HabitNowImport(Substitute.For<IStringLocalizer>()), new HabiticaImport(), new HabitifyImport(Substitute.For<IStringLocalizer>()));
+        ImportExportService service = new(_sut, new JsonImportExport(_sut), new TsvImportExport(_sut), new YamlImportExport(_sut), new MarkdownImportExport(_sut), new GoogleKeepImport(Substitute.For<IStringLocalizer>()), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()), new HabitNowImport(Substitute.For<IStringLocalizer>()), new HabiticaImport(), new HabitifyImport(Substitute.For<IStringLocalizer>()));
 
         (ImportResult result, PendingImport? pendingImport) = await service.ReadDataFile(filename, ToStream(content));
 
