@@ -18,36 +18,13 @@ public class LoopImport(IStringLocalizer loc)
 
     public async Task<ImportedData> ReadDataFile(Stream stream)
     {
-        // SQLite opens files, not streams.
-        string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.db");
+        using TemporaryDatabase database = await TemporaryDatabase.Open(stream);
 
-        try
-        {
-            await using (FileStream file = System.IO.File.Create(path))
-            {
-                await stream.CopyToAsync(file);
-            }
-
-            return Read(path);
-        }
-        finally
-        {
-            System.IO.File.Delete(path);
-        }
-    }
-
-    private ImportedData Read(string path)
-    {
-        // Without pooling the file is closed with the connection, so it can be deleted.
-        string connectionString = new SqliteConnectionStringBuilder { DataSource = path, Mode = SqliteOpenMode.ReadOnly, Pooling = false }.ToString();
-
-        using SqliteConnection connection = new(connectionString);
-
-        connection.Open();
+        SqliteConnection connection = database.Connection;
 
         // Old schemas, such as 12, have neither numerical habits nor entry values.
-        bool hasNumericalHabits = Columns(connection, "Habits").Contains("type");
-        bool hasEntryValues = Columns(connection, "Repetitions").Contains("value");
+        bool hasNumericalHabits = database.Columns("Habits").Contains("type");
+        bool hasEntryValues = database.Columns("Repetitions").Contains("value");
 
         DateTime now = DateTime.Now;
 
@@ -156,22 +133,6 @@ public class LoopImport(IStringLocalizer loc)
         return new ImportedData(categories, options);
     }
 
-    private static HashSet<string> Columns(SqliteConnection connection, string table)
-    {
-        using SqliteCommand command = connection.CreateCommand();
-
-        command.CommandText = $"SELECT name FROM pragma_table_info('{table}')";
-
-        using SqliteDataReader reader = command.ExecuteReader();
-
-        HashSet<string> columns = new(StringComparer.OrdinalIgnoreCase);
-
-        while (reader.Read())
-            columns.Add(reader.GetString(0));
-
-        return columns;
-    }
-
     private static long GetInt64(SqliteDataReader reader, int ordinal, long fallback)
     {
         return reader.IsDBNull(ordinal) ? fallback : reader.GetInt64(ordinal);
@@ -180,6 +141,6 @@ public class LoopImport(IStringLocalizer loc)
     // Old schemas, such as 12, store the color itself, later ones the palette index.
     private static string Color(long stored)
     {
-        return LoopFormat.IsPaletteIndex(stored) ? LoopFormat.ColorOfPaletteIndex((int)stored) : LoopFormat.ColorOfRgb((int)(stored & 0xFFFFFF));
+        return LoopFormat.IsPaletteIndex(stored) ? LoopFormat.ColorOfPaletteIndex((int)stored) : NearestColor.OfRgb((int)(stored & 0xFFFFFF));
     }
 }

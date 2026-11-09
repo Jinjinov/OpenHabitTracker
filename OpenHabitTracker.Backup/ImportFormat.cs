@@ -11,5 +11,6 @@ public enum ImportFormat
     LoopDatabase,
     LoopCsv,
     HabitNow,
-    Habitica
+    Habitica,
+    HabitifyDatabase
 }

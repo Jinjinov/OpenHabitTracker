@@ -4,6 +4,7 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
 using OpenHabitTracker.Backup.Habitica;
+using OpenHabitTracker.Backup.Habitify;
 using OpenHabitTracker.Backup.HabitNow;
 using OpenHabitTracker.Backup.Loop;
 using OpenHabitTracker.Data;
@@ -13,7 +14,7 @@ using YamlDotNet.Core;
 
 namespace OpenHabitTracker.Backup;
 
-public class ImportExportService(ClientState clientState, JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport, LoopImport loopImport, LoopCsvImport loopCsvImport, HabitNowImport habitNowImport, HabiticaImport habiticaImport)
+public class ImportExportService(ClientState clientState, JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport, LoopImport loopImport, LoopCsvImport loopCsvImport, HabitNowImport habitNowImport, HabiticaImport habiticaImport, HabitifyImport habitifyImport)
 {
     private readonly ClientState _clientState = clientState;
     private readonly JsonImportExport _jsonImportExport = jsonImportExport;
@@ -25,6 +26,7 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
     private readonly LoopCsvImport _loopCsvImport = loopCsvImport;
     private readonly HabitNowImport _habitNowImport = habitNowImport;
     private readonly HabiticaImport _habiticaImport = habiticaImport;
+    private readonly HabitifyImport _habitifyImport = habitifyImport;
 
     public async Task<string> GetDataExportFileString(FileFormat fileFormat)
     {
@@ -54,7 +56,7 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
         MergeOptions options = new();
 
         // Wasm ships no SQLite, so a database can only be read on the other hosts.
-        if (importFormat == ImportFormat.LoopDatabase && OperatingSystem.IsBrowser())
+        if ((importFormat is ImportFormat.LoopDatabase or ImportFormat.HabitifyDatabase) && OperatingSystem.IsBrowser())
             return (ImportResult.UnsupportedFormat, null);
 
         // Only the parse errors of the file formats are caught, so any other failure still surfaces.
@@ -92,6 +94,9 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
                     break;
                 case ImportFormat.Habitica:
                     (categories, options) = await _habiticaImport.ReadDataFile(memoryStream);
+                    break;
+                case ImportFormat.HabitifyDatabase:
+                    (categories, options) = await _habitifyImport.ReadDataFile(memoryStream);
                     break;
                 default:
                     return (ImportResult.UnsupportedFormat, null);

@@ -78,7 +78,12 @@ public class ImportFormatDetectorTests
         Assert.That(ImportFormatDetector.Detect("backup.hn", Fixture($"Importers/{path}")), Is.EqualTo(ImportFormat.HabitNow));
     }
 
-    [TestCase("Habitify/backup.db")]
+    [Test]
+    public void Detect_HabitifyBackup_IsHabitifyDatabase()
+    {
+        Assert.That(ImportFormatDetector.Detect("backup.db", Fixture("Importers/Habitify/backup.db")), Is.EqualTo(ImportFormat.HabitifyDatabase));
+    }
+
     [TestCase("Habitify/export.csv")]
     public void Detect_FormatWithoutAnImporter_IsUnknown(string path)
     {

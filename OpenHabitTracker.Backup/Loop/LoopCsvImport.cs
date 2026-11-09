@@ -72,7 +72,7 @@ public class LoopCsvImport(IStringLocalizer loc)
 
                 habit.LastTimeDoneAt = habit.TimesDone.LastOrDefault()?.CompletedAt;
 
-                if (TryParseColor(csv.GetField("Color"), out string color))
+                if (NearestColor.TryParseHex(csv.GetField("Color"), out string color))
                     habit.Color = color;
 
                 string category = hasCategories ? (csv.GetField("Category") ?? string.Empty).Trim() : string.Empty;
@@ -169,20 +169,5 @@ public class LoopCsvImport(IStringLocalizer loc)
     private static long ParseInt64(string? value, long fallback)
     {
         return long.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out long result) ? result : fallback;
-    }
-
-    // The color is written as #RRGGBB.
-    private static bool TryParseColor(string? value, out string color)
-    {
-        if (value is { Length: 7 } && value[0] == '#' && int.TryParse(value.AsSpan(1), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int rgb))
-        {
-            color = LoopFormat.ColorOfRgb(rgb);
-
-            return true;
-        }
-
-        color = string.Empty;
-
-        return false;
     }
 }

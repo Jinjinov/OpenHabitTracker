@@ -25,7 +25,10 @@ public static class ImportFormatDetector
 
         if (content.AsSpan().StartsWith(_sqliteSignature))
         {
-            return IsLoopDatabase(content) ? ImportFormat.LoopDatabase : ImportFormat.Unknown;
+            if (IsLoopDatabase(content))
+                return ImportFormat.LoopDatabase;
+
+            return IsHabitifyDatabase(content) ? ImportFormat.HabitifyDatabase : ImportFormat.Unknown;
         }
 
         using StreamReader streamReader = new(new MemoryStream(content));
@@ -110,6 +113,11 @@ public static class ImportFormatDetector
     private static bool IsLoopDatabase(byte[] content)
     {
         return content.AsSpan().IndexOf("CREATE TABLE Repetitions"u8) >= 0 && content.AsSpan().IndexOf("freq_num"u8) >= 0;
+    }
+
+    private static bool IsHabitifyDatabase(byte[] content)
+    {
+        return content.AsSpan().IndexOf("CREATE TABLE backup_metadata"u8) >= 0 && content.AsSpan().IndexOf("CREATE TABLE habit_logs"u8) >= 0;
     }
 
     // C, the backup time as yyyyMMddHHmmss, 1, and the categories section.
