@@ -69,7 +69,13 @@ public class BackupTests : BaseTest
         await download.SaveAsAsync(exportedFilePath);
 
         await Page.Locator("[data-data-step-2]").ClickAsync();
+        await CloseSidebarAsync();
 
+        // The import matches against the data that is there, so the delete has to be done first.
+        await NavigateToAsync("[data-main-step-3]");
+        await Expect(Page.Locator("[data-notes-step-2]")).ToHaveCountAsync(0);
+
+        await OpenSidebarAsync("bi-database");
         await Page.Locator("input[type='file'].d-none").SetInputFilesAsync(exportedFilePath);
         await Page.Locator("[data-import-summary] button.btn-primary").ClickAsync();
         await Page.WaitForTimeoutAsync(2000); // allow all async DB writes to complete

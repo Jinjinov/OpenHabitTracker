@@ -136,6 +136,9 @@
 #endif
 
         (_importResult, _pendingImport) = await ImportExportService.ReadDataFile(filename, stream);
+
+        // The file picker's callback belongs to OpenFile, which is not a component, so nothing re-renders this one.
+        StateHasChanged();
     }
 
     private async Task ConfirmImport()

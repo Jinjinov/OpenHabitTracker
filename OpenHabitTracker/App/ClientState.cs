@@ -536,19 +536,26 @@ public class ClientState
     }
 
     // Matches the categories against the data already there and writes nothing.
+    // The data is read from the store rather than from the loaded lists, because a refresh running at the
+    // same time, like the one after Delete all data, empties those lists until it has reloaded them.
     public async Task<UserDataMerge> MergeUserData(List<CategoryModel> categoryModels)
     {
+        // The import adds to the loaded lists, so they have to be complete before it.
         await LoadContent();
 
+        IReadOnlyList<CategoryEntity> categories = await DataAccess.GetCategories();
+        IReadOnlyList<NoteEntity> notes = await DataAccess.GetNotes();
+        IReadOnlyList<TaskEntity> tasks = await DataAccess.GetTasks();
+        IReadOnlyList<HabitEntity> habits = await DataAccess.GetHabits();
         IReadOnlyList<ItemEntity> items = await DataAccess.GetItems();
         IReadOnlyList<TimeEntity> times = await DataAccess.GetTimes();
 
         return UserDataMerge.Create(
             categoryModels,
-            Categories!.Values,
-            Notes!.Values,
-            Tasks!.Values,
-            Habits!.Values,
+            categories.Select(x => x.ToModel()),
+            notes.Select(x => x.ToModel()),
+            tasks.Select(x => x.ToModel()),
+            habits.Select(x => x.ToModel()),
             items.Select(x => x.ToModel()),
             times.Select(x => x.ToModel()));
     }
