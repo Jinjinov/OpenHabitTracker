@@ -1,12 +1,13 @@
 # 1.2.6 - Nov 11, 2026
 
 - Added multiple user accounts with separate data on the self-hosted server
+- Added an import summary, and importing only what is new
+- Added decimal quantities in habits
 - Added date format and time format settings
 - Improved app start speed and online sync login speed
 - Fixed dates and times ignoring the device's regional format
 - Fixed a crash in the Linux version when opening the web inspector
 - Fixed online sync not connecting until restart when the app was opened with no connection
-- Fixed the statistics under the lists not updating after online sync
 
 # 1.2.5 - Sep 9, 2026
 
