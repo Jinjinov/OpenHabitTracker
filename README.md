@@ -21,7 +21,7 @@ Key features:
 - Habits measured by how overdue they are rather than by an unbroken streak: a habit with a 10 day interval that is 2 days overdue reads 120%
 - Categories and priorities across notes, tasks and habits
 - Notifications: a daily summary of the tasks that are due and the habits that are overdue, and a reminder before a task's planned time
-- Import and export JSON, YAML, TSV and Markdown, plus import from Google Keep, Loop Habit Tracker, HabitNow, Habitica and Habitify
+- Import and export JSON, YAML, TSV and Markdown, plus import from Google Keep (a Google Takeout ZIP), Loop Habit Tracker, HabitNow, Habitica and Habitify
 - 26 themes with dark and light mode
 - Full keyboard navigation and screen reader support
 

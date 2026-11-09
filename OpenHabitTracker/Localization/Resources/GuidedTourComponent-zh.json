@@ -21,7 +21,7 @@
   "Import Categories, Notes, Tasks, and Habits from a TSV file.": "从TSV文件导入分类、笔记、任务和习惯。",
   "Import Categories, Notes, Tasks, Habits, and Settings from a YAML file.": "从YAML文件导入分类、笔记、任务、习惯和设置。",
   "Import Categories, Notes, Tasks, and Habits from a Markdown file.": "从Markdown文件导入分类、笔记、任务和习惯。",
-  "Import Google Keep notes from a ZIP file exported from Google Takeout.": "从Google Takeout导出的ZIP文件导入Google Keep笔记。",
+  "At takeout.google.com, select Keep and Tasks, export them as one ZIP file, and import that file.": "在 takeout.google.com 选择 Keep 和 Tasks，将它们导出为一个 ZIP 文件，然后导入该文件。",
   "Import habits and their history from Loop Habit Tracker.": "从 Loop Habit Tracker 导入习惯及其历史记录。",
   "Import habits, tasks and their history from a HabitNow backup.": "从 HabitNow 备份导入习惯、任务及其历史记录。",
   "Import habits, dailies and to-dos from Habitica.": "从 Habitica 导入习惯、每日任务和待办事项。",

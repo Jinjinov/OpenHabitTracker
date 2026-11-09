@@ -57,7 +57,7 @@ Each habit can also show charts of its own history, for repetitions, time and qu
 progress against the target for today, this week, this month, this quarter and this year, a history
 chart from days to years, a continuous year calendar, the ten longest streaks, and the amount done on
 each weekday by month.
-Import and export cover JSON, YAML, TSV and Markdown, plus import from Google Keep, Loop Habit Tracker, HabitNow, Habitica and Habitify.
+Import and export cover JSON, YAML, TSV and Markdown, plus import from Google Keep (a Google Takeout ZIP), Loop Habit Tracker, HabitNow, Habitica and Habitify.
 
 ## Site
 

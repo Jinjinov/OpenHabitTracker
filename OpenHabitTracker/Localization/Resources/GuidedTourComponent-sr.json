@@ -21,7 +21,7 @@
   "Import Categories, Notes, Tasks, and Habits from a TSV file.": "Uvezite kategorije, beleške, zadatke i navike iz TSV datoteke.",
   "Import Categories, Notes, Tasks, Habits, and Settings from a YAML file.": "Uvezite kategorije, beleške, zadatke, navike i podešavanja iz YAML datoteke.",
   "Import Categories, Notes, Tasks, and Habits from a Markdown file.": "Uvezite kategorije, beleške, zadatke i navike iz Markdown datoteke.",
-  "Import Google Keep notes from a ZIP file exported from Google Takeout.": "Uvezite beleške Google Keep iz ZIP datoteke izvezene iz Google Takeout.",
+  "At takeout.google.com, select Keep and Tasks, export them as one ZIP file, and import that file.": "Na takeout.google.com izaberite Keep i Tasks, izvezite ih kao jednu ZIP datoteku i uvezite tu datoteku.",
   "Import habits and their history from Loop Habit Tracker.": "Uvezite navike i njihovu istoriju iz aplikacije Loop Habit Tracker.",
   "Import habits, tasks and their history from a HabitNow backup.": "Uvezite navike, zadatke i njihovu istoriju iz rezervne kopije HabitNow.",
   "Import habits, dailies and to-dos from Habitica.": "Uvezite navike, dnevne zadatke i zadatke iz aplikacije Habitica.",

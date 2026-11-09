@@ -21,7 +21,7 @@
   "Import Categories, Notes, Tasks, and Habits from a TSV file.": "TSV 파일에서 카테고리, 메모, 할 일, 습관을 가져옵니다.",
   "Import Categories, Notes, Tasks, Habits, and Settings from a YAML file.": "YAML 파일에서 카테고리, 메모, 할 일, 습관, 설정을 가져옵니다.",
   "Import Categories, Notes, Tasks, and Habits from a Markdown file.": "Markdown 파일에서 카테고리, 메모, 할 일, 습관을 가져옵니다.",
-  "Import Google Keep notes from a ZIP file exported from Google Takeout.": "Google Takeout에서 내보낸 ZIP 파일에서 Google Keep 메모를 가져옵니다.",
+  "At takeout.google.com, select Keep and Tasks, export them as one ZIP file, and import that file.": "takeout.google.com에서 Keep과 Tasks를 선택하고 하나의 ZIP 파일로 내보낸 다음 그 파일을 가져오세요.",
   "Import habits and their history from Loop Habit Tracker.": "Loop Habit Tracker에서 습관과 기록을 가져옵니다.",
   "Import habits, tasks and their history from a HabitNow backup.": "HabitNow 백업에서 습관, 작업과 기록을 가져옵니다.",
   "Import habits, dailies and to-dos from Habitica.": "Habitica에서 습관, 일일 과제, 할 일을 가져옵니다.",
