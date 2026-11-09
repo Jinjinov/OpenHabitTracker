@@ -35,6 +35,9 @@ public static class ImportFormatDetector
         if (IsHabitNowBackup(text))
             return ImportFormat.HabitNow;
 
+        if (IsHabiticaUserData(text))
+            return ImportFormat.Habitica;
+
         string[] lines = text.Split('\n').Select(line => line.TrimEnd('\r')).ToArray();
 
         ImportFormat hint = GetExtensionHint(filename);
@@ -113,6 +116,32 @@ public static class ImportFormatDetector
     private static bool IsHabitNowBackup(string text)
     {
         return text.Length >= 18 && text[0] == 'C' && !text.AsSpan(1, 15).ContainsAnyExceptInRange('0', '9') && text.AsSpan(16, 2).SequenceEqual("{C");
+    }
+
+    // The user data has its tasks by type, directly or, from the API, wrapped in "data".
+    private static bool IsHabiticaUserData(string text)
+    {
+        if (!text.TrimStart().StartsWith('{'))
+            return false;
+
+        try
+        {
+            using JsonDocument document = JsonDocument.Parse(text);
+
+            JsonElement root = document.RootElement;
+
+            if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("data", out JsonElement data) && data.ValueKind == JsonValueKind.Object)
+                root = data;
+
+            return root.ValueKind == JsonValueKind.Object
+                && root.TryGetProperty("tasks", out JsonElement tasks)
+                && tasks.ValueKind == JsonValueKind.Object
+                && tasks.TryGetProperty("dailys", out _);
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
     }
 
     private static bool IsLoopCsvExport(byte[] content)

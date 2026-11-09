@@ -5,6 +5,7 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
+using OpenHabitTracker.Backup.Habitica;
 using OpenHabitTracker.Backup.HabitNow;
 using OpenHabitTracker.Backup.Loop;
 using OpenHabitTracker.Data;
@@ -24,7 +25,7 @@ public class ImportExportServiceTests
 
         ClientState clientState = new(new[] { dataAccess }, new MarkdownToHtml(new MarkdownPipelineBuilder().Build()));
 
-        _service = new(clientState, new JsonImportExport(clientState), new TsvImportExport(clientState), new YamlImportExport(clientState), new MarkdownImportExport(clientState), new GoogleKeepImport(), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()), new HabitNowImport(Substitute.For<IStringLocalizer>()));
+        _service = new(clientState, new JsonImportExport(clientState), new TsvImportExport(clientState), new YamlImportExport(clientState), new MarkdownImportExport(clientState), new GoogleKeepImport(), new LoopImport(Substitute.For<IStringLocalizer>()), new LoopCsvImport(Substitute.For<IStringLocalizer>()), new HabitNowImport(Substitute.For<IStringLocalizer>()), new HabiticaImport());
     }
 
     private static Stream Text(string content) => new MemoryStream(System.Text.Encoding.UTF8.GetBytes(content));
@@ -39,9 +40,9 @@ public class ImportExportServiceTests
     [Test]
     public async Task Read_FileOfAnotherApp_IsUnsupported()
     {
-        await using Stream stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "Importers", "Habitica", "userdata.json"));
+        await using Stream stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "Importers", "Habitify", "export.csv"));
 
-        Assert.That(await Read("userdata.json", stream), Is.EqualTo(ImportResult.UnsupportedFormat));
+        Assert.That(await Read("export.csv", stream), Is.EqualTo(ImportResult.UnsupportedFormat));
     }
 
     [Test]

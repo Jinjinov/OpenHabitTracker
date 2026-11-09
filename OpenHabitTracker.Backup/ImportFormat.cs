@@ -10,5 +10,6 @@ public enum ImportFormat
     GoogleKeep,
     LoopDatabase,
     LoopCsv,
-    HabitNow
+    HabitNow,
+    Habitica
 }

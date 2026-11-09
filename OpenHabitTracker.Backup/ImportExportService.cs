@@ -3,6 +3,7 @@ using Microsoft.Data.Sqlite;
 using OpenHabitTracker.App;
 using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
+using OpenHabitTracker.Backup.Habitica;
 using OpenHabitTracker.Backup.HabitNow;
 using OpenHabitTracker.Backup.Loop;
 using OpenHabitTracker.Data;
@@ -12,7 +13,7 @@ using YamlDotNet.Core;
 
 namespace OpenHabitTracker.Backup;
 
-public class ImportExportService(ClientState clientState, JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport, LoopImport loopImport, LoopCsvImport loopCsvImport, HabitNowImport habitNowImport)
+public class ImportExportService(ClientState clientState, JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport, LoopImport loopImport, LoopCsvImport loopCsvImport, HabitNowImport habitNowImport, HabiticaImport habiticaImport)
 {
     private readonly ClientState _clientState = clientState;
     private readonly JsonImportExport _jsonImportExport = jsonImportExport;
@@ -23,6 +24,7 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
     private readonly LoopImport _loopImport = loopImport;
     private readonly LoopCsvImport _loopCsvImport = loopCsvImport;
     private readonly HabitNowImport _habitNowImport = habitNowImport;
+    private readonly HabiticaImport _habiticaImport = habiticaImport;
 
     public async Task<string> GetDataExportFileString(FileFormat fileFormat)
     {
@@ -87,6 +89,9 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
                     break;
                 case ImportFormat.HabitNow:
                     (categories, options) = await _habitNowImport.ReadDataFile(memoryStream);
+                    break;
+                case ImportFormat.Habitica:
+                    (categories, options) = await _habiticaImport.ReadDataFile(memoryStream);
                     break;
                 default:
                     return (ImportResult.UnsupportedFormat, null);

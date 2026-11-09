@@ -63,6 +63,14 @@ public class ImportFormatDetectorTests
         Assert.That(ImportFormatDetector.Detect("export.zip", Fixture($"Importers/{path}")), Is.EqualTo(ImportFormat.LoopCsv));
     }
 
+    [TestCase("userdata.json")]
+    [TestCase("habitica-user-data.json")]
+    [TestCase("data")]
+    public void Detect_HabiticaUserData_IsHabitica(string filename)
+    {
+        Assert.That(ImportFormatDetector.Detect(filename, Fixture("Importers/Habitica/userdata.json")), Is.EqualTo(ImportFormat.Habitica));
+    }
+
     [TestCase("HabitNow/backup-frequency-tracks.hn")]
     [TestCase("HabitNow/backup-other-years.hn")]
     public void Detect_HabitNowBackup_IsHabitNow(string path)
@@ -70,7 +78,6 @@ public class ImportFormatDetectorTests
         Assert.That(ImportFormatDetector.Detect("backup.hn", Fixture($"Importers/{path}")), Is.EqualTo(ImportFormat.HabitNow));
     }
 
-    [TestCase("Habitica/userdata.json")]
     [TestCase("Habitify/backup.db")]
     [TestCase("Habitify/export.csv")]
     public void Detect_FormatWithoutAnImporter_IsUnknown(string path)

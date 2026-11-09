@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
+using OpenHabitTracker.Backup.Habitica;
 using OpenHabitTracker.Backup.HabitNow;
 using OpenHabitTracker.Backup.Loop;
 
@@ -19,6 +20,7 @@ public static class Startup
         services.AddScoped<LoopImport>();
         services.AddScoped<LoopCsvImport>();
         services.AddScoped<HabitNowImport>();
+        services.AddScoped<HabiticaImport>();
 
         services.AddScoped<ImportExportService>();
 
