@@ -12,6 +12,7 @@
 @inject IPriorityService PriorityService
 @inject INotifications Notifications
 @inject INotificationScheduler NotificationScheduler
+@inject IAuthFragment AuthFragment
 
 @implements IDisposable
 
@@ -78,6 +79,10 @@
                 <option value="Settings">@Loc["Settings"]</option>
                 <option value="Categories">@Loc["Categories"]</option>
                 <option value="Data">@Loc["Data"]</option>
+                @if (AuthFragment.IsAuthAvailable)
+                {
+                    <option value="Sync">@Loc["Sync"]</option>
+                }
                 <option value="About">@Loc["About"]</option>
             </InputSelect>
         </div>

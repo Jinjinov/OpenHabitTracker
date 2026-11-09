@@ -12,7 +12,7 @@ using OpenHabitTracker.Services;
 namespace OpenHabitTracker.UnitTests.Components;
 
 // The six notification rows are gated on CanNotify, so a host that cannot notify must not show
-// settings it can never act on - the same gating Data.razor applies to the online sync block.
+// settings it can never act on.
 [TestFixture]
 public class SettingsNotificationRowsTests
 {
@@ -46,6 +46,7 @@ public class SettingsNotificationRowsTests
         _ctx.Services.AddScoped(_ => Substitute.For<IJsInterop>());
         _ctx.Services.AddScoped(_ => Substitute.For<IGTourService>());
         _ctx.Services.AddScoped<IPriorityService>(_ => new PriorityService());
+        _ctx.Services.AddScoped(_ => Substitute.For<IAuthFragment>());
     }
 
     [TearDown]

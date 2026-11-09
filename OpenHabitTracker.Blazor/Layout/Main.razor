@@ -214,6 +214,7 @@
         { "Settings", "Settings" },
         { "Categories", "Categories" },
         { "Data", "Data" },
+        { "Sync", "Sync" },
         { "Trash", "Trash" },
         { "About", "About" }
     };
@@ -225,6 +226,7 @@
         { "Settings", "settings" },
         { "Categories", "categories" },
         { "Data", "data" },
+        { "Sync", "sync" },
         { "Trash", "trash" },
         { "About", "about" }
     };
@@ -273,8 +275,9 @@
         SetDynamicComponentParameters();
 
         if (AuthFragment.IsSignedOut)
-            SelectComponent<Data>();
-        else if (!string.IsNullOrEmpty(ClientState.Settings.StartSidebar))
+            SelectComponent<Sync>();
+        // A JSON import carries the setting in from a host where Sync exists.
+        else if (!string.IsNullOrEmpty(ClientState.Settings.StartSidebar) && (ClientState.Settings.StartSidebar != nameof(Sync) || AuthFragment.IsAuthAvailable))
             SelectComponent(ClientState.Settings.StartSidebar);
 
         // Tapping a notification navigates to what it was about.
@@ -298,7 +301,7 @@
         bool loggedIn = await AuthFragment.TryRefreshTokenLogin();
 
         if (AuthFragment.IsSignedOut)
-            SelectComponent<Data>();
+            SelectComponent<Sync>();
 
         if (loggedIn || AuthFragment.IsSignedOut)
         {
@@ -315,7 +318,7 @@
     {
         await AuthFragment.SignedOut();
 
-        SelectComponent<Data>();
+        SelectComponent<Sync>();
 
         await InvokeAsync(RepaintReplacedData);
     }
@@ -374,6 +377,7 @@
             { "Settings", windowDimensionsParameters },
             { "Categories", stateChangedParameters },
             { "Data", stateChangedParameters },
+            { "Sync", stateChangedParameters },
             { "Trash", stateChangedParameters }
         };
     }

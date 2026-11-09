@@ -239,8 +239,7 @@ public class StoreScreenshotTests : PlaywrightTest
     ];
 
     // Needs the temporary build that registers the real auth fragment: IAuthFragment.IsAuthAvailable
-    // is false in the PWA and its GetAuthFragment returns an empty RenderFragment, so on a shipped
-    // build this scene captures a heading and a blank space.
+    // is false in the PWA, so a shipped build has no Sync entry in the menu.
     private static (string File, Func<IPage, Task> Scene) SyncScene =>
         ("09-sync.png", async page =>
         {
@@ -248,8 +247,8 @@ public class StoreScreenshotTests : PlaywrightTest
             await page.Locator("#closeSidebar").ClickAsync(); // close Settings from the previous scene
             await page.Locator("[data-main-step-4]").ClickAsync(); // Tasks behind this one - the third list
             await page.Locator("[data-main-step-1]").ClickAsync(); // menu
-            await page.Locator("div[role='menu'] button:has(i.bi-database)").ClickAsync();
-            await Assertions.Expect(page.Locator("[data-data-step-12]")).ToBeVisibleAsync();
+            await page.Locator("div[role='menu'] button:has(i.bi-globe)").ClickAsync();
+            await Assertions.Expect(page.Locator("[data-sync-step-1]")).ToBeVisibleAsync();
         });
 
     // Desktop and Mac only - Home needs the width to show all three columns at once.
@@ -263,8 +262,6 @@ public class StoreScreenshotTests : PlaywrightTest
 
     // Play takes 8 per folder, Apple 10 per device size, Microsoft 10 desktop - so the phone and
     // tablet folders stop at the eight, and scene 10 is desktop-only because Home needs the width.
-    // The sync block also falls below the fold at the phone viewport, which the Play cap
-    // already excludes.
     private static (string File, Func<IPage, Task> Scene)[] ScenesFor(string target) => target switch
     {
         "play-phone" or "play-tablet-7" or "play-tablet-10" => Scenes,

@@ -1,0 +1,53 @@
+@using OpenHabitTracker.App
+
+@inject ClientState ClientState
+@inject IStringLocalizer Loc
+@inject ILinkAttributeService LinkAttributeService
+@inject IAuthFragment AuthFragment
+
+@if (AuthFragment.IsAuthAvailable)
+{
+    <small class="m-1"><i class="bi bi-globe" aria-hidden="true"></i> @Loc["Online sync"]</small>
+
+    <div class="mx-1 my-2" @ref="WrapperElement" data-sync-step-2>
+        <small>@Loc["To enable online sync, run"] <a href="https://hub.docker.com/r/jinjinov/openhabittracker">OpenHabitTracker Docker</a> @Loc["image on your server"]</small>
+    </div>
+
+    <div data-sync-step-1>
+        @AuthFragment.GetAuthFragment(StateChanged.Value, StateChangedChanged)
+    </div>
+}
+
+@if (ClientState.Settings.ShowHelp)
+{
+    <GuidedTourComponent TourId="sync" TourSteps="tourSteps" />
+}
+
+@code {
+    TourStep[] tourSteps;
+
+    public Sync()
+    {
+        tourSteps = new TourStep[]
+        {
+            new() { Text = "Use the address, username and password of your OpenHabitTracker Docker container to log in.", Show = () => AuthFragment.IsAuthAvailable },
+            new() { Text = "Download OpenHabitTracker Docker image and run it on your server to enable online sync.", Show = () => AuthFragment.IsAuthAvailable },
+        };
+    }
+
+    private ElementReference WrapperElement;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LinkAttributeService.AddAttributesToLinks(WrapperElement);
+        }
+    }
+
+    [Parameter]
+    public Ref<bool> StateChanged { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<bool> StateChangedChanged { get; set; }
+}
