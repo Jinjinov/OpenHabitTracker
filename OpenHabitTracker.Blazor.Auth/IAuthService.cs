@@ -2,8 +2,6 @@ namespace OpenHabitTracker.Blazor.Auth;
 
 public interface IAuthService
 {
-    string? Login { get; set; }
-
     string? Error { get; set; }
 
     bool IsSignedOut { get; }

@@ -274,10 +274,13 @@
 
         SetDynamicComponentParameters();
 
+        // Where there is no online sync, the page holds only the account.
+        _titleByTypeName[nameof(Sync)] = AuthFragment.IsAuthAvailable ? "Sync" : "Account";
+
         if (AuthFragment.IsSignedOut)
             SelectComponent<Sync>();
         // A JSON import carries the setting in from a host where Sync exists.
-        else if (!string.IsNullOrEmpty(ClientState.Settings.StartSidebar) && (ClientState.Settings.StartSidebar != nameof(Sync) || AuthFragment.IsAuthAvailable))
+        else if (!string.IsNullOrEmpty(ClientState.Settings.StartSidebar) && (ClientState.Settings.StartSidebar != nameof(Sync) || AuthFragment.IsAuthAvailable || AuthFragment.IsAccountAvailable))
             SelectComponent(ClientState.Settings.StartSidebar);
 
         // Tapping a notification navigates to what it was about.

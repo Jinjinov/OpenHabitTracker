@@ -6,6 +6,8 @@ public class AuthFragment : IAuthFragment
 {
     public bool IsAuthAvailable => false;
 
+    public bool IsAccountAvailable => false;
+
     public bool IsSignedOut => false;
 
     public bool CanRefreshTokenLogin => false;

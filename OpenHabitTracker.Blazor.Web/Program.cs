@@ -221,7 +221,8 @@ builder.Services.AddScoped<IAssemblyProvider, OpenHabitTracker.Blazor.Web.Compon
 builder.Services.AddScoped<ILinkAttributeService, LinkAttributeService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPreRenderService, OpenHabitTracker.Blazor.Web.PreRenderService>();
-builder.Services.AddScoped<IAuthFragment, AuthFragment>();
+builder.Services.AddScoped<IAuthFragment, ServerAuthFragment>();
+builder.Services.AddScoped<IAccountService, BrowserAccountService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

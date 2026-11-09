@@ -10,32 +10,24 @@
 @inject IStringLocalizer Loc
 @inject IAuthService AuthService
 
-<input class="form-control my-1" @bind="address" placeholder="@Loc["Address"]" />
-<input class="form-control my-1" @bind="username" placeholder="@Loc["Username"]" />
-<input class="form-control my-1" @bind="password" placeholder="@Loc["Password"]" type="password" />
-
-<div class="form-check position-relative my-1">
-    <InputCheckbox id="RememberMe" class="form-check-input me-1" Value="_settings.RememberMe" ValueExpression="() => _settings.RememberMe" ValueChanged="SaveRememberMe" />
-    <label for="RememberMe" class="form-check-label stretched-link">@Loc["Remember me"]</label>
-</div>
-
+@* Signed in, the account on the Sync page shows who is signed in and logs out. *@
 @if (ClientState.DataLocation == DataLocation.Local)
 {
+    <input class="form-control my-1" @bind="address" placeholder="@Loc["Address"]" />
+    <input class="form-control my-1" @bind="username" placeholder="@Loc["Username"]" />
+    <input class="form-control my-1" @bind="password" placeholder="@Loc["Password"]" type="password" />
+
+    <div class="form-check position-relative my-1">
+        <InputCheckbox id="RememberMe" class="form-check-input me-1" Value="_settings.RememberMe" ValueExpression="() => _settings.RememberMe" ValueChanged="SaveRememberMe" />
+        <label for="RememberMe" class="form-check-label stretched-link">@Loc["Remember me"]</label>
+    </div>
+
     <button class="btn btn-primary w-100 my-1" @onclick="Login" disabled="@_loggingIn">@Loc["Log in"]</button>
-}
-@if (ClientState.DataLocation == DataLocation.Remote)
-{
-    <button class="btn btn-primary w-100 my-1" @onclick="Logout">@Loc["Log out"]</button>
-}
 
-@if (!string.IsNullOrEmpty(AuthService.Login))
-{
-    <div>@AuthService.Login</div>
-}
-
-@if (!string.IsNullOrEmpty(AuthService.Error))
-{
-    <div>@AuthService.Error</div>
+    @if (!string.IsNullOrEmpty(AuthService.Error))
+    {
+        <div>@AuthService.Error</div>
+    }
 }
 
 @code {
@@ -85,13 +77,6 @@
         {
             _loggingIn = false;
         }
-    }
-
-    private async Task Logout()
-    {
-        await AuthService.Logout();
-
-        await OnStateChanged();
     }
 
     async Task SaveRememberMe(bool rememberMe)

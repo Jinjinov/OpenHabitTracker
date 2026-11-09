@@ -18,6 +18,13 @@
     </div>
 }
 
+@if (AuthFragment.IsAccountAvailable)
+{
+    <div data-sync-step-3>
+        <AccountComponent OnLoggedOut="OnStateChanged" />
+    </div>
+}
+
 @if (ClientState.Settings.ShowHelp)
 {
     <GuidedTourComponent TourId="sync" TourSteps="tourSteps" />
@@ -30,8 +37,10 @@
     {
         tourSteps = new TourStep[]
         {
-            new() { Text = "Use the address, username and password of your OpenHabitTracker Docker container to log in.", Show = () => AuthFragment.IsAuthAvailable },
+            // Signed in, the login form gives way to the account.
+            new() { Text = "Use the address, username and password of your OpenHabitTracker Docker container to log in.", Show = () => AuthFragment.IsAuthAvailable && !AuthFragment.IsAccountAvailable },
             new() { Text = "Download OpenHabitTracker Docker image and run it on your server to enable online sync.", Show = () => AuthFragment.IsAuthAvailable },
+            new() { Text = "Change your password and log out.", Show = () => AuthFragment.IsAccountAvailable },
         };
     }
 
@@ -39,7 +48,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && AuthFragment.IsAuthAvailable)
         {
             await LinkAttributeService.AddAttributesToLinks(WrapperElement);
         }
@@ -50,4 +59,10 @@
 
     [Parameter]
     public EventCallback<bool> StateChangedChanged { get; set; }
+
+    async Task OnStateChanged()
+    {
+        StateChanged.Value = !StateChanged.Value;
+        await StateChangedChanged.InvokeAsync(StateChanged.Value);
+    }
 }

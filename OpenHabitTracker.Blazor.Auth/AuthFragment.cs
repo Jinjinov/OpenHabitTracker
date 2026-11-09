@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Components;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Blazor.Auth.Components;
+using OpenHabitTracker.Data;
 
 namespace OpenHabitTracker.Blazor.Auth;
 
-public class AuthFragment(IAuthService authService) : IAuthFragment
+public class AuthFragment(IAuthService authService, ClientState clientState) : IAuthFragment
 {
     public bool IsAuthAvailable => true;
+
+    public bool IsAccountAvailable => clientState.DataLocation == DataLocation.Remote;
 
     public bool IsSignedOut => authService.IsSignedOut;
 

@@ -6,6 +6,8 @@ public interface IAuthFragment
 {
     bool IsAuthAvailable { get; }
 
+    bool IsAccountAvailable { get; }
+
     bool IsSignedOut { get; }
 
     bool CanRefreshTokenLogin { get; }

@@ -14,7 +14,6 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
     private readonly ApiClientOptions _apiClientOptions = apiClientOptions;
     private readonly IStringLocalizer _loc = loc;
 
-    public string? Login { get; set; } = string.Empty;
     public string? Error { get; set; } = string.Empty;
     public bool IsSignedOut { get; private set; }
 
@@ -42,8 +41,6 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
                 }
 
                 await _remoteDataSync.SetDataLocation(DataLocation.Remote);
-
-                ShowEmail(tokenResponse.Email);
 
                 Error = "";
 
@@ -86,12 +83,6 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
         return false;
     }
 
-    // Servers older than 1.2.6 send no email, which only leaves out the "User: email" line.
-    private void ShowEmail(string email)
-    {
-        Login = string.IsNullOrEmpty(email) ? "" : $"{_loc["User"]}: {email}";
-    }
-
     public bool CanRefreshTokenLogin => _clientState.DataLocation == DataLocation.Local && _clientState.Settings.RememberMe && !string.IsNullOrEmpty(_clientState.Settings.RefreshToken);
 
     public async Task<bool> TryRefreshTokenLogin()
@@ -123,8 +114,6 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
                 await _clientState.UpdateLoginSettings();
 
                 await _remoteDataSync.SetDataLocation(DataLocation.Remote);
-
-                ShowEmail(tokenResponse.Email);
 
                 Error = "";
 
@@ -193,7 +182,6 @@ public class AuthService(ClientState clientState, RemoteDataSync remoteDataSync,
 
         await _remoteDataSync.SetDataLocation(DataLocation.Local);
 
-        Login = "";
         Error = "";
 
         _clientState.Settings.RefreshToken = "";

@@ -73,7 +73,7 @@ public class AccountController(UserManager<ApplicationUser> userManager, SignInM
             await _signInManager.RefreshSignInAsync(user);
         }
 
-        return NoContent();
+        return Ok();
     }
 
     [HttpPost("logout")]
@@ -100,7 +100,7 @@ public class AccountController(UserManager<ApplicationUser> userManager, SignInM
             await _signInManager.SignOutAsync();
         }
 
-        return NoContent();
+        return Ok();
     }
 
     [HttpGet("accounts")]
@@ -167,7 +167,7 @@ public class AccountController(UserManager<ApplicationUser> userManager, SignInM
 
         await _dbContext.RemoveRefreshTokens(account.UserName);
 
-        return NoContent();
+        return Ok();
     }
 
     private async Task<AccountResponse> ToResponse(ApplicationUser user)

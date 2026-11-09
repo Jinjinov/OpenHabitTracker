@@ -67,6 +67,18 @@ public class SettingsStartSidebarTests
     }
 
     [Test]
+    public void StartSidebar_WhenOnlyTheAccountIsAvailable_OffersItAsAccount()
+    {
+        _authFragment.IsAccountAvailable.Returns(true);
+
+        IRenderedComponent<Blazor.Pages.Settings> settings = _ctx.Render<Blazor.Pages.Settings>();
+
+        IElement option = settings.Find("[data-settings-step-4] select option[value='Sync']");
+
+        Assert.That(option.TextContent, Is.EqualTo("Account"));
+    }
+
+    [Test]
     public void StartSidebar_WhenAuthIsNotAvailable_DoesNotOfferSync()
     {
         _authFragment.IsAuthAvailable.Returns(false);

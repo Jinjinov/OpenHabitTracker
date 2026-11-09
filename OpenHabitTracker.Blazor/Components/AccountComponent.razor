@@ -1,0 +1,113 @@
+@using OpenHabitTracker.Dto
+
+@inject IAccountService AccountService
+@inject IStringLocalizer Loc
+
+<div class="m-1">
+
+    @if (_account is not null)
+    {
+        <small class="d-block text-break">@Loc["User"]: @_account.Username</small>
+    }
+    else if (_loaded)
+    {
+        <small class="d-block text-danger" role="alert">@Loc["Connection error"]</small>
+    }
+
+    <button class="btn btn-primary w-100 my-1" @onclick="LogOut">@Loc["Log out"]</button>
+
+    @* The administrator's password is set in the container's settings. *@
+    @if (_account is { IsAdministrator: false })
+    {
+        <small class="d-block mt-2">@Loc["Change password"]</small>
+
+        <input id="current-password" class="form-control my-1" type="password" autocomplete="current-password" placeholder="@Loc["Current password"]" @bind="_currentPassword" />
+        <input id="new-password" class="form-control my-1" type="password" autocomplete="new-password" placeholder="@Loc["New password"]" @bind="_newPassword" />
+        <input id="confirm-password" class="form-control my-1" type="password" autocomplete="new-password" placeholder="@Loc["Repeat new password"]" @bind="_confirmPassword" />
+
+        <button class="btn btn-secondary w-100 my-1" @onclick="ChangePassword" disabled="@_changing">@Loc["Change password"]</button>
+
+        @foreach (string error in _errors)
+        {
+            <small class="d-block text-danger" role="alert">@error</small>
+        }
+
+        @if (_passwordChanged)
+        {
+            <small class="d-block" role="status">@Loc["Password changed. Your other devices have to log in again."]</small>
+        }
+    }
+
+    @if (_account is { IsAdministrator: true })
+    {
+        <AccountsComponent />
+    }
+
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnLoggedOut { get; set; }
+
+    private AccountResponse? _account;
+
+    private bool _loaded;
+
+    private string _currentPassword = string.Empty;
+    private string _newPassword = string.Empty;
+    private string _confirmPassword = string.Empty;
+
+    private IReadOnlyList<string> _errors = [];
+
+    private bool _passwordChanged;
+
+    private bool _changing;
+
+    // After the first render, because on the server the account is read by the browser.
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _account = await AccountService.GetAccount();
+            _loaded = true;
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task ChangePassword()
+    {
+        _passwordChanged = false;
+
+        if (_newPassword != _confirmPassword)
+        {
+            _errors = [Loc["The new passwords do not match."]];
+        }
+        else
+        {
+            _changing = true;
+
+            try
+            {
+                _errors = await AccountService.ChangePassword(_currentPassword, _newPassword);
+            }
+            finally
+            {
+                _changing = false;
+            }
+
+            _passwordChanged = _errors.Count == 0;
+        }
+
+        _currentPassword = string.Empty;
+        _newPassword = string.Empty;
+        _confirmPassword = string.Empty;
+    }
+
+    private async Task LogOut()
+    {
+        await AccountService.LogOut();
+
+        await OnLoggedOut.InvokeAsync();
+    }
+}

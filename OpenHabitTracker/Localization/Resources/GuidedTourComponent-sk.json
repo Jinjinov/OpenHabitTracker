@@ -24,6 +24,7 @@
   "Import Google Keep notes from a ZIP file exported from Google Takeout.": "Importovať poznámky Google Keep zo súboru ZIP exportovaného z Google Takeout.",
   "Use the address, username and password of your OpenHabitTracker Docker container to log in.": "Použi adresu, používateľské meno a heslo svojho Docker kontajnera OpenHabitTracker na prihlásenie.",
   "Download OpenHabitTracker Docker image and run it on your server to enable online sync.": "Stiahni obraz Docker OpenHabitTracker a spusti ho na svojom serveri na povolenie online synchronizácie.",
+  "Change your password and log out.": "Zmeň heslo a odhlás sa.",
 
   "Habit's priority.": "Priorita návyku.",
   "Habit's title.": "Názov návyku.",

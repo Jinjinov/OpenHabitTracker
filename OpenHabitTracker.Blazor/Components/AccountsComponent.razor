@@ -1,0 +1,128 @@
+@using OpenHabitTracker.Dto
+
+@inject IAccountService AccountService
+@inject IStringLocalizer Loc
+
+<small class="d-block mt-3">@Loc["Accounts"]</small>
+
+<table class="table table-sm small my-1">
+    <thead>
+        <tr>
+            <th scope="col">@Loc["Username"]</th>
+            <th scope="col">@Loc["Email"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (AccountResponse account in _accounts)
+        {
+            <tr>
+                <td class="text-break">@account.Username</td>
+                <td class="text-break">@account.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<small class="d-block mt-2">@Loc["Create account"]</small>
+
+<input id="create-username" class="form-control my-1" autocomplete="off" placeholder="@Loc["Username"]" @bind="_username" />
+<input id="create-email" class="form-control my-1" type="email" autocomplete="off" placeholder="@Loc["Email"]" @bind="_email" />
+<input id="create-password" class="form-control my-1" type="password" autocomplete="new-password" placeholder="@Loc["Password"]" @bind="_password" />
+
+<button class="btn btn-secondary w-100 my-1" @onclick="CreateAccount">@Loc["Create account"]</button>
+
+@foreach (string error in _createErrors)
+{
+    <small class="d-block text-danger" role="alert">@error</small>
+}
+
+@if (_resettableAccounts.Count > 0)
+{
+    <small class="d-block mt-2">@Loc["Reset password"]</small>
+
+    <select id="reset-username" class="form-select my-1" aria-label="@Loc["Username"]" @bind="_resetUsername">
+        <option value=""></option>
+        @foreach (AccountResponse account in _resettableAccounts)
+        {
+            <option value="@account.Username">@account.Username</option>
+        }
+    </select>
+    <input id="reset-password" class="form-control my-1" type="password" autocomplete="new-password" placeholder="@Loc["New password"]" @bind="_resetPassword" />
+
+    <button class="btn btn-secondary w-100 my-1" @onclick="ResetPassword" disabled="@string.IsNullOrEmpty(_resetUsername)">@Loc["Reset password"]</button>
+
+    @foreach (string error in _resetErrors)
+    {
+        <small class="d-block text-danger" role="alert">@error</small>
+    }
+
+    @if (_passwordReset)
+    {
+        <small class="d-block" role="status">@Loc["Password reset. The devices of this account have to log in again."]</small>
+    }
+}
+
+@code {
+    private IReadOnlyList<AccountResponse> _accounts = [];
+
+    private List<AccountResponse> _resettableAccounts = [];
+
+    private string _username = string.Empty;
+    private string _email = string.Empty;
+    private string _password = string.Empty;
+
+    private IReadOnlyList<string> _createErrors = [];
+
+    private string _resetUsername = string.Empty;
+    private string _resetPassword = string.Empty;
+
+    private IReadOnlyList<string> _resetErrors = [];
+
+    private bool _passwordReset;
+
+    // After the first render, because on the server the accounts are read by the browser.
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadAccounts();
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadAccounts()
+    {
+        _accounts = await AccountService.GetAccounts();
+
+        // The administrator's password is set in the container's settings.
+        _resettableAccounts = _accounts.Where(x => !x.IsAdministrator).ToList();
+    }
+
+    private async Task CreateAccount()
+    {
+        _createErrors = await AccountService.CreateAccount(_username, _email, _password);
+
+        _password = string.Empty;
+
+        if (_createErrors.Count == 0)
+        {
+            _username = string.Empty;
+            _email = string.Empty;
+
+            await LoadAccounts();
+        }
+    }
+
+    private async Task ResetPassword()
+    {
+        _resetErrors = await AccountService.ResetPassword(_resetUsername, _resetPassword);
+
+        _passwordReset = _resetErrors.Count == 0;
+
+        _resetPassword = string.Empty;
+
+        if (_passwordReset)
+            _resetUsername = string.Empty;
+    }
+}

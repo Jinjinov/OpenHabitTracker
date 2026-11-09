@@ -70,20 +70,6 @@ public class AuthServiceLoginTests
         new() { JwtToken = "jwt", RefreshToken = "refresh", JwtTokenExpiresAt = DateTimeOffset.UtcNow.AddDays(1), Email = email };
 
     [Test]
-    public async Task CredentialsLogin_ResponseCarriesTheEmail_ShowsTheEmail()
-    {
-        _authClient.GetJwtTokenAsync(Arg.Any<LoginCredentials>()).Returns(Response("a@example.com"));
-
-        bool loggedIn = await _sut.CredentialsLogin("https://example.com", "a", "password");
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(loggedIn, Is.True);
-            Assert.That(_sut.Login, Does.Contain("a@example.com"));
-        });
-    }
-
-    [Test]
     public async Task CredentialsLogin_OlderServerSendsNoEmail_IsStillALogin()
     {
         bool loggedIn = await _sut.CredentialsLogin("https://example.com", "a", "password");
@@ -92,22 +78,6 @@ public class AuthServiceLoginTests
         {
             Assert.That(loggedIn, Is.True);
             Assert.That(_sut.Error, Is.Empty);
-            Assert.That(_sut.Login, Is.Empty);
-            Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Remote));
-        });
-    }
-
-    [Test]
-    public async Task RefreshTokenLogin_ResponseCarriesTheEmail_ShowsTheEmail()
-    {
-        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>()).Returns(Response("a@example.com"));
-
-        bool loggedIn = await _sut.RefreshTokenLogin("https://example.com", "refresh");
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(loggedIn, Is.True);
-            Assert.That(_sut.Login, Does.Contain("a@example.com"));
             Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Remote));
         });
     }
@@ -121,7 +91,6 @@ public class AuthServiceLoginTests
         {
             Assert.That(loggedIn, Is.True);
             Assert.That(_sut.Error, Is.Empty);
-            Assert.That(_sut.Login, Is.Empty);
             Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Remote));
         });
     }
@@ -316,7 +285,6 @@ public class AuthServiceLoginTests
         {
             Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Local));
             Assert.That(_sut.Error, Is.EqualTo("Signed out - log in again"));
-            Assert.That(_sut.Login, Is.Empty);
             Assert.That(_clientState.Settings.RefreshToken, Is.Empty);
         });
     }

@@ -137,7 +137,7 @@ public class AccountControllerTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(result, Is.TypeOf<NoContentResult>());
+            Assert.That(result, Is.TypeOf<OkResult>());
             Assert.That(RefreshTokens(), Is.EqualTo(new[] { "token of bea's phone", "token of cid" }));
         });
         await _signInManager.DidNotReceiveWithAnyArgs().RefreshSignInAsync(default!);
@@ -164,7 +164,7 @@ public class AccountControllerTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(result, Is.TypeOf<NoContentResult>());
+            Assert.That(result, Is.TypeOf<OkResult>());
             Assert.That(RefreshTokens(), Is.EqualTo(new[] { "token of cid" }));
         });
         await _signInManager.Received(1).RefreshSignInAsync(_bea);
@@ -203,7 +203,7 @@ public class AccountControllerTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(result, Is.TypeOf<NoContentResult>());
+            Assert.That(result, Is.TypeOf<OkResult>());
             Assert.That(RefreshTokens(), Is.EqualTo(new[] { "token of bea's laptop", "token of cid" }));
         });
         await _signInManager.DidNotReceive().SignOutAsync();
@@ -275,7 +275,7 @@ public class AccountControllerTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(result, Is.TypeOf<NoContentResult>());
+            Assert.That(result, Is.TypeOf<OkResult>());
             Assert.That(RefreshTokens(), Is.EqualTo(new[] { "token of cid" }));
         });
         await _userManager.Received(1).SetLockoutEndDateAsync(_bea, null);

@@ -65,6 +65,23 @@ public class MenuComponentTests
     }
 
     [Test]
+    public void Renders_AccountButtonAfterData_WhenOnlyTheAccountIsAvailable()
+    {
+        _authFragment.IsAccountAvailable.Returns(true);
+
+        IRenderedComponent<Menu> cut = _ctx.Render<Menu>();
+
+        IReadOnlyList<IElement> buttons = cut.FindAll("div.list-group > button");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(buttons, Has.Count.EqualTo(7));
+            Assert.That(buttons[5].QuerySelector("i.bi-person"), Is.Not.Null);
+            Assert.That(buttons[5].TextContent.Trim(), Is.EqualTo("Account"));
+        });
+    }
+
+    [Test]
     public async Task ClickSyncButton_InvokesDynamicComponentTypeChanged_WithSyncType()
     {
         _authFragment.IsAuthAvailable.Returns(true);

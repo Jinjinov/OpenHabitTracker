@@ -12,9 +12,10 @@
             <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 2 ? 0 : -1)" @ref="_items[2]" @onclick="() => SelectComponentAt<Settings>(2)"><i class="bi bi-gear" aria-hidden="true"></i> @Loc["Settings"]</button>
             <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 3 ? 0 : -1)" @ref="_items[3]" @onclick="() => SelectComponentAt<Categories>(3)"><i class="bi bi-tag" aria-hidden="true"></i> @Loc["Categories"]</button>
             <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 4 ? 0 : -1)" @ref="_items[4]" @onclick="() => SelectComponentAt<Data>(4)"><i class="bi bi-database" aria-hidden="true"></i> @Loc["Data"]</button>
-            @if (AuthFragment.IsAuthAvailable)
+            @if (_hasSync)
             {
-                <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 5 ? 0 : -1)" @ref="_items[5]" @onclick="() => SelectComponentAt<Sync>(5)"><i class="bi bi-globe" aria-hidden="true"></i> @Loc["Sync"]</button>
+                @* Where there is no online sync, the page holds only the account. *@
+                <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == 5 ? 0 : -1)" @ref="_items[5]" @onclick="() => SelectComponentAt<Sync>(5)"><i class="bi @(AuthFragment.IsAuthAvailable ? "bi-globe" : "bi-person")" aria-hidden="true"></i> @Loc[AuthFragment.IsAuthAvailable ? "Sync" : "Account"]</button>
             }
             <button class="list-group-item list-group-item-action" role="menuitem" tabindex="@(_focusedIndex == _aboutIndex ? 0 : -1)" @ref="_items[_aboutIndex]" @onclick="() => SelectComponentAt<About>(_aboutIndex)"><i class="bi bi-info-circle" aria-hidden="true"></i> @Loc["About"]</button>
         </div>
@@ -34,12 +35,14 @@
     public Dimensions? WindowDimensions { get; set; }
 
     ElementReference[] _items = [];
+    bool _hasSync;
     int _aboutIndex;
     int _focusedIndex = 0;
 
     protected override void OnInitialized()
     {
-        _aboutIndex = AuthFragment.IsAuthAvailable ? 6 : 5;
+        _hasSync = AuthFragment.IsAuthAvailable || AuthFragment.IsAccountAvailable;
+        _aboutIndex = _hasSync ? 6 : 5;
         _items = new ElementReference[_aboutIndex + 1];
     }
 

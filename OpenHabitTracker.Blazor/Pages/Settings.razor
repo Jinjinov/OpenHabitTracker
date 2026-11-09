@@ -79,9 +79,9 @@
                 <option value="Settings">@Loc["Settings"]</option>
                 <option value="Categories">@Loc["Categories"]</option>
                 <option value="Data">@Loc["Data"]</option>
-                @if (AuthFragment.IsAuthAvailable)
+                @if (AuthFragment.IsAuthAvailable || AuthFragment.IsAccountAvailable)
                 {
-                    <option value="Sync">@Loc["Sync"]</option>
+                    <option value="Sync">@Loc[AuthFragment.IsAuthAvailable ? "Sync" : "Account"]</option>
                 }
                 <option value="About">@Loc["About"]</option>
             </InputSelect>

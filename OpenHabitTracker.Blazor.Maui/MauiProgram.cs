@@ -79,6 +79,7 @@ public static class MauiProgram
         builder.Services.AddScoped<IPreRenderService, PreRenderService>(); // different in Web
         builder.Services.AddScoped<IAuthFragment, OpenHabitTracker.Blazor.Auth.AuthFragment>();
         builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<IAccountService, ApiAccountService>();
         builder.Services.AddHttpClients();
 
         MauiApp mauiApp = builder.Build();

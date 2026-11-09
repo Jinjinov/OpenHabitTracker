@@ -59,6 +59,7 @@ public partial class MainWindow : Window
         services.AddScoped<IPreRenderService, PreRenderService>();
         services.AddScoped<IAuthFragment, OpenHabitTracker.Blazor.Auth.AuthFragment>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IAccountService, ApiAccountService>();
         services.AddHttpClients();
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();

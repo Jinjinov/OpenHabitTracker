@@ -5,7 +5,7 @@ namespace OpenHabitTracker.Blazor.Web.ApiClient;
 
 public static class Startup
 {
-    // Both clients use this one name, because IHttpClientFactory keeps one handler chain, and with it
+    // All three clients use this one name, because IHttpClientFactory keeps one handler chain, and with it
     // one connection pool, per name. With a name each, a login opened a second connection and paid a
     // second TLS handshake.
     private const string ServerClientName = "Server";
@@ -32,16 +32,28 @@ public static class Startup
         {
             ApiClientOptions apiClientOptions = serviceProvider.GetRequiredService<ApiClientOptions>();
 
-            RefreshTokenHandler refreshTokenHandler = new(apiClientOptions, serviceProvider.GetRequiredService<ITokenRefresher>())
-            {
-                InnerHandler = serviceProvider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(ServerClientName)
-            };
+            return new DataAccessClient(CreateRenewingHttpClient(serviceProvider, apiClientOptions), apiClientOptions);
+        });
 
-            return new DataAccessClient(new HttpClient(refreshTokenHandler), apiClientOptions);
+        services.AddScoped(serviceProvider =>
+        {
+            ApiClientOptions apiClientOptions = serviceProvider.GetRequiredService<ApiClientOptions>();
+
+            return new AccountClient(CreateRenewingHttpClient(serviceProvider, apiClientOptions), apiClientOptions);
         });
 
         services.AddScoped<IDataAccess, DataAccess>();
 
         return services;
+    }
+
+    private static HttpClient CreateRenewingHttpClient(IServiceProvider serviceProvider, ApiClientOptions apiClientOptions)
+    {
+        RefreshTokenHandler refreshTokenHandler = new(apiClientOptions, serviceProvider.GetRequiredService<ITokenRefresher>())
+        {
+            InnerHandler = serviceProvider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(ServerClientName)
+        };
+
+        return new HttpClient(refreshTokenHandler);
     }
 }
