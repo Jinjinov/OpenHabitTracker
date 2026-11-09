@@ -18,7 +18,7 @@ TVOJI PODATKI SO TVOJI
 
 • Vsi podatki so shranjeni lokalno na tvoji napravi
 • Izvoz in uvoz: Markdown, JSON, YAML, TSV
-• Uvozi zapiske iz Google Keep
+• Uvozi iz aplikacij Google Keep, Loop Habit Tracker, HabitNow, Habitica in Habitify
 • Neobvezna sinhronizacija za več uporabnikov: gosti sliko Docker na svojem strežniku in vsaka aplikacija, namizna ali mobilna, se lahko prijavi in sinhronizira
 
 PRILAGOJENO TEBI

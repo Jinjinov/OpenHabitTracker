@@ -18,7 +18,7 @@ TWOJE DANE SĄ TWOJE
 
 • Wszystkie dane są zapisywane lokalnie na Twoim urządzeniu
 • Eksport i import: Markdown, JSON, YAML, TSV
-• Importuj notatki z Google Keep
+• Importuj dane z aplikacji Google Keep, Loop Habit Tracker, HabitNow, Habitica i Habitify
 • Opcjonalna synchronizacja dla wielu użytkowników: uruchom obraz Dockera na własnym serwerze, a każda aplikacja, desktopowa czy mobilna, może się zalogować i synchronizować
 
 DOPASOWANA DO CIEBIE

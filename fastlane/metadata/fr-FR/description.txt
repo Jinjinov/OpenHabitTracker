@@ -18,7 +18,7 @@ VOS DONNÉES VOUS APPARTIENNENT
 
 • Toutes les données sont stockées localement sur votre appareil
 • Export et import : Markdown, JSON, YAML, TSV
-• Importez vos notes depuis Google Keep
+• Importez depuis Google Keep, Loop Habit Tracker, HabitNow, Habitica et Habitify
 • Synchronisation optionnelle pour plusieurs utilisateurs : hébergez l'image Docker sur votre propre serveur et chaque application, bureau ou mobile, peut se connecter et se synchroniser
 
 À VOTRE IMAGE

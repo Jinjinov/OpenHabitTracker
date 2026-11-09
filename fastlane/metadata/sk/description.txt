@@ -18,7 +18,7 @@ VAŠE DÁTA SÚ VAŠE
 
 • Všetky dáta sa ukladajú lokálne vo vašom zariadení
 • Export a import: Markdown, JSON, YAML, TSV
-• Import poznámok z Google Keep
+• Import z Google Keep, Loop Habit Tracker, HabitNow, Habitica a Habitify
 • Voliteľná synchronizácia pre viacerých používateľov: prevádzkujte Docker image na vlastnom serveri a každá aplikácia, desktopová aj mobilná, sa môže prihlásiť a synchronizovať
 
 PRISPÔSOBÍ SA VÁM

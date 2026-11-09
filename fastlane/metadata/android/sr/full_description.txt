@@ -18,7 +18,7 @@ VAŠI PODACI SU VAŠI
 
 • Svi podaci se čuvaju lokalno na vašem uređaju
 • Izvoz i uvoz: Markdown, JSON, YAML, TSV
-• Uvezite beleške iz Google Keepa
+• Uvezite podatke iz aplikacija Google Keep, Loop Habit Tracker, HabitNow, Habitica i Habitify
 • Opciona sinhronizacija za više korisnika: pokrenite Docker image na sopstvenom serveru i svaka aplikacija, desktop ili mobilna, može da se prijavi i sinhronizuje
 
 PRILAGOĐENO VAMA

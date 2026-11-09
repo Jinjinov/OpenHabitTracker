@@ -229,26 +229,26 @@
       <li xml:lang="sk">Export a import: Markdown, JSON, YAML, TSV</li>
       <li xml:lang="hr">Izvoz i uvoz: Markdown, JSON, YAML, TSV</li>
       <li xml:lang="sr">Izvoz i uvoz: Markdown, JSON, YAML, TSV</li>
-      <li>Import your notes from Google Keep</li>
-      <li xml:lang="de">Importiere deine Notizen aus Google Keep</li>
-      <li xml:lang="es">Importa tus notas desde Google Keep</li>
-      <li xml:lang="sl">Uvozi zapiske iz Google Keep</li>
-      <li xml:lang="fr">Importez vos notes depuis Google Keep</li>
-      <li xml:lang="pt">Importe as suas notas do Google Keep</li>
-      <li xml:lang="it">Importa le tue note da Google Keep</li>
-      <li xml:lang="ja">Google Keepからメモをインポート</li>
-      <li xml:lang="zh_CN">从 Google Keep 导入笔记</li>
-      <li xml:lang="ko">Google Keep에서 메모 가져오기</li>
-      <li xml:lang="nl">Importeer je notities uit Google Keep</li>
-      <li xml:lang="da">Importér dine noter fra Google Keep</li>
-      <li xml:lang="no">Importer notatene dine fra Google Keep</li>
-      <li xml:lang="sv">Importera dina anteckningar från Google Keep</li>
-      <li xml:lang="fi">Tuo muistiinpanosi Google Keepistä</li>
-      <li xml:lang="pl">Importuj notatki z Google Keep</li>
-      <li xml:lang="cs">Import poznámek z Google Keep</li>
-      <li xml:lang="sk">Import poznámok z Google Keep</li>
-      <li xml:lang="hr">Uvezite bilješke iz Google Keepa</li>
-      <li xml:lang="sr">Uvezite beleške iz Google Keepa</li>
+      <li>Import from Google Keep, Loop Habit Tracker, HabitNow, Habitica and Habitify</li>
+      <li xml:lang="de">Importiere aus Google Keep, Loop Habit Tracker, HabitNow, Habitica und Habitify</li>
+      <li xml:lang="es">Importa desde Google Keep, Loop Habit Tracker, HabitNow, Habitica y Habitify</li>
+      <li xml:lang="sl">Uvozi iz aplikacij Google Keep, Loop Habit Tracker, HabitNow, Habitica in Habitify</li>
+      <li xml:lang="fr">Importez depuis Google Keep, Loop Habit Tracker, HabitNow, Habitica et Habitify</li>
+      <li xml:lang="pt">Importe do Google Keep, Loop Habit Tracker, HabitNow, Habitica e Habitify</li>
+      <li xml:lang="it">Importa da Google Keep, Loop Habit Tracker, HabitNow, Habitica e Habitify</li>
+      <li xml:lang="ja">Google Keep、Loop Habit Tracker、HabitNow、Habitica、Habitifyからインポート</li>
+      <li xml:lang="zh_CN">从 Google Keep、Loop Habit Tracker、HabitNow、Habitica 和 Habitify 导入</li>
+      <li xml:lang="ko">Google Keep, Loop Habit Tracker, HabitNow, Habitica, Habitify에서 가져오기</li>
+      <li xml:lang="nl">Importeer uit Google Keep, Loop Habit Tracker, HabitNow, Habitica en Habitify</li>
+      <li xml:lang="da">Importér fra Google Keep, Loop Habit Tracker, HabitNow, Habitica og Habitify</li>
+      <li xml:lang="no">Importer fra Google Keep, Loop Habit Tracker, HabitNow, Habitica og Habitify</li>
+      <li xml:lang="sv">Importera från Google Keep, Loop Habit Tracker, HabitNow, Habitica och Habitify</li>
+      <li xml:lang="fi">Tuo tiedot sovelluksista Google Keep, Loop Habit Tracker, HabitNow, Habitica ja Habitify</li>
+      <li xml:lang="pl">Importuj dane z aplikacji Google Keep, Loop Habit Tracker, HabitNow, Habitica i Habitify</li>
+      <li xml:lang="cs">Import z Google Keep, Loop Habit Tracker, HabitNow, Habitica a Habitify</li>
+      <li xml:lang="sk">Import z Google Keep, Loop Habit Tracker, HabitNow, Habitica a Habitify</li>
+      <li xml:lang="hr">Uvezite podatke iz aplikacija Google Keep, Loop Habit Tracker, HabitNow, Habitica i Habitify</li>
+      <li xml:lang="sr">Uvezite podatke iz aplikacija Google Keep, Loop Habit Tracker, HabitNow, Habitica i Habitify</li>
       <li>Optional sync for multiple users: host the Docker image on your own server and every app, desktop or mobile, can log in and sync</li>
       <li xml:lang="de">Optionale Synchronisierung für mehrere Benutzer: Hoste das Docker-Image auf deinem eigenen Server - jede App, ob Desktop oder Mobil, kann sich anmelden und synchronisieren</li>
       <li xml:lang="es">Sincronización opcional para varios usuarios: aloja la imagen Docker en tu propio servidor y cualquier aplicación, de escritorio o móvil, puede iniciar sesión y sincronizarse</li>

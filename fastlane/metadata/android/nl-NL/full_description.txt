@@ -18,7 +18,7 @@ JOUW GEGEVENS BLIJVEN VAN JOU
 
 • Alle gegevens worden lokaal op je apparaat opgeslagen
 • Exporteren en importeren: Markdown, JSON, YAML, TSV
-• Importeer je notities uit Google Keep
+• Importeer uit Google Keep, Loop Habit Tracker, HabitNow, Habitica en Habitify
 • Optionele synchronisatie voor meerdere gebruikers: host de Docker-image op je eigen server en elke app, desktop of mobiel, kan inloggen en synchroniseren
 
 HELEMAAL NAAR JOUW HAND

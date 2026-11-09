@@ -44,6 +44,11 @@
             new() { Text = "Import Categories, Notes, Tasks, Habits, and Settings from a YAML file." },
             new() { Text = "Import Categories, Notes, Tasks, and Habits from a Markdown file." },
             new() { Text = "Import Google Keep notes from a ZIP file exported from Google Takeout." },
+            new() { Text = "Import habits and their history from Loop Habit Tracker." },
+            new() { Text = "Import habits, tasks and their history from a HabitNow backup." },
+            new() { Text = "Import habits, dailies and to-dos from Habitica." },
+            // The browser ships no SQLite, so it reads no databases.
+            new() { Text = "Import habits and their history from a Habitify backup.", Show = () => !OperatingSystem.IsBrowser() },
         };
     }
 

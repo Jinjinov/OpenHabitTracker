@@ -1,7 +1,7 @@
 # 1.2.6 - Nov 11, 2026
 
 - Added multiple user accounts with separate data on the self-hosted server
-- Added an import summary, and importing only what is new
+- Added import from Loop, HabitNow, Habitica and Habitify
 - Added decimal quantities in habits
 - Added date format and time format settings
 - Improved app start speed and online sync login speed

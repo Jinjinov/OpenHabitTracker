@@ -18,7 +18,7 @@ DIN DATA ÄR DIN
 
 • All data sparas lokalt på din enhet
 • Export och import: Markdown, JSON, YAML, TSV
-• Importera dina anteckningar från Google Keep
+• Importera från Google Keep, Loop Habit Tracker, HabitNow, Habitica och Habitify
 • Valfri synkronisering för flera användare: kör Docker-avbilden på din egen server så kan alla appar, dator eller mobil, logga in och synkronisera
 
 ANPASSAD EFTER DIG

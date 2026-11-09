@@ -18,7 +18,7 @@
 
 • すべてのデータは端末内にローカル保存
 • エクスポート/インポート:Markdown、JSON、YAML、TSV
-• Google Keepからメモをインポート
+• Google Keep、Loop Habit Tracker、HabitNow、Habitica、Habitifyからインポート
 • 複数ユーザー対応の任意の同期:Dockerイメージを自分のサーバーでホストすれば、デスクトップ版もモバイル版もログインして同期できます
 
 自分好みにカスタマイズ

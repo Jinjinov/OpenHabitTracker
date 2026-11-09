@@ -18,7 +18,7 @@ DINE DATA ER DINE
 
 • Alle data gemmes lokalt på din enhed
 • Eksport og import: Markdown, JSON, YAML, TSV
-• Importér dine noter fra Google Keep
+• Importér fra Google Keep, Loop Habit Tracker, HabitNow, Habitica og Habitify
 • Valgfri synkronisering for flere brugere: host Docker-imaget på din egen server, og alle apps, desktop eller mobil, kan logge ind og synkronisere
 
 TILPASSET DIG
