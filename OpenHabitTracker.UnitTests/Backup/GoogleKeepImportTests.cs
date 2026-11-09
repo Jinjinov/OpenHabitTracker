@@ -181,6 +181,20 @@ public class GoogleKeepImportTests
     }
 
     [Test]
+    public async Task Read_PinnedNote_GetsTheHighestPriority()
+    {
+        List<CategoryModel> categories = await ReadTakeout();
+
+        List<NoteModel> notes = categories.SelectMany(x => x.Notes).ToList();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(notes.Single(x => x.Title == "Plain note").Priority, Is.EqualTo(Priority.VeryHigh));
+            Assert.That(notes.Where(x => x.Title != "Plain note"), Has.All.Matches<NoteModel>(note => note.Priority == Priority.None));
+        });
+    }
+
+    [Test]
     public async Task Read_EveryKeepColor_MapsToABootstrapClass()
     {
         List<CategoryModel> categories = await ReadTakeout();

@@ -1,4 +1,5 @@
 using OpenHabitTracker.App;
+using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
 using System.IO.Compression;
 using System.Text.Json;
@@ -90,6 +91,7 @@ public class GoogleKeepImport
                 {
                     Title = googleKeepNote.Title,
                     Content = GetContent(googleKeepNote),
+                    Priority = googleKeepNote.IsPinned ? Priority.VeryHigh : Priority.None,
                     IsDeleted = googleKeepNote.IsTrashed,
                     Color = GetBootstrapClass(googleKeepNote.Color),
                     CreatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.CreatedTimestampUsec * 10).ToLocalTime(),
@@ -107,6 +109,7 @@ public class GoogleKeepImport
                 task = new()
                 {
                     Title = googleKeepNote.Title,
+                    Priority = googleKeepNote.IsPinned ? Priority.VeryHigh : Priority.None,
                     IsDeleted = googleKeepNote.IsTrashed,
                     Color = GetBootstrapClass(googleKeepNote.Color),
                     CreatedAt = DateTime.UnixEpoch.AddTicks(googleKeepNote.CreatedTimestampUsec * 10).ToLocalTime(),
