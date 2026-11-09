@@ -104,11 +104,32 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-// Only the two account policies challenge the cookie scheme: everything else gets the JWT 401 below.
+// Only the account policies challenge the cookie scheme: everything else gets the JWT 401 below.
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/login";
     options.AccessDeniedPath = "/";
+
+    // The account API takes the cookie too, and a caller of an API needs a status, not a page.
+    options.Events.OnRedirectToLogin = context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api"))
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        else
+            context.Response.Redirect(context.RedirectUri);
+
+        return Task.CompletedTask;
+    };
+
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api"))
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        else
+            context.Response.Redirect(context.RedirectUri);
+
+        return Task.CompletedTask;
+    };
 });
 
 // The default of 30 minutes keeps a deleted account's cookie working, and its page load ends on the error screen.
@@ -170,6 +191,19 @@ builder.Services.AddAuthorization(options =>
     {
         policy.AddAuthenticationSchemes(IdentityConstants.ApplicationScheme);
         policy.RequireAuthenticatedUser();
+    });
+
+    // The account API serves the browser on the server through its cookie and the devices through their token.
+    options.AddPolicy("AccountApiPolicy", policy =>
+    {
+        policy.AddAuthenticationSchemes(IdentityConstants.ApplicationScheme, JwtBearerDefaults.AuthenticationScheme);
+        policy.RequireAuthenticatedUser();
+    });
+
+    options.AddPolicy("AccountsApiPolicy", policy =>
+    {
+        policy.AddAuthenticationSchemes(IdentityConstants.ApplicationScheme, JwtBearerDefaults.AuthenticationScheme);
+        policy.RequireRole(RoleNames.Administrator);
     });
 });
 
@@ -278,7 +312,7 @@ app.UseWatchDog(opt => // https://localhost:7042/watchdog
     // WatchDog stores request and response bodies as plain text, so nothing that carries a password or a
     // token may reach it: the login form, the account pages, the auth API and the account endpoints.
     opt.UseRegexForBlacklisting = true;
-    opt.Blacklist = @"(?i)^/?(login|accounts?(/|$)|api/auth(/|$)|api/dataaccess/users?(/|$))";
+    opt.Blacklist = @"(?i)^/?(login|accounts?(/|$)|api/(auth|account)(/|$)|api/dataaccess/users?(/|$))";
 });
 
 // API routes (typically under /api/*) should be handled first
