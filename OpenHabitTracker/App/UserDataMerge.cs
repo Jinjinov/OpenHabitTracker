@@ -19,6 +19,9 @@ public class UserDataMerge
     internal List<ItemModel> Items { get; } = [];
     internal List<TimeModel> Times { get; } = [];
 
+    // New categories that are hidden from the lists once they exist.
+    internal List<CategoryModel> HiddenCategories { get; } = [];
+
     public ImportCounts Found { get; private init; } = new(0, 0, 0, 0, 0, 0);
 
     public ImportCounts New
@@ -54,8 +57,11 @@ public class UserDataMerge
         IEnumerable<TaskModel> existingTasks,
         IEnumerable<HabitModel> existingHabits,
         IEnumerable<ItemModel> existingItems,
-        IEnumerable<TimeModel> existingTimes)
+        IEnumerable<TimeModel> existingTimes,
+        MergeOptions? options = null)
     {
+        options ??= new();
+
         UserDataMerge merge = new() { Found = Count(categories) };
 
         // Each existing model can be matched once, so a file holding two equal notes adds the second
@@ -83,6 +89,9 @@ public class UserDataMerge
             else
             {
                 merge.Categories.Add(category);
+
+                if (options.HiddenCategories.Contains(category))
+                    merge.HiddenCategories.Add(category);
 
                 continue;
             }
@@ -120,7 +129,11 @@ public class UserDataMerge
                 if (Take(habitPool, x => SameTitle(x.Title, habit.Title)) is HabitModel existingHabit)
                 {
                     merge.AddMissingItems(existingHabit.Id, habit.Items, itemsByParentId[existingHabit.Id]);
-                    merge.AddMissingTimes(existingHabit.Id, habit.TimesDone, timesByHabitId[existingHabit.Id]);
+
+                    if (options.MatchCompletionsByDay)
+                        merge.AddTimesOnMissingDays(existingHabit.Id, habit.TimesDone, timesByHabitId[existingHabit.Id]);
+                    else
+                        merge.AddMissingTimes(existingHabit.Id, habit.TimesDone, timesByHabitId[existingHabit.Id]);
                 }
                 else
                 {
@@ -157,6 +170,21 @@ public class UserDataMerge
         foreach (TimeModel time in times ?? [])
         {
             if (Take(pool, x => x.StartedAt == time.StartedAt && x.CompletedAt == time.CompletedAt) is null)
+            {
+                time.HabitId = habitId;
+
+                Times.Add(time);
+            }
+        }
+    }
+
+    private void AddTimesOnMissingDays(long habitId, List<TimeModel>? times, IEnumerable<TimeModel> existingTimes)
+    {
+        HashSet<DateTime> doneDays = existingTimes.Select(x => x.StartedAt.Date).ToHashSet();
+
+        foreach (TimeModel time in times ?? [])
+        {
+            if (doneDays.Add(time.StartedAt.Date))
             {
                 time.HabitId = habitId;
 

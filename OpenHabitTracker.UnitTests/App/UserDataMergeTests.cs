@@ -20,6 +20,11 @@ public class UserDataMergeTests
         return UserDataMerge.Create([.. imported], _categories, _notes, _tasks, _habits, _items, _times);
     }
 
+    private UserDataMerge Merge(MergeOptions options, params CategoryModel[] imported)
+    {
+        return UserDataMerge.Create([.. imported], _categories, _notes, _tasks, _habits, _items, _times, options);
+    }
+
     [SetUp]
     public void SetUp()
     {
@@ -169,6 +174,34 @@ public class UserDataMergeTests
             Assert.That(merge.Times, Is.EqualTo(new[] { sameDayLater }));
             Assert.That(sameDayLater.HabitId, Is.EqualTo(5));
         });
+    }
+
+    [Test]
+    public void Merge_CompletionsByDay_AddsOnlyDaysTheHabitHasNoneOn()
+    {
+        _habits.Add(new HabitModel { Id = 5, CategoryId = 1, Title = "Run" });
+        _times.Add(new TimeModel { Id = 6, HabitId = 5, StartedAt = _plannedAt.AddHours(-2), CompletedAt = _plannedAt.AddHours(-2) });
+
+        TimeModel nextDay = new() { StartedAt = _plannedAt.Date.AddDays(1).AddHours(12) };
+
+        UserDataMerge merge = Merge(new MergeOptions { MatchCompletionsByDay = true }, new CategoryModel
+        {
+            Title = "Work",
+            Habits = [new HabitModel { Title = "Run", TimesDone = [new TimeModel { StartedAt = _plannedAt.Date.AddHours(12) }, nextDay] }]
+        });
+
+        Assert.That(merge.Times, Is.EqualTo(new[] { nextDay }));
+    }
+
+    [Test]
+    public void Merge_HiddenCategory_IsHiddenOnlyWhenTheImportCreatesIt()
+    {
+        CategoryModel archived = new() { Title = "Archived" };
+        CategoryModel existing = new() { Title = "Work" };
+
+        UserDataMerge merge = Merge(new MergeOptions { HiddenCategories = [archived, existing] }, archived, existing);
+
+        Assert.That(merge.HiddenCategories, Is.EqualTo(new[] { archived }));
     }
 
     [Test]

@@ -1,9 +1,11 @@
 using Markdig;
+using Microsoft.Extensions.Localization;
 using NSubstitute;
 using OpenHabitTracker.App;
 using OpenHabitTracker.Backup;
 using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
+using OpenHabitTracker.Backup.Loop;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
@@ -71,7 +73,7 @@ public class GoogleKeepImportTests
         File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "Importers", "GoogleKeep", "takeout.zip"));
 
     private ImportExportService CreateService() =>
-        new(_clientState, new JsonImportExport(_clientState), new TsvImportExport(_clientState), new YamlImportExport(_clientState), new MarkdownImportExport(_clientState), new GoogleKeepImport());
+        new(_clientState, new JsonImportExport(_clientState), new TsvImportExport(_clientState), new YamlImportExport(_clientState), new MarkdownImportExport(_clientState), new GoogleKeepImport(), new LoopImport(Substitute.For<IStringLocalizer>()));
 
     [Test]
     public async Task Read_TakeoutWithTasks_ReadsTheNotesAndSkipsTasksJson()

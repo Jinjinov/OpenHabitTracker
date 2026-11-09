@@ -12,6 +12,8 @@ public class PendingImport
 
     public required List<CategoryModel> Categories { get; init; }
 
+    public MergeOptions Options { get; init; } = new();
+
     // The settings the file carries, which replace the current ones.
     public SettingsModel? Settings { get; init; }
 

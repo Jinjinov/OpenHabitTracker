@@ -538,7 +538,7 @@ public class ClientState
     // Matches the categories against the data already there and writes nothing.
     // The data is read from the store rather than from the loaded lists, because a refresh running at the
     // same time, like the one after Delete all data, empties those lists until it has reloaded them.
-    public async Task<UserDataMerge> MergeUserData(List<CategoryModel> categoryModels)
+    public async Task<UserDataMerge> MergeUserData(List<CategoryModel> categoryModels, MergeOptions? options = null)
     {
         // The import adds to the loaded lists, so they have to be complete before it.
         await LoadContent();
@@ -557,7 +557,8 @@ public class ClientState
             tasks.Select(x => x.ToModel()),
             habits.Select(x => x.ToModel()),
             items.Select(x => x.ToModel()),
-            times.Select(x => x.ToModel()));
+            times.Select(x => x.ToModel()),
+            options);
     }
 
     // Adds what the merge holds and leaves the settings as they are.
@@ -684,6 +685,13 @@ public class ClientState
         // so every model is already in its category - adding it again renders it twice in grouped view.
 
         await WireIntoExistingData(merge);
+
+        if (merge.HiddenCategories.Count > 0)
+        {
+            Settings.HiddenCategoryIds.AddRange(merge.HiddenCategories.Select(x => x.Id));
+
+            await UpdateSettings();
+        }
 
         await DataReplaced();
     }

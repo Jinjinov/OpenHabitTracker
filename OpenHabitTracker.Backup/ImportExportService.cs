@@ -1,7 +1,9 @@
 ﻿using CsvHelper;
+using Microsoft.Data.Sqlite;
 using OpenHabitTracker.App;
 using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
+using OpenHabitTracker.Backup.Loop;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
 using System.Text.Json;
@@ -9,7 +11,7 @@ using YamlDotNet.Core;
 
 namespace OpenHabitTracker.Backup;
 
-public class ImportExportService(ClientState clientState, JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport)
+public class ImportExportService(ClientState clientState, JsonImportExport jsonImportExport, TsvImportExport tsvImportExport, YamlImportExport yamlImportExport, MarkdownImportExport markdownImportExport, GoogleKeepImport googleKeepImport, LoopImport loopImport)
 {
     private readonly ClientState _clientState = clientState;
     private readonly JsonImportExport _jsonImportExport = jsonImportExport;
@@ -17,6 +19,7 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
     private readonly YamlImportExport _yamlImportExport = yamlImportExport;
     private readonly MarkdownImportExport _markdownImportExport = markdownImportExport;
     private readonly GoogleKeepImport _googleKeepImport = googleKeepImport;
+    private readonly LoopImport _loopImport = loopImport;
 
     public async Task<string> GetDataExportFileString(FileFormat fileFormat)
     {
@@ -43,6 +46,11 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
 
         List<CategoryModel> categories;
         SettingsModel? settings = null;
+        MergeOptions options = new();
+
+        // Wasm ships no SQLite, so a database can only be read on the other hosts.
+        if (importFormat == ImportFormat.LoopDatabase && OperatingSystem.IsBrowser())
+            return (ImportResult.UnsupportedFormat, null);
 
         // Only the parse errors of the file formats are caught, so any other failure still surfaces.
         try
@@ -68,22 +76,26 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
                 case ImportFormat.GoogleKeep:
                     categories = await _googleKeepImport.ReadDataFile(memoryStream);
                     break;
+                case ImportFormat.LoopDatabase:
+                    (categories, options) = await _loopImport.ReadDataFile(memoryStream);
+                    break;
                 default:
                     return (ImportResult.UnsupportedFormat, null);
             }
         }
-        catch (Exception exception) when (exception is JsonException or YamlException or CsvHelperException or InvalidDataException)
+        catch (Exception exception) when (exception is JsonException or YamlException or CsvHelperException or InvalidDataException or SqliteException)
         {
             return (ImportResult.UnreadableContent, null);
         }
 
-        UserDataMerge merge = await _clientState.MergeUserData(categories);
+        UserDataMerge merge = await _clientState.MergeUserData(categories, options);
 
         PendingImport pendingImport = new()
         {
             Format = importFormat,
             Filename = filename,
             Categories = categories,
+            Options = options,
             Settings = settings,
             Found = merge.Found,
             New = merge.New
@@ -98,7 +110,7 @@ public class ImportExportService(ClientState clientState, JsonImportExport jsonI
         if (pendingImport.Settings is not null)
             await _clientState.ReplaceSettings(pendingImport.Settings);
 
-        UserDataMerge merge = await _clientState.MergeUserData(pendingImport.Categories);
+        UserDataMerge merge = await _clientState.MergeUserData(pendingImport.Categories, pendingImport.Options);
 
         await _clientState.AddUserData(merge);
     }

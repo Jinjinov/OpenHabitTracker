@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using OpenHabitTracker.Backup.File;
 using OpenHabitTracker.Backup.GoogleKeep;
+using OpenHabitTracker.Backup.Loop;
 
 namespace OpenHabitTracker.Backup;
 
@@ -14,6 +15,7 @@ public static class Startup
         services.AddScoped<MarkdownImportExport>();
 
         services.AddScoped<GoogleKeepImport>();
+        services.AddScoped<LoopImport>();
 
         services.AddScoped<ImportExportService>();
 

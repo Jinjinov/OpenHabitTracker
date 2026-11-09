@@ -464,6 +464,22 @@ public class ClientStateTests
     }
 
     [Test]
+    public async Task MergeThenAdd_HiddenCategory_IsAddedToTheHiddenCategories()
+    {
+        StubAddMethodsToAssignIds();
+        _dataAccess.GetSettings(Arg.Any<long>()).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = 1 }));
+
+        await _sut.LoadSettings();
+
+        CategoryModel archived = new() { Title = "Archived", Habits = [new HabitModel { Title = "Old habit" }] };
+
+        await _sut.AddUserData(await _sut.MergeUserData([archived], new MergeOptions { HiddenCategories = [archived] }));
+
+        Assert.That(_sut.Settings.HiddenCategoryIds, Is.EqualTo(new[] { 1L }));
+        await _dataAccess.Received(1).UpdateSettings(Arg.Is<SettingsEntity>(x => x != null && x.HiddenCategoryIds.SequenceEqual(new[] { 1L })));
+    }
+
+    [Test]
     public async Task Merge_OfWhatIsAlreadyThere_FindsNothingNew()
     {
         StubAddMethodsToAssignIds();

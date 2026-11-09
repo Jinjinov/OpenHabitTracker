@@ -9,6 +9,8 @@ public static class ImportFormatDetector
 {
     private static readonly byte[] _zipSignature = [0x50, 0x4B, 0x03, 0x04];
 
+    private static readonly byte[] _sqliteSignature = "SQLite format 3\0"u8.ToArray();
+
     private static readonly ImportFormat[] _textFormats = [ImportFormat.Json, ImportFormat.Tsv, ImportFormat.Yaml, ImportFormat.Markdown];
 
     public static ImportFormat Detect(string filename, byte[] content)
@@ -16,6 +18,11 @@ public static class ImportFormatDetector
         if (content.AsSpan().StartsWith(_zipSignature))
         {
             return IsGoogleKeepTakeout(content) ? ImportFormat.GoogleKeep : ImportFormat.Unknown;
+        }
+
+        if (content.AsSpan().StartsWith(_sqliteSignature))
+        {
+            return IsLoopDatabase(content) ? ImportFormat.LoopDatabase : ImportFormat.Unknown;
         }
 
         using StreamReader streamReader = new(new MemoryStream(content));
@@ -86,6 +93,13 @@ public static class ImportFormatDetector
         string? firstKey = lines.FirstOrDefault(line => line.Length > 0 && line != "---" && !line.StartsWith('#'));
 
         return firstKey is not null && (firstKey.StartsWith("Settings:") || firstKey.StartsWith("Categories:"));
+    }
+
+    // SQLite keeps the CREATE TABLE statement of every table as plain text in the file, so the table and
+    // column names can be found without opening the database.
+    private static bool IsLoopDatabase(byte[] content)
+    {
+        return content.AsSpan().IndexOf("CREATE TABLE Repetitions"u8) >= 0 && content.AsSpan().IndexOf("freq_num"u8) >= 0;
     }
 
     private static bool IsGoogleKeepTakeout(byte[] content)

@@ -47,8 +47,16 @@ public class ImportFormatDetectorTests
         Assert.That(ImportFormatDetector.Detect(filename, Fixture("Importers/GoogleKeep/takeout.zip")), Is.EqualTo(ImportFormat.GoogleKeep));
     }
 
-    [TestCase("Loop/Phone/export.zip")]
     [TestCase("Loop/Phone/backup.db")]
+    [TestCase("Loop/Repository/loop.db")]
+    [TestCase("Loop/Repository/databases/021.db")]
+    [TestCase("Loop/Repository/databases/022.db")]
+    public void Detect_LoopDatabase_IsLoopDatabase(string path)
+    {
+        Assert.That(ImportFormatDetector.Detect("backup.db", Fixture($"Importers/{path}")), Is.EqualTo(ImportFormat.LoopDatabase));
+    }
+
+    [TestCase("Loop/Phone/export.zip")]
     [TestCase("HabitNow/backup-other-years.hn")]
     [TestCase("Habitica/userdata.json")]
     [TestCase("Habitify/backup.db")]
