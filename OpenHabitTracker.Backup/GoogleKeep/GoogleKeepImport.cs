@@ -171,7 +171,12 @@ public class GoogleKeepImport(IStringLocalizer loc)
             .Where(annotation => !string.IsNullOrWhiteSpace(annotation.Url) && !ContainsUrl(text, annotation.Url))
             .Select(annotation => string.IsNullOrWhiteSpace(annotation.Title) ? annotation.Url : $"[{EscapeLinkText(annotation.Title)}]({annotation.Url})");
 
-        return string.Join("\n", new[] { text }.Concat(links).Where(line => !string.IsNullOrEmpty(line)));
+        // A category holds the first label, or no label when the note is archived, and the last line lists the labels it does not hold.
+        IEnumerable<Label> otherLabels = googleKeepNote.IsArchived ? googleKeepNote.Labels : googleKeepNote.Labels.Skip(1);
+
+        string labels = string.Join(" ", otherLabels.Select(label => $"`{label.Name}`"));
+
+        return string.Join("\n", new[] { text }.Concat(links).Append(labels).Where(line => !string.IsNullOrEmpty(line)));
     }
 
     // The text can hold the link without its scheme, www or the trailing slash.

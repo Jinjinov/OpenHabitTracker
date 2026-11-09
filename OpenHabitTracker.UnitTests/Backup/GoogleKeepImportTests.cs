@@ -142,6 +142,18 @@ public class GoogleKeepImportTests
         Assert.That(note.Content, Is.EqualTo(content));
     }
 
+    // "Two labels" has an identical copy.
+    [TestCase("Two labels", "This note has both test labels.\n`OHT Test B`")]
+    [TestCase("Archived note", "This note is archived.\n`OHT Test A`")]
+    public async Task Read_LabelsNotInTheCategory_GoIntoTheLastLine(string title, string content)
+    {
+        List<CategoryModel> categories = await ReadTakeout();
+
+        IEnumerable<NoteModel> notes = categories.SelectMany(x => x.Notes).Where(x => x.Title == title);
+
+        Assert.That(notes.Select(x => x.Content), Has.All.EqualTo(content));
+    }
+
     [Test]
     public async Task Read_Checklist_SkipsTheEmptyItem()
     {
