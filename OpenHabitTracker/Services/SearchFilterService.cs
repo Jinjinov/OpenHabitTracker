@@ -2,6 +2,8 @@ using HtmlAgilityPack;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
 using OpenHabitTracker.Query;
+using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace OpenHabitTracker.Services;
@@ -96,19 +98,34 @@ public class SearchFilterService : ISearchFilterService
         if (coll is null)
             return text;
 
-        if (MatchCase)
+        StringComparison comparisonType = MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+        // The text of a node holds & < > " as entities, so the term is matched in the decoded text,
+        // or a term like "a" would split "&amp;" and show it as written.
+        foreach (HtmlTextNode node in coll.Cast<HtmlTextNode>())
         {
-            foreach (HtmlTextNode node in coll.Cast<HtmlTextNode>())
+            string decoded = HtmlEntity.DeEntitize(node.Text);
+
+            int index = decoded.IndexOf(SearchTerm, comparisonType);
+
+            if (index < 0)
+                continue;
+
+            StringBuilder marked = new();
+            int start = 0;
+
+            while (index >= 0)
             {
-                node.Text = node.Text.Replace(SearchTerm, $"<mark>{SearchTerm}</mark>");
+                marked.Append(WebUtility.HtmlEncode(decoded[start..index]));
+                marked.Append("<mark>").Append(WebUtility.HtmlEncode(decoded.Substring(index, SearchTerm.Length))).Append("</mark>");
+
+                start = index + SearchTerm.Length;
+                index = decoded.IndexOf(SearchTerm, start, comparisonType);
             }
-        }
-        else
-        {
-            foreach (HtmlTextNode node in coll.Cast<HtmlTextNode>())
-            {
-                node.Text = MarkSearchResults(node.Text, "<mark>", "</mark>");
-            }
+
+            marked.Append(WebUtility.HtmlEncode(decoded[start..]));
+
+            node.Text = marked.ToString();
         }
 
         return htmlDoc.DocumentNode.OuterHtml;

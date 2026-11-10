@@ -1,3 +1,4 @@
+using HtmlAgilityPack;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
 using OpenHabitTracker.Query;
@@ -241,5 +242,28 @@ public class SearchFilterServiceTests
 
         Assert.That(result.Split("<mark>").Length - 1, Is.EqualTo(2));
         Assert.That(result, Does.Contain("<mark>cat</mark>"));
+    }
+
+    // Rendered markdown holds & < > " as entities, and a term can match letters of an entity's name.
+    [TestCase("<p>Tom &amp; Jerry say</p>", "a", false, "Tom & Jerry say")]
+    [TestCase("<p>Read &lt;30 pages test</p>", "t", true, "Read <30 pages test")]
+    public void MarkSearchResultsInHtml_TermMatchesLettersOfAnEntity_KeepsTheVisibleText(string html, string term, bool matchCase, string visible)
+    {
+        _sut.SearchTerm = term;
+        _sut.MatchCase = matchCase;
+
+        string result = _sut.MarkSearchResultsInHtml(html);
+
+        Assert.That(VisibleText(result), Is.EqualTo(visible));
+        Assert.That(result, Does.Contain($"<mark>{term}</mark>"));
+    }
+
+    // A browser decodes each text node on its own, so an entity split by a tag stays as written.
+    private static string VisibleText(string html)
+    {
+        HtmlDocument document = new();
+        document.LoadHtml(html);
+
+        return string.Concat(document.DocumentNode.SelectNodes("//text()").Select(x => HtmlEntity.DeEntitize(x.InnerText)));
     }
 }
