@@ -532,6 +532,9 @@ public class ClientState
     // Adds the categories with their notes, tasks and habits and leaves the settings as they are.
     public async Task AddUserData(List<CategoryModel> categoryModels)
     {
+        // The new models are added to the loaded lists, so they have to be complete before it.
+        await LoadContent();
+
         await AddUserData(UserDataMerge.AllNew(categoryModels));
     }
 
