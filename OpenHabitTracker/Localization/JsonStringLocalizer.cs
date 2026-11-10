@@ -16,8 +16,9 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
 
     private readonly ConcurrentDictionary<string, Dictionary<string, string>> _stringMapsCache = new();
 
-    private static readonly Dictionary<string, string> _missing = [];
-    private static readonly Dictionary<string, string> _unused = [];
+    // Written on every lookup, and the Web host renders its circuits in parallel through one localizer.
+    private static readonly ConcurrentDictionary<string, string> _missing = new();
+    private static readonly ConcurrentDictionary<string, string> _unused = new();
     private static readonly JsonSerializerOptions _options = new() { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 
     public static void SerializeMissingAndUnusedValues()
@@ -69,7 +70,7 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
             }
             else
             {
-                _unused.Remove(name);
+                _unused.TryRemove(name, out _);
             }
 
             return new LocalizedString(name, translation);
@@ -94,7 +95,7 @@ public class JsonStringLocalizer(IFileProvider fileProvider, string resourcesPat
             }
             else
             {
-                _unused.Remove(name);
+                _unused.TryRemove(name, out _);
             }
 
             return new LocalizedString(name, string.Format(translation, arguments));
