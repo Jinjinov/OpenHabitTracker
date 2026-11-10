@@ -206,6 +206,9 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
             time.CompletedAt = now;
             time.Quantity = quantity ?? habit.TargetQuantity;
 
+            // the completed entry now counts in the time spent
+            habit.RefreshTimesDoneByDay();
+
             if (await _clientState.DataAccess.GetTime(time.Id) is TimeEntity timeEntity)
             {
                 timeEntity.CompletedAt = now;
