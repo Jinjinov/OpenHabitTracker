@@ -140,13 +140,18 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
 
                     if (users.Count > 0)
                     {
+                        DateTime lastChangeAt = users[0].LastChangeAt;
+
                         // Skipped while a refresh started elsewhere is running - a delete-all stamps
                         // LastChangeAt and then refreshes itself - because two refreshes overlapping
                         // null each other's dictionaries. The next tick still sees the change.
-                        if (!_clientState.IsRefreshing && _lastRefreshAt < users[0].LastChangeAt)
+                        if (!_clientState.IsRefreshing && _lastRefreshAt < lastChangeAt)
                         {
                             await _clientState.RefreshState();
-                            _lastRefreshAt = DateTime.UtcNow;
+
+                            // The server's stamp from before the refresh, not this device's clock after it:
+                            // a change saved during the refresh is newer, so the next tick refreshes again.
+                            _lastRefreshAt = lastChangeAt;
 
                             _refresh?.Invoke();
                         }
@@ -228,7 +233,9 @@ public class RemoteDataSync(ClientState clientState) : IAsyncDisposable
         }
 
         await _clientState.SetDataLocationAndRefresh(dataLocation);
-        _lastRefreshAt = DateTime.UtcNow;
+
+        // The refresh reads the account first, so this is the server's stamp from before it.
+        _lastRefreshAt = _clientState.User.LastChangeAt;
 
         if (_clientState.DataLocation == DataLocation.Remote)
         {
