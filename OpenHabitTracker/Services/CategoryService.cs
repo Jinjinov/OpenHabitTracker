@@ -74,6 +74,11 @@ public class CategoryService(ClientState clientState, INotificationScheduler not
         if (_clientState.Categories is null)
             return;
 
+        // The category lists hold only the notes, tasks and habits whose lists are loaded.
+        await _clientState.LoadNotes();
+        await _clientState.LoadTasks();
+        await _clientState.LoadHabits();
+
         foreach (NoteModel note in category.Notes)
         {
             note.CategoryId = 0;
