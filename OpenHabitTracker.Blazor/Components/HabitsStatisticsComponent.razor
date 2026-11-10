@@ -86,12 +86,12 @@
 
         foreach (CategoryModel category in CategoryService.Categories)
         {
-            if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes || ClientState.Settings.CategoryFilterDisplay == FilterDisplay.RadioButtons)
+            if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes)
             {
                 if (ClientState.Settings.HiddenCategoryIds.Contains(category.Id))
                     continue;
             }
-            else if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
+            else if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.RadioButtons || ClientState.Settings.CategoryFilterDisplay == FilterDisplay.SelectOptions)
             {
                 if (ClientState.Settings.SelectedCategoryId is not null && ClientState.Settings.SelectedCategoryId != category.Id)
                     continue;
