@@ -29,14 +29,14 @@ public class TrashService(ClientState clientState, INotificationScheduler notifi
     private async Task RestoreModel(HabitModel model)
     {
         model.IsDeleted = false;
-        await RestoreHabit(model.Id);
+        await RestoreHabit(model);
         _clientState.TrashedHabits?.Remove(model);
     }
 
     public async Task Restore(NoteModel model)
     {
         model.IsDeleted = false;
-        await RestoreNote(model.Id);
+        await RestoreNote(model);
         _clientState.TrashedNotes?.Remove(model);
     }
 
@@ -49,34 +49,37 @@ public class TrashService(ClientState clientState, INotificationScheduler notifi
     private async Task RestoreModel(TaskModel model)
     {
         model.IsDeleted = false;
-        await RestoreTask(model.Id);
+        await RestoreTask(model);
         _clientState.TrashedTasks?.Remove(model);
     }
 
-    private async Task RestoreHabit(long id)
+    private async Task RestoreHabit(HabitModel model)
     {
-        if (await _clientState.DataAccess.GetHabit(id) is HabitEntity habit)
+        if (await _clientState.DataAccess.GetHabit(model.Id) is HabitEntity habit)
         {
             habit.IsDeleted = false;
             await _clientState.DataAccess.UpdateHabit(habit);
+            model.UpdatedAt = habit.UpdatedAt;
         }
     }
 
-    private async Task RestoreNote(long id)
+    private async Task RestoreNote(NoteModel model)
     {
-        if (await _clientState.DataAccess.GetNote(id) is NoteEntity note)
+        if (await _clientState.DataAccess.GetNote(model.Id) is NoteEntity note)
         {
             note.IsDeleted = false;
             await _clientState.DataAccess.UpdateNote(note);
+            model.UpdatedAt = note.UpdatedAt;
         }
     }
 
-    private async Task RestoreTask(long id)
+    private async Task RestoreTask(TaskModel model)
     {
-        if (await _clientState.DataAccess.GetTask(id) is TaskEntity task)
+        if (await _clientState.DataAccess.GetTask(model.Id) is TaskEntity task)
         {
             task.IsDeleted = false;
             await _clientState.DataAccess.UpdateTask(task);
+            model.UpdatedAt = task.UpdatedAt;
         }
     }
 

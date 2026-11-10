@@ -83,6 +83,7 @@ public class NoteService(ClientState clientState, ISearchFilterService searchFil
             SelectedNote.CopyToEntity(note);
 
             await _clientState.DataAccess.UpdateNote(note);
+            SelectedNote.UpdatedAt = note.UpdatedAt;
         }
     }
 
@@ -100,6 +101,7 @@ public class NoteService(ClientState clientState, ISearchFilterService searchFil
         {
             noteEntity.IsDeleted = true;
             await _clientState.DataAccess.UpdateNote(noteEntity);
+            note.UpdatedAt = noteEntity.UpdatedAt;
         }
     }
 }

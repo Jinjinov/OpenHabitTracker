@@ -135,6 +135,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
             SelectedHabit.CopyToEntity(habit);
 
             await _clientState.DataAccess.UpdateHabit(habit);
+            SelectedHabit.UpdatedAt = habit.UpdatedAt;
         }
 
         await _notificationScheduler.Rebuild();
@@ -266,6 +267,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         {
             habitEntity.LastTimeDoneAt = dateTime;
             await _clientState.DataAccess.UpdateHabit(habitEntity);
+            habit.UpdatedAt = habitEntity.UpdatedAt;
         }
     }
 
@@ -379,6 +381,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         {
             habitEntity.IsDeleted = true;
             await _clientState.DataAccess.UpdateHabit(habitEntity);
+            habit.UpdatedAt = habitEntity.UpdatedAt;
         }
 
         await _notificationScheduler.Rebuild();

@@ -93,6 +93,7 @@ public class CategoryService(ClientState clientState, INotificationScheduler not
             {
                 note.CopyToEntity(noteEntity);
                 await _clientState.DataAccess.UpdateNote(noteEntity);
+                note.UpdatedAt = noteEntity.UpdatedAt;
             }
         }
 
@@ -110,6 +111,7 @@ public class CategoryService(ClientState clientState, INotificationScheduler not
             {
                 task.CopyToEntity(taskEntity);
                 await _clientState.DataAccess.UpdateTask(taskEntity);
+                task.UpdatedAt = taskEntity.UpdatedAt;
             }
         }
 
@@ -127,6 +129,7 @@ public class CategoryService(ClientState clientState, INotificationScheduler not
             {
                 habit.CopyToEntity(habitEntity);
                 await _clientState.DataAccess.UpdateHabit(habitEntity);
+                habit.UpdatedAt = habitEntity.UpdatedAt;
             }
         }
 

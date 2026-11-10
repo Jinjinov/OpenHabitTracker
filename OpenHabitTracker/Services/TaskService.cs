@@ -83,6 +83,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
             SelectedTask.CopyToEntity(task);
 
             await _clientState.DataAccess.UpdateTask(task);
+            SelectedTask.UpdatedAt = task.UpdatedAt;
         }
 
         await _notificationScheduler.Rebuild();
@@ -104,6 +105,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
             taskEntity.CompletedAt = null;
 
             await _clientState.DataAccess.UpdateTask(taskEntity);
+            task.UpdatedAt = taskEntity.UpdatedAt;
         }
     }
 
@@ -121,6 +123,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
         {
             taskEntity.StartedAt = startedAt;
             await _clientState.DataAccess.UpdateTask(taskEntity);
+            task.UpdatedAt = taskEntity.UpdatedAt;
         }
     }
 
@@ -152,6 +155,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
             taskEntity.CompletedAt = task.CompletedAt;
 
             await _clientState.DataAccess.UpdateTask(taskEntity);
+            task.UpdatedAt = taskEntity.UpdatedAt;
         }
 
         // MarkAsDone toggles - only the transition to done is an engagement event
@@ -190,6 +194,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
         {
             taskEntity.IsDeleted = true;
             await _clientState.DataAccess.UpdateTask(taskEntity);
+            task.UpdatedAt = taskEntity.UpdatedAt;
         }
 
         await _notificationScheduler.Rebuild();

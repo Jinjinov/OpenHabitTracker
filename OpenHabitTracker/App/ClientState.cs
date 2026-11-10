@@ -755,6 +755,7 @@ public class ClientState
                     habitEntity.LastTimeDoneAt = lastTimeDoneAt;
 
                     await DataAccess.UpdateHabit(habitEntity);
+                    habit.UpdatedAt = habitEntity.UpdatedAt;
                 }
             }
         }
