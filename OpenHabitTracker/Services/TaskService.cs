@@ -62,9 +62,8 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
         _clientState.Tasks.Add(NewTask.Id, NewTask);
 
-        // already added by ChangeCategory in CategoryService:
-        //if (NewTask.CategoryId != 0 && _clientState.Categories?.TryGetValue(NewTask.CategoryId, out CategoryModel? taskCategory) == true)
-        //    taskCategory.Tasks.Add(NewTask);
+        if (NewTask.CategoryId != 0 && _clientState.Categories?.TryGetValue(NewTask.CategoryId, out CategoryModel? taskCategory) == true)
+            taskCategory.Tasks.Add(NewTask);
 
         NewTask = null;
 

@@ -184,6 +184,13 @@ public class CategoryService(ClientState clientState, INotificationScheduler not
         if (_clientState.Categories is null)
             return;
 
+        // An unsaved model joins its category list when AddNote, AddTask or AddHabit saves it.
+        if (model.Id == 0)
+        {
+            model.CategoryId = newCategoryId;
+            return;
+        }
+
         if (model.CategoryId != 0 && _clientState.Categories.TryGetValue(model.CategoryId, out CategoryModel? oldCategory))
         {
             if (model is NoteModel note)
