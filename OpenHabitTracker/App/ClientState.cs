@@ -681,6 +681,11 @@ public class ClientState
         if (Categories is null) Categories = categories.ToDictionary(x => x.Model.Id, x => x.Model);
         else foreach (var pair in categories.ToDictionary(x => x.Model.Id, x => x.Model)) Categories[pair.Key] = pair.Value;
 
+        // LoadTrash builds the trash lists only once, so a list already built gets the imported trashed items here.
+        TrashedNotes?.AddRange(notes.Select(x => x.Model).Where(x => x.IsDeleted));
+        TrashedTasks?.AddRange(tasks.Select(x => x.Model).Where(x => x.IsDeleted));
+        TrashedHabits?.AddRange(habits.Select(x => x.Model).Where(x => x.IsDeleted));
+
         // no CategoryModel sub-list wiring for the new categories, unlike LoadNotes / LoadTasks / LoadHabits.
         // those build fresh models out of entities, so the sub-lists start empty;
         // here notes, tasks and habits are the flattened sub-lists themselves (SelectMany above),
