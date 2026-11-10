@@ -149,7 +149,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         habit.TimesDone ??= [];
 
-        if (habit.TimesDone.LastOrDefault() is TimeModel time && time.CompletedAt is null)
+        if (habit.TimesDone.Any(x => x.CompletedAt is null))
             return;
 
         TimeModel timeModel = new()
@@ -180,10 +180,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         if (habit.TimesDone is null)
             return;
 
-        if (habit.TimesDone.LastOrDefault() is not TimeModel time)
-            return;
-
-        if (time.CompletedAt != null)
+        if (habit.TimesDone.LastOrDefault(x => x.CompletedAt is null) is not TimeModel time)
             return;
 
         time.StartedAt = startedAt;
@@ -204,7 +201,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         habit.TimesDone ??= [];
 
-        if (habit.TimesDone.LastOrDefault() is TimeModel time && time.CompletedAt is null)
+        if (habit.TimesDone.LastOrDefault(x => x.CompletedAt is null) is TimeModel time)
         {
             time.CompletedAt = now;
             time.Quantity = quantity ?? habit.TargetQuantity;

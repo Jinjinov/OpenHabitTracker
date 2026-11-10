@@ -103,6 +103,32 @@ public class HabitComponentTests
         await _habitService.Received(1).Start(_habit);
     }
 
+    // The quantity asked for after the stop belongs to the entry the stop completed, even when another
+    // entry completes later today, like one edited to end at 23:59 or one imported at 12:00.
+    [Test]
+    public async Task StopTimer_QuantityHabit_SavesTheQuantityOnTheStoppedEntry()
+    {
+        _habit.DisplayMetric = DisplayMetric.Quantity;
+        TimeModel laterToday = new() { Id = 1, StartedAt = DateTime.Today.AddHours(23), CompletedAt = DateTime.Today.AddHours(23).AddMinutes(59) };
+        TimeModel running = new() { Id = 2, StartedAt = DateTime.Now };
+        _habit.TimesDone = [laterToday, running];
+        _habitService.When(x => x.MarkAsDone(_habit, Arg.Any<double?>())).Do(_ => running.CompletedAt = DateTime.Now);
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        // Not awaited, for the reason in StartTimer_ButtonClick_InvokesHabitServiceStart.
+        Task _ = cut.Find("[data-habits-step-19] button").ClickAsync(new MouseEventArgs());
+
+        await cut.WaitForElement("button[aria-label='Stop']").ClickAsync(new MouseEventArgs());
+
+        cut.WaitForElement("#quantity-modal-input").Change("7");
+        await cut.Find("#quantity-modal-ok").ClickAsync(new MouseEventArgs());
+
+        await _habitService.Received(1).UpdateQuantity(_habit, running);
+        Assert.That(running.Quantity, Is.EqualTo(7));
+    }
+
     [Test]
     public async Task DeleteButton_Click_InvokesHabitServiceDeleteHabit()
     {

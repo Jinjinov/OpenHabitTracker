@@ -259,6 +259,7 @@
     bool _isPaused;
     bool _showQuantityModal;
     bool _isTimerStopModal;
+    TimeModel? _stoppedTime;
 
     async Task OnHabitChanged()
     {
@@ -324,7 +325,12 @@
 
         await HabitService.SetStartTime(Habit, _taskStartedTime);
 
+        TimeModel? running = Habit.TimesDone?.LastOrDefault(x => x.CompletedAt is null);
+
         await HabitService.MarkAsDone(Habit);
+
+        // MarkAsDone completes the running entry, or appends a new completion when there is none
+        _stoppedTime = running ?? Habit.TimesDone!.Last();
 
         _timer.Dispose();
         _timer = null;
@@ -425,9 +431,11 @@
     {
         if (_isTimerStopModal)
         {
-            TimeModel time = Habit.TimesDone!.Last();
-            time.Quantity = quantity;
-            await HabitService.UpdateQuantity(Habit, time);
+            if (_stoppedTime is not null)
+            {
+                _stoppedTime.Quantity = quantity;
+                await HabitService.UpdateQuantity(Habit, _stoppedTime);
+            }
         }
         else
         {
