@@ -185,6 +185,9 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         time.StartedAt = startedAt;
 
+        // a start moved across midnight belongs to another day
+        habit.RefreshTimesDoneByDay();
+
         if (await _clientState.DataAccess.GetTime(time.Id) is TimeEntity timeEntity)
         {
             timeEntity.StartedAt = startedAt;
