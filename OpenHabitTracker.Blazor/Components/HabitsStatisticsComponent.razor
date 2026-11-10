@@ -1,10 +1,12 @@
 @using OpenHabitTracker.App
 @using OpenHabitTracker.Data
 @using OpenHabitTracker.Data.Models
+@using OpenHabitTracker.Query
 @using OpenHabitTracker.Services
 
 @inject IHabitService HabitService
 @inject ICategoryService CategoryService
+@inject ISearchFilterService SearchFilterService
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
 
@@ -80,6 +82,8 @@
 
         List<(CategoryModel? Category, List<HabitModel> Habits)> result = new();
 
+        QueryParameters queryParameters = SearchFilterService.GetQueryParameters(ClientState.Settings);
+
         foreach (CategoryModel category in CategoryService.Categories)
         {
             if (ClientState.Settings.CategoryFilterDisplay == FilterDisplay.CheckBoxes || ClientState.Settings.CategoryFilterDisplay == FilterDisplay.RadioButtons)
@@ -93,12 +97,12 @@
                     continue;
             }
 
-            List<HabitModel> habits = category.Habits.ToList();
+            List<HabitModel> habits = category.Habits.FilterHabits(queryParameters).ToList();
             if (habits.Count > 0)
                 result.Add((category, habits));
         }
 
-        List<HabitModel> uncategorized = ClientState.Habits!.Values.Where(x => x.CategoryId == 0).ToList();
+        List<HabitModel> uncategorized = ClientState.Habits!.Values.Where(x => x.CategoryId == 0).FilterHabits(queryParameters).ToList();
         if (uncategorized.Count > 0)
             result.Add((null, uncategorized));
 
