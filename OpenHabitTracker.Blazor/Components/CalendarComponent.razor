@@ -138,6 +138,9 @@
 
     int _currentMaxSmallCalendarDays;
 
+    // The strip ends on the day it was laid out, so an app left open past midnight lays it out again.
+    DateTime _currentToday;
+
     CalendarParams _calendarParams = new();
 
     private readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
@@ -159,10 +162,11 @@
             }
         }
 
-        if (ColumnWidth != 0 && (_currentColumnWidth != ColumnWidth || _currentMaxSmallCalendarDays != ClientState.Settings.MaxSmallCalendarDays || rowCount == 0))
+        if (ColumnWidth != 0 && (_currentColumnWidth != ColumnWidth || _currentMaxSmallCalendarDays != ClientState.Settings.MaxSmallCalendarDays || _currentToday != DateTime.Today || rowCount == 0))
         {
             _currentColumnWidth = ColumnWidth;
             _currentMaxSmallCalendarDays = ClientState.Settings.MaxSmallCalendarDays;
+            _currentToday = DateTime.Today;
 
             if (DisplayBasedOnWidth)
             {
