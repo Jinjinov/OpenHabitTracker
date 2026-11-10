@@ -256,4 +256,42 @@ public class CategoryTests : BaseTest
 
         await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "HabitInTempCat" })).ToHaveCountAsync(0);
     }
+
+    // A category unchecked while the filter showed check boxes is still selectable as a radio button in grouped view.
+    [Test]
+    public async Task GroupedView_RadioCategoryFilter_ShowsCategoryUncheckedEarlier()
+    {
+        await Page.Locator("[data-categories-step-1] input").FillAsync("RadioCategory");
+        await Page.Locator("[data-categories-step-1] button:has(i.bi-plus-square)").ClickAsync();
+        await CloseSidebarAsync();
+
+        await EnableGroupedByCategoryAsync();
+
+        await NavigateToAsync("[data-main-step-3]");
+        await Page.Locator("button.btn-plain.input-group").ClickAsync();
+        await Page.Locator("input[aria-required='true']").FillAsync("RadioNote");
+        await Page.Locator("select[aria-label='Category']").SelectOptionAsync(new SelectOptionValue { Label = "RadioCategory" });
+        await Expect(Page.Locator("button:has(i.bi-floppy)")).ToBeEnabledAsync();
+        await Page.Locator("button:has(i.bi-floppy)").ClickAsync();
+
+        ILocator note = Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "RadioNote" });
+        await Expect(note).ToHaveCountAsync(1);
+
+        // check boxes: uncheck the category
+        await Page.Locator("[data-main-step-6]").ClickAsync();
+        await Page.Locator("label[for^='category-']").Filter(new LocatorFilterOptions { HasText = "RadioCategory" }).ClickAsync();
+        await Expect(note).ToHaveCountAsync(0);
+        await CloseSidebarAsync();
+
+        // radio buttons: select the category
+        await OpenSidebarAsync("bi-gear");
+        await Page.Locator("select[aria-label='Display category filter as']").SelectOptionAsync(new SelectOptionValue { Label = "Radio buttons" });
+        await CloseSidebarAsync();
+
+        await Page.Locator("[data-main-step-6]").ClickAsync();
+        await Page.Locator("label[for^='category-']").Filter(new LocatorFilterOptions { HasText = "RadioCategory" }).ClickAsync();
+        await CloseSidebarAsync();
+
+        await Expect(note).ToHaveCountAsync(1);
+    }
 }

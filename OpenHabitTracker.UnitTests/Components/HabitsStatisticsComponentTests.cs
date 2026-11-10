@@ -17,6 +17,7 @@ public class HabitsStatisticsComponentTests
     private BunitContext _ctx = null!;
     private IHabitService _habitService = null!;
     private ClientState _clientState = null!;
+    private ICategoryService _categoryService = null!;
 
     [SetUp]
     public void SetUp()
@@ -42,11 +43,12 @@ public class HabitsStatisticsComponentTests
             return new LocalizedString(key, string.Format(format, callInfo.RequiredArg<object[]>()));
         });
 
-        ICategoryService categoryService = Substitute.For<ICategoryService>();
+        _categoryService = Substitute.For<ICategoryService>();
 
         _ctx.Services.AddScoped(_ => _habitService);
-        _ctx.Services.AddScoped(_ => categoryService);
+        _ctx.Services.AddScoped(_ => _categoryService);
         _ctx.Services.AddScoped(_ => _clientState);
+        _ctx.Services.AddScoped<ISearchFilterService>(_ => new SearchFilterService());
         _ctx.Services.AddSingleton(loc);
     }
 
@@ -138,5 +140,49 @@ public class HabitsStatisticsComponentTests
             p => p.Add(c => c.PageStateChanged, true));
 
         Assert.That(secondCut.Markup, Does.Contain("out of 2 done"));
+    }
+
+    // --- grouped by category: a group counts what the list shows ---
+
+    private void SetUpOneCategory(long id, string title, params HabitModel[] habits)
+    {
+        foreach (HabitModel habit in habits)
+            habit.RefreshTimesDoneByDay();
+
+        CategoryModel category = new() { Id = id, Title = title, Habits = habits.ToList() };
+
+        _clientState.Settings.ShowGroupedByCategory = true;
+        _clientState.Categories = new() { { id, category } };
+        _clientState.Habits = habits.ToDictionary(x => x.Id);
+        _categoryService.Categories.Returns(_clientState.Categories.Values);
+        _habitService.Habits.Returns(_clientState.Habits.Values);
+        _habitService.GetHabits().Returns(_clientState.Habits.Values.Where(x => !x.IsDeleted));
+    }
+
+    [Test]
+    public void Grouped_TrashedHabit_IsNotCounted()
+    {
+        HabitModel done = new() { Id = 1, Title = "Done", CategoryId = 1, TimesDone = [new TimeModel { StartedAt = DateTime.Now, CompletedAt = DateTime.Now }], LastTimeDoneAt = DateTime.Now };
+        HabitModel trashed = new() { Id = 2, Title = "Trashed", CategoryId = 1, IsDeleted = true, TimesDone = [] };
+        SetUpOneCategory(1, "Health", done, trashed);
+
+        IRenderedComponent<HabitsStatisticsComponent> cut = _ctx.Render<HabitsStatisticsComponent>();
+
+        Assert.That(cut.Markup, Does.Contain("1 out of 1 done"));
+    }
+
+    // A category unchecked earlier, while the filter showed check boxes, is still selectable as a radio button.
+    [Test]
+    public void Grouped_RadioCategoryFilter_ShowsTheSelectedCategory()
+    {
+        HabitModel habit = new() { Id = 1, Title = "Run", CategoryId = 1, TimesDone = [] };
+        SetUpOneCategory(1, "Health", habit);
+        _clientState.Settings.HiddenCategoryIds.Add(1);
+        _clientState.Settings.CategoryFilterDisplay = FilterDisplay.RadioButtons;
+        _clientState.Settings.SelectedCategoryId = 1;
+
+        IRenderedComponent<HabitsStatisticsComponent> cut = _ctx.Render<HabitsStatisticsComponent>();
+
+        Assert.That(cut.Markup, Does.Contain("Health"));
     }
 }

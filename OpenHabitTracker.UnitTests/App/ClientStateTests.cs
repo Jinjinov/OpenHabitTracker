@@ -533,4 +533,59 @@ public class ClientStateTests
         Assert.That(_sut.Tasks, Is.Not.Null);
         Assert.That(_sut.Categories, Is.Not.Null);
     }
+
+    // Load examples runs while only the start page's list is loaded.
+    [Test]
+    public async Task AddUserData_WhenHabitsAndTasksAreNotLoaded_KeepsTheStoredHabitsAndTasks()
+    {
+        StubAddMethodsToAssignIds();
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>([new HabitEntity { Id = 3, Title = "Stored habit" }]));
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>([new TaskEntity { Id = 4, Title = "Stored task" }]));
+
+        await _sut.LoadSettings();
+        await _sut.LoadNotes();
+
+        List<CategoryModel> examples =
+        [
+            new CategoryModel
+            {
+                Title = "Examples",
+                Tasks = [new TaskModel { Title = "Example task" }],
+                Habits = [new HabitModel { Title = "Example habit", TimesDone = [] }]
+            }
+        ];
+
+        await _sut.AddUserData(examples);
+
+        await _sut.LoadHabits();
+        await _sut.LoadTasks();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Habits!.Values.Select(x => x.Title), Is.EquivalentTo(new[] { "Stored habit", "Example habit" }));
+            Assert.That(_sut.Tasks!.Values.Select(x => x.Title), Is.EquivalentTo(new[] { "Stored task", "Example task" }));
+        });
+    }
+
+    [Test]
+    public async Task AddUserData_TrashedNoteWhileTrashIsLoaded_AddsItToTrashedNotes()
+    {
+        StubAddMethodsToAssignIds();
+
+        await _sut.LoadSettings();
+        await _sut.LoadTrash();
+
+        List<CategoryModel> imported =
+        [
+            new CategoryModel
+            {
+                Title = "Backup",
+                Notes = [new NoteModel { Title = "Thrown away", IsDeleted = true }]
+            }
+        ];
+
+        await _sut.AddUserData(await _sut.MergeUserData(imported));
+
+        Assert.That(_sut.TrashedNotes!.Select(x => x.Title), Is.EquivalentTo(new[] { "Thrown away" }));
+    }
 }

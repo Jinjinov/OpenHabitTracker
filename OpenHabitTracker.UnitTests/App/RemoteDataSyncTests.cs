@@ -250,4 +250,48 @@ public class RemoteDataSyncTests
 
         Assert.That(signedOut, Is.False);
     }
+
+    // Another device saves while this one is reloading after its previous save. The server stamps
+    // LastChangeAt with its own clock, so a later poll must still see the second save.
+    [Test]
+    public async Task Poll_ChangeSavedDuringARefresh_IsPickedUpByALaterPoll()
+    {
+        List<NoteEntity> serverNotes = [];
+        DateTime serverLastChangeAt = DateTime.UtcNow.AddMinutes(-1);
+        int notesReads = 0;
+        object gate = new();
+
+        _remoteDataAccess.GetUsers().Returns(_ => Task.FromResult<IReadOnlyList<UserEntity>>([new UserEntity { Id = 1, LastChangeAt = serverLastChangeAt }]));
+        _remoteDataAccess.GetNotes().Returns(async _ =>
+        {
+            List<NoteEntity> snapshot;
+
+            lock (gate)
+            {
+                notesReads++;
+                snapshot = serverNotes.ToList();
+
+                // the first refresh after the first save: the second save lands right after the notes were read
+                if (notesReads == 1)
+                {
+                    serverNotes.Add(new NoteEntity { Id = 2, Title = "second", Content = "" });
+                    serverLastChangeAt = DateTime.UtcNow;
+                }
+            }
+
+            await Task.Delay(30); // the rest of the refresh
+
+            return (IReadOnlyList<NoteEntity>)snapshot;
+        });
+
+        lock (gate)
+        {
+            serverNotes.Add(new NoteEntity { Id = 1, Title = "first", Content = "" });
+            serverLastChangeAt = DateTime.UtcNow;
+        }
+
+        await Task.Delay(1000); // dozens of polls
+
+        Assert.That(_clientState.Notes?.Values.Select(x => x.Title), Is.EquivalentTo(new[] { "first", "second" }));
+    }
 }

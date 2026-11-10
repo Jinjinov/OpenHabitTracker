@@ -16,6 +16,8 @@ public class NotesStatisticsComponentTests
 {
     private BunitContext _ctx = null!;
     private INoteService _noteService = null!;
+    private ClientState _clientState = null!;
+    private ICategoryService _categoryService = null!;
 
     [SetUp]
     public void SetUp()
@@ -33,17 +35,18 @@ public class NotesStatisticsComponentTests
         MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         MarkdownToHtml markdownToHtml = new(pipeline);
 
-        ClientState clientState = new(new[] { dataAccess }, markdownToHtml);
+        _clientState = new(new[] { dataAccess }, markdownToHtml);
 
-        ICategoryService categoryService = Substitute.For<ICategoryService>();
+        _categoryService = Substitute.For<ICategoryService>();
 
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.RequiredArg<string>(), callInfo.RequiredArg<string>()));
 
         _ctx.Services.AddScoped(_ => _noteService);
         _ctx.Services.AddScoped(_ => priorityService);
-        _ctx.Services.AddScoped(_ => clientState);
-        _ctx.Services.AddScoped(_ => categoryService);
+        _ctx.Services.AddScoped(_ => _clientState);
+        _ctx.Services.AddScoped(_ => _categoryService);
+        _ctx.Services.AddScoped<ISearchFilterService>(_ => new SearchFilterService());
         _ctx.Services.AddSingleton(loc);
     }
 
@@ -123,5 +126,45 @@ public class NotesStatisticsComponentTests
             p => p.Add(c => c.PageStateChanged, true));
 
         Assert.That(secondCut.Find("p.mb-1").TextContent, Is.EqualTo("Total: 2"));
+    }
+
+    // --- grouped by category: a group counts what the list shows ---
+
+    private void SetUpOneCategory(long id, string title, params NoteModel[] notes)
+    {
+        CategoryModel category = new() { Id = id, Title = title, Notes = notes.ToList() };
+
+        _clientState.Settings.ShowGroupedByCategory = true;
+        _clientState.Categories = new() { { id, category } };
+        _clientState.Notes = notes.ToDictionary(x => x.Id);
+        _categoryService.Categories.Returns(_clientState.Categories.Values);
+        _noteService.Notes.Returns(_clientState.Notes.Values);
+        _noteService.GetNotes().Returns(_clientState.Notes.Values.Where(x => !x.IsDeleted));
+    }
+
+    [Test]
+    public void Grouped_TrashedNote_IsNotCounted()
+    {
+        SetUpOneCategory(1, "Work",
+            new NoteModel { Id = 1, Title = "Live", CategoryId = 1 },
+            new NoteModel { Id = 2, Title = "Trashed", CategoryId = 1, IsDeleted = true });
+
+        IRenderedComponent<NotesStatisticsComponent> cut = _ctx.Render<NotesStatisticsComponent>();
+
+        Assert.That(cut.Find("p.mb-1").TextContent, Is.EqualTo("Total: 1"));
+    }
+
+    // A category unchecked earlier, while the filter showed check boxes, is still selectable as a radio button.
+    [Test]
+    public void Grouped_RadioCategoryFilter_ShowsTheSelectedCategory()
+    {
+        SetUpOneCategory(1, "Work", new NoteModel { Id = 1, Title = "Live", CategoryId = 1 });
+        _clientState.Settings.HiddenCategoryIds.Add(1);
+        _clientState.Settings.CategoryFilterDisplay = FilterDisplay.RadioButtons;
+        _clientState.Settings.SelectedCategoryId = 1;
+
+        IRenderedComponent<NotesStatisticsComponent> cut = _ctx.Render<NotesStatisticsComponent>();
+
+        Assert.That(cut.Markup, Does.Contain("Work"));
     }
 }

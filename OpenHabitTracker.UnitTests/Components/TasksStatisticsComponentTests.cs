@@ -16,6 +16,8 @@ public class TasksStatisticsComponentTests
 {
     private BunitContext _ctx = null!;
     private ITaskService _taskService = null!;
+    private ClientState _clientState = null!;
+    private ICategoryService _categoryService = null!;
 
     [SetUp]
     public void SetUp()
@@ -30,16 +32,17 @@ public class TasksStatisticsComponentTests
         MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         MarkdownToHtml markdownToHtml = new(pipeline);
 
-        ClientState clientState = new(new[] { dataAccess }, markdownToHtml);
+        _clientState = new(new[] { dataAccess }, markdownToHtml);
 
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.RequiredArg<string>(), callInfo.RequiredArg<string>()));
 
-        ICategoryService categoryService = Substitute.For<ICategoryService>();
+        _categoryService = Substitute.For<ICategoryService>();
 
         _ctx.Services.AddScoped(_ => _taskService);
-        _ctx.Services.AddScoped(_ => categoryService);
-        _ctx.Services.AddScoped(_ => clientState);
+        _ctx.Services.AddScoped(_ => _categoryService);
+        _ctx.Services.AddScoped(_ => _clientState);
+        _ctx.Services.AddScoped<ISearchFilterService>(_ => new SearchFilterService());
         _ctx.Services.AddSingleton(loc);
     }
 
@@ -120,5 +123,45 @@ public class TasksStatisticsComponentTests
             p => p.Add(c => c.PageStateChanged, true));
 
         Assert.That(secondCut.Find("span.badge.bg-body-secondary").TextContent, Is.EqualTo("Total: 2"));
+    }
+
+    // --- grouped by category: a group counts what the list shows ---
+
+    private void SetUpOneCategory(long id, string title, params TaskModel[] tasks)
+    {
+        CategoryModel category = new() { Id = id, Title = title, Tasks = tasks.ToList() };
+
+        _clientState.Settings.ShowGroupedByCategory = true;
+        _clientState.Categories = new() { { id, category } };
+        _clientState.Tasks = tasks.ToDictionary(x => x.Id);
+        _categoryService.Categories.Returns(_clientState.Categories.Values);
+        _taskService.Tasks.Returns(_clientState.Tasks.Values);
+        _taskService.GetTasks().Returns(_clientState.Tasks.Values.Where(x => !x.IsDeleted));
+    }
+
+    [Test]
+    public void Grouped_TrashedTask_IsNotCounted()
+    {
+        SetUpOneCategory(1, "Work",
+            new TaskModel { Id = 1, Title = "Live", CategoryId = 1 },
+            new TaskModel { Id = 2, Title = "Trashed", CategoryId = 1, IsDeleted = true });
+
+        IRenderedComponent<TasksStatisticsComponent> cut = _ctx.Render<TasksStatisticsComponent>();
+
+        Assert.That(cut.Find("span.badge.bg-body-secondary").TextContent, Is.EqualTo("Total: 1"));
+    }
+
+    // A category unchecked earlier, while the filter showed check boxes, is still selectable as a radio button.
+    [Test]
+    public void Grouped_RadioCategoryFilter_ShowsTheSelectedCategory()
+    {
+        SetUpOneCategory(1, "Work", new TaskModel { Id = 1, Title = "Live", CategoryId = 1 });
+        _clientState.Settings.HiddenCategoryIds.Add(1);
+        _clientState.Settings.CategoryFilterDisplay = FilterDisplay.RadioButtons;
+        _clientState.Settings.SelectedCategoryId = 1;
+
+        IRenderedComponent<TasksStatisticsComponent> cut = _ctx.Render<TasksStatisticsComponent>();
+
+        Assert.That(cut.Markup, Does.Contain("Work"));
     }
 }

@@ -816,16 +816,17 @@ public class HabitServiceTests
     // Category assignment is handled by CategoryService.ChangeCategory (called when user selects a category in the UI).
     // AddHabit must NOT add to category.Habits — doing so would cause a duplicate when ChangeCategory already did it.
     [Test]
-    public async Task AddHabit_WithNonZeroCategoryId_DoesNotAddToCategory()
+    public async Task AddHabit_WithNonZeroCategoryId_AddsToCategory()
     {
         CategoryModel category = TestData.Category(id: 10);
         _clientState.Categories = TestData.CategoryDict(category);
         _clientState.Habits = new();
-        _sut.NewHabit = new HabitModel { Title = "Health", CategoryId = 10 };
+        HabitModel newHabit = new() { Title = "Health", CategoryId = 10 };
+        _sut.NewHabit = newHabit;
 
         await _sut.AddHabit();
 
-        Assert.That(category.Habits, Has.Count.EqualTo(0));
+        Assert.That(category.Habits, Is.EqualTo(new[] { newHabit }));
     }
 
     // --- MarkAsDone with UncheckAllItemsOnHabitDone=false ---
@@ -1313,5 +1314,79 @@ public class HabitServiceTests
         await _sut.Start(habit); // starting a timer is not a completion
 
         await _appReview.DidNotReceive().RecordEngagement(Arg.Any<EngagementKind>());
+    }
+
+    // --- the running timer is the entry with no CompletedAt, wherever it is in TimesDone ---
+
+    [Test]
+    public async Task MarkAsDone_AfterAddTimeDoneOnAPastDayWhileTimerRuns_CompletesTheRunningEntry()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.Start(habit);
+        TimeModel running = habit.TimesDone.Single();
+
+        await _sut.AddTimeDone(habit, DateTime.Today.AddDays(-2).AddHours(12)); // + on a past day in the large calendar
+
+        await _sut.MarkAsDone(habit); // Stop
+
+        Assert.That(running.CompletedAt, Is.Not.Null);
+        Assert.That(habit.TimesDone, Has.Count.EqualTo(2));
+    }
+
+    // --- aggregates and day buckets follow a completed or moved running entry ---
+
+    [Test]
+    public async Task MarkAsDone_WhenLastTimeInProgress_UpdatesTotalTimeSpent()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.Start(habit);
+        await _sut.SetStartTime(habit, DateTime.Now.AddMinutes(-30));
+        await _sut.MarkAsDone(habit);
+
+        Assert.That(habit.TotalTimeSpent, Is.GreaterThan(TimeSpan.FromMinutes(29)));
+        Assert.That(habit.AverageTimeSpent, Is.GreaterThan(TimeSpan.FromMinutes(29)));
+    }
+
+    [Test]
+    public async Task SetStartTime_ToTheDayBefore_MovesTheEntryToThatDay()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel inProgress = new() { Id = 5, HabitId = 1, StartedAt = DateTime.Today.AddMinutes(10) }; // CompletedAt = null
+        habit.TimesDone = [inProgress];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        DateTime yesterdayEvening = DateTime.Today.AddMinutes(-20); // a timer paused or reset across midnight
+        await _sut.SetStartTime(habit, yesterdayEvening);
+
+        Assert.That(habit.TimesDoneByDay!.GetValueOrDefault(DateTime.Today.AddDays(-1)), Is.EqualTo(new[] { inProgress }));
+        Assert.That(habit.TimesDoneByDay!.GetValueOrDefault(DateTime.Today) ?? [], Is.Empty);
+    }
+
+    // --- the data access stamps UpdatedAt on the entity; the model shows it ---
+
+    [Test]
+    public async Task UpdateHabit_SetsUpdatedAtFromTheStoredEntity()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.UpdatedAt = DateTime.Now.AddDays(-10);
+        _clientState.Habits = TestData.HabitDict(habit);
+        _sut.SelectedHabit = habit;
+        _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
+
+        DateTime stamped = DateTime.Now;
+        _dataAccess.When(x => x.UpdateHabit(Arg.Any<HabitEntity>())).Do(callInfo => callInfo.Arg<HabitEntity>().UpdatedAt = stamped);
+
+        await _sut.UpdateHabit();
+
+        Assert.That(habit.UpdatedAt, Is.EqualTo(stamped));
     }
 }

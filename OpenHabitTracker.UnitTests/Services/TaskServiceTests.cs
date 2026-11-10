@@ -390,6 +390,24 @@ public class TaskServiceTests
         await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(e => e != null && e.Id == task.Id));
     }
 
+    // The data access stamps UpdatedAt on the entity; the model shows it.
+    [Test]
+    public async Task UpdateTask_SetsUpdatedAtFromTheStoredEntity()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        task.UpdatedAt = DateTime.Now.AddDays(-10);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _sut.SelectedTask = task;
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        DateTime stamped = DateTime.Now;
+        _dataAccess.When(x => x.UpdateTask(Arg.Any<TaskEntity>())).Do(callInfo => callInfo.Arg<TaskEntity>().UpdatedAt = stamped);
+
+        await _sut.UpdateTask();
+
+        Assert.That(task.UpdatedAt, Is.EqualTo(stamped));
+    }
+
     // --- SetSelectedTask tests ---
 
     [Test]
@@ -453,16 +471,17 @@ public class TaskServiceTests
     // Category assignment is handled by CategoryService.ChangeCategory (called when user selects a category in the UI).
     // AddTask must NOT add to category.Tasks — doing so would cause a duplicate when ChangeCategory already did it.
     [Test]
-    public async Task AddTask_WithNonZeroCategoryId_DoesNotAddToCategory()
+    public async Task AddTask_WithNonZeroCategoryId_AddsToCategory()
     {
         CategoryModel category = TestData.Category(id: 10);
         _clientState.Categories = TestData.CategoryDict(category);
         _clientState.Tasks = new();
-        _sut.NewTask = new TaskModel { Title = "Project Task", CategoryId = 10 };
+        TaskModel newTask = new() { Title = "Project Task", CategoryId = 10 };
+        _sut.NewTask = newTask;
 
         await _sut.AddTask();
 
-        Assert.That(category.Tasks, Has.Count.EqualTo(0));
+        Assert.That(category.Tasks, Is.EqualTo(new[] { newTask }));
     }
 
     // --- DeleteTask additional tests ---

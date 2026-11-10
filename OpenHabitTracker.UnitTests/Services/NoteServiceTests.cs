@@ -235,6 +235,24 @@ public class NoteServiceTests
         await _dataAccess.Received(1).UpdateNote(Arg.Is<NoteEntity>(e => e != null && e.Id == note.Id));
     }
 
+    // The data access stamps UpdatedAt on the entity; the model shows it.
+    [Test]
+    public async Task UpdateNote_SetsUpdatedAtFromTheStoredEntity()
+    {
+        NoteModel note = TestData.Note(id: 1);
+        note.UpdatedAt = DateTime.Now.AddDays(-10);
+        _clientState.Notes = TestData.NoteDict(note);
+        _sut.SelectedNote = note;
+        _dataAccess.GetNote(note.Id).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = note.Id }));
+
+        DateTime stamped = DateTime.Now;
+        _dataAccess.When(x => x.UpdateNote(Arg.Any<NoteEntity>())).Do(callInfo => callInfo.Arg<NoteEntity>().UpdatedAt = stamped);
+
+        await _sut.UpdateNote();
+
+        Assert.That(note.UpdatedAt, Is.EqualTo(stamped));
+    }
+
     // --- AddNote additional tests ---
 
     [Test]
@@ -300,16 +318,17 @@ public class NoteServiceTests
     // Category assignment is handled by CategoryService.ChangeCategory (called when user selects a category in the UI).
     // AddNote must NOT add to category.Notes — doing so would cause a duplicate when ChangeCategory already did it.
     [Test]
-    public async Task AddNote_WithNonZeroCategoryId_DoesNotAddToCategory()
+    public async Task AddNote_WithNonZeroCategoryId_AddsToCategory()
     {
         CategoryModel category = TestData.Category(id: 10);
         _clientState.Categories = TestData.CategoryDict(category);
         _clientState.Notes = new();
-        _sut.NewNote = new NoteModel { Title = "Work Note", CategoryId = 10 };
+        NoteModel newNote = new() { Title = "Work Note", CategoryId = 10 };
+        _sut.NewNote = newNote;
 
         await _sut.AddNote();
 
-        Assert.That(category.Notes, Has.Count.EqualTo(0));
+        Assert.That(category.Notes, Is.EqualTo(new[] { newNote }));
     }
 
     // --- UpdateNote when entity not found ---

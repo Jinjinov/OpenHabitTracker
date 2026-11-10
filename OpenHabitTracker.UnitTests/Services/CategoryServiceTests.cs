@@ -478,4 +478,39 @@ public class CategoryServiceTests
 
         Assert.That(note.CategoryId, Is.EqualTo(20L));
     }
+
+    // The add form's category select: the model is saved, and added to the category, only by AddNote.
+    [Test]
+    public void ChangeCategory_OfAnUnsavedModel_DoesNotAddItToTheCategory()
+    {
+        NoteModel newNote = TestData.Note(id: 0, categoryId: 0);
+        CategoryModel category = TestData.Category(id: 20);
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        _sut.ChangeCategory(newNote, 20);
+
+        Assert.That(category.Notes, Is.Empty);
+        Assert.That(newNote.CategoryId, Is.EqualTo(20L));
+    }
+
+    // --- DeleteCategory when only the categories are loaded (the Categories sidebar after a start on /notes) ---
+
+    [Test]
+    public async Task DeleteCategory_WhenTasksAndHabitsAreNotLoaded_TrashesThem()
+    {
+        CategoryModel category = TestData.Category(id: 10);
+        _clientState.Categories = TestData.CategoryDict(category);
+
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 10 }]));
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([]));
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>([new TaskEntity { Id = 2, CategoryId = 10 }]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>([new HabitEntity { Id = 3, CategoryId = 10 }]));
+        _dataAccess.GetTask(2).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = 2, CategoryId = 10 }));
+        _dataAccess.GetHabit(3).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = 3, CategoryId = 10 }));
+
+        await _sut.DeleteCategory(category);
+
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x.Id == 2 && x.IsDeleted && x.CategoryId == 0));
+        await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(x => x.Id == 3 && x.IsDeleted && x.CategoryId == 0));
+    }
 }

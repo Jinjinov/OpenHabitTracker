@@ -530,4 +530,43 @@ public class HabitTests : BaseTest
         Assert.That(titleBox, Is.Not.Null);
         Assert.That(titleBox!.Y + titleBox.Height, Is.LessThanOrEqualTo(rowBox!.Y + rowBox.Height + 1));
     }
+
+    // Two clicks that overlap each other's save must both be recorded, and no error may reach the page.
+    [Test]
+    public async Task SmallCalendar_DoubleClickOnADay_RecordsTwoCompletions()
+    {
+        await AddItemAsync("Double Click Habit");
+
+        ILocator cells = Page.Locator("[data-habits-step-6]").First.Locator("button[role='gridcell']");
+        await Expect(cells.And(Page.Locator(".border-primary-subtle"))).ToBeVisibleAsync();
+
+        int todayIndex = await Page.EvaluateAsync<int>("() => [...document.querySelector(\"[data-habits-step-6]\").querySelectorAll(\"button[role='gridcell']\")].findIndex(c => c.classList.contains('border-primary-subtle'))");
+
+        await cells.Nth(todayIndex - 1).DblClickAsync();
+
+        await Expect(cells.Nth(todayIndex - 1)).ToContainTextAsync("2x");
+    }
+
+    // The app left open over midnight: the small calendar ends on the new day, with today marked.
+    [Test]
+    public async Task SmallCalendar_OpenOverMidnight_MarksTheNewDay()
+    {
+        DateTime lateEvening = DateTime.Today.AddDays(1).AddMinutes(-2);
+
+        await Page.Clock.InstallAsync(new ClockInstallOptions { TimeDate = lateEvening });
+        await AddItemAsync("Midnight Habit");
+
+        ILocator today = Page.Locator("[data-habits-step-6]").First.Locator("button[role='gridcell'].border-primary-subtle");
+        await Expect(today).ToHaveTextAsync(new Regex($"^{lateEvening.Day}"));
+
+        await Page.Clock.FastForwardAsync("05:00");
+
+        // opening and closing the habit repaints the list; the detail opens in the second column, so the list keeps its width
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Midnight Habit" }).ClickAsync();
+        await Expect(Page.Locator("#habit-component")).ToBeVisibleAsync();
+        await Page.Locator("[data-habits-step-11]").ClickAsync();
+        await Expect(Page.Locator("#habit-component")).ToHaveCountAsync(0);
+
+        await Expect(today).ToHaveTextAsync(new Regex($"^{lateEvening.AddMinutes(5).Day}"));
+    }
 }
