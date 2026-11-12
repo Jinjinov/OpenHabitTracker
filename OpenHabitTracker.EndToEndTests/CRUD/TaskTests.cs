@@ -110,6 +110,21 @@ public class TaskTests : BaseTest
         await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Edit Me" })).ToHaveCountAsync(0);
     }
 
+    // The title saves on change, which typing alone does not raise.
+    [Test]
+    public async Task EditTask_TypeTitleThenEscape_TitleKept()
+    {
+        await AddItemAsync("Escape Task");
+
+        await Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Escape Task" }).ClickAsync();
+
+        await Page.Locator("input[aria-label='Task title']").FillAsync("Typed Task");
+        await Page.Keyboard.PressAsync("Escape");
+
+        await Expect(Page.Locator("#task-component")).ToHaveCountAsync(0);
+        await Expect(Page.Locator("[data-tasks-step-2]").Filter(new LocatorFilterOptions { HasText = "Typed Task" })).ToBeVisibleAsync();
+    }
+
     [Test]
     public async Task EditTask_ChangeAllFields_CloseWorksOnFirstClick()
     {

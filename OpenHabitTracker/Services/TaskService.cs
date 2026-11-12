@@ -74,15 +74,16 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
     public async Task UpdateTask()
     {
-        if (Tasks is null || SelectedTask is null)
+        // Escape saves the focused field and closes the task without waiting, and the close clears SelectedTask.
+        if (Tasks is null || SelectedTask is not TaskModel selectedTask)
             return;
 
-        if (await _clientState.DataAccess.GetTask(SelectedTask.Id) is TaskEntity task)
+        if (await _clientState.DataAccess.GetTask(selectedTask.Id) is TaskEntity task)
         {
-            SelectedTask.CopyToEntity(task);
+            selectedTask.CopyToEntity(task);
 
             await _clientState.DataAccess.UpdateTask(task);
-            SelectedTask.UpdatedAt = task.UpdatedAt;
+            selectedTask.UpdatedAt = task.UpdatedAt;
         }
 
         await _notificationScheduler.Rebuild();

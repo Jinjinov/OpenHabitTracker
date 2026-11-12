@@ -16,6 +16,7 @@
 @inject IGTourService GTourService
 @inject IAuthFragment AuthFragment
 @inject INotificationScheduler NotificationScheduler
+@inject NotificationRebuildRelay NotificationRebuildRelay
 @inject INotifications Notifications
 
 @* Root <div> inside <html><body><app> *@
@@ -289,6 +290,9 @@
         // Import, delete-all and a sync pull replace the data wholesale, and ClientState cannot
         // reach the scheduler itself.
         ClientState.SetDataReplacedAction(() => NotificationScheduler.Rebuild());
+
+        // A resumed window arrives from outside the renderer.
+        NotificationRebuildRelay.SetRebuildAction(() => InvokeAsync(NotificationScheduler.Rebuild));
 
         await NotificationScheduler.Rebuild();
 

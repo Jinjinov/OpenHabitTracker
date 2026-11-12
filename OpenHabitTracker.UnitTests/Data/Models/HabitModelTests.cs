@@ -244,6 +244,19 @@ public class HabitModelTests
         Assert.That(ratio, Is.EqualTo(0.0));
     }
 
+    // Three times per week is once every 7/3 days, so three days since the last completion is 9/7 of it.
+    [TestCase(Ratio.ElapsedToDesired)]
+    [TestCase(Ratio.AverageToDesired)]
+    public void GetRatio_ToDesired_WithRepeatCount_MeasuresAgainstTheIntervalDividedByTheCount(Ratio ratio)
+    {
+        DateTime lastTimeDoneAt = DateTime.Now.AddDays(-3);
+        HabitModel habit = new() { RepeatCount = 3, RepeatInterval = 1, RepeatPeriod = Period.Week, LastTimeDoneAt = lastTimeDoneAt };
+        habit.TimesDone = [new TimeModel { StartedAt = lastTimeDoneAt.AddDays(-3) }, new TimeModel { StartedAt = lastTimeDoneAt }];
+        habit.RefreshTimesDoneByDay(); // AverageInterval = 3 days
+
+        Assert.That(habit.GetRatio(ratio), Is.EqualTo(900.0 / 7.0).Within(0.1));
+    }
+
     // --- RepeatCountReached boundary test ---
 
     [Test]

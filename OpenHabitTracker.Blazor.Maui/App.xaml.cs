@@ -54,7 +54,7 @@ public partial class App : Application
     }
 
     // Time has passed and another device may have changed something, so the schedule is rebuilt on
-    // resume as well as on launch. Its own scope keeps the loaded data from outliving the rebuild.
+    // resume as well as on launch.
     public static async Task RebuildNotificationSchedule()
     {
         if (IPlatformApplication.Current?.Services is not IServiceProvider services)
@@ -62,6 +62,11 @@ public partial class App : Application
 
         try
         {
+            // A new scope reads the device's own database, which is not the data of a signed in user.
+            if (await services.GetRequiredService<NotificationRebuildRelay>().TryRebuild())
+                return;
+
+            // Without a UI, its own scope keeps the loaded data from outliving the rebuild.
             using IServiceScope scope = services.CreateScope();
 
             await scope.ServiceProvider.GetRequiredService<INotificationScheduler>().Rebuild();

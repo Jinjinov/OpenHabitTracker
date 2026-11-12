@@ -137,56 +137,60 @@ public class ClientState
             await _onNewAccount();
     }
 
-    public async Task LoadUsers()
+    public async Task LoadUsers() => await LoadUsers(_clientData);
+
+    private async Task LoadUsers(ClientData clientData)
     {
-        if (User.Id == 0)
+        if (clientData.User.Id == 0)
         {
             IReadOnlyList<UserEntity> users = await DataAccess.GetUsers();
 
             if (users.Count > 0)
             {
-                User = users[0].ToModel();
+                clientData.User = users[0].ToModel();
             }
             else
             {
-                User = new UserModel
+                clientData.User = new UserModel
                 {
                     UserName = "admin",
                     Email = "admin@admin.com"
                 };
 
-                UserEntity userEntity = User.ToEntity();
+                UserEntity userEntity = clientData.User.ToEntity();
 
                 await DataAccess.AddUser(userEntity);
 
-                User.Id = userEntity.Id;
+                clientData.User.Id = userEntity.Id;
             }
         }
     }
 
-    public async Task<bool> LoadSettings()
+    public async Task<bool> LoadSettings() => await LoadSettings(_clientData);
+
+    private async Task<bool> LoadSettings(ClientData clientData)
     {
         bool loadWelcomeNote = false;
 
-        if (Settings.Id == 0)
+        if (clientData.Settings.Id == 0)
         {
             IReadOnlyList<SettingsEntity> settings = await DataAccess.GetSettings();
 
             if (settings.Count > 0)
             {
-                Settings = settings[0].ToModel();
+                clientData.Settings = settings[0].ToModel();
             }
             else
             {
-                await LoadUsers();
+                await LoadUsers(clientData);
 
-                Settings = SettingsModel.GetDefaultSettings(User.Id);
+                clientData.Settings = SettingsModel.GetDefaultSettings(clientData.User.Id);
 
-                SettingsEntity settingsEntity = Settings.ToEntity();
+                SettingsEntity settingsEntity = clientData.Settings.ToEntity();
 
                 await DataAccess.AddSettings(settingsEntity);
 
-                Settings.Id = settingsEntity.Id;
+                clientData.Settings.Id = settingsEntity.Id;
 
                 loadWelcomeNote = true;
             }
@@ -210,77 +214,105 @@ public class ClientState
         await DataAccess.UpdateLoginSettings(Settings.Id, Settings.BaseUrl, Settings.Username, Settings.RefreshToken);
     }
 
-    public async Task LoadHabits()
-    {
-        if (Habits is null)
-        {
-            await LoadCategories();
+    public async Task LoadHabits() => await LoadHabits(_clientData);
 
-            await LoadTimes(); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
+    private async Task LoadHabits(ClientData clientData)
+    {
+        if (clientData.Habits is null)
+        {
+            await LoadCategories(clientData);
+
+            await LoadTimes(clientData); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
 
             IReadOnlyList<HabitEntity> habits = await DataAccess.GetHabits();
-            Habits = habits.Select(x =>
+
+            // a load that overlapped this one has filled it, and its habits are already in the categories
+            if (clientData.Habits is not null)
+                return;
+
+            clientData.Habits = habits.Select(x =>
             {
                 HabitModel m = x.ToModel();
-                m.TimesDone = Times!.Values.Where(y => y.HabitId == x.Id).ToList(); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
+                m.TimesDone = clientData.Times!.Values.Where(y => y.HabitId == x.Id).ToList(); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
                 return m;
             }).ToDictionary(x => x.Id);
 
-            foreach (HabitModel habit in Habits.Values) // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
+            foreach (HabitModel habit in clientData.Habits.Values) // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
             {
                 habit.RefreshTimesDoneByDay(); // TODO:: remove temp fix (needed to get TimesDoneByDay, TotalTimeSpent, AverageTimeSpent, AverageInterval)
 
-                if (habit.CategoryId != 0 && Categories!.TryGetValue(habit.CategoryId, out CategoryModel? habitCategory))
+                if (habit.CategoryId != 0 && clientData.Categories!.TryGetValue(habit.CategoryId, out CategoryModel? habitCategory))
                     habitCategory.Habits.Add(habit);
             }
         }
     }
 
-    public async Task LoadNotes()
+    public async Task LoadNotes() => await LoadNotes(_clientData);
+
+    private async Task LoadNotes(ClientData clientData)
     {
-        if (Notes is null)
+        if (clientData.Notes is null)
         {
-            await LoadCategories();
+            await LoadCategories(clientData);
 
             IReadOnlyList<NoteEntity> notes = await DataAccess.GetNotes();
-            Notes = notes.Select(x =>
+
+            // a load that overlapped this one has filled it, and its notes are already in the categories
+            if (clientData.Notes is not null)
+                return;
+
+            clientData.Notes = notes.Select(x =>
             {
                 NoteModel m = x.ToModel();
                 m.ContentMarkdown = _markdownToHtml.GetMarkdown(x.Content);
                 return m;
             }).ToDictionary(x => x.Id);
 
-            foreach (NoteModel note in Notes.Values)
+            foreach (NoteModel note in clientData.Notes.Values)
             {
-                if (note.CategoryId != 0 && Categories!.TryGetValue(note.CategoryId, out CategoryModel? noteCategory))
+                if (note.CategoryId != 0 && clientData.Categories!.TryGetValue(note.CategoryId, out CategoryModel? noteCategory))
                     noteCategory.Notes.Add(note);
             }
         }
     }
 
-    public async Task LoadTasks()
+    public async Task LoadTasks() => await LoadTasks(_clientData);
+
+    private async Task LoadTasks(ClientData clientData)
     {
-        if (Tasks is null)
+        if (clientData.Tasks is null)
         {
-            await LoadCategories();
+            await LoadCategories(clientData);
 
             IReadOnlyList<TaskEntity> tasks = await DataAccess.GetTasks();
-            Tasks = tasks.Select(x => x.ToModel()).ToDictionary(x => x.Id);
 
-            foreach (TaskModel task in Tasks.Values)
+            // a load that overlapped this one has filled it, and its tasks are already in the categories
+            if (clientData.Tasks is not null)
+                return;
+
+            clientData.Tasks = tasks.Select(x => x.ToModel()).ToDictionary(x => x.Id);
+
+            foreach (TaskModel task in clientData.Tasks.Values)
             {
-                if (task.CategoryId != 0 && Categories!.TryGetValue(task.CategoryId, out CategoryModel? taskCategory))
+                if (task.CategoryId != 0 && clientData.Categories!.TryGetValue(task.CategoryId, out CategoryModel? taskCategory))
                     taskCategory.Tasks.Add(task);
             }
         }
     }
 
-    public async Task LoadTimes()
+    public async Task LoadTimes() => await LoadTimes(_clientData);
+
+    private async Task LoadTimes(ClientData clientData)
     {
-        if (Times is null)
+        if (clientData.Times is null)
         {
             IReadOnlyList<TimeEntity> times = await DataAccess.GetTimes();
-            Times = times.Select(c => c.ToModel()).ToDictionary(x => x.Id);
+
+            // a load that overlapped this one has filled it, and the habits hold its completions
+            if (clientData.Times is not null)
+                return;
+
+            clientData.Times = times.Select(c => c.ToModel()).ToDictionary(x => x.Id);
         }
     }
 
@@ -293,13 +325,19 @@ public class ClientState
         }
     }
 
-    public async Task LoadCategories()
+    public async Task LoadCategories() => await LoadCategories(_clientData);
+
+    private async Task LoadCategories(ClientData clientData)
     {
-        if (Categories is null)
+        if (clientData.Categories is null)
         {
             IReadOnlyList<CategoryEntity> categories = await DataAccess.GetCategories();
 
-            Categories = categories.Select(c => c.ToModel()).ToDictionary(x => x.Id);
+            // a load that overlapped this one has filled it, and the loaded lists are in its categories
+            if (clientData.Categories is not null)
+                return;
+
+            clientData.Categories = categories.Select(c => c.ToModel()).ToDictionary(x => x.Id);
         }
     }
 
@@ -318,13 +356,15 @@ public class ClientState
         }
     }
 
-    private async Task LoadContent()
-    {
-        await LoadCategories();
+    private async Task LoadContent() => await LoadContent(_clientData);
 
-        await LoadHabits();
-        await LoadNotes();
-        await LoadTasks();
+    private async Task LoadContent(ClientData clientData)
+    {
+        await LoadCategories(clientData);
+
+        await LoadHabits(clientData);
+        await LoadNotes(clientData);
+        await LoadTasks(clientData);
     }
 
     public async Task DeleteAllData()
@@ -334,66 +374,64 @@ public class ClientState
         await RefreshState();
     }
 
+    // Loaded data stays on screen and usable until the reload is complete, so a change made during the reload is saved,
+    // and a reload that fails partway leaves it as it was.
+    // A location with nothing loaded yet, like the one a login switches to, is loaded in place,
+    // so a page that loads during the reload shares its lists instead of fetching them twice.
     public async Task<bool> RefreshState(bool reloadUser = false)
     {
+        DataLocation dataLocation = DataLocation;
+
+        bool loadInPlace = Categories is null && Times is null && Habits is null && Notes is null && Tasks is null;
+
+        ClientData clientData = loadInPlace ? _clientData : new(DataAccess, _markdownToHtml);
+
+        UserModel user = User;
         SettingsModel settings = Settings;
-        Dictionary<long, HabitModel>? habits = Habits;
-        Dictionary<long, NoteModel>? notes = Notes;
-        Dictionary<long, TaskModel>? tasks = Tasks;
-        Dictionary<long, TimeModel>? times = Times;
-        Dictionary<long, ItemModel>? items = Items;
-        Dictionary<long, CategoryModel>? categories = Categories;
-        List<HabitModel>? trashedHabits = TrashedHabits;
-        List<NoteModel>? trashedNotes = TrashedNotes;
-        List<TaskModel>? trashedTasks = TrashedTasks;
 
         IsRefreshing = true;
-        bool loadWelcomeNote = false;
+        bool loadWelcomeNote;
 
         try
         {
-            Habits = null;
-            Notes = null;
-            Tasks = null;
-            Times = null;
-            Items = null;
-            Categories = null;
-            TrashedHabits = null;
-            TrashedNotes = null;
-            TrashedTasks = null;
-
             if (reloadUser)
             {
-                User = new();
-                await LoadUsers();
+                clientData.User = new();
+                await LoadUsers(clientData);
+            }
+            else
+            {
+                clientData.User = user;
             }
 
-            Settings = new();
+            clientData.Settings = new();
 
-            loadWelcomeNote = await LoadSettings();
+            loadWelcomeNote = await LoadSettings(clientData);
 
-            await LoadContent();
+            await LoadContent(clientData);
         }
         catch (Exception)
         {
-            // A load that fails partway leaves default settings and empty lists on screen, so put
-            // back what was there. The next refresh that reaches the data source replaces it.
-            Settings = settings;
-            Habits = habits;
-            Notes = notes;
-            Tasks = tasks;
-            Times = times;
-            Items = items;
-            Categories = categories;
-            TrashedHabits = trashedHabits;
-            TrashedNotes = trashedNotes;
-            TrashedTasks = trashedTasks;
+            // The lists loaded in place hold this location's data, but the reset user and settings would show defaults.
+            if (loadInPlace)
+            {
+                clientData.User = user;
+                clientData.Settings = settings;
+            }
 
             throw;
         }
         finally
         {
             IsRefreshing = false;
+        }
+
+        if (!loadInPlace)
+        {
+            _clientDataByLocation[dataLocation] = clientData;
+
+            if (DataLocation == dataLocation)
+                _clientData = clientData;
         }
 
         await DataReplaced();
@@ -507,6 +545,11 @@ public class ClientState
         settingsModel.RefreshToken = Settings.RefreshToken;
         settingsModel.RememberMe = Settings.RememberMe;
 
+        // keep this device's category filter - the file holds the ids of the database it came from,
+        // and the imported categories get new ids
+        settingsModel.HiddenCategoryIds = Settings.HiddenCategoryIds;
+        settingsModel.SelectedCategoryId = Settings.SelectedCategoryId;
+
         if (Settings.Id == 0)
         {
             SettingsEntity settings = settingsModel.ToEntity();
@@ -540,7 +583,7 @@ public class ClientState
 
     // Matches the categories against the data already there and writes nothing.
     // The data is read from the store rather than from the loaded lists, because a refresh running at the
-    // same time, like the one after Delete all data, empties those lists until it has reloaded them.
+    // same time, like the one after Delete all data, leaves the old lists in place until it has reloaded them.
     public async Task<UserDataMerge> MergeUserData(List<CategoryModel> categoryModels, MergeOptions? options = null)
     {
         // The import adds to the loaded lists, so they have to be complete before it.

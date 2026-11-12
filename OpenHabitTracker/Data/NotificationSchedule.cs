@@ -124,8 +124,8 @@ public static class NotificationSchedule
         return ratio switch
         {
             Ratio.ElapsedToAverage => elapsed / habit.AverageInterval * 100.0,
-            Ratio.ElapsedToDesired => elapsed / habit.GetRepeatInterval() * 100.0,
-            Ratio.AverageToDesired => habit.AverageInterval / habit.GetRepeatInterval() * 100.0,
+            Ratio.ElapsedToDesired => elapsed / habit.DesiredInterval * 100.0,
+            Ratio.AverageToDesired => habit.AverageInterval / habit.DesiredInterval * 100.0,
             _ => throw new ArgumentOutOfRangeException(nameof(ratio))
         };
     }

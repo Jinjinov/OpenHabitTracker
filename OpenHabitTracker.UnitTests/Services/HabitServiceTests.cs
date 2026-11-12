@@ -1114,6 +1114,21 @@ public class HabitServiceTests
         Assert.That(result[1].Id, Is.EqualTo(2L));
     }
 
+    // Each row shows its ratio, so the list sorted by it reads in falling order.
+    [Test]
+    public void GetHabits_SortBySelectedRatio_WithRepeatCount_FollowsTheShownRatio()
+    {
+        HabitModel daily = TestData.Habit(id: 1, lastTimeDoneAt: DateTime.Now.AddHours(-20));
+        HabitModel threeTimesAWeek = TestData.Habit(id: 2, repeatCount: 3, repeatPeriod: Period.Week, lastTimeDoneAt: DateTime.Now.AddDays(-2));
+        _clientState.Habits = TestData.HabitDict(daily, threeTimesAWeek);
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.SelectedRatio;
+        _clientState.Settings.SelectedRatio = Ratio.ElapsedToDesired;
+
+        List<double> shown = _sut.GetHabits().Select(x => x.GetRatio(Ratio.ElapsedToDesired)).ToList();
+
+        Assert.That(shown, Is.Ordered.Descending);
+    }
+
     [Test]
     public void GetHabits_SortByCategory_ReturnsByCategory()
     {

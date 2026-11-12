@@ -215,7 +215,7 @@ public static class QueryExtensions
             Sort.TimeSpent => habits.OrderBy(x => x.TotalTimeSpent),
             Sort.AverageTimeSpent => habits.OrderBy(x => x.AverageTimeSpent),
             Sort.ElapsedTime => habits.OrderBy(x => x.LastTimeDoneAt),
-            Sort.SelectedRatio => habits.OrderByDescending(x => x.GetRatio(queryParameters.SelectedRatio) * x.NonZeroRepeatCount),
+            Sort.SelectedRatio => habits.OrderByDescending(x => x.GetRatio(queryParameters.SelectedRatio)),
             _ => habits
         };
     }

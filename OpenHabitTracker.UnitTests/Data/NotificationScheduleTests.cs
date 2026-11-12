@@ -177,6 +177,17 @@ public class NotificationScheduleTests
     }
 
     [Test]
+    public void Build_HabitWithRepeatCount_TurnsDueAfterTheIntervalDividedByTheCount()
+    {
+        // Done today, seven times every two weeks: it turns due on day two.
+        HabitModel habit = TestData.Habit(repeatCount: 7, repeatInterval: 2, repeatPeriod: Period.Week, lastTimeDoneAt: Now);
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(leadMinutes: null), Now);
+
+        Assert.That(result[0].NotifyAt.Date, Is.EqualTo(Now.Date.AddDays(2)));
+    }
+
+    [Test]
     public void Build_HabitNeverDone_MeasuresFromItsStart()
     {
         HabitModel habit = TestData.Habit(startAt: Now.AddDays(-2));

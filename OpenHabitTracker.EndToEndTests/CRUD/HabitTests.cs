@@ -144,6 +144,21 @@ public class HabitTests : BaseTest
         await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Edit Me" })).ToHaveCountAsync(0);
     }
 
+    // The title saves on change, which typing alone does not raise.
+    [Test]
+    public async Task EditHabit_TypeTitleThenEscape_TitleKept()
+    {
+        await AddItemAsync("Escape Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Escape Habit" }).ClickAsync();
+
+        await Page.Locator("input[aria-label='Habit title']").FillAsync("Typed Habit");
+        await Page.Keyboard.PressAsync("Escape");
+
+        await Expect(Page.Locator("#habit-component")).ToHaveCountAsync(0);
+        await Expect(Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Typed Habit" })).ToBeVisibleAsync();
+    }
+
     [Test]
     public async Task EditHabit_ChangeAllFields_CloseWorksOnFirstClick()
     {

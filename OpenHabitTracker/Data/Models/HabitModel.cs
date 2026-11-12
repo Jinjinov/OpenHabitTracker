@@ -35,11 +35,14 @@ public class HabitModel : ItemsModel
 
     internal TimeSpan ElapsedTime => LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : new TimeSpan(Math.Max(0L, (DateTime.Now - (StartAt ?? CreatedAt)).Ticks));
 
-    internal double ElapsedTimeToRepeatIntervalRatio => ElapsedTime / GetRepeatInterval() * 100.0;
+    // RepeatCount completions per repeat interval are one completion per this much time.
+    internal TimeSpan DesiredInterval => GetRepeatInterval() / NonZeroRepeatCount;
+
+    internal double ElapsedTimeToRepeatIntervalRatio => ElapsedTime / DesiredInterval * 100.0;
 
     internal double ElapsedTimeToAverageIntervalRatio => ElapsedTime / AverageInterval * 100.0;
 
-    internal double AverageIntervalToRepeatIntervalRatio => AverageInterval / GetRepeatInterval() * 100.0;
+    internal double AverageIntervalToRepeatIntervalRatio => AverageInterval / DesiredInterval * 100.0;
 
     internal Dictionary<DateTime, List<TimeModel>>? TimesDoneByDay { get; set; }
 

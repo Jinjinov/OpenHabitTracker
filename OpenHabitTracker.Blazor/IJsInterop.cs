@@ -13,6 +13,7 @@ public interface IJsInterop
     ValueTask FocusElement(ElementReference element);
     ValueTask FocusElementById(string id);
     ValueTask FocusAndClick(ElementReference element);
+    ValueTask BlurActiveElement();
     ValueTask TrapFocus(string id);
     ValueTask SaveFocus();
     ValueTask RestoreFocus();

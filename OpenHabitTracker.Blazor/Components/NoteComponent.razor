@@ -93,7 +93,12 @@
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Escape")
+        {
+            // A field saves on change, which closing never raises, because it removes the focused field.
+            await JsInterop.BlurActiveElement();
+
             await CloseSelected.InvokeAsync();
+        }
     }
 
     async Task SaveTitle(NoteModel note, string title)

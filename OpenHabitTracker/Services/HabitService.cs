@@ -126,15 +126,16 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
     public async Task UpdateHabit()
     {
-        if (Habits is null || SelectedHabit is null)
+        // Escape saves the focused field and closes the habit without waiting, and the close clears SelectedHabit.
+        if (Habits is null || SelectedHabit is not HabitModel selectedHabit)
             return;
 
-        if (await _clientState.DataAccess.GetHabit(SelectedHabit.Id) is HabitEntity habit)
+        if (await _clientState.DataAccess.GetHabit(selectedHabit.Id) is HabitEntity habit)
         {
-            SelectedHabit.CopyToEntity(habit);
+            selectedHabit.CopyToEntity(habit);
 
             await _clientState.DataAccess.UpdateHabit(habit);
-            SelectedHabit.UpdatedAt = habit.UpdatedAt;
+            selectedHabit.UpdatedAt = habit.UpdatedAt;
         }
 
         await _notificationScheduler.Rebuild();

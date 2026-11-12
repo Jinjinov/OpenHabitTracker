@@ -8,6 +8,7 @@
 @implements IDisposable
 
 @inject IHabitService HabitService
+@inject IJsInterop JsInterop
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
 @inject IGTourService GTourService
@@ -147,11 +148,11 @@
             <div>@Loc["Elapsed time"]: @ToReadableString(Habit.ElapsedTime)</div>
         </div>
         <div class="p-1 border rounded-0" data-habits-step-23>
-            <div>@Loc["Repeat interval"]: @ToReadableString(Habit.GetRepeatInterval())</div>
+            <div>@Loc["Repeat interval"]: @ToReadableString(Habit.DesiredInterval)</div>
             <div>@Loc["Elapsed time to repeat interval ratio"]: @Habit.ElapsedTimeToRepeatIntervalRatio.ToString("N0")%</div>
             @if (Habit.ElapsedTimeToRepeatIntervalRatio > 100.0)
             {
-                <div>@Loc["Repeat interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.GetRepeatInterval())</div>
+                <div>@Loc["Repeat interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.DesiredInterval)</div>
             }
         </div>
         <div class="p-1 border rounded-0" data-habits-step-24>
@@ -350,7 +351,12 @@
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Escape")
+        {
+            // A field saves on change, which closing never raises, because it removes the focused field.
+            await JsInterop.BlurActiveElement();
+
             await CloseSelected.InvokeAsync();
+        }
     }
 
     async Task SaveTitle(HabitModel habit, string title)

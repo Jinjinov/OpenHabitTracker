@@ -71,6 +71,7 @@ public static class MauiProgram
         builder.Services.AddBackup();
         builder.Services.AddBlazor();
         builder.Services.AddScoped<IAppReview, AppReview>(); // different in Maui
+        builder.Services.AddSingleton<NotificationRebuildRelay>(); // different in Maui, where App reaches it from outside the UI scope
         builder.Services.AddScoped<IOpenFile, OpenFile>(); // different in Maui, WinForms, Wpf
         builder.Services.AddScoped<ISaveFile, SaveFile>(); // different in Maui, WinForms, Wpf
         builder.Services.AddScoped<INavBarFragment, NavBarFragment>(); // different in Web

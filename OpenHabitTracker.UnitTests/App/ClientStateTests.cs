@@ -4,6 +4,7 @@ using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Services;
 
 namespace OpenHabitTracker.UnitTests.App;
 
@@ -314,6 +315,25 @@ public class ClientStateTests
         });
     }
 
+    // The file holds the category ids of the database it was exported from.
+    [Test]
+    public async Task SetUserData_KeepsThisDevicesCategoryFilter()
+    {
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>(
+            [new SettingsEntity { Id = 1, HiddenCategoryIds = [3], SelectedCategoryId = 3 }]));
+        _dataAccess.GetSettings(Arg.Any<long>()).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = 1 }));
+
+        await _sut.LoadSettings();
+
+        await _sut.SetUserData(new UserImportExportData { Settings = new SettingsModel { HiddenCategoryIds = [9], SelectedCategoryId = 9 } });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Settings.HiddenCategoryIds, Is.EqualTo(new[] { 3L }));
+            Assert.That(_sut.Settings.SelectedCategoryId, Is.EqualTo(3));
+        });
+    }
+
     [Test]
     public async Task AddUserData_LeavesTheSettingsAsTheyAre()
     {
@@ -532,6 +552,63 @@ public class ClientStateTests
         Assert.That(_sut.Notes, Is.Not.Null);
         Assert.That(_sut.Tasks, Is.Not.Null);
         Assert.That(_sut.Categories, Is.Not.Null);
+    }
+
+    // A poll refresh repaints only when it ends, so the list on screen stays clickable while it loads.
+    [Test]
+    public async Task RefreshState_WhileItLoads_AHabitMarkedDoneIsSaved()
+    {
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>([new HabitEntity { Id = 1, Title = "Read" }]));
+
+        await _sut.LoadHabits();
+
+        HabitModel onScreen = _sut.Habits![1];
+
+        TaskCompletionSource<IReadOnlyList<HabitEntity>> reload = new();
+        _dataAccess.GetHabits().Returns(reload.Task);
+
+        Task refresh = _sut.RefreshState();
+
+        HabitService habitService = new(_sut, new SearchFilterService(), Substitute.For<IAppReview>(), Substitute.For<INotificationScheduler>());
+        await habitService.MarkAsDone(onScreen);
+
+        reload.SetResult([new HabitEntity { Id = 1, Title = "Read" }]);
+        await refresh;
+
+        await _dataAccess.Received(1).AddTime(Arg.Any<TimeEntity>());
+    }
+
+    [Test]
+    public async Task RefreshState_WhenTheReloadFails_KeepsTheLoadedLists()
+    {
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([new NoteEntity { Id = 1, Title = "Kept" }]));
+
+        await _sut.LoadSettings();
+        await _sut.LoadNotes();
+
+        _dataAccess.GetNotes().Returns(Task.FromException<IReadOnlyList<NoteEntity>>(new HttpRequestException()));
+
+        Assert.ThrowsAsync<HttpRequestException>(() => _sut.RefreshState());
+
+        Assert.That(_sut.Notes!.Values.Select(x => x.Title), Is.EqualTo(new[] { "Kept" }));
+    }
+
+    // Two pages can load the same list at once, and the second must not add its models to the categories again.
+    [Test]
+    public async Task LoadNotes_TwoLoadsOverlapping_AddEachNoteToItsCategoryOnce()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 1, Title = "Work" }]));
+
+        TaskCompletionSource<IReadOnlyList<NoteEntity>> notes = new();
+        _dataAccess.GetNotes().Returns(notes.Task);
+
+        Task first = _sut.LoadNotes();
+        Task second = _sut.LoadNotes();
+
+        notes.SetResult([new NoteEntity { Id = 1, CategoryId = 1, Title = "Meeting" }]);
+        await Task.WhenAll(first, second);
+
+        Assert.That(_sut.Categories![1].Notes, Has.Count.EqualTo(1));
     }
 
     // Load examples runs while only the start page's list is loaded.

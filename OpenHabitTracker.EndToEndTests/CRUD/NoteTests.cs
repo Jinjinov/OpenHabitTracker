@@ -103,6 +103,22 @@ public class NoteTests : BaseTest
         await Expect(Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Note Edited Title" })).ToBeVisibleAsync();
     }
 
+    // The content saves on change, which typing alone does not raise.
+    [Test]
+    public async Task EditNote_TypeContentThenEscape_ContentKept()
+    {
+        await AddItemAsync("Escape Note");
+
+        await Page.Locator("[data-notes-step-2]").Filter(new LocatorFilterOptions { HasText = "Escape Note" }).ClickAsync();
+
+        await Page.Locator("[data-notes-step-8] textarea").ClickAsync();
+        await Page.Locator("[data-notes-step-8] textarea").PressSequentiallyAsync("typed before escape");
+        await Page.Keyboard.PressAsync("Escape");
+
+        await Expect(Page.Locator("#note-component")).ToHaveCountAsync(0);
+        await Expect(Page.Locator("[data-notes-step-3]").Filter(new LocatorFilterOptions { HasText = "typed before escape" })).ToHaveCountAsync(1);
+    }
+
     [Test]
     public async Task EditNote_ContentPersistsAfterReload()
     {

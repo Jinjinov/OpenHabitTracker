@@ -74,15 +74,16 @@ public class NoteService(ClientState clientState, ISearchFilterService searchFil
 
     public async Task UpdateNote()
     {
-        if (Notes is null || SelectedNote is null)
+        // Escape saves the focused field and closes the note without waiting, and the close clears SelectedNote.
+        if (Notes is null || SelectedNote is not NoteModel selectedNote)
             return;
 
-        if (await _clientState.DataAccess.GetNote(SelectedNote.Id) is NoteEntity note)
+        if (await _clientState.DataAccess.GetNote(selectedNote.Id) is NoteEntity note)
         {
-            SelectedNote.CopyToEntity(note);
+            selectedNote.CopyToEntity(note);
 
             await _clientState.DataAccess.UpdateNote(note);
-            SelectedNote.UpdatedAt = note.UpdatedAt;
+            selectedNote.UpdatedAt = note.UpdatedAt;
         }
     }
 

@@ -46,6 +46,7 @@ public static class Startup
         services.AddScoped<ITrashService, TrashService>();
         services.AddScoped<ISearchFilterService, SearchFilterService>();
         services.AddScoped<INotificationScheduler, NotificationScheduler>();
+        services.AddScoped<NotificationRebuildRelay>(); // different in Maui
 
         services.AddLocalization(options => options.ResourcesPath = @"Localization\Resources");
         services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
