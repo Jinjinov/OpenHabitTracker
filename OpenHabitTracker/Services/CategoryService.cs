@@ -57,13 +57,18 @@ public class CategoryService(ClientState clientState, INotificationScheduler not
         if (Categories is null || SelectedCategory is null)
             return;
 
-        SelectedCategory.Title = title;
-
-        if (await _clientState.DataAccess.GetCategory(SelectedCategory.Id) is CategoryEntity category)
+        // An empty title keeps the old one, because a category without a title shows blank,
+        // and an import reads it as no category.
+        if (!string.IsNullOrWhiteSpace(title))
         {
-            category.Title = SelectedCategory.Title;
+            SelectedCategory.Title = title;
 
-            await _clientState.DataAccess.UpdateCategory(category);
+            if (await _clientState.DataAccess.GetCategory(SelectedCategory.Id) is CategoryEntity category)
+            {
+                category.Title = SelectedCategory.Title;
+
+                await _clientState.DataAccess.UpdateCategory(category);
+            }
         }
 
         SelectedCategory = null;

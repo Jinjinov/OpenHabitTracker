@@ -164,7 +164,8 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
         await _notificationScheduler.Rebuild();
 
-        if (task.Items is null)
+        // Un-completing leaves the items as they are, because some were ticked by hand before the task was done.
+        if (task.Items is null || isCompleted)
             return;
 
         foreach (ItemModel item in task.Items)

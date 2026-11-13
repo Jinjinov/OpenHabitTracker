@@ -70,12 +70,15 @@
 
     List<(CategoryModel? Category, List<TaskModel> Tasks)> GetTaskGroups()
     {
+        QueryParameters queryParameters = SearchFilterService.GetQueryParameters(ClientState.Settings);
+
+        // Hiding completed tasks shortens the list, while the panel counts what was done this week.
+        queryParameters.HideCompletedTasks = false;
+
         if (!ClientState.Settings.ShowGroupedByCategory || CategoryService.Categories is null)
-            return new List<(CategoryModel?, List<TaskModel>)> { (null, TaskService.GetTasks().ToList()) };
+            return new List<(CategoryModel?, List<TaskModel>)> { (null, TaskService.Tasks!.FilterTasks(queryParameters).ToList()) };
 
         List<(CategoryModel? Category, List<TaskModel> Tasks)> result = new();
-
-        QueryParameters queryParameters = SearchFilterService.GetQueryParameters(ClientState.Settings);
 
         foreach (CategoryModel category in CategoryService.Categories)
         {

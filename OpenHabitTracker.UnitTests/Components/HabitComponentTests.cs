@@ -114,11 +114,9 @@ public class HabitComponentTests
         _habit.TimesDone = [laterToday, running];
         _habitService.When(x => x.MarkAsDone(_habit, Arg.Any<double?>())).Do(_ => running.CompletedAt = DateTime.Now);
 
+        // The running entry shows as a running timer when the detail opens.
         IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
             parameters => parameters.Add(p => p.Habit, _habit));
-
-        // Not awaited, for the reason in StartTimer_ButtonClick_InvokesHabitServiceStart.
-        Task _ = cut.Find("[data-habits-step-19] button").ClickAsync(new MouseEventArgs());
 
         await cut.WaitForElement("button[aria-label='Stop']").ClickAsync(new MouseEventArgs());
 
@@ -127,6 +125,22 @@ public class HabitComponentTests
 
         await _habitService.Received(1).UpdateQuantity(_habit, running);
         Assert.That(running.Quantity, Is.EqualTo(7));
+    }
+
+    // A timer started before the detail was closed is still running in the data.
+    [Test]
+    public void Render_HabitWithARunningEntry_ShowsTheTimerRunningSinceItsStart()
+    {
+        _habit.TimesDone = [new TimeModel { Id = 1, StartedAt = DateTime.Now.AddMinutes(-5) }];
+
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.FindAll("button[aria-label='Stop']"), Has.Count.EqualTo(1));
+            Assert.That(cut.Find("[data-habits-step-19] span.input-group-text").TextContent, Does.StartWith("00:05:"));
+        });
     }
 
     [Test]

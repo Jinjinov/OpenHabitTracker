@@ -4,7 +4,6 @@ using OpenHabitTracker.Data.Models;
 using OpenHabitTracker.Query;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace OpenHabitTracker.Services;
 
@@ -58,31 +57,30 @@ public class SearchFilterService : ISearchFilterService
         };
     }
 
+    // The result is rendered as markup, so the text is encoded to show as typed, like "Learn <canvas> API".
     public string MarkSearchResults(string text)
     {
         if (string.IsNullOrEmpty(SearchTerm))
-            return text;
+            return WebUtility.HtmlEncode(text);
 
-        if (MatchCase)
-            return text.Replace(SearchTerm, $"<mark>{SearchTerm}</mark>");
-        else
-            return MarkSearchResults(text, "<mark>", "</mark>");
-    }
+        StringComparison comparisonType = MatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
-    string MarkSearchResults(string input, string before, string after)
-    {
-        // Create a pattern to match the search term with case-insensitivity
-        string pattern = "(?i)" + Regex.Escape(SearchTerm!);
+        StringBuilder marked = new();
+        int start = 0;
+        int index = text.IndexOf(SearchTerm, comparisonType);
 
-        // Replace the search term with the marked version
-        return Regex.Replace(input, pattern, match =>
+        while (index >= 0)
         {
-            // Get the matched search term with its original case
-            string matchedTerm = match.Value;
+            marked.Append(WebUtility.HtmlEncode(text[start..index]));
+            marked.Append("<mark>").Append(WebUtility.HtmlEncode(text.Substring(index, SearchTerm.Length))).Append("</mark>");
 
-            // Add mark tag to the start and end of the matched term
-            return $"{before}{matchedTerm}{after}";
-        });
+            start = index + SearchTerm.Length;
+            index = text.IndexOf(SearchTerm, start, comparisonType);
+        }
+
+        marked.Append(WebUtility.HtmlEncode(text[start..]));
+
+        return marked.ToString();
     }
 
     public string MarkSearchResultsInHtml(string text)
@@ -106,26 +104,8 @@ public class SearchFilterService : ISearchFilterService
         {
             string decoded = HtmlEntity.DeEntitize(node.Text);
 
-            int index = decoded.IndexOf(SearchTerm, comparisonType);
-
-            if (index < 0)
-                continue;
-
-            StringBuilder marked = new();
-            int start = 0;
-
-            while (index >= 0)
-            {
-                marked.Append(WebUtility.HtmlEncode(decoded[start..index]));
-                marked.Append("<mark>").Append(WebUtility.HtmlEncode(decoded.Substring(index, SearchTerm.Length))).Append("</mark>");
-
-                start = index + SearchTerm.Length;
-                index = decoded.IndexOf(SearchTerm, start, comparisonType);
-            }
-
-            marked.Append(WebUtility.HtmlEncode(decoded[start..]));
-
-            node.Text = marked.ToString();
+            if (decoded.Contains(SearchTerm, comparisonType))
+                node.Text = MarkSearchResults(decoded);
         }
 
         return htmlDoc.DocumentNode.OuterHtml;

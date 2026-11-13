@@ -420,11 +420,15 @@
         await HabitChanged.InvokeAsync(Habit);
     }
 
+    // The inputs hold only a time of day, so each keeps its own date, and an entry from 23:30 to 00:30
+    // is compared across midnight.
     async Task UpdateStartedAt(TimeModel time, DateTime startedAt)
     {
-        if (startedAt.TimeOfDay <= time.CompletedAt?.TimeOfDay)
+        DateTime newStartedAt = time.StartedAt.Date + startedAt.TimeOfDay;
+
+        if (newStartedAt <= time.CompletedAt)
         {
-            time.StartedAt = time.StartedAt.Date + startedAt.TimeOfDay;
+            time.StartedAt = newStartedAt;
 
             await HabitService.UpdateTimeDone(Habit!, time);
 
@@ -434,9 +438,11 @@
 
     async Task UpdateCompletedAt(TimeModel time, DateTime? completedAt)
     {
-        if (completedAt?.TimeOfDay >= time.StartedAt.TimeOfDay)
+        DateTime? newCompletedAt = time.CompletedAt?.Date + completedAt?.TimeOfDay;
+
+        if (newCompletedAt >= time.StartedAt)
         {
-            time.CompletedAt = time.CompletedAt?.Date + completedAt?.TimeOfDay;
+            time.CompletedAt = newCompletedAt;
 
             await HabitService.UpdateTimeDone(Habit!, time);
 

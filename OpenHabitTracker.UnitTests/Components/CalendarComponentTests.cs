@@ -364,6 +364,30 @@ public class CalendarComponentTests
     }
 
     [Test]
+    public async Task TimeList_EntryAcrossMidnight_StartAndEndCanBeChanged()
+    {
+        TimeModel entry = new() { StartedAt = DateTime.Today.AddHours(23).AddMinutes(30), CompletedAt = DateTime.Today.AddDays(1).AddMinutes(30) };
+        _habit.TimesDoneByDay = new Dictionary<DateTime, List<TimeModel>> { [DateTime.Today] = [entry] };
+
+        IRenderedComponent<CalendarComponent> cut = _ctx.Render<CalendarComponent>(
+            parameters => parameters
+                .Add(p => p.Habit, _habit)
+                .Add(p => p.DisplayMonth, true)
+                .Add(p => p.DisplayTimeList, true));
+
+        await cut.Find("button.border-primary-subtle").ClickAsync(new MouseEventArgs());
+
+        cut.Find("input[aria-label='From']").Change("23:00");
+        cut.Find("input[aria-label='to']").Change("00:45");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(entry.StartedAt, Is.EqualTo(DateTime.Today.AddHours(23)));
+            Assert.That(entry.CompletedAt, Is.EqualTo(DateTime.Today.AddDays(1).AddMinutes(45)));
+        });
+    }
+
+    [Test]
     public void MonthView_Quantity_CellShowsSumInParens()
     {
         _habit.DisplayMetric = DisplayMetric.Quantity;

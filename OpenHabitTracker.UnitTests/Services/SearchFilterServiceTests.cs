@@ -110,6 +110,20 @@ public class SearchFilterServiceTests
         Assert.That(result, Is.EqualTo("Some text"));
     }
 
+    // A title is plain text, and the result is rendered as markup.
+    [TestCase(null, "Learn <canvas> API")]
+    [TestCase("a", "Learn <canvas> API")]
+    [TestCase("b", "a<b c")]
+    [TestCase("t", "Tom & Jerry")]
+    public void MarkSearchResults_TextWithMarkupCharacters_ShowsAsTyped(string? term, string text)
+    {
+        _sut.SearchTerm = term;
+
+        string result = _sut.MarkSearchResults(text);
+
+        Assert.That(VisibleText(result), Is.EqualTo(text));
+    }
+
     // --- MarkSearchResultsInHtml tests ---
 
     [Test]

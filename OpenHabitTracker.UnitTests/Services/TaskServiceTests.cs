@@ -621,21 +621,24 @@ public class TaskServiceTests
     }
 
     [Test]
-    public async Task MarkAsDone_WhenAlreadyDone_ClearsAllItemsDoneAt()
+    public async Task MarkAsDone_WhenAlreadyDone_LeavesTheItemsAsTheyAre()
     {
+        DateTime tickedAt = DateTime.Now.AddMinutes(-5);
         TaskModel task = TestData.Task(id: 1, completedAt: DateTime.Now.AddMinutes(-5));
-        ItemModel item1 = new() { Id = 10, DoneAt = DateTime.Now.AddMinutes(-5) };
-        ItemModel item2 = new() { Id = 11, DoneAt = DateTime.Now.AddMinutes(-5) };
+        ItemModel item1 = new() { Id = 10, DoneAt = tickedAt };
+        ItemModel item2 = new() { Id = 11, DoneAt = tickedAt };
         task.Items = [item1, item2];
         _clientState.Tasks = TestData.TaskDict(task);
         _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
-        _dataAccess.GetItem(item1.Id).Returns(Task.FromResult<ItemEntity?>(new ItemEntity { Id = item1.Id }));
-        _dataAccess.GetItem(item2.Id).Returns(Task.FromResult<ItemEntity?>(new ItemEntity { Id = item2.Id }));
 
         await _sut.MarkAsDone(task);
 
-        Assert.That(item1.DoneAt, Is.Null);
-        Assert.That(item2.DoneAt, Is.Null);
+        Assert.Multiple(() =>
+        {
+            Assert.That(item1.DoneAt, Is.EqualTo(tickedAt));
+            Assert.That(item2.DoneAt, Is.EqualTo(tickedAt));
+        });
+        await _dataAccess.DidNotReceive().UpdateItem(Arg.Any<ItemEntity>());
     }
 
     [Test]

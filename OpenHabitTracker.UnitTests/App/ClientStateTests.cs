@@ -599,14 +599,18 @@ public class ClientStateTests
     {
         _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 1, Title = "Work" }]));
 
-        TaskCompletionSource<IReadOnlyList<NoteEntity>> notes = new();
-        _dataAccess.GetNotes().Returns(notes.Task);
+        TaskCompletionSource<IReadOnlyList<NoteEntity>> firstNotes = new();
+        TaskCompletionSource<IReadOnlyList<NoteEntity>> secondNotes = new();
+        _dataAccess.GetNotes().Returns(firstNotes.Task, secondNotes.Task);
 
         Task first = _sut.LoadNotes();
         Task second = _sut.LoadNotes();
 
-        notes.SetResult([new NoteEntity { Id = 1, CategoryId = 1, Title = "Meeting" }]);
-        await Task.WhenAll(first, second);
+        firstNotes.SetResult([new NoteEntity { Id = 1, CategoryId = 1, Title = "Meeting" }]);
+        await first;
+
+        secondNotes.SetResult([new NoteEntity { Id = 1, CategoryId = 1, Title = "Meeting" }]);
+        await second;
 
         Assert.That(_sut.Categories![1].Notes, Has.Count.EqualTo(1));
     }

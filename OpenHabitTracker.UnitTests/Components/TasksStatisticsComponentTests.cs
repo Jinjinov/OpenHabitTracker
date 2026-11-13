@@ -100,6 +100,23 @@ public class TasksStatisticsComponentTests
     }
 
     [Test]
+    public void HideCompletedTasks_CompletedTask_IsCountedAsDone()
+    {
+        _clientState.Settings.HideCompletedTasks = true;
+        List<TaskModel> tasks = new() { TestData.Task(id: 1, completedAt: DateTime.Now), TestData.Task(id: 2) };
+        _taskService.Tasks.Returns(tasks);
+        _taskService.GetTasks().Returns(tasks.Where(x => x.CompletedAt is null));
+
+        IRenderedComponent<TasksStatisticsComponent> cut = _ctx.Render<TasksStatisticsComponent>();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Find("span.badge.bg-body-secondary").TextContent, Is.EqualTo("Total: 2"));
+            Assert.That(cut.Find("span.badge.bg-success-subtle").TextContent, Is.EqualTo("Done: 1"));
+        });
+    }
+
+    [Test]
     public void PageStateChanged_ReadsServiceOnEachRender_ShowsFreshCount()
     {
         // First render: 1 task
@@ -149,6 +166,17 @@ public class TasksStatisticsComponentTests
         IRenderedComponent<TasksStatisticsComponent> cut = _ctx.Render<TasksStatisticsComponent>();
 
         Assert.That(cut.Find("span.badge.bg-body-secondary").TextContent, Is.EqualTo("Total: 1"));
+    }
+
+    [Test]
+    public void Grouped_HideCompletedTasks_CompletedTaskIsCountedAsDone()
+    {
+        SetUpOneCategory(1, "Work", new TaskModel { Id = 1, Title = "Finished", CategoryId = 1, CompletedAt = DateTime.Now });
+        _clientState.Settings.HideCompletedTasks = true;
+
+        IRenderedComponent<TasksStatisticsComponent> cut = _ctx.Render<TasksStatisticsComponent>();
+
+        Assert.That(cut.Find("span.badge.bg-success-subtle").TextContent, Is.EqualTo("Done: 1"));
     }
 
     // A category unchecked earlier, while the filter showed check boxes, is still selectable as a radio button.

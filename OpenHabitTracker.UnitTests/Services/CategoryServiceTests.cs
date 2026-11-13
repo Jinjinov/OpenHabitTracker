@@ -131,6 +131,24 @@ public class CategoryServiceTests
         Assert.That(category.Title, Is.EqualTo("New Title"));
     }
 
+    [TestCase("")]
+    [TestCase("   ")]
+    public async Task UpdateCategory_EmptyTitle_KeepsTheOldTitle(string title)
+    {
+        CategoryModel category = TestData.Category(id: 1, title: "Old Title");
+        _clientState.Categories = TestData.CategoryDict(category);
+        _sut.SelectedCategory = category;
+
+        await _sut.UpdateCategory(title);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(category.Title, Is.EqualTo("Old Title"));
+            Assert.That(_sut.SelectedCategory, Is.Null);
+        });
+        await _dataAccess.DidNotReceive().UpdateCategory(Arg.Any<CategoryEntity>());
+    }
+
     [Test]
     public async Task UpdateCategory_ClearsSelectedCategory()
     {

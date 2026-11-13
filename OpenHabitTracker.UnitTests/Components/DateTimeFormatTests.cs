@@ -55,7 +55,7 @@ public class DateTimeFormatTests
         _ctx.Services.AddScoped(_ => _taskService);
         _ctx.Services.AddScoped(_ => _habitService);
         _ctx.Services.AddScoped(_ => Substitute.For<ICategoryService>());
-        _ctx.Services.AddScoped(_ => Substitute.For<ISearchFilterService>());
+        _ctx.Services.AddScoped<ISearchFilterService>(_ => new SearchFilterService());
         _ctx.Services.AddScoped(_ => Substitute.For<IItemService>());
         _ctx.Services.AddScoped(_ => Substitute.For<IJsInterop>());
         _ctx.Services.AddScoped(_ => Substitute.For<IGTourService>());

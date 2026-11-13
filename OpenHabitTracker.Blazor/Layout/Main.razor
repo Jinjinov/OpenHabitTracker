@@ -202,6 +202,7 @@
     private Type? _previousDynamicComponentType;
     private bool _sidebarWasOpen;
     private bool _openedByNotification;
+    private bool _firstRenderDone;
 
     private ElementReference _menuButtonRef;
     private ElementReference _searchButtonRef;
@@ -287,9 +288,9 @@
         // Tapping a notification navigates to what it was about.
         Notifications.SetActivatedAction(OnNotificationActivated);
 
-        // Import, delete-all and a sync pull replace the data wholesale, and ClientState cannot
-        // reach the scheduler itself.
-        ClientState.SetDataReplacedAction(() => NotificationScheduler.Rebuild());
+        // Import, delete-all and a sync pull replace the data wholesale, settings included, and ClientState cannot
+        // reach the scheduler or the page itself.
+        ClientState.SetDataReplacedAction(OnDataReplaced);
 
         // A resumed window arrives from outside the renderer.
         NotificationRebuildRelay.SetRebuildAction(() => InvokeAsync(NotificationScheduler.Rebuild));
@@ -328,6 +329,24 @@
         SelectComponent<Sync>();
 
         await InvokeAsync(RepaintReplacedData);
+    }
+
+    private async Task OnDataReplaced()
+    {
+        // The first render sets the look from the settings, and there is no page to set before it.
+        if (_firstRenderDone)
+            await InvokeAsync(SetLook);
+
+        await NotificationScheduler.Rebuild();
+    }
+
+    private async Task SetLook()
+    {
+        ClientState.SetCulture();
+
+        await JsInterop.SetMode(ClientState.Settings.IsDarkMode ? "dark" : "light");
+        await JsInterop.SetTheme(ClientState.Settings.Theme);
+        await JsInterop.SetLang(Localization.Loc.Cultures[ClientState.Settings.Culture].Culture.Name);
     }
 
     // Runs outside any browser event, so it has to set the culture itself. The flip reaches the
@@ -424,6 +443,8 @@
             }
 
             StateHasChanged();
+
+            _firstRenderDone = true;
 
             Logger.LogInformation("MainLayout.OnAfterRenderAsync end");
         }

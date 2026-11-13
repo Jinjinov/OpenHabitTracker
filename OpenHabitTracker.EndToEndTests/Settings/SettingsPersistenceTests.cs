@@ -39,6 +39,21 @@ public class SettingsPersistenceTests : BaseTest
         await Expect(Page.Locator("html")).ToHaveAttributeAsync("data-bs-theme", "light");
     }
 
+    // Delete all data resets the settings, and the page follows them without a reload.
+    [Test]
+    public async Task DarkMode_DeleteAllData_BackToDarkImmediately()
+    {
+        await OpenSettingsAsync();
+        await Page.Locator("label[for='IsDarkMode']").ClickAsync();
+        await Expect(Page.Locator("html")).ToHaveAttributeAsync("data-bs-theme", "light");
+        await CloseSidebarAsync();
+
+        await OpenSidebarAsync("bi-database");
+        await Page.Locator("[data-data-step-2]").ClickAsync();
+
+        await Expect(Page.Locator("html")).ToHaveAttributeAsync("data-bs-theme", "dark");
+    }
+
     [Test]
     public async Task Language_Change_AppliesImmediately()
     {

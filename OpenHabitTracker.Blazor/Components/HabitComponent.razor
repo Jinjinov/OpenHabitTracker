@@ -267,16 +267,31 @@
         await HabitChanged.InvokeAsync(Habit);
     }
 
+    protected override void OnParametersSet()
+    {
+        // A timer keeps running in the data after the detail is closed, so the detail shows it again when it opens.
+        if (_timer is null && Habit.TimesDone?.LastOrDefault(x => x.CompletedAt is null) is TimeModel running)
+            _ = RunTimer(running.StartedAt);
+    }
+
     async Task StartTimer()
     {
         if (Habit is null)
             return;
 
-        TimeSpan? duration = Habit.Duration?.ToTimeSpan();
-
         await HabitService.Start(Habit);
 
-        ResetTimer();
+        await RunTimer(DateTime.Now);
+    }
+
+    async Task RunTimer(DateTime startedAt)
+    {
+        TimeSpan? duration = Habit.Duration?.ToTimeSpan();
+
+        _taskStartedTime = startedAt;
+        _elapsedTime = DateTime.Now - startedAt;
+        _previouslyElapsedTime = TimeSpan.Zero;
+        _isPaused = false;
 
         _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
 
