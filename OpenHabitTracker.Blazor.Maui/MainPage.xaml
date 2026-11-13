@@ -4,13 +4,17 @@
              xmlns:oht="clr-namespace:OpenHabitTracker.Blazor;assembly=OpenHabitTracker.Blazor"
              x:Class="OpenHabitTracker.Blazor.Maui.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
-             SafeAreaEdges="Container, Container, Container, None">
+             SafeAreaEdges="{OnPlatform Default='Container, Container, Container, None', Android='Container, Container, Container, SoftInput'}">
 
     <!-- Bottom None draws the page under the Android navigation bar and the iOS home indicator;
          the scroll containers in app.css end with a spacer of that height so the page stays reachable.
          Gesture navigation would hide a missing spacer (transparent 24 dp strip), three-button navigation
          would not (an opaque 48 dp bar covers the end of every page), so test on three-button navigation.
-         Container instead reserves the strip and paints it in PageBackgroundColor. -->
+         Container instead reserves the strip and paints it in PageBackgroundColor.
+         Android uses SoftInput for the bottom: it acts as None while the keyboard is hidden, and while it is shown
+         it shrinks the page above the keyboard, which nothing else does since MAUI draws Android edge-to-edge -
+         WindowSoftInputModeAdjust.Resize alone leaves the page full height and the end of a long note under the keyboard.
+         Container on the bottom would not help, because it excludes the keyboard. -->
 
     <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
         <BlazorWebView.RootComponents>
