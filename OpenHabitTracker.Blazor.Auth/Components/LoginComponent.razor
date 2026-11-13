@@ -13,7 +13,7 @@
 @* Signed in, the account on the Sync page shows who is signed in and logs out. *@
 @if (ClientState.DataLocation == DataLocation.Local)
 {
-    <input class="form-control my-1" @bind="address" placeholder="@Loc["Address"]" />
+    <input class="form-control my-1" @bind="address" placeholder="@Loc["Address"]" autocapitalize="off" />
     <input class="form-control my-1" @bind="username" placeholder="@Loc["Username"]" />
     <input class="form-control my-1" @bind="password" placeholder="@Loc["Password"]" type="password" />
 
