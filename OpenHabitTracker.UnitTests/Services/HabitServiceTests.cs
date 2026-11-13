@@ -330,6 +330,19 @@ public class HabitServiceTests
         Assert.That(added.UpdatedAt, Is.InRange(before, after));
     }
 
+    // The new habit form binds the repeat inputs straight to NewHabit, so a typed 0 or negative number reaches AddHabit.
+    [TestCase(0, 0)]
+    [TestCase(-3, -3)]
+    public async Task AddHabit_RepeatBelowOne_SavesOne(int repeatCount, int repeatInterval)
+    {
+        _clientState.Habits = new();
+        _sut.NewHabit = new HabitModel { Title = "New", RepeatCount = repeatCount, RepeatInterval = repeatInterval };
+
+        await _sut.AddHabit();
+
+        await _dataAccess.Received(1).AddHabit(Arg.Is<HabitEntity>(x => x.RepeatCount == 1 && x.RepeatInterval == 1));
+    }
+
     [Test]
     public async Task AddHabit_AddsHabitToClientStateDictionary()
     {

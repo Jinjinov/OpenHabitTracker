@@ -54,10 +54,10 @@
 
             <div class="input-group">
                 <label class="input-group-text bg-transparent" for="countInput">@Loc["Repeat"]</label>
-                <InputNumber class="form-control" id="countInput" @bind-Value="HabitService.NewHabit.RepeatCount" />
+                <InputNumber class="form-control" id="countInput" min="1" @bind-Value="HabitService.NewHabit.RepeatCount" />
 
                 <label class="input-group-text bg-transparent" for="intervalInput">@Loc["every"]</label>
-                <InputNumber class="form-control" id="intervalInput" @bind-Value="HabitService.NewHabit.RepeatInterval" />
+                <InputNumber class="form-control" id="intervalInput" min="1" @bind-Value="HabitService.NewHabit.RepeatInterval" />
 
                 <InputSelect class="form-select" aria-label="@Loc["Repeat period"]" @bind-Value="HabitService.NewHabit.RepeatPeriod">
                     @foreach (Period period in Enum.GetValues<Period>())

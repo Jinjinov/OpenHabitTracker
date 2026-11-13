@@ -106,6 +106,10 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         NewHabit.CreatedAt = now;
         NewHabit.UpdatedAt = now;
 
+        // The new habit form binds its repeat inputs straight to NewHabit, and a repeat below 1 makes the ratio infinite or negative.
+        NewHabit.RepeatCount = Math.Max(1, NewHabit.RepeatCount);
+        NewHabit.RepeatInterval = Math.Max(1, NewHabit.RepeatInterval);
+
         HabitEntity habit = NewHabit.ToEntity();
 
         await _clientState.DataAccess.AddHabit(habit);

@@ -49,10 +49,10 @@
 
     <div class="input-group" data-habits-step-15>
         <label class="input-group-text bg-transparent" for="@($"countInput-{Habit.Id}")">@Loc["Repeat"]</label>
-        <InputNumber class="form-control" id="@($"countInput-{Habit.Id}")" Value="Habit.RepeatCount" ValueExpression="() => Habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(Habit, repeatCount)" />
+        <InputNumber @key="(nameof(Habit.RepeatCount), _repeatInputsVersion)" class="form-control" id="@($"countInput-{Habit.Id}")" min="1" Value="Habit.RepeatCount" ValueExpression="() => Habit.RepeatCount" ValueChanged="(int repeatCount) => SaveRepeatCount(Habit, repeatCount)" />
 
         <label class="input-group-text bg-transparent" for="@($"intervalInput-{Habit.Id}")">@Loc["every"]</label>
-        <InputNumber class="form-control" id="@($"intervalInput-{Habit.Id}")" Value="Habit.RepeatInterval" ValueExpression="() => Habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(Habit, repeatInterval)" />
+        <InputNumber @key="(nameof(Habit.RepeatInterval), _repeatInputsVersion)" class="form-control" id="@($"intervalInput-{Habit.Id}")" min="1" Value="Habit.RepeatInterval" ValueExpression="() => Habit.RepeatInterval" ValueChanged="(int repeatInterval) => SaveRepeatInterval(Habit, repeatInterval)" />
 
         <InputSelect class="form-select" aria-label="@Loc["Repeat period"]" Value="Habit.RepeatPeriod" ValueExpression="() => Habit.RepeatPeriod" ValueChanged="(Period repeatPeriod) => SaveRepeatPeriod(Habit, repeatPeriod)">
             @foreach (Period period in Enum.GetValues<Period>())
@@ -112,7 +112,7 @@
             <button class="btn btn-outline-primary" aria-label="@Loc["Reset"]" @onclick="ResetTimer"><i class="bi bi-arrow-counterclockwise"></i></button>
             if (_isPaused)
             {
-                <button class="btn btn-outline-primary" aria-label="@Loc["Resume"]" @onclick="ResumeTimer"><i class="bi bi-play"></i></button>
+                <button class="btn btn-outline-primary" aria-label="@Loc["Resume"]" @onclick="ResumeAndSaveTimer"><i class="bi bi-play"></i></button>
             }
             else
             {
@@ -261,6 +261,7 @@
     bool _showQuantityModal;
     bool _isTimerStopModal;
     TimeModel? _stoppedTime;
+    int _repeatInputsVersion;
 
     async Task OnHabitChanged()
     {
@@ -331,6 +332,14 @@
         _isPaused = false;
     }
 
+    // The start moves later by the length of the pause, and a detail opened later shows the timer from the saved start.
+    async Task ResumeAndSaveTimer()
+    {
+        ResumeTimer();
+
+        await HabitService.SetStartTime(Habit, _taskStartedTime);
+    }
+
     async Task StopTimer()
     {
         if (Habit is null || _timer is null)
@@ -383,16 +392,28 @@
 
     async Task SaveRepeatCount(HabitModel habit, int repeatCount)
     {
-        habit.RepeatCount = repeatCount;
+        habit.RepeatCount = AtLeastOne(repeatCount);
 
         await HabitService.UpdateHabit();
     }
 
     async Task SaveRepeatInterval(HabitModel habit, int repeatInterval)
     {
-        habit.RepeatInterval = repeatInterval;
+        habit.RepeatInterval = AtLeastOne(repeatInterval);
 
         await HabitService.UpdateHabit();
+    }
+
+    // A repeat below 1 makes the ratio infinite or negative, so 1 is saved instead.
+    // The input keeps what was typed while the value it is given stays the same, so a new version rebuilds it.
+    int AtLeastOne(int repeat)
+    {
+        if (repeat >= 1)
+            return repeat;
+
+        _repeatInputsVersion++;
+
+        return 1;
     }
 
     async Task SaveRepeatPeriod(HabitModel habit, Period repeatPeriod)

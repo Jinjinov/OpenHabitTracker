@@ -285,14 +285,14 @@
                     <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show only habits with interval ratio over"] @_settings.SelectedRatioMin%</label>
                 </div>
 
-                <input type="range" class="form-range d-block" aria-label="@Loc["Minimum interval ratio"]" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-19 />
+                <input type="range" class="form-range d-block" aria-label="@Loc["Minimum interval ratio"]" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SetSelectedRatioMin(Convert.ToInt32(args.Value))" @onchange="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-19 />
 
                 <div class="position-relative mt-2" data-search-step-20>
                     <InputCheckbox id="ShowOnlyUnderSelectedRatioMax" class="form-check-input me-1" Value="_settings.ShowOnlyUnderSelectedRatioMax" ValueExpression="() => _settings.ShowOnlyUnderSelectedRatioMax" ValueChanged="SaveShowOnlyUnderSelectedRatioMax" />
                     <label for="ShowOnlyUnderSelectedRatioMax" class="form-check-label stretched-link d-inline">@Loc["Show only habits with interval ratio under"] @_settings.SelectedRatioMax%</label>
                 </div>
 
-                <input type="range" class="form-range d-block" aria-label="@Loc["Maximum interval ratio"]" min="0" max="300" value="@_settings.SelectedRatioMax" @oninput="(ChangeEventArgs args) => SaveSelectedRatioMax(Convert.ToInt32(args.Value))" data-search-step-21 />
+                <input type="range" class="form-range d-block" aria-label="@Loc["Maximum interval ratio"]" min="0" max="300" value="@_settings.SelectedRatioMax" @oninput="(ChangeEventArgs args) => SetSelectedRatioMax(Convert.ToInt32(args.Value))" @onchange="(ChangeEventArgs args) => SaveSelectedRatioMax(Convert.ToInt32(args.Value))" data-search-step-21 />
             </div>
             }
 
@@ -550,6 +550,14 @@
         await UpdateSettings();
     }
 
+    // A drag raises an input event at every step, so the list follows each step and the settings are saved on release.
+    async Task SetSelectedRatioMin(int min)
+    {
+        _settings.SelectedRatioMin = min;
+
+        await UpdateStateChanged();
+    }
+
     async Task SaveSelectedRatioMin(int min)
     {
         _settings.SelectedRatioMin = min;
@@ -562,6 +570,13 @@
         _settings.ShowOnlyUnderSelectedRatioMax = show;
 
         await UpdateSettings();
+    }
+
+    async Task SetSelectedRatioMax(int max)
+    {
+        _settings.SelectedRatioMax = max;
+
+        await UpdateStateChanged();
     }
 
     async Task SaveSelectedRatioMax(int max)

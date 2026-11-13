@@ -499,6 +499,29 @@ public class HabitTests : BaseTest
         await Expect(todayCell).ToContainTextAsync("(5)");
     }
 
+    // An end before the start is not saved, so the input must not keep showing it.
+    [Test]
+    public async Task LargeCalendar_EndBeforeStartInTimeList_InputShowsTheSavedEndAgain()
+    {
+        await AddItemAsync("Time List End Habit");
+
+        await Page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasText = "Time List End Habit" }).ClickAsync();
+
+        string todayPrefix = DateTime.Today.ToString("dddd, MMMM d");
+        await Page.Locator($"#habit-component button[role='gridcell'][aria-label^='{todayPrefix}']").ClickAsync();
+
+        await Page.Locator("button[aria-label='Increase']").ClickAsync();
+
+        ILocator end = Page.Locator("#habit-component input[aria-label='to']");
+        await Expect(end).Not.ToHaveValueAsync("");
+        string savedEnd = await end.InputValueAsync();
+
+        await end.FillAsync("00:00");
+        await end.BlurAsync();
+
+        await Expect(end).ToHaveValueAsync(savedEnd);
+    }
+
     // Path C: timer stop in Quantity mode shows modal without cancel button
     [Test]
     public async Task Timer_Stop_QuantityMode_ModalHasNoCancelButton()

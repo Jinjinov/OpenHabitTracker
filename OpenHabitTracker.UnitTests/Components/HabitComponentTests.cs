@@ -143,6 +143,44 @@ public class HabitComponentTests
         });
     }
 
+    // Repeat 0 or every 0 gives an infinite ratio, and a negative number negative ratios.
+    [TestCase("#countInput-0", "0")]
+    [TestCase("#countInput-0", "-3")]
+    [TestCase("#intervalInput-0", "0")]
+    [TestCase("#intervalInput-0", "-3")]
+    public void RepeatInput_BelowOne_SavesAndShowsOne(string input, string typed)
+    {
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        cut.Find(input).Change(typed);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_habit.RepeatCount, Is.EqualTo(1));
+            Assert.That(_habit.RepeatInterval, Is.EqualTo(1));
+            Assert.That(cut.Find(input).GetAttribute("value"), Is.EqualTo("1"));
+            Assert.That(cut.Find(input).GetAttribute("min"), Is.EqualTo("1"));
+        });
+        _habitService.Received(1).UpdateHabit();
+    }
+
+    // The time a pause lasted is not part of the completion, so the moved start is saved on Resume.
+    [Test]
+    public async Task Timer_PauseThenResume_SavesTheMovedStart()
+    {
+        IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
+            parameters => parameters.Add(p => p.Habit, _habit));
+
+        // Not awaited, for the reason in StartTimer_ButtonClick_InvokesHabitServiceStart.
+        Task _ = cut.Find("[data-habits-step-19] button").ClickAsync(new MouseEventArgs());
+
+        await cut.WaitForElement("button[aria-label='Pause']").ClickAsync(new MouseEventArgs());
+        await cut.WaitForElement("button[aria-label='Resume']").ClickAsync(new MouseEventArgs());
+
+        await _habitService.Received(1).SetStartTime(_habit, Arg.Any<DateTime>());
+    }
+
     [Test]
     public async Task DeleteButton_Click_InvokesHabitServiceDeleteHabit()
     {
