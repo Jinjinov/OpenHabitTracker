@@ -1,0 +1,7 @@
+• Viac používateľských účtov s oddelenými údajmi na vlastnom serveri
+• Import z Loop, HabitNow, Habitica a Habitify
+• Desatinné množstvá pri návykoch
+• Nastavenia formátu dátumu a formátu času
+• Rýchlejšie spustenie aplikácie a prihlásenie do online synchronizácie
+• Opravené: dátumy a časy ignorovali regionálny formát zariadenia
+• Opravené: online synchronizácia sa po otvorení aplikácie bez pripojenia nepripojila až do reštartu

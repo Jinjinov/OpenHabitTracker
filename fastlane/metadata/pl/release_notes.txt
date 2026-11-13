@@ -1,7 +1,7 @@
-• Wykresy nawyków: cel, historia, kalendarz, najlepsze serie i częstotliwość
-• Powiadomienie z dziennym podsumowaniem tego, co jest do zrobienia
-• Przypomnienie przed zaplanowaną godziną zadania
-• Ikona pokazująca, gdy synchronizacja online nie działa
-• Naprawiono: po utracie serwera synchronizacja online nie działała aż do restartu
-• Naprawiono: brak statystyk tygodniowych na stronie startowej do czasu zmiany
-• Naprawiono: koniec strony ukryty za paskiem nawigacji na telefonach
+• Wiele kont użytkowników z oddzielnymi danymi na samodzielnie hostowanym serwerze
+• Import z Loop, HabitNow, Habitica i Habitify
+• Ilości dziesiętne w nawykach
+• Ustawienia formatu daty i formatu godziny
+• Szybsze uruchamianie aplikacji i logowanie do synchronizacji online
+• Naprawiono: daty i godziny ignorowały format regionalny urządzenia
+• Naprawiono: synchronizacja online nie łączyła się aż do restartu, gdy aplikację otwarto bez połączenia

@@ -1,0 +1,7 @@
+• Più account utente con dati separati sul server self-hosted
+• Importazione da Loop, HabitNow, Habitica e Habitify
+• Quantità decimali nelle abitudini
+• Impostazioni per formato data e formato ora
+• Avvio dell'app e accesso alla sincronizzazione online più rapidi
+• Corretto: date e ore ignoravano il formato regionale del dispositivo
+• Corretto: la sincronizzazione online non si collegava fino al riavvio se l'app veniva aperta senza connessione

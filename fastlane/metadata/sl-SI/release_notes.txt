@@ -1,7 +1,7 @@
-• Grafi navad: cilj, zgodovina, koledar, najboljši nizi in pogostost
-• Obvestilo z dnevnim povzetkom tega, kar je na vrsti
-• Opomnik pred načrtovano uro naloge
-• Ikona, ki pokaže, kdaj spletna sinhronizacija ne deluje
-• Popravljeno: spletna sinhronizacija je po nedosegljivem strežniku odpovedala do ponovnega zagona
-• Popravljeno: tedenska statistika je na začetni strani manjkala, dokler se ni kaj spremenilo
-• Popravljeno: konec strani, skrit za navigacijsko vrstico na telefonih
+• Več uporabniških računov z ločenimi podatki na lastnem strežniku
+• Uvoz iz aplikacij Loop, HabitNow, Habitica in Habitify
+• Decimalne količine pri navadah
+• Nastavitve oblike datuma in oblike časa
+• Hitrejši zagon aplikacije in prijava v spletno sinhronizacijo
+• Popravljeno: datumi in časi so prezrli regionalno obliko naprave
+• Popravljeno: spletna sinhronizacija se po odprtju aplikacije brez povezave ni povezala do ponovnega zagona

@@ -1,7 +1,7 @@
-• Gewoontegrafieken: doel, geschiedenis, kalender, beste reeksen en frequentie
-• Melding met dagelijks overzicht van wat er gedaan moet worden
-• Herinnering vóór de geplande tijd van een taak
-• Pictogram dat aangeeft wanneer online synchronisatie niet werkt
-• Opgelost: online synchronisatie stopte tot een herstart als de server onbereikbaar werd
-• Opgelost: weekstatistieken ontbraken op de startpagina bij het openen
-• Opgelost: einde van een pagina op telefoons verborgen achter de navigatiebalk
+• Meerdere gebruikersaccounts met gescheiden gegevens op de zelf gehoste server
+• Importeren uit Loop, HabitNow, Habitica en Habitify
+• Decimale hoeveelheden bij gewoontes
+• Instellingen voor datumnotatie en tijdnotatie
+• Snellere start van de app en snellere aanmelding bij online synchronisatie
+• Opgelost: datums en tijden negeerden de regionale notatie van het apparaat
+• Opgelost: online synchronisatie verbond pas na een herstart als de app zonder verbinding was geopend

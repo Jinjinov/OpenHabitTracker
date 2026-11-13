@@ -1,0 +1,7 @@
+• Mehrere Benutzerkonten mit getrennten Daten auf dem selbst gehosteten Server
+• Import aus Loop, HabitNow, Habitica und Habitify
+• Dezimale Mengen bei Gewohnheiten
+• Einstellungen für Datumsformat und Zeitformat
+• Schnellerer App-Start und schnellere Anmeldung bei der Online-Synchronisation
+• Behoben: Datum und Uhrzeit ignorierten das Regionalformat des Geräts
+• Behoben: Online-Synchronisation verband sich nach einem Start ohne Verbindung erst nach einem Neustart

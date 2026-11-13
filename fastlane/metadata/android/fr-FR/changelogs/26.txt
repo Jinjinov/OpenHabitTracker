@@ -1,0 +1,7 @@
+• Plusieurs comptes utilisateur avec des données séparées sur le serveur auto-hébergé
+• Import depuis Loop, HabitNow, Habitica et Habitify
+• Quantités décimales dans les habitudes
+• Paramètres de format de date et de format de l'heure
+• Démarrage de l'app et connexion à la sync en ligne plus rapides
+• Corrigé : dates et heures qui ignoraient le format régional de l'appareil
+• Corrigé : la sync en ligne ne se connectait qu'après un redémarrage si l'app était ouverte sans connexion

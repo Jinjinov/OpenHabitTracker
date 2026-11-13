@@ -1,7 +1,7 @@
-• Tapojen tilastokaaviot: tavoite, historia, kalenteri, parhaat sarjat ja toistuvuus
-• Päivittäinen yhteenveto tehtävistä ilmoituksena
-• Muistutus ennen tehtävän suunniteltua kellonaikaa
-• Kuvake, joka näyttää, kun online-synkronointi ei toimi
-• Korjattu: online-synkronointi pysähtyi uudelleenkäynnistykseen asti, kun palvelin ei vastannut
-• Korjattu: viikkotilastot puuttuivat aloitussivulta, kunnes jokin muuttui
-• Korjattu: sivun loppu jäi navigointipalkin taakse puhelimissa
+• Useita käyttäjätilejä erillisillä tiedoilla itse ylläpidetyllä palvelimella
+• Tuonti Loopista, HabitNow'sta, Habiticasta ja Habitifysta
+• Desimaalimäärät tavoissa
+• Päivämäärän muodon ja ajan muodon asetukset
+• Nopeampi sovelluksen käynnistys ja online-synkronoinnin kirjautuminen
+• Korjattu: päivämäärät ja kellonajat ohittivat laitteen alueellisen muodon
+• Korjattu: online-synkronointi ei yhdistänyt ennen uudelleenkäynnistystä, kun sovellus avattiin ilman yhteyttä

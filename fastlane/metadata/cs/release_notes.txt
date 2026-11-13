@@ -1,7 +1,7 @@
-• Grafy návyků: cíl, historie, kalendář, nejlepší série a četnost
-• Oznámení s denním souhrnem toho, co je na řadě
-• Připomínka před naplánovaným časem úkolu
-• Ikona, která ukazuje, když online synchronizace nefunguje
-• Opraveno: online synchronizace po nedostupnosti serveru nefungovala až do restartu
-• Opraveno: chybějící týdenní statistiky na úvodní stránce, dokud se něco nezměnilo
-• Opraveno: konec stránky skrytý za navigační lištou na telefonech
+• Více uživatelských účtů s oddělenými daty na vlastním serveru
+• Import z Loop, HabitNow, Habitica a Habitify
+• Desetinná množství u návyků
+• Nastavení formátu data a formátu času
+• Rychlejší spuštění aplikace a přihlášení k online synchronizaci
+• Opraveno: data a časy ignorovaly regionální formát zařízení
+• Opraveno: online synchronizace se po otevření aplikace bez připojení nepřipojila až do restartu

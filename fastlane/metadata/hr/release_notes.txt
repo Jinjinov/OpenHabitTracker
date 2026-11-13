@@ -1,7 +1,7 @@
-• Grafikoni navika: cilj, povijest, kalendar, najbolji nizovi i učestalost
-• Obavijest s dnevnim sažetkom onoga što je na redu
-• Podsjetnik prije planiranog vremena zadatka
-• Ikona koja pokazuje kada online sinkronizacija ne radi
-• Popravljeno: online sinkronizacija nakon nedostupnog poslužitelja nije radila do ponovnog pokretanja
-• Popravljeno: tjedna statistika nedostajala na početnoj stranici dok se nešto ne promijeni
-• Popravljeno: kraj stranice skriven iza navigacijske trake na telefonima
+• Više korisničkih računa s odvojenim podacima na vlastitom poslužitelju
+• Uvoz iz aplikacija Loop, HabitNow, Habitica i Habitify
+• Decimalne količine kod navika
+• Postavke formata datuma i formata vremena
+• Brže pokretanje aplikacije i prijava u online sinkronizaciju
+• Popravljeno: datumi i vremena zanemarivali su regionalni format uređaja
+• Popravljeno: online sinkronizacija nije se povezivala do ponovnog pokretanja kad je aplikacija otvorena bez veze

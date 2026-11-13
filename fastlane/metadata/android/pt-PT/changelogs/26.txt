@@ -1,0 +1,7 @@
+• Várias contas de utilizador com dados separados no servidor auto-alojado
+• Importação do Loop, HabitNow, Habitica e Habitify
+• Quantidades decimais nos hábitos
+• Configurações de formato da data e de formato da hora
+• Arranque da app e início de sessão da sincronização online mais rápidos
+• Corrigido: datas e horas ignoravam o formato regional do dispositivo
+• Corrigido: a sincronização online não ligava até reiniciar se a app fosse aberta sem ligação

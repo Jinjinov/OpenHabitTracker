@@ -1,7 +1,7 @@
-• Statistikdiagramme für Gewohnheiten: Ziel, Verlauf, Kalender, beste Serien, Häufigkeit
-• Tägliche Zusammenfassung anstehender Einträge als Benachrichtigung
-• Erinnerung vor der geplanten Uhrzeit einer Aufgabe
-• Symbol, das zeigt, wenn die Online-Synchronisation nicht funktioniert
-• Behoben: Online-Synchronisation gab bei Serverausfall bis zum Neustart auf
-• Behoben: Wochenstatistik fehlte anfangs auf der Startseite
-• Behoben: Seitenende auf Telefonen hinter der Navigationsleiste verborgen
+• Mehrere Benutzerkonten mit getrennten Daten auf dem selbst gehosteten Server
+• Import aus Loop, HabitNow, Habitica und Habitify
+• Dezimale Mengen bei Gewohnheiten
+• Einstellungen für Datumsformat und Zeitformat
+• Schnellerer App-Start und schnellere Anmeldung bei der Online-Synchronisation
+• Behoben: Datum und Uhrzeit ignorierten das Regionalformat des Geräts
+• Behoben: Online-Synchronisation verband sich nach einem Start ohne Verbindung erst nach einem Neustart

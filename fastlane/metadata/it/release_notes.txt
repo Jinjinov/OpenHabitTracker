@@ -1,7 +1,7 @@
-• Grafici delle abitudini: obiettivo, cronologia, calendario, migliori serie e frequenza
-• Notifica di riepilogo giornaliero delle cose da fare
-• Promemoria prima dell'ora pianificata di un compito
-• Icona che segnala se la sincronizzazione online non funziona
-• Corretto: sincronizzazione online ferma fino al riavvio se il server non rispondeva
-• Corretto: statistiche settimanali mancanti nella pagina iniziale all'apertura
-• Corretto: fine pagina nascosta dalla barra di navigazione sui telefoni
+• Più account utente con dati separati sul server self-hosted
+• Importazione da Loop, HabitNow, Habitica e Habitify
+• Quantità decimali nelle abitudini
+• Impostazioni per formato data e formato ora
+• Avvio dell'app e accesso alla sincronizzazione online più rapidi
+• Corretto: date e ore ignoravano il formato regionale del dispositivo
+• Corretto: la sincronizzazione online non si collegava fino al riavvio se l'app veniva aperta senza connessione

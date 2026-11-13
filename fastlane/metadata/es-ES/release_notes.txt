@@ -1,7 +1,7 @@
-• Gráficos de hábitos: objetivo, historial, calendario, mejores rachas y frecuencia
-• Resumen diario de lo pendiente como notificación
-• Recordatorio antes de la hora planificada de una tarea
-• Icono que avisa si la sincronización en línea no funciona
-• Corregido: la sincronización en línea se detenía hasta reiniciar si fallaba el servidor
-• Corregido: estadísticas semanales ausentes en la página de inicio al abrir
-• Corregido: final de la página oculto tras la barra de navegación en teléfonos
+• Varias cuentas de usuario con datos separados en el servidor autoalojado
+• Importación desde Loop, HabitNow, Habitica y Habitify
+• Cantidades decimales en los hábitos
+• Ajustes de formato de fecha y formato de hora
+• Inicio de la app e inicio de sesión de la sincronización en línea más rápidos
+• Corregido: fechas y horas que ignoraban el formato regional del dispositivo
+• Corregido: la sincronización en línea no se conectaba hasta reiniciar si la app se abría sin conexión

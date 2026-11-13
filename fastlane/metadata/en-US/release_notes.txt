@@ -1,7 +1,7 @@
-• Added habit statistics charts: target, history, calendar, best streaks and frequency
-• Added a daily summary notification of what is due
-• Added a reminder notification before a task's planned time
-• Added an icon that shows when online sync is not working
-• Fixed online sync giving up until restart after the server became unreachable
-• Fixed weekly statistics missing on the start page until something changed
-• Fixed the end of a page being hidden behind the navigation bar on phones
+• Added multiple user accounts with separate data on the self-hosted server
+• Added import from Loop, HabitNow, Habitica and Habitify
+• Added decimal quantities in habits
+• Added date format and time format settings
+• Improved app start speed and online sync login speed
+• Fixed dates and times ignoring the device's regional format
+• Fixed online sync not connecting until restart when the app was opened with no connection

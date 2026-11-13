@@ -1,0 +1,7 @@
+• Više korisničkih naloga sa odvojenim podacima na sopstvenom serveru
+• Uvoz iz aplikacija Loop, HabitNow, Habitica i Habitify
+• Decimalne količine kod navika
+• Podešavanja formata datuma i formata vremena
+• Brže pokretanje aplikacije i prijava na online sinhronizaciju
+• Popravljeno: datumi i vremena zanemarivali su regionalni format uređaja
+• Popravljeno: online sinhronizacija se nije povezivala do ponovnog pokretanja kada je aplikacija otvorena bez veze

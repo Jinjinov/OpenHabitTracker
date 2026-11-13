@@ -1,7 +1,7 @@
-• Gráficos de hábitos: meta, histórico, calendário, melhores sequências e frequência
-• Notificação com o resumo diário do que está pendente
-• Lembrete antes da hora planeada de uma tarefa
-• Ícone que indica quando a sincronização online não funciona
-• Corrigido: a sincronização online parava até reiniciar se o servidor ficasse inacessível
-• Corrigido: estatísticas semanais em falta na página inicial ao abrir
-• Corrigido: fim da página escondido atrás da barra de navegação nos telemóveis
+• Várias contas de utilizador com dados separados no servidor auto-alojado
+• Importação do Loop, HabitNow, Habitica e Habitify
+• Quantidades decimais nos hábitos
+• Configurações de formato da data e de formato da hora
+• Arranque da app e início de sessão da sincronização online mais rápidos
+• Corrigido: datas e horas ignoravam o formato regional do dispositivo
+• Corrigido: a sincronização online não ligava até reiniciar se a app fosse aberta sem ligação

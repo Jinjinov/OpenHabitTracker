@@ -1,0 +1,7 @@
+• Flere brukerkontoer med atskilte data på den selvhostede serveren
+• Import fra Loop, HabitNow, Habitica og Habitify
+• Desimale mengder i vaner
+• Innstillinger for datoformat og tidsformat
+• Raskere oppstart av appen og raskere innlogging til nettsynkronisering
+• Rettet: datoer og klokkeslett ignorerte enhetens regionale format
+• Rettet: nettsynkronisering koblet seg først til etter omstart når appen ble åpnet uten tilkobling

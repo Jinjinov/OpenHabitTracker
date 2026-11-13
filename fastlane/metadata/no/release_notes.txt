@@ -1,7 +1,7 @@
-• Statistikkdiagrammer for vaner: mål, historikk, kalender, beste serier og hyppighet
-• Daglig oppsummering som varsel om hva som skal gjøres
-• Påminnelse før en oppgaves planlagte tidspunkt
-• Ikon som viser når nettsynkronisering ikke fungerer
-• Rettet: nettsynkronisering ga opp inntil omstart når serveren ikke kunne nås
-• Rettet: ukestatistikk manglet på startsiden inntil noe ble endret
-• Rettet: slutten av en side var skjult bak navigasjonslinjen på telefoner
+• Flere brukerkontoer med atskilte data på den selvhostede serveren
+• Import fra Loop, HabitNow, Habitica og Habitify
+• Desimale mengder i vaner
+• Innstillinger for datoformat og tidsformat
+• Raskere oppstart av appen og raskere innlogging til nettsynkronisering
+• Rettet: datoer og klokkeslett ignorerte enhetens regionale format
+• Rettet: nettsynkronisering koblet seg først til etter omstart når appen ble åpnet uten tilkobling

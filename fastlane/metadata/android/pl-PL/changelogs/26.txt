@@ -1,0 +1,7 @@
+• Wiele kont użytkowników z oddzielnymi danymi na samodzielnie hostowanym serwerze
+• Import z Loop, HabitNow, Habitica i Habitify
+• Ilości dziesiętne w nawykach
+• Ustawienia formatu daty i formatu godziny
+• Szybsze uruchamianie aplikacji i logowanie do synchronizacji online
+• Naprawiono: daty i godziny ignorowały format regionalny urządzenia
+• Naprawiono: synchronizacja online nie łączyła się aż do restartu, gdy aplikację otwarto bez połączenia

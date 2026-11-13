@@ -1,0 +1,7 @@
+• Meerdere gebruikersaccounts met gescheiden gegevens op de zelf gehoste server
+• Importeren uit Loop, HabitNow, Habitica en Habitify
+• Decimale hoeveelheden bij gewoontes
+• Instellingen voor datumnotatie en tijdnotatie
+• Snellere start van de app en snellere aanmelding bij online synchronisatie
+• Opgelost: datums en tijden negeerden de regionale notatie van het apparaat
+• Opgelost: online synchronisatie verbond pas na een herstart als de app zonder verbinding was geopend
