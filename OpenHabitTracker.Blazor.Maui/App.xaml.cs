@@ -1,5 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 using OpenHabitTracker.App;
 using Application = Microsoft.Maui.Controls.Application;
@@ -57,25 +55,8 @@ public partial class App : Application
     // resume as well as on launch.
     public static async Task RebuildNotificationSchedule()
     {
-        if (IPlatformApplication.Current?.Services is not IServiceProvider services)
-            return;
-
-        try
-        {
-            // A new scope reads the device's own database, which is not the data of a signed in user.
-            if (await services.GetRequiredService<NotificationRebuildRelay>().TryRebuild())
-                return;
-
-            // Without a UI, its own scope keeps the loaded data from outliving the rebuild.
-            using IServiceScope scope = services.CreateScope();
-
-            await scope.ServiceProvider.GetRequiredService<INotificationScheduler>().Rebuild();
-        }
-        catch (Exception exception)
-        {
-            // A failed rebuild must never take the app down on resume.
-            services.GetRequiredService<ILogger<App>>().LogError(exception, "Notification schedule rebuild failed");
-        }
+        if (IPlatformApplication.Current?.Services is IServiceProvider services)
+            await NotificationRebuildRelay.Rebuild(services);
     }
 
     private static void SaveWindowSettings(Window window, string path)
