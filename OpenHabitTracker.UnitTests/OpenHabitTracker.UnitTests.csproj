@@ -43,8 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Fixtures\**" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\OpenHabitTracker.EndToEndTests\Examples\example.*" Link="Fixtures\Examples\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\TestFixtures\**" Link="Fixtures\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
