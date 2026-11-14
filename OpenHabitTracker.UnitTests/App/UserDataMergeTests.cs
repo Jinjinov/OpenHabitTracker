@@ -1,4 +1,8 @@
+using Markdig;
+using NSubstitute;
 using OpenHabitTracker.App;
+using OpenHabitTracker.Backup.File;
+using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Models;
 
 namespace OpenHabitTracker.UnitTests.App;
@@ -202,6 +206,33 @@ public class UserDataMergeTests
         UserDataMerge merge = Merge(new MergeOptions { HiddenCategories = [archived, existing] }, archived, existing);
 
         Assert.That(merge.HiddenCategories, Is.EqualTo(new[] { archived }));
+    }
+
+    // The example backups have categories without tasks or habits.
+    [TestCase("example.json")]
+    [TestCase("example.yaml")]
+    public async Task Merge_BackupWithCategoriesWithoutTasksOrHabits_CountsWhatIsThere(string file)
+    {
+        _categories.Clear();
+
+        UserImportExportData data = await ReadBackup(file);
+
+        UserDataMerge merge = Merge([.. data.Categories]);
+
+        Assert.That(merge.Found, Is.EqualTo(new ImportCounts(Categories: 5, Notes: 6, Tasks: 3, Habits: 3, Items: merge.Found.Items, Completions: merge.Found.Completions)));
+    }
+
+    private static async Task<UserImportExportData> ReadBackup(string file)
+    {
+        IDataAccess dataAccess = Substitute.For<IDataAccess>();
+        dataAccess.DataLocation.Returns(DataLocation.Local);
+        ClientState clientState = new(new[] { dataAccess }, new MarkdownToHtml(new MarkdownPipelineBuilder().Build()));
+
+        await using Stream stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "Examples", file));
+
+        return file.EndsWith(".json")
+            ? await new JsonImportExport(clientState).ReadDataFile(stream)
+            : await new YamlImportExport(clientState).ReadDataFile(stream);
     }
 
     [Test]

@@ -30,6 +30,6 @@ public class YamlImportExport(ClientState clientState)
 
         string content = await streamReader.ReadToEndAsync();
 
-        return _deserializer.Deserialize<UserImportExportData>(content);
+        return _deserializer.Deserialize<UserImportExportData>(content).WithEmptyListsForNull();
     }
 }

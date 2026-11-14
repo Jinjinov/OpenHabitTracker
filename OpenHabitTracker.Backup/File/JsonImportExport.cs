@@ -23,6 +23,8 @@ public class JsonImportExport(ClientState clientState)
 
         string content = await streamReader.ReadToEndAsync();
 
-        return JsonSerializer.Deserialize<UserImportExportData>(content, _options) ?? throw new InvalidDataException("Can't deserialize JSON");
+        UserImportExportData data = JsonSerializer.Deserialize<UserImportExportData>(content, _options) ?? throw new InvalidDataException("Can't deserialize JSON");
+
+        return data.WithEmptyListsForNull();
     }
 }
