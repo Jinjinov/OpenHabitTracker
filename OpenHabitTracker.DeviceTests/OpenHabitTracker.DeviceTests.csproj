@@ -19,6 +19,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- One file per import format, pushed to the device and picked through the system picker. -->
+    <None Include="..\OpenHabitTracker.EndToEndTests\Examples\example.*" Link="Fixtures\Examples\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\OpenHabitTracker.UnitTests\Fixtures\Importers\GoogleKeep\takeout.zip" Link="Fixtures\Importers\takeout.zip" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\OpenHabitTracker.UnitTests\Fixtures\Importers\Loop\Phone\backup.db" Link="Fixtures\Importers\loop-backup.db" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\OpenHabitTracker.UnitTests\Fixtures\Importers\Loop\Phone\export.zip" Link="Fixtures\Importers\loop-export.zip" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\OpenHabitTracker.UnitTests\Fixtures\Importers\HabitNow\backup-frequency-tracks.hn" Link="Fixtures\Importers\habitnow.hn" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\OpenHabitTracker.UnitTests\Fixtures\Importers\Habitica\userdata.json" Link="Fixtures\Importers\habitica.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\OpenHabitTracker.UnitTests\Fixtures\Importers\Habitify\backup.db" Link="Fixtures\Importers\habitify.db" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="NUnit.Framework" />
     <Using Include="OpenQA.Selenium" />
     <Using Include="OpenQA.Selenium.Appium" />

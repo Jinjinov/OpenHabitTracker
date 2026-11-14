@@ -7,7 +7,11 @@ param(
     # Another checkout can be passed to install an older or deliberately broken build under the same id.
     [string]$SourceRoot = (Join-Path $PSScriptRoot '..\..'),
     [string]$Device = 'emulator-5554',
-    [string]$LogFile = (Join-Path $env:TEMP 'oht-uitest-build.log')
+    [string]$LogFile = (Join-Path $env:TEMP 'oht-uitest-build.log'),
+    # Keeps a copy of the APK as apks\<name>.apk beside the work folders, where the upgrade test looks for
+    # previous.apk (built from the last release tag) and current.apk.
+    [string]$SaveApkAs,
+    [switch]$NoInstall
 )
 
 $ErrorActionPreference = 'Stop'
@@ -44,11 +48,28 @@ $aapt2 = Get-ChildItem (Join-Path $env:ANDROID_HOME 'build-tools\*\aapt2.exe') |
 $apkPackage = (& $aapt2.FullName dump packagename $apk).Trim()
 if ($apkPackage -ne $PackageId) { throw "$apk carries the package $apkPackage, not $PackageId, so it is not installed" }
 
+if ($SaveApkAs) {
+    $apkFolder = Join-Path $env:LOCALAPPDATA 'OpenHabitTracker.DeviceTests\apks'
+    New-Item -ItemType Directory -Force $apkFolder | Out-Null
+    Copy-Item $apk (Join-Path $apkFolder "$SaveApkAs.apk") -Force
+    Write-Host "Saved $apkFolder\$SaveApkAs.apk"
+}
+
+if ($NoInstall) { return }
+
 # The build's own Install target has succeeded without installing anything, logging only a failed uninstall as a warning,
 # so the APK is installed here, where a failure is an error.
 $adb = Join-Path $env:ANDROID_HOME 'platform-tools\adb.exe'
 
-& $adb -s $Device install -r $apk
-if ($LASTEXITCODE -ne 0) { throw "adb could not install $apk" }
+$output = & $adb -s $Device install -r $apk 2>&1 | Out-String
+
+# An older checkout carries a lower version code, which Android refuses as an update.
+# The test package holds only test data, so it is reinstalled from scratch instead.
+if ($output -match 'INSTALL_FAILED_VERSION_DOWNGRADE') {
+    & $adb -s $Device uninstall $PackageId | Out-Null
+    $output = & $adb -s $Device install $apk 2>&1 | Out-String
+}
+
+if ($LASTEXITCODE -ne 0) { throw "adb could not install $apk`n$output" }
 
 Write-Host "Installed $PackageId from $SourceRoot on $Device"
