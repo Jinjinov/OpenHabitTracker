@@ -10,6 +10,8 @@ public static class NotificationsSetup
     {
         builder.Services.AddScoped<INotifications, MacCatalystNotifications>();
 
+        PluginNotifications.ListenForTaps();
+
         return builder.UseLocalNotification();
     }
 }

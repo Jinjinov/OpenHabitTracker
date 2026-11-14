@@ -4,7 +4,6 @@ using Plugin.LocalNotification.EventArgs;
 using AndroidIcon = Plugin.LocalNotification.Core.Models.AndroidOption.AndroidIcon;
 using AndroidScheduleMode = Plugin.LocalNotification.Core.Models.AndroidOption.AndroidScheduleMode;
 using AndroidScheduleOptions = Plugin.LocalNotification.Core.Models.AndroidOption.AndroidScheduleOptions;
-using NotificationLaunchDetails = Plugin.LocalNotification.Core.Models.NotificationLaunchDetails;
 using NotificationRequestSchedule = Plugin.LocalNotification.Core.Models.NotificationRequestSchedule;
 using PluginNotificationRequest = Plugin.LocalNotification.Core.Models.NotificationRequest;
 
@@ -22,13 +21,6 @@ public class PluginNotifications : INotifications
     public bool CanScheduleWhileClosed => true;
 
     public bool CanOpenSettings => true;
-
-    private Action<string>? _onActivated;
-
-    public PluginNotifications()
-    {
-        LocalNotificationCenter.Current.NotificationActionTapped += OnActionTapped;
-    }
 
     public async Task<bool> RequestPermission()
     {
@@ -157,33 +149,36 @@ public class PluginNotifications : INotifications
     {
         _onActivated = onActivated;
 
-        ReplayLaunchTap();
+        if (_tappedRoute is string route)
+        {
+            _tappedRoute = null;
+
+            onActivated(route);
+        }
     }
 
-    // A tap that cold-starts the app is raised by the plugin's delegate during launch, before this
-    // scoped service exists to hear it. The plugin keeps that first response, so it is replayed here
-    // once, the first time anything listens.
-    private static bool _launchTapReplayed;
+    // A tap that starts the app is raised before the page, and with it this scoped service, exists.
+    // Android also raises it early when it recreates a screen it kept after killing the process: the
+    // screen is created from its original intent and the tap arrives after it as a new intent.
+    // So the taps are heard from app start, and one that arrives before the page is held for it.
+    private static Action<string>? _onActivated;
 
-    private void ReplayLaunchTap()
+    private static string? _tappedRoute;
+
+    public static void ListenForTaps()
     {
-        if (_launchTapReplayed)
-            return;
-
-        NotificationLaunchDetails? launch = LocalNotificationCenter.LaunchNotificationDetails;
-
-        if (launch is null)
-            return;
-
-        _launchTapReplayed = true;
-
-        if (launch.DidNotificationLaunchApp && launch.ActionId == NotificationActionEventArgs.TapActionId && !string.IsNullOrEmpty(launch.Request?.ReturningData))
-            _onActivated?.Invoke(launch.Request.ReturningData);
+        LocalNotificationCenter.Current.NotificationActionTapped += OnActionTapped;
     }
 
-    private void OnActionTapped(NotificationActionEventArgs eventArgs)
+    // Dismissing a notification is reported through the same event.
+    private static void OnActionTapped(NotificationActionEventArgs eventArgs)
     {
-        if (!string.IsNullOrEmpty(eventArgs.Request?.ReturningData))
-            _onActivated?.Invoke(eventArgs.Request.ReturningData);
+        if (eventArgs.ActionId != NotificationActionEventArgs.TapActionId || string.IsNullOrEmpty(eventArgs.Request?.ReturningData))
+            return;
+
+        if (_onActivated is null)
+            _tappedRoute = eventArgs.Request.ReturningData;
+        else
+            _onActivated(eventArgs.Request.ReturningData);
     }
 }

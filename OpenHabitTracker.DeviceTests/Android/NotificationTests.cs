@@ -118,7 +118,7 @@ public class NotificationTests : AndroidTest
     }
 
     // A reminder fires at its time, and tapping it opens its task: with the app in the background,
-    // and with its process gone, which is the cold start that replays the tap once the page exists.
+    // and with its process gone, where Android recreates the kept screen and the tap arrives before the page exists.
     // am kill, not force-stop: a force-stopped app loses its alarms.
     [TestCase(false, TestName = "Reminder_TappedWithTheAppInTheBackground_OpensItsTask")]
     [TestCase(true, TestName = "Reminder_TappedWithTheAppKilled_OpensItsTask")]
