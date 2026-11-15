@@ -232,6 +232,23 @@ public class HabiticaImportTests
         });
     }
 
+    // The last change of the todo stands in for the missing dateCompleted.
+    [Test]
+    public async Task Todo_CompletedWithoutDateCompleted_ImportsAsCompletedAtItsLastChange()
+    {
+        ImportedData data = await ReadJson("""
+            { "tasks": { "todos": [ { "text": "Pack", "completed": true, "updatedAt": "2026-01-03T10:00:00.000Z", "checklist": [ { "text": "Socks", "completed": true } ] } ] } }
+            """);
+
+        TaskModel pack = data.Categories.Single().Tasks.Single();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(pack.CompletedAt, Is.EqualTo(new DateTime(2026, 1, 3, 10, 0, 0)));
+            Assert.That(pack.Items!.Single().DoneAt, Is.Not.Null);
+        });
+    }
+
     [Test]
     public async Task Dates_ComeFromTheFileAndFallBackToTheImportTime()
     {

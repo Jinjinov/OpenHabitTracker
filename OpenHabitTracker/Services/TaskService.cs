@@ -23,7 +23,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
     {
         QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);
 
-        return Tasks!.FilterTasks(queryParameters);
+        return Tasks!.FilterTasks(queryParameters, _clientState.Categories);
     }
 
     public async Task Initialize()
@@ -96,6 +96,8 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
         DateTime now = DateTime.Now;
 
+        bool wasCompleted = task.CompletedAt is not null;
+
         task.StartedAt = now;
         task.CompletedAt = null;
 
@@ -107,6 +109,10 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
             await _clientState.DataAccess.UpdateTask(taskEntity);
             task.UpdatedAt = taskEntity.UpdatedAt;
         }
+
+        // the schedule reads only the completion, so only a completed task started again changes it
+        if (wasCompleted)
+            await _notificationScheduler.Rebuild();
     }
 
     public async Task SetStartTime(TaskModel task, DateTime startedAt)

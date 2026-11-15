@@ -328,7 +328,7 @@ public class SearchPageTests
 
         cut.Find("#HideCompletedTasks").Change(false);
         cut.Find("select[aria-label='Habit interval ratio']").Change(nameof(Ratio.AverageToDesired));
-        cut.Find("[data-search-step-18] input").Change(true);
+        cut.Find("#ShowOnlyOverSelectedRatioMin").Change(true);
         cut.Find("#ShowOnlyUnderSelectedRatioMax").Change(true);
         cut.Find("[data-search-step-21]").Change("200");
 
@@ -342,6 +342,7 @@ public class SearchPageTests
             Assert.That(stored.ShowOnlyUnderSelectedRatioMax, Is.True);
             Assert.That(stored.SelectedRatioMax, Is.EqualTo(200));
             Assert.That(cut.Find("label[for='ShowOnlyUnderSelectedRatioMax']").TextContent, Is.EqualTo("Show only habits with interval ratio under 200%"));
+            Assert.That(cut.Find("label[for='ShowOnlyOverSelectedRatioMin']").TextContent, Is.EqualTo("Show only habits with interval ratio over 50%"));
         });
     }
 

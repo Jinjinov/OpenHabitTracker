@@ -87,7 +87,9 @@ public static class SelfTestChecks
         }
         finally
         {
-            File.Delete(path);
+            // File.Delete throws for a missing directory, which would replace the check's own failure.
+            if (File.Exists(path))
+                File.Delete(path);
         }
 
         return Task.FromResult(Path.Combine(Path.GetFullPath(dataDirectory), WindowSettings.FileName));

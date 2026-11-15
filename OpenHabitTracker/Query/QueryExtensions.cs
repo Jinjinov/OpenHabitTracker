@@ -5,7 +5,7 @@ namespace OpenHabitTracker.Query;
 
 public static class QueryExtensions
 {
-    public static IEnumerable<NoteModel> FilterNotes(this IEnumerable<NoteModel> source, QueryParameters queryParameters)
+    public static IEnumerable<NoteModel> FilterNotes(this IEnumerable<NoteModel> source, QueryParameters queryParameters, IReadOnlyDictionary<long, CategoryModel>? categories = null)
     {
         IEnumerable<NoteModel> notes = source.Where(x => !x.IsDeleted);
 
@@ -36,14 +36,14 @@ public static class QueryExtensions
 
         return queryParameters.SortBy[ContentType.Note] switch
         {
-            Sort.Category => notes.OrderBy(x => x.CategoryId),
+            Sort.Category => OrderByCategory(notes, categories),
             Sort.Priority => notes.OrderByDescending(x => x.Priority),
             Sort.Title => notes.OrderBy(x => x.Title),
             _ => notes
         };
     }
 
-    public static IEnumerable<TaskModel> FilterTasks(this IEnumerable<TaskModel> source, QueryParameters queryParameters)
+    public static IEnumerable<TaskModel> FilterTasks(this IEnumerable<TaskModel> source, QueryParameters queryParameters, IReadOnlyDictionary<long, CategoryModel>? categories = null)
     {
         IEnumerable<TaskModel> tasks = source.Where(x => !x.IsDeleted);
 
@@ -125,7 +125,7 @@ public static class QueryExtensions
 
         return queryParameters.SortBy[ContentType.Task] switch
         {
-            Sort.Category => tasks.OrderBy(x => x.CategoryId),
+            Sort.Category => OrderByCategory(tasks, categories),
             Sort.Priority => tasks.OrderByDescending(x => x.Priority),
             Sort.Title => tasks.OrderBy(x => x.Title),
             Sort.Duration => tasks.OrderBy(x => x.Duration),
@@ -136,7 +136,7 @@ public static class QueryExtensions
         };
     }
 
-    public static IEnumerable<HabitModel> FilterHabits(this IEnumerable<HabitModel> source, QueryParameters queryParameters)
+    public static IEnumerable<HabitModel> FilterHabits(this IEnumerable<HabitModel> source, QueryParameters queryParameters, IReadOnlyDictionary<long, CategoryModel>? categories = null)
     {
         IEnumerable<HabitModel> habits = source.Where(x => !x.IsDeleted);
 
@@ -206,7 +206,7 @@ public static class QueryExtensions
 
         return queryParameters.SortBy[ContentType.Habit] switch
         {
-            Sort.Category => habits.OrderBy(x => x.CategoryId),
+            Sort.Category => OrderByCategory(habits, categories),
             Sort.Priority => habits.OrderByDescending(x => x.Priority),
             Sort.Title => habits.OrderBy(x => x.Title),
             Sort.Duration => habits.OrderBy(x => x.Duration),
@@ -218,5 +218,18 @@ public static class QueryExtensions
             Sort.SelectedRatio => habits.OrderByDescending(x => x.GetRatio(queryParameters.SelectedRatio)),
             _ => habits
         };
+    }
+
+    // By category title, with the uncategorized last, as their group is on the pages.
+    // Without the categories, only the id is known, which orders the categories by when they were created.
+    private static IOrderedEnumerable<T> OrderByCategory<T>(IEnumerable<T> items, IReadOnlyDictionary<long, CategoryModel>? categories) where T : ContentModel
+    {
+        if (categories is null)
+            return items.OrderBy(x => x.CategoryId);
+
+        return items
+            .OrderBy(x => !categories.ContainsKey(x.CategoryId))
+            .ThenBy(x => categories.TryGetValue(x.CategoryId, out CategoryModel? category) ? category.Title : string.Empty)
+            .ThenBy(x => x.CategoryId);
     }
 }

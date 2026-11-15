@@ -23,7 +23,7 @@ public class NoteService(ClientState clientState, ISearchFilterService searchFil
     {
         QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);
 
-        return Notes!.FilterNotes(queryParameters);
+        return Notes!.FilterNotes(queryParameters, _clientState.Categories);
     }
 
     public async Task Initialize()

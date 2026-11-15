@@ -187,6 +187,15 @@ public class SelfTestTests
         Assert.CatchAsync<Exception>(() => SelfTestChecks.WindowGeometry(Path.Combine(_directory, "missing")).Run());
     }
 
+    // The cleanup must not replace the check's own failure.
+    [Test]
+    public void WindowGeometry_DirectoryMissing_SaysTheGeometryDidNotLoadBack()
+    {
+        InvalidOperationException? exception = Assert.ThrowsAsync<InvalidOperationException>(() => SelfTestChecks.WindowGeometry(Path.Combine(_directory, "missing")).Run());
+
+        Assert.That(exception?.Message, Is.EqualTo("saved geometry did not load back"));
+    }
+
     [Test]
     public async Task Localization_EveryLanguageHasItsTourAndTheEnglishKeys()
     {

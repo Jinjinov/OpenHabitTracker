@@ -281,8 +281,8 @@
                 </InputSelect>
                 </div>
                 <div class="position-relative mt-2" data-search-step-18>
-                    <InputCheckbox id="ShowItemList" class="form-check-input me-1" Value="_settings.ShowOnlyOverSelectedRatioMin" ValueExpression="() => _settings.ShowOnlyOverSelectedRatioMin" ValueChanged="SaveShowOnlyOverSelectedRatioMin" />
-                    <label for="ShowItemList" class="form-check-label stretched-link d-inline">@Loc["Show only habits with interval ratio over"] @_settings.SelectedRatioMin%</label>
+                    <InputCheckbox id="ShowOnlyOverSelectedRatioMin" class="form-check-input me-1" Value="_settings.ShowOnlyOverSelectedRatioMin" ValueExpression="() => _settings.ShowOnlyOverSelectedRatioMin" ValueChanged="SaveShowOnlyOverSelectedRatioMin" />
+                    <label for="ShowOnlyOverSelectedRatioMin" class="form-check-label stretched-link d-inline">@Loc["Show only habits with interval ratio over"] @_settings.SelectedRatioMin%</label>
                 </div>
 
                 <input type="range" class="form-range d-block" aria-label="@Loc["Minimum interval ratio"]" value="@_settings.SelectedRatioMin" @oninput="(ChangeEventArgs args) => SetSelectedRatioMin(Convert.ToInt32(args.Value))" @onchange="(ChangeEventArgs args) => SaveSelectedRatioMin(Convert.ToInt32(args.Value))" data-search-step-19 />

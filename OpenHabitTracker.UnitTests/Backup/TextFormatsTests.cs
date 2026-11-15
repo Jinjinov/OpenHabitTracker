@@ -207,6 +207,33 @@ public class TextFormatsTests
 
     // Known: TODO.md, section 5.
     [Test]
+    [Explicit("Bug: TSV import joins a note's lines with Environment.NewLine, so the same file gives CRLF on Windows and LF elsewhere")]
+    public async Task Tsv_Read_JoinsNoteLinesWithLineFeedOnEverySystem()
+    {
+        List<CategoryModel> categories = await new TsvImportExport(_clientState).ReadDataFile(ToStream(
+            TsvHeader + "\n" +
+            "Note\tWork\tMeeting\tAgenda\tHigh\t\t\t\t\t\n" +
+            "Note\tWork\tMeeting\tBudget\tHigh\t\t\t\t\t\n"));
+
+        Assert.That(categories.Single().Notes.Single().Content, Is.EqualTo("Agenda\nBudget"));
+    }
+
+    // Known: TODO.md, section 5.
+    [Test]
+    [Explicit("Bug: TSV import gives a habit with blank repeat fields RepeatCount and RepeatInterval 0, and an interval of 0 makes its ratio infinite")]
+    public async Task Tsv_Read_HabitWithBlankRepeatFields_RepeatsOncePerPeriod()
+    {
+        List<CategoryModel> categories = await new TsvImportExport(_clientState).ReadDataFile(ToStream(
+            TsvHeader + "\n" +
+            "Habit\tHealth\tRun\t\tMedium\t\t\t\t\t\n"));
+
+        HabitModel run = categories.Single().Habits.Single();
+
+        Assert.That((run.RepeatCount, run.RepeatInterval), Is.EqualTo((1, 1)));
+    }
+
+    // Known: TODO.md, section 5.
+    [Test]
     [Explicit("Bug: TSV import groups rows by title, so two notes with the same title in one category become one note")]
     public async Task Tsv_TwoNotesWithTheSameTitle_ExportAndReadBackAsTwo()
     {

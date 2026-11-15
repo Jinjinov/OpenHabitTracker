@@ -513,6 +513,32 @@ public class TaskServiceTests
         Assert.That(task.CompletedAt, Is.Null);
     }
 
+    // A completed task is announced by nothing, so starting it again makes it due again, as marking it not done does.
+    [Test]
+    public async Task Start_CompletedTask_RebuildsTheNotificationSchedule()
+    {
+        TaskModel task = TestData.Task(id: 1, completedAt: DateTime.Now.AddHours(-1));
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        await _sut.Start(task);
+
+        await _notificationScheduler.Received(1).Rebuild();
+    }
+
+    // The schedule reads only the completion, which an open task does not have.
+    [Test]
+    public async Task Start_OpenTask_LeavesTheNotificationScheduleAlone()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
+
+        await _sut.Start(task);
+
+        await _notificationScheduler.DidNotReceive().Rebuild();
+    }
+
     // --- SetStartTime tests ---
 
     [Test]

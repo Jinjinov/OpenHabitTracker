@@ -93,8 +93,9 @@ public class HabiticaImport
             if (Date(todo, "date") is DateTime due)
                 task.PlannedAt = Local(due).Date + TaskModel.DateOnlySentinel;
 
+            // Without dateCompleted, the todo's last change, or else the import, stands in for the completion.
             if (todo.TryGetProperty("completed", out JsonElement completed) && completed.ValueKind == JsonValueKind.True)
-                task.CompletedAt = Date(todo, "dateCompleted") is DateTime dateCompleted ? Local(dateCompleted) : null;
+                task.CompletedAt = Date(todo, "dateCompleted") is DateTime dateCompleted ? Local(dateCompleted) : task.UpdatedAt;
 
             CategoryOf(todo).Tasks.Add(task);
         }

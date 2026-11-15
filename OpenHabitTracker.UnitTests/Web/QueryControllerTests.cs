@@ -37,6 +37,11 @@ public class QueryControllerTests
         ]));
         dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
         dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([]));
+        dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>(
+        [
+            new CategoryEntity { Id = 1, Title = "Shop" },
+            new CategoryEntity { Id = 2, Title = "Bakery" }
+        ]));
 
         _server = await InProcessServer.Start(services =>
         {
@@ -81,6 +86,14 @@ public class QueryControllerTests
         List<JsonElement> notes = await Read(await _httpClient.GetAsync("api/Query/notes?HiddenCategoryIds=1"));
 
         Assert.That(Titles(notes), Is.EqualTo(new[] { "Bread" }));
+    }
+
+    [Test]
+    public async Task NotesGet_SortByCategory_OrdersByTheCategoryTitle()
+    {
+        List<JsonElement> notes = await Read(await _httpClient.GetAsync("api/Query/notes?SortBy[Note]=Category"));
+
+        Assert.That(Titles(notes), Is.EqualTo(new[] { "Bread", "Milk" }));
     }
 
     [Test]

@@ -1,4 +1,4 @@
-﻿using OpenHabitTracker.App;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
@@ -23,7 +23,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
     {
         QueryParameters queryParameters = _searchFilterService.GetQueryParameters(_clientState.Settings);
 
-        return Habits!.FilterHabits(queryParameters);
+        return Habits!.FilterHabits(queryParameters, _clientState.Categories);
     }
 
     public async Task Initialize()

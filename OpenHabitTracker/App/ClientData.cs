@@ -34,7 +34,7 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
             }
         }
 
-        return Notes.Values.FilterNotes(queryParameters);
+        return Notes.Values.FilterNotes(queryParameters, await CategoriesToSortBy(queryParameters, ContentType.Note));
     }
 
     public async Task<IEnumerable<TaskModel>> GetTasks(QueryParameters queryParameters)
@@ -55,7 +55,7 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
             }
         }
 
-        return Tasks.Values.FilterTasks(queryParameters);
+        return Tasks.Values.FilterTasks(queryParameters, await CategoriesToSortBy(queryParameters, ContentType.Task));
     }
 
     public async Task<IEnumerable<HabitModel>> GetHabits(QueryParameters queryParameters)
@@ -88,6 +88,16 @@ public class ClientData(IDataAccess dataAccess, MarkdownToHtml markdownToHtml)
             }
         }
 
-        return Habits.Values.FilterHabits(queryParameters);
+        return Habits.Values.FilterHabits(queryParameters, await CategoriesToSortBy(queryParameters, ContentType.Habit));
+    }
+
+    // Read only for a sort by category, and not kept in Categories, because ClientState takes a filled Categories
+    // to mean that the notes, tasks and habits are already in its lists.
+    private async Task<IReadOnlyDictionary<long, CategoryModel>?> CategoriesToSortBy(QueryParameters queryParameters, ContentType contentType)
+    {
+        if (queryParameters.SortBy[contentType] != Sort.Category)
+            return null;
+
+        return Categories ?? (await _dataAccess.GetCategories()).Select(x => x.ToModel()).ToDictionary(x => x.Id);
     }
 }
