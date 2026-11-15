@@ -251,18 +251,86 @@
 
     async Task HandleGridKeyDown(KeyboardEventArgs e)
     {
+        bool moved = DisplayMonth ? MoveInMonth(e.Key) : MoveInStrip(e.Key);
+
+        if (moved)
+            await JsInterop.FocusElement(_dayCellRefs[_activeDayIndex]);
+    }
+
+    // The keys move by date, so at the edge of the view the month that holds the next day opens with that day focused.
+    bool MoveInMonth(string key)
+    {
+        DateTime day = CalendarService.GetCalendarDay(_calendarParams.CalendarStart, _activeDayIndex);
+
+        switch (key)
+        {
+            case "ArrowRight":
+                FocusDay(day.AddDays(1));
+                break;
+            case "ArrowLeft":
+                FocusDay(day.AddDays(-1));
+                break;
+            case "ArrowDown":
+                FocusDay(day.AddDays(7));
+                break;
+            case "ArrowUp":
+                FocusDay(day.AddDays(-7));
+                break;
+            case "Home":
+                _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow;
+                break;
+            case "End":
+                _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow + daysInRow - 1;
+                break;
+            case "PageDown":
+                _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek);
+                FocusSameDayOfTheShownMonth(day);
+                break;
+            case "PageUp":
+                _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek);
+                FocusSameDayOfTheShownMonth(day);
+                break;
+            default:
+                return false;
+        }
+
+        return true;
+    }
+
+    void FocusDay(DateTime day)
+    {
+        int index = (day - _calendarParams.CalendarStart).Days;
+
+        if (index < 0 || index >= rowCount * daysInRow)
+        {
+            _calendarParams.SetCalendarStartByFirstDayOfMonth(ClientState.Settings.FirstDayOfWeek, day);
+            index = (day - _calendarParams.CalendarStart).Days;
+        }
+
+        _activeDayIndex = index;
+    }
+
+    // A day the shown month does not have, like the 31st in a 30 day month, becomes its last day.
+    void FocusSameDayOfTheShownMonth(DateTime day)
+    {
+        DateTime month = _calendarParams.FirstDayOfMonth;
+
+        FocusDay(month.AddDays(Math.Min(day.Day, DateTime.DaysInMonth(month.Year, month.Month)) - 1));
+    }
+
+    // A strip pages by its own width, so no day is skipped or shown twice.
+    bool MoveInStrip(string key)
+    {
         int totalCells = rowCount * daysInRow;
-        switch (e.Key)
+
+        switch (key)
         {
             case "ArrowRight":
                 if (_activeDayIndex + 1 < totalCells)
                     _activeDayIndex++;
                 else
                 {
-                    if (DisplayMonth)
-                        _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek);
-                    else
-                        _calendarParams.ShiftCalendarByDays(daysInRow);
+                    _calendarParams.ShiftCalendarByDays(daysInRow);
                     _activeDayIndex = 0;
                 }
                 break;
@@ -271,10 +339,7 @@
                     _activeDayIndex--;
                 else
                 {
-                    if (DisplayMonth)
-                        _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek);
-                    else
-                        _calendarParams.ShiftCalendarByDays(-daysInRow);
+                    _calendarParams.ShiftCalendarByDays(-daysInRow);
                     _activeDayIndex = totalCells - 1;
                 }
                 break;
@@ -283,10 +348,7 @@
                     _activeDayIndex += daysInRow;
                 else
                 {
-                    if (DisplayMonth)
-                        _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek);
-                    else
-                        _calendarParams.ShiftCalendarByDays(daysInRow);
+                    _calendarParams.ShiftCalendarByDays(daysInRow);
                     _activeDayIndex = 0;
                 }
                 break;
@@ -295,10 +357,7 @@
                     _activeDayIndex -= daysInRow;
                 else
                 {
-                    if (DisplayMonth)
-                        _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek);
-                    else
-                        _calendarParams.ShiftCalendarByDays(-daysInRow);
+                    _calendarParams.ShiftCalendarByDays(-daysInRow);
                     _activeDayIndex = totalCells - 1;
                 }
                 break;
@@ -309,23 +368,18 @@
                 _activeDayIndex = (_activeDayIndex / daysInRow) * daysInRow + daysInRow - 1;
                 break;
             case "PageDown":
-                if (DisplayMonth)
-                    _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek);
-                else
-                    _calendarParams.ShiftCalendarByDays(daysInRow);
+                _calendarParams.ShiftCalendarByDays(daysInRow);
                 _activeDayIndex = 0;
                 break;
             case "PageUp":
-                if (DisplayMonth)
-                    _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek);
-                else
-                    _calendarParams.ShiftCalendarByDays(-daysInRow);
+                _calendarParams.ShiftCalendarByDays(-daysInRow);
                 _activeDayIndex = 0;
                 break;
             default:
-                return;
+                return false;
         }
-        await JsInterop.FocusElement(_dayCellRefs[_activeDayIndex]);
+
+        return true;
     }
 
     async Task DayClicked(DateTime dateTime, List<TimeModel>? timeList, int cellIndex)

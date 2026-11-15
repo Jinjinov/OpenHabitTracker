@@ -408,60 +408,104 @@ public class CalendarComponentStoreTests
         Assert.That(cut.FindAll("[role='dialog']"), Is.Empty);
     }
 
+    // Page Down and Page Up keep the day of the month, and a day the month does not have becomes its last day.
     [Test]
-    public async Task Keys_PageDownAndPageUp_TurnTheMonthAndFocusTheFirstDay()
+    public async Task Keys_PageDownAndPageUp_TurnTheMonthAndKeepTheDayOfTheMonth()
     {
         await StartWith();
 
         IRenderedComponent<CalendarComponent> cut = RenderMonth();
 
-        await Press(cut, "ArrowRight");
+        DateTime fifteenth = FirstOfMonth(0).AddDays(14);
+        await CellOf(cut, fifteenth).ClickAsync(new MouseEventArgs());
         await Press(cut, "PageDown");
 
         Assert.Multiple(() =>
         {
             Assert.That(cut.Find("span.input-group-text").TextContent, Is.EqualTo(FirstOfMonth(1).ToString("MMMM")));
-            Assert.That(ActiveDay(cut), Is.EqualTo(Day(WeekStart(FirstOfMonth(1), DayOfWeek.Monday))));
+            Assert.That(ActiveDay(cut), Is.EqualTo(Day(FirstOfMonth(1).AddDays(14))));
         });
 
         await Press(cut, "PageUp");
         await Press(cut, "PageUp");
 
-        Assert.That(ActiveDay(cut), Is.EqualTo(Day(WeekStart(FirstOfMonth(-1), DayOfWeek.Monday))));
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Find("span.input-group-text").TextContent, Is.EqualTo(FirstOfMonth(-1).ToString("MMMM")));
+            Assert.That(ActiveDay(cut), Is.EqualTo(Day(FirstOfMonth(-1).AddDays(14))));
+        });
     }
 
     [Test]
-    public async Task Keys_LeftOrUpFromTheFirstDay_ShowThePreviousMonthWithItsLastDayFocused()
+    public async Task Keys_PageDownFromTheLastDayOfAMonth_LandsOnTheLastDayOfAShorterMonth()
     {
         await StartWith();
 
         IRenderedComponent<CalendarComponent> cut = RenderMonth();
 
+        DateTime focused = FirstOfMonth(1).AddDays(-1);
+        await CellOf(cut, focused).ClickAsync(new MouseEventArgs());
+
+        // a year of pages meets 28, 29, 30 and 31 day months
+        for (int month = 1; month <= 12; month++)
+        {
+            await Press(cut, "PageDown");
+
+            DateTime shown = FirstOfMonth(month);
+            focused = shown.AddDays(Math.Min(focused.Day, DateTime.DaysInMonth(shown.Year, shown.Month)) - 1);
+
+            Assert.That(ActiveDay(cut), Is.EqualTo(Day(focused)), shown.ToString("MMMM yyyy"));
+        }
+    }
+
+    // The keys move by date, so at the edge of the view they open the month that holds the next day.
+    [Test]
+    public async Task Keys_LeftOrUpFromTheFirstCell_OpenThePreviousMonthOnTheDayBefore()
+    {
+        await StartWith();
+
+        IRenderedComponent<CalendarComponent> cut = RenderMonth();
+        DateTime first = WeekStart(FirstOfMonth(0), DayOfWeek.Monday);
+
         await Press(cut, "ArrowLeft");
 
-        Assert.That(ActiveDay(cut), Is.EqualTo(Day(WeekStart(FirstOfMonth(-1), DayOfWeek.Monday).AddDays(41))));
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Find("span.input-group-text").TextContent, Is.EqualTo(FirstOfMonth(-1).ToString("MMMM")));
+            Assert.That(ActiveDay(cut), Is.EqualTo(Day(first.AddDays(-1))));
+        });
 
         await Press(cut, "ArrowUp");
 
-        Assert.That(ActiveDay(cut), Is.EqualTo(Day(WeekStart(FirstOfMonth(-1), DayOfWeek.Monday).AddDays(34))));
+        Assert.That(ActiveDay(cut), Is.EqualTo(Day(first.AddDays(-8))));
     }
 
     [Test]
-    public async Task Keys_RightOrDownFromTheLastDay_ShowTheNextMonthWithItsFirstDayFocused()
+    public async Task Keys_RightOrDownFromTheLastCell_OpenTheNextMonthOnTheDayAfter()
     {
         await StartWith();
 
         IRenderedComponent<CalendarComponent> cut = RenderMonth();
+        DateTime last = WeekStart(FirstOfMonth(0), DayOfWeek.Monday).AddDays(41);
 
-        await Press(cut, "ArrowLeft");
+        await Press(cut, "End");
+
+        for (int row = 0; row < 5; row++)
+            await Press(cut, "ArrowDown");
+
+        Assert.That(ActiveDay(cut), Is.EqualTo(Day(last)));
+
         await Press(cut, "ArrowRight");
 
-        Assert.That(ActiveDay(cut), Is.EqualTo(Day(WeekStart(FirstOfMonth(0), DayOfWeek.Monday))));
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Find("span.input-group-text").TextContent, Is.EqualTo(FirstOfMonth(1).ToString("MMMM")));
+            Assert.That(ActiveDay(cut), Is.EqualTo(Day(last.AddDays(1))));
+        });
 
-        await Press(cut, "ArrowLeft");
         await Press(cut, "ArrowDown");
 
-        Assert.That(ActiveDay(cut), Is.EqualTo(Day(WeekStart(FirstOfMonth(0), DayOfWeek.Monday))));
+        Assert.That(ActiveDay(cut), Is.EqualTo(Day(last.AddDays(8))));
     }
 
     [Test]
