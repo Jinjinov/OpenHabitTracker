@@ -372,7 +372,6 @@ public class HabitComponentStoreTests
     }
 
     [Test]
-    [Explicit("Bug: Mark as done while the timer runs completes the entry but leaves the timer running, and Stop then stores a second completion")]
     public async Task MarkAsDone_WhileTheTimerRuns_StopsTheTimer()
     {
         await StartWith();
@@ -392,6 +391,25 @@ public class HabitComponentStoreTests
             Assert.That((await StoredTimes()).Count(x => x.CompletedAt is not null), Is.EqualTo(1));
             Assert.That(timerShown, Is.False);
         });
+    }
+
+    // As after Stop, the quantity is asked for the stopped entry and cannot be cancelled.
+    [Test]
+    public async Task MarkAsDone_QuantityHabitWhileTheTimerRuns_AsksForTheQuantityOfTheStoppedEntry()
+    {
+        await StartWith(habit: x => x.DisplayMetric = DisplayMetric.Quantity);
+
+        IRenderedComponent<HabitComponent> cut = Render();
+
+        StartTimer(cut);
+        await Click(cut, "Mark as done");
+
+        Assert.That(cut.FindAll("[role='dialog'] button[aria-label='Cancel']"), Is.Empty);
+
+        cut.Find("#quantity-modal-input").Change("4");
+        await cut.Find("#quantity-modal-ok").ClickAsync(new MouseEventArgs());
+
+        Assert.That((await StoredTimes()).Select(x => (x.CompletedAt is not null, x.Quantity)), Is.EqualTo(new[] { (true, 4.0) }));
     }
 
     [TestCase(1, 2, Period.Day, "2 d")]

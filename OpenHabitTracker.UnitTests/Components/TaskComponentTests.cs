@@ -309,7 +309,6 @@ public class TaskComponentTests
     }
 
     [Test]
-    [Explicit("Bug: Mark as done while the timer runs leaves the timer running unseen, so the started and completed times stay hidden")]
     public async Task MarkAsDone_WhileTheTimerRuns_StopsTheTimerAndShowsTheTimes()
     {
         IRenderedComponent<TaskComponent> cut = Render();
@@ -327,7 +326,7 @@ public class TaskComponentTests
             Assert.That(cut.FindAll("[data-tasks-step-17]"), Has.Count.EqualTo(1));
         });
 
-        // marked as not done again, the task shows the timer that kept running instead of a new one
+        // marked as not done again, the task offers a new timer
         await cut.Find("[data-tasks-step-8]").ClickAsync(new MouseEventArgs());
 
         Assert.That(cut.FindAll("[data-tasks-step-14] button[aria-label='Start']"), Has.Count.EqualTo(1));

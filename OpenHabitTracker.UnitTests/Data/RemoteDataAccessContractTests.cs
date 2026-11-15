@@ -91,11 +91,6 @@ public class RemoteDataAccessContractTests : DataAccessContractTests
         Assert.That(categories.Select(x => (x.Id, x.Title)), Is.EqualTo(stored.OrderBy(x => x.Id).Select(x => (x.Id, x.Title))));
     }
 
-    // The server stamps the row, but the entity the caller passed never learns the new time.
-    [Test]
-    [Explicit("Bug: an update leaves the old UpdatedAt on the caller's entity")]
-    public override Task UpdateHabitNoteTask_StoreTheChangeAndStampUpdatedAt() => base.UpdateHabitNoteTask_StoreTheChangeAndStampUpdatedAt();
-
     // The login fields belong to the device and are never sent to the server.
     [Test]
     public override Task UpdateLoginSettings_WritesOnlyTheLoginFields()

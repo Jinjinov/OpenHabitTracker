@@ -442,8 +442,15 @@
         await HabitService.UpdateHabit();
     }
 
+    // While the timer runs, done means the same as Stop, which completes the running entry.
     async Task OnMarkAsDoneClicked()
     {
+        if (_timer is not null)
+        {
+            await StopTimer();
+            return;
+        }
+
         if (Habit.DisplayMetric == DisplayMetric.Quantity)
         {
             _isTimerStopModal = false;

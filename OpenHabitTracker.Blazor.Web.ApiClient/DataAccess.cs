@@ -175,9 +175,30 @@ public class DataAccess(DataAccessClient client) : IDataAccess
 
     // Update
     public Task UpdateUser(UserEntity user) => _client.UpdateUserAsync(user);
-    public Task UpdateHabit(HabitEntity habit) => _client.UpdateHabitAsync(habit);
-    public Task UpdateNote(NoteEntity note) => _client.UpdateNoteAsync(note);
-    public Task UpdateTask(TaskEntity task) => _client.UpdateTaskAsync(task);
+
+    // The server stamps UpdatedAt on its own row, and the stamp is read back because the caller shows it.
+    public async Task UpdateHabit(HabitEntity habit)
+    {
+        await _client.UpdateHabitAsync(habit);
+
+        if (await GetHabit(habit.Id) is HabitEntity stored)
+            habit.UpdatedAt = stored.UpdatedAt;
+    }
+    public async Task UpdateNote(NoteEntity note)
+    {
+        await _client.UpdateNoteAsync(note);
+
+        if (await GetNote(note.Id) is NoteEntity stored)
+            note.UpdatedAt = stored.UpdatedAt;
+    }
+    public async Task UpdateTask(TaskEntity task)
+    {
+        await _client.UpdateTaskAsync(task);
+
+        if (await GetTask(task.Id) is TaskEntity stored)
+            task.UpdatedAt = stored.UpdatedAt;
+    }
+
     public Task UpdateTime(TimeEntity time) => _client.UpdateTimeAsync(time);
     public Task UpdateItem(ItemEntity item) => _client.UpdateItemAsync(item);
     public Task UpdateCategory(CategoryEntity category) => _client.UpdateCategoryAsync(category);

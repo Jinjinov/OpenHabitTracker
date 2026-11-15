@@ -264,7 +264,7 @@ public abstract class DataAccessContractTests
 
     // The store stamps UpdatedAt in local time, and the services copy it back onto the model.
     [Test]
-    public virtual async Task UpdateHabitNoteTask_StoreTheChangeAndStampUpdatedAt()
+    public async Task UpdateHabitNoteTask_StoreTheChangeAndStampUpdatedAt()
     {
         HabitEntity habit = Habit();
         NoteEntity note = new() { Title = "note", UpdatedAt = _created };
