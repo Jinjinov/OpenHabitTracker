@@ -306,7 +306,7 @@
                     </InputSelect>
                     <span class="input-group-text bg-transparent">min</span>
 
-                    <button class="btn btn-outline-primary" aria-label="@Loc["Clear reminder time"]" @onclick="() => SaveNotificationLead(0, 0)"><i class="bi bi-x-square"></i></button>
+                    <button class="btn btn-outline-primary" aria-label="@Loc["Clear reminder time"]" @onclick="ClearNotificationLead"><i class="bi bi-x-square"></i></button>
                 </div>
             </div>
 
@@ -729,6 +729,17 @@
     async Task SaveNotificationLead(int hour, int minute)
     {
         _settings.NotificationLeadMinutes = await Allowed(true) ? hour * 60 + minute : null;
+
+        await UpdateAndRefresh();
+    }
+
+    // Clearing resets the time and leaves on and off to the checkbox; an off reminder has no time to clear.
+    async Task ClearNotificationLead()
+    {
+        if (_settings.NotificationLeadMinutes is null)
+            return;
+
+        _settings.NotificationLeadMinutes = 0;
 
         await UpdateAndRefresh();
     }

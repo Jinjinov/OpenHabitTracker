@@ -286,12 +286,16 @@ public class SettingsPageTests
         {
             Assert.That((await Stored()).NotificationLeadMinutes, Is.EqualTo(0));
             Assert.That(cut.Find("select[aria-label='Remind hours']").GetAttribute("value"), Is.EqualTo("0"));
+            Assert.That(cut.Find("#NotificationLead").HasAttribute("checked"), Is.True);
+
+            // the check box and the hour each asked for the permission, and clearing does not ask again
+            await _app.Notifications.Received(2).RequestPermission();
         });
     }
 
-    // The button is shown with the reminder off as well, and clearing turns the reminder on.
+    // The button is shown with the reminder off as well, and an off reminder has no time to clear.
     [Test]
-    public async Task ClearReminderTime_WithTheReminderOff_TurnsItOn()
+    public async Task ClearReminderTime_WithTheReminderOff_LeavesItOff()
     {
         CanNotify(permissionGranted: true);
 
@@ -301,8 +305,9 @@ public class SettingsPageTests
 
         await Assert.MultipleAsync(async () =>
         {
-            Assert.That((await Stored()).NotificationLeadMinutes, Is.EqualTo(0));
-            Assert.That(cut.Find("#NotificationLead").HasAttribute("checked"), Is.True);
+            Assert.That((await Stored()).NotificationLeadMinutes, Is.Null);
+            Assert.That(cut.Find("#NotificationLead").HasAttribute("checked"), Is.False);
+            await _app.Notifications.DidNotReceive().RequestPermission();
         });
     }
 
