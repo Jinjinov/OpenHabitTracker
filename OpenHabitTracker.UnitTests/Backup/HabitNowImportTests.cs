@@ -186,4 +186,124 @@ public class HabitNowImportTests
         Assert.That(data.Categories.Select(x => x.Title),
             Is.EquivalentTo(new[] { "", "Health", "Study", "Sports", "Household", "Meditation", "Archived", "Finance", "Task" }));
     }
+
+    // A backup written by hand in the .hn layout: categories, then activities, then entries.
+    private async Task<ImportedData> ReadText(string categories, string activities, string entries = "")
+    {
+        await using MemoryStream stream = new(System.Text.Encoding.UTF8.GetBytes($"C202611081056331{{C{categories}{{H{activities}{{S{{X{entries}{{T"));
+
+        return await _sut.ReadDataFile(stream);
+    }
+
+    [Test]
+    public async Task Priority_EveryStepAndAMissingOne()
+    {
+        ImportedData data = await ReadText("1;1;Work;1",
+            "1;1;;p0;1;1c0;B6aa;;0;0|2;2;;p1;1;1c1;B6aa;;0;0|3;3;;p2;1;1c2;B6aa;;0;0|4;4;;p3;1;1c3;B6aa;;0;0|" +
+            "5;5;;p4;1;1c4;B6aa;;0;0|6;6;;p5;1;1c5;B6aa;;0;0|7;7;;p7;1;1c7;B6aa;;0;0|8;8;;none;1;1c;B6aa;;0;0");
+
+        Assert.That(data.Categories.Single(x => x.Title == "Work").Tasks.Select(x => x.Priority), Is.EqualTo(new[]
+        {
+            Priority.None, Priority.VeryLow, Priority.Low, Priority.Medium, Priority.High, Priority.VeryHigh, Priority.VeryHigh, Priority.VeryLow
+        }));
+    }
+
+    [Test]
+    public async Task Frequency_CountsPerWeekOrMonthAndUnreadableParametersFallBackToDaily()
+    {
+        ImportedData data = await ReadText("1;1;Work;1",
+            "1;1;;Weekly three;1;0a1;B6a1;;0;02;03;;;|2;2;;Monthly four;1;0a1;B6a1;;0;02;14;;;|3;3;;Broken count;1;0a1;B6a1;;0;02;1x;;;|" +
+            "4;4;;Every x days;1;0a1;B6a1;;0;07;x;;;|5;5;;Every zero days;1;0a1;B6a1;;0;07;0;;;|6;6;;No days given;1;0a1;B6a1;;0;01;01;;;|" +
+            "7;7;;Unknown repeat;1;0a1;B6a1;;0;09;01;;;");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Rule(Habit(data, "Weekly three")), Is.EqualTo((3, 1, Period.Week)));
+            Assert.That(Rule(Habit(data, "Monthly four")), Is.EqualTo((4, 1, Period.Month)));
+            Assert.That(Rule(Habit(data, "Broken count")), Is.EqualTo((1, 1, Period.Day)));
+            Assert.That(Rule(Habit(data, "Every x days")), Is.EqualTo((1, 1, Period.Day)));
+            Assert.That(Rule(Habit(data, "Every zero days")), Is.EqualTo((1, 1, Period.Day)));
+            Assert.That(Rule(Habit(data, "No days given")), Is.EqualTo((1, 1, Period.Week)));
+            Assert.That(Rule(Habit(data, "Unknown repeat")), Is.EqualTo((1, 1, Period.Day)));
+        });
+    }
+
+    [Test]
+    public async Task Dates_ThatAreNotRealDays_LeaveTheTaskUnplanned()
+    {
+        ImportedData data = await ReadText("1;1;Work;1",
+            "1;1;;Feb 31;1;1c1;B61v;;0;0|2;2;;Decade zero;1;1c1;@6a1;;0;0|3;3;;Too short;1;1c1;B6;;0;0|4;4;;Bad digit;1;1c1;B6w1;;0;0|" +
+            "5;5;;Twenty ten;1;1c1;A9b5;;0;0|6;6;;Leap day;1;1c1;B81t;;0;0");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Task(data, "Feb 31").PlannedAt, Is.Null);
+            Assert.That(Task(data, "Decade zero").PlannedAt, Is.Null);
+            Assert.That(Task(data, "Too short").PlannedAt, Is.Null);
+            Assert.That(Task(data, "Bad digit").PlannedAt, Is.Null);
+            Assert.That(Task(data, "Twenty ten").PlannedDate, Is.EqualTo(new DateTime(2019, 12, 5)));
+            Assert.That(Task(data, "Leap day").PlannedDate, Is.EqualTo(new DateTime(2028, 2, 29)));
+        });
+    }
+
+    [Test]
+    public async Task YesNoHabit_FailedEntriesWithAValueAndEntriesOnNoDayAreLeftOut()
+    {
+        ImportedData data = await ReadText("1;1;Work;1",
+            "1;1;;Stretch;1;0a1;B6a1;;0;00;01;;;",
+            "1;B6a2;fc|1;B6a3;fc;1|1;B6a4;fs|1;B6a5;fd|1;B6aw;fd|1;B6a6;fdWith a note");
+
+        Assert.That(Habit(data, "Stretch").TimesDone!.Select(x => x.StartedAt), Is.EqualTo(new[] { Midday(2026, 11, 5), Midday(2026, 11, 6) }));
+    }
+
+    [Test]
+    public async Task Targets_ZeroQuantityIsOneAndATimerPastADayIsCapped()
+    {
+        ImportedData data = await ReadText("1;1;Work;1",
+            "1;1;;Pushups;1;0a1;B6a1;;0;10;01;reps;;0|2;2;;Long timer;1;0a1;B6a1;;0;60;01;;;100000|" +
+            "3;3;;Plain;1;0a1;B6a1;;0;00;01;ignored unit;;|4;4;;Timer no target;1;0a1;B6a1;;0;60;01;;;");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Habit(data, "Pushups (reps)").TargetQuantity, Is.EqualTo(1));
+            Assert.That(Habit(data, "Long timer").Duration, Is.EqualTo(new TimeOnly(23, 59, 59)));
+            Assert.That(Habit(data, "Plain").DisplayMetric, Is.EqualTo(DisplayMetric.Repetitions));
+            Assert.That(Habit(data, "Timer no target").Duration, Is.Null);
+            Assert.That(Habit(data, "Timer no target").DisplayMetric, Is.EqualTo(DisplayMetric.Time));
+        });
+    }
+
+    [Test]
+    public async Task Categories_ACustomNameIsKeptAndAnUnknownIdIsNoCategory()
+    {
+        ImportedData data = await ReadText("1;1;My own;1|broken",
+            "1;1;;Mine;1;0a1;B6a1;;0;00;01;;;|2;2;;Lost;9;0a1;B6a1;;0;00;01;;;|3;3;;short");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(CategoryOf(data, "Mine"), Is.EqualTo("My own"));
+            Assert.That(CategoryOf(data, "Lost"), Is.Empty);
+            Assert.That(data.Categories.SelectMany(x => x.Habits).Select(x => x.Title), Is.EquivalentTo(new[] { "Mine", "Lost" }));
+        });
+    }
+
+    // Every track of an ended habit names the first, and none is the running one.
+    [Test]
+    public async Task Tracks_NoneRunning_TakesTheLatestTrackAndStartsAtTheFirst()
+    {
+        ImportedData data = await ReadText("1;1;Work;1",
+            "61;-60;;Old name;1;0a1;B6a1;;0;00;01;;;|62;-60;;New name;1;0a1;B6a5;;0;07;02;;;",
+            "61;B6a2;fd|62;B6a6;fd");
+
+        HabitModel habit = data.Categories.SelectMany(x => x.Habits).Single();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.Title, Is.EqualTo("New name"));
+            Assert.That(Rule(habit), Is.EqualTo((1, 2, Period.Day)));
+            Assert.That(habit.StartAt, Is.EqualTo(new DateTime(2026, 11, 1)));
+            Assert.That(habit.TimesDone!.Select(x => x.StartedAt), Is.EqualTo(new[] { Midday(2026, 11, 2), Midday(2026, 11, 6) }));
+            Assert.That(habit.LastTimeDoneAt, Is.EqualTo(Midday(2026, 11, 6)));
+        });
+    }
 }

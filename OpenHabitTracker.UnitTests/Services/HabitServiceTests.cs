@@ -826,8 +826,7 @@ public class HabitServiceTests
 
     // --- AddHabit with category tests ---
 
-    // Category assignment is handled by CategoryService.ChangeCategory (called when user selects a category in the UI).
-    // AddHabit must NOT add to category.Habits — doing so would cause a duplicate when ChangeCategory already did it.
+    // ChangeCategory only sets CategoryId on an unsaved habit, so AddHabit adds it to its category list.
     [Test]
     public async Task AddHabit_WithNonZeroCategoryId_AddsToCategory()
     {
@@ -1386,17 +1385,401 @@ public class HabitServiceTests
     [Test]
     public async Task SetStartTime_ToTheDayBefore_MovesTheEntryToThatDay()
     {
+        DateTime today = new(2026, 3, 10);
         HabitModel habit = TestData.Habit(id: 1);
-        TimeModel inProgress = new() { Id = 5, HabitId = 1, StartedAt = DateTime.Today.AddMinutes(10) }; // CompletedAt = null
+        TimeModel inProgress = new() { Id = 5, HabitId = 1, StartedAt = today.AddMinutes(10) }; // CompletedAt = null
         habit.TimesDone = [inProgress];
         habit.RefreshTimesDoneByDay();
         _clientState.Habits = TestData.HabitDict(habit);
 
-        DateTime yesterdayEvening = DateTime.Today.AddMinutes(-20); // a timer paused or reset across midnight
+        DateTime yesterdayEvening = today.AddMinutes(-20); // a timer paused or reset across midnight
         await _sut.SetStartTime(habit, yesterdayEvening);
 
-        Assert.That(habit.TimesDoneByDay!.GetValueOrDefault(DateTime.Today.AddDays(-1)), Is.EqualTo(new[] { inProgress }));
-        Assert.That(habit.TimesDoneByDay!.GetValueOrDefault(DateTime.Today) ?? [], Is.Empty);
+        Assert.That(habit.TimesDoneByDay!.GetValueOrDefault(today.AddDays(-1)), Is.EqualTo(new[] { inProgress }));
+        Assert.That(habit.TimesDoneByDay!.GetValueOrDefault(today) ?? [], Is.Empty);
+    }
+
+    // --- AddTimeDone: the start is the duration before the completion, within the same day ---
+
+    private static readonly DateTime _noon = new(2026, 3, 10, 12, 0, 0);
+
+    private void StubAddTimeToAssignId(long id)
+    {
+        _dataAccess.When(x => x.AddTime(Arg.Any<TimeEntity>())).Do(callInfo => callInfo.RequiredArg<TimeEntity>().Id = id);
+    }
+
+    [Test]
+    public async Task AddTimeDone_HabitWithDuration_StartsTheEntryThatLongBeforeTheCompletion()
+    {
+        StubAddTimeToAssignId(77);
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.Duration = new TimeOnly(0, 30);
+        habit.TimesDone = [];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetHabit(1).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = 1 }));
+
+        await _sut.AddTimeDone(habit, _noon);
+
+        TimeModel time = habit.TimesDone.Single();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(time.Id, Is.EqualTo(77));
+            Assert.That(time.HabitId, Is.EqualTo(1));
+            Assert.That(time.StartedAt, Is.EqualTo(_noon.AddMinutes(-30)));
+            Assert.That(time.CompletedAt, Is.EqualTo(_noon));
+            Assert.That(habit.TimesDoneByDay![_noon.Date], Is.EqualTo(new[] { time }));
+            Assert.That(habit.LastTimeDoneAt, Is.EqualTo(_noon));
+            Assert.That(_clientState.Times![77], Is.SameAs(time));
+        });
+        await _dataAccess.Received(1).AddTime(Arg.Is<TimeEntity>(x => x != null && x.HabitId == 1 && x.StartedAt == _noon.AddMinutes(-30) && x.CompletedAt == _noon));
+        await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(x => x != null && x.LastTimeDoneAt == _noon));
+    }
+
+    [Test]
+    public async Task AddTimeDone_DurationReachingIntoThePreviousDay_StartsAtMidnight()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.Duration = new TimeOnly(1, 0);
+        habit.TimesDone = [];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        DateTime justAfterMidnight = _noon.Date.AddMinutes(20);
+
+        await _sut.AddTimeDone(habit, justAfterMidnight);
+
+        Assert.That(habit.TimesDone.Single().StartedAt, Is.EqualTo(_noon.Date));
+    }
+
+    [Test]
+    public async Task AddTimeDone_WithoutDuration_StartsAndCompletesAtTheSameTime()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.AddTimeDone(habit, _noon);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.TimesDone.Single().StartedAt, Is.EqualTo(_noon));
+            Assert.That(habit.TimesDone.Single().CompletedAt, Is.EqualTo(_noon));
+        });
+    }
+
+    [TestCase(null, 2.5)]
+    [TestCase(4.0, 4.0)]
+    public async Task AddTimeDone_Quantity_DefaultsToTheTargetQuantity(double? quantity, double expected)
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TargetQuantity = 2.5;
+        habit.TimesDone = [];
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.AddTimeDone(habit, _noon, quantity);
+
+        Assert.That(habit.TimesDone.Single().Quantity, Is.EqualTo(expected));
+        await _dataAccess.Received(1).AddTime(Arg.Is<TimeEntity>(x => x != null && x.Quantity == expected));
+    }
+
+    [TestCase(null, 2.5)]
+    [TestCase(3.0, 3.0)]
+    public async Task MarkAsDone_WhenLastTimeInProgress_StoresTheCompletionAndQuantity(double? quantity, double expected)
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TargetQuantity = 2.5;
+        TimeModel inProgress = new() { Id = 10, HabitId = 1, StartedAt = _noon };
+        habit.TimesDone = [inProgress];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTime(10).Returns(Task.FromResult<TimeEntity?>(new TimeEntity { Id = 10, StartedAt = _noon }));
+
+        DateTime before = DateTime.Now;
+        await _sut.MarkAsDone(habit, quantity);
+        DateTime after = DateTime.Now;
+
+        Assert.That(inProgress.Quantity, Is.EqualTo(expected));
+        await _dataAccess.Received(1).UpdateTime(Arg.Is<TimeEntity>(x => x != null && x.Id == 10 && x.Quantity == expected && x.CompletedAt >= before && x.CompletedAt <= after));
+        await _dataAccess.DidNotReceive().AddTime(Arg.Any<TimeEntity>());
+    }
+
+    [Test]
+    public async Task MarkAsDone_WhenLastTimeDone_AddsACompletedEntryForNow()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [new TimeModel { Id = 10, HabitId = 1, StartedAt = _noon, CompletedAt = _noon }];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        DateTime before = DateTime.Now;
+        await _sut.MarkAsDone(habit);
+        DateTime after = DateTime.Now;
+
+        TimeModel added = habit.TimesDone[1];
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(added.CompletedAt, Is.InRange(before, after));
+            Assert.That(added.StartedAt, Is.EqualTo(added.CompletedAt));
+            Assert.That(habit.LastTimeDoneAt, Is.EqualTo(added.CompletedAt));
+        });
+    }
+
+    // --- UpdateQuantity ---
+
+    [Test]
+    public async Task UpdateQuantity_WritesTheQuantityOfTheEntry()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel time = new() { Id = 10, HabitId = 1, StartedAt = _noon, CompletedAt = _noon, Quantity = 7 };
+        habit.TimesDone = [time];
+        _dataAccess.GetTime(10).Returns(Task.FromResult<TimeEntity?>(new TimeEntity { Id = 10, Quantity = 1 }));
+
+        await _sut.UpdateQuantity(habit, time);
+
+        await _dataAccess.Received(1).UpdateTime(Arg.Is<TimeEntity>(x => x != null && x.Id == 10 && x.Quantity == 7));
+    }
+
+    [Test]
+    public async Task UpdateQuantity_CompletionsNotLoadedOrEntryMissing_WritesNothing()
+    {
+        HabitModel notLoaded = TestData.Habit(id: 1);
+        HabitModel loaded = TestData.Habit(id: 2);
+        loaded.TimesDone = [];
+        _dataAccess.GetTime(Arg.Any<long>()).Returns(Task.FromResult<TimeEntity?>(null));
+
+        await _sut.UpdateQuantity(notLoaded, new TimeModel { Id = 10, Quantity = 7 });
+        await _sut.UpdateQuantity(loaded, new TimeModel { Id = 11, Quantity = 7 });
+
+        await _dataAccess.DidNotReceive().UpdateTime(Arg.Any<TimeEntity>());
+    }
+
+    // --- writes that reach the store ---
+
+    [Test]
+    public async Task UpdateHabit_CopiesTheEditedFieldsToTheStoredEntity()
+    {
+        HabitModel habit = TestData.Habit(id: 1, title: "Old");
+        _clientState.Habits = TestData.HabitDict(habit);
+        _sut.SelectedHabit = habit;
+        _dataAccess.GetHabit(1).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = 1, Title = "Old" }));
+
+        habit.Title = "New";
+        habit.RepeatCount = 3;
+        habit.RepeatPeriod = Period.Week;
+        habit.Priority = Priority.High;
+
+        await _sut.UpdateHabit();
+
+        await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(x => x != null && x.Title == "New" && x.RepeatCount == 3 && x.RepeatPeriod == Period.Week && x.Priority == Priority.High));
+    }
+
+    [Test]
+    public async Task UpdateHabit_NothingSelected_WritesNothing()
+    {
+        _clientState.Habits = TestData.HabitDict(TestData.Habit(id: 1));
+        _sut.SelectedHabit = null;
+
+        await _sut.UpdateHabit();
+
+        await _dataAccess.DidNotReceive().GetHabit(Arg.Any<long>());
+        await _notificationScheduler.DidNotReceive().Rebuild();
+    }
+
+    [Test]
+    public async Task UpdateTimeDone_WritesTheEditedStartAndCompletion()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel time = new() { Id = 5, HabitId = 1, StartedAt = _noon, CompletedAt = _noon.AddMinutes(5) };
+        habit.TimesDone = [time];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetTime(5).Returns(Task.FromResult<TimeEntity?>(new TimeEntity { Id = 5 }));
+
+        time.StartedAt = _noon.AddDays(-1);
+        time.CompletedAt = _noon.AddDays(-1).AddMinutes(45);
+
+        await _sut.UpdateTimeDone(habit, time);
+
+        await _dataAccess.Received(1).UpdateTime(Arg.Is<TimeEntity>(x => x != null && x.StartedAt == _noon.AddDays(-1) && x.CompletedAt == _noon.AddDays(-1).AddMinutes(45)));
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.TimesDoneByDay!.Keys, Is.EqualTo(new[] { _noon.Date.AddDays(-1) }));
+            Assert.That(habit.TotalTimeSpent, Is.EqualTo(TimeSpan.FromMinutes(45)));
+        });
+    }
+
+    [Test]
+    public async Task DeleteHabit_StoresTheDeletedFlag()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        _clientState.Habits = TestData.HabitDict(habit);
+        _dataAccess.GetHabit(1).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = 1 }));
+
+        await _sut.DeleteHabit(habit);
+
+        await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(x => x != null && x.Id == 1 && x.IsDeleted));
+        Assert.That(_clientState.Habits[1], Is.SameAs(habit));
+    }
+
+    [Test]
+    public async Task Start_StoresTheRunningEntryAndPutsItOnToday()
+    {
+        StubAddTimeToAssignId(9);
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        DateTime before = DateTime.Now;
+        await _sut.Start(habit);
+        DateTime after = DateTime.Now;
+
+        TimeModel running = habit.TimesDone.Single();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(running.Id, Is.EqualTo(9));
+            Assert.That(running.StartedAt, Is.InRange(before, after));
+            Assert.That(habit.TimesDoneByDay![running.StartedAt.Date], Is.EqualTo(new[] { running }));
+        });
+        await _dataAccess.Received(1).AddTime(Arg.Is<TimeEntity>(x => x != null && x.HabitId == 1 && x.CompletedAt == null));
+    }
+
+    // --- loading ---
+
+    [Test]
+    public async Task Initialize_LoadsTheCategoriesAndTheHabits()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 2, Title = "Health" }]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>([new HabitEntity { Id = 3, CategoryId = 2, Title = "Run" }]));
+
+        await _sut.Initialize();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Habits!.Select(x => x.Title), Is.EqualTo(new[] { "Run" }));
+            Assert.That(_clientState.Categories![2].Habits.Select(x => x.Title), Is.EqualTo(new[] { "Run" }));
+        });
+    }
+
+    [Test]
+    public async Task SetSelectedHabit_HabitsNotLoaded_KeepsTheSelection()
+    {
+        HabitModel selected = TestData.Habit(id: 1);
+        _sut.SelectedHabit = selected;
+
+        await _sut.SetSelectedHabit(2);
+
+        Assert.That(_sut.SelectedHabit, Is.SameAs(selected));
+    }
+
+    [Test]
+    public async Task LoadTimesDone_DayBucketsMissing_ReloadsTheCompletionsFromTheStore()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [new TimeModel { Id = 1, HabitId = 1, StartedAt = _noon }];
+        habit.TimesDoneByDay = null;
+        _dataAccess.GetTimes(1).Returns(Task.FromResult<IReadOnlyList<TimeEntity>>(
+            [new TimeEntity { Id = 1, HabitId = 1, StartedAt = _noon }, new TimeEntity { Id = 2, HabitId = 1, StartedAt = _noon.AddDays(1) }]));
+
+        await _sut.LoadTimesDone(habit);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.TimesDone.Select(x => x.Id), Is.EqualTo(new[] { 1L, 2L }));
+            Assert.That(habit.TimesDoneByDay!.Keys, Is.EqualTo(new[] { _noon.Date, _noon.Date.AddDays(1) }));
+            Assert.That(_clientState.Times!.Keys, Is.EquivalentTo(new[] { 1L, 2L }));
+        });
+    }
+
+    [Test]
+    public async Task RemoveTimeDone_CompletionsNotLoaded_WritesNothing()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel time = new() { Id = 5, StartedAt = _noon };
+        habit.TimesDone = [time];
+        habit.TimesDoneByDay = null;
+
+        await _sut.RemoveTimeDone(habit, time);
+
+        await _dataAccess.DidNotReceive().RemoveTime(Arg.Any<long>());
+        Assert.That(habit.TimesDone, Has.Count.EqualTo(1));
+    }
+
+    // --- every change that alters what is due reschedules the notifications ---
+
+    [Test]
+    public async Task AddHabit_RebuildsTheNotificationSchedule()
+    {
+        _clientState.Habits = new();
+        _sut.NewHabit = new HabitModel { Title = "New" };
+
+        await _sut.AddHabit();
+
+        await _notificationScheduler.Received(1).Rebuild();
+    }
+
+    [Test]
+    public async Task UpdateHabit_RebuildsTheNotificationSchedule()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        _clientState.Habits = TestData.HabitDict(habit);
+        _sut.SelectedHabit = habit;
+
+        await _sut.UpdateHabit();
+
+        await _notificationScheduler.Received(1).Rebuild();
+    }
+
+    [Test]
+    public async Task DeleteHabit_RebuildsTheNotificationSchedule()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.DeleteHabit(habit);
+
+        await _notificationScheduler.Received(1).Rebuild();
+    }
+
+    [Test]
+    public async Task MarkAsDone_BothWays_RebuildsTheNotificationScheduleOnce()
+    {
+        HabitModel running = TestData.Habit(id: 1);
+        running.TimesDone = [new TimeModel { Id = 3, HabitId = 1, StartedAt = _noon }];
+        HabitModel idle = TestData.Habit(id: 2);
+        idle.TimesDone = [];
+        _clientState.Habits = TestData.HabitDict(running, idle);
+
+        await _sut.MarkAsDone(running);
+        await _notificationScheduler.Received(1).Rebuild();
+
+        _notificationScheduler.ClearReceivedCalls();
+
+        await _sut.MarkAsDone(idle);
+        await _notificationScheduler.Received(1).Rebuild();
+    }
+
+    [Test]
+    public async Task RemoveAndUpdateTimeDone_RebuildTheNotificationSchedule()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        TimeModel first = new() { Id = 3, HabitId = 1, StartedAt = _noon, CompletedAt = _noon };
+        TimeModel second = new() { Id = 4, HabitId = 1, StartedAt = _noon.AddDays(1), CompletedAt = _noon.AddDays(1) };
+        habit.TimesDone = [first, second];
+        habit.RefreshTimesDoneByDay();
+        _clientState.Habits = TestData.HabitDict(habit);
+
+        await _sut.UpdateTimeDone(habit, second);
+        await _notificationScheduler.Received(1).Rebuild();
+
+        _notificationScheduler.ClearReceivedCalls();
+
+        await _sut.RemoveTimeDone(habit, first);
+        await _notificationScheduler.Received(1).Rebuild();
     }
 
     // --- the data access stamps UpdatedAt on the entity; the model shows it ---

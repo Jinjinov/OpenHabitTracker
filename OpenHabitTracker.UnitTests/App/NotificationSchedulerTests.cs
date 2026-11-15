@@ -1,0 +1,250 @@
+using Markdig;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
+using OpenHabitTracker.App;
+using OpenHabitTracker.Data;
+using OpenHabitTracker.Data.Entities;
+using OpenHabitTracker.Data.Models;
+using OpenHabitTracker.Services;
+
+namespace OpenHabitTracker.UnitTests.App;
+
+// Rebuild reads the clock itself, so every planned moment here is days away from it.
+[TestFixture]
+[SetCulture("en-US")]
+public class NotificationSchedulerTests
+{
+    private IDataAccess _dataAccess = null!;
+    private INotifications _notifications = null!;
+    private ClientState _clientState = null!;
+    private NotificationScheduler _sut = null!;
+    private List<NotificationRequest> _replaced = null!;
+
+    [SetUp]
+    public void SetUp()
+    {
+        _dataAccess = Substitute.For<IDataAccess>();
+        _dataAccess.DataLocation.Returns(DataLocation.Local);
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([]));
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>([]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>([]));
+        _dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([]));
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([]));
+
+        _notifications = Substitute.For<INotifications>();
+        _notifications.CanNotify.Returns(true);
+        _replaced = [];
+        _notifications.When(x => x.Replace(Arg.Any<IReadOnlyList<NotificationRequest>>())).Do(callInfo => _replaced = callInfo.RequiredArg<IReadOnlyList<NotificationRequest>>().ToList());
+
+        IStringLocalizer loc = Substitute.For<IStringLocalizer>();
+        loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.RequiredArg<string>(), $"[{callInfo.RequiredArg<string>()}]"));
+
+        _clientState = new(new[] { _dataAccess }, new MarkdownToHtml(new MarkdownPipelineBuilder().Build()));
+        _sut = new(_clientState, _notifications, loc, NullLogger<NotificationScheduler>.Instance);
+    }
+
+    private void UseSettings(TimeOnly? summaryTime, int? leadMinutes, bool includeOverdueTasks = false, string startPage = "")
+    {
+        _clientState.Settings = new SettingsModel
+        {
+            Id = 1,
+            NotificationTime = summaryTime,
+            NotificationLeadMinutes = leadMinutes,
+            NotificationIncludeOverdueTasks = includeOverdueTasks,
+            NotificationHabitThreshold = 100,
+            SelectedRatio = Ratio.ElapsedToDesired,
+            StartPage = startPage
+        };
+    }
+
+    private void StoreTasks(params TaskEntity[] tasks) => _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>(tasks));
+
+    private void StoreHabits(params HabitEntity[] habits) => _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(habits));
+
+    private static HabitEntity OverdueHabit(long id, string title) =>
+        new() { Id = id, Title = title, RepeatCount = 1, RepeatInterval = 1, RepeatPeriod = Period.Day, LastTimeDoneAt = DateTime.Now.AddDays(-5) };
+
+    [Test]
+    public async Task Rebuild_HostCannotNotify_DoesNothing()
+    {
+        _notifications.CanNotify.Returns(false);
+
+        await _sut.Rebuild();
+
+        await _dataAccess.DidNotReceive().GetSettings();
+        await _notifications.DidNotReceive().Replace(Arg.Any<IReadOnlyList<NotificationRequest>>());
+        await _notifications.DidNotReceive().CancelAll();
+    }
+
+    [Test]
+    public async Task Rebuild_NoSettingsSavedYet_DoesNothingAndCreatesNone()
+    {
+        await _sut.Rebuild();
+
+        await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
+        await _notifications.DidNotReceive().Replace(Arg.Any<IReadOnlyList<NotificationRequest>>());
+        await _notifications.DidNotReceive().CancelAll();
+    }
+
+    [Test]
+    public async Task Rebuild_SettingsNotLoaded_ReadsTheSavedOnes()
+    {
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 4, NotificationTime = null, NotificationLeadMinutes = null }]));
+
+        await _sut.Rebuild();
+
+        Assert.That(_clientState.Settings.Id, Is.EqualTo(4));
+        await _notifications.Received(1).CancelAll();
+    }
+
+    [Test]
+    public async Task Rebuild_BothSwitchesOff_CancelsEverything()
+    {
+        UseSettings(summaryTime: null, leadMinutes: null);
+        StoreTasks(new TaskEntity { Id = 1, Title = "Call", PlannedAt = DateTime.Today.AddDays(2).AddHours(10) });
+
+        await _sut.Rebuild();
+
+        await _notifications.Received(1).CancelAll();
+        await _notifications.DidNotReceive().Replace(Arg.Any<IReadOnlyList<NotificationRequest>>());
+    }
+
+    [Test]
+    public async Task Rebuild_TimedTask_RequestsAReminderThatNamesTheTaskAndItsTime()
+    {
+        DateTime plannedAt = DateTime.Today.AddDays(2).AddHours(10);
+        UseSettings(summaryTime: null, leadMinutes: 15);
+        StoreTasks(new TaskEntity { Id = 7, Title = "Call the bank", PlannedAt = plannedAt });
+
+        await _sut.Rebuild();
+
+        NotificationRequest request = _replaced.Single();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(request.Id, Is.EqualTo("task-7"));
+            Assert.That(request.Title, Is.EqualTo("Call the bank"));
+            Assert.That(request.Body, Is.EqualTo("10:00 AM"));
+            Assert.That(request.NotifyAt, Is.EqualTo(plannedAt.AddMinutes(-15)));
+            Assert.That(request.Route, Is.EqualTo("/tasks/7"));
+        });
+    }
+
+    [Test]
+    public async Task Rebuild_ReminderAtThePlannedMoment_HasNoBody()
+    {
+        UseSettings(summaryTime: null, leadMinutes: 0);
+        StoreTasks(new TaskEntity { Id = 7, Title = "Call the bank", PlannedAt = DateTime.Today.AddDays(2).AddHours(10) });
+
+        await _sut.Rebuild();
+
+        Assert.That(_replaced.Single().Body, Is.Empty);
+    }
+
+    [Test]
+    public async Task Rebuild_DigestWithTasksAndHabits_ListsEachKindOnItsOwnLineAndOpensTheStartPage()
+    {
+        DateTime day = DateTime.Today.AddDays(2);
+        UseSettings(summaryTime: new TimeOnly(9, 0), leadMinutes: null, startPage: "/notes");
+        StoreTasks(
+            new TaskEntity { Id = 1, Title = "Pay rent", PlannedAt = day + TaskModel.DateOnlySentinel },
+            new TaskEntity { Id = 2, Title = "Buy milk", PlannedAt = day + TaskModel.DateOnlySentinel });
+        StoreHabits(OverdueHabit(3, "Stretch"));
+
+        await _sut.Rebuild();
+
+        NotificationRequest digest = _replaced.Single(x => x.NotifyAt == day.AddHours(9));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(digest.Id, Is.EqualTo($"digest-{day:yyyyMMdd}"));
+            Assert.That(digest.Title, Is.EqualTo("[Due today]"));
+            Assert.That(digest.Body, Is.EqualTo("[Tasks]: Buy milk, Pay rent\n[Habits]: Stretch"));
+            Assert.That(digest.Route, Is.EqualTo("/notes"));
+        });
+    }
+
+    [Test]
+    public async Task Rebuild_DigestWithBothKindsAndNoStartPage_OpensTheRoot()
+    {
+        DateTime day = DateTime.Today.AddDays(2);
+        UseSettings(summaryTime: new TimeOnly(9, 0), leadMinutes: null);
+        StoreTasks(new TaskEntity { Id = 1, Title = "Pay rent", PlannedAt = day + TaskModel.DateOnlySentinel });
+        StoreHabits(OverdueHabit(3, "Stretch"));
+
+        await _sut.Rebuild();
+
+        Assert.That(_replaced.Single(x => x.NotifyAt == day.AddHours(9)).Route, Is.EqualTo("/"));
+    }
+
+    [Test]
+    public async Task Rebuild_DigestWithOnlyTasks_OpensTheTasks()
+    {
+        DateTime day = DateTime.Today.AddDays(2);
+        UseSettings(summaryTime: new TimeOnly(9, 0), leadMinutes: null, startPage: "/notes");
+        StoreTasks(new TaskEntity { Id = 1, Title = "Pay rent", PlannedAt = day + TaskModel.DateOnlySentinel });
+
+        await _sut.Rebuild();
+
+        NotificationRequest digest = _replaced.Single();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(digest.Body, Is.EqualTo("[Tasks]: Pay rent"));
+            Assert.That(digest.Route, Is.EqualTo("/tasks"));
+        });
+    }
+
+    [Test]
+    public async Task Rebuild_DigestWithOnlyHabits_OpensTheHabits()
+    {
+        UseSettings(summaryTime: new TimeOnly(9, 0), leadMinutes: null, startPage: "/notes");
+        StoreHabits(OverdueHabit(3, "Stretch"));
+
+        await _sut.Rebuild();
+
+        Assert.Multiple(() =>
+        {
+            // today's summary is left out once 09:00 has passed
+            Assert.That(_replaced, Has.Count.EqualTo(NotificationSchedule.HorizonDays).Or.Count.EqualTo(NotificationSchedule.HorizonDays - 1));
+            Assert.That(_replaced.Select(x => x.Body).Distinct(), Is.EqualTo(new[] { "[Habits]: Stretch" }));
+            Assert.That(_replaced.Select(x => x.Route).Distinct(), Is.EqualTo(new[] { "/habits" }));
+        });
+    }
+
+    [Test]
+    public async Task Rebuild_OverdueTasks_NameTheirDateAndTheirTimeWhenTheyHaveOne()
+    {
+        DateTime threeDaysAgo = DateTime.Today.AddDays(-3);
+        DateTime day = DateTime.Today.AddDays(2);
+        UseSettings(summaryTime: new TimeOnly(9, 0), leadMinutes: null, includeOverdueTasks: true);
+        StoreTasks(
+            new TaskEntity { Id = 1, Title = "Untimed", PlannedAt = threeDaysAgo + TaskModel.DateOnlySentinel },
+            new TaskEntity { Id = 2, Title = "Timed", PlannedAt = threeDaysAgo.AddHours(8).AddMinutes(30) });
+
+        await _sut.Rebuild();
+
+        NotificationRequest digest = _replaced.Single(x => x.NotifyAt == day.AddHours(9));
+
+        Assert.That(digest.Body, Is.EqualTo($"[Tasks]: Timed {threeDaysAgo:M/d/yyyy} 8:30 AM, Untimed {threeDaysAgo:M/d/yyyy}"));
+    }
+
+    [Test]
+    public async Task Rebuild_SchedulesRemindersAndDigestsTogetherInTimeOrder()
+    {
+        DateTime day = DateTime.Today.AddDays(2);
+        UseSettings(summaryTime: new TimeOnly(9, 0), leadMinutes: 30);
+        StoreTasks(
+            new TaskEntity { Id = 1, Title = "Untimed", PlannedAt = day + TaskModel.DateOnlySentinel },
+            new TaskEntity { Id = 2, Title = "Timed", PlannedAt = day.AddHours(14) });
+
+        await _sut.Rebuild();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_replaced.Select(x => x.Id), Is.EqualTo(new[] { $"digest-{day:yyyyMMdd}", "task-2" }));
+            Assert.That(_replaced.Select(x => x.NotifyAt), Is.Ordered);
+        });
+    }
+}

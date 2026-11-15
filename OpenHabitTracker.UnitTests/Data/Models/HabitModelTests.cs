@@ -102,41 +102,101 @@ public class HabitModelTests
 
     // --- GetRatio tests ---
 
+    // ElapsedTime reads the clock, so the two clock-based ratios are compared within a minute's worth of percent.
+    private const double OneMinuteOfADayInPercent = 100.0 / (24 * 60);
+
     [Test]
-    public void GetRatio_ElapsedToDesired_DoesNotThrow()
+    public void GetRatio_ElapsedToDesired_IsTheElapsedTimeOverTheDesiredInterval()
     {
-        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
+        HabitModel habit = new() { RepeatInterval = 2, RepeatPeriod = Period.Day, LastTimeDoneAt = DateTime.Now.AddDays(-1) };
         habit.TimesDone = [];
         habit.RefreshTimesDoneByDay();
 
-        Assert.DoesNotThrow(() => habit.GetRatio(Ratio.ElapsedToDesired));
+        Assert.That(habit.GetRatio(Ratio.ElapsedToDesired), Is.EqualTo(50).Within(OneMinuteOfADayInPercent));
     }
 
     [Test]
-    public void GetRatio_ElapsedToAverage_DoesNotThrow()
+    public void GetRatio_ElapsedToAverage_IsTheElapsedTimeOverTheAverageInterval()
     {
         HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
-        DateTime t1 = DateTime.Now.AddDays(-2);
-        DateTime t2 = DateTime.Now.AddDays(-1);
-        habit.TimesDone = [new TimeModel { StartedAt = t1 }, new TimeModel { StartedAt = t2 }];
-        habit.LastTimeDoneAt = t2;
+        DateTime last = DateTime.Now.AddDays(-3);
+        habit.TimesDone = [new TimeModel { StartedAt = last.AddDays(-2) }, new TimeModel { StartedAt = last }];
+        habit.LastTimeDoneAt = last;
         habit.RefreshTimesDoneByDay();
 
-        double ratio = habit.GetRatio(Ratio.ElapsedToAverage);
-
-        Assert.That(ratio, Is.GreaterThanOrEqualTo(0));
+        // 3 days since the last of two completions 2 days apart
+        Assert.That(habit.GetRatio(Ratio.ElapsedToAverage), Is.EqualTo(150).Within(OneMinuteOfADayInPercent));
     }
 
     [Test]
-    public void GetRatio_AverageToDesired_DoesNotThrow()
+    public void GetRatio_AverageToDesired_IsTheAverageIntervalOverTheDesiredInterval()
     {
-        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = Period.Day };
-        DateTime t1 = DateTime.Now.AddDays(-2);
-        DateTime t2 = DateTime.Now.AddDays(-1);
-        habit.TimesDone = [new TimeModel { StartedAt = t1 }, new TimeModel { StartedAt = t2 }];
+        HabitModel habit = new() { RepeatCount = 2, RepeatInterval = 1, RepeatPeriod = Period.Week };
+        DateTime first = new(2026, 2, 2, 7, 0, 0);
+        habit.TimesDone = [new TimeModel { StartedAt = first }, new TimeModel { StartedAt = first.AddDays(7) }];
         habit.RefreshTimesDoneByDay();
 
-        Assert.DoesNotThrow(() => habit.GetRatio(Ratio.AverageToDesired));
+        // done every 7 days, wanted every 3.5
+        Assert.That(habit.GetRatio(Ratio.AverageToDesired), Is.EqualTo(200));
+    }
+
+    [Test]
+    public void GetRepeatInterval_InvalidPeriod_Throws()
+    {
+        HabitModel habit = new() { RepeatInterval = 1, RepeatPeriod = (Period)9 };
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => habit.GetRepeatInterval());
+    }
+
+    [Test]
+    public void RemoveTimesDoneByDay_EntryNotInItsDay_LeavesTheDayAsItIs()
+    {
+        DateTime day = new(2026, 2, 2, 7, 0, 0);
+        TimeModel stored = new() { StartedAt = day };
+        HabitModel habit = new() { TimesDone = [stored] };
+        habit.RefreshTimesDoneByDay();
+
+        habit.RemoveTimesDoneByDay(new TimeModel { StartedAt = day });
+
+        Assert.That(habit.TimesDoneByDay![day.Date], Is.EqualTo(new[] { stored }));
+    }
+
+    [Test]
+    public void RemoveTimesDoneByDay_RecomputesTheTotalsFromTheRemainingEntries()
+    {
+        DateTime day = new(2026, 2, 2, 7, 0, 0);
+        TimeModel kept = new() { StartedAt = day, CompletedAt = day.AddMinutes(10) };
+        TimeModel removed = new() { StartedAt = day.AddDays(1), CompletedAt = day.AddDays(1).AddMinutes(50) };
+        HabitModel habit = new() { RepeatInterval = 1, TimesDone = [kept, removed] };
+        habit.RefreshTimesDoneByDay();
+
+        habit.TimesDone.Remove(removed);
+        habit.RemoveTimesDoneByDay(removed);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.TotalTimeSpent, Is.EqualTo(TimeSpan.FromMinutes(10)));
+            Assert.That(habit.AverageInterval, Is.EqualTo(TimeSpan.FromDays(1)));
+            Assert.That(habit.TimesDoneByDay![day.Date.AddDays(1)], Is.Empty);
+        });
+    }
+
+    [Test]
+    public void ComputeStreaks_Yearly_DoneThisYearAndLastYear_CurrentStreak2()
+    {
+        DateTime today = DateTime.Today;
+        HabitModel habit = new() { RepeatCount = 1, RepeatInterval = 1, RepeatPeriod = Period.Year };
+        habit.TimesDone = [new TimeModel { StartedAt = today.AddYears(-1) }, new TimeModel { StartedAt = today }];
+
+        habit.RefreshTimesDoneByDay();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.CurrentStreak!.Count, Is.EqualTo(2));
+            Assert.That(habit.CurrentStreak.From, Is.EqualTo(today.AddYears(-1)));
+            Assert.That(habit.CurrentStreak.To, Is.EqualTo(today));
+            Assert.That(habit.BestStreak!.Count, Is.EqualTo(2));
+        });
     }
 
     // --- AddTimesDoneByDay / RemoveTimesDoneByDay tests ---

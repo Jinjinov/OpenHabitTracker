@@ -245,4 +245,91 @@ public class UserDataMergeTests
 
         Assert.That(merge.Habits, Has.Count.EqualTo(1));
     }
+
+    [Test]
+    public void Merge_CompletionsByDay_TwoImportedOnTheSameNewDay_AddsOne()
+    {
+        _habits.Add(new HabitModel { Id = 5, CategoryId = 1, Title = "Run" });
+
+        TimeModel first = new() { StartedAt = _plannedAt };
+        TimeModel second = new() { StartedAt = _plannedAt.AddHours(3) };
+
+        UserDataMerge merge = Merge(new MergeOptions { MatchCompletionsByDay = true }, new CategoryModel
+        {
+            Title = "Work",
+            Habits = [new HabitModel { Title = "Run", TimesDone = [first, second] }]
+        });
+
+        Assert.That(merge.Times, Is.EqualTo(new[] { first }));
+    }
+
+    [Test]
+    public void Merge_ExistingHabit_GainsOnlyItemsWithANewTitleIgnoringCaseAndSpaces()
+    {
+        _habits.Add(new HabitModel { Id = 5, CategoryId = 1, Title = "Run" });
+        _items.Add(new ItemModel { Id = 9, ParentId = 5, Title = "Shoes" });
+
+        ItemModel water = new() { Title = "Water" };
+
+        UserDataMerge merge = Merge(new CategoryModel
+        {
+            Title = "Work",
+            Habits = [new HabitModel { Title = " run ", Items = [new ItemModel { Title = " SHOES " }, water] }]
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(merge.Habits, Is.Empty);
+            Assert.That(merge.Items, Is.EqualTo(new[] { water }));
+            Assert.That(water.ParentId, Is.EqualTo(5));
+            Assert.That(merge.New, Is.EqualTo(new ImportCounts(Categories: 0, Notes: 0, Tasks: 0, Habits: 0, Items: 1, Completions: 0)));
+        });
+    }
+
+    [Test]
+    public void Merge_NoteWithTheSameTitleButOtherContent_IsNew()
+    {
+        _notes.Add(new NoteModel { Id = 3, CategoryId = 1, Title = "Ideas", Content = "one" });
+
+        NoteModel other = new() { Title = "Ideas", Content = "two" };
+
+        UserDataMerge merge = Merge(new CategoryModel { Title = "Work", Notes = [other] });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(merge.Notes, Is.EqualTo(new[] { other }));
+            Assert.That(other.CategoryId, Is.EqualTo(1));
+        });
+    }
+
+    [Test]
+    public void Merge_FormerContent_MatchesTheNoteAnEarlierImportWrote()
+    {
+        _notes.Add(new NoteModel { Id = 3, CategoryId = 1, Title = "Ideas", Content = "old wording" });
+
+        NoteModel imported = new() { Title = "Ideas", Content = "new wording" };
+
+        UserDataMerge merge = Merge(new MergeOptions { FormerContents = new Dictionary<NoteModel, string> { [imported] = "old wording" } },
+            new CategoryModel { Title = "Work", Notes = [imported] });
+
+        Assert.That(merge.New.IsEmpty, Is.True);
+    }
+
+    [Test]
+    public void Merge_NewTaskAndHabitInAnExistingCategory_CountTheirItemsAndCompletionsAsNew()
+    {
+        UserDataMerge merge = Merge(new CategoryModel
+        {
+            Title = "Work",
+            Tasks = [new TaskModel { Title = "Pack", Items = [new ItemModel { Title = "a" }, new ItemModel { Title = "b" }] }],
+            Habits = [new HabitModel { Title = "Run", Items = [new ItemModel { Title = "c" }], TimesDone = [new TimeModel { StartedAt = _plannedAt }] }]
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(merge.Categories, Is.Empty);
+            Assert.That(merge.New, Is.EqualTo(new ImportCounts(Categories: 0, Notes: 0, Tasks: 1, Habits: 1, Items: 3, Completions: 1)));
+            Assert.That(merge.Found, Is.EqualTo(new ImportCounts(Categories: 1, Notes: 0, Tasks: 1, Habits: 1, Items: 3, Completions: 1)));
+        });
+    }
 }

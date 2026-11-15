@@ -65,6 +65,49 @@ public class SearchFilterServiceTests
         Assert.That(qp.PriorityFilterDisplay, Is.EqualTo(FilterDisplay.SelectOptions));
     }
 
+    [Test]
+    public void GetQueryParameters_MapsTheCategoryPriorityAndSortSelections()
+    {
+        SettingsModel settings = new()
+        {
+            SelectedCategoryId = 4,
+            SelectedPriority = Priority.High,
+            HiddenCategoryIds = [2, 3],
+        };
+        settings.ShowPriority[Priority.Low] = false;
+        settings.SortBy[ContentType.Task] = Sort.Duration;
+
+        QueryParameters qp = _sut.GetQueryParameters(settings);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(qp.SelectedCategoryId, Is.EqualTo(4));
+            Assert.That(qp.SelectedPriority, Is.EqualTo(Priority.High));
+            Assert.That(qp.HiddenCategoryIds, Is.EqualTo(new[] { 2L, 3L }));
+            Assert.That(qp.ShowPriority[Priority.Low], Is.False);
+            Assert.That(qp.ShowPriority[Priority.High], Is.True);
+            Assert.That(qp.SortBy[ContentType.Task], Is.EqualTo(Sort.Duration));
+            Assert.That(qp.SortBy[ContentType.Note], Is.EqualTo(Sort.Priority));
+        });
+    }
+
+    [Test]
+    public void GetQueryParameters_RelativeOffsetsBeyondTheCap_ResolveToTheCap()
+    {
+        SettingsModel settings = new() { PlannedFromDayOffset = -20000, PlannedToDayOffset = 20000 };
+
+        DateTime before = DateTime.Today;
+        QueryParameters qp = _sut.GetQueryParameters(settings);
+        DateTime after = DateTime.Today;
+
+        // GetQueryParameters reads the clock itself, so a run across midnight may resolve against either day.
+        Assert.Multiple(() =>
+        {
+            Assert.That(qp.PlannedRangeStart, Is.EqualTo(before.AddDays(-SettingsModel.MaxDayOffset)).Or.EqualTo(after.AddDays(-SettingsModel.MaxDayOffset)));
+            Assert.That(qp.PlannedRangeEnd, Is.EqualTo(before.AddDays(SettingsModel.MaxDayOffset)).Or.EqualTo(after.AddDays(SettingsModel.MaxDayOffset)));
+        });
+    }
+
     // --- MarkSearchResults tests ---
 
     [Test]
@@ -75,7 +118,7 @@ public class SearchFilterServiceTests
 
         string result = _sut.MarkSearchResults("Say Hello World");
 
-        Assert.That(result, Does.Contain("<mark>Hello</mark>"));
+        Assert.That(result, Is.EqualTo("Say <mark>Hello</mark> World"));
     }
 
     [Test]
@@ -86,7 +129,7 @@ public class SearchFilterServiceTests
 
         string result = _sut.MarkSearchResults("Say hello World");
 
-        Assert.That(result, Does.Contain("<mark>hello</mark>"));
+        Assert.That(result, Is.EqualTo("Say <mark>hello</mark> World"));
     }
 
     [Test]
@@ -97,7 +140,23 @@ public class SearchFilterServiceTests
 
         string result = _sut.MarkSearchResults("Say Hello World");
 
-        Assert.That(result, Does.Not.Contain("<mark>"));
+        Assert.That(result, Is.EqualTo("Say Hello World"));
+    }
+
+    [Test]
+    public void MarkSearchResults_EmptySearchTerm_OnlyEncodesTheText()
+    {
+        _sut.SearchTerm = string.Empty;
+
+        Assert.That(_sut.MarkSearchResults("a<b"), Is.EqualTo("a&lt;b"));
+    }
+
+    [Test]
+    public void MarkSearchResults_MatchAtTheStartAndEndAndAdjacent_MarksEveryOccurrence()
+    {
+        _sut.SearchTerm = "ab";
+
+        Assert.That(_sut.MarkSearchResults("ababxab"), Is.EqualTo("<mark>ab</mark><mark>ab</mark>x<mark>ab</mark>"));
     }
 
     [Test]
@@ -135,8 +194,25 @@ public class SearchFilterServiceTests
         string html = "<p>This is <strong>bold text</strong> here.</p>";
         string result = _sut.MarkSearchResultsInHtml(html);
 
-        Assert.That(result, Does.Not.Contain("<mark><strong>"));
-        Assert.That(result, Does.Contain("<mark>bold</mark>"));
+        Assert.That(result, Is.EqualTo("<p>This is <strong><mark>bold</mark> text</strong> here.</p>"));
+    }
+
+    [Test]
+    public void MarkSearchResultsInHtml_TermOnlyInATagName_LeavesTheHtmlUnchanged()
+    {
+        _sut.SearchTerm = "strong";
+        string html = "<p>This is <strong>bold</strong></p>";
+
+        Assert.That(_sut.MarkSearchResultsInHtml(html), Is.EqualTo(html));
+    }
+
+    [Test]
+    public void MarkSearchResultsInHtml_NoTextNodes_ReturnsTheInput()
+    {
+        _sut.SearchTerm = "x";
+        string html = "<hr>";
+
+        Assert.That(_sut.MarkSearchResultsInHtml(html), Is.EqualTo(html));
     }
 
     [Test]
@@ -216,11 +292,14 @@ public class SearchFilterServiceTests
             DoneToDayOffset = null,
         };
 
+        DateTime before = DateTime.Today;
         QueryParameters qp = _sut.GetQueryParameters(settings);
+        DateTime after = DateTime.Today;
 
-        Assert.That(qp.PlannedRangeStart, Is.EqualTo(DateTime.Today.AddDays(-7)));
-        Assert.That(qp.PlannedRangeEnd, Is.EqualTo(DateTime.Today.AddDays(7)));
-        Assert.That(qp.DoneRangeStart, Is.EqualTo(DateTime.Today.AddDays(-3)));
+        // GetQueryParameters reads the clock itself, so a run across midnight may resolve against either day.
+        Assert.That(qp.PlannedRangeStart, Is.EqualTo(before.AddDays(-7)).Or.EqualTo(after.AddDays(-7)));
+        Assert.That(qp.PlannedRangeEnd, Is.EqualTo(before.AddDays(7)).Or.EqualTo(after.AddDays(7)));
+        Assert.That(qp.DoneRangeStart, Is.EqualTo(before.AddDays(-3)).Or.EqualTo(after.AddDays(-3)));
         Assert.That(qp.DoneRangeEnd, Is.Null);
     }
 

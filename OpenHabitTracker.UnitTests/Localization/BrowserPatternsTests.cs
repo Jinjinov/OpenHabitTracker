@@ -164,4 +164,61 @@ public class BrowserPatternsTests
 
         Assert.That(pattern, Is.Null);
     }
+
+    [TestCase("day")]
+    [TestCase("month")]
+    [TestCase("year")]
+    public void ToDatePattern_APartTwice_FallsBack(string repeated)
+    {
+        List<DateTimePart> parts = Parts(("day", "05"), ("literal", "."), ("month", "01"), ("literal", "."), ("year", "2026"), ("literal", " "));
+        parts.Add(new DateTimePart { Type = repeated, Value = repeated == "year" ? "2026" : "05" });
+
+        Assert.That(BrowserPatterns.ToDatePattern(parts), Is.Null);
+    }
+
+    [TestCase("year", "202")]
+    [TestCase("day", "005")]
+    [TestCase("month", "Jan")]
+    public void ToDatePattern_APartOfAnUnexpectedLength_FallsBack(string type, string value)
+    {
+        List<DateTimePart> parts = Parts(("day", "05"), ("literal", "/"), ("month", "01"), ("literal", "/"), ("year", "2026"));
+        parts.Single(x => x.Type == type).Value = value;
+
+        Assert.That(BrowserPatterns.ToDatePattern(parts), Is.Null);
+    }
+
+    [Test]
+    public void ToTimePattern_H11_IsTwelveHourPadded()
+    {
+        string? pattern = BrowserPatterns.ToTimePattern(Parts(("hour", "09"), ("literal", ":"), ("minute", "05"), ("literal", " "), ("dayPeriod", "AM")), "h11");
+
+        Assert.That(pattern, Is.EqualTo("hh':'mm' 'tt"));
+    }
+
+    [Test]
+    public void ToTimePattern_H24_IsTwentyFourHourUnpadded()
+    {
+        string? pattern = BrowserPatterns.ToTimePattern(Parts(("hour", "9"), ("literal", ":"), ("minute", "05")), "h24");
+
+        Assert.That(pattern, Is.EqualTo("H':'mm"));
+    }
+
+    [Test]
+    public void ToTimePattern_ADayPeriodOnATwentyFourHourClock_FallsBack()
+    {
+        string? pattern = BrowserPatterns.ToTimePattern(Parts(("hour", "09"), ("literal", ":"), ("minute", "05"), ("dayPeriod", "AM")), "h23");
+
+        Assert.That(pattern, Is.Null);
+    }
+
+    [Test]
+    public void ToTimePattern_ASingleDigitMinuteOrASecondHour_FallsBack()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That(BrowserPatterns.ToTimePattern(Parts(("hour", "09"), ("literal", ":"), ("minute", "5")), "h23"), Is.Null);
+            Assert.That(BrowserPatterns.ToTimePattern(Parts(("hour", "09"), ("literal", ":"), ("minute", "05"), ("hour", "09")), "h23"), Is.Null);
+            Assert.That(BrowserPatterns.ToTimePattern(Parts(("hour", "09"), ("literal", ":"), ("minute", "05"), ("second", "07")), "h23"), Is.Null);
+        });
+    }
 }

@@ -384,4 +384,42 @@ public class GoogleKeepImportTests
 
         await _dataAccess.DidNotReceive().AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>());
     }
+
+    private static async Task<string> ReadHtml(string html)
+    {
+        string json = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object>
+        {
+            ["color"] = "DEFAULT",
+            ["title"] = "Formatted",
+            ["textContent"] = "",
+            ["userEditedTimestampUsec"] = 1,
+            ["createdTimestampUsec"] = 1,
+            ["textContentHtml"] = html
+        });
+
+        List<CategoryModel> categories = await ReadNote(json);
+
+        return categories.Single().Notes.Single().Content;
+    }
+
+    [TestCase("<p><b>bold</b> <i>italic</i> <u>under</u> <strong>strong</strong> <em>em</em></p>", "**bold** *italic* ++under++ **strong** *em*")]
+    [TestCase("<p><span style=\"font-weight:700\">a <span style=\"font-style:italic\">b</span></span></p>", "**a** ***b***")]
+    [TestCase("<p><span style=\"font-weight: bold\">x</span> <span style=\"font-weight:600\">y</span> <span style=\"font-weight:500\">z</span></p>", "**x** **y** z")]
+    [TestCase("<p><b><span style=\"font-weight:400\">not bold</span></b></p>", "not bold")]
+    [TestCase("<p><span style=\"text-decoration: underline line-through\">u</span><span style=\"text-decoration:none\">n</span></p>", "++u++n")]
+    [TestCase("<p>x<span style=\"font-weight:700\"> b </span>y</p>", "x **b** y")]
+    [TestCase("<p><span style=\"font-weight:700\">one </span><span style=\"font-weight:700\">span</span></p>", "**one span**")]
+    [TestCase("<h3>three</h3><h4>four</h4><h5>five</h5><h6>six</h6>", "### three\n#### four\n##### five\n###### six")]
+    [TestCase("<div>a</div><ul><li>b</li><li>c</li></ul>", "a\nb\nc")]
+    [TestCase("<p>a</p>\n   <p>b</p>", "a\nb")]
+    [TestCase("<p>a</p><p></p><p>b</p>", "a\n\nb")]
+    [TestCase("<p>a<span/>b</p>", "ab")]
+    [TestCase("<p>see <a href=\"https://example.com\">this</a></p>", "see this")]
+    [TestCase("plain text with no block", "plain text with no block")]
+    [TestCase("<p>a</p>trailing", "a\ntrailing")]
+    [TestCase("<P>upper</P><BR>", "upper")]
+    public async Task Read_Html_ConvertsToMarkdown(string html, string expected)
+    {
+        Assert.That(await ReadHtml(html), Is.EqualTo(expected));
+    }
 }

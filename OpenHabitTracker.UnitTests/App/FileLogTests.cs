@@ -67,4 +67,100 @@ public class FileLogTests
         Assert.That(lines[0], Does.Not.StartWith("000000 "));
         Assert.That(lines[0], Does.Match("^\\d{6} x+$"));
     }
+
+    [Test]
+    public void Write_DirectoryMissing_NeverThrows()
+    {
+        string missing = Path.Combine(_directory, "missing");
+
+        Assert.DoesNotThrow(() => FileLog.Write(missing, LogLevel.Error, "Category", "lost"));
+        Assert.That(Directory.Exists(missing), Is.False);
+    }
+
+    // The self-test relies on a failed write surfacing.
+    [Test]
+    public void Append_DirectoryMissing_Throws()
+    {
+        Assert.Throws<DirectoryNotFoundException>(() => FileLog.Append(Path.Combine(_directory, "missing"), FileLog.FileName, "entry"));
+    }
+
+    [Test]
+    public void WriteAndRead_AnotherFileName_UseThatFile()
+    {
+        FileLog.Write(_directory, LogLevel.Warning, "Category", "elsewhere", fileName: "Other.log");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(FileLog.Read(_directory), Is.Null);
+            Assert.That(FileLog.Read(_directory, "Other.log"), Does.EndWith("[Warning] Category: elsewhere" + Environment.NewLine));
+        });
+    }
+
+    [Test]
+    public void Write_StartsWithTheLocalTimestamp()
+    {
+        DateTime before = DateTime.Now.AddSeconds(-1);
+
+        FileLog.Write(_directory, LogLevel.Warning, "Category", "stamped");
+
+        DateTime stamp = DateTime.ParseExact(FileLog.Read(_directory)![..19], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+        Assert.That(stamp, Is.InRange(before, DateTime.Now));
+    }
+
+    [Test]
+    public void FileLoggerProvider_WritesWarningAndAboveOnly()
+    {
+        using FileLoggerProvider provider = new(_directory);
+        ILogger logger = provider.CreateLogger("Sync");
+
+        logger.LogInformation("not written");
+        logger.LogWarning("slow");
+        logger.LogError(new InvalidOperationException("boom"), "failed");
+        logger.Log(LogLevel.None, "never");
+
+        string text = FileLog.Read(_directory)!;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(text, Does.Not.Contain("not written"));
+            Assert.That(text, Does.Not.Contain("never"));
+            Assert.That(text, Does.Contain("[Warning] Sync: slow"));
+            Assert.That(text, Does.Contain("[Error] Sync: failed" + Environment.NewLine + "System.InvalidOperationException: boom"));
+            Assert.That(logger.IsEnabled(LogLevel.Information), Is.False);
+            Assert.That(logger.IsEnabled(LogLevel.Critical), Is.True);
+            Assert.That(logger.BeginScope("scope"), Is.Null);
+        });
+    }
+
+    [Test]
+    public void FileLoggerProvider_LowerMinimumLevel_WritesThatLevelToo()
+    {
+        using FileLoggerProvider provider = new(_directory, LogLevel.Information);
+
+        provider.CreateLogger("Update").LogInformation("checked");
+
+        Assert.That(FileLog.Read(_directory), Does.Contain("[Information] Update: checked"));
+    }
+
+    [Test]
+    public void FileLoggerProvider_FormatterThatThrows_WritesAPlaceholder()
+    {
+        using FileLoggerProvider provider = new(_directory);
+
+        provider.CreateLogger("Category").Log<string>(LogLevel.Error, default, "state", null, (_, _) => throw new FormatException());
+
+        Assert.That(FileLog.Read(_directory), Does.Contain("[Error] Category: (the message could not be formatted)"));
+    }
+
+    // The single source is <Version> in Directory.Build.props, without the "+<commit sha>" suffix.
+    [Test]
+    public void AppVersion_Current_IsTheThreePartAssemblyVersion()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That(AppVersion.Current, Does.Match(@"^\d+\.\d+\.\d+$"));
+            Assert.That(AppVersion.Current, Is.EqualTo(typeof(AppVersion).Assembly.GetName().Version!.ToString(3)));
+        });
+    }
 }

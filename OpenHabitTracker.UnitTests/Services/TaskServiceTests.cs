@@ -468,8 +468,7 @@ public class TaskServiceTests
         Assert.That(_clientState.Tasks, Is.Empty);
     }
 
-    // Category assignment is handled by CategoryService.ChangeCategory (called when user selects a category in the UI).
-    // AddTask must NOT add to category.Tasks — doing so would cause a duplicate when ChangeCategory already did it.
+    // ChangeCategory only sets CategoryId on an unsaved task, so AddTask adds it to its category list.
     [Test]
     public async Task AddTask_WithNonZeroCategoryId_AddsToCategory()
     {
@@ -890,5 +889,209 @@ public class TaskServiceTests
         await _sut.AddTask();
 
         await _notificationScheduler.Received(1).Rebuild();
+    }
+
+    private static readonly DateTime _planned = new(2026, 3, 10, 9, 30, 0);
+
+    [Test]
+    public async Task AddTask_StoresTheTaskAndTakesItsId()
+    {
+        _dataAccess.When(x => x.AddTask(Arg.Any<TaskEntity>())).Do(callInfo => callInfo.RequiredArg<TaskEntity>().Id = 12);
+        _clientState.Tasks = new();
+        TaskModel newTask = new() { Title = "Pack", PlannedAt = _planned, Priority = Priority.High };
+        _sut.NewTask = newTask;
+
+        await _sut.AddTask();
+
+        await _dataAccess.Received(1).AddTask(Arg.Is<TaskEntity>(x => x != null && x.Title == "Pack" && x.PlannedAt == _planned && x.Priority == Priority.High));
+        Assert.Multiple(() =>
+        {
+            Assert.That(newTask.Id, Is.EqualTo(12));
+            Assert.That(_clientState.Tasks[12], Is.SameAs(newTask));
+            Assert.That(_sut.NewTask, Is.Null);
+        });
+    }
+
+    [Test]
+    public async Task UpdateTask_CopiesTheEditedFieldsToTheStoredEntityAndRebuilds()
+    {
+        TaskModel task = TestData.Task(id: 1, title: "Old");
+        _clientState.Tasks = TestData.TaskDict(task);
+        _sut.SelectedTask = task;
+        _dataAccess.GetTask(1).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = 1, Title = "Old" }));
+
+        task.Title = "New";
+        task.PlannedAt = _planned;
+        task.Duration = new TimeOnly(0, 45);
+
+        await _sut.UpdateTask();
+
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x != null && x.Title == "New" && x.PlannedAt == _planned && x.Duration == new TimeOnly(0, 45)));
+        await _notificationScheduler.Received(1).Rebuild();
+    }
+
+    [Test]
+    public async Task UpdateTask_NothingSelected_WritesNothing()
+    {
+        _clientState.Tasks = TestData.TaskDict(TestData.Task(id: 1));
+        _sut.SelectedTask = null;
+
+        await _sut.UpdateTask();
+
+        await _dataAccess.DidNotReceive().GetTask(Arg.Any<long>());
+        await _notificationScheduler.DidNotReceive().Rebuild();
+    }
+
+    [Test]
+    public async Task MarkAsDone_NotDone_StoresTheStartAndTheCompletion()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(1).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = 1 }));
+
+        await _sut.MarkAsDone(task);
+
+        DateTime completedAt = task.CompletedAt!.Value;
+
+        Assert.That(task.StartedAt, Is.EqualTo(completedAt));
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x != null && x.StartedAt == completedAt && x.CompletedAt == completedAt));
+        await _notificationScheduler.Received(1).Rebuild();
+    }
+
+    [Test]
+    public async Task MarkAsDone_NotDoneWithDuration_StartsTheDurationBeforeTheCompletionWithinTheDay()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        task.Duration = new TimeOnly(0, 30);
+        _clientState.Tasks = TestData.TaskDict(task);
+
+        await _sut.MarkAsDone(task);
+
+        DateTime completedAt = task.CompletedAt!.Value;
+        DateTime durationBefore = completedAt.AddMinutes(-30);
+
+        // in the first half hour after midnight the start is clamped to midnight
+        DateTime expected = durationBefore < completedAt.Date ? completedAt.Date : durationBefore;
+
+        Assert.That(task.StartedAt, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public async Task MarkAsDone_Done_StoresTheClearedStartAndCompletionAndRebuilds()
+    {
+        TaskModel task = TestData.Task(id: 1, completedAt: _planned);
+        task.StartedAt = _planned.AddMinutes(-10);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(1).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = 1, StartedAt = _planned.AddMinutes(-10), CompletedAt = _planned }));
+
+        await _sut.MarkAsDone(task);
+
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x != null && x.StartedAt == null && x.CompletedAt == null));
+        await _notificationScheduler.Received(1).Rebuild();
+    }
+
+    [Test]
+    public async Task MarkAsDone_NotDone_TicksEveryItemAtTheCompletionTimeAndStoresIt()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        ItemModel ticked = new() { Id = 10, DoneAt = _planned };
+        ItemModel open = new() { Id = 11 };
+        task.Items = [ticked, open];
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetItem(10).Returns(Task.FromResult<ItemEntity?>(new ItemEntity { Id = 10, DoneAt = _planned }));
+        _dataAccess.GetItem(11).Returns(Task.FromResult<ItemEntity?>(new ItemEntity { Id = 11 }));
+
+        await _sut.MarkAsDone(task);
+
+        DateTime completedAt = task.CompletedAt!.Value;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(ticked.DoneAt, Is.EqualTo(completedAt));
+            Assert.That(open.DoneAt, Is.EqualTo(completedAt));
+        });
+        await _dataAccess.Received(2).UpdateItem(Arg.Is<ItemEntity>(x => x != null && x.DoneAt == completedAt));
+    }
+
+    [Test]
+    public async Task Start_StoresTheNewStartAndTheClearedCompletion()
+    {
+        TaskModel task = TestData.Task(id: 1, completedAt: _planned);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(1).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = 1, CompletedAt = _planned }));
+
+        await _sut.Start(task);
+
+        DateTime startedAt = task.StartedAt!.Value;
+
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x != null && x.StartedAt == startedAt && x.CompletedAt == null));
+    }
+
+    [Test]
+    public async Task Start_TasksNotLoaded_ChangesNothing()
+    {
+        TaskModel task = TestData.Task(id: 1, completedAt: _planned);
+        _clientState.Tasks = null;
+
+        await _sut.Start(task);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(task.StartedAt, Is.Null);
+            Assert.That(task.CompletedAt, Is.EqualTo(_planned));
+        });
+    }
+
+    [Test]
+    public async Task SetStartTime_TaskInProgress_StoresTheNewStart()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        task.StartedAt = _planned;
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(1).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = 1, StartedAt = _planned }));
+
+        await _sut.SetStartTime(task, _planned.AddHours(-1));
+
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x != null && x.StartedAt == _planned.AddHours(-1)));
+    }
+
+    [Test]
+    public async Task DeleteTask_StoresTheDeletedFlagAndRebuilds()
+    {
+        TaskModel task = TestData.Task(id: 1);
+        _clientState.Tasks = TestData.TaskDict(task);
+        _dataAccess.GetTask(1).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = 1 }));
+
+        await _sut.DeleteTask(task);
+
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x != null && x.Id == 1 && x.IsDeleted));
+        await _notificationScheduler.Received(1).Rebuild();
+    }
+
+    [Test]
+    public async Task Initialize_LoadsTheCategoriesAndTheTasks()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 2, Title = "Home" }]));
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>([new TaskEntity { Id = 3, CategoryId = 2, Title = "Clean" }]));
+
+        await _sut.Initialize();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Tasks!.Select(x => x.Title), Is.EqualTo(new[] { "Clean" }));
+            Assert.That(_clientState.Categories![2].Tasks.Select(x => x.Title), Is.EqualTo(new[] { "Clean" }));
+        });
+    }
+
+    [Test]
+    public void SetSelectedTask_TasksNotLoaded_KeepsTheSelection()
+    {
+        TaskModel selected = TestData.Task(id: 1);
+        _sut.SelectedTask = selected;
+        _clientState.Tasks = null;
+
+        _sut.SetSelectedTask(2);
+
+        Assert.That(_sut.SelectedTask, Is.SameAs(selected));
     }
 }

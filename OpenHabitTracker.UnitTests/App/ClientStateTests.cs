@@ -147,24 +147,68 @@ public class ClientStateTests
     // --- LoadSettings tests ---
 
     [Test]
-    public async Task LoadSettings_WhenNoSettingsExist_CreatesDefaultAndCallsAddSettings()
+    public async Task LoadSettings_WhenNoSettingsExist_CreatesTheUserAndTheDefaultSettings()
     {
         // GetSettings already returns empty in SetUp
-        await _sut.LoadSettings();
+        bool loadWelcomeNote = await _sut.LoadSettings();
 
-        await _dataAccess.Received(1).AddSettings(Arg.Any<SettingsEntity>());
-        Assert.That(_sut.Settings.Id, Is.Not.EqualTo(0));
+        await _dataAccess.Received(1).AddUser(Arg.Is<UserEntity>(x => x != null && x.UserName == "admin" && x.Email == "admin@admin.com"));
+        await _dataAccess.Received(1).AddSettings(Arg.Is<SettingsEntity>(x => x != null && x.UserId == 1 && x.StartPage == "/notes"));
+        Assert.Multiple(() =>
+        {
+            Assert.That(loadWelcomeNote, Is.True);
+            Assert.That(_sut.User.Id, Is.EqualTo(1));
+            Assert.That(_sut.Settings.Id, Is.EqualTo(1));
+            Assert.That(_sut.Settings.UserId, Is.EqualTo(1));
+            Assert.That(_sut.Settings.StartPage, Is.EqualTo("/notes"));
+            Assert.That(_sut.Settings.SelectedRatio, Is.EqualTo(Ratio.ElapsedToDesired));
+        });
     }
 
     [Test]
     public async Task LoadSettings_WhenSettingsExist_LoadsFromDataAccess()
     {
         _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>(
-            [new SettingsEntity { Id = 99 }]));
+            [new SettingsEntity { Id = 99, Theme = "darkly" }]));
 
+        bool loadWelcomeNote = await _sut.LoadSettings();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(loadWelcomeNote, Is.False);
+            Assert.That(_sut.Settings.Id, Is.EqualTo(99));
+            Assert.That(_sut.Settings.Theme, Is.EqualTo("darkly"));
+        });
+        await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
+        await _dataAccess.DidNotReceive().AddUser(Arg.Any<UserEntity>());
+    }
+
+    [Test]
+    public async Task LoadSettings_SecondCall_DoesNotReadTheStoreAgain()
+    {
         await _sut.LoadSettings();
 
-        Assert.That(_sut.Settings.Id, Is.EqualTo(99));
+        bool loadWelcomeNote = await _sut.LoadSettings();
+
+        Assert.That(loadWelcomeNote, Is.False);
+        await _dataAccess.Received(1).GetSettings();
+    }
+
+    [Test]
+    public async Task LoadUsers_WhenAUserExists_UsesItAndAddsNone()
+    {
+        _dataAccess.GetUsers().Returns(Task.FromResult<IReadOnlyList<UserEntity>>([new UserEntity { Id = 7, UserName = "urban" }]));
+
+        await _sut.LoadUsers();
+        await _sut.LoadUsers();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.User.Id, Is.EqualTo(7));
+            Assert.That(_sut.User.UserName, Is.EqualTo("urban"));
+        });
+        await _dataAccess.Received(1).GetUsers();
+        await _dataAccess.DidNotReceive().AddUser(Arg.Any<UserEntity>());
     }
 
     // --- UpdateSettings tests ---
@@ -175,9 +219,211 @@ public class ClientStateTests
         await _sut.LoadSettings();
         _dataAccess.GetSettings(_sut.Settings.Id).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = _sut.Settings.Id }));
 
+        _sut.Settings.Theme = "darkly";
+        _sut.Settings.HideCompletedTasks = false;
+
         await _sut.UpdateSettings();
 
-        await _dataAccess.Received(1).UpdateSettings(Arg.Any<SettingsEntity>());
+        await _dataAccess.Received(1).UpdateSettings(Arg.Is<SettingsEntity>(x => x != null && x.Id == 1 && x.Theme == "darkly" && !x.HideCompletedTasks));
+    }
+
+    [Test]
+    public async Task UpdateSettings_WhenTheStoredRowIsMissing_WritesNothing()
+    {
+        await _sut.LoadSettings();
+        _dataAccess.GetSettings(Arg.Any<long>()).Returns(Task.FromResult<SettingsEntity?>(null));
+
+        await _sut.UpdateSettings();
+
+        await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+    }
+
+    [Test]
+    public async Task UpdateLoginSettings_WritesOnlyTheDeviceLoginFields()
+    {
+        await _sut.LoadSettings();
+        _sut.Settings.BaseUrl = "https://sync.example";
+        _sut.Settings.Username = "urban";
+        _sut.Settings.RefreshToken = "token";
+
+        await _sut.UpdateLoginSettings();
+
+        await _dataAccess.Received(1).UpdateLoginSettings(1, "https://sync.example", "urban", "token");
+        await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+    }
+
+    // --- SetCulture tests ---
+
+    [Test]
+    public async Task SetCulture_WithoutStoredFormats_AppliesTheAutomaticFormats()
+    {
+        CultureTargetSpy target = new();
+        ClientState sut = new(new[] { _dataAccess }, new MarkdownToHtml(new MarkdownPipelineBuilder().Build()), target);
+        await sut.LoadSettings();
+        sut.Settings.Culture = "sl";
+        sut.AutomaticDateFormat = "yyyy/MM/dd";
+        sut.AutomaticTimeFormat = "HH:mm";
+
+        sut.SetCulture();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(target.UiCulture!.Name, Is.EqualTo("sl"));
+            Assert.That(target.Culture!.DateTimeFormat.ShortDatePattern, Is.EqualTo("yyyy'/'MM'/'dd"));
+            Assert.That(target.Culture!.DateTimeFormat.ShortTimePattern, Is.EqualTo("HH':'mm"));
+        });
+    }
+
+    [Test]
+    public async Task SetCulture_WithStoredFormats_PrefersThemOverTheAutomaticOnes()
+    {
+        CultureTargetSpy target = new();
+        ClientState sut = new(new[] { _dataAccess }, new MarkdownToHtml(new MarkdownPipelineBuilder().Build()), target);
+        await sut.LoadSettings();
+        sut.Settings.DateFormat = "dd.MM.yyyy";
+        sut.Settings.TimeFormat = "h:mm tt";
+        sut.AutomaticDateFormat = "yyyy/MM/dd";
+        sut.AutomaticTimeFormat = "HH:mm";
+
+        sut.SetCulture();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(target.UiCulture!.Name, Is.EqualTo("en"));
+            Assert.That(target.Culture!.DateTimeFormat.ShortDatePattern, Is.EqualTo("dd.MM.yyyy"));
+            Assert.That(target.Culture!.DateTimeFormat.ShortTimePattern, Is.EqualTo("h':'mm tt"));
+        });
+    }
+
+    private sealed class CultureTargetSpy : OpenHabitTracker.Localization.ICultureTarget
+    {
+        public System.Globalization.CultureInfo? Culture { get; private set; }
+
+        public System.Globalization.CultureInfo? UiCulture { get; private set; }
+
+        public void Apply(System.Globalization.CultureInfo culture, System.Globalization.CultureInfo uiCulture)
+        {
+            Culture = culture;
+            UiCulture = uiCulture;
+        }
+    }
+
+    // --- Load tests ---
+
+    [Test]
+    public async Task LoadNotes_RendersTheMarkdownAndAddsEachNoteToItsCategory()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 1, Title = "Work" }]));
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>(
+        [
+            new NoteEntity { Id = 1, CategoryId = 1, Title = "In work", Content = "*a*" },
+            new NoteEntity { Id = 2, CategoryId = 0, Title = "No category" },
+            new NoteEntity { Id = 3, CategoryId = 9, Title = "Unknown category" }
+        ]));
+
+        await _sut.LoadNotes();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Notes!.Keys, Is.EquivalentTo(new[] { 1L, 2L, 3L }));
+            Assert.That(_sut.Notes![1].ContentMarkdown, Is.EqualTo("<p><em>a</em></p>\n"));
+            Assert.That(_sut.Categories![1].Notes.Select(x => x.Id), Is.EqualTo(new[] { 1L }));
+            Assert.That(_sut.Categories![1].Notes[0], Is.SameAs(_sut.Notes![1]));
+        });
+    }
+
+    [Test]
+    public async Task LoadTasks_AddsEachTaskToItsCategory()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 1, Title = "Work" }, new CategoryEntity { Id = 2, Title = "Home" }]));
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>(
+        [
+            new TaskEntity { Id = 1, CategoryId = 2, Title = "Clean" },
+            new TaskEntity { Id = 2, CategoryId = 0, Title = "Free" }
+        ]));
+
+        await _sut.LoadTasks();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Categories![1].Tasks, Is.Empty);
+            Assert.That(_sut.Categories![2].Tasks.Select(x => x.Id), Is.EqualTo(new[] { 1L }));
+            Assert.That(_sut.Tasks!.Keys, Is.EquivalentTo(new[] { 1L, 2L }));
+        });
+    }
+
+    [Test]
+    public async Task LoadHabits_AddsEachHabitToItsCategoryAndGroupsItsCompletionsByDay()
+    {
+        DateTime day = new(2026, 5, 4, 7, 30, 0);
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 1, Title = "Health" }]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
+            [new HabitEntity { Id = 4, CategoryId = 1, Title = "Run", RepeatCount = 1, RepeatInterval = 1 }]));
+        _dataAccess.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>(
+        [
+            new TimeEntity { Id = 1, HabitId = 4, StartedAt = day, CompletedAt = day.AddMinutes(20) },
+            new TimeEntity { Id = 2, HabitId = 4, StartedAt = day.AddHours(10), CompletedAt = day.AddHours(10).AddMinutes(10) },
+            new TimeEntity { Id = 3, HabitId = 5, StartedAt = day }
+        ]));
+
+        await _sut.LoadHabits();
+
+        HabitModel habit = _sut.Habits![4];
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Categories![1].Habits, Is.EqualTo(new[] { habit }));
+            Assert.That(habit.TimesDone!.Select(x => x.Id), Is.EqualTo(new[] { 1L, 2L }));
+            Assert.That(habit.TimesDoneByDay!.Keys, Is.EqualTo(new[] { day.Date }));
+            Assert.That(habit.TimesDoneByDay![day.Date], Has.Count.EqualTo(2));
+            Assert.That(habit.TotalTimeSpent, Is.EqualTo(TimeSpan.FromMinutes(30)));
+            Assert.That(_sut.Times!.Keys, Is.EquivalentTo(new[] { 1L, 2L, 3L }));
+        });
+    }
+
+    [Test]
+    public async Task LoadItems_LoadsOnceIntoTheItemsDictionary()
+    {
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>(
+            [new ItemEntity { Id = 3, ParentId = 1, Title = "Socks" }]));
+
+        await _sut.LoadItems();
+        await _sut.LoadItems();
+
+        Assert.That(_sut.Items![3].Title, Is.EqualTo("Socks"));
+        await _dataAccess.Received(1).GetItems();
+    }
+
+    [Test]
+    public async Task LoadTrash_CollectsOnlyTheDeletedNotesTasksAndHabits()
+    {
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>(
+            [new NoteEntity { Id = 1, Title = "Kept" }, new NoteEntity { Id = 2, Title = "Trashed note", IsDeleted = true }]));
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>(
+            [new TaskEntity { Id = 3, Title = "Trashed task", IsDeleted = true }, new TaskEntity { Id = 4, Title = "Kept" }]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
+            [new HabitEntity { Id = 5, Title = "Kept" }, new HabitEntity { Id = 6, Title = "Trashed habit", IsDeleted = true }]));
+
+        await _sut.LoadTrash();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.TrashedNotes!.Select(x => x.Title), Is.EqualTo(new[] { "Trashed note" }));
+            Assert.That(_sut.TrashedTasks!.Select(x => x.Title), Is.EqualTo(new[] { "Trashed task" }));
+            Assert.That(_sut.TrashedHabits!.Select(x => x.Title), Is.EqualTo(new[] { "Trashed habit" }));
+            Assert.That(_sut.TrashedNotes![0], Is.SameAs(_sut.Notes![2]));
+        });
+    }
+
+    [Test]
+    public async Task LoadTrash_WhenAlreadyLoaded_KeepsTheSameLists()
+    {
+        await _sut.LoadTrash();
+        List<NoteModel> trashedNotes = _sut.TrashedNotes!;
+
+        await _sut.LoadTrash();
+
+        Assert.That(_sut.TrashedNotes, Is.SameAs(trashedNotes));
     }
 
     // --- LoadCategories tests ---
@@ -206,11 +452,24 @@ public class ClientStateTests
     // --- DeleteAllData tests ---
 
     [Test]
-    public async Task DeleteAllData_CallsDeleteAllUserData()
+    public async Task DeleteAllData_DeletesAndReloadsTheNowEmptyStoreAndNotifies()
     {
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([new NoteEntity { Id = 1, Title = "Old" }]));
+        await _sut.LoadSettings();
+        await _sut.LoadNotes();
+
+        int replacedCount = 0;
+        _sut.SetDataReplacedAction(() => { replacedCount++; return Task.CompletedTask; });
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([]));
+
         await _sut.DeleteAllData();
 
         await _dataAccess.Received(1).DeleteAllUserData();
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Notes, Is.Empty);
+            Assert.That(replacedCount, Is.EqualTo(1));
+        });
     }
 
     // --- GetUserData tests ---
@@ -239,7 +498,93 @@ public class ClientStateTests
 
         UserImportExportData result = await _sut.GetUserData();
 
-        Assert.That(result.Categories.Any(c => c.Id == 0), Is.True);
+        CategoryModel defaultCategory = result.Categories.Single();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(defaultCategory.Id, Is.EqualTo(0));
+            Assert.That(defaultCategory.Title, Is.Empty);
+            Assert.That(defaultCategory.Habits.Select(x => x.Title), Is.EqualTo(new[] { "No Category" }));
+        });
+    }
+
+    [Test]
+    public async Task GetUserData_EverythingInACategory_AddsNoDefaultCategory()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 1, Title = "Work" }]));
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([new NoteEntity { Id = 2, CategoryId = 1, Title = "Meeting" }]));
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
+
+        UserImportExportData result = await _sut.GetUserData();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Categories.Select(x => x.Title), Is.EqualTo(new[] { "Work" }));
+            Assert.That(result.Categories[0].Notes.Select(x => x.Title), Is.EqualTo(new[] { "Meeting" }));
+        });
+    }
+
+    [Test]
+    public async Task GetUserData_NoCategoriesAndNoContent_AddsAnEmptyDefaultCategory()
+    {
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
+
+        UserImportExportData result = await _sut.GetUserData();
+
+        CategoryModel defaultCategory = result.Categories.Single();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(defaultCategory.Title, Is.Empty);
+            Assert.That(defaultCategory.Notes, Is.Empty);
+            Assert.That(defaultCategory.Tasks, Is.Empty);
+            Assert.That(defaultCategory.Habits, Is.Empty);
+        });
+    }
+
+    [Test]
+    public async Task GetUserData_AttachesTheStoredItemsAndCompletionsToTasksAndHabits()
+    {
+        DateTime doneAt = new(2026, 2, 3, 9, 0, 0);
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>([new TaskEntity { Id = 1, Title = "Pack" }]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>([new HabitEntity { Id = 2, Title = "Run" }]));
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>(
+        [
+            new ItemEntity { Id = 10, ParentId = 1, Title = "Socks" },
+            new ItemEntity { Id = 11, ParentId = 2, Title = "Shoes" }
+        ]));
+
+        // The first read is the habit list's own load, the second is the export's fresh read.
+        _dataAccess.GetTimes().Returns(
+            Task.FromResult<IReadOnlyList<TimeEntity>>([]),
+            Task.FromResult<IReadOnlyList<TimeEntity>>([new TimeEntity { Id = 20, HabitId = 2, StartedAt = doneAt }]));
+
+        UserImportExportData result = await _sut.GetUserData();
+
+        CategoryModel defaultCategory = result.Categories.Single();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(defaultCategory.Tasks.Single().Items!.Select(x => x.Title), Is.EqualTo(new[] { "Socks" }));
+            Assert.That(defaultCategory.Habits.Single().Items!.Select(x => x.Title), Is.EqualTo(new[] { "Shoes" }));
+            Assert.That(_sut.Times!.Keys, Is.EqualTo(new[] { 20L }));
+        });
+        await _dataAccess.Received(2).GetTimes();
+    }
+
+    [Test]
+    public async Task GetUserData_ExportsACopyOfTheSettings()
+    {
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([]));
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 1, Theme = "darkly", BaseUrl = "https://x" }]));
+
+        UserImportExportData result = await _sut.GetUserData();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Settings, Is.Not.SameAs(_sut.Settings));
+            Assert.That(result.Settings.Theme, Is.EqualTo("darkly"));
+        });
     }
 
     [Test]
@@ -532,26 +877,343 @@ public class ClientStateTests
     }
 
     [Test]
-    public async Task RefreshState_ClearsHabits_Notes_Tasks_Times_Items_Categories_Trash()
+    public async Task RefreshState_ReplacesEveryLoadedListWithTheStoredData()
     {
-        // Pre-populate everything to non-null values
-        _sut.Habits = new Dictionary<long, HabitModel>();
-        _sut.Notes = new Dictionary<long, NoteModel>();
-        _sut.Tasks = new Dictionary<long, TaskModel>();
-        _sut.Times = new Dictionary<long, TimeModel>();
-        _sut.Items = new Dictionary<long, ItemModel>();
-        _sut.Categories = new Dictionary<long, CategoryModel>();
+        _sut.Habits = new Dictionary<long, HabitModel> { [1] = TestData.Habit(1, "Stale habit") };
+        _sut.Notes = new Dictionary<long, NoteModel> { [1] = TestData.Note(1, "Stale note") };
+        _sut.Tasks = new Dictionary<long, TaskModel> { [1] = TestData.Task(1, "Stale task") };
+        _sut.Times = new Dictionary<long, TimeModel> { [1] = TestData.Time(1) };
+        _sut.Items = new Dictionary<long, ItemModel> { [1] = TestData.Item(1) };
+        _sut.Categories = new Dictionary<long, CategoryModel> { [1] = TestData.Category(1, "Stale category") };
         _sut.TrashedHabits = [];
         _sut.TrashedNotes = [];
         _sut.TrashedTasks = [];
 
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([new NoteEntity { Id = 2, Title = "Stored note" }]));
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 3, Title = "Stored category" }]));
+
         await _sut.RefreshState();
 
-        // After RefreshState, all collections are re-initialized (not null) from empty DB
-        Assert.That(_sut.Habits, Is.Not.Null);
-        Assert.That(_sut.Notes, Is.Not.Null);
-        Assert.That(_sut.Tasks, Is.Not.Null);
-        Assert.That(_sut.Categories, Is.Not.Null);
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Notes!.Values.Select(x => x.Title), Is.EqualTo(new[] { "Stored note" }));
+            Assert.That(_sut.Categories!.Values.Select(x => x.Title), Is.EqualTo(new[] { "Stored category" }));
+            Assert.That(_sut.Habits, Is.Empty);
+            Assert.That(_sut.Tasks, Is.Empty);
+            Assert.That(_sut.Times, Is.Empty);
+            Assert.That(_sut.Items, Is.Null);
+            Assert.That(_sut.TrashedHabits, Is.Null);
+            Assert.That(_sut.TrashedNotes, Is.Null);
+            Assert.That(_sut.TrashedTasks, Is.Null);
+        });
+    }
+
+    [Test]
+    public async Task RefreshState_KeepsTheUserUnlessAskedToReloadIt()
+    {
+        _dataAccess.GetUsers().Returns(Task.FromResult<IReadOnlyList<UserEntity>>([new UserEntity { Id = 4, UserName = "stored" }]));
+        _sut.User = new UserModel { Id = 9, UserName = "in memory" };
+        _sut.Notes = [];
+
+        await _sut.RefreshState();
+
+        Assert.That(_sut.User.UserName, Is.EqualTo("in memory"));
+
+        _sut.Notes = [];
+
+        await _sut.RefreshState(reloadUser: true);
+
+        Assert.That(_sut.User.UserName, Is.EqualTo("stored"));
+    }
+
+    [Test]
+    public async Task RefreshState_ReturnsWhetherItCreatedTheSettings()
+    {
+        Assert.That(await _sut.RefreshState(), Is.True);
+
+        _sut.Notes = [];
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 1 }]));
+
+        Assert.That(await _sut.RefreshState(), Is.False);
+    }
+
+    [Test]
+    public async Task RefreshState_IsRefreshingOnlyWhileItRuns()
+    {
+        TaskCompletionSource<IReadOnlyList<NoteEntity>> notes = new();
+        _dataAccess.GetNotes().Returns(notes.Task);
+
+        Task refresh = _sut.RefreshState();
+
+        Assert.That(_sut.IsRefreshing, Is.True);
+
+        notes.SetResult([]);
+        await refresh;
+
+        Assert.That(_sut.IsRefreshing, Is.False);
+    }
+
+    [Test]
+    public async Task RefreshState_NothingLoadedAndTheLoadFails_KeepsTheUserAndSettings()
+    {
+        await _sut.LoadSettings();
+        _sut.Settings.Theme = "darkly";
+        UserModel user = _sut.User;
+        SettingsModel settings = _sut.Settings;
+
+        _dataAccess.GetNotes().Returns(Task.FromException<IReadOnlyList<NoteEntity>>(new HttpRequestException()));
+
+        Assert.ThrowsAsync<HttpRequestException>(() => _sut.RefreshState());
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.User, Is.SameAs(user));
+            Assert.That(_sut.Settings, Is.SameAs(settings));
+            Assert.That(_sut.IsRefreshing, Is.False);
+        });
+    }
+
+    [Test]
+    public async Task SetDataLocationAndRefresh_ToANewRemoteAccount_LoadsItAndRunsTheNewAccountAction()
+    {
+        IDataAccess remote = Substitute.For<IDataAccess>();
+        remote.DataLocation.Returns(DataLocation.Remote);
+        remote.GetUsers().Returns(Task.FromResult<IReadOnlyList<UserEntity>>([new UserEntity { Id = 3, UserName = "remote" }]));
+        remote.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([]));
+        remote.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([]));
+        remote.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([new NoteEntity { Id = 1, Title = "Remote note" }]));
+        remote.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>([]));
+        remote.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>([]));
+        remote.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([]));
+        remote.When(x => x.AddSettings(Arg.Any<SettingsEntity>())).Do(callInfo => callInfo.RequiredArg<SettingsEntity>().Id = 5);
+
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([new NoteEntity { Id = 1, Title = "Local note" }]));
+
+        ClientState sut = new(new[] { _dataAccess, remote }, new MarkdownToHtml(new MarkdownPipelineBuilder().Build()));
+        await sut.LoadSettings();
+        await sut.LoadNotes();
+
+        int newAccountCount = 0;
+        sut.SetNewAccountAction(() => { newAccountCount++; return Task.CompletedTask; });
+
+        await sut.SetDataLocationAndRefresh(DataLocation.Remote);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(sut.DataLocation, Is.EqualTo(DataLocation.Remote));
+            Assert.That(sut.DataAccess, Is.SameAs(remote));
+            Assert.That(sut.User.UserName, Is.EqualTo("remote"));
+            Assert.That(sut.Settings.Id, Is.EqualTo(5));
+            Assert.That(sut.Settings.UserId, Is.EqualTo(3));
+            Assert.That(sut.Notes!.Values.Select(x => x.Title), Is.EqualTo(new[] { "Remote note" }));
+            Assert.That(newAccountCount, Is.EqualTo(1));
+        });
+    }
+
+    [Test]
+    public async Task SetDataLocationAndRefresh_BackToLocal_ShowsTheLocalDataAndSkipsTheNewAccountAction()
+    {
+        IDataAccess remote = Substitute.For<IDataAccess>();
+        remote.DataLocation.Returns(DataLocation.Remote);
+        remote.GetUsers().Returns(Task.FromResult<IReadOnlyList<UserEntity>>([new UserEntity { Id = 3 }]));
+        remote.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 5 }]));
+        remote.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([]));
+        remote.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([new NoteEntity { Id = 1, Title = "Remote note" }]));
+        remote.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>([]));
+        remote.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>([]));
+        remote.GetTimes().Returns(Task.FromResult<IReadOnlyList<TimeEntity>>([]));
+
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 1 }]));
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([new NoteEntity { Id = 1, Title = "Local note" }]));
+
+        ClientState sut = new(new[] { _dataAccess, remote }, new MarkdownToHtml(new MarkdownPipelineBuilder().Build()));
+        await sut.LoadSettings();
+        await sut.LoadNotes();
+
+        int newAccountCount = 0;
+        sut.SetNewAccountAction(() => { newAccountCount++; return Task.CompletedTask; });
+
+        await sut.SetDataLocationAndRefresh(DataLocation.Remote);
+        await sut.SetDataLocationAndRefresh(DataLocation.Local);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(sut.DataLocation, Is.EqualTo(DataLocation.Local));
+            Assert.That(sut.DataAccess, Is.SameAs(_dataAccess));
+            Assert.That(sut.Notes!.Values.Select(x => x.Title), Is.EqualTo(new[] { "Local note" }));
+            Assert.That(newAccountCount, Is.EqualTo(0));
+        });
+    }
+
+    // --- ReplaceSettings tests ---
+
+    [Test]
+    public async Task ReplaceSettings_BeforeAnySettingsAreLoaded_AddsTheImportedSettings()
+    {
+        await _sut.LoadUsers();
+
+        await _sut.ReplaceSettings(new SettingsModel { Theme = "darkly", UserId = 42 });
+
+        await _dataAccess.Received(1).AddSettings(Arg.Is<SettingsEntity>(x => x != null && x.Theme == "darkly" && x.UserId == 1));
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Settings.Id, Is.EqualTo(1));
+            Assert.That(_sut.Settings.Theme, Is.EqualTo("darkly"));
+            Assert.That(_sut.Settings.UserId, Is.EqualTo(1));
+        });
+    }
+
+    [Test]
+    public async Task ReplaceSettings_ExistingRow_UpdatesItUnderTheSameId()
+    {
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 8, Theme = "default" }]));
+        _dataAccess.GetSettings(8).Returns(Task.FromResult<SettingsEntity?>(new SettingsEntity { Id = 8 }));
+        await _sut.LoadSettings();
+
+        SettingsModel imported = new() { Theme = "darkly", Culture = "de" };
+
+        await _sut.ReplaceSettings(imported);
+
+        await _dataAccess.Received(1).UpdateSettings(Arg.Is<SettingsEntity>(x => x != null && x.Id == 8 && x.Theme == "darkly" && x.Culture == "de"));
+        await _dataAccess.DidNotReceive().AddSettings(Arg.Any<SettingsEntity>());
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Settings, Is.SameAs(imported));
+            Assert.That(_sut.Settings.Id, Is.EqualTo(8));
+        });
+    }
+
+    [Test]
+    public async Task ReplaceSettings_StoredRowMissing_KeepsTheCurrentSettings()
+    {
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 8, Theme = "default" }]));
+        _dataAccess.GetSettings(8).Returns(Task.FromResult<SettingsEntity?>(null));
+        await _sut.LoadSettings();
+
+        await _sut.ReplaceSettings(new SettingsModel { Theme = "darkly" });
+
+        await _dataAccess.DidNotReceive().UpdateSettings(Arg.Any<SettingsEntity>());
+        Assert.That(_sut.Settings.Theme, Is.EqualTo("default"));
+    }
+
+    // --- AddUserData tests ---
+
+    [Test]
+    public async Task AddUserData_EmptyMerge_WritesNothingAndStillNotifies()
+    {
+        StubExistingWorkCategory();
+        await _sut.LoadSettings();
+
+        int replacedCount = 0;
+        _sut.SetDataReplacedAction(() => { replacedCount++; return Task.CompletedTask; });
+
+        await _sut.AddUserData(await _sut.MergeUserData([]));
+
+        Assert.That(replacedCount, Is.EqualTo(1));
+        await _dataAccess.DidNotReceive().AddCategories(Arg.Any<IReadOnlyList<CategoryEntity>>());
+        await _dataAccess.DidNotReceive().AddNotes(Arg.Any<IReadOnlyList<NoteEntity>>());
+    }
+
+    [Test]
+    public async Task AddUserData_CategoryWithoutTitle_AddsItsContentWithoutAddingTheCategory()
+    {
+        StubAddMethodsToAssignIds();
+        await _sut.LoadSettings();
+
+        await _sut.AddUserData([new CategoryModel { Notes = [new NoteModel { Title = "Loose" }] }]);
+
+        await _dataAccess.Received(1).AddCategories(Arg.Is<IReadOnlyList<CategoryEntity>>(x => x != null && x.Count == 0));
+        await _dataAccess.Received(1).AddNotes(Arg.Is<IReadOnlyList<NoteEntity>>(x => x != null && x.Count == 1 && x[0].CategoryId == 0));
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Categories, Is.Empty);
+            Assert.That(_sut.Notes![20].Title, Is.EqualTo("Loose"));
+        });
+    }
+
+    [Test]
+    public async Task AddUserData_WiresTheNewIdsThroughNotesTasksHabitsItemsAndCompletions()
+    {
+        StubAddMethodsToAssignIds();
+        await _sut.LoadSettings();
+
+        DateTime doneAt = new(2026, 4, 1, 6, 0, 0);
+        ItemModel taskItem = new() { Title = "Read diff" };
+        ItemModel habitItem = new() { Title = "Warm up" };
+        TimeModel time = new() { StartedAt = doneAt, CompletedAt = doneAt.AddMinutes(15) };
+        NoteModel note = new() { Title = "Meeting", Content = "**Q3**" };
+        TaskModel task = new() { Title = "Review", Items = [taskItem] };
+        HabitModel habit = new() { Title = "Exercise", Items = [habitItem], TimesDone = [time] };
+
+        await _sut.AddUserData([new CategoryModel { Title = "Work", Notes = [note], Tasks = [task], Habits = [habit] }]);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Categories!.Keys, Is.EqualTo(new[] { 1L }));
+            Assert.That(_sut.Categories![1].UserId, Is.EqualTo(1));
+            Assert.That((note.Id, note.CategoryId), Is.EqualTo((20L, 1L)));
+            Assert.That((task.Id, task.CategoryId), Is.EqualTo((30L, 1L)));
+            Assert.That((habit.Id, habit.CategoryId), Is.EqualTo((10L, 1L)));
+            Assert.That(note.ContentMarkdown, Is.EqualTo("<p><strong>Q3</strong></p>\n"));
+            Assert.That((taskItem.Id, taskItem.ParentId), Is.EqualTo((40L, 30L)));
+            Assert.That((habitItem.Id, habitItem.ParentId), Is.EqualTo((41L, 10L)));
+            Assert.That((time.Id, time.HabitId), Is.EqualTo((50L, 10L)));
+            Assert.That(habit.TimesDoneByDay!.Keys, Is.EqualTo(new[] { doneAt.Date }));
+            Assert.That(_sut.Items!.Keys, Is.EquivalentTo(new[] { 40L, 41L }));
+            Assert.That(_sut.Times!.Keys, Is.EqualTo(new[] { 50L }));
+            Assert.That(_sut.Notes![20], Is.SameAs(note));
+            Assert.That(_sut.Tasks![30], Is.SameAs(task));
+            Assert.That(_sut.Habits![10], Is.SameAs(habit));
+        });
+        await _dataAccess.Received(1).AddItems(Arg.Is<IReadOnlyList<ItemEntity>>(x => x != null && x.Count == 2 && x[0].ParentId == 30 && x[1].ParentId == 10));
+        await _dataAccess.Received(1).AddTimes(Arg.Is<IReadOnlyList<TimeEntity>>(x => x != null && x.Count == 1 && x[0].HabitId == 10));
+    }
+
+    [Test]
+    public async Task MergeThenAdd_OlderCompletionOfAnExistingHabit_KeepsTheLastTimeDone()
+    {
+        StubAddMethodsToAssignIds();
+        StubExistingWorkCategory();
+        await _sut.LoadSettings();
+
+        DateTime earlier = _doneAt.AddDays(-5);
+        List<CategoryModel> imported =
+        [
+            new CategoryModel { Title = "Work", Habits = [new HabitModel { Title = "Exercise", TimesDone = [new TimeModel { StartedAt = earlier, CompletedAt = earlier }] }] }
+        ];
+
+        await _sut.AddUserData(await _sut.MergeUserData(imported));
+
+        await _dataAccess.Received(1).AddTimes(Arg.Is<IReadOnlyList<TimeEntity>>(x => x != null && x.Count == 1 && x[0].HabitId == 7));
+        await _dataAccess.DidNotReceive().UpdateHabit(Arg.Any<HabitEntity>());
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Habits![7].LastTimeDoneAt, Is.EqualTo(_doneAt));
+            Assert.That(_sut.Habits![7].TimesDone!.Select(x => x.StartedAt), Is.EquivalentTo(new[] { _doneAt, earlier }));
+            Assert.That(_sut.Habits![7].TimesDoneByDay!.Keys, Is.EquivalentTo(new[] { _doneAt.Date, earlier.Date }));
+        });
+    }
+
+    [Test]
+    public async Task MergeThenAdd_NewItemOfAnExistingTask_IsAddedToItsLoadedItems()
+    {
+        StubAddMethodsToAssignIds();
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 5, Title = "Work" }]));
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>([new TaskEntity { Id = 6, CategoryId = 5, Title = "Pack" }]));
+        _dataAccess.GetItems().Returns(Task.FromResult<IReadOnlyList<ItemEntity>>([new ItemEntity { Id = 1, ParentId = 6, Title = "Socks" }]));
+        await _sut.LoadSettings();
+        await _sut.LoadTasks();
+        _sut.Tasks![6].Items = [new ItemModel { Id = 1, ParentId = 6, Title = "Socks" }];
+
+        List<CategoryModel> imported =
+        [
+            new CategoryModel { Title = "Work", Tasks = [new TaskModel { Title = "Pack", Items = [new ItemModel { Title = "Socks" }, new ItemModel { Title = "Shirt" }] }] }
+        ];
+
+        await _sut.AddUserData(await _sut.MergeUserData(imported));
+
+        await _dataAccess.Received(1).AddItems(Arg.Is<IReadOnlyList<ItemEntity>>(x => x != null && x.Count == 1 && x[0].Title == "Shirt" && x[0].ParentId == 6));
+        Assert.That(_sut.Tasks![6].Items!.Select(x => x.Title), Is.EqualTo(new[] { "Socks", "Shirt" }));
     }
 
     // A poll refresh repaints only when it ends, so the list on screen stays clickable while it loads.

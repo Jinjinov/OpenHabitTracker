@@ -81,4 +81,25 @@ public class CalendarServiceTests
 
         Assert.That(result, Is.EqualTo(new DateTime(2025, 6, 8)));
     }
+
+    [TestCase(2028, 2, 28, 1, 2028, 2, 29)]
+    [TestCase(2028, 2, 28, 2, 2028, 3, 1)]
+    [TestCase(2026, 12, 31, 1, 2027, 1, 1)]
+    [TestCase(2026, 3, 28, 2, 2026, 3, 30)]
+    [TestCase(2026, 10, 24, 2, 2026, 10, 26)]
+    public void GetCalendarDay_AcrossLeapYearYearEndAndDaylightSavingChanges_StaysOnMidnight(int year, int month, int day, int offset, int expectedYear, int expectedMonth, int expectedDay)
+    {
+        DateTime result = _sut.GetCalendarDay(new DateTime(year, month, day), offset);
+
+        Assert.That(result, Is.EqualTo(new DateTime(expectedYear, expectedMonth, expectedDay)));
+        Assert.That(result.TimeOfDay, Is.EqualTo(TimeSpan.Zero));
+    }
+
+    [Test]
+    public void GetCalendarDay_StartWithATime_KeepsTheTime()
+    {
+        DateTime result = _sut.GetCalendarDay(new DateTime(2026, 1, 1, 13, 5, 0), 3);
+
+        Assert.That(result, Is.EqualTo(new DateTime(2026, 1, 4, 13, 5, 0)));
+    }
 }

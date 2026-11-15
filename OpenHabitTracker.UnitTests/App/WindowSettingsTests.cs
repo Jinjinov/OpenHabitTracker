@@ -81,6 +81,27 @@ public class WindowSettingsTests
         Assert.That(new[] { read!.X, read.Y, read.Width, read.Height }, Is.EqualTo(new double[] { 1, 2, 3, 4 }));
     }
 
+    // A window closing on a read-only or missing folder must still close.
+    [Test]
+    public void Save_FolderMissing_IsQuietAndWritesNothing()
+    {
+        string path = Path.Combine(_directory, "missing", WindowSettings.FileName);
+
+        Assert.Multiple(() =>
+        {
+            Assert.DoesNotThrow(() => new WindowSettings { X = 1, Y = 2, Width = 3, Height = 4 }.Save(path));
+            Assert.That(File.Exists(path), Is.False);
+        });
+    }
+
+    [Test]
+    public void Save_WritesTheFourValuesTheLoaderReads()
+    {
+        new WindowSettings { X = 1.5, Y = -2, Width = 300, Height = 400 }.Save(_path);
+
+        Assert.That(File.ReadAllLines(_path).Where(x => x.Length > 0), Is.EqualTo(new[] { "X: 1.5", "Y: -2", "Width: 300", "Height: 400" }));
+    }
+
     [Test]
     public void Load_MissingFile_ReturnsNull()
     {

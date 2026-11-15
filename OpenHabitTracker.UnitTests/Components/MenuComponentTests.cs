@@ -234,6 +234,54 @@ public class MenuComponentTests
         Assert.That(buttons[0].GetAttribute("tabindex"), Is.EqualTo("-1"));
     }
 
+    [TestCase("bi-trash", typeof(Trash))]
+    [TestCase("bi-search", typeof(Search))]
+    [TestCase("bi-gear", typeof(Settings))]
+    [TestCase("bi-tag", typeof(Categories))]
+    [TestCase("bi-database", typeof(OpenHabitTracker.Blazor.Pages.Data))]
+    [TestCase("bi-person", typeof(Sync))]
+    [TestCase("bi-info-circle", typeof(About))]
+    public async Task Click_EachItem_OpensItsSidebar(string icon, Type type)
+    {
+        _authFragment.IsAccountAvailable.Returns(true);
+
+        List<Type?> opened = [];
+        IRenderedComponent<Menu> cut = _ctx.Render<Menu>(parameters => parameters.Add(p => p.DynamicComponentTypeChanged, (Type? t) => opened.Add(t)));
+
+        await cut.Find($"button:has(i.{icon})").ClickAsync(new MouseEventArgs());
+
+        Assert.That(opened, Is.EqualTo(new[] { type }));
+    }
+
+    [Test]
+    public async Task ArrowRightAndLeft_MoveLikeDownAndUp()
+    {
+        IRenderedComponent<Menu> cut = _ctx.Render<Menu>();
+
+        await cut.Find("div[role='menu']").KeyDownAsync(new KeyboardEventArgs { Key = "ArrowRight" });
+        await cut.Find("div[role='menu']").KeyDownAsync(new KeyboardEventArgs { Key = "ArrowRight" });
+
+        Assert.That(cut.FindAll("div.list-group > button")[2].GetAttribute("tabindex"), Is.EqualTo("0"));
+
+        await cut.Find("div[role='menu']").KeyDownAsync(new KeyboardEventArgs { Key = "ArrowLeft" });
+
+        Assert.That(cut.FindAll("div.list-group > button")[1].GetAttribute("tabindex"), Is.EqualTo("0"));
+    }
+
+    [Test]
+    public async Task OtherKey_MovesNothing()
+    {
+        IRenderedComponent<Menu> cut = _ctx.Render<Menu>();
+
+        await cut.Find("div[role='menu']").KeyDownAsync(new KeyboardEventArgs { Key = "Enter" });
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(cut.FindAll("div.list-group > button")[0].GetAttribute("tabindex"), Is.EqualTo("0"));
+            await _jsInterop.DidNotReceive().FocusElement(Arg.Any<Microsoft.AspNetCore.Components.ElementReference>());
+        });
+    }
+
     [Test]
     public async Task ArrowDown_CallsFocusElementOnJsInterop()
     {

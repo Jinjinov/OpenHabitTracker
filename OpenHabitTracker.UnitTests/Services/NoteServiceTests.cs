@@ -206,7 +206,87 @@ public class NoteServiceTests
         await _sut.AddNote();
 
         NoteModel added = _clientState.Notes.Values.Single();
-        Assert.That(added.ContentMarkdown, Does.Contain("<strong>bold</strong>"));
+        Assert.That(added.ContentMarkdown, Is.EqualTo("<p><strong>bold</strong></p>\n"));
+    }
+
+    [Test]
+    public async Task AddNote_StoresTheNoteAndTakesItsId()
+    {
+        _dataAccess.When(x => x.AddNote(Arg.Any<NoteEntity>())).Do(callInfo => callInfo.RequiredArg<NoteEntity>().Id = 14);
+        _clientState.Notes = new();
+        NoteModel newNote = new() { Title = "Ideas", Content = "- one", Color = "bg-info" };
+        _sut.NewNote = newNote;
+
+        await _sut.AddNote();
+
+        await _dataAccess.Received(1).AddNote(Arg.Is<NoteEntity>(x => x != null && x.Title == "Ideas" && x.Content == "- one" && x.Color == "bg-info"));
+        Assert.Multiple(() =>
+        {
+            Assert.That(newNote.Id, Is.EqualTo(14));
+            Assert.That(_clientState.Notes[14], Is.SameAs(newNote));
+        });
+    }
+
+    [Test]
+    public async Task AddNote_NotesNotLoaded_WritesNothing()
+    {
+        _clientState.Notes = null;
+        _sut.NewNote = new NoteModel { Title = "Ideas" };
+
+        await _sut.AddNote();
+
+        await _dataAccess.DidNotReceive().AddNote(Arg.Any<NoteEntity>());
+        Assert.That(_sut.NewNote, Is.Not.Null);
+    }
+
+    [Test]
+    public async Task UpdateNote_NothingSelected_WritesNothing()
+    {
+        _clientState.Notes = TestData.NoteDict(TestData.Note(id: 1));
+        _sut.SelectedNote = null;
+
+        await _sut.UpdateNote();
+
+        await _dataAccess.DidNotReceive().GetNote(Arg.Any<long>());
+    }
+
+    [Test]
+    public async Task DeleteNote_StoresTheDeletedFlag()
+    {
+        NoteModel note = TestData.Note(id: 1);
+        _clientState.Notes = TestData.NoteDict(note);
+        _dataAccess.GetNote(1).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = 1 }));
+
+        await _sut.DeleteNote(note);
+
+        await _dataAccess.Received(1).UpdateNote(Arg.Is<NoteEntity>(x => x != null && x.Id == 1 && x.IsDeleted));
+    }
+
+    [Test]
+    public async Task Initialize_LoadsTheCategoriesAndTheNotes()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 2, Title = "Work" }]));
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>([new NoteEntity { Id = 3, CategoryId = 2, Title = "Agenda" }]));
+
+        await _sut.Initialize();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Notes!.Select(x => x.Title), Is.EqualTo(new[] { "Agenda" }));
+            Assert.That(_clientState.Categories![2].Notes.Select(x => x.Title), Is.EqualTo(new[] { "Agenda" }));
+        });
+    }
+
+    [Test]
+    public void SetSelectedNote_NotesNotLoaded_KeepsTheSelection()
+    {
+        NoteModel selected = TestData.Note(id: 1);
+        _sut.SelectedNote = selected;
+        _clientState.Notes = null;
+
+        _sut.SetSelectedNote(2);
+
+        Assert.That(_sut.SelectedNote, Is.SameAs(selected));
     }
 
     [Test]
@@ -230,9 +310,13 @@ public class NoteServiceTests
         _sut.SelectedNote = note;
         _dataAccess.GetNote(note.Id).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = note.Id }));
 
+        note.Title = "Edited";
+        note.Content = "new content";
+        note.Priority = Priority.Low;
+
         await _sut.UpdateNote();
 
-        await _dataAccess.Received(1).UpdateNote(Arg.Is<NoteEntity>(e => e != null && e.Id == note.Id));
+        await _dataAccess.Received(1).UpdateNote(Arg.Is<NoteEntity>(e => e != null && e.Id == note.Id && e.Title == "Edited" && e.Content == "new content" && e.Priority == Priority.Low));
     }
 
     // The data access stamps UpdatedAt on the entity; the model shows it.
@@ -315,8 +399,7 @@ public class NoteServiceTests
 
     // --- AddNote with category tests ---
 
-    // Category assignment is handled by CategoryService.ChangeCategory (called when user selects a category in the UI).
-    // AddNote must NOT add to category.Notes — doing so would cause a duplicate when ChangeCategory already did it.
+    // ChangeCategory only sets CategoryId on an unsaved note, so AddNote adds it to its category list.
     [Test]
     public async Task AddNote_WithNonZeroCategoryId_AddsToCategory()
     {

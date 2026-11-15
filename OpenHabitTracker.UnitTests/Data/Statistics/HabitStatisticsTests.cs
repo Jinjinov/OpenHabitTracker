@@ -623,7 +623,208 @@ public class HabitStatisticsTests
 
         List<DateTime> weeks = HabitStatistics.GetCalendarWeeks(habit, DayOfWeek.Monday, new DateTime(2026, 3, 4));
 
-        Assert.That(weeks, Has.Count.InRange(52, 54));
+        Assert.Multiple(() =>
+        {
+            Assert.That(weeks, Has.Count.EqualTo(53));
+            Assert.That(weeks[0], Is.EqualTo(new DateTime(2025, 3, 3)));
+            Assert.That(weeks[^1], Is.EqualTo(new DateTime(2026, 3, 2)));
+        });
+    }
+
+    [Test]
+    public void GetCalendarWeeks_HistoryOlderThanAYear_StartsAtTheWeekOfTheFirstCompletion()
+    {
+        HabitModel habit = Habit(DisplayMetric.Repetitions, times: [Done(new DateTime(2024, 6, 12, 8, 0, 0))]);
+
+        List<DateTime> weeks = HabitStatistics.GetCalendarWeeks(habit, DayOfWeek.Sunday, new DateTime(2026, 3, 4));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(weeks[0], Is.EqualTo(new DateTime(2024, 6, 9)));
+            Assert.That(weeks[^1], Is.EqualTo(new DateTime(2026, 3, 1)));
+            Assert.That(weeks.Zip(weeks.Skip(1), (a, b) => (b - a).Days).Distinct(), Is.EqualTo(new[] { 7 }));
+        });
+    }
+
+    [Test]
+    public void GetHistory_HistoryOlderThanTheMinimumWindow_StartsAtTheBucketOfTheFirstCompletion()
+    {
+        HabitModel habit = Habit(DisplayMetric.Repetitions, times: [Done(new DateTime(2026, 1, 20, 8, 0, 0))]);
+
+        List<HistoryBucket> buckets = HabitStatistics.GetHistory(habit, StatisticsPeriod.Day, DayOfWeek.Monday, new DateTime(2026, 3, 4, 12, 0, 0));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(buckets[0].Start, Is.EqualTo(new DateTime(2026, 1, 20)));
+            Assert.That(buckets[0].Value, Is.EqualTo(1));
+            Assert.That(buckets, Has.Count.EqualTo(44));
+        });
+    }
+
+    [TestCase(StatisticsPeriod.Quarter, 8)]
+    [TestCase(StatisticsPeriod.Year, 5)]
+    [TestCase(StatisticsPeriod.Week, 26)]
+    public void GetHistory_NoTimes_DrawsTheMinimumWindowOfEachGranularity(StatisticsPeriod period, int count)
+    {
+        List<HistoryBucket> buckets = HabitStatistics.GetHistory(Habit(), period, DayOfWeek.Monday, new DateTime(2026, 11, 14));
+
+        Assert.That(buckets, Has.Count.EqualTo(count));
+    }
+
+    [Test]
+    [SetCulture("en-US")]
+    public void GetHistory_Labels_FollowTheGranularity()
+    {
+        HabitModel habit = Habit();
+        DateTime now = new(2026, 11, 14);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(HabitStatistics.GetHistory(habit, StatisticsPeriod.Day, DayOfWeek.Monday, now)[^1].Label, Is.EqualTo("14 Nov"));
+            Assert.That(HabitStatistics.GetHistory(habit, StatisticsPeriod.Week, DayOfWeek.Monday, now)[^1].Label, Is.EqualTo("9 Nov"));
+            Assert.That(HabitStatistics.GetHistory(habit, StatisticsPeriod.Month, DayOfWeek.Monday, now)[^1].Label, Is.EqualTo("Nov"));
+            Assert.That(HabitStatistics.GetHistory(habit, StatisticsPeriod.Quarter, DayOfWeek.Monday, now)[^1].Label, Is.EqualTo("Oct"));
+            Assert.That(HabitStatistics.GetHistory(habit, StatisticsPeriod.Year, DayOfWeek.Monday, now)[^1].Label, Is.EqualTo("2026"));
+        });
+    }
+
+    [Test]
+    public void GetFrequency_HistoryOlderThanAYear_StartsAtTheMonthOfTheFirstCompletion()
+    {
+        HabitModel habit = Habit(DisplayMetric.Repetitions, times: [Done(new DateTime(2024, 6, 12, 8, 0, 0))]);
+
+        List<FrequencyCell> cells = HabitStatistics.GetFrequency(habit, DayOfWeek.Monday, new DateTime(2026, 3, 4));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cells[0].Month, Is.EqualTo(new DateTime(2024, 6, 1)));
+            Assert.That(cells, Has.Count.EqualTo(22 * 7));
+            Assert.That(cells.Single(c => c.Value > 0).DayOfWeek, Is.EqualTo(DayOfWeek.Wednesday));
+        });
+    }
+
+    [TestCase(2026, 1, 1, 2026, 1, 1)]
+    [TestCase(2026, 3, 31, 2026, 1, 1)]
+    [TestCase(2026, 4, 1, 2026, 4, 1)]
+    [TestCase(2026, 11, 14, 2026, 10, 1)]
+    [TestCase(2026, 12, 31, 2026, 10, 1)]
+    public void GetBucketStart_Quarter_IsTheFirstDayOfItsQuarter(int year, int month, int day, int startYear, int startMonth, int startDay)
+    {
+        DateTime start = HabitStatistics.GetBucketStart(new DateTime(year, month, day, 18, 0, 0), StatisticsPeriod.Quarter, DayOfWeek.Monday);
+
+        Assert.That(start, Is.EqualTo(new DateTime(startYear, startMonth, startDay)));
+    }
+
+    [Test]
+    public void GetBucketStart_Day_IsMidnight()
+    {
+        Assert.That(HabitStatistics.GetBucketStart(new DateTime(2026, 5, 6, 23, 59, 0), StatisticsPeriod.Day, DayOfWeek.Monday), Is.EqualTo(new DateTime(2026, 5, 6)));
+    }
+
+    [Test]
+    public void GetExpected_MonthlyHabitOverHalfOfFebruary_AsksForTheFractionOfThatMonth()
+    {
+        HabitModel habit = Habit(repeatPeriod: Period.Month);
+
+        double? expected = HabitStatistics.GetExpected(habit, new DateTime(2026, 2, 1), new DateTime(2026, 2, 15));
+
+        Assert.That(expected, Is.EqualTo(0.5).Within(0.0001));
+    }
+
+    [Test]
+    public void GetExpected_EveryTwoWeeks_AsksForHalfAsMany()
+    {
+        HabitModel habit = Habit(repeatCount: 3, repeatInterval: 2, repeatPeriod: Period.Week);
+
+        double? expected = HabitStatistics.GetExpected(habit, new DateTime(2026, 3, 2), new DateTime(2026, 3, 30));
+
+        Assert.That(expected, Is.EqualTo(6).Within(0.0001));
+    }
+
+    [Test]
+    public void GetDayStatus_WeeklyHabitWithItsCountInTheWindow_IsSuccess()
+    {
+        HabitModel twice = Habit(repeatCount: 2, repeatPeriod: Period.Week, times:
+        [
+            Done(new DateTime(2026, 3, 2, 8, 0, 0)),
+            Done(new DateTime(2026, 3, 5, 8, 0, 0))
+        ]);
+        HabitModel once = Habit(repeatCount: 2, repeatPeriod: Period.Week, times: [Done(new DateTime(2026, 3, 2, 8, 0, 0))]);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(HabitStatistics.GetDayStatus(twice, new DateTime(2026, 3, 2)).Background, Is.EqualTo("bg-success-subtle"));
+            Assert.That(HabitStatistics.GetDayStatus(once, new DateTime(2026, 3, 2)).Background, Is.EqualTo("bg-warning-subtle"));
+            Assert.That(HabitStatistics.GetDayStatus(once, new DateTime(2026, 3, 2)).Label, Is.Empty);
+        });
+    }
+
+    [Test]
+    public void GetDayStatus_QuantityThatSumsWithFloatingPointError_StillReachesTheTarget()
+    {
+        HabitModel habit = new() { DisplayMetric = DisplayMetric.Quantity, TargetQuantity = 0.8 };
+        DateTime day = new(2026, 3, 2, 8, 0, 0);
+        habit.TimesDone = [new TimeModel { StartedAt = day, CompletedAt = day, Quantity = 0.7 }, new TimeModel { StartedAt = day, CompletedAt = day, Quantity = 0.1 }];
+        habit.RefreshTimesDoneByDay();
+
+        DayStatus status = HabitStatistics.GetDayStatus(habit, day);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(status.Background, Is.EqualTo("bg-success-subtle"));
+            Assert.That(status.Quantity, Is.EqualTo(0.8));
+        });
+    }
+
+    [Test]
+    public void GetDayStatus_TimeAtLeastTheDuration_IsSuccessWithAnHourMinuteLabel()
+    {
+        HabitModel habit = Habit(DisplayMetric.Time, duration: new TimeOnly(1, 0), times:
+            [Done(new DateTime(2026, 3, 2, 8, 0, 0), new DateTime(2026, 3, 2, 9, 5, 0))]);
+
+        DayStatus status = HabitStatistics.GetDayStatus(habit, new DateTime(2026, 3, 2));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(status.Background, Is.EqualTo("bg-success-subtle"));
+            Assert.That(status.Label, Is.EqualTo("1:05"));
+            Assert.That(status.TotalTime, Is.EqualTo(TimeSpan.FromMinutes(65)));
+        });
+    }
+
+    [Test]
+    [SetCulture("en-US")]
+    public void Format_LargeQuantity_GroupsThousandsAndKeepsTwoDecimals()
+    {
+        HabitModel habit = Habit(DisplayMetric.Quantity);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(HabitStatistics.Format(habit, 1234.567), Is.EqualTo("1,234.57"));
+            Assert.That(HabitStatistics.Format(habit, 2.5), Is.EqualTo("2.5"));
+            Assert.That(HabitStatistics.Format(Habit(DisplayMetric.Time), 1500), Is.EqualTo("25:00"));
+        });
+    }
+
+    [TestCase(Period.Day, 1, "Day")]
+    [TestCase(Period.Day, 0, "Days")]
+    [TestCase(Period.Day, 2, "Days")]
+    [TestCase(Period.Week, 1, "Week")]
+    [TestCase(Period.Week, 3, "Weeks")]
+    [TestCase(Period.Month, 1, "Month")]
+    [TestCase(Period.Month, 4, "Months")]
+    [TestCase(Period.Year, 1, "Year")]
+    [TestCase(Period.Year, 5, "Years")]
+    [TestCase((Period)9, 1, "")]
+    public void GetStreakUnitKey_NamesThePeriodInSingularOrPlural(Period period, int count, string expected)
+    {
+        Assert.That(HabitStatistics.GetStreakUnitKey(period, count), Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void FromRepeatPeriod_UnknownPeriod_OpensOnMonths()
+    {
+        Assert.That(HabitStatistics.FromRepeatPeriod((Period)9), Is.EqualTo(StatisticsPeriod.Month));
     }
 
     // One step coarser than the habit repeats: at its own period every bucket holds the same

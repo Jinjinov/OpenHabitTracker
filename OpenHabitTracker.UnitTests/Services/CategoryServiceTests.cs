@@ -531,4 +531,169 @@ public class CategoryServiceTests
         await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x.Id == 2 && x.IsDeleted && x.CategoryId == 0));
         await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(x => x.Id == 3 && x.IsDeleted && x.CategoryId == 0));
     }
+
+    [Test]
+    public async Task DeleteCategory_StoresTheTrashedNoteWithoutACategoryAndRemovesTheCategory()
+    {
+        NoteModel note = TestData.Note(id: 1, title: "Kept text", categoryId: 10);
+        CategoryModel category = TestData.Category(id: 10, notes: [note]);
+        _clientState.Categories = TestData.CategoryDict(category);
+        _dataAccess.GetNote(1).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = 1, CategoryId = 10 }));
+
+        await _sut.DeleteCategory(category);
+
+        await _dataAccess.Received(1).UpdateNote(Arg.Is<NoteEntity>(x => x != null && x.Id == 1 && x.IsDeleted && x.CategoryId == 0 && x.Title == "Kept text"));
+        await _dataAccess.Received(1).RemoveCategory(10);
+    }
+
+    [Test]
+    public async Task DeleteCategory_CategoriesNotLoaded_DoesNothing()
+    {
+        _clientState.Categories = null;
+
+        await _sut.DeleteCategory(TestData.Category(id: 10));
+
+        await _dataAccess.DidNotReceive().RemoveCategory(Arg.Any<long>());
+        await _notificationScheduler.DidNotReceive().Rebuild();
+    }
+
+    [Test]
+    public async Task AddCategory_StoresTheCategoryAndPreparesTheNextOneForTheUser()
+    {
+        _dataAccess.When(x => x.AddCategory(Arg.Any<CategoryEntity>())).Do(callInfo => callInfo.RequiredArg<CategoryEntity>().Id = 6);
+        _clientState.User = new UserModel { Id = 3 };
+        _clientState.Categories = new();
+        CategoryModel newCategory = new() { Title = "Health", UserId = 3 };
+        _sut.NewCategory = newCategory;
+
+        await _sut.AddCategory();
+
+        await _dataAccess.Received(1).AddCategory(Arg.Is<CategoryEntity>(x => x != null && x.Title == "Health" && x.UserId == 3));
+        Assert.Multiple(() =>
+        {
+            Assert.That(newCategory.Id, Is.EqualTo(6));
+            Assert.That(_clientState.Categories[6], Is.SameAs(newCategory));
+            Assert.That(_sut.NewCategory, Is.Not.SameAs(newCategory));
+            Assert.That(_sut.NewCategory!.UserId, Is.EqualTo(3));
+        });
+    }
+
+    [Test]
+    public async Task UpdateCategory_StoresTheNewTitle()
+    {
+        CategoryModel category = TestData.Category(id: 1, title: "Old Title");
+        _clientState.Categories = TestData.CategoryDict(category);
+        _sut.SelectedCategory = category;
+        _dataAccess.GetCategory(1).Returns(Task.FromResult<CategoryEntity?>(new CategoryEntity { Id = 1, Title = "Old Title" }));
+
+        await _sut.UpdateCategory("New Title");
+
+        await _dataAccess.Received(1).UpdateCategory(Arg.Is<CategoryEntity>(x => x != null && x.Id == 1 && x.Title == "New Title"));
+    }
+
+    [Test]
+    public async Task Initialize_LoadsTheCategoriesAndPreparesANewCategoryForTheUser()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([new CategoryEntity { Id = 4, Title = "Work" }]));
+        _clientState.User = new UserModel { Id = 3 };
+
+        await _sut.Initialize();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.Categories!.Select(x => x.Title), Is.EqualTo(new[] { "Work" }));
+            Assert.That(_sut.NewCategory!.UserId, Is.EqualTo(3));
+            Assert.That(_sut.NewCategory.Title, Is.Empty);
+        });
+    }
+
+    [Test]
+    public async Task Initialize_KeepsANewCategoryAlreadyBeingTyped()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([]));
+        CategoryModel typing = new() { Title = "Hal" };
+        _sut.NewCategory = typing;
+
+        await _sut.Initialize();
+
+        Assert.That(_sut.NewCategory, Is.SameAs(typing));
+    }
+
+    [Test]
+    public async Task ToggleCollapsed_FlipsTheFlagAndStoresIt()
+    {
+        CategoryModel category = TestData.Category(id: 2);
+        _dataAccess.GetCategory(2).Returns(Task.FromResult<CategoryEntity?>(new CategoryEntity { Id = 2 }));
+
+        await _sut.ToggleCollapsed(category);
+
+        Assert.That(category.IsCollapsed, Is.True);
+        await _dataAccess.Received(1).UpdateCategory(Arg.Is<CategoryEntity>(x => x != null && x.IsCollapsed));
+
+        _dataAccess.ClearReceivedCalls();
+
+        await _sut.ToggleCollapsed(category);
+
+        Assert.That(category.IsCollapsed, Is.False);
+        await _dataAccess.Received(1).UpdateCategory(Arg.Is<CategoryEntity>(x => x != null && !x.IsCollapsed));
+    }
+
+    [Test]
+    public async Task ToggleCompletionRule_SwitchesBetweenAllAndAnyAndStoresIt()
+    {
+        CategoryModel category = TestData.Category(id: 2);
+        _dataAccess.GetCategory(2).Returns(Task.FromResult<CategoryEntity?>(new CategoryEntity { Id = 2 }));
+
+        await _sut.ToggleCompletionRule(category);
+
+        Assert.That(category.CompletionRule, Is.EqualTo(CompletionRule.Any));
+        await _dataAccess.Received(1).UpdateCategory(Arg.Is<CategoryEntity>(x => x != null && x.CompletionRule == CompletionRule.Any));
+
+        _dataAccess.ClearReceivedCalls();
+
+        await _sut.ToggleCompletionRule(category);
+
+        Assert.That(category.CompletionRule, Is.EqualTo(CompletionRule.All));
+        await _dataAccess.Received(1).UpdateCategory(Arg.Is<CategoryEntity>(x => x != null && x.CompletionRule == CompletionRule.All));
+    }
+
+    [Test]
+    public async Task ToggleCollapsedAndCompletionRule_StoredRowMissing_StillChangeTheModel()
+    {
+        CategoryModel category = TestData.Category(id: 2);
+        _dataAccess.GetCategory(2).Returns(Task.FromResult<CategoryEntity?>(null));
+
+        await _sut.ToggleCollapsed(category);
+        await _sut.ToggleCompletionRule(category);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(category.IsCollapsed, Is.True);
+            Assert.That(category.CompletionRule, Is.EqualTo(CompletionRule.Any));
+        });
+        await _dataAccess.DidNotReceive().UpdateCategory(Arg.Any<CategoryEntity>());
+    }
+
+    [Test]
+    public void ChangeCategory_CategoriesNotLoaded_LeavesTheModelAsItIs()
+    {
+        NoteModel note = TestData.Note(id: 3, categoryId: 1);
+        _clientState.Categories = null;
+
+        _sut.ChangeCategory(note, 2);
+
+        Assert.That(note.CategoryId, Is.EqualTo(1));
+    }
+
+    [Test]
+    public void SetSelectedCategory_CategoriesNotLoaded_KeepsTheSelection()
+    {
+        CategoryModel selected = TestData.Category(id: 1);
+        _sut.SelectedCategory = selected;
+        _clientState.Categories = null;
+
+        _sut.SetSelectedCategory(2);
+
+        Assert.That(_sut.SelectedCategory, Is.SameAs(selected));
+    }
 }

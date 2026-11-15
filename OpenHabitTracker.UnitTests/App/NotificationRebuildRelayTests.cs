@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using OpenHabitTracker.App;
 using OpenHabitTracker.Data;
@@ -110,5 +111,47 @@ public class NotificationRebuildRelayTests
         await NotificationRebuildRelay.Rebuild(provider);
 
         await notifications.Received(1).CancelAll();
+    }
+
+    private sealed class CapturingLoggerProvider : ILoggerProvider
+    {
+        public List<(LogLevel Level, Exception? Exception)> Entries { get; } = [];
+
+        public ILogger CreateLogger(string categoryName) => new CapturingLogger(this);
+
+        public void Dispose()
+        {
+        }
+
+        private sealed class CapturingLogger(CapturingLoggerProvider provider) : ILogger
+        {
+            public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+
+            public bool IsEnabled(LogLevel logLevel) => true;
+
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+            {
+                provider.Entries.Add((logLevel, exception));
+            }
+        }
+    }
+
+    // A resume must never take the app down.
+    [Test]
+    public async Task Rebuild_WhenTheRebuildThrows_LogsTheErrorAndReturns()
+    {
+        CapturingLoggerProvider logs = new();
+        ServiceCollection services = new();
+        services.AddLogging(builder => builder.AddProvider(logs));
+        services.AddSingleton<NotificationRebuildRelay>();
+
+        using ServiceProvider provider = services.BuildServiceProvider();
+
+        InvalidOperationException failure = new("store unavailable");
+        provider.GetRequiredService<NotificationRebuildRelay>().SetRebuildAction(() => throw failure);
+
+        await NotificationRebuildRelay.Rebuild(provider);
+
+        Assert.That(logs.Entries, Has.One.EqualTo((LogLevel.Error, (Exception?)failure)));
     }
 }

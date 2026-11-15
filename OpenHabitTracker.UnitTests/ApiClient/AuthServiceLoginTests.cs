@@ -289,6 +289,161 @@ public class AuthServiceLoginTests
         });
     }
 
+    private static ApiException Status(int status) => new("status", status, "", new Dictionary<string, IEnumerable<string>>(), null);
+
+    private static IEnumerable<TestCaseData> Failures()
+    {
+        yield return new TestCaseData(Status(404), "Invalid address").SetName("{m}(404)");
+        yield return new TestCaseData(Status(405), "Invalid address").SetName("{m}(405)");
+        yield return new TestCaseData(Status(500), "Connection error").SetName("{m}(500)");
+        yield return new TestCaseData(new InvalidOperationException("relative uri"), "Invalid address").SetName("{m}(InvalidOperation)");
+        yield return new TestCaseData(new HttpRequestException(HttpRequestError.NameResolutionError, "no such host"), "Invalid address").SetName("{m}(NameResolution)");
+        yield return new TestCaseData(new HttpRequestException(HttpRequestError.Unknown, "unknown"), "Invalid address").SetName("{m}(Unknown)");
+        yield return new TestCaseData(new HttpRequestException(HttpRequestError.ConnectionError, "refused"), "Connection error").SetName("{m}(ConnectionError)");
+        yield return new TestCaseData(new TaskCanceledException("timeout"), "Connection error").SetName("{m}(Timeout)");
+    }
+
+    [TestCaseSource(nameof(Failures))]
+    public async Task CredentialsLogin_Failure_ReportsWhyAndStaysLocal(Exception exception, string error)
+    {
+        _authClient.GetJwtTokenAsync(Arg.Any<LoginCredentials>()).ThrowsAsync(exception);
+
+        bool loggedIn = await _sut.CredentialsLogin("https://example.com", "a", "password");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(loggedIn, Is.False);
+            Assert.That(_sut.Error, Is.EqualTo(error));
+            Assert.That(_sut.IsSignedOut, Is.False);
+            Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Local));
+        });
+    }
+
+    [TestCaseSource(nameof(Failures))]
+    public async Task RefreshTokenLogin_Failure_ReportsWhyAndKeepsTheToken(Exception exception, string error)
+    {
+        _clientState.Settings.RefreshToken = "stored";
+        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>()).ThrowsAsync(exception);
+
+        bool loggedIn = await _sut.RefreshTokenLogin("https://example.com", "stored");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(loggedIn, Is.False);
+            Assert.That(_sut.Error, Is.EqualTo(error));
+            Assert.That(_sut.IsSignedOut, Is.False);
+            Assert.That(_clientState.Settings.RefreshToken, Is.EqualTo("stored"));
+        });
+    }
+
+    [Test]
+    public async Task Login_SignedOutDuringTheCall_ShowsSignedOut()
+    {
+        _authClient.GetJwtTokenAsync(Arg.Any<LoginCredentials>()).ThrowsAsync(new SignedOutException());
+        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>()).ThrowsAsync(new SignedOutException());
+
+        bool credentials = await _sut.CredentialsLogin("https://example.com", "a", "password");
+        bool refresh = await _sut.RefreshTokenLogin("https://example.com", "stored");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(credentials || refresh, Is.False);
+            Assert.That(_sut.IsSignedOut, Is.True);
+            Assert.That(_sut.Error, Is.EqualTo("Signed out - log in again"));
+        });
+    }
+
+    [Test]
+    public async Task Login_EmptyToken_IsNoLogin()
+    {
+        _authClient.GetJwtTokenAsync(Arg.Any<LoginCredentials>()).Returns(new TokenResponse { JwtToken = "", RefreshToken = "", JwtTokenExpiresAt = DateTimeOffset.UtcNow, Email = "" });
+        _authClient.GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>()).Returns(new TokenResponse { JwtToken = "", RefreshToken = "", JwtTokenExpiresAt = DateTimeOffset.UtcNow, Email = "" });
+
+        bool credentials = await _sut.CredentialsLogin("https://example.com", "a", "password");
+        bool refresh = await _sut.RefreshTokenLogin("https://example.com", "stored");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(credentials || refresh, Is.False);
+            Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Local));
+        });
+    }
+
+    [Test]
+    public async Task CredentialsLogin_SetsTheAddressAndTokensForTheApiCalls()
+    {
+        ApiClientOptions options = new();
+        AuthService sut = new(_clientState, _remoteDataSync, _authClient, options, Substitute.For<IStringLocalizer>());
+        TokenResponse response = Response();
+        _authClient.GetJwtTokenAsync(Arg.Any<LoginCredentials>()).Returns(response);
+
+        await sut.CredentialsLogin("https://example.com", "a", "password");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(options.BaseUrl, Is.EqualTo("https://example.com/"));
+            Assert.That(options.BearerToken, Is.EqualTo("jwt"));
+            Assert.That(options.RefreshToken, Is.EqualTo("refresh"));
+            Assert.That(options.BearerTokenExpiresAt, Is.EqualTo(response.JwtTokenExpiresAt));
+        });
+
+        await sut.Logout();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(options.BearerToken, Is.Empty);
+            Assert.That(options.RefreshToken, Is.Empty);
+            Assert.That(options.BearerTokenExpiresAt, Is.EqualTo(default(DateTimeOffset)));
+            Assert.That(_clientState.DataLocation, Is.EqualTo(DataLocation.Local));
+        });
+    }
+
+    [Test]
+    public async Task CredentialsLogin_RememberMeOff_StoresNoLogin()
+    {
+        await _clientState.LoadSettings();
+        _clientState.Settings.RememberMe = false;
+
+        await _sut.CredentialsLogin("https://example.com", "a", "password");
+
+        await Assert.MultipleAsync(async () =>
+        {
+            await _localDataAccess.DidNotReceive().UpdateLoginSettings(Arg.Any<long>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
+            Assert.That(_clientState.Settings.Username, Is.Empty);
+        });
+    }
+
+    [Test]
+    public async Task TryRefreshTokenLogin_WithoutAStoredToken_CallsNothing()
+    {
+        _clientState.Settings.RememberMe = true;
+        _clientState.Settings.RefreshToken = "";
+
+        bool loggedIn = await _sut.TryRefreshTokenLogin();
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(loggedIn, Is.False);
+            await _authClient.DidNotReceive().GetRefreshTokenAsync(Arg.Any<RefreshTokenRequest>());
+        });
+    }
+
+    [Test]
+    public async Task TryRefreshTokenLogin_WithAStoredToken_LogsInWithItAtTheStoredAddress()
+    {
+        _clientState.Settings.RememberMe = true;
+        _clientState.Settings.RefreshToken = "stored";
+        _clientState.Settings.BaseUrl = "https://sync.example";
+
+        bool loggedIn = await _sut.TryRefreshTokenLogin();
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(loggedIn, Is.True);
+            await _authClient.Received(1).GetRefreshTokenAsync(Arg.Is<RefreshTokenRequest>(x => x.RefreshToken == "stored"));
+        });
+    }
+
     [Test]
     public async Task CredentialsLogin_WrongPassword_ReportsInvalidCredentials()
     {

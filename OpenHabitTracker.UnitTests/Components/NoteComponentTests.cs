@@ -71,10 +71,10 @@ public class NoteComponentTests
         Assert.That(titleInput.GetAttribute("value"), Is.EqualTo("My Note"));
     }
 
+    // The textarea edits the raw markdown, not the HTML stored in ContentMarkdown.
     [Test]
-    public void Renders_ContentMarkdown_AsHtml_NotRawText()
+    public void Renders_TheRawMarkdownInTheTextarea()
     {
-        // The textarea always shows raw markdown content, not the HTML markup stored in ContentMarkdown
         IRenderedComponent<NoteComponent> cut = _ctx.Render<NoteComponent>(
             parameters => parameters.Add(p => p.Note, _note));
 

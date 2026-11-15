@@ -298,4 +298,64 @@ public class NotificationScheduleTests
 
         Assert.That(result, Is.Ordered.By(nameof(ScheduledNotification.NotifyAt)));
     }
+
+    [Test]
+    public void Build_ElapsedToAverageWithHistory_TurnsDueWhenTheAverageIntervalHasPassed()
+    {
+        // Done every two days on average, last done yesterday at 08:00: due tomorrow at 08:00.
+        HabitModel habit = TestData.Habit(lastTimeDoneAt: Now.AddDays(-1));
+        habit.TimesDone = [new TimeModel { StartedAt = Now.AddDays(-3) }, new TimeModel { StartedAt = Now.AddDays(-1) }];
+        habit.RefreshTimesDoneByDay();
+
+        List<ScheduledNotification> result = NotificationSchedule.Build(
+            [], [habit], Settings(leadMinutes: null, selectedRatio: Ratio.ElapsedToAverage), Now);
+
+        Assert.That(result[0].NotifyAt, Is.EqualTo(Now.Date.AddDays(1).AddHours(9)));
+    }
+
+    [Test]
+    public void Build_Digest_TiesAreOrderedByTitle()
+    {
+        TaskModel b = UntimedTask(Now, id: 1);
+        b.Title = "b";
+        TaskModel a = UntimedTask(Now, id: 2);
+        a.Title = "a";
+        HabitModel y = DailyHabit(3, id: 3);
+        y.Title = "y";
+        HabitModel x = DailyHabit(3, id: 4);
+        x.Title = "x";
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([b, a], [y, x], Settings(leadMinutes: null), Now);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result[0].TaskIds, Is.EqualTo(new long[] { 2, 1 }));
+            Assert.That(result[0].HabitIds, Is.EqualTo(new long[] { 4, 3 }));
+        });
+    }
+
+    [Test]
+    public void Build_SummaryTimeAlreadyPassedToday_StartsWithTomorrow()
+    {
+        DateTime afternoon = Now.Date.AddHours(17);
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [DailyHabit(3)], Settings(leadMinutes: null), afternoon);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result[0].NotifyAt, Is.EqualTo(Now.Date.AddDays(1).AddHours(9)));
+            Assert.That(result, Has.Count.EqualTo(NotificationSchedule.HorizonDays - 1));
+        });
+    }
+
+    // The digest leaves a timed task to its own reminder, which does not exist while reminders are off.
+    [Test]
+    [Explicit("Bug: with reminders off, a timed task is announced by no notification at all")]
+    public void Build_TimedTaskWithRemindersOff_CountsInTheDigestOfItsDay()
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build(
+            [TimedTask(new DateTime(2026, 7, 24, 15, 0, 0))], [], Settings(leadMinutes: null), Now);
+
+        Assert.That(result.SingleOrDefault(x => x.NotifyAt.Date == Now.Date)?.TaskCount, Is.EqualTo(1));
+    }
 }

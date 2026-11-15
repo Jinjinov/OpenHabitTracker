@@ -652,4 +652,121 @@ public class TrashServiceTests
 
         Assert.DoesNotThrowAsync(() => _sut.RestoreAll());
     }
+
+    // --- store writes ---
+
+    [Test]
+    public async Task Restore_NoteAndTask_StoreTheClearedFlag()
+    {
+        NoteModel note = TestData.Note(id: 2, isDeleted: true);
+        TaskModel task = TestData.Task(id: 3, isDeleted: true);
+        _dataAccess.GetNote(2).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = 2, IsDeleted = true }));
+        _dataAccess.GetTask(3).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = 3, IsDeleted = true }));
+
+        await _sut.Restore(note);
+        await _sut.Restore(task);
+
+        await _dataAccess.Received(1).UpdateNote(Arg.Is<NoteEntity>(x => x != null && x.Id == 2 && !x.IsDeleted));
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x != null && x.Id == 3 && !x.IsDeleted));
+    }
+
+    [Test]
+    public async Task Restore_TakesUpdatedAtFromTheStoredEntity()
+    {
+        DateTime stamped = new(2026, 5, 1, 8, 0, 0);
+        HabitModel habit = TestData.Habit(id: 1, isDeleted: true);
+        _dataAccess.GetHabit(1).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = 1, IsDeleted = true }));
+        _dataAccess.When(x => x.UpdateHabit(Arg.Any<HabitEntity>())).Do(callInfo => callInfo.RequiredArg<HabitEntity>().UpdatedAt = stamped);
+
+        await _sut.Restore(habit);
+
+        Assert.That(habit.UpdatedAt, Is.EqualTo(stamped));
+    }
+
+    [Test]
+    public async Task Delete_Note_RemovesItFromTheStore()
+    {
+        NoteModel note = TestData.Note(id: 2, isDeleted: true);
+
+        await _sut.Delete(note);
+
+        await _dataAccess.Received(1).RemoveNote(2);
+    }
+
+    [Test]
+    public async Task Initialize_LoadsTheTrash()
+    {
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>([]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>([]));
+        _dataAccess.GetTasks().Returns(Task.FromResult<IReadOnlyList<TaskEntity>>([]));
+        _dataAccess.GetNotes().Returns(Task.FromResult<IReadOnlyList<NoteEntity>>(
+            [new NoteEntity { Id = 1, Title = "Live" }, new NoteEntity { Id = 2, Title = "Gone", IsDeleted = true }]));
+
+        await _sut.Initialize();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_sut.TrashedNotes!.Select(x => x.Title), Is.EqualTo(new[] { "Gone" }));
+            Assert.That(_sut.TrashedTasks, Is.Empty);
+            Assert.That(_sut.TrashedHabits, Is.Empty);
+        });
+    }
+
+    // --- restoring or deleting a task or habit changes what is due, a note does not ---
+
+    private INotificationScheduler UseSchedulerSpy()
+    {
+        INotificationScheduler scheduler = Substitute.For<INotificationScheduler>();
+        _sut = new(_clientState, scheduler);
+        return scheduler;
+    }
+
+    [Test]
+    public async Task RestoreAndDelete_HabitOrTask_RebuildTheNotificationScheduleOnce()
+    {
+        INotificationScheduler scheduler = UseSchedulerSpy();
+
+        await _sut.Restore(TestData.Habit(id: 1, isDeleted: true));
+        await _sut.Restore(TestData.Task(id: 2, isDeleted: true));
+        await _sut.Delete(TestData.Habit(id: 3, isDeleted: true));
+        await _sut.Delete(TestData.Task(id: 4, isDeleted: true));
+
+        await scheduler.Received(4).Rebuild();
+    }
+
+    [Test]
+    public async Task RestoreAndDelete_Note_DoNotRebuildTheNotificationSchedule()
+    {
+        INotificationScheduler scheduler = UseSchedulerSpy();
+
+        await _sut.Restore(TestData.Note(id: 1, isDeleted: true));
+        await _sut.Delete(TestData.Note(id: 2, isDeleted: true));
+
+        await scheduler.DidNotReceive().Rebuild();
+    }
+
+    [Test]
+    public async Task RestoreAllAndEmptyTrash_RebuildOnceForTheWholeTrash()
+    {
+        INotificationScheduler scheduler = UseSchedulerSpy();
+        _clientState.TrashedHabits = [TestData.Habit(id: 1, isDeleted: true), TestData.Habit(id: 2, isDeleted: true)];
+        _clientState.TrashedNotes = [TestData.Note(id: 3, isDeleted: true)];
+        _clientState.TrashedTasks = [TestData.Task(id: 4, isDeleted: true), TestData.Task(id: 5, isDeleted: true)];
+
+        await _sut.RestoreAll();
+
+        await scheduler.Received(1).Rebuild();
+
+        scheduler.ClearReceivedCalls();
+        _clientState.TrashedHabits = [TestData.Habit(id: 1, isDeleted: true), TestData.Habit(id: 2, isDeleted: true)];
+        _clientState.TrashedTasks = [TestData.Task(id: 4, isDeleted: true), TestData.Task(id: 5, isDeleted: true)];
+
+        await _sut.EmptyTrash();
+
+        await scheduler.Received(1).Rebuild();
+        await _dataAccess.Received(1).RemoveHabit(1);
+        await _dataAccess.Received(1).RemoveHabit(2);
+        await _dataAccess.Received(1).RemoveTask(4);
+        await _dataAccess.Received(1).RemoveTask(5);
+    }
 }

@@ -95,4 +95,88 @@ public class ImportFormatDetectorTests
     {
         Assert.That(ImportFormatDetector.Detect("backup.json", []), Is.EqualTo(ImportFormat.Unknown));
     }
+
+    private static byte[] Text(string text) => System.Text.Encoding.UTF8.GetBytes(text);
+
+    [TestCase("{ \"Settings\": {} }", ImportFormat.Json)]
+    [TestCase("  {\"Categories\": []}", ImportFormat.Json)]
+    [TestCase("{ \"Other\": 1 }", ImportFormat.Unknown)]
+    [TestCase("{ broken json", ImportFormat.Unknown)]
+    [TestCase("[ { \"Settings\": {} } ]", ImportFormat.Unknown)]
+    public void Detect_Json_NeedsAnObjectWithSettingsOrCategories(string text, ImportFormat expected)
+    {
+        Assert.That(ImportFormatDetector.Detect("backup.json", Text(text)), Is.EqualTo(expected));
+    }
+
+    [TestCase("{ \"data\": { \"tasks\": { \"dailys\": [] } } }", ImportFormat.Habitica)]
+    [TestCase("{ \"tasks\": { \"dailys\": [] } }", ImportFormat.Habitica)]
+    [TestCase("{ \"tasks\": { \"todos\": [] } }", ImportFormat.Unknown)]
+    [TestCase("{ \"tasks\": [] }", ImportFormat.Unknown)]
+    [TestCase("{ \"data\": [ 1 ], \"tasks\": { \"dailys\": [] } }", ImportFormat.Habitica)]
+    public void Detect_HabiticaUserData_NeedsTheDailies(string text, ImportFormat expected)
+    {
+        Assert.That(ImportFormatDetector.Detect("export.json", Text(text)), Is.EqualTo(expected));
+    }
+
+    [TestCase("---\n# a comment\nSettings:\n  IsDarkMode: true\n", "backup.yml", ImportFormat.Yaml)]
+    [TestCase("\nCategories: []\n", "backup", ImportFormat.Yaml)]
+    [TestCase("Title: not a backup\n", "backup.yaml", ImportFormat.Unknown)]
+    public void Detect_Yaml_StartsWithSettingsOrCategories(string text, string filename, ImportFormat expected)
+    {
+        Assert.That(ImportFormatDetector.Detect(filename, Text(text)), Is.EqualTo(expected));
+    }
+
+    [TestCase("ContentType\tCategory\tTitle\r\nNote\tWork\tIdeas\r\n", ImportFormat.Tsv)]
+    [TestCase("ContentType\tTitle\r\n", ImportFormat.Unknown)]
+    public void Detect_Tsv_NeedsTheThreeKeyColumns(string text, ImportFormat expected)
+    {
+        Assert.That(ImportFormatDetector.Detect("backup.tsv", Text(text)), Is.EqualTo(expected));
+    }
+
+    [TestCase("C2026110810563{C1;1;x;1")]
+    [TestCase("C20261108105633X{C1;1;x;1")]
+    [TestCase("C202611081056331{H")]
+    public void Detect_AlmostAHabitNowHeader_IsNotHabitNow(string text)
+    {
+        Assert.That(ImportFormatDetector.Detect("backup.hn", Text(text)), Is.EqualTo(ImportFormat.Unknown));
+    }
+
+    [Test]
+    public void Detect_ZipOfSomethingElse_IsUnknown()
+    {
+        using MemoryStream stream = new();
+
+        using (System.IO.Compression.ZipArchive archive = new(stream, System.IO.Compression.ZipArchiveMode.Create, leaveOpen: true))
+        {
+            using StreamWriter json = new(archive.CreateEntry("Takeout/Keep/settings.json").Open());
+            json.Write("{ \"not\": \"a note\" }");
+        }
+
+        using (System.IO.Compression.ZipArchive archive = new(new MemoryStream(stream.ToArray()), System.IO.Compression.ZipArchiveMode.Read))
+            Assume.That(archive.Entries, Has.Count.EqualTo(1));
+
+        Assert.That(ImportFormatDetector.Detect("takeout.zip", stream.ToArray()), Is.EqualTo(ImportFormat.Unknown));
+    }
+
+    [Test]
+    public void Detect_DamagedZip_IsUnknown()
+    {
+        byte[] content = [0x50, 0x4B, 0x03, 0x04, 1, 2, 3, 4, 5, 6, 7, 8];
+
+        Assert.That(ImportFormatDetector.Detect("takeout.zip", content), Is.EqualTo(ImportFormat.Unknown));
+    }
+
+    [Test]
+    public void Detect_SqliteDatabaseOfAnotherApp_IsUnknown()
+    {
+        byte[] content = Text("SQLite format 3\0CREATE TABLE notes (id INTEGER)");
+
+        Assert.That(ImportFormatDetector.Detect("other.db", content), Is.EqualTo(ImportFormat.Unknown));
+    }
+
+    [Test]
+    public void Detect_PlainText_IsUnknown()
+    {
+        Assert.That(ImportFormatDetector.Detect("notes.txt", Text("just some words\nand more")), Is.EqualTo(ImportFormat.Unknown));
+    }
 }

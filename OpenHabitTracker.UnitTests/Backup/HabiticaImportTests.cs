@@ -103,4 +103,155 @@ public class HabiticaImportTests
             Assert.That(Habit("Tap here to edit this into a bad habit you'd like to quit").TimesDone, Is.Empty);
         });
     }
+
+    private static async Task<ImportedData> ReadJson(string json)
+    {
+        await using MemoryStream stream = new(System.Text.Encoding.UTF8.GetBytes(json));
+
+        return await new HabiticaImport().ReadDataFile(stream);
+    }
+
+    private static HabitModel HabitIn(ImportedData data, string title) => data.Categories.SelectMany(x => x.Habits).Single(x => x.Title == title);
+
+    [Test]
+    public async Task ApiWrapper_TheDataPropertyIsRead()
+    {
+        ImportedData data = await ReadJson("""{ "data": { "tasks": { "todos": [ { "text": " Wrapped " } ] } } }""");
+
+        Assert.That(data.Categories.Single().Tasks.Single().Title, Is.EqualTo("Wrapped"));
+    }
+
+    [Test]
+    public void NoTasks_IsUnreadable()
+    {
+        Assert.ThrowsAsync<InvalidDataException>(() => ReadJson("""{ "preferences": {} }"""));
+    }
+
+    // At UTC+2 with the day starting at 04:00, 01:00 UTC on the 9th is 03:00 local, still the 8th.
+    [Test]
+    public async Task DayStart_ACompletionBeforeTheDayStartsCountsForThePreviousDay()
+    {
+        ImportedData data = await ReadJson("""
+            { "preferences": { "timezoneOffset": -120, "dayStart": 4 },
+              "tasks": { "habits": [ { "text": "Late", "history": [ { "date": "2026-11-09T01:00:00.000Z", "scoredUp": 1, "scoredDown": 0 }, { "date": "2026-11-09T03:00:00.000Z", "scoredUp": 2 } ] } ] } }
+            """);
+
+        Assert.That(HabitIn(data, "Late").TimesDone!.Select(x => x.StartedAt), Is.EqualTo(new[] { Midday(2026, 11, 8), Midday(2026, 11, 9), Midday(2026, 11, 9) }));
+    }
+
+    [Test]
+    public async Task Tags_TheFirstKnownTagIsTheCategoryAndTasksShareIt()
+    {
+        ImportedData data = await ReadJson("""
+            { "tags": [ { "id": "t1", "name": "Work" }, { "id": "t2", "name": "Home" }, { "name": "no id" } ],
+              "tasks": { "todos": [ { "text": "a", "tags": [ "missing", "t2", "t1" ] }, { "text": "b", "tags": [ "t2" ] }, { "text": "c", "tags": [] }, { "text": "d", "tags": "t1" } ] } }
+            """);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(data.Categories.Select(x => x.Title), Is.EqualTo(new[] { "", "Home" }));
+            Assert.That(data.Categories[1].Tasks.Select(x => x.Title), Is.EqualTo(new[] { "a", "b" }));
+            Assert.That(data.Categories[0].Tasks.Select(x => x.Title), Is.EqualTo(new[] { "c", "d" }));
+        });
+    }
+
+    [Test]
+    public async Task DailySchedules_BecomeACountPerWeekMonthOrYear()
+    {
+        ImportedData data = await ReadJson("""
+            { "tasks": { "dailys": [
+                { "text": "weekdays", "frequency": "weekly", "everyX": 2, "repeat": { "m": true, "t": false, "w": true, "th": false, "f": true, "s": false, "su": false } },
+                { "text": "no repeat", "frequency": "weekly" },
+                { "text": "none on", "frequency": "weekly", "repeat": { "m": false } },
+                { "text": "month days", "frequency": "monthly", "daysOfMonth": [ 1, 15 ] },
+                { "text": "month weeks", "frequency": "monthly", "weeksOfMonth": [ 0, 2 ], "repeat": { "s": true, "su": true } },
+                { "text": "yearly", "frequency": "yearly", "everyX": 3 },
+                { "text": "daily zero", "frequency": "daily", "everyX": 0 },
+                { "text": "unknown", "frequency": "hourly" } ] } }
+            """);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Rule(HabitIn(data, "weekdays")), Is.EqualTo((3, 2, Period.Week)));
+            Assert.That(Rule(HabitIn(data, "no repeat")), Is.EqualTo((7, 1, Period.Week)));
+            Assert.That(Rule(HabitIn(data, "none on")), Is.EqualTo((1, 1, Period.Week)));
+            Assert.That(Rule(HabitIn(data, "month days")), Is.EqualTo((2, 1, Period.Month)));
+            Assert.That(Rule(HabitIn(data, "month weeks")), Is.EqualTo((4, 1, Period.Month)));
+            Assert.That(Rule(HabitIn(data, "yearly")), Is.EqualTo((1, 3, Period.Year)));
+            Assert.That(Rule(HabitIn(data, "daily zero")), Is.EqualTo((1, 1, Period.Day)));
+            Assert.That(Rule(HabitIn(data, "unknown")), Is.EqualTo((1, 1, Period.Day)));
+        });
+    }
+
+    // JsonElement.TryGetInt32 throws on a string instead of returning false, and ImportExportService
+    // does not turn an InvalidOperationException into "The file could not be read".
+    [Test]
+    [Explicit("Bug: a non-number everyX, timezoneOffset, dayStart or scoredUp throws InvalidOperationException instead of falling back")]
+    public async Task NumbersWrittenAsText_FallBackToTheDefaults()
+    {
+        ImportedData data = await ReadJson("""
+            { "preferences": { "timezoneOffset": "-60", "dayStart": "4" },
+              "tasks": { "dailys": [ { "text": "Daily", "frequency": "daily", "everyX": "2" } ],
+                         "habits": [ { "text": "Counter", "history": [ { "date": "2026-11-09T10:00:00.000Z", "scoredUp": "1" } ] } ] } }
+            """);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Rule(HabitIn(data, "Daily")), Is.EqualTo((1, 1, Period.Day)));
+            Assert.That(HabitIn(data, "Counter").TimesDone, Is.Empty);
+        });
+    }
+
+    [Test]
+    public async Task Daily_HistoryInMillisecondsAndOnlyCompletedEntriesCount()
+    {
+        // 1762603200000 is 2025-11-08T12:00:00Z.
+        ImportedData data = await ReadJson("""
+            { "tasks": { "dailys": [ { "text": "Stretch", "history": [ { "date": 1762603200000, "completed": true }, { "date": 1762689600000, "completed": false }, { "date": "not a date", "completed": true }, { "completed": true } ] } ] } }
+            """);
+
+        Assert.That(HabitIn(data, "Stretch").TimesDone!.Select(x => x.StartedAt), Is.EqualTo(new[] { Midday(2025, 11, 8) }));
+    }
+
+    [Test]
+    public async Task Checklists_ATodoKeepsWhichItemsAreDoneADailyDoesNot()
+    {
+        ImportedData data = await ReadJson("""
+            { "tasks": {
+                "todos": [ { "text": "Pack", "checklist": [ { "text": "Socks", "completed": true }, { "text": "Shirt", "completed": false } ] } ],
+                "dailys": [ { "text": "Routine", "checklist": [ { "text": "Teeth", "completed": true } ] } ] } }
+            """);
+
+        List<ItemModel> packItems = data.Categories.Single().Tasks.Single().Items!;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(packItems.Select(x => x.Title), Is.EqualTo(new[] { "Socks", "Shirt" }));
+            Assert.That(packItems[0].DoneAt, Is.Not.Null);
+            Assert.That(packItems[1].DoneAt, Is.Null);
+            Assert.That(HabitIn(data, "Routine").Items!.Select(x => (x.Title, x.DoneAt)), Is.EqualTo(new[] { ("Teeth", (DateTime?)null) }));
+        });
+    }
+
+    [Test]
+    public async Task Dates_ComeFromTheFileAndFallBackToTheImportTime()
+    {
+        DateTime before = DateTime.Now;
+
+        ImportedData data = await ReadJson("""
+            { "tasks": { "todos": [
+                { "text": "dated", "createdAt": "2026-01-02T10:00:00.000Z", "updatedAt": "2026-01-03T10:00:00.000Z" },
+                { "text": "undated", "createdAt": 5 } ] } }
+            """);
+
+        List<TaskModel> tasks = data.Categories.Single().Tasks;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(tasks[0].CreatedAt, Is.EqualTo(new DateTime(2026, 1, 2, 10, 0, 0)));
+            Assert.That(tasks[0].UpdatedAt, Is.EqualTo(new DateTime(2026, 1, 3, 10, 0, 0)));
+            Assert.That(tasks[1].CreatedAt, Is.EqualTo(new DateTime(1970, 1, 1, 0, 0, 0, 5)));
+            Assert.That(tasks[1].UpdatedAt, Is.InRange(before, DateTime.Now));
+        });
+    }
 }

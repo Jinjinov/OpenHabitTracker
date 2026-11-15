@@ -41,8 +41,71 @@ public class ItemServiceTests
 
         await _sut.Initialize(habit);
 
-        Assert.That(habit.Items, Is.Not.Null);
-        Assert.That(habit.Items, Has.Count.EqualTo(1));
+        Assert.Multiple(() =>
+        {
+            Assert.That(habit.Items!.Select(x => (x.Id, x.ParentId, x.Title)), Is.EqualTo(new[] { (5L, 1L, "Step 1") }));
+            Assert.That(_sut.NewItem, Is.Not.Null);
+        });
+    }
+
+    [Test]
+    public async Task Initialize_KeepsANewItemAlreadyBeingTyped()
+    {
+        ItemModel typing = new() { Title = "half typed" };
+        _sut.NewItem = typing;
+
+        await _sut.Initialize(null);
+
+        Assert.That(_sut.NewItem, Is.SameAs(typing));
+    }
+
+    [Test]
+    public async Task AddItem_StoresTheItemAndTakesItsId()
+    {
+        _dataAccess.When(x => x.AddItem(Arg.Any<ItemEntity>())).Do(callInfo => callInfo.RequiredArg<ItemEntity>().Id = 33);
+        TaskModel task = TestData.Task(id: 8);
+        task.Items = [];
+        _clientState.Items = new();
+        ItemModel newItem = new() { Title = "Socks" };
+        _sut.NewItem = newItem;
+
+        await _sut.AddItem(task);
+
+        await _dataAccess.Received(1).AddItem(Arg.Is<ItemEntity>(x => x != null && x.Title == "Socks" && x.ParentId == 8 && x.DoneAt == null));
+        Assert.Multiple(() =>
+        {
+            Assert.That(newItem.Id, Is.EqualTo(33));
+            Assert.That(_clientState.Items[33], Is.SameAs(newItem));
+            Assert.That(task.Items, Is.EqualTo(new[] { newItem }));
+        });
+    }
+
+    [Test]
+    public async Task AddItem_NoNewItem_WritesNothing()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.Items = [];
+        _sut.NewItem = null;
+
+        await _sut.AddItem(habit);
+
+        await _dataAccess.DidNotReceive().AddItem(Arg.Any<ItemEntity>());
+        Assert.That(habit.Items, Is.Empty);
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task SetIsDone_StoresTheDoneTime(bool done)
+    {
+        ItemModel item = new() { Id = 5, Title = "Step", DoneAt = done ? null : new DateTime(2026, 1, 1) };
+        _dataAccess.GetItem(5).Returns(Task.FromResult<ItemEntity?>(new ItemEntity { Id = 5, DoneAt = item.DoneAt }));
+
+        await _sut.SetIsDone(item, done);
+
+        DateTime? doneAt = item.DoneAt;
+
+        Assert.That(doneAt.HasValue, Is.EqualTo(done));
+        await _dataAccess.Received(1).UpdateItem(Arg.Is<ItemEntity>(x => x != null && x.Id == 5 && x.DoneAt == doneAt));
     }
 
     [Test]

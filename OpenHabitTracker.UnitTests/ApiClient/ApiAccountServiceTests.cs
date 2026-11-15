@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Localization;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using OpenHabitTracker.App;
 using OpenHabitTracker.Blazor.Auth;
 using OpenHabitTracker.Blazor.Web.ApiClient;
 using OpenHabitTracker.Dto;
@@ -74,6 +75,73 @@ public class ApiAccountServiceTests
         await _sut.LogOut();
 
         await _authService.Received(1).Logout();
+    }
+
+    [Test]
+    public async Task GetAccountAndAccounts_Answered_ReturnWhatTheServerSent()
+    {
+        AccountResponse bea = new() { Username = "bea", Email = "b@x", IsAdministrator = true };
+        _accountClient.GetAccountAsync().Returns(bea);
+        _accountClient.GetAccountsAsync().Returns([bea]);
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(await _sut.GetAccount(), Is.SameAs(bea));
+            Assert.That(await _sut.GetAccounts(), Is.EqualTo(new[] { bea }));
+        });
+    }
+
+    private static IEnumerable<Exception> CallFailures()
+    {
+        yield return Refused(500, "");
+        yield return new SignedOutException();
+        yield return new HttpRequestException();
+        yield return new TaskCanceledException();
+        yield return new InvalidOperationException();
+    }
+
+    [TestCaseSource(nameof(CallFailures))]
+    public async Task Reads_CallFails_ReturnNothing(Exception exception)
+    {
+        _accountClient.GetAccountAsync().ThrowsAsync(exception);
+        _accountClient.GetAccountsAsync().ThrowsAsync(exception);
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(await _sut.GetAccount(), Is.Null);
+            Assert.That(await _sut.GetAccounts(), Is.Empty);
+        });
+    }
+
+    [TestCaseSource(nameof(CallFailures))]
+    public async Task Changes_CallFails_AreAnError(Exception exception)
+    {
+        _accountClient.CreateAccountAsync(Arg.Any<CreateAccountRequest>()).ThrowsAsync(exception);
+
+        Assert.That(await _sut.CreateAccount("cid", "c@x", "pw"), Has.Count.EqualTo(1));
+    }
+
+    // Anything else is a fault in the app, which the error page shows.
+    [Test]
+    public void Changes_UnexpectedFault_IsNotSwallowed()
+    {
+        _accountClient.ResetPasswordAsync(Arg.Any<ResetPasswordRequest>()).ThrowsAsync(new NullReferenceException());
+
+        Assert.ThrowsAsync<NullReferenceException>(() => _sut.ResetPassword("cid", "pw"));
+    }
+
+    [Test]
+    public async Task CreateAndReset_SendTheirFields()
+    {
+        IReadOnlyList<string> created = await _sut.CreateAccount("cid", "c@x", "pw");
+        IReadOnlyList<string> reset = await _sut.ResetPassword("cid", "pw2");
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(created.Concat(reset), Is.Empty);
+            await _accountClient.Received(1).CreateAccountAsync(Arg.Is<CreateAccountRequest>(x => x != null && x.Username == "cid" && x.Email == "c@x" && x.Password == "pw"));
+            await _accountClient.Received(1).ResetPasswordAsync(Arg.Is<ResetPasswordRequest>(x => x != null && x.Username == "cid" && x.Password == "pw2"));
+        });
     }
 
     [Test]

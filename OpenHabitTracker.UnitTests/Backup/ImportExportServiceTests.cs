@@ -63,4 +63,68 @@ public class ImportExportServiceTests
     {
         Assert.That(await Read("backup.tsv", Text("ContentType\tCategory\tTitle\tContent\tPriority\tDuration\tPlannedAt\tRepeatCount\tRepeatInterval\tRepeatPeriod\nNotAType\tWork\tIdeas\t\tNone\t\t\t\t\t\n")), Is.EqualTo(ImportResult.UnreadableContent));
     }
+
+    // Every export is detected as its own format again, which is what lets the file be imported.
+    [TestCase(FileFormat.Json, ImportFormat.Json)]
+    [TestCase(FileFormat.Tsv, ImportFormat.Tsv)]
+    [TestCase(FileFormat.Yaml, ImportFormat.Yaml)]
+    [TestCase(FileFormat.Md, ImportFormat.Markdown)]
+    public async Task GetDataExportFileString_EachFormat_IsDetectedAsThatFormat(FileFormat fileFormat, ImportFormat importFormat)
+    {
+        string file = await _service.GetDataExportFileString(fileFormat);
+
+        Assert.That(ImportFormatDetector.Detect("backup", System.Text.Encoding.UTF8.GetBytes(file)), Is.EqualTo(importFormat));
+    }
+
+    [Test]
+    public void GetDataExportFileString_UnknownFormat_Throws()
+    {
+        Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => _service.GetDataExportFileString((FileFormat)9));
+    }
+
+    [Test]
+    public async Task Read_HandWrittenMarkdown_CountsWhatItHolds()
+    {
+        (ImportResult result, PendingImport? pending) = await _service.ReadDataFile("notes.md", Text("# Work\n\n## Ideas\n\nline\n\n## Pack\n\n- Socks\n- Shirt\n"));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EqualTo(ImportResult.Read));
+            Assert.That(pending!.Format, Is.EqualTo(ImportFormat.Markdown));
+            Assert.That(pending.Filename, Is.EqualTo("notes.md"));
+            Assert.That(pending.Settings, Is.Null);
+            Assert.That(pending.Found, Is.EqualTo(new ImportCounts(Categories: 1, Notes: 1, Tasks: 1, Habits: 0, Items: 2, Completions: 0)));
+        });
+    }
+
+    [Test]
+    public async Task Read_HabitNowBackup_ReadsItAndMatchesCompletionsByDay()
+    {
+        await using Stream stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "Importers", "HabitNow", "backup-frequency-tracks.hn"));
+
+        (ImportResult result, PendingImport? pending) = await _service.ReadDataFile("backup.hn", stream);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EqualTo(ImportResult.Read));
+            Assert.That(pending!.Format, Is.EqualTo(ImportFormat.HabitNow));
+            Assert.That(pending.Options.MatchCompletionsByDay, Is.True);
+            Assert.That(pending.Found.Habits, Is.GreaterThan(0));
+        });
+    }
+
+    [Test]
+    public async Task Read_DamagedHabitifyDatabase_IsUnreadable()
+    {
+        byte[] database = File.ReadAllBytes(Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "Importers", "Habitify", "backup.db"));
+
+        // The signature and the table definitions are there, the pages after them are not.
+        const int pageSize = 4096;
+        int lastDefinition = database.AsSpan().IndexOf("CREATE TABLE backup_metadata"u8);
+        byte[] damaged = database[..(((lastDefinition / pageSize) + 1) * pageSize)];
+
+        Assume.That(ImportFormatDetector.Detect("backup.db", damaged), Is.EqualTo(ImportFormat.HabitifyDatabase));
+
+        Assert.That(await Read("backup.db", new MemoryStream(damaged)), Is.EqualTo(ImportResult.UnreadableContent));
+    }
 }
