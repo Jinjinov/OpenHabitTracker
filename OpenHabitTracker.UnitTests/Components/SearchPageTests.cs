@@ -472,9 +472,9 @@ public class SearchPageTests
         Assert.That(cut.FindAll("[data-search-step-16]"), Has.Count.EqualTo(1));
     }
 
-    // Blazor renders a bool attribute value as an empty attribute when true and drops it when false.
+    // Blazor renders a bool attribute value as an empty attribute when true and drops it when false,
+    // so aria-expanded is bound to the text "true" or "false".
     [Test]
-    [Explicit("Bug: aria-expanded on the fold-section headers is bound to a bool, so it renders empty or not at all")]
     public void FoldSection_HeaderReportsItsExpandedState()
     {
         IRenderedComponent<Search> cut = Render();

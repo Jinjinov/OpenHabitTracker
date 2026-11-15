@@ -221,7 +221,7 @@ public abstract class DataAccessContractTests
     }
 
     [Test]
-    public virtual async Task GetHabit_IdOfANote_ReturnsNull()
+    public async Task GetHabit_IdOfANote_ReturnsNull()
     {
         NoteEntity note = new() { Title = "note" };
         await Sut.AddNote(note);
@@ -248,7 +248,7 @@ public abstract class DataAccessContractTests
     }
 
     [Test]
-    public virtual async Task GetById_MissingRow_ReturnsNull()
+    public async Task GetById_MissingRow_ReturnsNull()
     {
         await Assert.MultipleAsync(async () =>
         {

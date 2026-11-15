@@ -330,7 +330,7 @@ public class NoteServiceTests
         _dataAccess.GetNote(note.Id).Returns(Task.FromResult<NoteEntity?>(new NoteEntity { Id = note.Id }));
 
         DateTime stamped = DateTime.Now;
-        _dataAccess.When(x => x.UpdateNote(Arg.Any<NoteEntity>())).Do(callInfo => callInfo.Arg<NoteEntity>().UpdatedAt = stamped);
+        _dataAccess.When(x => x.UpdateNote(Arg.Any<NoteEntity>())).Do(callInfo => callInfo.RequiredArg<NoteEntity>().UpdatedAt = stamped);
 
         await _sut.UpdateNote();
 

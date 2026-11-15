@@ -268,10 +268,7 @@ public class NotesAndTasksLayoutTests
         await notes.Find("button[aria-label='Help']").ClickAsync(new MouseEventArgs());
         await tasks.Find("button[aria-label='Help']").ClickAsync(new MouseEventArgs());
 
-        Assert.Multiple(() =>
-        {
-            _app.GTourService.Received(1).StartTour("notes");
-            _app.GTourService.Received(1).StartTour("tasks");
-        });
+        await _app.GTourService.Received(1).StartTour("notes");
+        await _app.GTourService.Received(1).StartTour("tasks");
     }
 }

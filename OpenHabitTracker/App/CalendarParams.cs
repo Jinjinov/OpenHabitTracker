@@ -47,7 +47,7 @@ public class CalendarParams
         CalendarStart = GetFirstDayOfWeek(firstDayOfWeek, FirstDayOfMonth);
     }
 
-    private void ShiftCalendarByDays(int days)
+    public void ShiftCalendarByDays(int days)
     {
         CalendarStart = CalendarStart.AddDays(days);
         FirstDayOfMonth = GetFirstDayOfMonth(CalendarStart);

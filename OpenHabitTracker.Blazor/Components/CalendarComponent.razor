@@ -262,7 +262,7 @@
                     if (DisplayMonth)
                         _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek);
                     else
-                        _calendarParams.SetCalendarStartToNextWeek();
+                        _calendarParams.ShiftCalendarByDays(daysInRow);
                     _activeDayIndex = 0;
                 }
                 break;
@@ -274,7 +274,7 @@
                     if (DisplayMonth)
                         _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek);
                     else
-                        _calendarParams.SetCalendarStartToPreviousWeek();
+                        _calendarParams.ShiftCalendarByDays(-daysInRow);
                     _activeDayIndex = totalCells - 1;
                 }
                 break;
@@ -286,7 +286,7 @@
                     if (DisplayMonth)
                         _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek);
                     else
-                        _calendarParams.SetCalendarStartToNextWeek();
+                        _calendarParams.ShiftCalendarByDays(daysInRow);
                     _activeDayIndex = 0;
                 }
                 break;
@@ -298,7 +298,7 @@
                     if (DisplayMonth)
                         _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek);
                     else
-                        _calendarParams.SetCalendarStartToPreviousWeek();
+                        _calendarParams.ShiftCalendarByDays(-daysInRow);
                     _activeDayIndex = totalCells - 1;
                 }
                 break;
@@ -312,14 +312,14 @@
                 if (DisplayMonth)
                     _calendarParams.SetCalendarStartToNextMonth(ClientState.Settings.FirstDayOfWeek);
                 else
-                    _calendarParams.SetCalendarStartToNextWeek();
+                    _calendarParams.ShiftCalendarByDays(daysInRow);
                 _activeDayIndex = 0;
                 break;
             case "PageUp":
                 if (DisplayMonth)
                     _calendarParams.SetCalendarStartToPreviousMonth(ClientState.Settings.FirstDayOfWeek);
                 else
-                    _calendarParams.SetCalendarStartToPreviousWeek();
+                    _calendarParams.ShiftCalendarByDays(-daysInRow);
                 _activeDayIndex = 0;
                 break;
             default:

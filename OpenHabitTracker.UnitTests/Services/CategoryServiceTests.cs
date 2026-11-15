@@ -528,8 +528,8 @@ public class CategoryServiceTests
 
         await _sut.DeleteCategory(category);
 
-        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x.Id == 2 && x.IsDeleted && x.CategoryId == 0));
-        await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(x => x.Id == 3 && x.IsDeleted && x.CategoryId == 0));
+        await _dataAccess.Received(1).UpdateTask(Arg.Is<TaskEntity>(x => x != null && x.Id == 2 && x.IsDeleted && x.CategoryId == 0));
+        await _dataAccess.Received(1).UpdateHabit(Arg.Is<HabitEntity>(x => x != null && x.Id == 3 && x.IsDeleted && x.CategoryId == 0));
     }
 
     [Test]

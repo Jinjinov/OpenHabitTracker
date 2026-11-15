@@ -340,7 +340,7 @@ public class HabitServiceTests
 
         await _sut.AddHabit();
 
-        await _dataAccess.Received(1).AddHabit(Arg.Is<HabitEntity>(x => x.RepeatCount == 1 && x.RepeatInterval == 1));
+        await _dataAccess.Received(1).AddHabit(Arg.Is<HabitEntity>(x => x != null && x.RepeatCount == 1 && x.RepeatInterval == 1));
     }
 
     [Test]
@@ -1794,7 +1794,7 @@ public class HabitServiceTests
         _dataAccess.GetHabit(habit.Id).Returns(Task.FromResult<HabitEntity?>(new HabitEntity { Id = habit.Id }));
 
         DateTime stamped = DateTime.Now;
-        _dataAccess.When(x => x.UpdateHabit(Arg.Any<HabitEntity>())).Do(callInfo => callInfo.Arg<HabitEntity>().UpdatedAt = stamped);
+        _dataAccess.When(x => x.UpdateHabit(Arg.Any<HabitEntity>())).Do(callInfo => callInfo.RequiredArg<HabitEntity>().UpdatedAt = stamped);
 
         await _sut.UpdateHabit();
 

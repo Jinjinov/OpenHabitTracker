@@ -31,7 +31,7 @@
 
         <div class="col bg-body-secondary d-flex align-items-center">
 
-            <button @ref="_menuButtonRef" class="nav-link px-2 py-1 my-1 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="ToggleMenu" aria-label="@Loc["Toggle menu"]" aria-expanded="@(_dynamicComponentType == typeof(Menu))" data-main-step-1><i class="bi bi-three-dots-vertical"></i></button>
+            <button @ref="_menuButtonRef" class="nav-link px-2 py-1 my-1 @(_dynamicComponentType == typeof(Menu) ? "active" : "")" @onclick="ToggleMenu" aria-label="@Loc["Toggle menu"]" aria-expanded="@(_dynamicComponentType == typeof(Menu) ? "true" : "false")" data-main-step-1><i class="bi bi-three-dots-vertical"></i></button>
 
             @* <button class="nav-link" @onclick="Localization.JsonStringLocalizer.SerializeMissingAndUnusedValues"><i class="bi bi-floppy"></i> Save</button> *@
             @* <button class="nav-link" @onclick="() =>
@@ -51,7 +51,7 @@
             <NavLink class="nav-link px-2 py-1 ms-3" href="tasks" aria-current="@AriaCurrentPage("tasks")" aria-label="@Loc["Tasks"]" data-main-step-4><i class="bi bi-list-task"></i></NavLink>
             <NavLink class="nav-link px-2 py-1 ms-3" href="habits" aria-current="@AriaCurrentPage("habits")" aria-label="@Loc["Habits"]" data-main-step-5><i class="bi bi-repeat"></i></NavLink>
 
-            <button @ref="_searchButtonRef" class="nav-link px-2 py-1 ms-3 @(_dynamicComponentType == typeof(Search) ? "active" : "")" @onclick="ToggleSearch" aria-label="@Loc["Search, Filter, Sort"]" aria-expanded="@(_dynamicComponentType == typeof(Search))" data-main-step-6><i class="bi bi-search"></i></button>
+            <button @ref="_searchButtonRef" class="nav-link px-2 py-1 ms-3 @(_dynamicComponentType == typeof(Search) ? "active" : "")" @onclick="ToggleSearch" aria-label="@Loc["Search, Filter, Sort"]" aria-expanded="@(_dynamicComponentType == typeof(Search) ? "true" : "false")" data-main-step-6><i class="bi bi-search"></i></button>
 
             @if (ClientState.Settings.ShowHelp)
             {

@@ -27,10 +27,10 @@ public class HabiticaImport
 
         if (user.TryGetProperty("preferences", out JsonElement preferences))
         {
-            if (preferences.TryGetProperty("timezoneOffset", out JsonElement timezoneOffset) && timezoneOffset.TryGetInt32(out int minutes))
+            if (Int(preferences, "timezoneOffset") is int minutes)
                 offset = TimeSpan.FromMinutes(-minutes);
 
-            if (preferences.TryGetProperty("dayStart", out JsonElement start) && start.TryGetInt32(out int hours))
+            if (Int(preferences, "dayStart") is int hours)
                 dayStart = TimeSpan.FromHours(hours);
         }
 
@@ -128,8 +128,8 @@ public class HabiticaImport
 
             // Each up press of a day is a completion of that day.
             habit.TimesDone = History(counter)
-                .Where(entry => Date(entry, "date") is not null && entry.TryGetProperty("scoredUp", out JsonElement up) && up.TryGetInt32(out _))
-                .SelectMany(entry => Enumerable.Repeat(LocalDay(Date(entry, "date")!.Value), entry.GetProperty("scoredUp").GetInt32()))
+                .Where(entry => Date(entry, "date") is not null && Int(entry, "scoredUp") is not null)
+                .SelectMany(entry => Enumerable.Repeat(LocalDay(Date(entry, "date")!.Value), Int(entry, "scoredUp")!.Value))
                 .Select(Completion)
                 .ToList();
 
@@ -163,7 +163,7 @@ public class HabiticaImport
     // Weekdays become a count per week and days of the month a count per month, because a repeat rule cannot name days.
     private static (int RepeatCount, int RepeatInterval, Period RepeatPeriod) DailyFrequency(JsonElement daily)
     {
-        int everyX = daily.TryGetProperty("everyX", out JsonElement every) && every.TryGetInt32(out int x) ? Math.Max(1, x) : 1;
+        int everyX = Int(daily, "everyX") is int x ? Math.Max(1, x) : 1;
 
         int weekdays = daily.TryGetProperty("repeat", out JsonElement repeat) && repeat.ValueKind == JsonValueKind.Object
             ? _weekdays.Count(day => repeat.TryGetProperty(day, out JsonElement on) && on.ValueKind == JsonValueKind.True)
@@ -210,6 +210,12 @@ public class HabiticaImport
     private static string? String(JsonElement element, string name)
     {
         return element.TryGetProperty(name, out JsonElement value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
+    }
+
+    // TryGetInt32 throws on a value that is not a number, so a number written as text counts as missing.
+    private static int? Int(JsonElement element, string name)
+    {
+        return element.TryGetProperty(name, out JsonElement value) && value.ValueKind == JsonValueKind.Number && value.TryGetInt32(out int number) ? number : null;
     }
 
     // Dates are ISO strings, and history dates are milliseconds.

@@ -93,11 +93,11 @@ public static class NotificationSchedule
         return result.OrderBy(notification => notification.NotifyAt).ToList();
     }
 
-    // The digest covers what the lead time will not, so a timed task later the same day is left
-    // to its own reminder and never announced twice.
+    // The digest covers what the lead time will not, so with reminders on a timed task later the
+    // same day is left to its own reminder and never announced twice.
     private static bool IsInDigest(TaskModel task, DateTime day, DateTime notifyAt, SettingsModel settings)
     {
-        if (task.PlannedTime is null && task.PlannedAt!.Value.Date == day)
+        if (task.PlannedAt!.Value.Date == day && (task.PlannedTime is null || settings.NotificationLeadMinutes is null))
             return true;
 
         return settings.NotificationIncludeOverdueTasks && task.PlannedAt!.Value < notifyAt;

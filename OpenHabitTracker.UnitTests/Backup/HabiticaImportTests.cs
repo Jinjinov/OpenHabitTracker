@@ -186,7 +186,6 @@ public class HabiticaImportTests
     // JsonElement.TryGetInt32 throws on a string instead of returning false, and ImportExportService
     // does not turn an InvalidOperationException into "The file could not be read".
     [Test]
-    [Explicit("Bug: a non-number everyX, timezoneOffset, dayStart or scoredUp throws InvalidOperationException instead of falling back")]
     public async Task NumbersWrittenAsText_FallBackToTheDefaults()
     {
         ImportedData data = await ReadJson("""

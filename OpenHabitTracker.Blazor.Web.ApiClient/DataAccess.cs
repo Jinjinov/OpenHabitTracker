@@ -149,15 +149,29 @@ public class DataAccess(DataAccessClient client) : IDataAccess
     public Task<IReadOnlyList<SettingsEntity>> GetSettings() => _client.GetSettingsAsync();
 
     // Get single entities
-    public Task<UserEntity?> GetUser(long id) => _client.GetUserAsync(id);
-    public Task<HabitEntity?> GetHabit(long id) => _client.GetHabitAsync(id);
-    public Task<NoteEntity?> GetNote(long id) => _client.GetNoteAsync(id);
-    public Task<TaskEntity?> GetTask(long id) => _client.GetTaskAsync(id);
-    public Task<TimeEntity?> GetTime(long id) => _client.GetTimeAsync(id);
-    public Task<ItemEntity?> GetItem(long id) => _client.GetItemAsync(id);
-    public Task<CategoryEntity?> GetCategory(long id) => _client.GetCategoryAsync(id);
-    public Task<PriorityEntity?> GetPriority(long id) => _client.GetPriorityAsync(id);
-    public Task<SettingsEntity?> GetSettings(long id) => _client.GetSettingAsync(id);
+    public Task<UserEntity?> GetUser(long id) => NullIfNotFound(_client.GetUserAsync(id));
+    public Task<HabitEntity?> GetHabit(long id) => NullIfNotFound(_client.GetHabitAsync(id));
+    public Task<NoteEntity?> GetNote(long id) => NullIfNotFound(_client.GetNoteAsync(id));
+    public Task<TaskEntity?> GetTask(long id) => NullIfNotFound(_client.GetTaskAsync(id));
+    public Task<TimeEntity?> GetTime(long id) => NullIfNotFound(_client.GetTimeAsync(id));
+    public Task<ItemEntity?> GetItem(long id) => NullIfNotFound(_client.GetItemAsync(id));
+    public Task<CategoryEntity?> GetCategory(long id) => NullIfNotFound(_client.GetCategoryAsync(id));
+    public Task<PriorityEntity?> GetPriority(long id) => NullIfNotFound(_client.GetPriorityAsync(id));
+    public Task<SettingsEntity?> GetSettings(long id) => NullIfNotFound(_client.GetSettingAsync(id));
+
+    // The server answers a missing row with 404, which the generated client throws as an ApiException,
+    // and a row deleted on another device is missing here.
+    private static async Task<T?> NullIfNotFound<T>(Task<T> call) where T : class
+    {
+        try
+        {
+            return await call;
+        }
+        catch (ApiException exception) when (exception.StatusCode == 404)
+        {
+            return null;
+        }
+    }
 
     // Update
     public Task UpdateUser(UserEntity user) => _client.UpdateUserAsync(user);

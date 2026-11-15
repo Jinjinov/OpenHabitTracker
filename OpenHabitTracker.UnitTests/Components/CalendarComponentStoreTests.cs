@@ -493,8 +493,8 @@ public class CalendarComponentStoreTests
         await _app.JsInterop.Received(1).PreventScrollKeys(Arg.Any<ElementReference>());
     }
 
+    // A strip pages by its own width, so no day is skipped or shown twice.
     [Test]
-    [Explicit("Bug: in a strip narrower than a week the keys move by a week, so the days between are never shown")]
     public async Task Keys_LeftFromTheFirstDayOfAFiveDayStrip_FocusesTheDayBefore()
     {
         await StartWith(maxSmallCalendarDays: 5);
@@ -505,6 +505,32 @@ public class CalendarComponentStoreTests
 
         await Press(cut, "ArrowLeft");
 
-        Assert.That(ActiveDay(cut), Is.EqualTo(Day(DateTime.Today.AddDays(-5))));
+        Assert.Multiple(() =>
+        {
+            Assert.That(ActiveDay(cut), Is.EqualTo(Day(DateTime.Today.AddDays(-5))));
+            Assert.That(Cells(cut).Select(DayOf), Is.EqualTo(Enumerable.Range(-9, 5).Select(x => Day(DateTime.Today.AddDays(x)))));
+        });
+
+        await Press(cut, "ArrowRight");
+
+        Assert.That(ActiveDay(cut), Is.EqualTo(Day(DateTime.Today.AddDays(-4))));
+    }
+
+    [TestCase(5)]
+    [TestCase(10)]
+    public async Task Keys_PageUpAndPageDownInAStrip_MoveByTheStripsWidth(int days)
+    {
+        await StartWith(maxSmallCalendarDays: days);
+
+        IRenderedComponent<CalendarComponent> cut = RenderStrip(columnWidth: 900, displayBasedOnWidth: true);
+        DateTime first = DateTime.Today.AddDays(1 - days);
+
+        await Press(cut, "PageUp");
+
+        Assert.That(Cells(cut).Select(DayOf), Is.EqualTo(Enumerable.Range(0, days).Select(x => Day(first.AddDays(x - days)))));
+
+        await Press(cut, "PageDown");
+
+        Assert.That(Cells(cut).Select(DayOf), Is.EqualTo(Enumerable.Range(0, days).Select(x => Day(first.AddDays(x)))));
     }
 }

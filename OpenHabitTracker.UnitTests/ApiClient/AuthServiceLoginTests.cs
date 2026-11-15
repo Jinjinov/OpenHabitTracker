@@ -440,7 +440,7 @@ public class AuthServiceLoginTests
         await Assert.MultipleAsync(async () =>
         {
             Assert.That(loggedIn, Is.True);
-            await _authClient.Received(1).GetRefreshTokenAsync(Arg.Is<RefreshTokenRequest>(x => x.RefreshToken == "stored"));
+            await _authClient.Received(1).GetRefreshTokenAsync(Arg.Is<RefreshTokenRequest>(x => x != null && x.RefreshToken == "stored"));
         });
     }
 

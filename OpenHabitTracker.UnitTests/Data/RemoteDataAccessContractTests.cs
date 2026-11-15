@@ -91,15 +91,6 @@ public class RemoteDataAccessContractTests : DataAccessContractTests
         Assert.That(categories.Select(x => (x.Id, x.Title)), Is.EqualTo(stored.OrderBy(x => x.Id).Select(x => (x.Id, x.Title))));
     }
 
-    // The server answers 404, which the client throws as an ApiException.
-    [Test]
-    [Explicit("Bug: a missing row throws ApiException (404) instead of returning null")]
-    public override Task GetById_MissingRow_ReturnsNull() => base.GetById_MissingRow_ReturnsNull();
-
-    [Test]
-    [Explicit("Bug: a missing row throws ApiException (404) instead of returning null")]
-    public override Task GetHabit_IdOfANote_ReturnsNull() => base.GetHabit_IdOfANote_ReturnsNull();
-
     // The server stamps the row, but the entity the caller passed never learns the new time.
     [Test]
     [Explicit("Bug: an update leaves the old UpdatedAt on the caller's entity")]

@@ -154,7 +154,7 @@
                 </button>
                 @if (group.Category is not null)
                 {
-                    <small class="d-flex align-items-center gap-1"><span>@Loc["Mark complete when"]</span> <button class="btn btn-outline-@completionColor btn-sm py-0 px-1" aria-pressed="@(group.Category.CompletionRule == CompletionRule.All)" @onclick="() => OnToggleCompletionRule(group.Category)">@Loc[group.Category.CompletionRule == CompletionRule.All ? "all habits are done" : "any habit is done"]</button></small>
+                    <small class="d-flex align-items-center gap-1"><span>@Loc["Mark complete when"]</span> <button class="btn btn-outline-@completionColor btn-sm py-0 px-1" aria-pressed="@(group.Category.CompletionRule == CompletionRule.All ? "true" : "false")" @onclick="() => OnToggleCompletionRule(group.Category)">@Loc[group.Category.CompletionRule == CompletionRule.All ? "all habits are done" : "any habit is done"]</button></small>
                 }
                 @if (ClientState.Settings.ShowLastTimeDone && categoryLastDone is not null && group.Category?.IsCollapsed != true)
                 {

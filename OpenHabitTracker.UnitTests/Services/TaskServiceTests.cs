@@ -401,7 +401,7 @@ public class TaskServiceTests
         _dataAccess.GetTask(task.Id).Returns(Task.FromResult<TaskEntity?>(new TaskEntity { Id = task.Id }));
 
         DateTime stamped = DateTime.Now;
-        _dataAccess.When(x => x.UpdateTask(Arg.Any<TaskEntity>())).Do(callInfo => callInfo.Arg<TaskEntity>().UpdatedAt = stamped);
+        _dataAccess.When(x => x.UpdateTask(Arg.Any<TaskEntity>())).Do(callInfo => callInfo.RequiredArg<TaskEntity>().UpdatedAt = stamped);
 
         await _sut.UpdateTask();
 

@@ -218,6 +218,7 @@ public class MainLayoutTests
         {
             Assert.That(Sidebar(cut)!.GetAttribute("aria-label"), Is.EqualTo("Menu"));
             Assert.That(cut.Find("[data-main-step-1]").ClassList, Does.Contain("active"));
+            Assert.That(cut.Find("[data-main-step-1]").GetAttribute("aria-expanded"), Is.EqualTo("true"));
             Assert.That(cut.FindAll("#closeSidebar"), Is.Empty);
         });
 
@@ -227,6 +228,7 @@ public class MainLayoutTests
         {
             Assert.That(Sidebar(cut), Is.Null);
             Assert.That(cut.Find("[data-main-step-1]").ClassList, Does.Not.Contain("active"));
+            Assert.That(cut.Find("[data-main-step-1]").GetAttribute("aria-expanded"), Is.EqualTo("false"));
         });
     }
 
@@ -259,11 +261,16 @@ public class MainLayoutTests
         {
             Assert.That(cut.Find("#sidebar-container span.fw-bold").TextContent, Is.EqualTo("Search, Filter, Sort"));
             Assert.That(cut.Find("[data-main-step-6]").ClassList, Does.Contain("active"));
+            Assert.That(cut.Find("[data-main-step-6]").GetAttribute("aria-expanded"), Is.EqualTo("true"));
         });
 
         await Click(cut, "Search, Filter, Sort");
 
-        Assert.That(Sidebar(cut), Is.Null);
+        Assert.Multiple(() =>
+        {
+            Assert.That(Sidebar(cut), Is.Null);
+            Assert.That(cut.Find("[data-main-step-6]").GetAttribute("aria-expanded"), Is.EqualTo("false"));
+        });
 
         await Click(cut, "Search, Filter, Sort");
         await cut.Find("#closeSidebar").ClickAsync(new MouseEventArgs());
@@ -434,6 +441,6 @@ public class MainLayoutTests
 
         await cut.Find("[data-main-step-7]").ClickAsync(new MouseEventArgs());
 
-        _app.GTourService.Received(1).StartTour("main");
+        await _app.GTourService.Received(1).StartTour("main");
     }
 }

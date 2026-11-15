@@ -96,7 +96,7 @@ public class NotificationRebuildRelayTests
         await NotificationRebuildRelay.Rebuild(provider);
 
         await notifications.DidNotReceive().CancelAll();
-        await notifications.Received(1).Replace(Arg.Is<IReadOnlyList<NotificationRequest>>(x => x.Count > 0));
+        await notifications.Received(1).Replace(Arg.Is<IReadOnlyList<NotificationRequest>>(x => x != null && x.Count > 0));
     }
 
     // A broadcast can start the app with no window, and then nothing else can rebuild.

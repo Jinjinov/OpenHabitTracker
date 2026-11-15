@@ -231,9 +231,8 @@ public class HabitsPageTests
     }
 
     // Blazor renders a bool attribute value as an empty attribute when true and drops it when false,
-    // so aria-pressed never carries "true" or "false".
+    // so aria-pressed is bound to the text "true" or "false".
     [Test]
-    [Explicit("Bug: aria-pressed on the completion rule button is bound to a bool, so it renders empty or not at all")]
     public async Task GroupedByCategory_TheCompletionRuleButtonReportsItsPressedState()
     {
         await Seed(settings => settings.ShowGroupedByCategory = true, Daily("Not done", 30));
@@ -438,6 +437,6 @@ public class HabitsPageTests
 
         await cut.Find("button[aria-label='Help']").ClickAsync(new MouseEventArgs());
 
-        _app.GTourService.Received(1).StartTour("habits");
+        await _app.GTourService.Received(1).StartTour("habits");
     }
 }

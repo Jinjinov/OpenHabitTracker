@@ -350,7 +350,6 @@ public class NotificationScheduleTests
 
     // The digest leaves a timed task to its own reminder, which does not exist while reminders are off.
     [Test]
-    [Explicit("Bug: with reminders off, a timed task is announced by no notification at all")]
     public void Build_TimedTaskWithRemindersOff_CountsInTheDigestOfItsDay()
     {
         List<ScheduledNotification> result = NotificationSchedule.Build(

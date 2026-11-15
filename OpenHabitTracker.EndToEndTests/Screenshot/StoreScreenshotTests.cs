@@ -354,20 +354,12 @@ public class StoreScreenshotTests : PlaywrightTest
 
     // The six section headers are the only buttons in the sidebar carrying aria-expanded, and each
     // label is unique, so the pair identifies one section without depending on their order.
-    // Do not compare the attribute against "true": Blazor renders a bool attribute value as an empty
-    // string, or omits the attribute entirely, depending on how the expression is typed. Anything
-    // that is not an explicit false counts as open, and a missing header means already folded.
     private static async Task FoldSectionAsync(IPage page, string label)
     {
         ILocator header = page.Locator("#sidebar-container button[aria-expanded]")
             .Filter(new LocatorFilterOptions { HasTextString = label });
 
-        if (await header.CountAsync() == 0)
-            return;
-
-        string? expanded = await header.GetAttributeAsync("aria-expanded");
-
-        if (expanded is null || !expanded.Equals("false", StringComparison.OrdinalIgnoreCase))
+        if (await header.GetAttributeAsync("aria-expanded") == "true")
             await header.ClickAsync();
     }
 
