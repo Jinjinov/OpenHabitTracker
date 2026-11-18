@@ -36,22 +36,19 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
 
         CloseApp();
 
-        // The app Windows starts takes its devtools port from the user's environment.
-        UseDevtoolsPort();
-
         ClickNotification(title, plannedAt);
 
-        StartApp(attach: true);
-        SwitchToWebView();
-
-        Assert.That(WaitUntil(() => (RunScript("return location.pathname;") as string ?? "").StartsWith("/tasks/"), StartupTimeout), Is.True,
-            $"The click opened {RunScript("return location.pathname;")}");
-        Assert.That(WaitForElement("#task-component [data-tasks-step-7] input").GetDomProperty("value"), Is.EqualTo(title));
+        // The task's detail shows the title in its title box, which WebView2 exposes to UI Automation as an edit's value.
+        AttachToApp();
+        Assert.That(WaitUntil(() => Driver.FindElements(By.TagName("Edit")).Any(edit => edit.GetAttribute("Value") == title), StartupTimeout), Is.True,
+            "The click did not open the reminder's task");
     }
 
     // Native: the notification lands in the Action Center at its time, whether or not Windows also pops it up:
     // Focus Assist, on by schedule or by a rule, holds the popup back. So once it is due, the Action Center is opened and the notification clicked there.
-    // Its text holds the reminder's title. A search of the whole desktop is slow, so only the shell's CoreWindows are searched, which listing the windows finds at once.
+    // Its text holds the reminder's title. A search of the whole desktop is slow, and windows: getWindows leaves the Action Center out,
+    // so the shell's CoreWindows are found as elements and searched.
+    // The Windows key + A toggles the Action Center, and a failed run can leave it open, so the search runs before the first toggle and after each of two.
     private static void ClickNotification(string title, DateTime plannedAt)
     {
         DateTime due = plannedAt.AddMinutes(-1).AddSeconds(5);
@@ -59,7 +56,43 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
 
         using WincoreDriver desktop = StartDesktopSession();
 
-        // Windows key + A
+        IWebElement? notification = FindNotification(desktop, title, TimeSpan.Zero);
+
+        for (int toggle = 0; toggle < 2 && notification is null; toggle++)
+        {
+            ToggleActionCenter(desktop);
+            notification = FindNotification(desktop, title, DefaultTimeout);
+        }
+
+        Assert.That(notification, Is.Not.Null, "The reminder is not in the Action Center");
+
+        notification!.Click();
+        desktop.Quit();
+    }
+
+    private static IWebElement? FindNotification(WincoreDriver desktop, string title, TimeSpan timeout)
+    {
+        IWebElement? notification = null;
+
+        WaitUntil(() =>
+        {
+            foreach (IWebElement window in desktop.FindElements(By.ClassName("Windows.UI.Core.CoreWindow")))
+            {
+                notification = window.FindElements(By.XPath($".//*[contains(@Name, '{title}')]")).FirstOrDefault();
+
+                if (notification is not null)
+                    return true;
+            }
+
+            return false;
+        }, timeout);
+
+        return notification;
+    }
+
+    // Windows key + A
+    private static void ToggleActionCenter(WincoreDriver desktop)
+    {
         desktop.ExecuteScript("windows: keys", new Dictionary<string, object>
         {
             ["actions"] = new object[]
@@ -69,28 +102,5 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
                 new Dictionary<string, object> { ["virtualKeyCode"] = 0x5B, ["down"] = false }
             }
         });
-
-        IWebElement? notification = null;
-
-        bool found = WaitUntil(() =>
-        {
-            IEnumerable<object> windows = (IEnumerable<object>)desktop.ExecuteScript("windows: getWindows")!;
-
-            foreach (Dictionary<string, object> window in windows.Cast<Dictionary<string, object>>().Where(window => (string)window["className"] == "Windows.UI.Core.CoreWindow"))
-            {
-                desktop.SwitchTo().Window((string)window["handle"]);
-                notification = desktop.FindElements(By.XPath($"//*[contains(@Name, '{title}')]")).FirstOrDefault();
-
-                if (notification is not null)
-                    return true;
-            }
-
-            return false;
-        }, DefaultTimeout);
-
-        Assert.That(found, Is.True, "The reminder is not in the Action Center");
-
-        notification!.Click();
-        desktop.Quit();
     }
 }

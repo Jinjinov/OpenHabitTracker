@@ -87,13 +87,14 @@ public class FileDialogTests() : WindowsTest(WindowsHost.WinForms)
 
         string? dialog = null;
         Assert.That(WaitUntil(() => (dialog = DialogHandle()) is not null, DefaultTimeout), Is.True, "The app opened no file dialog");
-        Driver.SwitchTo().Window(dialog);
+        Driver.SwitchTo().Window(dialog!);
 
-        IWebElement fileName = WaitForNativeElement(MobileBy.AccessibilityId(fileNameBox));
-        string proposed = fileName.GetAttribute("Value");
+        // The edit itself, not the combo box around it, which carries the same id in the open dialog.
+        // Its value is set through UI Automation, because typed keys go wherever the keyboard focus is.
+        IWebElement fileName = WaitForNativeElement(By.XPath($"//Edit[@AutomationId='{fileNameBox}']"));
+        string proposed = fileName.GetAttribute("Value") ?? string.Empty;
 
-        fileName.Clear();
-        fileName.SendKeys(path(proposed));
+        Driver.ExecuteScript("windows: setValue", fileName, path(proposed));
         Driver.FindElement(MobileBy.AccessibilityId(ConfirmButton)).Click();
 
         Assert.That(WaitUntil(() => DialogHandle() is null, DefaultTimeout), Is.True, "The file dialog did not close");

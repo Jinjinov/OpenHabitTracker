@@ -118,8 +118,35 @@ public abstract class WindowsTest(WindowsHost host) : DeviceTest<WincoreDriver>
         TestContext.Out.WriteLine($"Artifacts: {folder}");
     }
 
-    // Starts the app in a new session, or with attach, joins the app that Windows started, from a notification for one.
-    protected void StartApp(bool attach = false)
+    // Starts the app in a new session, with its WebView2 page as a context.
+    protected void StartApp()
+    {
+        AppiumOptions options = AppOptions();
+        options.App = Host == WindowsHost.Msix ? Aumid : WinFormsExe;
+
+        options.AddAdditionalAppiumOption("webviewEnabled", true);
+        options.AddAdditionalAppiumOption("ms:waitForAppLaunch", (int)StartupTimeout.TotalSeconds);
+
+        // WinCore starts an exe with a devtools port of its own choosing in its environment.
+        // The MSIX it activates through Windows has only the user's environment to take one from.
+        if (Host == WindowsHost.Msix)
+            options.AddAdditionalAppiumOption("webviewDevtoolsPort", UseDevtoolsPort());
+
+        Driver = new WincoreDriver(AppiumServer, options, TimeSpan.FromMinutes(3));
+    }
+
+    // Joins the app Windows started, from a notification click for one, in the native context only:
+    // an app started through COM activation does not get the user's environment, so it opens no devtools port.
+    // WinCore's own attach, noReset with the app, takes any visible window with content for an AUMID, so the app's window is named by its handle.
+    protected void AttachToApp()
+    {
+        AppiumOptions options = AppOptions();
+        options.AddAdditionalAppiumOption("appTopLevelWindow", $"0x{AppWindow():X}");
+
+        Driver = new WincoreDriver(AppiumServer, options, TimeSpan.FromMinutes(3));
+    }
+
+    private static AppiumOptions AppOptions()
     {
         AppiumOptions options = new()
         {
@@ -127,25 +154,11 @@ public abstract class WindowsTest(WindowsHost host) : DeviceTest<WincoreDriver>
             AutomationName = "Wincore"
         };
 
-        // WinCore's own attach, noReset with the app, takes any visible window with content for an AUMID, so the app's window is named by its handle.
-        if (attach)
-            options.AddAdditionalAppiumOption("appTopLevelWindow", $"0x{AppWindow():X}");
-        else
-            options.App = Host == WindowsHost.Msix ? Aumid : WinFormsExe;
-
-        options.AddAdditionalAppiumOption("webviewEnabled", true);
-        options.AddAdditionalAppiumOption("ms:waitForAppLaunch", (int)StartupTimeout.TotalSeconds);
-
         // WinCore closes the window through UI Automation when the session ends, and a close that fails is logged only at debug level,
         // as it did for the WinForms window after a task was edited; CloseApp closes it instead.
         options.AddAdditionalAppiumOption("shouldCloseApp", false);
 
-        // WinCore starts an exe with a devtools port of its own choosing in its environment.
-        // An app it activates through Windows, or one Windows started, has only the user's environment to take one from.
-        if (Host == WindowsHost.Msix || attach)
-            options.AddAdditionalAppiumOption("webviewDevtoolsPort", UseDevtoolsPort());
-
-        Driver = new WincoreDriver(AppiumServer, options, TimeSpan.FromMinutes(3));
+        return options;
     }
 
     // The main window of the app's running process, once it has one.
@@ -274,10 +287,10 @@ public abstract class WindowsTest(WindowsHost host) : DeviceTest<WincoreDriver>
         WaitForElement("main#main-content", StartupTimeout);
     }
 
-    // WebView2 reads WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS when the app creates it. A process Windows starts takes the
+    // WebView2 reads WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS when the app creates it. A process explorer.exe starts takes the
     // user's environment, so the variable is set there for the length of the test, and every WebView2 app started meanwhile opens the port too.
     // WebView2's own registry override is keyed by app, but only administrators can write under Software\Policies.
-    protected int UseDevtoolsPort()
+    private int UseDevtoolsPort()
     {
         if (_devtoolsPort is int port)
             return port;

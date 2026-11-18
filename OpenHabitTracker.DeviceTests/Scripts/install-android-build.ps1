@@ -9,7 +9,7 @@ param(
     [string]$Device = 'emulator-5554',
     [string]$LogFile = (Join-Path $env:TEMP 'oht-uitest-build.log'),
     # Keeps a copy of the APK as apks\<name>.apk beside the work folders, where the upgrade test looks for
-    # previous.apk (built from the last release tag) and current.apk.
+    # previous.apk, built from the last release tag.
     [string]$SaveApkAs,
     [switch]$NoInstall
 )
