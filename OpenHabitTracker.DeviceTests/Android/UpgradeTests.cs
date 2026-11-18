@@ -1,20 +1,25 @@
+using System.Diagnostics;
+using System.Text.RegularExpressions;
+
 namespace OpenHabitTracker.DeviceTests.Android;
 
-// Prerequisite, besides the ones in AndroidTest: previous.apk, saved by Scripts/install-android-build.ps1
-// from a checkout of the last release tag (-SaveApkAs previous -NoInstall). It is debug-signed on this machine like the build under test,
-// which an update needs: Android refuses an update signed with another key.
+// Prerequisite, besides the ones in AndroidTest: previous.apk, which Scripts/install-android-build.ps1 builds from the latest release tag
+// and names in previous.tag. It is debug-signed on this machine like the build under test, which an update needs:
+// Android refuses an update signed with another key.
 [TestFixture]
 public class UpgradeTests : AndroidTest
 {
     // The only test that runs the real migration path on a device: every launch migrates the database it finds,
     // and a migration that breaks only an existing database breaks the update rather than a fresh install.
-    // The update goes to the installed build, pulled from the device first, so the test checks the build under test
-    // and leaves it installed for the fixtures after it.
     [Test]
     public void PreviousRelease_UpdatedInPlace_KeepsItsDataAndStarts()
     {
-        string previous = SavedApk("previous");
-        string current = InstalledApk();
+        string previous = Path.Combine(ApkFolder, "previous.apk");
+        string previousTag = Path.Combine(ApkFolder, "previous.tag");
+        string latestTag = LatestReleaseTag();
+
+        Assert.That(File.Exists(previous) && File.Exists(previousTag) && File.ReadAllText(previousTag).Trim() == latestTag, Is.True,
+            $"{previous} is not built from the latest release tag {latestTag}; Scripts/install-android-build.ps1 builds it");
 
         Driver.ExecuteScript("mobile: removeApp", new Dictionary<string, object> { ["appId"] = AppPackage });
         Driver.ExecuteScript("mobile: installApp", new Dictionary<string, object> { ["appPath"] = previous });
@@ -34,7 +39,7 @@ public class UpgradeTests : AndroidTest
 
         // The update stops the running app, so its last action is an add flow, whose form closes only after the save.
         Driver.Context = NativeContext;
-        Driver.ExecuteScript("mobile: installApp", new Dictionary<string, object> { ["appPath"] = current, ["replace"] = true });
+        Driver.ExecuteScript("mobile: installApp", new Dictionary<string, object> { ["appPath"] = BuildUnderTest, ["replace"] = true });
 
         LaunchApp();
         SwitchToWebView();
@@ -50,25 +55,25 @@ public class UpgradeTests : AndroidTest
         Assert.That(WaitForElement("[data-habits-step-3]").Text, Does.Not.Contain(NeverDone), "The habit's completion is gone after the update");
     }
 
-    private static string SavedApk(string name)
+    // The highest version tag of the repository the tests are built from: bin\Debug\net10.0 is four folders below its root.
+    private static string LatestReleaseTag()
     {
-        string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OpenHabitTracker.DeviceTests", "apks", $"{name}.apk");
+        string root = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "..", ".."));
 
-        Assert.That(File.Exists(path), Is.True, $"{path} is missing; build it with Scripts/install-android-build.ps1 -SaveApkAs {name}");
+        ProcessStartInfo start = new("git", ["-C", root, "tag", "--list", "--sort=-v:refname"])
+        {
+            RedirectStandardOutput = true,
+            UseShellExecute = false
+        };
 
-        return path;
-    }
+        using Process git = Process.Start(start)!;
+        string tags = git.StandardOutput.ReadToEnd();
+        git.WaitForExit();
 
-    // The Release build is a single APK, so the package has one path.
-    private string InstalledApk()
-    {
-        string[] paths = Shell("pm", "path", AppPackage).Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        string? latest = tags.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).FirstOrDefault(tag => Regex.IsMatch(tag, @"^\d+(\.\d+){2,3}$"));
 
-        Assert.That(paths, Has.Length.EqualTo(1), $"{AppPackage} must be installed as one APK; install it with Scripts/install-android-build.ps1");
+        Assert.That(latest, Is.Not.Null, $"{root} has no release tag");
 
-        string path = Path.Combine(TestContext.CurrentContext.WorkDirectory, "installed.apk");
-        File.WriteAllBytes(path, Driver.PullFile(paths[0]["package:".Length..]));
-
-        return path;
+        return latest!;
     }
 }

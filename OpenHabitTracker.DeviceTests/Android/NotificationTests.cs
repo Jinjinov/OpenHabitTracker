@@ -105,10 +105,8 @@ public class NotificationTests : AndroidTest
         WaitForNativeElement(By.Id("com.android.permissioncontroller:id/permission_allow_button")).Click();
         Assert.That(WaitUntil(() => PendingAlarms().Count > 0, DefaultTimeout), Is.True, "Nothing is scheduled");
 
-        string apk = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OpenHabitTracker.DeviceTests", "apks", "current.apk");
-        Assert.That(File.Exists(apk), Is.True, $"{apk} is missing; build it with Scripts/install-android-build.ps1 -SaveApkAs current");
-
-        Driver.ExecuteScript("mobile: installApp", new Dictionary<string, object> { ["appPath"] = apk, ["replace"] = true });
+        // The fixture's start installed the build under test, so this is the same APK installed over itself.
+        Driver.ExecuteScript("mobile: installApp", new Dictionary<string, object> { ["appPath"] = BuildUnderTest, ["replace"] = true });
 
         LaunchApp();
         SwitchToWebView();

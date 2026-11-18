@@ -1,6 +1,11 @@
 using System.Diagnostics;
+using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace OpenHabitTracker.DeviceTests.Windows;
 
@@ -13,7 +18,8 @@ public enum WindowsHost
     WinForms
 }
 
-// Prerequisites: Scripts/start-appium.ps1 is running, and Scripts/install-windows-builds.ps1 has installed both hosts.
+// Prerequisites: Scripts/start-appium.ps1 is running, and Scripts/install-windows-builds.ps1 has built both hosts.
+// Each fixture installs its host's build under test unless the installed app's files match it.
 // The tests run under the real package identity, packId and data folders, and replace the installs and reset the data,
 // because this PC keeps no personal install of the app.
 // A session is one run of the app: StartApp starts it, CloseApp closes its window, which is when the app saves what it keeps on exit.
@@ -41,8 +47,29 @@ public abstract class WindowsTest(WindowsHost host) : DeviceTest<WincoreDriver>
 
     protected static readonly string WinFormsExe = Path.Combine(VelopackRoot, "current", "OpenHT.exe");
 
-    // What Scripts/install-windows-builds.ps1 keeps between runs: the build under test packed for Velopack, and the previous release's installer.
-    protected static readonly string VelopackFolder = Path.Combine(LocalAppData, "OpenHabitTracker.DeviceTests", "velopack");
+    private static readonly string DeviceTestsFolder = Path.Combine(LocalAppData, "OpenHabitTracker.DeviceTests");
+
+    // The WinForms build under test, published in publish and packed in current by Scripts/install-windows-builds.ps1,
+    // and in previous the latest release's installer, which the update test downloads.
+    protected static readonly string VelopackFolder = Path.Combine(DeviceTestsFolder, "velopack");
+
+    // The MSIX build under test, signed.
+    private static readonly string UnderTestMsix = Path.Combine(DeviceTestsFolder, "msix", "under-test.msix");
+
+    // The website's Velopack feed, which the installed WinForms app checks on every start.
+    protected const string Feed = "https://openhabittracker.net/download/win/";
+
+    // The newest release on the feed, read once per run.
+    protected static readonly Lazy<string> LatestRelease = new(() =>
+    {
+        using HttpClient client = new();
+        using JsonDocument releases = JsonDocument.Parse(client.GetStringAsync(Feed + "releases.win.json").GetAwaiter().GetResult());
+
+        return Property(releases.RootElement, "Assets").EnumerateArray()
+            .Select(asset => Property(asset, "Version").GetString()!)
+            .OrderBy(NumericVersion)
+            .Last();
+    });
 
     protected WindowsHost Host { get; } = host;
 
@@ -60,6 +87,111 @@ public abstract class WindowsTest(WindowsHost host) : DeviceTest<WincoreDriver>
     }
 
     private int? _devtoolsPort;
+
+    // Whatever an earlier test, run or install left, the fixture runs the build under test.
+    [OneTimeSetUp]
+    public void InstallBuildUnderTest()
+    {
+        StopApp();
+
+        if (Host == WindowsHost.Msix)
+            InstallMsixUnderTest();
+        else
+            InstallWinFormsUnderTest();
+    }
+
+    // The installed package's block map holds the hash of every file in the package, so it matches the build under test's only when every file does.
+    // Anything else installed under the identity, a Store install or an older test package among them, is replaced.
+    private static void InstallMsixUnderTest()
+    {
+        Assert.That(File.Exists(UnderTestMsix), Is.True, $"{UnderTestMsix} is missing; Scripts/install-windows-builds.ps1 builds it");
+
+        using ZipArchive package = ZipFile.OpenRead(UnderTestMsix);
+
+        XElement identity;
+        using (Stream manifest = package.GetEntry("AppxManifest.xml")!.Open())
+            identity = XDocument.Load(manifest).Root!.Elements().First(element => element.Name.LocalName == "Identity");
+
+        string name = identity.Attribute("Name")!.Value;
+        string publisherId = PackageFamilyName.Split('_')[1];
+
+        // Windows installs a package into a folder named after its full name, where a package without an architecture is neutral.
+        string architecture = identity.Attribute("ProcessorArchitecture")?.Value ?? "neutral";
+        string installedBlockMap = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "WindowsApps",
+            $"{name}_{identity.Attribute("Version")!.Value}_{architecture}__{publisherId}", "AppxBlockMap.xml");
+
+        byte[] expected;
+        using (Stream blockMap = package.GetEntry("AppxBlockMap.xml")!.Open())
+            expected = SHA256.HashData(blockMap);
+
+        if (File.Exists(installedBlockMap) && SHA256.HashData(File.ReadAllBytes(installedBlockMap)).SequenceEqual(expected))
+            return;
+
+        // The Appx module loads only in Windows PowerShell.
+        // Installing over a package of the same version changes nothing, so the installed one is removed first, its data with it.
+        int exitCode = RunToEnd("powershell.exe", "-NoProfile", "-Command",
+            $"Get-AppxPackage -Name '{name}' | Remove-AppxPackage -ErrorAction Stop; Add-AppxPackage -Path '{UnderTestMsix}' -ForceApplicationShutdown -ErrorAction Stop");
+
+        Assert.That(exitCode, Is.Zero, $"Windows did not install {UnderTestMsix}; Scripts/install-windows-builds.ps1 trusts its certificate");
+    }
+
+    // Velopack installs the published files into current unchanged, so they match the build under test only when every published file is there with the same hash.
+    // Anything else, the previous release a stopped update test left among them, is replaced.
+    private static void InstallWinFormsUnderTest()
+    {
+        string publish = Path.Combine(VelopackFolder, "publish");
+        Assert.That(Directory.Exists(publish), Is.True, $"{publish} is missing; Scripts/install-windows-builds.ps1 builds it");
+
+        string packed = Path.Combine(VelopackFolder, "current");
+        string package = OnlyFile(packed, "OpenHT-*-full.nupkg");
+        string setup = OnlyFile(packed, "*Setup.exe");
+
+        // The installed app updates itself from the feed on start, so a release as new as the build under test would replace it mid-run.
+        string version = Regex.Match(Path.GetFileName(package), @"^OpenHT-(.+)-full\.nupkg$").Groups[1].Value;
+        Assert.That(NumericVersion(version), Is.GreaterThan(NumericVersion(LatestRelease.Value)),
+            $"The website has the release {LatestRelease.Value}, which the build under test {version} would update to; Scripts/install-windows-builds.ps1 packs it above the latest release");
+
+        string current = Path.Combine(VelopackRoot, "current");
+
+        bool installed = Directory.Exists(current) && Directory.EnumerateFiles(publish, "*", SearchOption.AllDirectories).All(file =>
+        {
+            FileInfo installedFile = new(Path.Combine(current, Path.GetRelativePath(publish, file)));
+
+            return installedFile.Exists && installedFile.Length == new FileInfo(file).Length
+                && SHA256.HashData(File.ReadAllBytes(installedFile.FullName)).SequenceEqual(SHA256.HashData(File.ReadAllBytes(file)));
+        });
+
+        if (installed)
+            return;
+
+        // Velopack's Setup refuses an app that is already installed, so the installed one is removed first; its data folder is not touched.
+        string update = Path.Combine(VelopackRoot, "Update.exe");
+        if (File.Exists(update))
+            Assert.That(RunToEnd(update, "uninstall", "--silent"), Is.Zero, "Velopack did not uninstall the installed app");
+
+        Assert.That(RunToEnd(setup, "--silent"), Is.Zero, "Velopack's Setup did not install the build under test");
+    }
+
+    // The numeric part of a Velopack version, which is all the feed's releases have.
+    protected static Version NumericVersion(string version)
+    {
+        return Version.Parse(version.Split('-')[0]);
+    }
+
+    protected static string OnlyFile(string folder, string pattern)
+    {
+        string[] files = Directory.Exists(folder) ? Directory.GetFiles(folder, pattern) : [];
+
+        Assert.That(files, Has.Length.EqualTo(1), $"{folder} must hold one {pattern}; Scripts/install-windows-builds.ps1 builds it");
+
+        return files[0];
+    }
+
+    // The feed's JSON names its properties in either case.
+    private static JsonElement Property(JsonElement element, string name)
+    {
+        return element.EnumerateObject().First(property => string.Equals(property.Name, name, StringComparison.OrdinalIgnoreCase)).Value;
+    }
 
     [TearDown]
     public void SaveArtifactsAndCleanUp()

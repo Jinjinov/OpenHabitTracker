@@ -2,23 +2,21 @@ using System.Text.RegularExpressions;
 
 namespace OpenHabitTracker.DeviceTests.Windows;
 
-// Prerequisite, besides the ones in WindowsTest: Scripts/install-windows-builds.ps1 has packed the build under test for Velopack
-// and downloaded the latest release's installer.
 [TestFixture]
 public class VelopackUpdateTests() : WindowsTest(WindowsHost.WinForms)
 {
     // The installed app downloads an update from the website's feed and applies it on exit through Velopack's Update.exe.
     // Here Update.exe applies the build under test the same way, given the package's path; the feed check is not part of it,
     // because the app's feed is the website's. Every start migrates the database it finds, so this is where a migration
-    // that breaks only an existing database shows. The test ends with the build under test installed, as the script leaves it.
+    // that breaks only an existing database shows.
     [Test]
     public void PreviousRelease_UpdatedToTheBuildUnderTest_KeepsItsDataAndStarts()
     {
-        string setup = OnlyFile(Path.Combine(VelopackFolder, "previous"), "OpenHabitTracker.Windows.*.exe");
+        string previousVersion = LatestRelease.Value;
+        string setup = PreviousReleaseSetup(previousVersion);
         string package = OnlyFile(Path.Combine(VelopackFolder, "current"), "OpenHT-*-full.nupkg");
         string update = Path.Combine(VelopackRoot, "Update.exe");
 
-        string previousVersion = Regex.Match(Path.GetFileName(setup), @"^OpenHabitTracker\.Windows\.(.+)\.exe$").Groups[1].Value;
         string currentVersion = Regex.Match(Path.GetFileName(package), @"^OpenHT-(.+)-full\.nupkg$").Groups[1].Value;
 
         // Velopack's Setup refuses an app that is already installed.
@@ -70,12 +68,30 @@ public class VelopackUpdateTests() : WindowsTest(WindowsHost.WinForms)
         return Regex.Match(File.ReadAllText(Path.Combine(VelopackRoot, "current", "sq.version")), "<version>([^<]+)</version>").Groups[1].Value;
     }
 
-    private static string OnlyFile(string folder, string pattern)
+    // The release's installer from the website, downloaded when the folder holds no installer of that release; an older release's is removed.
+    // The download goes to a temporary name first, so a download that stops leaves no installer behind.
+    private static string PreviousReleaseSetup(string version)
     {
-        string[] files = Directory.Exists(folder) ? Directory.GetFiles(folder, pattern) : [];
+        string folder = Path.Combine(VelopackFolder, "previous");
+        string setup = Path.Combine(folder, $"OpenHabitTracker.Windows.{version}.exe");
 
-        Assert.That(files, Has.Length.EqualTo(1), $"{folder} must hold one {pattern}; run Scripts/install-windows-builds.ps1");
+        if (File.Exists(setup))
+            return setup;
 
-        return files[0];
+        if (Directory.Exists(folder))
+            Directory.Delete(folder, true);
+
+        Directory.CreateDirectory(folder);
+
+        string download = setup + ".download";
+
+        using (HttpClient client = new() { Timeout = TimeSpan.FromMinutes(10) })
+        using (Stream response = client.GetStreamAsync($"{Feed}OpenHabitTracker.Windows.{version}.exe").GetAwaiter().GetResult())
+        using (FileStream file = File.Create(download))
+            response.CopyTo(file);
+
+        File.Move(download, setup);
+
+        return setup;
     }
 }

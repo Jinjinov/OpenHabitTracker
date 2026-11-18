@@ -1,7 +1,8 @@
 # Builds the two Windows hosts that ship in Release, from a copy of the working tree, and installs them the way they ship:
 # the MAUI app as a package under its Store identity, and the WinForms app through Velopack.
 # They replace any install of the app and keep its data folders, because this PC keeps no personal install.
-# Also downloads the latest release's installer from the website, which the Velopack update test installs first.
+# The builds under test stay in msix\under-test.msix and in velopack\publish with velopack\current, its Velopack package;
+# every Windows fixture installs them again unless the installed app's files match.
 
 param(
     # Another checkout can be passed to install an older or deliberately broken build.
@@ -57,10 +58,16 @@ $signtool = Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\bin\*\x64\sign
 & $signtool.FullName sign /fd SHA256 /sha1 $certificate.Thumbprint $msix.FullName *> "$LogFolder\sign.log"
 if ($LASTEXITCODE -ne 0) { throw "signtool could not sign $($msix.FullName), see $LogFolder\sign.log" }
 
+$msixFolder = Join-Path $DeviceTestsFolder 'msix'
+if (Test-Path $msixFolder) { Remove-Item -Recurse -Force $msixFolder }
+New-Item -ItemType Directory -Force $msixFolder | Out-Null
+$underTest = Join-Path $msixFolder 'under-test.msix'
+Copy-Item $msix.FullName $underTest
+
 # The Appx module loads only in Windows PowerShell.
 # Installing over a package of the same version changes nothing, so the installed one is removed first, its data with it.
-powershell.exe -NoProfile -Command "Get-AppxPackage -Name '$packageName' | Remove-AppxPackage -ErrorAction Stop; Add-AppxPackage -Path '$($msix.FullName)' -ForceApplicationShutdown -ErrorAction Stop"
-if ($LASTEXITCODE -ne 0) { throw "Windows could not install $($msix.FullName)" }
+powershell.exe -NoProfile -Command "Get-AppxPackage -Name '$packageName' | Remove-AppxPackage -ErrorAction Stop; Add-AppxPackage -Path '$underTest' -ForceApplicationShutdown -ErrorAction Stop"
+if ($LASTEXITCODE -ne 0) { throw "Windows could not install $underTest" }
 
 Write-Host "Installed $packageName from $SourceRoot"
 
@@ -74,7 +81,6 @@ $version = "$($latest.Major).$($latest.Minor).$($latest.Patch + 1)-uitest"
 $VelopackFolder = Join-Path $DeviceTestsFolder 'velopack'
 $publish = Join-Path $VelopackFolder 'publish'
 $current = Join-Path $VelopackFolder 'current'
-$previous = Join-Path $VelopackFolder 'previous'
 
 foreach ($folder in $publish, $current) {
     if (Test-Path $folder) { Remove-Item -Recurse -Force $folder }
@@ -87,14 +93,6 @@ if ($LASTEXITCODE -ne 0) { throw "The WinForms publish failed, see $LogFolder\wi
 
 vpk pack -u OpenHT -v $version -p $publish -e OpenHT.exe --packTitle OpenHabitTracker --packAuthors Jinjinov -i (Join-Path $winForms 'favicon.ico') --framework webview2 -o $current *> "$LogFolder\vpk.log"
 if ($LASTEXITCODE -ne 0) { throw "vpk pack failed, see $LogFolder\vpk.log" }
-
-# The update test installs the latest release from its own installer, kept until a newer release replaces it.
-$previousSetup = Join-Path $previous "OpenHabitTracker.Windows.$latest.exe"
-if (-not (Test-Path $previousSetup)) {
-    if (Test-Path $previous) { Remove-Item -Recurse -Force $previous }
-    New-Item -ItemType Directory -Force $previous | Out-Null
-    Invoke-WebRequest "$($feed)OpenHabitTracker.Windows.$latest.exe" -OutFile $previousSetup
-}
 
 # Velopack's Setup refuses an app that is already installed, so the installed one is removed first; its data folder is not touched.
 $update = Join-Path $env:LOCALAPPDATA 'OpenHT\Update.exe'

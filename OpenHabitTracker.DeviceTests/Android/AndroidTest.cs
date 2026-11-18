@@ -1,12 +1,14 @@
 using OpenQA.Selenium.Appium.Android;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace OpenHabitTracker.DeviceTests.Android;
 
 // Prerequisites: Scripts/start-appium.ps1 is running, the emulator is booted,
-// and Scripts/install-android-build.ps1 has installed the build under test.
-// One Appium session per fixture; each test starts from the state it needs (ClearApp, then LaunchApp).
+// and Scripts/install-android-build.ps1 has built the build under test.
+// One Appium session per fixture, which installs the build under test unless the device already has exactly that APK;
+// each test starts from the state it needs (ClearApp, then LaunchApp).
 [Category("Android")]
 public abstract class AndroidTest : DeviceTest<AndroidDriver>
 {
@@ -26,9 +28,17 @@ public abstract class AndroidTest : DeviceTest<AndroidDriver>
     // A first launch runs every migration before the page renders, which takes over a minute on a loaded emulator.
     protected static readonly TimeSpan StartupTimeout = TimeSpan.FromMinutes(3);
 
+    // Where Scripts/install-android-build.ps1 saves the APKs it builds.
+    protected static readonly string ApkFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OpenHabitTracker.DeviceTests", "apks");
+
+    // The APK every fixture runs, whatever an earlier test, run or install left on the device.
+    protected static readonly string BuildUnderTest = Path.Combine(ApkFolder, "under-test.apk");
+
     [OneTimeSetUp]
     public void StartSession()
     {
+        WaitForAndroid();
+
         AppiumOptions options = new()
         {
             PlatformName = "Android",
@@ -52,6 +62,63 @@ public abstract class AndroidTest : DeviceTest<AndroidDriver>
         // show_ime_with_hard_keyboard does not change that; restarting the keyboard app does.
         string keyboard = Shell("settings", "get", "secure", "default_input_method").Trim();
         Shell("am", "force-stop", keyboard.Split('/')[0]);
+
+        InstallBuildUnderTest();
+    }
+
+    // Under load the emulator's system_server dies and restarts, and for about a minute Android has no settings or package service,
+    // so a session started then fails, and every fixture after it with it. A session starts only once both answer and the boot is complete.
+    private static void WaitForAndroid()
+    {
+        bool ready = WaitUntil(() =>
+            Adb("shell", "getprop", "sys.boot_completed").Trim() == "1" &&
+            Adb("shell", "service", "check", "settings").Contains(": found") &&
+            Adb("shell", "service", "check", "package").Contains(": found"), StartupTimeout);
+
+        Assert.That(ready, Is.True, $"Android on {Device} did not become ready");
+    }
+
+    private static readonly string AdbPath = Path.Combine(Environment.GetEnvironmentVariable("ANDROID_HOME") ?? @"C:\Program Files (x86)\Android\android-sdk", "platform-tools", "adb.exe");
+
+    // adb run directly, for when the device cannot take a session.
+    private static string Adb(params string[] args)
+    {
+        ProcessStartInfo start = new(AdbPath, ["-s", Device, .. args])
+        {
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false
+        };
+
+        using Process adb = Process.Start(start)!;
+        string output = adb.StandardOutput.ReadToEnd();
+        adb.WaitForExit();
+
+        return output;
+    }
+
+    // Compares the installed APK with the build under test by hash, and replaces whatever is installed when they differ:
+    // nothing, the previous release an interrupted upgrade test left, or another build.
+    // The app is removed first, because Android refuses a lower version or another signature over an install.
+    protected void InstallBuildUnderTest()
+    {
+        Assert.That(File.Exists(BuildUnderTest), Is.True, $"{BuildUnderTest} is missing; build it with Scripts/install-android-build.ps1");
+
+        string expected = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(BuildUnderTest))).ToLowerInvariant();
+
+        // pm path exits with an error when the package is not installed, which Appium raises; pm list packages -f lists the base APK, or nothing.
+        // Each line reads package:<path>=<package>.
+        string? installed = Shell("pm", "list", "packages", "-f", AppPackage)
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(line => line.EndsWith($"={AppPackage}"))
+            .Select(line => line["package:".Length..^(AppPackage.Length + 1)])
+            .FirstOrDefault();
+
+        if (installed is not null && Shell("sha256sum", installed).Split(' ')[0] == expected)
+            return;
+
+        Driver.ExecuteScript("mobile: removeApp", new Dictionary<string, object> { ["appId"] = AppPackage });
+        Driver.ExecuteScript("mobile: installApp", new Dictionary<string, object> { ["appPath"] = BuildUnderTest });
     }
 
     [OneTimeTearDown]
@@ -249,9 +316,7 @@ public abstract class AndroidTest : DeviceTest<AndroidDriver>
     // The screen as RGBA pixels, read raw through adb: Appium's screenshot is a PNG, and .NET has no portable PNG decoder.
     protected ScreenPixels Screen()
     {
-        string sdk = Environment.GetEnvironmentVariable("ANDROID_HOME") ?? @"C:\Program Files (x86)\Android\android-sdk";
-
-        ProcessStartInfo start = new(Path.Combine(sdk, "platform-tools", "adb.exe"), $"-s {Device} exec-out screencap")
+        ProcessStartInfo start = new(AdbPath, $"-s {Device} exec-out screencap")
         {
             RedirectStandardOutput = true,
             UseShellExecute = false
