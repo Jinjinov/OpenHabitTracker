@@ -17,21 +17,12 @@ param(
 $ErrorActionPreference = 'Stop'
 
 . "$PSScriptRoot\appium-env.ps1"
+. "$PSScriptRoot\work-folder.ps1"
 
 $PackageId = 'net.openhabittracker.uitest'
 
-# The build runs on a copy of the working tree, never in the checkout itself.
-# In a shared obj folder an incremental build kept the manifest of an earlier store build, so the APK carried
-# net.openhabittracker whatever ApplicationId said, and a later store build could pick up this build's id the same way.
-# The copy keeps its own bin and obj between runs, so repeated builds stay incremental.
-# Each checkout gets its own copy: robocopy keeps the files' timestamps, so one checkout's older files mirrored over another's
-# look older than the build output and the incremental build skips them.
 $SourceRoot = (Resolve-Path $SourceRoot).Path
-$sourceHash = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($SourceRoot.ToLowerInvariant()))).Substring(0, 12)
-$WorkFolder = Join-Path $env:LOCALAPPDATA "OpenHabitTracker.DeviceTests\$sourceHash"
-
-robocopy $SourceRoot $WorkFolder /MIR /XD bin obj .git .vs .idea AppPackages publish /XF *.keystore *.pfx *.user /NFL /NDL /NJH /NJS /NP | Out-Null
-if ($LASTEXITCODE -ge 8) { throw "robocopy could not mirror $SourceRoot to $WorkFolder" }
+$WorkFolder = Sync-WorkFolder $SourceRoot
 
 Push-Location (Join-Path $WorkFolder 'OpenHabitTracker.Blazor.Maui')
 try {
@@ -49,7 +40,7 @@ $apkPackage = (& $aapt2.FullName dump packagename $apk).Trim()
 if ($apkPackage -ne $PackageId) { throw "$apk carries the package $apkPackage, not $PackageId, so it is not installed" }
 
 if ($SaveApkAs) {
-    $apkFolder = Join-Path $env:LOCALAPPDATA 'OpenHabitTracker.DeviceTests\apks'
+    $apkFolder = Join-Path $DeviceTestsFolder 'apks'
     New-Item -ItemType Directory -Force $apkFolder | Out-Null
     Copy-Item $apk (Join-Path $apkFolder "$SaveApkAs.apk") -Force
     Write-Host "Saved $apkFolder\$SaveApkAs.apk"

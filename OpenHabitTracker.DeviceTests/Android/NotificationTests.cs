@@ -220,12 +220,6 @@ public class NotificationTests : AndroidTest
         Driver.Context = NativeContext;
     }
 
-    // Web context: a value and the change event the app saves on.
-    private void SetChangedValue(IWebElement input, string value)
-    {
-        RunScript("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", input, value);
-    }
-
     // Put back to the default after the test; revoking it kills the app, which the test is done with by then.
     private void SetExactAlarmPermission(string mode)
     {

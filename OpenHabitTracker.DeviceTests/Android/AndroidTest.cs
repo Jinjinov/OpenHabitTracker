@@ -1,5 +1,4 @@
 using OpenQA.Selenium.Appium.Android;
-using OpenQA.Selenium.Support.UI;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
@@ -9,7 +8,7 @@ namespace OpenHabitTracker.DeviceTests.Android;
 // and Scripts/install-android-build.ps1 has installed the build under test.
 // One Appium session per fixture; each test starts from the state it needs (ClearApp, then LaunchApp).
 [Category("Android")]
-public abstract class AndroidTest
+public abstract class AndroidTest : DeviceTest<AndroidDriver>
 {
     // The test build's own package: an everyday install of net.openhabittracker is never replaced or wiped.
     protected const string AppPackage = "net.openhabittracker.uitest";
@@ -26,10 +25,6 @@ public abstract class AndroidTest
 
     // A first launch runs every migration before the page renders, which takes over a minute on a loaded emulator.
     protected static readonly TimeSpan StartupTimeout = TimeSpan.FromMinutes(3);
-
-    protected static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(20);
-
-    protected AndroidDriver Driver = null!;
 
     [OneTimeSetUp]
     public void StartSession()
@@ -372,93 +367,6 @@ public abstract class AndroidTest
         Assert.That(switched, Is.True, $"{WebViewContext} never accepted the switch");
     }
 
-    // Polls the condition and returns whether it became true in time, so the caller can assert with the values it measured.
-    protected bool WaitUntil(Func<bool> condition, TimeSpan timeout)
-    {
-        try
-        {
-            return new WebDriverWait(Driver, timeout).Until(driver => condition());
-        }
-        catch (WebDriverTimeoutException)
-        {
-            return false;
-        }
-    }
-
-    // Native context only.
-    protected IWebElement WaitForNativeElement(By locator, TimeSpan? timeout = null)
-    {
-        WebDriverWait wait = new(Driver, timeout ?? DefaultTimeout);
-        wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(StaleElementReferenceException));
-
-        return wait.Until(driver => driver.FindElement(locator));
-    }
-
-    // Web context only: waits until the selector matches a displayed element.
-    protected IWebElement WaitForElement(string cssSelector, TimeSpan? timeout = null)
-    {
-        WebDriverWait wait = new(Driver, timeout ?? DefaultTimeout);
-        wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(StaleElementReferenceException));
-
-        return wait.Until(driver =>
-        {
-            IWebElement element = driver.FindElement(By.CssSelector(cssSelector));
-            return element.Displayed ? element : null;
-        })!;
-    }
-
-    // Web context only.
-    protected object? RunScript(string script, params object[] args)
-    {
-        return Driver.ExecuteScript(script, args);
-    }
-
-    // Main nav steps, as the e2e uses them.
-    protected const string HomePage = "[data-main-step-2]";
-    protected const string NotesPage = "[data-main-step-3]";
-    protected const string TasksPage = "[data-main-step-4]";
-    protected const string HabitsPage = "[data-main-step-5]";
-
-    // Title buttons of the list rows, per page.
-    protected const string NoteRows = "[data-notes-step-2]";
-    protected const string TaskRows = "[data-tasks-step-2]";
-    protected const string HabitRows = "[data-habits-step-2]";
-
-    // Web context only: a page through its main nav step.
-    protected void OpenPage(string navStep)
-    {
-        WaitForElement(navStep).Click();
-        WaitForElement("main#main-content");
-    }
-
-    // Web context only.
-    protected void OpenNotesPage()
-    {
-        OpenPage(NotesPage);
-    }
-
-    // Web context only: sets a field's value and raises the input event that typing raises, without typing.
-    // Chromedriver's typing reaches Android as hardware key events, after which Gboard opens as its small
-    // hardware-keyboard toolbar instead of the soft keyboard, for every later field.
-    protected void SetValue(IWebElement field, string value)
-    {
-        RunScript("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", field, value);
-    }
-
-    // Web context only: adds a note, task or habit through the current page's add form, the same way the e2e adds items.
-    // The form closes only after the save has finished.
-    protected void AddItem(string title)
-    {
-        WaitForElement("button.btn-plain.input-group").Click();
-        SetValue(WaitForElement("input[aria-required='true']"), title);
-
-        IWebElement save = WaitForElement("button:has(i.bi-floppy)");
-        new WebDriverWait(Driver, DefaultTimeout).Until(driver => save.Enabled);
-        save.Click();
-
-        new WebDriverWait(Driver, DefaultTimeout).Until(driver => driver.FindElements(By.CssSelector("button:has(i.bi-floppy)")).Count == 0);
-    }
-
     // Web context only: adds a note on the notes page and opens its detail, with numbered lines as its content.
     // The content saves on change, which setting the value alone does not raise.
     protected void AddLongNoteAndOpenIt(string title, int lines = 60)
@@ -508,25 +416,6 @@ public abstract class AndroidTest
         return webView.Top + Convert.ToDouble(measured["bottom"]) * Convert.ToDouble(measured["ratio"]);
     }
 
-    // Web context only: fails if the page shows an error. The error boundaries and the database error render role="alert",
-    // and an exception outside them shows Blazor's own #blazor-error-ui bar.
-    protected void AssertNoErrorShown()
-    {
-        IWebElement? alert = Driver.FindElements(By.CssSelector("[role='alert']")).FirstOrDefault(element => element.Displayed);
-        Assert.That(alert?.Text, Is.Null, "The page shows an error");
-
-        bool errorBar = Driver.FindElements(By.CssSelector("#blazor-error-ui")).Any(element => element.Displayed);
-        Assert.That(errorBar, Is.False, "The page shows Blazor's unhandled error bar");
-    }
-
-    // Web context only: a sidebar from the menu, by the icon on its menu entry, as the e2e opens them.
-    protected void OpenSidebar(string iconClass)
-    {
-        WaitForElement("[data-main-step-1]").Click();
-        WaitForElement($"button:has(i.{iconClass})").Click();
-        WaitForElement("#closeSidebar");
-    }
-
     // Copies a file to the device's Download folder as the only test file there: files the picker's grid shows
     // past the bottom of the screen are not found, so the earlier ones, all named oht-*, are removed first.
     protected void PushToDownloads(string localPath, string deviceName)
@@ -562,27 +451,5 @@ public abstract class AndroidTest
         WaitForNativeElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Download\")")).Click();
 
         WaitUntil(() => Driver.FindElements(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"com.google.android.documentsui:id/breadcrumb_text\").text(\"Download\")")).Count > 0, DefaultTimeout);
-    }
-
-    // Web context only: the list row title whose text contains the title, or null once the wait runs out.
-    protected IWebElement? Row(string rows, string title, TimeSpan? timeout = null)
-    {
-        IWebElement? row = null;
-
-        WaitUntil(() =>
-        {
-            try
-            {
-                row = Driver.FindElements(By.CssSelector(rows)).FirstOrDefault(element => element.Text.Contains(title));
-            }
-            catch (StaleElementReferenceException)
-            {
-                row = null;
-            }
-
-            return row is not null;
-        }, timeout ?? DefaultTimeout);
-
-        return row;
     }
 }

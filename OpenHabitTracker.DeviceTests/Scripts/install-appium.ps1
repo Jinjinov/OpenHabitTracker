@@ -8,6 +8,8 @@ $AppiumVersion = '4.0.0-beta.8'
 
 $Drivers = [ordered]@{
     'uiautomator2' = @{ Package = 'appium-uiautomator2-driver'; Version = '9.1.0' }
+    # Installed from npm by package name, which works whether or not Appium registers the wincore short name.
+    'wincore' = @{ Package = 'appium-wincore-driver'; Version = '4.1.2' }
 }
 
 . "$PSScriptRoot\appium-env.ps1"

@@ -1,0 +1,313 @@
+using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
+
+namespace OpenHabitTracker.DeviceTests.Windows;
+
+public enum WindowsHost
+{
+    // The MAUI app, registered as a package, the way the Store installs it.
+    Msix,
+
+    // The WinForms app, installed by Velopack, the way the website's installer installs it.
+    WinForms
+}
+
+// Prerequisites: Scripts/start-appium.ps1 is running, and Scripts/install-windows-builds.ps1 has installed both hosts.
+// The tests run under the real package identity, packId and data folders, and replace the installs and reset the data,
+// because this PC keeps no personal install of the app.
+// A session is one run of the app: StartApp starts it, CloseApp closes its window, which is when the app saves what it keeps on exit.
+[Category("Windows")]
+public abstract class WindowsTest(WindowsHost host) : DeviceTest<WincoreDriver>
+{
+    protected const string NativeContext = "NATIVE_APP";
+
+    // The package's identity, from Package.appxmanifest; Windows derives the family name's suffix from the publisher.
+    protected const string PackageFamilyName = "31456Jinjinov.578313437ADBB_xykcbrkqsemtg";
+
+    protected const string Aumid = PackageFamilyName + "!App";
+
+    // Both hosts run as OpenHT.exe.
+    private const string ProcessName = "OpenHT";
+
+    protected static readonly TimeSpan StartupTimeout = TimeSpan.FromMinutes(1);
+
+    private static readonly Uri AppiumServer = new("http://127.0.0.1:4723");
+
+    protected static readonly string LocalAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+    // Velopack installs into %LOCALAPPDATA%\<packId>, and runs the version in current.
+    protected static readonly string VelopackRoot = Path.Combine(LocalAppData, "OpenHT");
+
+    protected static readonly string WinFormsExe = Path.Combine(VelopackRoot, "current", "OpenHT.exe");
+
+    // What Scripts/install-windows-builds.ps1 keeps between runs: the build under test packed for Velopack, and the previous release's installer.
+    protected static readonly string VelopackFolder = Path.Combine(LocalAppData, "OpenHabitTracker.DeviceTests", "velopack");
+
+    protected WindowsHost Host { get; } = host;
+
+    // Where the host keeps OpenHT.db, Window.yaml and Error.log.
+    protected string DataFolder => Host == WindowsHost.Msix
+        ? Path.Combine(LocalAppData, "Packages", PackageFamilyName, "LocalState")
+        : Path.Combine(LocalAppData, "OpenHabitTracker");
+
+    // Cleanups that run after the test and after the app has stopped, whether the test passed or failed, newest first.
+    private readonly List<Action> _restore = new();
+
+    protected void AfterTest(Action cleanup)
+    {
+        _restore.Add(cleanup);
+    }
+
+    private int? _devtoolsPort;
+
+    [TearDown]
+    public void SaveArtifactsAndCleanUp()
+    {
+        try
+        {
+            SaveArtifactsOnFailure();
+        }
+        finally
+        {
+            EndSession();
+            StopApp();
+
+            for (int i = _restore.Count - 1; i >= 0; i--)
+                _restore[i]();
+
+            _restore.Clear();
+            _devtoolsPort = null;
+        }
+    }
+
+    private void SaveArtifactsOnFailure()
+    {
+        if (TestContext.CurrentContext.Result.Outcome.Status != NUnit.Framework.Interfaces.TestStatus.Failed)
+            return;
+
+        // A test case's name carries its arguments, quotes and slashes included.
+        string name = string.Concat(TestContext.CurrentContext.Test.FullName.Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c));
+        string folder = Path.Combine(TestContext.CurrentContext.WorkDirectory, "artifacts", name);
+        Directory.CreateDirectory(folder);
+
+        if (ErrorLog() is string errorLog)
+            File.WriteAllText(Path.Combine(folder, "Error.log"), errorLog);
+
+        if (Driver is not null)
+        {
+            try
+            {
+                string context = Driver.Context;
+                Driver.Context = NativeContext;
+                Driver.GetScreenshot().SaveAsFile(Path.Combine(folder, "screen.png"));
+                File.WriteAllText(Path.Combine(folder, "native.xml"), Driver.PageSource);
+
+                if (context != NativeContext)
+                {
+                    Driver.Context = context;
+                    File.WriteAllText(Path.Combine(folder, "page.html"), Driver.PageSource);
+                }
+            }
+            catch (Exception exception)
+            {
+                File.WriteAllText(Path.Combine(folder, "artifact-error.txt"), exception.ToString());
+            }
+        }
+
+        TestContext.Out.WriteLine($"Artifacts: {folder}");
+    }
+
+    // Starts the app in a new session, or with attach, joins the app that Windows started, from a notification for one.
+    protected void StartApp(bool attach = false)
+    {
+        AppiumOptions options = new()
+        {
+            PlatformName = "Windows",
+            AutomationName = "Wincore"
+        };
+
+        // WinCore's own attach, noReset with the app, takes any visible window with content for an AUMID, so the app's window is named by its handle.
+        if (attach)
+            options.AddAdditionalAppiumOption("appTopLevelWindow", $"0x{AppWindow():X}");
+        else
+            options.App = Host == WindowsHost.Msix ? Aumid : WinFormsExe;
+
+        options.AddAdditionalAppiumOption("webviewEnabled", true);
+        options.AddAdditionalAppiumOption("ms:waitForAppLaunch", (int)StartupTimeout.TotalSeconds);
+
+        // WinCore closes the window through UI Automation when the session ends, and a close that fails is logged only at debug level,
+        // as it did for the WinForms window after a task was edited; CloseApp closes it instead.
+        options.AddAdditionalAppiumOption("shouldCloseApp", false);
+
+        // WinCore starts an exe with a devtools port of its own choosing in its environment.
+        // An app it activates through Windows, or one Windows started, has only the user's environment to take one from.
+        if (Host == WindowsHost.Msix || attach)
+            options.AddAdditionalAppiumOption("webviewDevtoolsPort", UseDevtoolsPort());
+
+        Driver = new WincoreDriver(AppiumServer, options, TimeSpan.FromMinutes(3));
+    }
+
+    // The main window of the app's running process, once it has one.
+    private static nint AppWindow()
+    {
+        nint window = 0;
+
+        bool found = WaitUntil(() =>
+        {
+            foreach (Process process in Process.GetProcessesByName(ProcessName))
+            {
+                using (process)
+                {
+                    if (process.MainWindowHandle != 0)
+                        window = process.MainWindowHandle;
+                }
+            }
+
+            return window != 0;
+        }, StartupTimeout);
+
+        Assert.That(found, Is.True, "The app has no window to attach to");
+
+        return window;
+    }
+
+    // A session on the whole desktop, for what Windows itself shows, like a notification.
+    protected static WincoreDriver StartDesktopSession()
+    {
+        AppiumOptions options = new()
+        {
+            PlatformName = "Windows",
+            AutomationName = "Wincore",
+            App = "Root"
+        };
+
+        return new WincoreDriver(AppiumServer, options, TimeSpan.FromMinutes(3));
+    }
+
+    // Ends the session and closes the app's window with WM_CLOSE, what its close button sends, then waits for its process to end.
+    protected void CloseApp()
+    {
+        EndSession();
+
+        foreach (Process process in Process.GetProcessesByName(ProcessName))
+        {
+            process.CloseMainWindow();
+            process.Dispose();
+        }
+
+        Assert.That(WaitUntil(() => Process.GetProcessesByName(ProcessName).Length == 0, DefaultTimeout), Is.True,
+            $"The app is still running after its window closed, with the windows: {string.Join(", ", Process.GetProcessesByName(ProcessName).Select(process => $"'{process.MainWindowTitle}'"))}");
+    }
+
+    private void EndSession()
+    {
+        try
+        {
+            Driver?.Quit();
+        }
+        catch (WebDriverException)
+        {
+        }
+
+        Driver?.Dispose();
+        Driver = null!;
+    }
+
+    // Ends every run of the app the test left behind, a window waiting on an error dialog among them.
+    protected static void StopApp()
+    {
+        foreach (Process process in Process.GetProcessesByName(ProcessName))
+        {
+            try
+            {
+                process.Kill();
+                process.WaitForExit(10000);
+            }
+            catch (InvalidOperationException)
+            {
+            }
+        }
+    }
+
+    // The next start is a first start with an empty database and no saved window or log.
+    protected void ClearData()
+    {
+        StopApp();
+
+        Directory.CreateDirectory(DataFolder);
+
+        foreach (string file in new[] { "OpenHT.db", "OpenHT.db-wal", "OpenHT.db-shm", "Window.yaml", "Error.log" })
+            File.Delete(Path.Combine(DataFolder, file));
+    }
+
+    protected string? ErrorLog()
+    {
+        string path = Path.Combine(DataFolder, "Error.log");
+
+        return File.Exists(path) ? File.ReadAllText(path) : null;
+    }
+
+    // The WebView2 page is a context once the app has created it.
+    protected void SwitchToWebView()
+    {
+        bool switched = WaitUntil(() =>
+        {
+            string? webView = Driver.Contexts.FirstOrDefault(context => context.StartsWith("WEBVIEW_"));
+
+            if (webView is null)
+                return false;
+
+            try
+            {
+                Driver.Context = webView;
+                return true;
+            }
+            catch (WebDriverException)
+            {
+                return false;
+            }
+        }, StartupTimeout);
+
+        Assert.That(switched, Is.True, $"The app's WebView never became a context; there are {string.Join(", ", Driver.Contexts)}");
+
+        WaitForElement("main#main-content", StartupTimeout);
+    }
+
+    // WebView2 reads WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS when the app creates it. A process Windows starts takes the
+    // user's environment, so the variable is set there for the length of the test, and every WebView2 app started meanwhile opens the port too.
+    // WebView2's own registry override is keyed by app, but only administrators can write under Software\Policies.
+    protected int UseDevtoolsPort()
+    {
+        if (_devtoolsPort is int port)
+            return port;
+
+        TcpListener listener = new(IPAddress.Loopback, 0);
+        listener.Start();
+        port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        listener.Stop();
+
+        const string Variable = "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS";
+
+        string? previous = Environment.GetEnvironmentVariable(Variable, EnvironmentVariableTarget.User);
+        _restore.Add(() => Environment.SetEnvironmentVariable(Variable, previous, EnvironmentVariableTarget.User));
+
+        Environment.SetEnvironmentVariable(Variable, $"--remote-debugging-port={port}", EnvironmentVariableTarget.User);
+
+        _devtoolsPort = port;
+
+        return port;
+    }
+
+    // Runs a program to its end and returns its exit code.
+    protected static int RunToEnd(string fileName, params string[] arguments)
+    {
+        ProcessStartInfo start = new(fileName, arguments) { UseShellExecute = false };
+
+        using Process process = Process.Start(start)!;
+
+        Assert.That(process.WaitForExit(TimeSpan.FromMinutes(5)), Is.True, $"{fileName} did not finish");
+
+        return process.ExitCode;
+    }
+}

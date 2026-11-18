@@ -4,7 +4,7 @@ namespace OpenHabitTracker.DeviceTests.Android;
 public class FileDialogTests : AndroidTest
 {
     // Every import format, read through the system picker in the Release build, where trimming and AOT apply;
-    // the unit tests read the same files untrimmed. The summary names the format it recognized, in text that is not localized.
+    // the unit tests read the same files untrimmed.
     [TestCase("Examples/example.json", "oht-example.json", "JSON (.json)")]
     [TestCase("Examples/example.tsv", "oht-example.tsv", "TSV (.tsv)")]
     [TestCase("Examples/example.yaml", "oht-example.yaml", "YAML (.yaml)")]
@@ -30,14 +30,7 @@ public class FileDialogTests : AndroidTest
         PickFromDownloads(deviceName);
 
         SwitchToWebView();
-        WaitUntil(() => Driver.FindElements(By.CssSelector("[data-import-summary], [role='alert'], #blazor-error-ui")).Any(element => element.Displayed), DefaultTimeout);
-        AssertNoErrorShown();
-
-        Assert.That(WaitForElement("[data-import-summary] small").Text, Does.StartWith(format), "The summary names another format");
-
-        WaitForElement("[data-import-summary] .btn-primary").Click();
-        Assert.That(WaitUntil(() => Driver.FindElements(By.CssSelector("[data-import-summary]")).Count == 0, DefaultTimeout), Is.True, "The import did not finish");
-        AssertNoErrorShown();
+        Assert.That(ConfirmImport(), Does.StartWith(format), "The summary names another format");
     }
 
     // The export goes through the system's create-document dialog; the file it writes is pulled back and checked.

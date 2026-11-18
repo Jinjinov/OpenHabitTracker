@@ -49,20 +49,6 @@ public class UpgradeTests : AndroidTest
         Assert.That(WaitForElement("[data-habits-step-3]").Text, Does.Not.Contain(NeverDone), "The habit's completion is gone after the update");
     }
 
-    // The elapsed time a habit row shows before its first completion.
-    private const string NeverDone = "⊘";
-
-    // Clicks today's cell in the habit row's small calendar, which records a completion.
-    // The cell shows the count before the save finishes; the elapsed time changes only after it, so that is what the wait is on.
-    private void CompleteToday(string habitTitle)
-    {
-        Assert.That(Row(HabitRows, habitTitle), Is.Not.Null, $"The habit {habitTitle} is not in the list");
-
-        WaitForElement("[data-habits-step-6] button[role='gridcell'].border-primary-subtle").Click();
-
-        Assert.That(WaitUntil(() => !WaitForElement("[data-habits-step-3]").Text.Contains(NeverDone), DefaultTimeout), Is.True, "The completion was not saved");
-    }
-
     private static string Apk(string name)
     {
         string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OpenHabitTracker.DeviceTests", "apks", $"{name}.apk");
