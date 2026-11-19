@@ -25,12 +25,11 @@ public partial class App : Application
 
         WindowSettings? saved = WindowSettings.Load(windowSettingsPath);
 
+        Rect frame;
+
         if (saved is not null)
         {
-            window.X = saved.X;
-            window.Y = saved.Y;
-            window.Width = saved.Width;
-            window.Height = saved.Height;
+            frame = new Rect(saved.X, saved.Y, saved.Width, saved.Height);
         }
         else
         {
@@ -38,14 +37,30 @@ public partial class App : Application
             // No #if WINDOWS, so no taskbar-excluded work area; a 0.85 fraction of the full display absorbs the taskbar.
             DisplayInfo display = DeviceDisplay.Current.MainDisplayInfo;
             double density = display.Density > 0 ? display.Density : 1;
-            window.X = 0;
-            window.Y = 0;
-            window.Width = Math.Min(display.Width / density * 0.85, 1680);
-            window.Height = Math.Min(display.Height / density * 0.85, 1050);
+            frame = new Rect(0, 0, Math.Min(display.Width / density * 0.85, 1680), Math.Min(display.Height / density * 0.85, 1050));
         }
 
-        window.SizeChanged += (sender, e) => SaveWindowSettings(window, windowSettingsPath);
-        window.Destroying += (sender, e) => SaveWindowSettings(window, windowSettingsPath);
+        SetFrame(window, frame);
+
+        // Mac Catalyst applies a frame only to a window that has its scene, which it gets after CreateWindow; until then
+        // the window reports the scene's default bounds back as its frame. So the frame is set again on the first activation,
+        // and the window is saved only from then on, so the default bounds never overwrite the saved frame.
+        // Elsewhere the frame is already applied, and setting the same values again changes nothing.
+        bool activated = false;
+
+        window.Activated += (sender, e) =>
+        {
+            if (activated)
+                return;
+
+            activated = true;
+
+            SetFrame(window, frame);
+
+            window.SizeChanged += (sender, e) => SaveWindowSettings(window, windowSettingsPath);
+            window.Destroying += (sender, e) => SaveWindowSettings(window, windowSettingsPath);
+        };
+
         window.Resumed += async (sender, e) => await RebuildNotificationSchedule();
 
         return window;
@@ -57,6 +72,14 @@ public partial class App : Application
     {
         if (IPlatformApplication.Current?.Services is IServiceProvider services)
             await NotificationRebuildRelay.Rebuild(services);
+    }
+
+    private static void SetFrame(Window window, Rect frame)
+    {
+        window.X = frame.X;
+        window.Y = frame.Y;
+        window.Width = frame.Width;
+        window.Height = frame.Height;
     }
 
     private static void SaveWindowSettings(Window window, string path)
