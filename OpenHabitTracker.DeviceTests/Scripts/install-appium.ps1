@@ -7,7 +7,7 @@ $ErrorActionPreference = 'Stop'
 
 $AppiumVersion = '4.0.0'
 
-# Android and Windows are tested on the Windows PC, iOS on the Mac.
+# Android and Windows are tested on the Windows PC, iOS and macCatalyst on the Mac.
 $Drivers = if ($IsWindows) {
     [ordered]@{
         'uiautomator2' = @{ Package = 'appium-uiautomator2-driver'; Version = '9.1.0' }
@@ -18,6 +18,7 @@ $Drivers = if ($IsWindows) {
 else {
     [ordered]@{
         'xcuitest' = @{ Package = 'appium-xcuitest-driver'; Version = '13.1.3' }
+        'mac2' = @{ Package = 'appium-mac2-driver'; Version = '5.0.5' }
     }
 }
 

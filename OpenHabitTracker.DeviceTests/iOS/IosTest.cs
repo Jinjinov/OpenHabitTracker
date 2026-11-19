@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace OpenHabitTracker.DeviceTests.iOS;
 
-// The two simulator builds Scripts/install-ios-build.ps1 makes.
+// The two simulator builds Scripts/install-apple-builds.ps1 makes for iOS.
 // Release is the one trimming and AOT apply to, and its page is reachable only through the accessibility tree;
 // Debug makes its WKWebView inspectable, so it is the one with a web context.
 public enum IosBuild
@@ -12,7 +12,7 @@ public enum IosBuild
     Debug
 }
 
-// Prerequisites: Scripts/start-appium.ps1 is running and Scripts/install-ios-build.ps1 has built both builds.
+// Prerequisites: Scripts/start-appium.ps1 is running and Scripts/install-apple-builds.ps1 has built both builds.
 // The simulator is booted by Appium. One Appium session per fixture; each test installs the fixture's build afresh
 // (ReinstallApp, then LaunchApp), whatever an earlier test, run or install left on the simulator.
 [Category("iOS")]
@@ -27,7 +27,7 @@ public abstract class IosTest : DeviceTest<IOSDriver>
     // A first launch runs every migration before the page renders.
     protected static readonly TimeSpan StartupTimeout = TimeSpan.FromMinutes(3);
 
-    // Where Scripts/install-ios-build.ps1 saves the bundles it builds.
+    // Where Scripts/install-apple-builds.ps1 saves the bundles it builds.
     private static readonly string BuildFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OpenHabitTracker.DeviceTests", "ios");
 
     protected abstract IosBuild Build { get; }
@@ -43,7 +43,7 @@ public abstract class IosTest : DeviceTest<IOSDriver>
     [OneTimeSetUp]
     public void StartSession()
     {
-        Assert.That(Directory.Exists(BuildUnderTest), Is.True, $"{BuildUnderTest} is missing; build it with Scripts/install-ios-build.ps1");
+        Assert.That(Directory.Exists(BuildUnderTest), Is.True, $"{BuildUnderTest} is missing; build it with Scripts/install-apple-builds.ps1");
 
         AppiumOptions options = new()
         {
