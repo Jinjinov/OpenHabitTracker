@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace OpenHabitTracker.DeviceTests.Windows;
 
-[TestFixture(WindowsHost.Msix, Explicit = true, Reason = "Bug: a startup failure crashes the MSIX through WinUI (0xc000027b in Microsoft.UI.Xaml.dll) before the crash handler writes it to Error.log")]
+[TestFixture(WindowsHost.Msix)]
 [TestFixture(WindowsHost.WinForms)]
 public class ErrorLogTests(WindowsHost host) : WindowsTest(host)
 {

@@ -135,13 +135,12 @@ public abstract class WindowsTest(WindowsHost host) : DeviceTest<WincoreDriver>
         Assert.That(exitCode, Is.Zero, $"Windows did not install {UnderTestMsix}; Scripts/install-windows-builds.ps1 trusts its certificate");
     }
 
-    // Velopack installs the published files into current unchanged, so they match the build under test only when every published file is there with the same hash.
+    // Velopack installs the files under lib/app in its package into current unchanged, so the install matches the build under test
+    // only when every one of them is there with the same hash; the package leaves out what the publish has besides, like the .pdb files.
+    // Two of them are Velopack's own and go elsewhere: the execution stub becomes the launcher one folder up, and Squirrel.exe is not installed.
     // Anything else, the previous release a stopped update test left among them, is replaced.
     private static void InstallWinFormsUnderTest()
     {
-        string publish = Path.Combine(VelopackFolder, "publish");
-        Assert.That(Directory.Exists(publish), Is.True, $"{publish} is missing; Scripts/install-windows-builds.ps1 builds it");
-
         string packed = Path.Combine(VelopackFolder, "current");
         string package = OnlyFile(packed, "OpenHT-*-full.nupkg");
         string setup = OnlyFile(packed, "*Setup.exe");
@@ -152,24 +151,50 @@ public abstract class WindowsTest(WindowsHost host) : DeviceTest<WincoreDriver>
             $"The website has the release {LatestRelease.Value}, which the build under test {version} would update to; Scripts/install-windows-builds.ps1 packs it above the latest release");
 
         string current = Path.Combine(VelopackRoot, "current");
+        const string AppFiles = "lib/app/";
 
-        bool installed = Directory.Exists(current) && Directory.EnumerateFiles(publish, "*", SearchOption.AllDirectories).All(file =>
+        bool installed;
+        using (ZipArchive nupkg = ZipFile.OpenRead(package))
         {
-            FileInfo installedFile = new(Path.Combine(current, Path.GetRelativePath(publish, file)));
+            installed = Directory.Exists(current) && nupkg.Entries
+                .Where(entry => entry.FullName.StartsWith(AppFiles) && !entry.FullName.EndsWith('/'))
+                .Where(entry => entry.Name != "Squirrel.exe" && !entry.Name.EndsWith("_ExecutionStub.exe"))
+                .All(entry =>
+            {
+                FileInfo installedFile = new(Path.Combine(current, entry.FullName[AppFiles.Length..].Replace('/', Path.DirectorySeparatorChar)));
 
-            return installedFile.Exists && installedFile.Length == new FileInfo(file).Length
-                && SHA256.HashData(File.ReadAllBytes(installedFile.FullName)).SequenceEqual(SHA256.HashData(File.ReadAllBytes(file)));
-        });
+                if (!installedFile.Exists || installedFile.Length != entry.Length)
+                    return false;
+
+                using Stream packedFile = entry.Open();
+
+                return SHA256.HashData(packedFile).SequenceEqual(SHA256.HashData(File.ReadAllBytes(installedFile.FullName)));
+            });
+        }
 
         if (installed)
             return;
 
-        // Velopack's Setup refuses an app that is already installed, so the installed one is removed first; its data folder is not touched.
+        UninstallVelopackApp();
+
+        string log = Path.Combine(TestContext.CurrentContext.WorkDirectory, "velopack-setup.log");
+        File.Delete(log);
+
+        Assert.That(RunToEnd(setup, "--silent", "--log", log), Is.Zero,
+            $"Velopack's Setup did not install the build under test:\n{(File.Exists(log) ? string.Join("\n", File.ReadLines(log).TakeLast(15)) : "it wrote no log")}");
+    }
+
+    // Velopack's Setup refuses an app that is already installed, so the installed one is removed first; its data folder is not touched.
+    // The install folder is gone only some time after Update.exe has exited, and Setup run before that refuses as well.
+    protected static void UninstallVelopackApp()
+    {
+        StopApp();
+
         string update = Path.Combine(VelopackRoot, "Update.exe");
         if (File.Exists(update))
             Assert.That(RunToEnd(update, "uninstall", "--silent"), Is.Zero, "Velopack did not uninstall the installed app");
 
-        Assert.That(RunToEnd(setup, "--silent"), Is.Zero, "Velopack's Setup did not install the build under test");
+        Assert.That(WaitUntil(() => !Directory.Exists(VelopackRoot), DefaultTimeout), Is.True, $"{VelopackRoot} is still there after the uninstall");
     }
 
     // The numeric part of a Velopack version, which is all the feed's releases have.
@@ -360,19 +385,25 @@ public abstract class WindowsTest(WindowsHost host) : DeviceTest<WincoreDriver>
     }
 
     // Ends every run of the app the test left behind, a window waiting on an error dialog among them.
+    // A process that has already exited cannot be killed, and neither can one Windows Error Reporting holds after a crash,
+    // which denies even a handle to wait on; it ends by itself, so the wait watches the process list instead.
     protected static void StopApp()
     {
         foreach (Process process in Process.GetProcessesByName(ProcessName))
         {
-            try
+            using (process)
             {
-                process.Kill();
-                process.WaitForExit(10000);
-            }
-            catch (InvalidOperationException)
-            {
+                try
+                {
+                    process.Kill();
+                }
+                catch (Exception exception) when (exception is InvalidOperationException or System.ComponentModel.Win32Exception)
+                {
+                }
             }
         }
+
+        Assert.That(WaitUntil(() => Process.GetProcessesByName(ProcessName).Length == 0, TimeSpan.FromMinutes(1)), Is.True, "The app's process did not end");
     }
 
     // The next start is a first start with an empty database and no saved window or log.

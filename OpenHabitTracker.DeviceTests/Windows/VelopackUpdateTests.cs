@@ -19,11 +19,7 @@ public class VelopackUpdateTests() : WindowsTest(WindowsHost.WinForms)
 
         string currentVersion = Regex.Match(Path.GetFileName(package), @"^OpenHT-(.+)-full\.nupkg$").Groups[1].Value;
 
-        // Velopack's Setup refuses an app that is already installed.
-        StopApp();
-        if (File.Exists(update))
-            Assert.That(RunToEnd(update, "uninstall", "--silent"), Is.Zero, "Velopack did not uninstall the installed app");
-
+        UninstallVelopackApp();
         ClearData();
 
         Assert.That(RunToEnd(setup, "--silent"), Is.Zero, "The previous release did not install");

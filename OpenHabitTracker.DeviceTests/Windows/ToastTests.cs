@@ -76,9 +76,10 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
 
         WaitUntil(() =>
         {
+            // A closed Action Center keeps its notifications in the tree, off screen, where a click starts nothing.
             foreach (IWebElement window in desktop.FindElements(By.ClassName("Windows.UI.Core.CoreWindow")))
             {
-                notification = window.FindElements(By.XPath($".//*[contains(@Name, '{title}')]")).FirstOrDefault();
+                notification = window.FindElements(By.XPath($".//*[contains(@Name, '{title}')]")).FirstOrDefault(element => element.Displayed);
 
                 if (notification is not null)
                     return true;
