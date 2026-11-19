@@ -6,7 +6,6 @@ public class WindowTests : MacCatalystTest
     // The window comes back where the user left it and at the size they left it, through Window.yaml.
     // The window is moved by its title bar and resized by its bottom-right corner, as a user does.
     [Test]
-    [Explicit("Bug: on macCatalyst the app never applies Window.yaml - the window comes back at 1024x768 away from where it was left, and the next save overwrites the file with X 0, Y 0")]
     public void MovedAndResizedWindow_Relaunched_ComesBackWithTheSameFrame()
     {
         ResetApp();

@@ -43,10 +43,27 @@ public partial class App : Application
         SetFrame(window, frame);
 
         // Mac Catalyst applies a frame only to a window that has its scene, which it gets after CreateWindow; until then
-        // the window reports the scene's default bounds back as its frame. So the frame is set again on the first activation,
-        // and the window is saved only from then on, so the default bounds never overwrite the saved frame.
+        // the window reports the scene's default bounds back as its frame. So the frame is set again on the first activation.
+        // Even then macOS places the launching window itself a moment later, at its default frame, so on Mac Catalyst the frame
+        // is set once more on the first resize the app did not cause. The window is saved only from then on,
+        // so neither the default bounds nor the default placement overwrite the saved frame.
         // Elsewhere the frame is already applied, and setting the same values again changes nothing.
         bool activated = false;
+        bool waitingForPlacement = DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst;
+        bool settingFrame = false;
+
+        void ApplyFrame()
+        {
+            settingFrame = true;
+            SetFrame(window, frame);
+            settingFrame = false;
+        }
+
+        void SaveFromNowOn()
+        {
+            window.SizeChanged += (sender, e) => SaveWindowSettings(window, windowSettingsPath);
+            window.Destroying += (sender, e) => SaveWindowSettings(window, windowSettingsPath);
+        }
 
         window.Activated += (sender, e) =>
         {
@@ -55,10 +72,21 @@ public partial class App : Application
 
             activated = true;
 
-            SetFrame(window, frame);
+            ApplyFrame();
 
-            window.SizeChanged += (sender, e) => SaveWindowSettings(window, windowSettingsPath);
-            window.Destroying += (sender, e) => SaveWindowSettings(window, windowSettingsPath);
+            if (!waitingForPlacement)
+                SaveFromNowOn();
+        };
+
+        window.SizeChanged += (sender, e) =>
+        {
+            if (!activated || !waitingForPlacement || settingFrame)
+                return;
+
+            waitingForPlacement = false;
+
+            ApplyFrame();
+            SaveFromNowOn();
         };
 
         window.Resumed += async (sender, e) => await RebuildNotificationSchedule();
