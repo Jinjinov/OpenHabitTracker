@@ -1,18 +1,26 @@
-# Installs the Appium server and the drivers the device tests run against, each at a pinned version.
-# Needs Node.js first: winget install --id OpenJS.NodeJS.LTS --exact --version 26.13.1
+# Installs the Appium server and the drivers the device tests run against on this machine, each at a pinned version.
+# Needs Node.js first: winget install --id OpenJS.NodeJS.LTS --exact --version 26.13.1 on Windows, brew install node on macOS.
 # Every driver release requires one Appium server line, so the versions below change together.
 
 $ErrorActionPreference = 'Stop'
 
 $AppiumVersion = '4.0.0-beta.8'
 
-$Drivers = [ordered]@{
-    'uiautomator2' = @{ Package = 'appium-uiautomator2-driver'; Version = '9.1.0' }
-    # Installed from npm by package name, which works whether or not Appium registers the wincore short name.
-    'wincore' = @{ Package = 'appium-wincore-driver'; Version = '4.1.2' }
+# Android and Windows are tested on the Windows PC, iOS on the Mac.
+$Drivers = if ($IsWindows) {
+    [ordered]@{
+        'uiautomator2' = @{ Package = 'appium-uiautomator2-driver'; Version = '9.1.0' }
+        # Installed from npm by package name, which works whether or not Appium registers the wincore short name.
+        'wincore' = @{ Package = 'appium-wincore-driver'; Version = '4.1.2' }
+    }
+}
+else {
+    [ordered]@{
+        'xcuitest' = @{ Package = 'appium-xcuitest-driver'; Version = '13.1.3' }
+    }
 }
 
-. "$PSScriptRoot\appium-env.ps1"
+. "$PSScriptRoot/appium-env.ps1"
 
 npm install --global "appium@$AppiumVersion"
 if ($LASTEXITCODE -ne 0) { throw "npm could not install appium@$AppiumVersion" }

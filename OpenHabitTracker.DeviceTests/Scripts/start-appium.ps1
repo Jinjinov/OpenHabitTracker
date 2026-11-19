@@ -4,6 +4,6 @@
 
 $ErrorActionPreference = 'Stop'
 
-. "$PSScriptRoot\appium-env.ps1"
+. "$PSScriptRoot/appium-env.ps1"
 
 appium server --address 127.0.0.1 --port 4723 --allow-insecure 'uiautomator2:adb_shell,uiautomator2:chromedriver_autodownload'
