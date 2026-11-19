@@ -160,14 +160,27 @@ public abstract class IosTest : DeviceTest<IOSDriver>
         Driver.ExecuteScript("mobile: installApp", new Dictionary<string, object> { ["app"] = BuildUnderTest });
     }
 
-    // queryAppState: 4 is running in the foreground.
+    // Right after an install, SpringBoard can refuse the launch as an unknown application until it has registered the app,
+    // so the launch is repeated until the app is in the foreground. queryAppState: 4 is running in the foreground.
     protected void LaunchApp()
     {
         LaunchedAt = DateTime.Now;
 
-        Driver.ExecuteScript("mobile: activateApp", new Dictionary<string, object> { ["bundleId"] = BundleId });
+        bool inForeground = WaitUntil(() =>
+        {
+            try
+            {
+                Driver.ExecuteScript("mobile: activateApp", new Dictionary<string, object> { ["bundleId"] = BundleId });
+            }
+            catch (WebDriverException)
+            {
+                return false;
+            }
 
-        Assert.That(WaitUntil(() => AppState() == 4, TimeSpan.FromSeconds(45)), Is.True, $"{BundleId} did not come to the foreground");
+            return WaitUntil(() => AppState() == 4, TimeSpan.FromSeconds(10));
+        }, TimeSpan.FromSeconds(45));
+
+        Assert.That(inForeground, Is.True, $"{BundleId} did not come to the foreground");
     }
 
     // queryAppState: 1 is not running, 2 and 3 suspended or running in the background, 4 running in the foreground.

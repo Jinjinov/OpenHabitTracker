@@ -1,10 +1,11 @@
 # Installs the Appium server and the drivers the device tests run against on this machine, each at a pinned version.
 # Needs Node.js first: winget install --id OpenJS.NodeJS.LTS --exact --version 26.13.1 on Windows, brew install node on macOS.
+# On macOS PowerShell itself comes from dotnet tool install --global PowerShell, not from Homebrew, whose package brings its own dotnet.
 # Every driver release requires one Appium server line, so the versions below change together.
 
 $ErrorActionPreference = 'Stop'
 
-$AppiumVersion = '4.0.0-beta.8'
+$AppiumVersion = '4.0.0'
 
 # Android and Windows are tested on the Windows PC, iOS on the Mac.
 $Drivers = if ($IsWindows) {
