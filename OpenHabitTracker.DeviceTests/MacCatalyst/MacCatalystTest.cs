@@ -136,4 +136,60 @@ public abstract class MacCatalystTest : DeviceTest<MacDriver>
             ["duration"] = 0.5
         });
     }
+
+    // The page's elements, found by their element type and English label.
+    protected static By Labelled(int elementType, string label)
+    {
+        return MobileBy.IosNSPredicate($"elementType == {elementType} AND label == '{label}'");
+    }
+
+    protected const int ButtonType = 9;
+    protected const int StaticTextType = 48;
+    protected const int TextFieldType = 49;
+    protected const int SwitchType = 40;
+    protected const int PopUpButtonType = 14;
+    protected const int LinkType = 42;
+    protected const int MenuItemType = 54;
+
+    // Opens a sidebar from the menu. The entries are static texts carrying the entry's name as their label;
+    // the welcome note's markdown carries the same words as values.
+    protected void OpenMenuEntry(string entry)
+    {
+        WaitForNativeElement(Labelled(ButtonType, "Toggle menu")).Click();
+        WaitForNativeElement(Labelled(StaticTextType, entry)).Click();
+        WaitForNativeElement(MobileBy.IosNSPredicate($"label == '{entry}, region'"));
+    }
+
+    // XCTest does not scroll an element into view before clicking it, and a click outside the window does nothing,
+    // so the sidebar region is scrolled until the element lies inside the window.
+    protected IWebElement ScrollIntoWindow(string region, By locator)
+    {
+        IWebElement scroller = WaitForNativeElement(MobileBy.IosNSPredicate($"label == '{region}'"));
+        IWebElement element = WaitForNativeElement(locator);
+        System.Drawing.Rectangle window = WindowFrame();
+
+        for (int i = 0; i < 20; i++)
+        {
+            System.Drawing.Rectangle frame = Driver.FindElement(locator).Rect;
+
+            if (frame.Top >= window.Top + 40 && frame.Bottom <= window.Bottom)
+                return element;
+
+            Driver.ExecuteScript("macos: scroll", new Dictionary<string, object>
+            {
+                ["elementId"] = ((AppiumElement)scroller).Id,
+                ["deltaX"] = 0,
+                ["deltaY"] = frame.Top < window.Top + 40 ? 300 : -300
+            });
+        }
+
+        Assert.Fail($"{locator} could not be scrolled into the window");
+        return element;
+    }
+
+    protected void CloseSidebar(string region)
+    {
+        ScrollIntoWindow(region, Labelled(ButtonType, "Close sidebar")).Click();
+        Assert.That(WaitUntil(() => Driver.FindElements(MobileBy.IosNSPredicate($"label == '{region}'")).Count == 0, DefaultTimeout), Is.True, $"{region} did not close");
+    }
 }
