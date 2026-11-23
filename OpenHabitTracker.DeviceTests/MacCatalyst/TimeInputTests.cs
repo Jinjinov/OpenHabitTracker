@@ -4,11 +4,12 @@ namespace OpenHabitTracker.DeviceTests.MacCatalyst;
 public class TimeInputTests : MacCatalystTest
 {
     // WebKit opens <input type="time"> in a wheels-style UIDatePicker, which the Mac idiom forbids: UIKit throws and the app
-    // terminates. The app turns the wheels into another style; this is the guard that WebKit still sets the style the way the app
+    // terminates. The app gives that picker the Pad idiom; this is the guard that WebKit still sets the style the way the app
     // expects, so a WebKit update cannot bring the crash back unnoticed.
+    // The wheels are 352 x 246 points; any other style the Mac idiom allows is at most 155 x 76, too small to use.
     // The page is reachable only through the accessibility tree, so its English labels are the locators.
     [Test]
-    public void TaskTimeField_Clicked_OpensTheTimePickerWithoutCrashing()
+    public void TaskTimeField_Clicked_OpensTheWheelsWithoutCrashing()
     {
         ResetApp();
         LaunchApp();
@@ -30,6 +31,9 @@ public class TimeInputTests : MacCatalystTest
         Assert.That(AppCrash(), Is.Null, "The app crashed when the time field opened its picker");
         Assert.That(AppState(), Is.EqualTo(4), "The app left the foreground");
         Assert.That(pickerShown, Is.True, "No time picker opened");
+
+        System.Drawing.Rectangle picker = Driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypePopover/**/XCUIElementTypeDatePicker")).Rect;
+        Assert.That(picker.Height, Is.GreaterThan(200), $"The time picker is {picker.Width} x {picker.Height} points, not the wheels");
 
         Driver.ExecuteScript("macos: keys", new Dictionary<string, object> { ["keys"] = new[] { "XCUIKeyboardKeyEscape" } });
     }

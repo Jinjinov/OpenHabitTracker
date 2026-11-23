@@ -9,8 +9,8 @@ public class AppDelegate : MauiUIApplicationDelegate
 
     public override bool FinishedLaunching(UIApplication application, NSDictionary? launchOptions)
     {
-        // Before the first page, so no time input can open the wheels style the Mac idiom forbids.
-        TimePickerStyle.UseInlineInsteadOfWheels();
+        // Before the first page, so no time input can open its wheels while the Mac idiom still forbids them.
+        TimePickerStyle.AllowWheels();
 
         return base.FinishedLaunching(application, launchOptions);
     }

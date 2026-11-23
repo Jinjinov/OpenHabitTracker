@@ -107,53 +107,53 @@ public class NotificationTests : MacCatalystTest
         ClosePopover();
     }
 
-    // The time input opens a popover with one picker, which draws the time as a pill 39 points from its right edge, vertically centred.
-    // A click on the pill selects the whole time for typing, and the picker's "Time Picker" button leaves the tree.
-    // The accessibility frames are final while the popover is still growing into place for two to three seconds, and a click then
-    // misses the pill or opens a nested editor, so the click waits until the popover's own screenshot stops changing.
+    // The time input opens a popover with an hour and a minute wheel, set to the current time.
     private void SetPlannedTime(DateTime time)
     {
         WaitForNativeElement(Labelled(StaticTextType, "Time")).Click();
 
-        By popover = MobileBy.IosClassChain("**/XCUIElementTypePopover");
-        By pickers = MobileBy.IosClassChain("**/XCUIElementTypePopover/**/XCUIElementTypeDatePicker");
+        Assert.That(WaitUntil(() => Driver.FindElements(Wheels).Count == 2 && PlannedTime() is not null, DefaultTimeout), Is.True, "The time input did not open an hour and a minute wheel");
 
-        WaitForNativeElement(popover);
-
-        string? image = null;
-        int stillReads = 0;
-        bool settled = WaitUntil(() =>
-        {
-            string current = Driver.FindElement(popover).GetScreenshot().AsBase64EncodedString;
-            stillReads = current == image ? stillReads + 1 : 0;
-            image = current;
-            return stillReads >= 2;
-        }, DefaultTimeout);
-
-        Assert.That(settled, Is.True, "The time picker's popover did not settle");
-
-        AppiumElement picker = Driver.FindElement(pickers);
-        System.Drawing.Rectangle frame = picker.Rect;
-
-        Driver.ExecuteScript("macos: click", new Dictionary<string, object>
-        {
-            ["elementId"] = picker.Id,
-            ["x"] = frame.Width - 39,
-            ["y"] = frame.Height / 2
-        });
-
-        Assert.That(WaitUntil(() => Driver.FindElements(Labelled(ButtonType, "Time Picker")).Count == 0, DefaultTimeout), Is.True, "The click did not select the time in the picker");
-
-        string digits = time.ToString("HHmm", CultureInfo.InvariantCulture);
-        Driver.ExecuteScript("macos: keys", new Dictionary<string, object> { ["keys"] = digits.Select(digit => digit.ToString()).ToArray() });
-
-        string expected = time.ToString("HH:mm", CultureInfo.InvariantCulture);
-        Assert.That(WaitUntil(() => Driver.FindElement(Labelled(StaticTextType, "Time")).GetAttribute("value") == expected, DefaultTimeout), Is.True, $"The planned time is not {expected}");
+        TurnWheel(0, time.Hour, planned => planned.Hour);
+        TurnWheel(1, time.Minute, planned => planned.Minute);
 
         ClosePopover();
+
+        Assert.That(PlannedTime(), Is.EqualTo(TimeOnly.FromDateTime(time)), "Closing the picker changed the planned time");
     }
 
-    // Escape closes a picker's popover, but the first one only ends the editing when the pill has focus,
+    private static readonly By Wheels = MobileBy.IosClassChain("**/XCUIElementTypePopover/**/XCUIElementTypePickerWheel");
+
+    // Turns a wheel by clicking the row below its middle, which moves it one row on, until the input shows the value.
+    // The wheel's own value is a row number, so the input is what is read. Digits are not typed, because the wheels
+    // do not always take keyboard focus from a click.
+    private void TurnWheel(int index, int target, Func<TimeOnly, int> part)
+    {
+        const int RowHeight = 32;
+
+        System.Drawing.Rectangle wheel = Driver.FindElements(Wheels)[index].Rect;
+
+        for (int row = 0; row < 60; row++)
+        {
+            TimeOnly? before = PlannedTime();
+
+            if (before is not null && part(before.Value) == target)
+                return;
+
+            Driver.ExecuteScript("macos: click", new Dictionary<string, object> { ["x"] = wheel.Left + wheel.Width / 2, ["y"] = wheel.Top + wheel.Height / 2 + RowHeight });
+
+            Assert.That(WaitUntil(() => PlannedTime() != before, DefaultTimeout), Is.True, $"The wheel did not turn from {before}");
+        }
+
+        Assert.Fail($"The wheel did not reach {target}");
+    }
+
+    private TimeOnly? PlannedTime()
+    {
+        return TimeOnly.TryParseExact(Driver.FindElement(Labelled(StaticTextType, "Time")).GetAttribute("value"), "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out TimeOnly time) ? time : null;
+    }
+
+    // Escape closes a picker's popover, but the first one only takes the keyboard focus from the wheels when they have it,
     // and a click elsewhere while the popover is open only dismisses it.
     private void ClosePopover()
     {
