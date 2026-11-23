@@ -411,6 +411,18 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.2.6" date="2026-11-11">
+      <description>
+        <p>Added multiple user accounts with separate data on the self-hosted server</p>
+        <p>Added import from Loop, HabitNow, Habitica and Habitify</p>
+        <p>Added decimal quantities in habits</p>
+        <p>Added date format and time format settings</p>
+        <p>Improved app start speed and online sync login speed</p>
+        <p>Fixed dates and times ignoring the device's regional format</p>
+        <p>Fixed a crash in the Linux version when opening the web inspector</p>
+        <p>Fixed online sync not connecting until restart when the app was opened with no connection</p>
+      </description>
+    </release>
     <release version="1.2.5" date="2026-09-09">
       <description>
         <p>Added habit statistics charts: target, history, calendar, best streaks and frequency</p>
