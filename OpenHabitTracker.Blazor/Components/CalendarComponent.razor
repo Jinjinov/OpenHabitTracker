@@ -36,9 +36,10 @@
             </div>
         }
 
+        @* Blazor sets an element reference only when it creates the element, so a row of another length is created again. *@
         @for (int row = 0; row < rowCount; row++)
         {
-            <div class="d-flex" role="row">
+            <div @key="(daysInRow, row)" class="d-flex" role="row">
                 @for (int day = 0; day < daysInRow; day++)
                 {
                     int cellIndex = row * daysInRow + day;

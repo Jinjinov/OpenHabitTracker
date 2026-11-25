@@ -524,6 +524,111 @@ public class CalendarComponentStoreTests
         });
     }
 
+    private async Task<string?> PressAndReadTheFocusedReference(IRenderedComponent<CalendarComponent> cut, string key)
+    {
+        ElementReference focused = default;
+        _app.JsInterop.FocusElement(Arg.Do<ElementReference>(x => focused = x)).Returns(ValueTask.CompletedTask);
+
+        await Press(cut, key);
+
+        return focused.Id;
+    }
+
+    // Walks the first row to its end and back: every cell has a reference of its own, and the same one on the way back.
+    private async Task CheckTheReferencesOfTheFirstRow(IRenderedComponent<CalendarComponent> cut, int length)
+    {
+        List<string?> forward = [await PressAndReadTheFocusedReference(cut, "Home")];
+
+        for (int i = 1; i < length; i++)
+            forward.Add(await PressAndReadTheFocusedReference(cut, "ArrowRight"));
+
+        List<string?> back = [await PressAndReadTheFocusedReference(cut, "End")];
+
+        for (int i = 1; i < length; i++)
+            back.Add(await PressAndReadTheFocusedReference(cut, "ArrowLeft"));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(forward, Has.None.Null.And.None.Empty);
+            Assert.That(forward, Is.Unique);
+            Assert.That(Enumerable.Reverse(back), Is.EqualTo(forward));
+        });
+    }
+
+    // A reference is set only when its element is created, so a cell kept on screen must not lose it when the strip changes its length.
+    [TestCase(350, 500)]
+    [TestCase(500, 350)]
+    [TestCase(350, 900)]
+    [TestCase(50, 350)]
+    public async Task Keys_AfterTheColumnWidthChanged_FocusTheCells(int before, int after)
+    {
+        await StartWith();
+
+        IRenderedComponent<CalendarComponent> cut = RenderStrip(columnWidth: before);
+
+        await CheckTheReferencesOfTheFirstRow(cut, before / 50);
+
+        cut.Render(parameters => parameters.Add(p => p.ColumnWidth, after));
+
+        Assert.That(Cells(cut), Has.Count.EqualTo(after / 50));
+
+        await CheckTheReferencesOfTheFirstRow(cut, after / 50);
+
+        cut.Render(parameters => parameters.Add(p => p.ColumnWidth, before));
+
+        await CheckTheReferencesOfTheFirstRow(cut, before / 50);
+    }
+
+    [TestCase(0, 5, 5)]
+    [TestCase(5, 0, 7)]
+    [TestCase(3, 6, 6)]
+    public async Task Keys_AfterTheSmallCalendarLengthChanged_FocusTheCells(int before, int after, int length)
+    {
+        await StartWith(maxSmallCalendarDays: before);
+
+        IRenderedComponent<CalendarComponent> cut = RenderStrip();
+
+        _app.ClientState.Settings.MaxSmallCalendarDays = after;
+        cut.Render();
+
+        Assert.That(Cells(cut), Has.Count.EqualTo(length));
+
+        await CheckTheReferencesOfTheFirstRow(cut, length);
+    }
+
+    [Test]
+    public async Task Keys_InTheMonthAfterItIsTurned_FocusTheCells()
+    {
+        await StartWith();
+
+        IRenderedComponent<CalendarComponent> cut = RenderMonth();
+
+        await CheckTheReferencesOfTheFirstRow(cut, 7);
+        await Click(cut, "Next month");
+        await CheckTheReferencesOfTheFirstRow(cut, 7);
+    }
+
+    [Test]
+    public async Task Render_StripOfAnotherLength_PreventsScrollKeysOnTheSameGridOnce()
+    {
+        await StartWith();
+
+        IRenderedComponent<CalendarComponent> cut = RenderStrip(columnWidth: 350);
+
+        string GridReference() => cut.Find("div[role='grid']").GetAttribute("blazor:elementReference")!;
+
+        cut.Render(parameters => parameters.Add(p => p.ColumnWidth, 500));
+
+        Assert.That(Cells(cut), Has.Count.EqualTo(10));
+
+        // a new grid element would carry the reference of its creation and have no key handler
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(GridReference(), Is.Empty);
+            await _app.JsInterop.Received(1).PreventScrollKeys(Arg.Any<ElementReference>());
+        });
+    }
+
     [Test]
     public async Task Render_PreventsScrollKeysOnTheGridOnce()
     {
