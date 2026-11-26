@@ -4169,6 +4169,23 @@
             ],
             "format": "date-time"
           },
+          "repeatWeekdays": {
+            "$ref": "#/components/schemas/Weekdays"
+          },
+          "repeatMonthDays": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "repeatMonthWeeks": {
+            "$ref": "#/components/schemas/MonthWeeks"
+          },
+          "repeatMonths": {
+            "$ref": "#/components/schemas/Months"
+          },
           "id": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
@@ -4261,6 +4278,23 @@
               "string"
             ],
             "format": "date-time"
+          },
+          "repeatWeekdays": {
+            "$ref": "#/components/schemas/Weekdays"
+          },
+          "repeatMonthDays": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "repeatMonthWeeks": {
+            "$ref": "#/components/schemas/MonthWeeks"
+          },
+          "repeatMonths": {
+            "$ref": "#/components/schemas/Months"
           },
           "timesDone": {
             "type": [
@@ -4388,6 +4422,12 @@
             ]
           }
         }
+      },
+      "Months": {
+        "type": "string"
+      },
+      "MonthWeeks": {
+        "type": "string"
       },
       "NoteEntity": {
         "type": "object",
@@ -5237,6 +5277,9 @@
             "format": "date-time"
           }
         }
+      },
+      "Weekdays": {
+        "type": "string"
       }
     }
   },

@@ -78,7 +78,7 @@ public class StoreIntegrationTests
             lines.Add($"category {category.Title}");
             lines.AddRange(category.Notes.Select(x => $"  note {x.Title} | {x.Content} | {x.Priority} | {x.IsDeleted}").Order(StringComparer.Ordinal));
             lines.AddRange(category.Tasks.Select(x => $"  task {x.Title} | {Stamp(x.PlannedAt)} | {Stamp(x.CompletedAt)} | {x.Duration} | items {string.Join(",", (x.Items ?? []).Select(i => $"{i.Title}:{Stamp(i.DoneAt)}"))}").Order(StringComparer.Ordinal));
-            lines.AddRange(category.Habits.Select(x => $"  habit {x.Title} | {x.RepeatCount}/{x.RepeatInterval} {x.RepeatPeriod} | {Stamp(x.LastTimeDoneAt)} | times {string.Join(",", (x.TimesDone ?? []).Select(t => $"{Stamp(t.StartedAt)}-{Stamp(t.CompletedAt)}").Order(StringComparer.Ordinal))} | items {string.Join(",", (x.Items ?? []).Select(i => i.Title))}").Order(StringComparer.Ordinal));
+            lines.AddRange(category.Habits.Select(x => $"  habit {x.Title} | {x.RepeatCount}/{x.RepeatInterval} {x.RepeatPeriod} {x.RepeatWeekdays} {x.RepeatMonthDays} {x.RepeatMonthWeeks} {x.RepeatMonths} | {Stamp(x.LastTimeDoneAt)} | times {string.Join(",", (x.TimesDone ?? []).Select(t => $"{Stamp(t.StartedAt)}-{Stamp(t.CompletedAt)}").Order(StringComparer.Ordinal))} | items {string.Join(",", (x.Items ?? []).Select(i => i.Title))}").Order(StringComparer.Ordinal));
         }
 
         return lines;
@@ -366,6 +366,39 @@ public class StoreIntegrationTests
                 Assert.That(habit.LastTimeDoneAt, Is.EqualTo(completedAt));
                 Assert.That(habit.TimesDoneByDay![completedAt.Date], Is.EqualTo(new[] { time }));
             });
+        }
+    }
+
+    [Test]
+    public async Task RepeatDays_SetInOneSession_AreThereInTheNext()
+    {
+        using ServiceProvider device = await NewDevice();
+
+        using (IServiceScope session = device.CreateScope())
+        {
+            IServiceProvider services = session.ServiceProvider;
+            await services.GetRequiredService<ClientState>().LoadSettings();
+
+            IHabitService habitService = services.GetRequiredService<IHabitService>();
+            await habitService.Initialize();
+            habitService.NewHabit = new HabitModel { Title = "Gym", RepeatPeriod = Period.Month };
+            await habitService.AddHabit();
+
+            await habitService.SetSelectedHabit(habitService.Habits!.Single().Id);
+            habitService.SelectedHabit!.RepeatWeekdays = Weekdays.Tuesday | Weekdays.Thursday;
+            habitService.SelectedHabit.RepeatMonthWeeks = MonthWeeks.First | MonthWeeks.Last;
+            await habitService.UpdateHabit();
+        }
+
+        using (IServiceScope session = device.CreateScope())
+        {
+            IHabitService habitService = session.ServiceProvider.GetRequiredService<IHabitService>();
+            await habitService.Initialize();
+
+            HabitModel habit = habitService.Habits!.Single();
+
+            Assert.That((habit.RepeatPeriod, habit.RepeatWeekdays, habit.RepeatMonthDays, habit.RepeatMonthWeeks, habit.RepeatMonths),
+                Is.EqualTo((Period.Month, Weekdays.Tuesday | Weekdays.Thursday, 0, MonthWeeks.First | MonthWeeks.Last, Months.None)));
         }
     }
 }

@@ -181,6 +181,25 @@ public class UserDataMergeTests
     }
 
     [Test]
+    public void Merge_HabitWithOtherRepeatDays_KeepsTheDaysOfTheOneThereAndANewOneBringsItsOwn()
+    {
+        HabitModel existing = new() { Id = 5, CategoryId = 1, Title = "Run", RepeatCount = 1, RepeatPeriod = Period.Week, RepeatWeekdays = Weekdays.Monday };
+        _habits.Add(existing);
+
+        HabitModel imported = new() { Title = "Run", RepeatCount = 2, RepeatPeriod = Period.Month, RepeatMonthDays = (1 << 0) | (1 << 14) };
+        HabitModel brandNew = new() { Title = "Swim", RepeatCount = 1, RepeatPeriod = Period.Year, RepeatMonths = Months.July, RepeatMonthWeeks = MonthWeeks.Last, RepeatWeekdays = Weekdays.Sunday };
+
+        UserDataMerge merge = Merge(new CategoryModel { Title = "Work", Habits = [imported, brandNew] });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(merge.Habits, Is.EqualTo(new[] { brandNew }));
+            Assert.That((brandNew.RepeatMonths, brandNew.RepeatMonthWeeks, brandNew.RepeatWeekdays), Is.EqualTo((Months.July, MonthWeeks.Last, Weekdays.Sunday)));
+            Assert.That((existing.RepeatCount, existing.RepeatPeriod, existing.RepeatWeekdays, existing.RepeatMonthDays), Is.EqualTo((1, Period.Week, Weekdays.Monday, 0)));
+        });
+    }
+
+    [Test]
     public void Merge_CompletionsByDay_AddsOnlyDaysTheHabitHasNoneOn()
     {
         _habits.Add(new HabitModel { Id = 5, CategoryId = 1, Title = "Run" });

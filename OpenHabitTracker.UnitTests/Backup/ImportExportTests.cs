@@ -263,6 +263,82 @@ public class ImportExportTests
         await AssertDateOnlyRoundTrips(clientState => new TsvImportExport(clientState), "backup.tsv");
     }
 
+    // --- repeat days ---
+
+    private static IEnumerable<TestCaseData> RepeatDaysCases()
+    {
+        foreach (string file in new[] { "backup.json", "backup.yaml" })
+        {
+            yield return new TestCaseData(file, Weekdays.None, 0, MonthWeeks.None, Months.None).SetArgDisplayNames(file, "none");
+            yield return new TestCaseData(file, Weekdays.Monday | Weekdays.Sunday, (1 << 0) | (1 << 30), MonthWeeks.Second | MonthWeeks.Last, Months.January | Months.December).SetArgDisplayNames(file, "some");
+            yield return new TestCaseData(file, (Weekdays)127, int.MaxValue, (MonthWeeks)31, (Months)4095).SetArgDisplayNames(file, "all");
+        }
+    }
+
+    [TestCaseSource(nameof(RepeatDaysCases))]
+    public async Task ExportThenImport_KeepsTheRepeatDays(string filename, Weekdays weekdays, int monthDays, MonthWeeks monthWeeks, Months months)
+    {
+        await _sut.LoadSettings();
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>(
+            [new CategoryEntity { Id = 1, Title = "Fitness" }]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
+            [new HabitEntity { Id = 1, CategoryId = 1, Title = "Gym", RepeatCount = 3, RepeatInterval = 1, RepeatPeriod = Period.Week,
+                RepeatWeekdays = weekdays, RepeatMonthDays = monthDays, RepeatMonthWeeks = monthWeeks, RepeatMonths = months }]));
+
+        string exported = filename.EndsWith(".json")
+            ? await new JsonImportExport(_sut).GetDataExportFileString()
+            : await new YamlImportExport(_sut).GetDataExportFileString();
+
+        EmptyTheData();
+
+        IReadOnlyList<HabitEntity>? added = null;
+        _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>())).Do(callInfo => added = callInfo.RequiredArg<IReadOnlyList<HabitEntity>>());
+
+        await Import(filename, exported);
+
+        Assert.That(added!.Select(x => (x.Title, x.RepeatCount, x.RepeatWeekdays, x.RepeatMonthDays, x.RepeatMonthWeeks, x.RepeatMonths)),
+            Is.EqualTo(new[] { ("Gym", 3, weekdays, monthDays, monthWeeks, months) }));
+    }
+
+    [TestCase("backup.json", """{ "Categories": [ { "Title": "Fitness", "Habits": [ { "Title": "Gym", "RepeatCount": 3, "RepeatPeriod": 1 } ] } ] }""")]
+    [TestCase("backup.yaml", "Categories:\n- Title: Fitness\n  Habits:\n  - Title: Gym\n    RepeatCount: 3\n    RepeatPeriod: Week\n")]
+    public async Task Import_FileFromBeforeTheRepeatDays_HasNoDays(string filename, string content)
+    {
+        await _sut.LoadSettings();
+
+        IReadOnlyList<HabitEntity>? added = null;
+        _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>())).Do(callInfo => added = callInfo.RequiredArg<IReadOnlyList<HabitEntity>>());
+
+        await Import(filename, content);
+
+        Assert.That(added!.Select(x => (x.Title, x.RepeatCount, x.RepeatPeriod, x.RepeatWeekdays, x.RepeatMonthDays, x.RepeatMonthWeeks, x.RepeatMonths)),
+            Is.EqualTo(new[] { ("Gym", 3, Period.Week, Weekdays.None, 0, MonthWeeks.None, Months.None) }));
+    }
+
+    // TSV carries the count and the period, and no days.
+    [Test]
+    public async Task Tsv_ExportThenImport_KeepsTheCountWithoutTheDays()
+    {
+        await _sut.LoadSettings();
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>(
+            [new CategoryEntity { Id = 1, Title = "Fitness" }]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
+            [new HabitEntity { Id = 1, CategoryId = 1, Title = "Gym", RepeatCount = 3, RepeatInterval = 1, RepeatPeriod = Period.Week,
+                RepeatWeekdays = Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday }]));
+
+        string tsv = await new TsvImportExport(_sut).GetDataExportFileString();
+
+        EmptyTheData();
+
+        IReadOnlyList<HabitEntity>? added = null;
+        _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>())).Do(callInfo => added = callInfo.RequiredArg<IReadOnlyList<HabitEntity>>());
+
+        await Import("backup.tsv", tsv);
+
+        Assert.That(added!.Select(x => (x.Title, x.RepeatCount, x.RepeatInterval, x.RepeatPeriod, x.RepeatWeekdays)),
+            Is.EqualTo(new[] { ("Gym", 3, 1, Period.Week, Weekdays.None) }));
+    }
+
     // --- date-only sentinel round-trip ---
 
     [Test]

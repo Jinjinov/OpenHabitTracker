@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using NSubstitute;
 using OpenHabitTracker.Blazor.Web;
 using OpenHabitTracker.Blazor.Web.Data;
@@ -27,6 +29,61 @@ public abstract class DataAccessContractTests
 
     // The stamp the store writes on every change, which other devices poll.
     protected abstract Task<DateTime> ReadLastChangeAt();
+
+    // A habit, a note and a task written by the version before the repeat days, then the store opened by this one.
+    // The rows are written as SQL, because the model of that version no longer exists.
+    protected async Task WriteContentBeforeTheRepeatDaysAndMigrate(DbContext context, string previousMigration, long userId)
+    {
+        await context.GetService<IMigrator>().MigrateAsync(previousMigration);
+
+        await context.Database.ExecuteSqlRawAsync(
+            "INSERT INTO \"Contents\" (\"Id\", \"UserId\", \"CategoryId\", \"Title\", \"Color\", \"Priority\", \"IsDeleted\", \"CreatedAt\", \"UpdatedAt\", \"Discriminator\", " +
+            "\"DisplayMetric\", \"Duration\", \"LastTimeDoneAt\", \"RepeatCount\", \"RepeatInterval\", \"RepeatPeriod\", \"StartAt\", \"TargetQuantity\") " +
+            $"VALUES (101, {userId}, 0, 'Run', 'bg-info', 4, 0, '2026-02-03 04:05:06', '2026-02-04 04:05:06', 'HabitEntity', 2, '00:45:00', '2026-02-05 06:07:08', 3, 2, 1, '2026-02-01 00:00:00', 2.75)");
+
+        await context.Database.ExecuteSqlRawAsync(
+            "INSERT INTO \"Contents\" (\"Id\", \"UserId\", \"CategoryId\", \"Title\", \"Color\", \"Priority\", \"IsDeleted\", \"CreatedAt\", \"UpdatedAt\", \"Discriminator\", \"Content\") " +
+            $"VALUES (102, {userId}, 0, 'Ideas', 'bg-warning', 2, 1, '2026-02-03 04:05:06', '2026-02-04 04:05:06', 'NoteEntity', 'line 1')");
+
+        await context.Database.ExecuteSqlRawAsync(
+            "INSERT INTO \"Contents\" (\"Id\", \"UserId\", \"CategoryId\", \"Title\", \"Color\", \"Priority\", \"IsDeleted\", \"CreatedAt\", \"UpdatedAt\", \"Discriminator\", " +
+            "\"CompletedAt\", \"TaskEntity_Duration\", \"PlannedAt\", \"StartedAt\") " +
+            $"VALUES (103, {userId}, 0, 'Pack', 'bg-danger', 5, 0, '2026-02-03 04:05:06', '2026-02-04 04:05:06', 'TaskEntity', '2026-02-06 10:00:00', '01:30:00', '2026-02-06 09:00:00', '2026-02-06 09:30:00')");
+
+        await Sut.Initialize();
+    }
+
+    protected async Task AssertContentBeforeTheRepeatDaysReadsWithoutDays()
+    {
+        DateTime created = new(2026, 2, 3, 4, 5, 6);
+        DateTime updated = new(2026, 2, 4, 4, 5, 6);
+
+        HabitEntity habit = (await Sut.GetHabit(101))!;
+        NoteEntity note = (await Sut.GetNote(102))!;
+        TaskEntity task = (await Sut.GetTask(103))!;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That((habit.RepeatWeekdays, habit.RepeatMonthDays, habit.RepeatMonthWeeks, habit.RepeatMonths), Is.EqualTo((Weekdays.None, 0, MonthWeeks.None, Months.None)));
+            Assert.That((habit.Title, habit.Color, habit.Priority, habit.IsDeleted, habit.CreatedAt, habit.UpdatedAt),
+                Is.EqualTo(("Run", "bg-info", Priority.High, false, created, updated)));
+            Assert.That((habit.DisplayMetric, habit.Duration, habit.LastTimeDoneAt, habit.RepeatCount, habit.RepeatInterval, habit.RepeatPeriod, habit.StartAt, habit.TargetQuantity),
+                Is.EqualTo((DisplayMetric.Quantity, (TimeOnly?)new TimeOnly(0, 45), (DateTime?)new DateTime(2026, 2, 5, 6, 7, 8), 3, 2, Period.Week, (DateTime?)new DateTime(2026, 2, 1), 2.75)));
+            Assert.That((note.Title, note.Color, note.Priority, note.IsDeleted, note.CreatedAt, note.UpdatedAt, note.Content),
+                Is.EqualTo(("Ideas", "bg-warning", Priority.Low, true, created, updated, "line 1")));
+            Assert.That((task.Title, task.Color, task.Priority, task.IsDeleted, task.CreatedAt, task.UpdatedAt),
+                Is.EqualTo(("Pack", "bg-danger", Priority.VeryHigh, false, created, updated)));
+            Assert.That((task.CompletedAt, task.Duration, task.PlannedAt, task.StartedAt),
+                Is.EqualTo(((DateTime?)new DateTime(2026, 2, 6, 10, 0, 0), (TimeOnly?)new TimeOnly(1, 30), (DateTime?)new DateTime(2026, 2, 6, 9, 0, 0), (DateTime?)new DateTime(2026, 2, 6, 9, 30, 0))));
+        });
+
+        habit.RepeatWeekdays = Weekdays.Tuesday;
+        await Sut.UpdateHabit(habit);
+
+        HabitEntity saved = (await Sut.GetHabit(101))!;
+
+        Assert.That((saved.RepeatWeekdays, saved.RepeatMonthDays, saved.RepeatCount, saved.TargetQuantity), Is.EqualTo((Weekdays.Tuesday, 0, 3, 2.75)));
+    }
 
     [SetUp]
     public async Task SetUpStore()
@@ -59,7 +116,11 @@ public abstract class DataAccessContractTests
         TargetQuantity = 2.75,
         Duration = new TimeOnly(0, 45),
         LastTimeDoneAt = _created.AddDays(1),
-        StartAt = _created.AddDays(-1)
+        StartAt = _created.AddDays(-1),
+        RepeatWeekdays = Weekdays.Monday | Weekdays.Friday,
+        RepeatMonthDays = (1 << 0) | (1 << 14),
+        RepeatMonthWeeks = MonthWeeks.Second | MonthWeeks.Last,
+        RepeatMonths = Months.March | Months.December
     };
 
     [Test]
@@ -87,8 +148,49 @@ public abstract class DataAccessContractTests
             Assert.That(stored.Duration, Is.EqualTo(new TimeOnly(0, 45)));
             Assert.That(stored.LastTimeDoneAt, Is.EqualTo(_created.AddDays(1)));
             Assert.That(stored.StartAt, Is.EqualTo(_created.AddDays(-1)));
+            Assert.That(stored.RepeatWeekdays, Is.EqualTo(Weekdays.Monday | Weekdays.Friday));
+            Assert.That(stored.RepeatMonthDays, Is.EqualTo(16385));
+            Assert.That(stored.RepeatMonthWeeks, Is.EqualTo(MonthWeeks.Second | MonthWeeks.Last));
+            Assert.That(stored.RepeatMonths, Is.EqualTo(Months.March | Months.December));
             Assert.That(stored.IsDeleted, Is.False);
         });
+    }
+
+    // Every bit the four sets can hold, and bits beyond them, which a newer version could write.
+    [Test]
+    public async Task AddHabit_RepeatDaysAtTheirHighest_AreStoredWithEveryBit()
+    {
+        HabitEntity habit = Habit();
+        habit.RepeatWeekdays = (Weekdays)int.MaxValue;
+        habit.RepeatMonthDays = int.MaxValue;
+        habit.RepeatMonthWeeks = (MonthWeeks)int.MaxValue;
+        habit.RepeatMonths = (Months)int.MaxValue;
+
+        await Sut.AddHabit(habit);
+
+        HabitEntity stored = (await Sut.GetHabit(habit.Id))!;
+
+        Assert.That((stored.RepeatWeekdays, stored.RepeatMonthDays, stored.RepeatMonthWeeks, stored.RepeatMonths),
+            Is.EqualTo(((Weekdays)int.MaxValue, int.MaxValue, (MonthWeeks)int.MaxValue, (Months)int.MaxValue)));
+    }
+
+    [Test]
+    public async Task UpdateHabit_RepeatDaysChangedAndCleared_StoresTheChange()
+    {
+        HabitEntity habit = Habit();
+        await Sut.AddHabit(habit);
+
+        habit = (await Sut.GetHabit(habit.Id))!;
+        habit.RepeatWeekdays = Weekdays.Sunday;
+        habit.RepeatMonthDays = 1 << 30;
+        habit.RepeatMonthWeeks = MonthWeeks.None;
+        habit.RepeatMonths = Months.None;
+        await Sut.UpdateHabit(habit);
+
+        HabitEntity stored = (await Sut.GetHabit(habit.Id))!;
+
+        Assert.That((stored.RepeatWeekdays, stored.RepeatMonthDays, stored.RepeatMonthWeeks, stored.RepeatMonths),
+            Is.EqualTo((Weekdays.Sunday, 1 << 30, MonthWeeks.None, Months.None)));
     }
 
     [Test]
@@ -541,6 +643,15 @@ public class LocalDataAccessContractTests : DataAccessContractTests
     }
 
     [Test]
+    public async Task Migrate_ContentFromBeforeTheRepeatDays_ReadsWithoutDaysAndKeepsEveryOtherColumn()
+    {
+        using (LocalDbContext context = new(_options))
+            await WriteContentBeforeTheRepeatDaysAndMigrate(context, "20261113133830_AddDateTimeFormatUserOwnershipAndDecimalQuantity", 0);
+
+        await AssertContentBeforeTheRepeatDaysReadsWithoutDays();
+    }
+
+    [Test]
     public async Task Users_AddGetUpdateRemove()
     {
         UserEntity user = new() { UserName = "second", Email = "second@example.com" };
@@ -627,6 +738,15 @@ public class ServerDataAccessContractTests : DataAccessContractTests
         using ServerDbContext context = new(_options);
 
         return (await context.Users.SingleAsync(x => x.Id == UserId)).LastChangeAt;
+    }
+
+    [Test]
+    public async Task Migrate_ContentFromBeforeTheRepeatDays_ReadsWithoutDaysAndKeepsEveryOtherColumn()
+    {
+        using (ServerDbContext context = new(_options))
+            await WriteContentBeforeTheRepeatDaysAndMigrate(context, "20261113133842_AddDateTimeFormatUserOwnershipAndDecimalQuantity", UserId);
+
+        await AssertContentBeforeTheRepeatDaysReadsWithoutDays();
     }
 
     [Test]

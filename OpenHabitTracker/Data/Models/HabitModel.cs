@@ -16,6 +16,15 @@ public class HabitModel : ItemsModel
 
     public DateTime? StartAt { get; set; }
 
+    public Weekdays RepeatWeekdays { get; set; }
+
+    // Day n of the month is bit n - 1.
+    public int RepeatMonthDays { get; set; }
+
+    public MonthWeeks RepeatMonthWeeks { get; set; }
+
+    public Months RepeatMonths { get; set; }
+
     public List<TimeModel>? TimesDone { get; set; }
 
     internal TimeSpan TotalTimeSpent { get; set; } // TODO:: save it ? (so LoadHabits doesn't need to call RefreshTimesDoneByDay)

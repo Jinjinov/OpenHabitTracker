@@ -602,7 +602,19 @@ namespace OpenHabitTracker.Blazor.Web.Migrations
                     b.Property<int>("RepeatInterval")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("RepeatMonthDays")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RepeatMonthWeeks")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RepeatMonths")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("RepeatPeriod")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RepeatWeekdays")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("StartAt")

@@ -47,6 +47,10 @@ public static class EntityToModel
         model.Duration = entity.Duration;
         model.LastTimeDoneAt = entity.LastTimeDoneAt;
         model.StartAt = entity.StartAt;
+        model.RepeatWeekdays = entity.RepeatWeekdays;
+        model.RepeatMonthDays = entity.RepeatMonthDays;
+        model.RepeatMonthWeeks = entity.RepeatMonthWeeks;
+        model.RepeatMonths = entity.RepeatMonths;
     }
 
     public static ItemModel ToModel(this ItemEntity entity)

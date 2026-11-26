@@ -91,6 +91,36 @@ public class RemoteDataAccessContractTests : DataAccessContractTests
         Assert.That(categories.Select(x => (x.Id, x.Title)), Is.EqualTo(stored.OrderBy(x => x.Id).Select(x => (x.Id, x.Title))));
     }
 
+    // An app version from before the repeat days sends a habit without them.
+    [Test]
+    public async Task AddHabit_FromAClientWithoutTheRepeatDays_StoresNoDays()
+    {
+        using StringContent body = new("""{ "Title": "Old client", "RepeatCount": 3, "RepeatInterval": 1, "RepeatPeriod": 1 }""", System.Text.Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await _httpClient.PostAsync($"{_server.BaseUrl}/api/DataAccess/habit", body);
+        response.EnsureSuccessStatusCode();
+
+        long id = long.Parse(await response.Content.ReadAsStringAsync());
+        HabitEntity stored = (await Sut.GetHabit(id))!;
+
+        Assert.That((stored.Title, stored.RepeatCount, stored.RepeatPeriod, stored.RepeatWeekdays, stored.RepeatMonthDays, stored.RepeatMonthWeeks, stored.RepeatMonths),
+            Is.EqualTo(("Old client", 3, Period.Week, Weekdays.None, 0, MonthWeeks.None, Months.None)));
+    }
+
+    // A newer server can send fields this client does not know.
+    [Test]
+    public async Task AddHabit_WithAPropertyTheServerDoesNotKnow_StoresTheRest()
+    {
+        using StringContent body = new("""{ "Title": "New client", "RepeatWeekdays": 5, "RepeatYearDays": 7 }""", System.Text.Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await _httpClient.PostAsync($"{_server.BaseUrl}/api/DataAccess/habit", body);
+        response.EnsureSuccessStatusCode();
+
+        HabitEntity stored = (await Sut.GetHabit(long.Parse(await response.Content.ReadAsStringAsync())))!;
+
+        Assert.That((stored.Title, stored.RepeatWeekdays), Is.EqualTo(("New client", Weekdays.Monday | Weekdays.Wednesday)));
+    }
+
     // The login fields belong to the device and are never sent to the server.
     [Test]
     public override Task UpdateLoginSettings_WritesOnlyTheLoginFields()
