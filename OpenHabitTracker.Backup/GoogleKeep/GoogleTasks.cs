@@ -88,14 +88,48 @@ public class Interval
     public WeeklyInterval? Weekly { get; set; }
 
     [JsonPropertyName("monthly")]
-    public JsonElement? Monthly { get; set; }
+    public MonthlyInterval? Monthly { get; set; }
 
     [JsonPropertyName("yearly")]
-    public JsonElement? Yearly { get; set; }
+    public YearlyInterval? Yearly { get; set; }
 }
 
 public class WeeklyInterval
 {
     [JsonPropertyName("day_of_week")]
     public List<string> DayOfWeek { get; set; } = [];
+}
+
+// Either a day of the month, or a weekday of a week of the month, as "the third Sunday".
+public class MonthlyInterval
+{
+    [JsonPropertyName("day_of_month")]
+    public int? DayOfMonth { get; set; }
+
+    [JsonPropertyName("monthly_day_of_week")]
+    public MonthlyDayOfWeek? MonthlyDayOfWeek { get; set; }
+}
+
+public class MonthlyDayOfWeek
+{
+    [JsonPropertyName("week_number")]
+    public int WeekNumber { get; set; }
+
+    [JsonPropertyName("day_of_week")]
+    public string DayOfWeek { get; set; } = string.Empty;
+}
+
+public class YearlyInterval
+{
+    [JsonPropertyName("date_of_year")]
+    public DateOfYear? DateOfYear { get; set; }
+}
+
+public class DateOfYear
+{
+    [JsonPropertyName("month")]
+    public int Month { get; set; }
+
+    [JsonPropertyName("day")]
+    public int Day { get; set; }
 }

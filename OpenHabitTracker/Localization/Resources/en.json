@@ -348,5 +348,14 @@
   "Exact notification timing": "Exact notification timing",
   "Open alarms & reminders": "Open alarms & reminders",
   "On": "On",
-  "Off": "Off"
+  "Off": "Off",
+  "Repeat on": "Repeat on",
+  "Weekdays": "Weekdays",
+  "First": "First",
+  "Second": "Second",
+  "Third": "Third",
+  "Fourth": "Fourth",
+  "Last": "Last",
+  "Next scheduled day": "Next scheduled day",
+  "scheduled": "scheduled"
 }

@@ -110,6 +110,8 @@ public class HabiticaImport
             habit.RepeatInterval = repeatInterval;
             habit.RepeatPeriod = repeatPeriod;
             habit.StartAt = Date(daily, "startDate") is DateTime startDate ? Local(startDate).Date : null;
+
+            SetDays(habit, daily);
             habit.Items = Checklist(daily, null);
             habit.TimesDone = History(daily)
                 .Where(entry => entry.TryGetProperty("completed", out JsonElement done) && done.ValueKind == JsonValueKind.True)
@@ -161,7 +163,65 @@ public class HabiticaImport
         habit.LastTimeDoneAt = habit.TimesDone.LastOrDefault()?.CompletedAt;
     }
 
-    // Weekdays become a count per week and days of the month a count per month, because a repeat rule cannot name days.
+    // The days a daily is due on, read in the order Habitica's shouldDo reads them: weeks of the month win over
+    // days of the month. weeksOfMonth counts the weekday from 0, and its fifth occurrence becomes the last.
+    // A day number Habitica skips in a shorter month is the last day of it here. Every X weeks is counted in
+    // Monday weeks from the start, where Habitica counts blocks of seven days from it.
+    private static void SetDays(HabitModel habit, JsonElement daily)
+    {
+        Weekdays weekdays = Weekdays.None;
+
+        if (daily.TryGetProperty("repeat", out JsonElement repeat) && repeat.ValueKind == JsonValueKind.Object)
+        {
+            for (int i = 0; i < _weekdays.Length; i++)
+            {
+                if (repeat.TryGetProperty(_weekdays[i], out JsonElement on) && on.ValueKind == JsonValueKind.True)
+                    weekdays |= (Weekdays)(1 << i);
+            }
+        }
+
+        switch (String(daily, "frequency"))
+        {
+            case "weekly":
+                habit.RepeatWeekdays = weekdays;
+                break;
+            case "monthly":
+                MonthWeeks monthWeeks = MonthWeeks.None;
+
+                foreach (int week in Numbers(daily, "weeksOfMonth"))
+                {
+                    if (week is >= 0 and <= 3)
+                        monthWeeks |= (MonthWeeks)(1 << week);
+                    else if (week == 4)
+                        monthWeeks |= MonthWeeks.Last;
+                }
+
+                if (Array(daily, "weeksOfMonth").Any())
+                {
+                    habit.RepeatMonthWeeks = monthWeeks;
+                    habit.RepeatWeekdays = weekdays;
+                }
+                else
+                {
+                    habit.RepeatMonthDays = Numbers(daily, "daysOfMonth").Where(day => day is >= 1 and <= 31).Aggregate(0, (days, day) => days | (1 << (day - 1)));
+                }
+                break;
+            case "yearly":
+                if (habit.StartAt is DateTime startAt)
+                {
+                    habit.RepeatMonths = (Months)(1 << (startAt.Month - 1));
+                    habit.RepeatMonthDays = 1 << (startAt.Day - 1);
+                }
+                break;
+        }
+
+        habit.KeepRepeatCountInStep(hadSchedule: false);
+    }
+
+    private static IEnumerable<int> Numbers(JsonElement element, string name) =>
+        Array(element, name).Where(x => x.ValueKind == JsonValueKind.Number && x.TryGetInt32(out _)).Select(x => x.GetInt32());
+
+    // A rule without a single day it can name stays a count per week, month or year.
     private static (int RepeatCount, int RepeatInterval, Period RepeatPeriod) DailyFrequency(JsonElement daily)
     {
         int everyX = Int(daily, "everyX") is int x ? Math.Max(1, x) : 1;

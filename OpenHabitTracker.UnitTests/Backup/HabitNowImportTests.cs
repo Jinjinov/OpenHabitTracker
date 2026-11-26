@@ -54,6 +54,54 @@ public class HabitNowImportTests
         });
     }
 
+    private static (int, int, Period, Weekdays, int) Days(HabitModel habit) => (habit.RepeatCount, habit.RepeatInterval, habit.RepeatPeriod, habit.RepeatWeekdays, habit.RepeatMonthDays);
+
+    [Test]
+    public async Task WeekdaysAndDaysOfTheMonth_AreTheDaysOfTheHabit()
+    {
+        ImportedData data = await Read("backup-frequency-tracks.hn");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Days(Habit(data, "Read a book")), Is.EqualTo((3, 1, Period.Week, Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday, 0)));
+            Assert.That(Days(Habit(data, "Pay bills")), Is.EqualTo((2, 1, Period.Month, Weekdays.None, (1 << 0) | (1 << 14))));
+            Assert.That(Days(Habit(data, "Drink water")), Is.EqualTo((1, 1, Period.Day, Weekdays.None, 0)));
+            Assert.That(Days(Habit(data, "Water plants")), Is.EqualTo((1, 3, Period.Day, Weekdays.None, 0)));
+            Assert.That(Days(Habit(data, "Gym")), Is.EqualTo((3, 1, Period.Week, Weekdays.None, 0)));
+        });
+    }
+
+    // Weekdays are java.util.Calendar numbers, 1 for Sunday to 7 for Saturday.
+    [TestCase("01", "1 7", 2, Weekdays.Sunday | Weekdays.Saturday, 0)]
+    [TestCase("01", "0 8 x 2", 1, Weekdays.Monday, 0)]
+    [TestCase("01", "2 2", 1, Weekdays.Monday, 0)]
+    [TestCase("01", "", 1, Weekdays.None, 0)]
+    [TestCase("04", "0 32 31", 1, Weekdays.None, 1 << 30)]
+    [TestCase("04", "15 15", 1, Weekdays.None, 1 << 14)]
+    [TestCase("04", "", 1, Weekdays.None, 0)]
+    public async Task Days_OutsideTheRealOnesAreLeftOutAndADayNamedTwiceIsOne(string repeat, string days, int count, Weekdays weekdays, int monthDays)
+    {
+        ImportedData data = await ReadText("1;1;Work;1", $"1;1;;Habit;1;0a1;B6a1;;0;{repeat};01;;{days};");
+
+        HabitModel habit = data.Categories.SelectMany(x => x.Habits).Single();
+
+        Assert.That((habit.RepeatCount, habit.RepeatWeekdays, habit.RepeatMonthDays), Is.EqualTo((count, weekdays, monthDays)));
+    }
+
+    [Test]
+    public async Task Tracks_TheDaysAreThoseOfTheRunningTrack()
+    {
+        ImportedData data = await ReadText("1;1;Work;1",
+            "70;-70;;Gym;1;0b1;B6a1;;0;00;01;;;|71;70;;Gym;1;0a1;B6a5;;0;01;01;;2 4;|" +
+            "80;-80;;Swim;1;0b1;B6a1;;0;01;01;;2 4;|81;80;;Swim;1;0a1;B6a5;;0;00;01;;;");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Days(Habit(data, "Gym")), Is.EqualTo((2, 1, Period.Week, Weekdays.Monday | Weekdays.Wednesday, 0)));
+            Assert.That(Days(Habit(data, "Swim")), Is.EqualTo((1, 1, Period.Day, Weekdays.None, 0)));
+        });
+    }
+
     [Test]
     public async Task DaysPerMonth_IsACountPerMonth()
     {

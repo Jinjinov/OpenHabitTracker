@@ -139,7 +139,9 @@ public class HabitNowImport(IStringLocalizer loc)
         string unit = fields.Length > 11 ? fields[11].Trim() : string.Empty;
         double target = fields.Length > 13 && double.TryParse(fields[13], NumberStyles.Float, CultureInfo.InvariantCulture, out double value) ? value : 0;
 
-        (int repeatCount, int repeatInterval, Period repeatPeriod) = Frequency(repeat, fields[10], fields.Length > 12 ? fields[12] : string.Empty);
+        string days = fields.Length > 12 ? fields[12] : string.Empty;
+
+        (int repeatCount, int repeatInterval, Period repeatPeriod) = Frequency(repeat, fields[10], days);
 
         HabitModel habit = new()
         {
@@ -152,6 +154,13 @@ public class HabitNowImport(IStringLocalizer loc)
             CreatedAt = now,
             UpdatedAt = now
         };
+
+        if (repeat == '1')
+            habit.RepeatWeekdays = ToWeekdays(days);
+        else if (repeat == '4')
+            habit.RepeatMonthDays = ToMonthDays(days);
+
+        habit.KeepRepeatCountInStep(hadSchedule: false);
 
         if (evaluation == '1')
         {
@@ -168,8 +177,35 @@ public class HabitNowImport(IStringLocalizer loc)
         return habit;
     }
 
-    // Every day and every N days map exactly, weekdays and days per week become a count per week, and days
-    // of the month and days per month a count per month, because a repeat rule cannot name days.
+    // Weekdays are java.util.Calendar numbers, 1 for Sunday to 7 for Saturday. Anything else is left out.
+    private static Weekdays ToWeekdays(string days)
+    {
+        Weekdays weekdays = Weekdays.None;
+
+        foreach (string day in days.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (int.TryParse(day, out int number) && number is >= 1 and <= 7)
+                weekdays |= (Weekdays)(1 << ((number + 5) % 7));
+        }
+
+        return weekdays;
+    }
+
+    private static int ToMonthDays(string days)
+    {
+        int monthDays = 0;
+
+        foreach (string day in days.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (int.TryParse(day, out int number) && number is >= 1 and <= 31)
+                monthDays |= 1 << (number - 1);
+        }
+
+        return monthDays;
+    }
+
+    // Every day and every N days map exactly, and so do weekdays and days of the month, whose count is
+    // their number. Days per week and days per month become a count per week or per month.
     private static (int RepeatCount, int RepeatInterval, Period RepeatPeriod) Frequency(char repeat, string parameter, string days)
     {
         int dayCount = Math.Max(1, days.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length);

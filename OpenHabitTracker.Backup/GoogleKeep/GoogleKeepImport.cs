@@ -203,8 +203,10 @@ public class GoogleKeepImport(IStringLocalizer loc)
         return local.TimeOfDay == TimeSpan.Zero ? local.Date + TaskModel.DateOnlySentinel : local;
     }
 
-    // A habit repeats a number of times per interval, so the weekdays of a weekly reminder become its count,
-    // and the day of the month, the day of the year and the end of the repeat are left out.
+    private static readonly string[] _weekdayNames = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
+
+    // The weekdays of a weekly reminder, the day or the weekday of the week of a monthly one, and the date of a
+    // yearly one. The names are those of the reminder's time zone, and the end of the repeat is left out.
     private static void SetRepeat(HabitModel habit, Interval interval)
     {
         habit.RepeatInterval = Math.Max(1, interval.IntervalMultiplier);
@@ -216,6 +218,38 @@ public class GoogleKeepImport(IStringLocalizer loc)
             { Yearly: not null } => (1, Period.Year),
             _ => (1, Period.Day)
         };
+
+        if (interval.Weekly is WeeklyInterval weeklyDays)
+        {
+            habit.RepeatWeekdays = weeklyDays.DayOfWeek.Aggregate(Weekdays.None, (weekdays, name) => weekdays | ToWeekday(name));
+        }
+        else if (interval.Monthly is MonthlyInterval monthly)
+        {
+            if (monthly.DayOfMonth is int day && day is >= 1 and <= 31)
+            {
+                habit.RepeatMonthDays = 1 << (day - 1);
+            }
+            else if (monthly.MonthlyDayOfWeek is MonthlyDayOfWeek dayOfWeek)
+            {
+                // A week number past the fourth is the last week of the month.
+                habit.RepeatMonthWeeks = dayOfWeek.WeekNumber is >= 1 and <= 4 ? (MonthWeeks)(1 << (dayOfWeek.WeekNumber - 1)) : MonthWeeks.Last;
+                habit.RepeatWeekdays = ToWeekday(dayOfWeek.DayOfWeek);
+            }
+        }
+        else if (interval.Yearly?.DateOfYear is DateOfYear date && date.Month is >= 1 and <= 12 && date.Day is >= 1 and <= 31)
+        {
+            habit.RepeatMonths = (Months)(1 << (date.Month - 1));
+            habit.RepeatMonthDays = 1 << (date.Day - 1);
+        }
+
+        habit.KeepRepeatCountInStep(hadSchedule: false);
+    }
+
+    private static Weekdays ToWeekday(string name)
+    {
+        int index = Array.IndexOf(_weekdayNames, name.ToUpperInvariant());
+
+        return index < 0 ? Weekdays.None : (Weekdays)(1 << index);
     }
 
     private static string GetContent(GoogleKeepNote googleKeepNote)

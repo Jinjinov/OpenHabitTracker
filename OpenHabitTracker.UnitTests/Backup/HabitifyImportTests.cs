@@ -46,6 +46,39 @@ public class HabitifyImportTests
     }
 
     [Test]
+    public void WeekdayHabit_HasItsDays()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That((Habit("Read").RepeatCount, Habit("Read").RepeatWeekdays), Is.EqualTo((3, Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday)));
+            Assert.That(Habit("Drink water").RepeatWeekdays, Is.EqualTo(Weekdays.None));
+            Assert.That(Habit("Run (km)").RepeatWeekdays, Is.EqualTo(Weekdays.None));
+        });
+    }
+
+    [Test]
+    public async Task Weekdays_AllNamesAndOnesHabitifyMayAddLater()
+    {
+        ImportedData data = await ReadBackup(
+            [
+                "'a', '{\"name\":\"All\",\"regularly\":\"weekDays-mon,tue,wed,thu,fri,sat,sun\"}', NULL, 1",
+                "'b', '{\"name\":\"Unknown beside\",\"regularly\":\"weekDays-mon,xyz\"}', NULL, 2",
+                "'c', '{\"name\":\"Only unknown\",\"regularly\":\"weekDays-xyz\"}', NULL, 3",
+                "'d', '{\"name\":\"Upper case\",\"regularly\":\"weekDays-MON,FRI\"}', NULL, 4"
+            ],
+            [],
+            []);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That((HabitIn(data, "All").RepeatCount, HabitIn(data, "All").RepeatWeekdays), Is.EqualTo((7, (Weekdays)127)));
+            Assert.That((HabitIn(data, "Unknown beside").RepeatCount, HabitIn(data, "Unknown beside").RepeatWeekdays), Is.EqualTo((1, Weekdays.Monday)));
+            Assert.That((HabitIn(data, "Only unknown").RepeatCount, HabitIn(data, "Only unknown").RepeatWeekdays), Is.EqualTo((1, Weekdays.None)));
+            Assert.That((HabitIn(data, "Upper case").RepeatCount, HabitIn(data, "Upper case").RepeatWeekdays), Is.EqualTo((2, Weekdays.Monday | Weekdays.Friday)));
+        });
+    }
+
+    [Test]
     public void RepetitionGoal_IsAHabitThatIsDone()
     {
         HabitModel drinkWater = Habit("Drink water");

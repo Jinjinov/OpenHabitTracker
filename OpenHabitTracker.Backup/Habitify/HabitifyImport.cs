@@ -78,6 +78,9 @@ public class HabitifyImport(IStringLocalizer loc)
                 UpdatedAt = now
             };
 
+            habit.RepeatWeekdays = ToWeekdays(String(root, "regularly"));
+            habit.KeepRepeatCountInStep(hadSchedule: false);
+
             if (NearestColor.TryParseHex(String(root, "accentColor"), out string color))
                 habit.Color = color;
 
@@ -158,7 +161,22 @@ public class HabitifyImport(IStringLocalizer loc)
         return value * from.Size / to.Size;
     }
 
-    // Weekdays become a count per week, because a repeat rule cannot name days.
+    private static readonly string[] _weekdayNames = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+
+    // The named weekdays of weekDays-mon,wed,fri; a name Habitify adds later is left out.
+    private static Weekdays ToWeekdays(string? regularly)
+    {
+        if (regularly is null || !regularly.StartsWith("weekDays-"))
+            return Weekdays.None;
+
+        return regularly["weekDays-".Length..]
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(name => System.Array.IndexOf(_weekdayNames, name.Trim().ToLowerInvariant()))
+            .Where(index => index >= 0)
+            .Aggregate(Weekdays.None, (weekdays, index) => weekdays | (Weekdays)(1 << index));
+    }
+
+    // Weekdays become a count per week, which is their number once they are read.
     private static (int RepeatCount, int RepeatInterval, Period RepeatPeriod) Frequency(string? regularly)
     {
         if (regularly is not null && regularly.StartsWith("weekDays-"))

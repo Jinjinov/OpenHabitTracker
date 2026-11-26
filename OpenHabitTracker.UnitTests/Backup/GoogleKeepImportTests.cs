@@ -155,6 +155,85 @@ public class GoogleKeepImportTests
         });
     }
 
+    // The Takeout's reminders: weekly on Wednesday, monthly on the 30th, yearly on November 29,
+    // every 2 weeks on Monday and Wednesday, and monthly on the third Sunday.
+    [TestCase("Reminder daily", 1, Weekdays.None, 0, MonthWeeks.None, Months.None)]
+    [TestCase("Reminder weekly", 1, Weekdays.Wednesday, 0, MonthWeeks.None, Months.None)]
+    [TestCase("Reminder monthly", 1, Weekdays.None, 1 << 29, MonthWeeks.None, Months.None)]
+    [TestCase("Reminder yearly", 1, Weekdays.None, 1 << 28, MonthWeeks.None, Months.November)]
+    [TestCase("Reminder custom forever", 2, Weekdays.Monday | Weekdays.Wednesday, 0, MonthWeeks.None, Months.None)]
+    [TestCase("Reminder custom until", 1, Weekdays.Sunday, 0, MonthWeeks.Third, Months.None)]
+    [TestCase("Reminder custom count", 1, Weekdays.None, 0, MonthWeeks.None, Months.None)]
+    public async Task Read_RepeatingReminder_HasTheDaysOfTheRule(string title, int repeatCount, Weekdays weekdays, int monthDays, MonthWeeks monthWeeks, Months months)
+    {
+        List<CategoryModel> categories = await ReadTakeout();
+
+        HabitModel habit = categories.SelectMany(x => x.Habits).Single(x => x.Title == title);
+
+        Assert.That((habit.RepeatCount, habit.RepeatWeekdays, habit.RepeatMonthDays, habit.RepeatMonthWeeks, habit.RepeatMonths),
+            Is.EqualTo((repeatCount, weekdays, monthDays, monthWeeks, months)));
+    }
+
+    // A note whose reminder repeats by the given interval, with the Tasks.json that holds it.
+    private static async Task<HabitModel> ReadRepeatingNote(string interval)
+    {
+        using MemoryStream stream = new();
+
+        using (ZipArchive archive = new(stream, ZipArchiveMode.Create, leaveOpen: true))
+        {
+            await using (StreamWriter note = new(archive.CreateEntry("Takeout/Keep/Habit.json").Open()))
+                await note.WriteAsync("""{"color":"DEFAULT","title":"Habit","textContent":"","userEditedTimestampUsec":1,"createdTimestampUsec":1,"tasks":[{"id":"abc"}]}""");
+
+            await using (StreamWriter tasks = new(archive.CreateEntry("Takeout/Tasks/Tasks.json").Open()))
+                await tasks.WriteAsync($$$"""
+                    {"kind":"tasks#taskLists","items":[{"items":[{"id":"YWJj","scheduled_time":[{"current":true,"start":"2026-11-16T08:00:00Z"}],"task_recurrence_id":"r1"}],
+                    "recurrences":[{"id":"r1","schedule":{"interval":{{{interval}}}}}]}]}
+                    """);
+        }
+
+        stream.Position = 0;
+
+        return (await new GoogleKeepImport(Localizer()).ReadDataFile(stream)).Categories.SelectMany(x => x.Habits).Single();
+    }
+
+    [TestCase("MONDAY", Weekdays.Monday)]
+    [TestCase("TUESDAY", Weekdays.Tuesday)]
+    [TestCase("WEDNESDAY", Weekdays.Wednesday)]
+    [TestCase("THURSDAY", Weekdays.Thursday)]
+    [TestCase("FRIDAY", Weekdays.Friday)]
+    [TestCase("SATURDAY", Weekdays.Saturday)]
+    [TestCase("SUNDAY", Weekdays.Sunday)]
+    public async Task Read_WeeklyReminder_EachWeekday(string name, Weekdays weekday)
+    {
+        HabitModel habit = await ReadRepeatingNote($$$"""{"interval_multiplier":1,"weekly":{"day_of_week":["{{{name}}}"]}}""");
+
+        Assert.That((habit.RepeatCount, habit.RepeatPeriod, habit.RepeatWeekdays), Is.EqualTo((1, Period.Week, weekday)));
+    }
+
+    [TestCase("""{"interval_multiplier":1,"weekly":{"day_of_week":["MONDAY","FUNDAY"]}}""", 1, Weekdays.Monday, 0, MonthWeeks.None, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"weekly":{"day_of_week":["FUNDAY"]}}""", 1, Weekdays.None, 0, MonthWeeks.None, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"weekly":{"day_of_week":[]}}""", 1, Weekdays.None, 0, MonthWeeks.None, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"monthly":{"day_of_month":1}}""", 1, Weekdays.None, 1, MonthWeeks.None, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"monthly":{"day_of_month":31}}""", 1, Weekdays.None, 1 << 30, MonthWeeks.None, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"monthly":{"day_of_month":0}}""", 1, Weekdays.None, 0, MonthWeeks.None, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"monthly":{"day_of_month":32}}""", 1, Weekdays.None, 0, MonthWeeks.None, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"monthly":{"monthly_day_of_week":{"week_number":1,"day_of_week":"SUNDAY"}}}""", 1, Weekdays.Sunday, 0, MonthWeeks.First, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"monthly":{"monthly_day_of_week":{"week_number":2,"day_of_week":"SUNDAY"}}}""", 1, Weekdays.Sunday, 0, MonthWeeks.Second, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"monthly":{"monthly_day_of_week":{"week_number":4,"day_of_week":"SUNDAY"}}}""", 1, Weekdays.Sunday, 0, MonthWeeks.Fourth, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"monthly":{"monthly_day_of_week":{"week_number":5,"day_of_week":"FRIDAY"}}}""", 1, Weekdays.Friday, 0, MonthWeeks.Last, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"monthly":{"monthly_day_of_week":{"week_number":-1,"day_of_week":"FRIDAY"}}}""", 1, Weekdays.Friday, 0, MonthWeeks.Last, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"monthly":{}}""", 1, Weekdays.None, 0, MonthWeeks.None, Months.None)]
+    [TestCase("""{"interval_multiplier":1,"yearly":{"date_of_year":{"month":2,"day":29}}}""", 1, Weekdays.None, 1 << 28, MonthWeeks.None, Months.February)]
+    [TestCase("""{"interval_multiplier":1,"yearly":{"date_of_year":{"month":13,"day":1}}}""", 1, Weekdays.None, 0, MonthWeeks.None, Months.None)]
+    [TestCase("""{"interval_multiplier":3,"daily":{}}""", 1, Weekdays.None, 0, MonthWeeks.None, Months.None)]
+    public async Task Read_Reminder_DaysOutsideTheRealOnesAreLeftOut(string interval, int repeatCount, Weekdays weekdays, int monthDays, MonthWeeks monthWeeks, Months months)
+    {
+        HabitModel habit = await ReadRepeatingNote(interval);
+
+        Assert.That((habit.RepeatCount, habit.RepeatWeekdays, habit.RepeatMonthDays, habit.RepeatMonthWeeks, habit.RepeatMonths),
+            Is.EqualTo((repeatCount, weekdays, monthDays, monthWeeks, months)));
+    }
+
     [Test]
     public async Task Read_RepeatingReminder_StartsTheHabitAtTheFirstReminder()
     {

@@ -78,6 +78,88 @@ public class HabiticaImportTests
         });
     }
 
+    private static (int, int, Period, Weekdays, int, MonthWeeks, Months) Days(HabitModel habit) =>
+        (habit.RepeatCount, habit.RepeatInterval, habit.RepeatPeriod, habit.RepeatWeekdays, habit.RepeatMonthDays, habit.RepeatMonthWeeks, habit.RepeatMonths);
+
+    // "Pay bills" is due on the 8th, the day its daysOfMonth names, which is when Habitica's shouldDo makes it due.
+    [Test]
+    public void Dailies_HaveTheDaysTheyAreDueOn()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That(Days(Habit("Read a book")), Is.EqualTo((3, 1, Period.Week, Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday, 0, MonthWeeks.None, Months.None)));
+            Assert.That(Days(Habit("Pay bills")), Is.EqualTo((1, 1, Period.Month, Weekdays.None, 1 << 7, MonthWeeks.None, Months.None)));
+            Assert.That(Days(Habit("Water plants")), Is.EqualTo((1, 3, Period.Day, Weekdays.None, 0, MonthWeeks.None, Months.None)));
+            Assert.That(Days(Habit("Drink water")), Is.EqualTo((1, 1, Period.Day, Weekdays.None, 0, MonthWeeks.None, Months.None)));
+        });
+    }
+
+    [TestCase("m", Weekdays.Monday)]
+    [TestCase("t", Weekdays.Tuesday)]
+    [TestCase("w", Weekdays.Wednesday)]
+    [TestCase("th", Weekdays.Thursday)]
+    [TestCase("f", Weekdays.Friday)]
+    [TestCase("s", Weekdays.Saturday)]
+    [TestCase("su", Weekdays.Sunday)]
+    public async Task Weekly_EachWeekday(string key, Weekdays weekday)
+    {
+        ImportedData data = await ReadJson($$"""{ "tasks": { "dailys": [ { "text": "d", "frequency": "weekly", "repeat": { "{{key}}": true } } ] } }""");
+
+        Assert.That(Days(HabitIn(data, "d")), Is.EqualTo((1, 1, Period.Week, weekday, 0, MonthWeeks.None, Months.None)));
+    }
+
+    [Test]
+    public async Task Schedules_ReadTheDaysAndKeepTheCountOfARuleWithoutThem()
+    {
+        ImportedData data = await ReadJson("""
+            { "tasks": { "dailys": [
+                { "text": "all seven", "frequency": "weekly", "repeat": { "m": true, "t": true, "w": true, "th": true, "f": true, "s": true, "su": true } },
+                { "text": "not true", "frequency": "weekly", "repeat": { "m": "yes", "w": true } },
+                { "text": "every two weeks", "frequency": "weekly", "everyX": 2, "repeat": { "m": true, "w": true } },
+                { "text": "no repeat", "frequency": "weekly" },
+                { "text": "first and last", "frequency": "monthly", "daysOfMonth": [ 1, 31 ] },
+                { "text": "outside", "frequency": "monthly", "daysOfMonth": [ 0, 32, "x" ] },
+                { "text": "every week", "frequency": "monthly", "weeksOfMonth": [ 0, 1, 2, 3, 4 ], "repeat": { "su": true } },
+                { "text": "weeks outside", "frequency": "monthly", "weeksOfMonth": [ 5, -1 ], "repeat": { "su": true } },
+                { "text": "both", "frequency": "monthly", "daysOfMonth": [ 1, 2, 3 ], "weeksOfMonth": [ 2 ], "repeat": { "s": true } },
+                { "text": "week without weekday", "frequency": "monthly", "weeksOfMonth": [ 1 ], "repeat": { "m": false } },
+                { "text": "no start", "frequency": "yearly" } ] } }
+            """);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Days(HabitIn(data, "all seven")), Is.EqualTo((7, 1, Period.Week, (Weekdays)127, 0, MonthWeeks.None, Months.None)));
+            Assert.That(Days(HabitIn(data, "not true")), Is.EqualTo((1, 1, Period.Week, Weekdays.Wednesday, 0, MonthWeeks.None, Months.None)));
+            Assert.That(Days(HabitIn(data, "every two weeks")), Is.EqualTo((2, 2, Period.Week, Weekdays.Monday | Weekdays.Wednesday, 0, MonthWeeks.None, Months.None)));
+            Assert.That(Days(HabitIn(data, "no repeat")), Is.EqualTo((7, 1, Period.Week, Weekdays.None, 0, MonthWeeks.None, Months.None)));
+            Assert.That(Days(HabitIn(data, "first and last")), Is.EqualTo((2, 1, Period.Month, Weekdays.None, (1 << 0) | (1 << 30), MonthWeeks.None, Months.None)));
+            Assert.That(Days(HabitIn(data, "outside")), Is.EqualTo((3, 1, Period.Month, Weekdays.None, 0, MonthWeeks.None, Months.None)));
+            Assert.That(Days(HabitIn(data, "every week")), Is.EqualTo((5, 1, Period.Month, Weekdays.Sunday, 0, (MonthWeeks)31, Months.None)));
+            Assert.That(Days(HabitIn(data, "weeks outside")), Is.EqualTo((2, 1, Period.Month, Weekdays.Sunday, 0, MonthWeeks.None, Months.None)));
+            Assert.That(Days(HabitIn(data, "both")), Is.EqualTo((1, 1, Period.Month, Weekdays.Saturday, 0, MonthWeeks.Third, Months.None)));
+            Assert.That(Days(HabitIn(data, "week without weekday")), Is.EqualTo((1, 1, Period.Month, Weekdays.None, 0, MonthWeeks.Second, Months.None)));
+            Assert.That(Days(HabitIn(data, "no start")), Is.EqualTo((1, 1, Period.Year, Weekdays.None, 0, MonthWeeks.None, Months.None)));
+        });
+    }
+
+    // The start is the UTC instant of local midnight, so at UTC+2 the 13th at 23:00 UTC is the 14th.
+    [Test]
+    public async Task Yearly_IsTheLocalMonthAndDayOfTheStart()
+    {
+        ImportedData data = await ReadJson("""
+            { "preferences": { "timezoneOffset": -120 },
+              "tasks": { "dailys": [
+                { "text": "leap day", "frequency": "yearly", "startDate": "2028-02-28T22:00:00.000Z" },
+                { "text": "pi day", "frequency": "yearly", "everyX": 2, "startDate": "2026-03-13T23:00:00.000Z" } ] } }
+            """);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Days(HabitIn(data, "leap day")), Is.EqualTo((1, 1, Period.Year, Weekdays.None, 1 << 28, MonthWeeks.None, Months.February)));
+            Assert.That(Days(HabitIn(data, "pi day")), Is.EqualTo((1, 2, Period.Year, Weekdays.None, 1 << 13, MonthWeeks.None, Months.March)));
+        });
+    }
+
     [Test]
     public void Daily_CompletedHistoryEntry_IsACompletionOnItsLocalDay()
     {
