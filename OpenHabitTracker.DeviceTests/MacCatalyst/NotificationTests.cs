@@ -22,7 +22,7 @@ public class NotificationTests : MacCatalystTest
 
         // Remind 1 minute before a planned task; turning reminders on asks for the permission the first time.
         OpenMenuEntry("Settings");
-        By remindSwitch = Labelled(SwitchType, "Remind before a planned task");
+        By remindSwitch = Labelled(SwitchType, "Remind before a planned task or habit");
         ScrollIntoWindow("Settings, region", remindSwitch).Click();
         AllowNotificationsIfAsked(remindSwitch);
 

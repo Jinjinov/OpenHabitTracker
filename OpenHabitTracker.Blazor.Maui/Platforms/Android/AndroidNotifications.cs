@@ -6,7 +6,7 @@ using Plugin.LocalNotification.Core.Models.AndroidOption;
 
 namespace OpenHabitTracker.Blazor.Maui;
 
-// Two channels rather than one, so the daily summary and task reminders can be silenced
+// Two channels rather than one, so the daily summary and the reminders can be silenced
 // independently in Android's own notification settings; that is why the app has no sound,
 // vibration or importance settings of its own.
 public sealed class AndroidNotifications : PluginNotifications
@@ -28,7 +28,7 @@ public sealed class AndroidNotifications : PluginNotifications
             new AndroidNotificationChannelRequest
             {
                 Id = ReminderChannelId,
-                Name = loc["Task reminders"],
+                Name = loc["Reminders"],
                 Importance = AndroidImportance.Default
             }
         ]);

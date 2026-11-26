@@ -271,6 +271,25 @@ public class SettingsPageTests
         Assert.That((await Stored()).NotificationLeadMinutes, Is.Null);
     }
 
+    // The reminder covers the planned time of a habit as well as of a task.
+    [Test]
+    public async Task Reminder_NamesTasksAndHabitsInItsLabelAndItsTour()
+    {
+        CanNotify(permissionGranted: true);
+
+        IRenderedComponent<Settings> cut = await Render();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Find("label[for='NotificationLead']").TextContent, Is.EqualTo("Remind before a planned task or habit"));
+            Assert.That(TourOf(cut).Select(x => x.Text), Does.Contain("Choose how long before the planned time of a task or a habit its reminder arrives, or turn it off."));
+            Assert.That(TourOf(cut).Select(x => x.Text), Does.Contain("Choose the time of day the daily summary arrives, or clear it to turn it off. It lists the day's tasks that have no planned time, the habits meant for that day, and habits over their interval. While reminders are on, a task or a habit with a planned time is left to its own reminder."));
+        });
+    }
+
+    private static OpenHabitTracker.Blazor.Components.TourStep[] TourOf(IRenderedComponent<Settings> cut) =>
+        (OpenHabitTracker.Blazor.Components.TourStep[])typeof(Settings).GetField("tourSteps", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!.GetValue(cut.Instance)!;
+
     [Test]
     public async Task ClearReminderTime_RemindsAtThePlannedMoment()
     {
