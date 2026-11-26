@@ -117,31 +117,16 @@ public class NotificationTests : AndroidTest
 
     // A reminder fires at its time, and tapping it opens its task: with the app in the background,
     // and with its process gone, where Android recreates the kept screen and the tap arrives before the page exists.
-    // am kill, not force-stop: a force-stopped app loses its alarms.
     [TestCase(false, TestName = "Reminder_TappedWithTheAppInTheBackground_OpensItsTask")]
     [TestCase(true, TestName = "Reminder_TappedWithTheAppKilled_OpensItsTask")]
     public void Reminder_Tapped_OpensItsTask(bool killed)
     {
         string title = $"Reminder {DateTime.Now:HHmmss}";
 
-        // The permissions are the setup here, not what is tested: granted directly, the reminder fires on its minute.
-        ClearApp();
-        Shell("pm", "grant", AppPackage, PostNotifications);
-        SetExactAlarmPermission("allow");
+        StartWithPermissionsGranted();
+        SetReminderLeadMinutes("1");
 
-        LaunchApp();
-        SwitchToWebView();
-
-        // Remind 1 minute before a planned task.
-        OpenSidebar("bi-gear");
-        WaitForElement("label[for='NotificationLead']").Click();
-        IWebElement minutes = Driver.FindElements(By.CssSelector("[data-settings-step-33] select"))[1];
-        RunScript("arguments[0].value = '1'; arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", minutes);
-        WaitForElement("#closeSidebar").Click();
-
-        // Planned on the device's clock 3 minutes ahead, rounded up to a whole minute, so the reminder lands at least 2 minutes out.
-        DateTime plannedAt = DeviceNow().AddMinutes(4);
-        plannedAt = new DateTime(plannedAt.Year, plannedAt.Month, plannedAt.Day, plannedAt.Hour, plannedAt.Minute, 0);
+        DateTime plannedAt = MinutesAheadOnTheDevice();
 
         OpenPage(TasksPage);
         AddItem(title);
@@ -153,6 +138,152 @@ public class NotificationTests : AndroidTest
         Driver.Context = NativeContext;
         Assert.That(WaitUntil(() => PendingAlarms().Any(alarm => alarm.Exact), DefaultTimeout), Is.True, "The reminder is not scheduled exactly");
 
+        TapNotification(title, killed);
+
+        SwitchToWebView();
+        Assert.That(WaitUntil(() => (RunScript("return location.pathname;") as string ?? "").StartsWith("/tasks/"), StartupTimeout), Is.True,
+            $"The tap opened {RunScript("return location.pathname;")}");
+        Assert.That(WaitForElement("#task-component [data-tasks-step-7] input").GetDomProperty("value"), Is.EqualTo(title));
+    }
+
+    // A habit with a planned time reminds like a task, on the reminders channel, and tapping the reminder opens the habit.
+    [TestCase(false, TestName = "HabitReminder_TappedWithTheAppInTheBackground_OpensItsHabit")]
+    [TestCase(true, TestName = "HabitReminder_TappedWithTheAppKilled_OpensItsHabit")]
+    public void HabitReminder_Tapped_OpensItsHabit(bool killed)
+    {
+        string title = $"Habit reminder {DateTime.Now:HHmmss}";
+
+        StartWithPermissionsGranted();
+        StopRemindingAfterTest();
+        SetReminderLeadMinutes("1");
+
+        DateTime plannedAt = MinutesAheadOnTheDevice();
+        Assume.That(plannedAt.Date, Is.EqualTo(DeviceNow().Date), "The planned time crosses midnight");
+
+        OpenPage(HabitsPage);
+        string route = AddHabitPlannedAt(title, plannedAt);
+
+        Driver.Context = NativeContext;
+        Assert.That(WaitUntil(() => PendingAlarms().Any(alarm => alarm.OrigWhen.StartsWith(plannedAt.AddMinutes(-1).ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)) && alarm.Exact), DefaultTimeout), Is.True,
+            "Today's reminder is not scheduled exactly: " + string.Join(", ", PendingAlarms()));
+
+        TapNotification(title, killed);
+
+        Assert.That(Regex.IsMatch(AppChannels(), @"mId='reminders', mName=Reminders\b"), Is.True, "The reminders channel is not named Reminders: " + AppChannels());
+
+        SwitchToWebView();
+        Assert.That(WaitUntil(() => RunScript("return location.pathname;") as string == route, StartupTimeout), Is.True,
+            $"The tap opened {RunScript("return location.pathname;")}, not {route}");
+        Assert.That(WaitForElement("#habit-component [data-habits-step-8] > input.form-control").GetDomProperty("value"), Is.EqualTo(title));
+    }
+
+    // A habit done today needs no reminder today; tomorrow's stays.
+    [Test]
+    public void HabitReminder_DoneToday_TodaysReminderIsRemovedAndTomorrowsStays()
+    {
+        string title = $"Done before its time {DateTime.Now:HHmmss}";
+
+        StartWithPermissionsGranted();
+        StopRemindingAfterTest();
+        SetReminderLeadMinutes("1");
+
+        DateTime plannedAt = MinutesAheadOnTheDevice(30);
+        Assume.That(plannedAt.Date, Is.EqualTo(DeviceNow().Date), "The planned time crosses midnight");
+
+        string today = plannedAt.AddMinutes(-1).ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+        string tomorrow = plannedAt.AddDays(1).AddMinutes(-1).ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
+        OpenPage(HabitsPage);
+        AddHabitPlannedAt(title, plannedAt);
+
+        Driver.Context = NativeContext;
+        Assert.That(WaitUntil(() => PendingAlarms() is List<(string OrigWhen, bool Exact)> alarms && alarms.Any(alarm => alarm.OrigWhen.StartsWith(today)) && alarms.Any(alarm => alarm.OrigWhen.StartsWith(tomorrow)), DefaultTimeout), Is.True,
+            "Today's and tomorrow's reminders are not scheduled: " + string.Join(", ", PendingAlarms()));
+
+        SwitchToWebView();
+        CompleteToday(title);
+
+        Driver.Context = NativeContext;
+        Assert.That(WaitUntil(() => PendingAlarms() is List<(string OrigWhen, bool Exact)> alarms && !alarms.Any(alarm => alarm.OrigWhen.StartsWith(today)) && alarms.Any(alarm => alarm.OrigWhen.StartsWith(tomorrow)), DefaultTimeout), Is.True,
+            "Done today did not leave only tomorrow's reminder: " + string.Join(", ", PendingAlarms()));
+    }
+
+    // Each completion rebuilds the whole schedule before the row shows it, and ten daily habits with a planned time fill the budget of 64 every time.
+    [Test]
+    [Explicit("Measurement: prints how long a click on a day takes to show, with ten habits reminding and with reminders off")]
+    public void DayClick_TenHabitsReminding_MeasuredAgainstRemindersOff()
+    {
+        StartWithPermissionsGranted();
+        StopRemindingAfterTest();
+        SetReminderLeadMinutes("1");
+
+        OpenPage(HabitsPage);
+
+        for (int i = 0; i < 10; i++)
+            AddHabitPlannedAt($"Reminding {i:D2}", DateTime.Today.AddHours(12).AddMinutes(i));
+
+        for (int i = 0; i < 10; i++)
+            AddItem($"Clicked {i:D2}");
+
+        Driver.Context = NativeContext;
+        Assert.That(WaitUntil(() => PendingAlarms().Count == 64, DefaultTimeout), Is.True, $"The budget is not full: {PendingAlarms().Count} alarms");
+
+        SwitchToWebView();
+        List<(double Cell, double Row)> reminding = Enumerable.Range(0, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
+
+        OpenSidebar("bi-gear");
+        WaitForElement("[data-settings-step-33] button").Click();
+        WaitForElement("#closeSidebar").Click();
+
+        Driver.Context = NativeContext;
+        Assert.That(WaitUntil(() => PendingAlarms().Count == 0, DefaultTimeout), Is.True, "Reminders off left alarms");
+
+        SwitchToWebView();
+        List<(double Cell, double Row)> off = Enumerable.Range(5, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
+
+        TestContext.Out.WriteLine($"Reminding: cell {string.Join(", ", reminding.Select(click => $"{click.Cell:F0}"))} ms, row {string.Join(", ", reminding.Select(click => $"{click.Row:F0}"))} ms");
+        TestContext.Out.WriteLine($"Off: cell {string.Join(", ", off.Select(click => $"{click.Cell:F0}"))} ms, row {string.Join(", ", off.Select(click => $"{click.Row:F0}"))} ms");
+    }
+
+    // A daily habit's reminders would go on firing on the device every day.
+    // A force-stop drops the app's alarms, keeps its data, and keeps it from the boot broadcast until it is launched again.
+    private void StopRemindingAfterTest()
+    {
+        RestoreAfterTest(() => Shell("am", "force-stop", AppPackage));
+    }
+
+    // The permissions are the setup, not what is tested: granted directly, a reminder fires on its minute.
+    private void StartWithPermissionsGranted()
+    {
+        ClearApp();
+        Shell("pm", "grant", AppPackage, PostNotifications);
+        SetExactAlarmPermission("allow");
+
+        LaunchApp();
+        SwitchToWebView();
+    }
+
+    // Web context: turns on the reminder before a planned time and sets its minutes.
+    private void SetReminderLeadMinutes(string minutes)
+    {
+        OpenSidebar("bi-gear");
+        WaitForElement("label[for='NotificationLead']").Click();
+        SetChangedValue(Driver.FindElements(By.CssSelector("[data-settings-step-33] select"))[1], minutes);
+        WaitForElement("#closeSidebar").Click();
+    }
+
+    // At least the given minutes ahead on the device's clock, on a whole minute.
+    private DateTime MinutesAheadOnTheDevice(int minutes = 3)
+    {
+        DateTime ahead = DeviceNow().AddMinutes(minutes + 1);
+
+        return new DateTime(ahead.Year, ahead.Month, ahead.Day, ahead.Hour, ahead.Minute, 0);
+    }
+
+    // Native context: leaves the app, optionally kills its process, waits in the notification shade for the notification and taps it.
+    // am kill, not force-stop: a force-stopped app loses its alarms.
+    private void TapNotification(string title, bool killed)
+    {
         Driver.ExecuteScript("mobile: pressKey", new Dictionary<string, object> { ["keycode"] = 3 });
         // am kill stops only an app the system already treats as a cached background process, which takes a moment after Home.
         if (killed)
@@ -168,11 +299,6 @@ public class NotificationTests : AndroidTest
         By notification = MobileBy.AndroidUIAutomator($"new UiSelector().text(\"{title}\")");
         Assert.That(WaitUntil(() => Driver.FindElements(notification).Count > 0, TimeSpan.FromMinutes(5)), Is.True, "The reminder never arrived");
         Driver.FindElement(notification).Click();
-
-        SwitchToWebView();
-        Assert.That(WaitUntil(() => (RunScript("return location.pathname;") as string ?? "").StartsWith("/tasks/"), StartupTimeout), Is.True,
-            $"The tap opened {RunScript("return location.pathname;")}");
-        Assert.That(WaitForElement("#task-component [data-tasks-step-7] input").GetDomProperty("value"), Is.EqualTo(title));
     }
 
     // A habit meant for today is in today's summary whatever its ratio, and a habit meant for today that is done is not.
@@ -182,13 +308,7 @@ public class NotificationTests : AndroidTest
         string listed = $"Meant for today {DateTime.Now:HHmmss}";
         string done = $"Done today {DateTime.Now:HHmmss}";
 
-        // The permissions are the setup here, not what is tested: granted directly, the summary fires on its minute.
-        ClearApp();
-        Shell("pm", "grant", AppPackage, PostNotifications);
-        SetExactAlarmPermission("allow");
-
-        LaunchApp();
-        SwitchToWebView();
+        StartWithPermissionsGranted();
         OpenPage(HabitsPage);
 
         // The done habit is added first, so its row is the only one and today's cell is its own.

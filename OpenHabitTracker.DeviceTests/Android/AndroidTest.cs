@@ -55,7 +55,17 @@ public abstract class AndroidTest : DeviceTest<AndroidDriver>
         // The emulator stalls for tens of seconds under memory pressure, longer than adb's default 20 seconds.
         options.AddAdditionalAppiumOption("adbExecTimeout", 90000);
 
+        // An install over USB takes over a minute on the A52s, while Appium gives its own server 20 seconds.
+        options.AddAdditionalAppiumOption("uiautomator2ServerInstallTimeout", 180000);
+
         Driver = new AndroidDriver(AppiumServer, options, TimeSpan.FromMinutes(5));
+
+        // A phone's screen sleeps after its timeout, and on a sleeping screen the app never renders its page.
+        // So the screen is woken and kept on while plugged in, until the session ends.
+        _stayOnWhilePluggedIn ??= Adb("shell", "settings", "get", "global", "stay_on_while_plugged_in").Trim();
+        Adb("shell", "settings", "put", "global", "stay_on_while_plugged_in", "7");
+        Adb("shell", "input", "keyevent", "KEYCODE_WAKEUP");
+        Adb("shell", "wm", "dismiss-keyguard");
 
         // The emulator has a hardware keyboard, and once typed key events arrive from it (Chromedriver's typing is one source),
         // Gboard keeps opening as a small toolbar instead of the soft keyboard a phone shows, until it restarts.
@@ -118,14 +128,23 @@ public abstract class AndroidTest : DeviceTest<AndroidDriver>
             return;
 
         Driver.ExecuteScript("mobile: removeApp", new Dictionary<string, object> { ["appId"] = AppPackage });
-        Driver.ExecuteScript("mobile: installApp", new Dictionary<string, object> { ["appPath"] = BuildUnderTest });
+        Driver.ExecuteScript("mobile: installApp", new Dictionary<string, object> { ["appPath"] = BuildUnderTest, ["timeout"] = 180000 });
     }
+
+    // The device's own setting, read at the first session and put back when the session ends.
+    private static string? _stayOnWhilePluggedIn;
 
     [OneTimeTearDown]
     public void EndSession()
     {
         Driver?.Quit();
         Driver?.Dispose();
+
+        if (_stayOnWhilePluggedIn is not null)
+        {
+            Adb("shell", "settings", "put", "global", "stay_on_while_plugged_in", _stayOnWhilePluggedIn);
+            _stayOnWhilePluggedIn = null;
+        }
     }
 
     // The UiAutomator2 server inside the emulator can crash with the emulator's system; the session is dead from then on,

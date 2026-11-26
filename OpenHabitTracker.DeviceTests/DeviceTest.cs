@@ -121,6 +121,63 @@ public abstract class DeviceTest<TDriver> where TDriver : AppiumDriver
         Assert.That(WaitUntil(() => !WaitForElement("[data-habits-step-3]").Text.Contains(NeverDone), DefaultTimeout), Is.True, "The completion was not saved");
     }
 
+    // Web context only, on the habits page: adds a habit, gives it the time of day, and returns the route of its detail.
+    protected string AddHabitPlannedAt(string title, DateTime plannedAt)
+    {
+        AddItem(title);
+        Row(HabitRows, title)!.Click();
+        SetChangedValue(WaitForElement("#habit-component [data-habits-step-17] input[type='time']"), plannedAt.ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture));
+
+        string route = RunScript("return location.pathname;") as string ?? "";
+
+        WaitForElement("[data-habits-step-11]").Click();
+
+        // Selecting a habit closes the add form, so a form opened before the close has landed closes again.
+        new WebDriverWait(Driver, DefaultTimeout).Until(driver => driver.FindElements(By.CssSelector("#habit-component")).Count == 0);
+
+        return route;
+    }
+
+    // Web context only: clicks today's cell in the habit row's small calendar from script and returns, in milliseconds,
+    // when the cell showed the completion, in its label, which carries the count, and when the row's elapsed time did.
+    // The cell renders at the first save; the row renders once the whole click is handled, the rebuild of the notifications included.
+    // The habit must never have been done, so its elapsed time changes.
+    // A completion can move the row, and the rows' elements are reused by position, so the row is found again at each change of the page.
+    protected (double Cell, double Row) MeasureDayClick(string habitTitle)
+    {
+        RunScript("""
+            const title = arguments[0];
+            const todayCell = index => document.querySelectorAll("[data-habits-step-6] button[role='gridcell'].border-primary-subtle")[index];
+            const elapsed = index => document.querySelectorAll('[data-habits-step-3]')[index];
+            const rowIndex = () => [...document.querySelectorAll('[data-habits-step-2]')].findIndex(row => row.getAttribute('title') === title);
+            const before = todayCell(rowIndex()).getAttribute('aria-label');
+            const measured = window.deviceTestDayClick = { cell: null, row: null };
+            let start = 0;
+            const observer = new MutationObserver(() => {
+                const index = rowIndex();
+                const now = performance.now() - start;
+                if (measured.cell === null && todayCell(index).getAttribute('aria-label') !== before)
+                    measured.cell = now;
+                if (measured.row === null && !elapsed(index).textContent.includes('⊘'))
+                    measured.row = now;
+                if (measured.cell !== null && measured.row !== null)
+                    observer.disconnect();
+            });
+            observer.observe(document.querySelector('main#main-content'), { childList: true, characterData: true, subtree: true });
+            start = performance.now();
+            todayCell(rowIndex()).click();
+            """, habitTitle);
+
+        Dictionary<string, object>? measured = null;
+
+        bool shown = WaitUntil(() => (measured = RunScript("return window.deviceTestDayClick.row === null ? null : window.deviceTestDayClick;") as Dictionary<string, object>) is not null, DefaultTimeout);
+
+        Assert.That(shown, Is.True, $"The row of {habitTitle} never showed the completion");
+        Assert.That(measured!["cell"], Is.Not.Null, $"The cell of {habitTitle} never showed the completion");
+
+        return (Convert.ToDouble(measured["cell"]), Convert.ToDouble(measured["row"]));
+    }
+
     // Web context only: fails if the page shows an error. The error boundaries and the database error render role="alert",
     // and an exception outside them shows Blazor's own #blazor-error-ui bar.
     protected void AssertNoErrorShown()

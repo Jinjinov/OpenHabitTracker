@@ -17,15 +17,9 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
         StartApp();
         SwitchToWebView();
 
-        // Remind 1 minute before a planned task.
-        OpenSidebar("bi-gear");
-        WaitForElement("label[for='NotificationLead']").Click();
-        SetChangedValue(Driver.FindElements(By.CssSelector("[data-settings-step-33] select"))[1], "1");
-        WaitForElement("#closeSidebar").Click();
+        SetReminderLeadMinutes("1");
 
-        // Planned 3 minutes ahead, rounded down to a whole minute, so the reminder lands at least a minute out.
-        DateTime plannedAt = DateTime.Now.AddMinutes(3);
-        plannedAt = new DateTime(plannedAt.Year, plannedAt.Month, plannedAt.Day, plannedAt.Hour, plannedAt.Minute, 0);
+        DateTime plannedAt = MinutesAhead(3);
 
         OpenPage(TasksPage);
         AddItem(title);
@@ -42,6 +36,120 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
         AttachToApp();
         Assert.That(WaitUntil(() => Driver.FindElements(By.TagName("Edit")).Any(edit => edit.GetAttribute("Value") == title), StartupTimeout), Is.True,
             "The click did not open the reminder's task");
+    }
+
+    // A habit's reminder fires at its time with the app closed, and clicking it starts the app on the habit.
+    [Test]
+    public void HabitReminder_ClickedWithTheAppClosed_OpensItsHabit()
+    {
+        string title = $"Habit reminder {DateTime.Now:HHmmss}";
+
+        ClearData();
+        AfterTest(RemoveScheduledToasts);
+        StartApp();
+        SwitchToWebView();
+
+        SetReminderLeadMinutes("1");
+
+        DateTime plannedAt = MinutesAhead(3);
+        Assume.That(plannedAt.Date, Is.EqualTo(DateTime.Today), "The planned time crosses midnight");
+
+        OpenPage(HabitsPage);
+        AddHabitPlannedAt(title, plannedAt);
+
+        CloseApp();
+
+        ClickNotification(title, plannedAt);
+
+        // The habit's detail shows the title in its title box, which WebView2 exposes to UI Automation as an edit's value.
+        AttachToApp();
+        Assert.That(WaitUntil(() => Driver.FindElements(By.TagName("Edit")).Any(edit => edit.GetAttribute("Value") == title), StartupTimeout), Is.True,
+            "The click did not open the reminder's habit");
+    }
+
+    // The queue holds a habit's reminder for each day ahead; done today, today's leaves the queue and tomorrow's stays.
+    [Test]
+    public void HabitReminder_DoneToday_TodaysToastLeavesTheQueue()
+    {
+        string title = $"Done before its time {DateTime.Now:HHmmss}";
+
+        ClearData();
+        AfterTest(RemoveScheduledToasts);
+        StartApp();
+        SwitchToWebView();
+
+        SetReminderLeadMinutes("1");
+
+        DateTime plannedAt = MinutesAhead(30);
+        Assume.That(plannedAt.Date, Is.EqualTo(DateTime.Today), "The planned time crosses midnight");
+
+        OpenPage(HabitsPage);
+        string habitId = AddHabitPlannedAt(title, plannedAt).Split('/').Last();
+        string today = $"habit-{habitId}-{DateTime.Today:yyyyMMdd}";
+        string tomorrow = $"habit-{habitId}-{DateTime.Today.AddDays(1):yyyyMMdd}";
+
+        Assert.That(WaitUntil(() => ScheduledToasts() is Dictionary<string, string> toasts && toasts.ContainsKey(today) && toasts.ContainsKey(tomorrow), DefaultTimeout), Is.True,
+            $"Today's and tomorrow's reminders are not in the queue: {string.Join(", ", ScheduledToasts().Keys)}");
+        Assert.That(ScheduledToasts()[today], Does.Contain(title));
+
+        CompleteToday(title);
+
+        Assert.That(WaitUntil(() => ScheduledToasts() is Dictionary<string, string> toasts && !toasts.ContainsKey(today) && toasts.ContainsKey(tomorrow), DefaultTimeout), Is.True,
+            $"Done today did not leave only tomorrow's reminder: {string.Join(", ", ScheduledToasts().Keys)}");
+    }
+
+    // Each completion rebuilds the whole queue before the row shows it, and ten daily habits with a planned time are a toast for each of them on each day ahead.
+    [Test]
+    [Explicit("Measurement: prints how long a click on a day takes to show, with ten habits reminding and with reminders off")]
+    public void DayClick_TenHabitsReminding_MeasuredAgainstRemindersOff()
+    {
+        ClearData();
+        AfterTest(RemoveScheduledToasts);
+        StartApp();
+        SwitchToWebView();
+
+        SetReminderLeadMinutes("1");
+
+        OpenPage(HabitsPage);
+
+        for (int i = 0; i < 10; i++)
+            AddHabitPlannedAt($"Reminding {i:D2}", DateTime.Today.AddHours(12).AddMinutes(i));
+
+        for (int i = 0; i < 10; i++)
+            AddItem($"Clicked {i:D2}");
+
+        int queued = ScheduledToasts().Count;
+
+        List<(double Cell, double Row)> reminding = Enumerable.Range(0, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
+
+        OpenSidebar("bi-gear");
+        WaitForElement("[data-settings-step-33] button").Click();
+        WaitForElement("#closeSidebar").Click();
+
+        Assert.That(WaitUntil(() => ScheduledToasts().Count == 0, DefaultTimeout), Is.True, "Reminders off left toasts in the queue");
+
+        List<(double Cell, double Row)> off = Enumerable.Range(5, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
+
+        TestContext.Out.WriteLine($"{Host}, {queued} toasts queued");
+        TestContext.Out.WriteLine($"Reminding: cell {string.Join(", ", reminding.Select(click => $"{click.Cell:F0}"))} ms, row {string.Join(", ", reminding.Select(click => $"{click.Row:F0}"))} ms");
+        TestContext.Out.WriteLine($"Off: cell {string.Join(", ", off.Select(click => $"{click.Cell:F0}"))} ms, row {string.Join(", ", off.Select(click => $"{click.Row:F0}"))} ms");
+    }
+
+    // Web context: turns on the reminder before a planned time and sets its minutes.
+    private void SetReminderLeadMinutes(string minutes)
+    {
+        OpenSidebar("bi-gear");
+        WaitForElement("label[for='NotificationLead']").Click();
+        SetChangedValue(Driver.FindElements(By.CssSelector("[data-settings-step-33] select"))[1], minutes);
+        WaitForElement("#closeSidebar").Click();
+    }
+
+    // At least the given minutes ahead, on a whole minute.
+    private static DateTime MinutesAhead(int minutes)
+    {
+        DateTime ahead = DateTime.Now.AddMinutes(minutes + 1);
+
+        return new DateTime(ahead.Year, ahead.Month, ahead.Day, ahead.Hour, ahead.Minute, 0);
     }
 
     // The summaries waiting in Windows' queue list a habit on the days it is meant for, and a changed weekday moves it to another day's summary.
