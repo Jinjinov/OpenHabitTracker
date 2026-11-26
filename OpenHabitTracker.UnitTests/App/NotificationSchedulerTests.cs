@@ -77,9 +77,107 @@ public class NotificationSchedulerTests
         await _notifications.DidNotReceive().CancelAll();
     }
 
+    private static HabitEntity TimedHabit(long id, string title, int hour) =>
+        new() { Id = id, Title = title, RepeatCount = 1, RepeatInterval = 1, RepeatPeriod = Period.Day, CreatedAt = DateTime.Today.AddDays(-30), PlannedTime = new TimeOnly(hour, 0) };
+
+    [Test]
+    public async Task Rebuild_HabitWithATime_RequestsAReminderThatNamesTheHabitAndItsTime()
+    {
+        DateTime day = DateTime.Today.AddDays(2);
+        UseSettings(summaryTime: null, leadMinutes: 15);
+        StoreHabits(TimedHabit(7, "Stretch", 18));
+
+        await _sut.Rebuild();
+
+        NotificationRequest request = _replaced.Single(x => x.NotifyAt.Date == day);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(request.Id, Is.EqualTo($"habit-7-{day:yyyyMMdd}"));
+            Assert.That(request.Title, Is.EqualTo("Stretch"));
+            Assert.That(request.Body, Is.EqualTo("6:00 PM"));
+            Assert.That(request.NotifyAt, Is.EqualTo(day.AddHours(18).AddMinutes(-15)));
+            Assert.That(request.Route, Is.EqualTo("/habits/7"));
+            Assert.That(request.AllowedDelay, Is.EqualTo(TimeSpan.FromHours(1)));
+        });
+    }
+
+    [Test]
+    public async Task Rebuild_HabitWithATimeAndNoLeadTime_HasNoBody()
+    {
+        UseSettings(summaryTime: null, leadMinutes: 0);
+        StoreHabits(TimedHabit(7, "Stretch", 18));
+
+        await _sut.Rebuild();
+
+        Assert.That(_replaced.Select(x => x.Body).Distinct(), Is.EqualTo(new[] { "" }));
+    }
+
+    [Test]
+    public async Task Rebuild_HabitWithATimeAndNoTitle_IsNamedHabits()
+    {
+        UseSettings(summaryTime: null, leadMinutes: 0);
+        StoreHabits(TimedHabit(7, "", 18));
+
+        await _sut.Rebuild();
+
+        Assert.That(_replaced.Select(x => x.Title).Distinct(), Is.EqualTo(new[] { "[Habits]" }));
+    }
+
+    [Test]
+    public async Task Rebuild_HabitWithATimeTwice_HasTheSameIds()
+    {
+        UseSettings(summaryTime: null, leadMinutes: 0);
+        StoreHabits(TimedHabit(7, "Stretch", 18));
+
+        await _sut.Rebuild();
+        List<string> first = _replaced.Select(x => x.Id).ToList();
+
+        await _sut.Rebuild();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_replaced.Select(x => x.Id), Is.EqualTo(first));
+            Assert.That(first.Distinct().Count(), Is.EqualTo(first.Count));
+        });
+    }
+
+    [TestCase("de-DE", "18:00")]
+    [TestCase("en-GB", "18:00")]
+    public async Task Rebuild_HabitWithATime_WritesTheTimeInTheCulture(string culture, string expected)
+    {
+        System.Globalization.CultureInfo before = System.Globalization.CultureInfo.CurrentCulture;
+
+        try
+        {
+            System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo(culture);
+            UseSettings(summaryTime: null, leadMinutes: 15);
+            StoreHabits(TimedHabit(7, "Stretch", 18));
+
+            await _sut.Rebuild();
+
+            Assert.That(_replaced.Select(x => x.Body).Distinct(), Is.EqualTo(new[] { expected }));
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentCulture = before;
+        }
+    }
+
     // A control character, a lone half of a surrogate pair, and the characters XML allows around them.
     private const string PastedTitle = "a\u0001b\tc\nd\re\uD800f\uDC00g😀h\u001Fi￾j";
     private const string CleanTitle = "ab\tc\nd\refg😀hij";
+
+    [Test]
+    public async Task Rebuild_HabitTitleWithCharactersXmlRefuses_TheReminderLeavesThemOut()
+    {
+        UseSettings(summaryTime: null, leadMinutes: 0);
+        StoreHabits(TimedHabit(7, PastedTitle, 18));
+
+        await _sut.Rebuild();
+
+        Assert.That(_replaced.Select(x => x.Title).Distinct(), Is.EqualTo(new[] { CleanTitle }));
+    }
 
     [Test]
     public async Task Rebuild_TitlesWithCharactersXmlRefuses_TheReminderLeavesThemOut()

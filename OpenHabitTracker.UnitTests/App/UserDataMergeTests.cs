@@ -200,6 +200,29 @@ public class UserDataMergeTests
     }
 
     [Test]
+    public void Merge_HabitWithAnotherPlannedTime_KeepsTheTimeOfTheOneThereAndANewOneBringsItsOwn()
+    {
+        HabitModel existing = new() { Id = 5, CategoryId = 1, Title = "Run", RepeatCount = 1, PlannedTime = new TimeOnly(7, 0) };
+        HabitModel existingWithoutTime = new() { Id = 6, CategoryId = 1, Title = "Read", RepeatCount = 1 };
+        _habits.Add(existing);
+        _habits.Add(existingWithoutTime);
+
+        HabitModel imported = new() { Title = "Run", RepeatCount = 1, PlannedTime = new TimeOnly(19, 0) };
+        HabitModel importedWithTime = new() { Title = "Read", RepeatCount = 1, PlannedTime = new TimeOnly(21, 0) };
+        HabitModel brandNew = new() { Title = "Swim", RepeatCount = 1, PlannedTime = new TimeOnly(6, 30) };
+
+        UserDataMerge merge = Merge(new CategoryModel { Title = "Work", Habits = [imported, importedWithTime, brandNew] });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(merge.Habits, Is.EqualTo(new[] { brandNew }));
+            Assert.That(brandNew.PlannedTime, Is.EqualTo(new TimeOnly(6, 30)));
+            Assert.That(existing.PlannedTime, Is.EqualTo(new TimeOnly(7, 0)));
+            Assert.That(existingWithoutTime.PlannedTime, Is.Null);
+        });
+    }
+
+    [Test]
     public void Merge_CompletionsByDay_AddsOnlyDaysTheHabitHasNoneOn()
     {
         _habits.Add(new HabitModel { Id = 5, CategoryId = 1, Title = "Run" });

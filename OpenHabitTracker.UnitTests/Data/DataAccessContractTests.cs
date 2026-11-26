@@ -88,6 +88,22 @@ public abstract class DataAccessContractTests
         Assert.That((saved.RepeatWeekdays, saved.RepeatMonthDays, saved.RepeatCount, saved.TargetQuantity), Is.EqualTo((Weekdays.Tuesday, 0, 3, 2.75)));
     }
 
+    // The same rows written by the version before the planned time: the habit has none, and takes one.
+    protected async Task AssertContentBeforeThePlannedTimeReadsWithoutIt()
+    {
+        Assert.That((await Sut.GetHabit(101))!.PlannedTime, Is.Null);
+
+        await AssertContentBeforeTheRepeatDaysReadsWithoutDays();
+
+        HabitEntity habit = (await Sut.GetHabit(101))!;
+        habit.PlannedTime = new TimeOnly(18, 0);
+        await Sut.UpdateHabit(habit);
+
+        HabitEntity saved = (await Sut.GetHabit(101))!;
+
+        Assert.That((saved.PlannedTime, saved.RepeatWeekdays, saved.Duration), Is.EqualTo(((TimeOnly?)new TimeOnly(18, 0), Weekdays.Tuesday, (TimeOnly?)new TimeOnly(0, 45))));
+    }
+
     [SetUp]
     public async Task SetUpStore()
     {
@@ -123,7 +139,8 @@ public abstract class DataAccessContractTests
         RepeatWeekdays = Weekdays.Monday | Weekdays.Friday,
         RepeatMonthDays = (1 << 0) | (1 << 14),
         RepeatMonthWeeks = MonthWeeks.Second | MonthWeeks.Last,
-        RepeatMonths = Months.March | Months.December
+        RepeatMonths = Months.March | Months.December,
+        PlannedTime = new TimeOnly(7, 30)
     };
 
     [Test]
@@ -155,7 +172,56 @@ public abstract class DataAccessContractTests
             Assert.That(stored.RepeatMonthDays, Is.EqualTo(16385));
             Assert.That(stored.RepeatMonthWeeks, Is.EqualTo(MonthWeeks.Second | MonthWeeks.Last));
             Assert.That(stored.RepeatMonths, Is.EqualTo(Months.March | Months.December));
+            Assert.That(stored.PlannedTime, Is.EqualTo(new TimeOnly(7, 30)));
             Assert.That(stored.IsDeleted, Is.False);
+        });
+    }
+
+    [TestCase(0, 0)]
+    [TestCase(23, 59)]
+    public async Task AddHabit_PlannedTimeAtEitherEndOfTheDay_IsStored(int hour, int minute)
+    {
+        HabitEntity habit = Habit();
+        habit.PlannedTime = new TimeOnly(hour, minute);
+
+        await Sut.AddHabit(habit);
+
+        Assert.That((await Sut.GetHabit(habit.Id))!.PlannedTime, Is.EqualTo(new TimeOnly(hour, minute)));
+    }
+
+    [Test]
+    public async Task AddHabit_WithoutAPlannedTime_HasNone()
+    {
+        HabitEntity habit = Habit();
+        habit.PlannedTime = null;
+
+        await Sut.AddHabit(habit);
+
+        Assert.That((await Sut.GetHabit(habit.Id))!.PlannedTime, Is.Null);
+    }
+
+    [Test]
+    public async Task UpdateHabit_PlannedTimeChangedAndCleared_StoresTheChange()
+    {
+        HabitEntity habit = Habit();
+        await Sut.AddHabit(habit);
+
+        habit = (await Sut.GetHabit(habit.Id))!;
+        habit.PlannedTime = new TimeOnly(18, 15);
+        await Sut.UpdateHabit(habit);
+
+        Assert.That((await Sut.GetHabit(habit.Id))!.PlannedTime, Is.EqualTo(new TimeOnly(18, 15)));
+
+        habit = (await Sut.GetHabit(habit.Id))!;
+        habit.PlannedTime = null;
+        await Sut.UpdateHabit(habit);
+
+        HabitEntity stored = (await Sut.GetHabit(habit.Id))!;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(stored.PlannedTime, Is.Null);
+            Assert.That((stored.Title, stored.RepeatCount, stored.Duration), Is.EqualTo(("Run", 3, (TimeOnly?)new TimeOnly(0, 45))));
         });
     }
 
@@ -655,6 +721,15 @@ public class LocalDataAccessContractTests : DataAccessContractTests
     }
 
     [Test]
+    public async Task Migrate_ContentFromBeforeThePlannedTime_ReadsWithoutItAndKeepsEveryOtherColumn()
+    {
+        using (LocalDbContext context = new(_options))
+            await WriteContentBeforeTheRepeatDaysAndMigrate(context, "20261126091642_AddRepeatDays", 0);
+
+        await AssertContentBeforeThePlannedTimeReadsWithoutIt();
+    }
+
+    [Test]
     public async Task Users_AddGetUpdateRemove()
     {
         UserEntity user = new() { UserName = "second", Email = "second@example.com" };
@@ -750,6 +825,15 @@ public class ServerDataAccessContractTests : DataAccessContractTests
             await WriteContentBeforeTheRepeatDaysAndMigrate(context, "20261113133842_AddDateTimeFormatUserOwnershipAndDecimalQuantity", UserId);
 
         await AssertContentBeforeTheRepeatDaysReadsWithoutDays();
+    }
+
+    [Test]
+    public async Task Migrate_ContentFromBeforeThePlannedTime_ReadsWithoutItAndKeepsEveryOtherColumn()
+    {
+        using (ServerDbContext context = new(_options))
+            await WriteContentBeforeTheRepeatDaysAndMigrate(context, "20261126091659_AddRepeatDays", UserId);
+
+        await AssertContentBeforeThePlannedTimeReadsWithoutIt();
     }
 
     [Test]

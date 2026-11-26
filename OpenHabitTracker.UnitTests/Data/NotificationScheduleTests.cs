@@ -506,6 +506,294 @@ public class NotificationScheduleTests
         Assert.That(DaysListing(result, 1).First(), Is.EqualTo(new DateTime(2027, 2, 28)));
     }
 
+    // --- habits with a time of day; Now is Friday 2026-07-24 at 08:00 ---
+
+    private static HabitModel Timed(int hour, int minute = 0, Period period = Period.Day, int count = 1, int interval = 1, DateTime? lastTimeDoneAt = null,
+        Weekdays weekdays = Weekdays.None, long id = 1, Priority priority = Priority.None, params DateTime[] completions)
+    {
+        HabitModel habit = new()
+        {
+            Id = id,
+            Title = $"Habit {id}",
+            Priority = priority,
+            RepeatCount = count,
+            RepeatInterval = interval,
+            RepeatPeriod = period,
+            RepeatWeekdays = weekdays,
+            LastTimeDoneAt = lastTimeDoneAt,
+            CreatedAt = new DateTime(2026, 7, 1),
+            PlannedTime = new TimeOnly(hour, minute),
+            TimesDone = completions.Select(x => new TimeModel { StartedAt = x, CompletedAt = x }).ToList()
+        };
+
+        habit.RefreshTimesDoneByDay();
+
+        return habit;
+    }
+
+    private static List<DateTime> HabitReminders(List<ScheduledNotification> result, long habitId = 1) =>
+        result.Where(x => x.Kind == NotificationKind.HabitReminder && x.HabitId == habitId).Select(x => x.NotifyAt).ToList();
+
+    private static IEnumerable<DateTime> At(IEnumerable<DateTime> days, int hour, int minute = 0) => days.Select(day => day.AddHours(hour).AddMinutes(minute));
+
+    [Test]
+    public void Build_DailyHabitWithATime_RemindsEveryDayOfTheHorizonBeforeItsTime()
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Timed(18)], Settings(summaryOff: true), Now);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Select(x => (x.Kind, x.HabitId)).Distinct(), Is.EqualTo(new[] { (NotificationKind.HabitReminder, 1L) }));
+            Assert.That(HabitReminders(result), Is.EqualTo(At(Days(new DateTime(2026, 7, 24), new DateTime(2026, 8, 24)), 17, 45)));
+        });
+    }
+
+    [Test]
+    public void Build_ScheduledHabitWithATime_RemindsOnItsDaysOnly()
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Timed(7, period: Period.Week, weekdays: Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday)], Settings(summaryOff: true, leadMinutes: 0), Now);
+
+        IEnumerable<DateTime> expected = Days(new DateTime(2026, 7, 25), new DateTime(2026, 8, 24))
+            .Where(day => day.DayOfWeek is DayOfWeek.Monday or DayOfWeek.Wednesday or DayOfWeek.Friday);
+
+        // Friday the 24th at 07:00 has passed at 08:00.
+        Assert.That(HabitReminders(result), Is.EqualTo(At(expected, 7)));
+    }
+
+    // Done Monday, Tuesday and Wednesday of the week of July 20, so silent until Monday the 27th, then every day.
+    [Test]
+    public void Build_WeeklyHabitDoneForThisWeek_RemindsFromTheNextWeekOn()
+    {
+        HabitModel habit = Timed(18, period: Period.Week, count: 3, completions: [new DateTime(2026, 7, 20, 8, 0, 0), new DateTime(2026, 7, 21, 8, 0, 0), new DateTime(2026, 7, 22, 8, 0, 0)]);
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(summaryOff: true, leadMinutes: 0), Now);
+
+        Assert.That(HabitReminders(result), Is.EqualTo(At(Days(new DateTime(2026, 7, 27), new DateTime(2026, 8, 24)), 18)));
+    }
+
+    [Test]
+    public void Build_WeeklyHabitDoneForThisWeekWithASundayWeekStart_RemindsFromSunday()
+    {
+        HabitModel habit = Timed(18, period: Period.Week, count: 3, completions: [new DateTime(2026, 7, 20, 8, 0, 0), new DateTime(2026, 7, 21, 8, 0, 0), new DateTime(2026, 7, 22, 8, 0, 0)]);
+        SettingsModel settings = Settings(summaryOff: true, leadMinutes: 0);
+        settings.FirstDayOfWeek = DayOfWeek.Sunday;
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], settings, Now);
+
+        Assert.That(HabitReminders(result), Is.EqualTo(At(Days(new DateTime(2026, 7, 26), new DateTime(2026, 8, 24)), 18)));
+    }
+
+    // Done on Thursday at 08:00, due on Sunday at 08:00.
+    [Test]
+    public void Build_EveryThreeDaysWithATime_RemindsFromTheDueDayOn()
+    {
+        HabitModel habit = Timed(18, interval: 3, lastTimeDoneAt: new DateTime(2026, 7, 23, 8, 0, 0));
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(summaryOff: true, leadMinutes: 0), Now);
+
+        Assert.That(HabitReminders(result), Is.EqualTo(At(Days(new DateTime(2026, 7, 26), new DateTime(2026, 8, 24)), 18)));
+    }
+
+    [Test]
+    public void Build_YearlyHabitDueInsideTheHorizon_RemindsFromThatDayOn()
+    {
+        HabitModel habit = Timed(18, period: Period.Year, lastTimeDoneAt: new DateTime(2025, 7, 25, 8, 0, 0));
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(summaryOff: true, leadMinutes: 0), Now);
+
+        Assert.That(HabitReminders(result), Is.EqualTo(At(Days(new DateTime(2026, 7, 25), new DateTime(2026, 8, 24)), 18)));
+    }
+
+    [Test]
+    public void Build_YearlyHabitDueAfterTheHorizon_RemindsOnceOnItsDueDay()
+    {
+        HabitModel habit = Timed(18, period: Period.Year, lastTimeDoneAt: new DateTime(2025, 12, 1, 8, 0, 0));
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(summaryOff: true), Now);
+
+        Assert.That(HabitReminders(result), Is.EqualTo(new[] { new DateTime(2026, 12, 1, 17, 45, 0) }));
+    }
+
+    [Test]
+    public void Build_HabitOnMarchFourteenth_RemindsOnceOnTheNextOne()
+    {
+        HabitModel habit = Timed(9, period: Period.Year);
+        habit.RepeatMonths = Months.March;
+        habit.RepeatMonthDays = 1 << 13;
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(summaryOff: true, leadMinutes: 0), Now);
+
+        Assert.That(HabitReminders(result), Is.EqualTo(new[] { new DateTime(2027, 3, 14, 9, 0, 0) }));
+    }
+
+    // A yearly habit due today at a time that has passed is due again only next year.
+    [Test]
+    public void Build_YearlyHabitWhoseOnlyDayInTheHorizonHasPassed_RemindsOnTheNextOne()
+    {
+        HabitModel habit = Timed(7, period: Period.Year);
+        habit.RepeatMonths = Months.July;
+        habit.RepeatMonthDays = 1 << 23;
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(summaryOff: true, leadMinutes: 0), Now);
+
+        Assert.That(HabitReminders(result), Is.EqualTo(new[] { new DateTime(2027, 7, 24, 7, 0, 0) }));
+    }
+
+    [Test]
+    public void Build_HabitWithATimeAndTheLeadTimeOff_HasNoReminder()
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Timed(18, lastTimeDoneAt: Now.AddDays(-3))], Settings(leadMinutes: null), Now);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(HabitReminders(result), Is.Empty);
+            Assert.That(DaysListing(result, 1), Is.EqualTo(Days(Now.Date, Now.Date.AddDays(NotificationSchedule.HorizonDays - 1))));
+        });
+    }
+
+    [Test]
+    public void Build_HabitWithoutATime_HasNoReminder()
+    {
+        HabitModel habit = Timed(18);
+        habit.PlannedTime = null;
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(summaryOff: true), Now);
+
+        Assert.That(result, Is.Empty);
+    }
+
+    [TestCase(0, 18, 0)]
+    [TestCase(15, 17, 45)]
+    public void Build_HabitWithATime_RemindsTheLeadTimeBeforeIt(int leadMinutes, int hour, int minute)
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Timed(18)], Settings(summaryOff: true, leadMinutes: leadMinutes), Now);
+
+        Assert.That(HabitReminders(result), Is.EqualTo(At(Days(new DateTime(2026, 7, 24), new DateTime(2026, 8, 24)), hour, minute)));
+    }
+
+    // A lead time of a whole day puts the reminder of each day on the day before, so today's is already past.
+    [Test]
+    public void Build_HabitWithATimeAndALeadTimeOfADay_RemindsTheDayBefore()
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Timed(18)], Settings(summaryOff: true, leadMinutes: 1440), Now);
+
+        Assert.That(HabitReminders(result), Is.EqualTo(At(Days(new DateTime(2026, 7, 24), new DateTime(2026, 8, 23)), 18)));
+    }
+
+    [TestCase(8, 15, false)]
+    [TestCase(8, 16, true)]
+    [TestCase(8, 14, false)]
+    public void Build_HabitReminderAroundNow_OnlyAFutureMoment(int hour, int minute, bool scheduledToday)
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Timed(hour, minute)], Settings(summaryOff: true), Now);
+
+        Assert.That(HabitReminders(result).Any(x => x.Date == Now.Date), Is.EqualTo(scheduledToday));
+    }
+
+    [Test]
+    public void Build_DailyHabitDoneToday_RemindsFromTomorrow()
+    {
+        HabitModel habit = Timed(18, lastTimeDoneAt: Now.AddHours(-1), completions: [Now.AddHours(-1)]);
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(summaryOff: true, leadMinutes: 0), Now);
+
+        Assert.That(HabitReminders(result), Is.EqualTo(At(Days(new DateTime(2026, 7, 25), new DateTime(2026, 8, 24)), 18)));
+    }
+
+    [Test]
+    public void Build_DailyHabitDoneYesterday_RemindsToday()
+    {
+        HabitModel habit = Timed(18, lastTimeDoneAt: Now.AddDays(-1), completions: [Now.AddDays(-1)]);
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(summaryOff: true, leadMinutes: 0), Now);
+
+        Assert.That(HabitReminders(result).First(), Is.EqualTo(new DateTime(2026, 7, 24, 18, 0, 0)));
+    }
+
+    [Test]
+    public void Build_ThreeTimesADayDoneOnceToday_RemindsToday()
+    {
+        HabitModel habit = Timed(18, count: 3, lastTimeDoneAt: Now.AddHours(-1), completions: [Now.AddHours(-1)]);
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(summaryOff: true, leadMinutes: 0), Now);
+
+        Assert.That(HabitReminders(result).First(), Is.EqualTo(new DateTime(2026, 7, 24, 18, 0, 0)));
+    }
+
+    [Test]
+    public void Build_HabitWithATimeBelowTheMinimumPriorityOrWithTasksOnlyOrInTheTrash_HasNoReminder()
+    {
+        HabitModel trashed = Timed(18, id: 3);
+        trashed.IsDeleted = true;
+
+        List<ScheduledNotification> belowPriority = NotificationSchedule.Build([], [Timed(18, priority: Priority.Low)], Settings(summaryOff: true, minimumPriority: Priority.Medium), Now);
+        List<ScheduledNotification> atPriority = NotificationSchedule.Build([], [Timed(18, priority: Priority.Medium)], Settings(summaryOff: true, minimumPriority: Priority.Medium), Now);
+        List<ScheduledNotification> tasksOnly = NotificationSchedule.Build([], [Timed(18)], Settings(summaryOff: true, content: DigestContent.Tasks), Now);
+        List<ScheduledNotification> inTheTrash = NotificationSchedule.Build([], [trashed], Settings(summaryOff: true), Now);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(belowPriority, Is.Empty);
+            Assert.That(HabitReminders(atPriority), Has.Count.EqualTo(NotificationSchedule.HorizonDays));
+            Assert.That(tasksOnly, Is.Empty);
+            Assert.That(inTheTrash, Is.Empty);
+        });
+    }
+
+    // A daily habit three days overdue reminds every day, so the summary never lists it, whether its time comes before or after the summary.
+    [TestCase(7)]
+    [TestCase(18)]
+    public void Build_HabitThatRemindsEveryDay_IsLeftOutOfEverySummary(int hour)
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Timed(hour, lastTimeDoneAt: Now.AddDays(-3))], Settings(leadMinutes: 0), Now);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Where(x => x.Kind == NotificationKind.DailyDigest), Is.Empty);
+            Assert.That(HabitReminders(result), Is.Not.Empty);
+        });
+    }
+
+    // A Monday habit with a time, three weeks overdue: its Mondays are left to its reminder, its other days are in the summary.
+    [Test]
+    public void Build_ScheduledHabitWithATime_IsInTheSummaryOnlyOnTheDaysItHasNoReminder()
+    {
+        HabitModel habit = Timed(18, period: Period.Week, weekdays: Weekdays.Monday, lastTimeDoneAt: new DateTime(2026, 7, 6, 8, 0, 0));
+
+        List<ScheduledNotification> withReminders = NotificationSchedule.Build([], [habit], Settings(leadMinutes: 0), Now);
+        List<ScheduledNotification> remindersOff = NotificationSchedule.Build([], [habit], Settings(leadMinutes: null), Now);
+
+        IEnumerable<DateTime> horizon = Days(Now.Date, Now.Date.AddDays(NotificationSchedule.HorizonDays - 1));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(DaysListing(withReminders, 1), Is.EqualTo(horizon.Where(day => day.DayOfWeek != DayOfWeek.Monday)));
+            Assert.That(HabitReminders(withReminders), Is.EqualTo(At(horizon.Where(day => day.DayOfWeek == DayOfWeek.Monday), 18)));
+            Assert.That(DaysListing(remindersOff, 1), Is.EqualTo(horizon));
+        });
+    }
+
+    [Test]
+    public void Build_TwoHabitsAndATaskAtTheSameTime_AllRemind()
+    {
+        DateTime tomorrow = Now.Date.AddDays(1);
+
+        List<ScheduledNotification> result = NotificationSchedule.Build(
+            [TimedTask(tomorrow.AddHours(18), id: 5)], [Timed(18, id: 1), Timed(18, id: 2)], Settings(summaryOff: true, leadMinutes: 0), Now);
+
+        Assert.That(result.Where(x => x.NotifyAt == tomorrow.AddHours(18)).Select(x => (x.Kind, x.TaskId, x.HabitId)),
+            Is.EquivalentTo(new[] { (NotificationKind.TaskReminder, 5L, 0L), (NotificationKind.HabitReminder, 0L, 1L), (NotificationKind.HabitReminder, 0L, 2L) }));
+    }
+
+    [Test]
+    public void Build_HabitRemindersTasksAndSummaries_AreInOrderOfTime()
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build(
+            [TimedTask(Now.AddHours(30))], [Timed(7, id: 2, lastTimeDoneAt: Now.AddDays(-3)), Timed(20, id: 3)], Settings(leadMinutes: 0), Now);
+
+        Assert.That(result.Select(x => x.NotifyAt), Is.Ordered);
+    }
+
     // The digest leaves a timed task to its own reminder, which does not exist while reminders are off.
     [Test]
     public void Build_TimedTaskWithRemindersOff_CountsInTheDigestOfItsDay()

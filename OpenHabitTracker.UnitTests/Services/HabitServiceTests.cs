@@ -1607,6 +1607,7 @@ public class HabitServiceTests
         await _sut.UpdateQuantity(habit, time);
 
         await _dataAccess.Received(1).UpdateTime(Arg.Is<TimeEntity>(x => x != null && x.Id == 10 && x.Quantity == 7));
+        await _notificationScheduler.Received(1).Rebuild();
     }
 
     [Test]
@@ -1621,6 +1622,7 @@ public class HabitServiceTests
         await _sut.UpdateQuantity(loaded, new TimeModel { Id = 11, Quantity = 7 });
 
         await _dataAccess.DidNotReceive().UpdateTime(Arg.Any<TimeEntity>());
+        await _notificationScheduler.DidNotReceive().Rebuild();
     }
 
     // --- writes that reach the store ---

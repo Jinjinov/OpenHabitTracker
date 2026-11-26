@@ -79,7 +79,7 @@ public class ApiClientRequestTests
     {
         CapturingHandler handler = new("""
             [ { "Id": 1, "Title": "Older", "RepeatCount": 3, "RepeatPeriod": 1 },
-              { "Id": 2, "Title": "Newer", "RepeatWeekdays": 21, "RepeatMonthDays": 16385, "RepeatMonthWeeks": 18, "RepeatMonths": 2052, "RepeatYearDays": 7 } ]
+              { "Id": 2, "Title": "Newer", "RepeatWeekdays": 21, "RepeatMonthDays": 16385, "RepeatMonthWeeks": 18, "RepeatMonths": 2052, "PlannedTime": "06:30:00", "RepeatYearDays": 7 } ]
             """);
         DataAccessClient client = new(new HttpClient(handler), new ApiClientOptions { BaseUrl = "https://sync.example", BearerToken = "jwt" });
 
@@ -89,12 +89,14 @@ public class ApiClientRequestTests
         {
             Assert.That((habits[0].Title, habits[0].RepeatCount, habits[0].RepeatWeekdays, habits[0].RepeatMonthDays, habits[0].RepeatMonthWeeks, habits[0].RepeatMonths),
                 Is.EqualTo(("Older", 3, Weekdays.None, 0, MonthWeeks.None, Months.None)));
-            Assert.That((habits[1].Title, habits[1].RepeatWeekdays, habits[1].RepeatMonthDays, habits[1].RepeatMonthWeeks, habits[1].RepeatMonths),
+            Assert.That(habits[0].PlannedTime, Is.Null);
+            Assert.That((habits[1].Title, habits[1].RepeatWeekdays, habits[1].RepeatMonthDays, habits[1].RepeatMonthWeeks, habits[1].RepeatMonths, habits[1].PlannedTime),
                 Is.EqualTo(("Newer",
                     Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday,
                     16385,
                     MonthWeeks.Second | MonthWeeks.Last,
-                    Months.March | Months.December)));
+                    Months.March | Months.December,
+                    (TimeOnly?)new TimeOnly(6, 30))));
         });
     }
 

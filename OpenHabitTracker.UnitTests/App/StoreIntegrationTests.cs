@@ -78,7 +78,7 @@ public class StoreIntegrationTests
             lines.Add($"category {category.Title}");
             lines.AddRange(category.Notes.Select(x => $"  note {x.Title} | {x.Content} | {x.Priority} | {x.IsDeleted}").Order(StringComparer.Ordinal));
             lines.AddRange(category.Tasks.Select(x => $"  task {x.Title} | {Stamp(x.PlannedAt)} | {Stamp(x.CompletedAt)} | {x.Duration} | items {string.Join(",", (x.Items ?? []).Select(i => $"{i.Title}:{Stamp(i.DoneAt)}"))}").Order(StringComparer.Ordinal));
-            lines.AddRange(category.Habits.Select(x => $"  habit {x.Title} | {x.RepeatCount}/{x.RepeatInterval} {x.RepeatPeriod} {x.RepeatWeekdays} {x.RepeatMonthDays} {x.RepeatMonthWeeks} {x.RepeatMonths} | {Stamp(x.LastTimeDoneAt)} | times {string.Join(",", (x.TimesDone ?? []).Select(t => $"{Stamp(t.StartedAt)}-{Stamp(t.CompletedAt)}").Order(StringComparer.Ordinal))} | items {string.Join(",", (x.Items ?? []).Select(i => i.Title))}").Order(StringComparer.Ordinal));
+            lines.AddRange(category.Habits.Select(x => $"  habit {x.Title} | {x.RepeatCount}/{x.RepeatInterval} {x.RepeatPeriod} {x.RepeatWeekdays} {x.RepeatMonthDays} {x.RepeatMonthWeeks} {x.RepeatMonths} at {x.PlannedTime?.ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture) ?? "-"} | {Stamp(x.LastTimeDoneAt)} | times {string.Join(",", (x.TimesDone ?? []).Select(t => $"{Stamp(t.StartedAt)}-{Stamp(t.CompletedAt)}").Order(StringComparer.Ordinal))} | items {string.Join(",", (x.Items ?? []).Select(i => i.Title))}").Order(StringComparer.Ordinal));
         }
 
         return lines;
@@ -399,6 +399,108 @@ public class StoreIntegrationTests
 
             Assert.That((habit.RepeatPeriod, habit.RepeatWeekdays, habit.RepeatMonthDays, habit.RepeatMonthWeeks, habit.RepeatMonths),
                 Is.EqualTo((Period.Month, Weekdays.Tuesday | Weekdays.Thursday, 0, MonthWeeks.First | MonthWeeks.Last, Months.None)));
+        }
+    }
+
+    // The reminders of a habit with a time follow every change the services make, through the real scheduler.
+    // The day checked is tomorrow, so that the test reads the same at any time of day.
+    [Test]
+    public async Task HabitReminders_FollowTheTimeTheCompletionsAndTheQuantity()
+    {
+        using ServiceProvider device = await NewDevice();
+        using IServiceScope session = device.CreateScope();
+        IServiceProvider services = session.ServiceProvider;
+
+        INotifications notifications = Substitute.For<INotifications>();
+        notifications.CanNotify.Returns(true);
+        List<NotificationRequest> pending = [];
+        notifications.When(x => x.Replace(Arg.Any<IReadOnlyList<NotificationRequest>>())).Do(callInfo => pending = callInfo.RequiredArg<IReadOnlyList<NotificationRequest>>().ToList());
+
+        ClientState clientState = services.GetRequiredService<ClientState>();
+        await clientState.LoadSettings();
+        clientState.Settings.NotificationLeadMinutes = 0;
+        await clientState.UpdateSettings();
+
+        NotificationScheduler scheduler = new(clientState, notifications, services.GetRequiredService<Microsoft.Extensions.Localization.IStringLocalizer>(), Microsoft.Extensions.Logging.Abstractions.NullLogger<NotificationScheduler>.Instance);
+        HabitService habitService = new(clientState, services.GetRequiredService<ISearchFilterService>(), Substitute.For<IAppReview>(), scheduler);
+
+        DateTime tomorrow = DateTime.Today.AddDays(1);
+        List<DateTime> HabitDays() => pending.Where(x => x.Id.StartsWith("habit-", StringComparison.Ordinal)).Select(x => x.NotifyAt).ToList();
+
+        await habitService.Initialize();
+        habitService.NewHabit = new HabitModel { Title = "Water", DisplayMetric = DisplayMetric.Quantity, TargetQuantity = 2, PlannedTime = new TimeOnly(20, 0) };
+        await habitService.AddHabit();
+
+        Assert.That(HabitDays(), Does.Contain(tomorrow.AddHours(20)), "added with a time");
+
+        HabitModel habit = habitService.Habits!.Single();
+        await habitService.SetSelectedHabit(habit.Id);
+        habit.PlannedTime = new TimeOnly(21, 30);
+        await habitService.UpdateHabit();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(HabitDays(), Does.Contain(tomorrow.AddHours(21).AddMinutes(30)), "a changed time");
+            Assert.That(HabitDays(), Does.Not.Contain(tomorrow.AddHours(20)), "the old time");
+        });
+
+        await habitService.AddTimeDone(habit, tomorrow.AddHours(8), 1);
+
+        Assert.That(HabitDays(), Does.Contain(tomorrow.AddHours(21).AddMinutes(30)), "half the quantity");
+
+        TimeModel entry = habit.TimesDone!.Single();
+        entry.Quantity = 2;
+        await habitService.UpdateQuantity(habit, entry);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(HabitDays(), Does.Not.Contain(tomorrow.AddHours(21).AddMinutes(30)), "the whole quantity");
+            Assert.That(HabitDays(), Does.Contain(tomorrow.AddDays(1).AddHours(21).AddMinutes(30)), "the day after");
+        });
+
+        await habitService.RemoveTimeDone(habit, entry);
+
+        Assert.That(HabitDays(), Does.Contain(tomorrow.AddHours(21).AddMinutes(30)), "the completion removed");
+
+        habit.PlannedTime = null;
+        await habitService.UpdateHabit();
+
+        Assert.That(HabitDays(), Is.Empty, "the time removed");
+    }
+
+    [Test]
+    public async Task PlannedTime_SetInTheFormAndChangedInOneSession_IsThereInTheNext()
+    {
+        using ServiceProvider device = await NewDevice();
+
+        using (IServiceScope session = device.CreateScope())
+        {
+            IServiceProvider services = session.ServiceProvider;
+            await services.GetRequiredService<ClientState>().LoadSettings();
+
+            IHabitService habitService = services.GetRequiredService<IHabitService>();
+            await habitService.Initialize();
+            habitService.NewHabit = new HabitModel { Title = "Gym", PlannedTime = new TimeOnly(6, 0) };
+            await habitService.AddHabit();
+            habitService.NewHabit = new HabitModel { Title = "Read", PlannedTime = new TimeOnly(21, 0) };
+            await habitService.AddHabit();
+
+            await habitService.SetSelectedHabit(habitService.Habits!.Single(x => x.Title == "Gym").Id);
+            habitService.SelectedHabit!.PlannedTime = new TimeOnly(18, 30);
+            await habitService.UpdateHabit();
+
+            await habitService.SetSelectedHabit(habitService.Habits!.Single(x => x.Title == "Read").Id);
+            habitService.SelectedHabit!.PlannedTime = null;
+            await habitService.UpdateHabit();
+        }
+
+        using (IServiceScope session = device.CreateScope())
+        {
+            IHabitService habitService = session.ServiceProvider.GetRequiredService<IHabitService>();
+            await habitService.Initialize();
+
+            Assert.That(habitService.Habits!.OrderBy(x => x.Title).Select(x => (x.Title, x.PlannedTime)),
+                Is.EqualTo(new[] { ("Gym", (TimeOnly?)new TimeOnly(18, 30)), ("Read", (TimeOnly?)null) }));
         }
     }
 }

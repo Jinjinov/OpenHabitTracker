@@ -51,6 +51,7 @@ public static class EntityToModel
         model.RepeatMonthDays = entity.RepeatMonthDays;
         model.RepeatMonthWeeks = entity.RepeatMonthWeeks;
         model.RepeatMonths = entity.RepeatMonths;
+        model.PlannedTime = entity.PlannedTime;
     }
 
     public static ItemModel ToModel(this ItemEntity entity)

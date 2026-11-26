@@ -110,6 +110,20 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
             };
         }
 
+        if (scheduled.Kind == NotificationKind.HabitReminder)
+        {
+            _clientState.Habits!.TryGetValue(scheduled.HabitId, out HabitModel? habit);
+
+            return new NotificationRequest
+            {
+                Id = $"habit-{scheduled.HabitId}-{scheduled.NotifyAt:yyyyMMdd}",
+                Title = string.IsNullOrEmpty(habit?.Title) ? _loc["Habits"] : habit.Title,
+                Body = _clientState.Settings.NotificationLeadMinutes is 0 or null ? string.Empty : habit?.PlannedTime?.ToString("t") ?? string.Empty,
+                NotifyAt = scheduled.NotifyAt,
+                Route = $"/habits/{scheduled.HabitId}"
+            };
+        }
+
         return new NotificationRequest
         {
             Id = $"digest-{scheduled.NotifyAt:yyyyMMdd}",

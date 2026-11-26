@@ -315,7 +315,55 @@ public class ImportExportTests
             Is.EqualTo(new[] { ("Gym", 3, Period.Week, Weekdays.None, 0, MonthWeeks.None, Months.None) }));
     }
 
-    // TSV carries the count and the period, and no days.
+    private static IEnumerable<TestCaseData> PlannedTimeCases()
+    {
+        foreach (string file in new[] { "backup.json", "backup.yaml" })
+        {
+            yield return new TestCaseData(file, null).SetArgDisplayNames(file, "none");
+            yield return new TestCaseData(file, new TimeOnly(0, 0)).SetArgDisplayNames(file, "00:00");
+            yield return new TestCaseData(file, new TimeOnly(7, 30)).SetArgDisplayNames(file, "07:30");
+            yield return new TestCaseData(file, new TimeOnly(23, 59)).SetArgDisplayNames(file, "23:59");
+        }
+    }
+
+    [TestCaseSource(nameof(PlannedTimeCases))]
+    public async Task ExportThenImport_KeepsThePlannedTime(string filename, TimeOnly? plannedTime)
+    {
+        await _sut.LoadSettings();
+        _dataAccess.GetCategories().Returns(Task.FromResult<IReadOnlyList<CategoryEntity>>(
+            [new CategoryEntity { Id = 1, Title = "Fitness" }]));
+        _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
+            [new HabitEntity { Id = 1, CategoryId = 1, Title = "Gym", RepeatCount = 1, RepeatInterval = 1, PlannedTime = plannedTime }]));
+
+        string exported = filename.EndsWith(".json")
+            ? await new JsonImportExport(_sut).GetDataExportFileString()
+            : await new YamlImportExport(_sut).GetDataExportFileString();
+
+        EmptyTheData();
+
+        IReadOnlyList<HabitEntity>? added = null;
+        _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>())).Do(callInfo => added = callInfo.RequiredArg<IReadOnlyList<HabitEntity>>());
+
+        await Import(filename, exported);
+
+        Assert.That(added!.Select(x => (x.Title, x.PlannedTime)), Is.EqualTo(new[] { ("Gym", plannedTime) }));
+    }
+
+    [TestCase("backup.json", """{ "Categories": [ { "Title": "Fitness", "Habits": [ { "Title": "Gym", "RepeatCount": 3, "RepeatPeriod": 1 } ] } ] }""")]
+    [TestCase("backup.yaml", "Categories:\n- Title: Fitness\n  Habits:\n  - Title: Gym\n    RepeatCount: 3\n    RepeatPeriod: Week\n")]
+    public async Task Import_FileFromBeforeThePlannedTime_HasNone(string filename, string content)
+    {
+        await _sut.LoadSettings();
+
+        IReadOnlyList<HabitEntity>? added = null;
+        _dataAccess.When(x => x.AddHabits(Arg.Any<IReadOnlyList<HabitEntity>>())).Do(callInfo => added = callInfo.RequiredArg<IReadOnlyList<HabitEntity>>());
+
+        await Import(filename, content);
+
+        Assert.That(added!.Select(x => (x.Title, x.RepeatCount, x.PlannedTime)), Is.EqualTo(new[] { ("Gym", 3, (TimeOnly?)null) }));
+    }
+
+    // TSV carries the count and the period, and neither the days nor the time.
     [Test]
     public async Task Tsv_ExportThenImport_KeepsTheCountWithoutTheDays()
     {
@@ -324,7 +372,7 @@ public class ImportExportTests
             [new CategoryEntity { Id = 1, Title = "Fitness" }]));
         _dataAccess.GetHabits().Returns(Task.FromResult<IReadOnlyList<HabitEntity>>(
             [new HabitEntity { Id = 1, CategoryId = 1, Title = "Gym", RepeatCount = 3, RepeatInterval = 1, RepeatPeriod = Period.Week,
-                RepeatWeekdays = Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday }]));
+                RepeatWeekdays = Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday, PlannedTime = new TimeOnly(18, 0) }]));
 
         string tsv = await new TsvImportExport(_sut).GetDataExportFileString();
 
@@ -335,8 +383,8 @@ public class ImportExportTests
 
         await Import("backup.tsv", tsv);
 
-        Assert.That(added!.Select(x => (x.Title, x.RepeatCount, x.RepeatInterval, x.RepeatPeriod, x.RepeatWeekdays)),
-            Is.EqualTo(new[] { ("Gym", 3, 1, Period.Week, Weekdays.None) }));
+        Assert.That(added!.Select(x => (x.Title, x.RepeatCount, x.RepeatInterval, x.RepeatPeriod, x.RepeatWeekdays, x.PlannedTime)),
+            Is.EqualTo(new[] { ("Gym", 3, 1, Period.Week, Weekdays.None, (TimeOnly?)null) }));
     }
 
     // --- date-only sentinel round-trip ---

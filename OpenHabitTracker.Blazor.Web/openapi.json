@@ -4186,6 +4186,13 @@
           "repeatMonths": {
             "$ref": "#/components/schemas/Months"
           },
+          "plannedTime": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "time"
+          },
           "id": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
@@ -4295,6 +4302,13 @@
           },
           "repeatMonths": {
             "$ref": "#/components/schemas/Months"
+          },
+          "plannedTime": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "time"
           },
           "timesDone": {
             "type": [

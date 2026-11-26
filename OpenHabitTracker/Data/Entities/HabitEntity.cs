@@ -26,4 +26,6 @@ public class HabitEntity : ContentEntity
     public MonthWeeks RepeatMonthWeeks { get; set; }
 
     public Months RepeatMonths { get; set; }
+
+    public TimeOnly? PlannedTime { get; set; }
 }

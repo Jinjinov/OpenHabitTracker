@@ -390,6 +390,9 @@ namespace OpenHabitTracker.EntityFrameworkCore.Migrations
                     b.Property<DateTime?>("LastTimeDoneAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<TimeOnly?>("PlannedTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("RepeatCount")
                         .HasColumnType("INTEGER");
 

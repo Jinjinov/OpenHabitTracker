@@ -103,8 +103,38 @@ public class RemoteDataAccessContractTests : DataAccessContractTests
         long id = long.Parse(await response.Content.ReadAsStringAsync());
         HabitEntity stored = (await Sut.GetHabit(id))!;
 
-        Assert.That((stored.Title, stored.RepeatCount, stored.RepeatPeriod, stored.RepeatWeekdays, stored.RepeatMonthDays, stored.RepeatMonthWeeks, stored.RepeatMonths),
-            Is.EqualTo(("Old client", 3, Period.Week, Weekdays.None, 0, MonthWeeks.None, Months.None)));
+        Assert.That((stored.Title, stored.RepeatCount, stored.RepeatPeriod, stored.RepeatWeekdays, stored.RepeatMonthDays, stored.RepeatMonthWeeks, stored.RepeatMonths, stored.PlannedTime),
+            Is.EqualTo(("Old client", 3, Period.Week, Weekdays.None, 0, MonthWeeks.None, Months.None, (TimeOnly?)null)));
+    }
+
+    // An app version from before the planned time saves the whole habit without it, which clears it on the server.
+    [Test]
+    public async Task UpdateHabit_FromAClientWithoutThePlannedTime_StoresNone()
+    {
+        HabitEntity habit = new() { Title = "Run", RepeatCount = 1, RepeatInterval = 1, PlannedTime = new TimeOnly(7, 0) };
+        await Sut.AddHabit(habit);
+
+        using StringContent body = new($$"""{ "Id": {{habit.Id}}, "Title": "Run later", "RepeatCount": 1, "RepeatInterval": 1 }""", System.Text.Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await _httpClient.PutAsync($"{_server.BaseUrl}/api/DataAccess/habits", body);
+        response.EnsureSuccessStatusCode();
+
+        HabitEntity stored = (await Sut.GetHabit(habit.Id))!;
+
+        Assert.That((stored.Title, stored.PlannedTime), Is.EqualTo(("Run later", (TimeOnly?)null)));
+    }
+
+    [Test]
+    public async Task AddHabit_WithAPlannedTimeAsText_StoresIt()
+    {
+        using StringContent body = new("""{ "Title": "Read", "PlannedTime": "21:45:00" }""", System.Text.Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await _httpClient.PostAsync($"{_server.BaseUrl}/api/DataAccess/habit", body);
+        response.EnsureSuccessStatusCode();
+
+        HabitEntity stored = (await Sut.GetHabit(long.Parse(await response.Content.ReadAsStringAsync())))!;
+
+        Assert.That(stored.PlannedTime, Is.EqualTo(new TimeOnly(21, 45)));
     }
 
     // A newer server can send fields this client does not know.

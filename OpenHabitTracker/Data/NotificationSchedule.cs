@@ -6,6 +6,7 @@ public enum NotificationKind
 {
     TaskReminder,
     DailyDigest,
+    HabitReminder,
 }
 
 public class ScheduledNotification
@@ -16,6 +17,9 @@ public class ScheduledNotification
 
     // TaskReminder only.
     public long TaskId { get; set; }
+
+    // HabitReminder only.
+    public long HabitId { get; set; }
 
     // DailyDigest only: what it lists, most urgent first.
     public List<long> TaskIds { get; set; } = new();
@@ -59,6 +63,9 @@ public static class NotificationSchedule
                 if (notifyAt > now)
                     result.Add(new ScheduledNotification { NotifyAt = notifyAt, Kind = NotificationKind.TaskReminder, TaskId = task.Id });
             }
+
+            foreach (HabitModel habit in candidateHabits.Where(habit => habit.PlannedTime is not null))
+                result.AddRange(HabitReminders(habit, leadMinutes, settings.FirstDayOfWeek, now));
         }
 
         if (settings.NotificationTime is TimeOnly summaryTime)
@@ -79,6 +86,7 @@ public static class NotificationSchedule
                     .ToList();
 
                 List<long> habitIds = candidateHabits
+                    .Where(habit => !HasOwnReminderOn(habit, day, settings))
                     .Where(habit => IsScheduledAndNotDone(habit, day) || IsDue(habit, notifyAt, settings))
                     .OrderByDescending(habit => habit.GetRatioAt(settings.SelectedRatio, notifyAt))
                     .ThenBy(habit => habit.Title)
@@ -102,6 +110,35 @@ public static class NotificationSchedule
 
         return settings.NotificationIncludeOverdueTasks && task.PlannedAt!.Value < notifyAt;
     }
+
+    // One reminder for each day of the horizon the habit reminds on, at its time minus the lead time.
+    // Without such a day in the horizon, the next one after it, at any distance, as a task's reminder is.
+    private static IEnumerable<ScheduledNotification> HabitReminders(HabitModel habit, int leadMinutes, DayOfWeek firstDayOfWeek, DateTime now)
+    {
+        TimeSpan timeOfDay = habit.PlannedTime!.Value.ToTimeSpan();
+
+        ScheduledNotification At(DateTime day) =>
+            new() { NotifyAt = day.Add(timeOfDay).AddMinutes(-leadMinutes), Kind = NotificationKind.HabitReminder, HabitId = habit.Id };
+
+        List<ScheduledNotification> inHorizon = Enumerable.Range(0, HorizonDays)
+            .Select(dayOffset => now.Date.AddDays(dayOffset))
+            .Where(day => habit.RemindsOn(day, firstDayOfWeek))
+            .Select(At)
+            .Where(notification => notification.NotifyAt > now)
+            .ToList();
+
+        if (inHorizon.Count > 0)
+            return inHorizon;
+
+        DateTime? nextDay = habit.GetNextReminderDay(now.Date.AddDays(HorizonDays), firstDayOfWeek);
+
+        return nextDay is DateTime day ? [At(day)] : [];
+    }
+
+    // The summary covers what the lead time will not, so with reminders on a habit is left to its own
+    // reminder on each day it has one, as a timed task is.
+    private static bool HasOwnReminderOn(HabitModel habit, DateTime day, SettingsModel settings) =>
+        settings.NotificationLeadMinutes is not null && habit.PlannedTime is not null && habit.RemindsOn(day, settings.FirstDayOfWeek);
 
     // A completion is the only thing that lowers a ratio, and a completion rebuilds the schedule.
     private static bool IsDue(HabitModel habit, DateTime notifyAt, SettingsModel settings)

@@ -1,3 +1,5 @@
+using OpenHabitTracker.Data.Statistics;
+
 namespace OpenHabitTracker.Data.Models;
 
 public class HabitModel : ItemsModel
@@ -24,6 +26,9 @@ public class HabitModel : ItemsModel
     public MonthWeeks RepeatMonthWeeks { get; set; }
 
     public Months RepeatMonths { get; set; }
+
+    // The time of day the habit is meant for, which reminds like the planned time of a task.
+    public TimeOnly? PlannedTime { get; set; }
 
     public List<TimeModel>? TimesDone { get; set; }
 
@@ -117,6 +122,99 @@ public class HabitModel : ItemsModel
         bool doneToday = LastTimeDoneAt?.Date >= today.Date;
 
         return doneToday ? HabitSchedule.GetNextScheduledDay(Rule, today.Date) : FirstScheduledDayFrom(Rule, today.Date);
+    }
+
+    // Whether the planned time reminds on a day: on the named days of a schedule, every day of a daily
+    // habit, every day of a week that does not yet hold the weekly count, and every day from the due day
+    // for any other habit. Never before the day of StartAt, nor on a day the habit is done for.
+    internal bool RemindsOn(DateTime day, DayOfWeek firstDayOfWeek)
+    {
+        DateTime date = day.Date;
+
+        if (StartAt is DateTime startAt && date < startAt.Date)
+            return false;
+
+        if (IsDoneForDay(date))
+            return false;
+
+        if (HasSchedule)
+            return HabitSchedule.IsScheduledOn(Rule, date);
+
+        if (RepeatInterval <= 1 && RepeatPeriod == Period.Day)
+            return true;
+
+        if (RepeatInterval <= 1 && RepeatPeriod == Period.Week)
+            return !IsDoneForWeek(date, firstDayOfWeek);
+
+        return date >= GetDueAt().Date;
+    }
+
+    // The first day from fromDay on that the planned time reminds on, or null when there is none before the
+    // year 9999. A day the habit is already done for, which a completion entered ahead makes possible, is passed.
+    internal DateTime? GetNextReminderDay(DateTime fromDay, DayOfWeek firstDayOfWeek)
+    {
+        DateTime? day = fromDay.Date;
+
+        if (StartAt is DateTime startAt && startAt.Date > day)
+            day = startAt.Date;
+
+        if (!HasSchedule && !(RepeatInterval <= 1 && RepeatPeriod is Period.Day or Period.Week))
+        {
+            DateTime dueAt = GetDueAt();
+
+            // An interval that reaches past the last day DateTime holds is never due.
+            if (dueAt == DateTime.MaxValue)
+                return null;
+
+            if (dueAt.Date > day)
+                day = dueAt.Date;
+        }
+
+        if (HasSchedule)
+            day = FirstScheduledDayFrom(Rule, day.Value);
+
+        // A completion is entered at most a few days ahead, so a short walk finds the next day.
+        for (int step = 0; step < 1000 && day is DateTime candidate; step++)
+        {
+            if (RemindsOn(candidate, firstDayOfWeek))
+                return candidate;
+
+            day = HasSchedule ? HabitSchedule.GetNextScheduledDay(Rule, candidate) : candidate.Year < 9999 ? candidate.AddDays(1) : null;
+        }
+
+        return null;
+    }
+
+    // The goal of one day is met by the completed entries that started on it. The count applies to a
+    // daily habit only, since a weekly, monthly or yearly one asks for one completion on a day.
+    internal bool IsDoneForDay(DateTime day)
+    {
+        if (TimesDoneByDay is null || !TimesDoneByDay.TryGetValue(day.Date, out List<TimeModel>? times))
+            return false;
+
+        List<TimeModel> completed = times.Where(time => time.CompletedAt.HasValue).ToList();
+
+        if (completed.Count == 0)
+            return false;
+
+        return DisplayMetric switch
+        {
+            DisplayMetric.Time => Duration is not TimeOnly duration || completed.Sum(time => (time.CompletedAt!.Value - time.StartedAt).Ticks) >= duration.ToTimeSpan().Ticks,
+            // Rounded, because 0.7 plus 0.1 sums to 0.7999999999999999 and would miss a target of 0.8.
+            DisplayMetric.Quantity => Math.Round(completed.Sum(time => time.Quantity), 9) >= TargetQuantity,
+            _ => RepeatPeriod != Period.Day || completed.Count >= NonZeroRepeatCount
+        };
+    }
+
+    // The week follows the Week start setting, because it decides when the reminders begin again.
+    internal bool IsDoneForWeek(DateTime day, DayOfWeek firstDayOfWeek)
+    {
+        DateTime start = HabitStatistics.GetBucketStart(day, StatisticsPeriod.Week, firstDayOfWeek);
+        DateTime end = HabitStatistics.GetNextBucketStart(start, StatisticsPeriod.Week);
+
+        int completed = TimesDone?.Count(time => time.CompletedAt.HasValue && time.StartedAt >= start && time.StartedAt < end) ?? 0;
+
+        return completed >= NonZeroRepeatCount;
     }
 
     // The ratios only move one way with time between completions, so the value at a later moment is

@@ -369,6 +369,9 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
         {
             timeEntity.Quantity = time.Quantity;
             await _clientState.DataAccess.UpdateTime(timeEntity);
+
+            // A quantity can make a habit done for its day, which takes the day's reminder away, or no longer done.
+            await _notificationScheduler.Rebuild();
         }
     }
 
