@@ -64,7 +64,14 @@
                         _ => $"{dateTime:dddd, MMMM d} \u2014 {dayStatus.Count} {Loc["times done"]}"
                     };
 
-                    <button class="@($"border {border} {text} d-flex {background}")"
+                    string weight = "";
+                    if (HabitSchedule.IsScheduledOn(Habit.Rule, dateTime))
+                    {
+                        weight = "fw-bold";
+                        ariaLabel += $", {Loc["scheduled"]}";
+                    }
+
+                    <button class="@($"border {border} {text} {weight} d-flex {background}")"
                             role="gridcell"
                             style="align-items: center; justify-content: center; height: 50px; width: 50px; line-height: normal; flex-direction: column;"
                             tabindex="@(cellIndex == _activeDayIndex ? 0 : -1)"

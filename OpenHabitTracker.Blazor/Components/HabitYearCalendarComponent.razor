@@ -55,7 +55,7 @@
                                      @key="date"
                                      aria-label="@CellAriaLabel(date, status)"
                                      title="@CellAriaLabel(date, status)"
-                                     class="@($"border d-flex align-items-center justify-content-center {status.Background} {(date.Date == DateTime.Today ? "border-2 border-primary-subtle" : "")}")"
+                                     class="@($"border d-flex align-items-center justify-content-center {status.Background} {(date.Date == DateTime.Today ? "border-2 border-primary-subtle" : "")} {(HabitSchedule.IsScheduledOn(Habit.Rule, date) ? "fw-bold" : "")}")"
                                      style="flex: 1 0 26px; max-width: 44px; height: 22px;">
                                     <small style="font-size: 0.6rem; line-height: 1;">@date.Day</small>
                                 </div>
@@ -127,12 +127,17 @@
         return column == 0 ? week : null;
     }
 
-    string CellAriaLabel(DateTime date, DayStatus status) => Habit.DisplayMetric switch
+    string CellAriaLabel(DateTime date, DayStatus status)
     {
-        DisplayMetric.Time => $"{date:dddd, MMMM d} — {status.Label}",
-        DisplayMetric.Quantity => $"{date:dddd, MMMM d} — {status.Quantity:0.##} {Loc["Quantity"]}",
-        _ => $"{date:dddd, MMMM d} — {status.Count} {Loc["times done"]}"
-    };
+        string label = Habit.DisplayMetric switch
+        {
+            DisplayMetric.Time => $"{date:dddd, MMMM d} — {status.Label}",
+            DisplayMetric.Quantity => $"{date:dddd, MMMM d} — {status.Quantity:0.##} {Loc["Quantity"]}",
+            _ => $"{date:dddd, MMMM d} — {status.Count} {Loc["times done"]}"
+        };
+
+        return HabitSchedule.IsScheduledOn(Habit.Rule, date) ? $"{label}, {Loc["scheduled"]}" : label;
+    }
 
     // Read only: the month calendar in the detail owns editing, so this grid only moves focus.
     async Task HandleKeyDown(KeyboardEventArgs e)

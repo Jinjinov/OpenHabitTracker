@@ -143,6 +143,95 @@ public class CalendarComponentStoreTests
         Assert.That(DayOf(Cells(cut)[0]), Is.EqualTo(Day(start.AddDays(-7))));
     }
 
+    // --- scheduled days ---
+
+    private static List<(DateTime Day, bool Bold, string Label)> Marks(IRenderedComponent<CalendarComponent> cut, DateTime firstCell) =>
+        Cells(cut).Select((x, i) => (firstCell.AddDays(i), x.ClassList.Contains("fw-bold"), x.GetAttribute("aria-label")!)).ToList();
+
+    [Test]
+    public async Task Month_ScheduledDays_AreBoldAndSaySoBeforeTheStartAndInTheFutureToo()
+    {
+        await StartWith();
+        _habit.RepeatPeriod = Period.Week;
+        _habit.RepeatWeekdays = Weekdays.Monday;
+        _habit.StartAt = DateTime.Today.AddDays(60);
+
+        IRenderedComponent<CalendarComponent> cut = RenderMonth();
+
+        List<(DateTime Day, bool Bold, string Label)> marks = Marks(cut, WeekStart(FirstOfMonth(0), DayOfWeek.Monday));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(marks.Where(x => x.Bold).Select(x => x.Day.DayOfWeek), Is.EqualTo(Enumerable.Repeat(DayOfWeek.Monday, 6)));
+            Assert.That(marks.Where(x => !x.Bold).Select(x => x.Label), Has.None.EndsWith(", scheduled"));
+            Assert.That(marks.Where(x => x.Bold).Select(x => x.Label), Is.EqualTo(marks.Where(x => x.Bold).Select(x => $"{Day(x.Day)} — 0 times done, scheduled")));
+        });
+    }
+
+    [Test]
+    public async Task Month_EverySecondWeek_IsBoldInTheCountedWeeksOnly()
+    {
+        await StartWith();
+        DateTime anchor = WeekStart(FirstOfMonth(0), DayOfWeek.Monday);
+        _habit.RepeatPeriod = Period.Week;
+        _habit.RepeatInterval = 2;
+        _habit.RepeatWeekdays = Weekdays.Monday | Weekdays.Thursday;
+        _habit.StartAt = anchor;
+
+        IRenderedComponent<CalendarComponent> cut = RenderMonth();
+
+        List<(DateTime Day, bool Bold, string Label)> marks = Marks(cut, anchor);
+
+        Assert.That(marks.Where(x => x.Bold).Select(x => x.Day), Is.EqualTo(new[] { 0, 3, 14, 17, 28, 31 }.Select(x => anchor.AddDays(x))));
+    }
+
+    [Test]
+    public async Task Strip_ScheduledDay_IsBoldAndADoneOneSaysBoth()
+    {
+        await StartWith();
+        _habit.RepeatPeriod = Period.Week;
+        _habit.RepeatWeekdays = Weekdays.Monday;
+
+        DateTime lastMonday = WeekStart(DateTime.Today, DayOfWeek.Monday);
+        await _app.Get<IHabitService>().AddTimeDone(_habit, lastMonday.AddMinutes(1));
+        _habit.TimesDoneByDay = null;
+
+        IRenderedComponent<CalendarComponent> cut = RenderStrip(350);
+
+        List<(DateTime Day, bool Bold, string Label)> marks = Marks(cut, DateTime.Today.AddDays(-6));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(marks.Count(x => x.Bold), Is.EqualTo(1));
+            Assert.That(marks.Single(x => x.Bold).Day, Is.EqualTo(lastMonday));
+            Assert.That(CellOf(cut, lastMonday).GetAttribute("aria-label"), Is.EqualTo($"{Day(lastMonday)} — 1 times done, scheduled"));
+        });
+    }
+
+    [Test]
+    public async Task Month_ScheduledDayOfAQuantityHabit_SaysSo()
+    {
+        await StartWith(DisplayMetric.Quantity);
+        _habit.RepeatPeriod = Period.Week;
+        _habit.RepeatWeekdays = Weekdays.Monday;
+
+        IRenderedComponent<CalendarComponent> cut = RenderMonth();
+
+        DateTime monday = WeekStart(FirstOfMonth(0), DayOfWeek.Monday).AddDays(7);
+
+        Assert.That(CellOf(cut, monday).GetAttribute("aria-label"), Is.EqualTo($"{Day(monday)} — 0 Quantity, scheduled"));
+    }
+
+    [Test]
+    public async Task Month_WithoutScheduledDays_NothingIsBold()
+    {
+        await StartWith();
+
+        IRenderedComponent<CalendarComponent> cut = RenderMonth();
+
+        Assert.That(Cells(cut).Where(x => x.ClassList.Contains("fw-bold")), Is.Empty);
+    }
+
     [Test]
     public async Task Month_MarksTodayWeekendsAndTheDaysOfOtherMonths()
     {

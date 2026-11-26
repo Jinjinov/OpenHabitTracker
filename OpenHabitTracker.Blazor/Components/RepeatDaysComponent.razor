@@ -5,27 +5,89 @@
 
 @inject ClientState ClientState
 @inject IStringLocalizer Loc
+@inject IJsInterop JsInterop
 
-@if (ShowsDaysFor(Habit.RepeatPeriod))
+@if (Habit.RepeatPeriod == Period.Week)
 {
     <div class="input-group flex-nowrap">
         <span class="input-group-text bg-transparent col-4" id="@_labelId">@Loc["Repeat on"]</span>
         <div class="d-flex flex-grow-1" role="group" aria-labelledby="@_labelId">
-            @for (int i = 0; i < 7; i++)
-            {
-                DayOfWeek dayOfWeek = (DayOfWeek)OpenHabitTracker.Services.CalendarService.GetDayOfWeek(ClientState.Settings.FirstDayOfWeek, i);
-                Weekdays weekday = ToWeekdays(dayOfWeek);
-                bool pressed = (Habit.RepeatWeekdays & weekday) != Weekdays.None;
-
-                <button type="button"
-                        class="@($"btn {(pressed ? "btn-primary" : "btn-outline-primary")} flex-fill px-0 rounded-0")"
-                        aria-pressed="@(pressed ? "true" : "false")"
-                        aria-label="@CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(dayOfWeek)"
-                        @onclick="() => Toggle(weekday)">
-                    @Loc[OpenHabitTracker.Services.CalendarService.WeekdayKeys[(int)dayOfWeek]]
-                </button>
-            }
+            @WeekdayButtons("flex-fill px-0", "")
         </div>
+    </div>
+}
+else if (Habit.RepeatPeriod is Period.Month or Period.Year)
+{
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text bg-transparent col-4" id="@_labelId">@Loc["Repeat on"]</span>
+        <select class="form-select" aria-labelledby="@_labelId" value="@(_onWeekdays ? "weekdays" : "days")" @onchange="ChooseMonthlyForm">
+            <option value="days">@Loc["Days"]</option>
+            <option value="weekdays">@Loc["Weekdays"]</option>
+        </select>
+    </div>
+
+    <div class="mx-auto" style="width: 350px;">
+        @if (Habit.RepeatPeriod == Period.Year)
+        {
+            <div class="d-flex flex-wrap" role="group" aria-label="@Loc["Months"]">
+                @for (int month = 1; month <= 12; month++)
+                {
+                    Months bit = (Months)(1 << (month - 1));
+                    bool pressed = (Habit.RepeatMonths & bit) != Months.None;
+
+                    <button type="button"
+                            class="@ButtonClass(pressed, "px-0")"
+                            style="width: 87.5px; height: 50px;"
+                            aria-pressed="@(pressed ? "true" : "false")"
+                            aria-label="@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)"
+                            @onclick="() => ToggleMonth(bit)">
+                        @CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month)
+                    </button>
+                }
+            </div>
+        }
+
+        @if (_onWeekdays)
+        {
+            <div class="d-flex" role="group" aria-label="@Loc["Weekdays"]">
+                @foreach ((MonthWeeks position, string key) in _positions)
+                {
+                    bool pressed = (Habit.RepeatMonthWeeks & position) != MonthWeeks.None;
+
+                    <button type="button"
+                            class="@ButtonClass(pressed, "px-0")"
+                            style="width: 70px; height: 50px;"
+                            aria-pressed="@(pressed ? "true" : "false")"
+                            @onclick="() => TogglePosition(position)">
+                        @Loc[key]
+                    </button>
+                }
+            </div>
+            <div class="d-flex" role="group" aria-label="@Loc["Weekdays"]">
+                @WeekdayButtons("", "width: 50px; height: 50px;")
+            </div>
+        }
+        else
+        {
+            @* One tab stop for the 31 days, moved by the arrow keys. *@
+            <div class="d-flex flex-wrap" role="toolbar" aria-label="@Loc["Days"]" @ref="_daysRef" @onkeydown="MoveInDays">
+                @for (int day = 1; day <= 31; day++)
+                {
+                    int index = day - 1;
+                    bool pressed = (Habit.RepeatMonthDays & (1 << index)) != 0;
+
+                    <button type="button"
+                            class="@ButtonClass(pressed, "px-0")"
+                            style="width: 50px; height: 50px;"
+                            tabindex="@(index == _activeDay ? 0 : -1)"
+                            aria-pressed="@(pressed ? "true" : "false")"
+                            @ref="_dayRefs[index]"
+                            @onclick="() => ToggleMonthDay(index)">
+                        @day
+                    </button>
+                }
+            </div>
+        }
     </div>
 }
 
@@ -40,20 +102,135 @@
 
     readonly string _labelId = $"repeat-on-{Guid.NewGuid():N}";
 
+    static readonly (MonthWeeks Position, string Key)[] _positions =
+    [
+        (MonthWeeks.First, "First"),
+        (MonthWeeks.Second, "Second"),
+        (MonthWeeks.Third, "Third"),
+        (MonthWeeks.Fourth, "Fourth"),
+        (MonthWeeks.Last, "Last")
+    ];
+
+    const int AllMonthDays = int.MaxValue;
+    const MonthWeeks AllMonthWeeks = (MonthWeeks)31;
+
+    // Which monthly form is on screen. It is not stored: the form that holds a day is the one that counts.
+    bool _onWeekdays;
+    HabitModel? _formOf;
+
+    int _activeDay;
+    readonly ElementReference[] _dayRefs = new ElementReference[31];
+    ElementReference _daysRef;
+    string? _scrollKeysPreventedOn;
+
     // The periods whose days can be chosen here.
-    public static bool ShowsDaysFor(Period period) => period == Period.Week;
+    public static bool ShowsDaysFor(Period period) => period is Period.Week or Period.Month or Period.Year;
+
+    protected override void OnParametersSet()
+    {
+        if (!ReferenceEquals(_formOf, Habit))
+        {
+            _formOf = Habit;
+            _onWeekdays = (Habit.RepeatMonthDays & AllMonthDays) == 0 && (Habit.RepeatMonthWeeks & AllMonthWeeks) != MonthWeeks.None;
+            _activeDay = 0;
+        }
+    }
+
+    // The grid of days is created again whenever the weekdays or another period were on screen in between.
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_daysRef.Id is not null && _daysRef.Id != _scrollKeysPreventedOn)
+        {
+            _scrollKeysPreventedOn = _daysRef.Id;
+            await JsInterop.PreventScrollKeys(_daysRef);
+        }
+    }
+
+    RenderFragment WeekdayButtons(string extraClass, string style) => __builder =>
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            DayOfWeek dayOfWeek = (DayOfWeek)OpenHabitTracker.Services.CalendarService.GetDayOfWeek(ClientState.Settings.FirstDayOfWeek, i);
+            Weekdays weekday = ToWeekdays(dayOfWeek);
+            bool pressed = (Habit.RepeatWeekdays & weekday) != Weekdays.None;
+
+            <button type="button"
+                    class="@ButtonClass(pressed, extraClass)"
+                    style="@style"
+                    aria-pressed="@(pressed ? "true" : "false")"
+                    aria-label="@CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(dayOfWeek)"
+                    @onclick="() => ToggleWeekday(weekday)">
+                @Loc[OpenHabitTracker.Services.CalendarService.WeekdayKeys[(int)dayOfWeek]]
+            </button>
+        }
+    };
+
+    static string ButtonClass(bool pressed, string extraClass) => $"btn {(pressed ? "btn-primary" : "btn-outline-primary")} rounded-0 {extraClass}";
 
     static Weekdays ToWeekdays(DayOfWeek dayOfWeek) => (Weekdays)(1 << (((int)dayOfWeek + 6) % 7));
 
-    async Task Toggle(Weekdays weekday)
+    void ChooseMonthlyForm(ChangeEventArgs args)
+    {
+        _onWeekdays = args.Value?.ToString() == "weekdays";
+    }
+
+    Task ToggleWeekday(Weekdays weekday) => Change(() => Habit.RepeatWeekdays ^= weekday);
+
+    Task ToggleMonth(Months month) => Change(() => Habit.RepeatMonths ^= month);
+
+    // A day turned on makes the days the form that counts, so the positions go.
+    Task ToggleMonthDay(int index)
+    {
+        _activeDay = index;
+
+        return Change(() =>
+        {
+            Habit.RepeatMonthDays ^= 1 << index;
+
+            if ((Habit.RepeatMonthDays & (1 << index)) != 0)
+                Habit.RepeatMonthWeeks &= ~AllMonthWeeks;
+        });
+    }
+
+    // A position turned on makes the weekdays the form that counts, so the days go.
+    Task TogglePosition(MonthWeeks position) => Change(() =>
+    {
+        Habit.RepeatMonthWeeks ^= position;
+
+        if ((Habit.RepeatMonthWeeks & position) != MonthWeeks.None)
+            Habit.RepeatMonthDays &= ~AllMonthDays;
+    });
+
+    async Task Change(Action change)
     {
         bool hadSchedule = Habit.HasSchedule;
 
-        Habit.RepeatWeekdays ^= weekday;
+        change();
 
         Habit.KeepRepeatCountInStep(hadSchedule);
         Habit.RefreshStatistics();
 
         await OnChange.InvokeAsync();
+    }
+
+    async Task MoveInDays(KeyboardEventArgs e)
+    {
+        int target = e.Key switch
+        {
+            "ArrowRight" => _activeDay + 1,
+            "ArrowLeft" => _activeDay - 1,
+            "ArrowDown" => _activeDay + 7,
+            "ArrowUp" => _activeDay - 7,
+            "Home" => 0,
+            "End" => 30,
+            _ => -1
+        };
+
+        if (target < 0 || target > 30)
+            return;
+
+        _activeDay = target;
+
+        await JsInterop.FocusElement(_dayRefs[_activeDay]);
     }
 }

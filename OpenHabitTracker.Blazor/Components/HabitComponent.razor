@@ -156,10 +156,14 @@
         </div>
         <div class="p-1 border rounded-0" data-habits-step-24>
             <div>@Loc["Repeat interval"]: @ToReadableString(Habit.DesiredInterval)</div>
+            @if (Habit.GetNextScheduledDay(DateTime.Today) is DateTime nextScheduledDay)
+            {
+                <div>@Loc["Next scheduled day"]: @nextScheduledDay.ToShortDateString()</div>
+            }
             <div>@Loc["Elapsed time to repeat interval ratio"]: @Habit.ElapsedTimeToRepeatIntervalRatio.ToString("N0")%</div>
             @if (Habit.ElapsedTimeToRepeatIntervalRatio > 100.0)
             {
-                <div>@Loc["Repeat interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.DesiredInterval)</div>
+                <div>@Loc["Repeat interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.GetIntervalToDue())</div>
             }
         </div>
         <div class="p-1 border rounded-0" data-habits-step-25>

@@ -76,6 +76,38 @@ public class HabitYearCalendarTests
         cut.Find("div[role='grid']").KeyDownAsync(new KeyboardEventArgs { Key = key });
 
     [Test]
+    public void Render_ScheduledDays_AreBoldAndSaySo()
+    {
+        HabitModel habit = Habit(DisplayMetric.Repetitions, Done(DateTime.Today.AddDays(-14).AddHours(8)));
+        habit.RepeatPeriod = Period.Week;
+        habit.RepeatWeekdays = Weekdays.Monday;
+
+        IRenderedComponent<HabitYearCalendarComponent> cut = Render(habit);
+
+        List<(bool Monday, bool Bold, bool Scheduled, bool Title)> cells = Cells(cut)
+            .Select(x => (x.GetAttribute("aria-label")!.StartsWith("Monday"), x.ClassList.Contains("fw-bold"), x.GetAttribute("aria-label")!.EndsWith(", scheduled"), x.GetAttribute("title") == x.GetAttribute("aria-label")))
+            .ToList();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cells.Count(x => x.Monday), Is.GreaterThanOrEqualTo(52));
+            Assert.That(cells.All(x => x.Bold == x.Monday && x.Scheduled == x.Monday && x.Title), Is.True);
+        });
+    }
+
+    [Test]
+    public void Render_WithoutScheduledDays_NothingIsBold()
+    {
+        IRenderedComponent<HabitYearCalendarComponent> cut = Render(Habit());
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Cells(cut).Where(x => x.ClassList.Contains("fw-bold")), Is.Empty);
+            Assert.That(Cells(cut).Select(x => x.GetAttribute("aria-label")), Has.None.EndsWith(", scheduled"));
+        });
+    }
+
+    [Test]
     public void Render_EmptyHabit_DrawsFiftyThreeWeeksEndingThisWeek()
     {
         IRenderedComponent<HabitYearCalendarComponent> cut = Render(Habit());

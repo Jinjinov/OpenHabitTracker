@@ -26,7 +26,7 @@ public class RepeatDaysComponentTests
     private HabitModel _habit = null!;
     private int _changes;
 
-    private async Task StartWith(Action<HabitModel>? habit = null, DayOfWeek firstDayOfWeek = DayOfWeek.Monday, params HabitModel[] others)
+    private async Task StartWith(Action<HabitModel>? habit = null, DayOfWeek firstDayOfWeek = DayOfWeek.Monday, bool statistics = false, params HabitModel[] others)
     {
         _app = new AppTestContext();
         _app.JsInterop.GetElementDimensions(Arg.Any<ElementReference>()).Returns(Task.FromResult(new Dimensions { Width = 300, Height = 800 }));
@@ -36,7 +36,7 @@ public class RepeatDaysComponentTests
             settings.FirstDayOfWeek = firstDayOfWeek;
             settings.ShowLargeCalendar = false;
             settings.ShowSmallCalendar = false;
-            settings.ShowHabitStatistics = false;
+            settings.ShowHabitStatistics = statistics;
             settings.ShowHabitCharts = false;
         });
 
@@ -302,6 +302,341 @@ public class RepeatDaysComponentTests
             Assert.That(before, Is.EqualTo(1));
             Assert.That(_habit.BestStreak, Is.Null);
         });
+    }
+
+    // --- months and years ---
+
+    private async Task<(int Count, int MonthDays, MonthWeeks MonthWeeks, Weekdays Weekdays, Months Months)> StoredMonthly()
+    {
+        HabitEntity stored = (await _app.Store.GetHabit(_habit.Id))!;
+
+        return (stored.RepeatCount, stored.RepeatMonthDays, stored.RepeatMonthWeeks, stored.RepeatWeekdays, stored.RepeatMonths);
+    }
+
+    private static IElement FormSelect(IRenderedComponent<HabitComponent> cut) => cut.Find("[data-habits-step-16] select");
+
+    private static List<IElement> DayButtons(IRenderedComponent<HabitComponent> cut) => cut.FindAll("[data-habits-step-16] [role='toolbar'] button").ToList();
+
+    private static IElement Position(IRenderedComponent<HabitComponent> cut, string text) =>
+        cut.FindAll("[data-habits-step-16] button:not([aria-label])").Single(x => x.TextContent.Trim() == text);
+
+    private static string[] Positions(IRenderedComponent<HabitComponent> cut) =>
+        cut.FindAll("[data-habits-step-16] button:not([aria-label])").Select(x => x.TextContent.Trim()).ToArray();
+
+    [Test]
+    public async Task Month_DaysForm_ShowsTheChoiceAndThe31Days()
+    {
+        await StartWith(habit => habit.RepeatPeriod = Period.Month);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(FormSelect(cut).GetAttribute("value"), Is.EqualTo("days"));
+            Assert.That(FormSelect(cut).QuerySelectorAll("option").Select(x => x.TextContent), Is.EqualTo(new[] { "Days", "Weekdays" }));
+            Assert.That(DayButtons(cut).Select(x => x.TextContent.Trim()), Is.EqualTo(Enumerable.Range(1, 31).Select(x => x.ToString())));
+            Assert.That(DayButtons(cut).Select(x => x.GetAttribute("tabindex")), Is.EqualTo(new[] { "0" }.Concat(Enumerable.Repeat("-1", 30))));
+            Assert.That(cut.FindAll("[data-habits-step-16] button[aria-label='Monday']"), Is.Empty);
+            Assert.That(cut.FindAll("[data-habits-step-16] button[aria-label='January']"), Is.Empty);
+        });
+    }
+
+    [Test]
+    public async Task Month_WeekdaysForm_ShowsThePositionsOverTheWeekdaysAndStoresNothing()
+    {
+        await StartWith(habit => habit.RepeatPeriod = Period.Month);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        FormSelect(cut).Change("weekdays");
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(Positions(cut), Is.EqualTo(new[] { "First", "Second", "Third", "Fourth", "Last" }));
+            Assert.That(Toggles(cut).Where(x => x.HasAttribute("aria-label")).Select(x => x.GetAttribute("aria-label")),
+                Is.EqualTo(new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" }));
+            Assert.That(DayButtons(cut), Is.Empty);
+            Assert.That(await StoredMonthly(), Is.EqualTo((1, 0, MonthWeeks.None, Weekdays.None, Months.None)));
+            Assert.That(_changes, Is.Zero);
+        });
+    }
+
+    [Test]
+    public async Task Year_ShowsTheTwelveMonthsAboveTheMonthlyBlock()
+    {
+        await StartWith(habit => habit.RepeatPeriod = Period.Year);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        List<IElement> months = cut.FindAll("[data-habits-step-16] button[aria-label]").ToList();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(months.Select(x => x.TextContent.Trim()), Is.EqualTo(new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }));
+            Assert.That(months.Select(x => x.GetAttribute("aria-label")), Is.EqualTo(new[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }));
+            Assert.That(DayButtons(cut), Has.Count.EqualTo(31));
+        });
+    }
+
+    [Test]
+    [SetCulture("de-DE")]
+    public async Task Year_MonthLabelsAreTheFullNamesOfTheCulture()
+    {
+        await StartWith(habit => habit.RepeatPeriod = Period.Year);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        Assert.That(cut.FindAll("[data-habits-step-16] button[aria-label]").Select(x => x.GetAttribute("aria-label")),
+            Is.EqualTo(new[] { "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" }));
+    }
+
+    [Test]
+    public async Task Month_EveryDay_StoresEveryBitAndTheCount()
+    {
+        await StartWith(habit => habit.RepeatPeriod = Period.Month);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        for (int day = 0; day < 31; day++)
+            await DayButtons(cut)[day].ClickAsync(new MouseEventArgs());
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(await StoredMonthly(), Is.EqualTo((31, int.MaxValue, MonthWeeks.None, Weekdays.None, Months.None)));
+            Assert.That(DayButtons(cut).Select(x => x.GetAttribute("aria-pressed")), Is.All.EqualTo("true"));
+            Assert.That(_changes, Is.EqualTo(31));
+        });
+    }
+
+    [Test]
+    public async Task Month_EveryPositionAndWeekday_StoresEveryBitAndTheCount()
+    {
+        await StartWith(habit => habit.RepeatPeriod = Period.Month);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        FormSelect(cut).Change("weekdays");
+
+        List<MonthWeeks> positions = [];
+
+        foreach (string text in new[] { "First", "Second", "Third", "Fourth", "Last" })
+        {
+            await Position(cut, text).ClickAsync(new MouseEventArgs());
+            positions.Add((await StoredMonthly()).MonthWeeks);
+        }
+
+        int countBeforeWeekdays = (await StoredMonthly()).Count;
+
+        foreach (string name in new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" })
+            await Toggle(cut, name).ClickAsync(new MouseEventArgs());
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(positions, Is.EqualTo(new[] { (MonthWeeks)1, (MonthWeeks)3, (MonthWeeks)7, (MonthWeeks)15, (MonthWeeks)31 }));
+            Assert.That(countBeforeWeekdays, Is.EqualTo(1));
+            Assert.That(await StoredMonthly(), Is.EqualTo((35, 0, (MonthWeeks)31, (Weekdays)127, Months.None)));
+        });
+    }
+
+    [Test]
+    public async Task Year_EveryMonth_StoresEveryBitAndNoScheduleUntilADay()
+    {
+        await StartWith(habit => { habit.RepeatPeriod = Period.Year; habit.RepeatCount = 4; });
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        foreach (string name in new[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" })
+            await cut.Find($"[data-habits-step-16] button[aria-label='{name}']").ClickAsync(new MouseEventArgs());
+
+        (int, int, MonthWeeks, Weekdays, Months) monthsOnly = await StoredMonthly();
+        bool lockedWithMonthsOnly = CountInput(cut).HasAttribute("readonly");
+
+        await DayButtons(cut)[0].ClickAsync(new MouseEventArgs());
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That((monthsOnly, lockedWithMonthsOnly), Is.EqualTo(((4, 0, MonthWeeks.None, Weekdays.None, (Months)4095), false)));
+            Assert.That(await StoredMonthly(), Is.EqualTo((12, 1, MonthWeeks.None, Weekdays.None, (Months)4095)));
+            Assert.That(CountInput(cut).HasAttribute("readonly"), Is.True);
+        });
+    }
+
+    [TestCase(0, MonthWeeks.None, "days")]
+    [TestCase(1, MonthWeeks.None, "days")]
+    [TestCase(0, MonthWeeks.Second, "weekdays")]
+    [TestCase(1, MonthWeeks.Second, "days")]
+    [TestCase(int.MinValue, MonthWeeks.Second, "weekdays")]
+    public async Task Month_StartsOnTheFormThatCounts(int monthDays, MonthWeeks monthWeeks, string form)
+    {
+        await StartWith(habit => { habit.RepeatPeriod = Period.Month; habit.RepeatMonthDays = monthDays; habit.RepeatMonthWeeks = monthWeeks; });
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        Assert.That(FormSelect(cut).GetAttribute("value"), Is.EqualTo(form));
+    }
+
+    [Test]
+    public async Task Month_FirstToggleOfTheOtherForm_ClearsTheFirstAndKeepsBitsOutsideTheSets()
+    {
+        await StartWith(habit =>
+        {
+            habit.RepeatPeriod = Period.Month;
+            habit.RepeatMonthDays = int.MinValue | (1 << 14);
+            habit.RepeatMonthWeeks = (MonthWeeks)32;
+            habit.RepeatWeekdays = Weekdays.Monday;
+        });
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        FormSelect(cut).Change("weekdays");
+        await Position(cut, "Second").ClickAsync(new MouseEventArgs());
+
+        (int, int, MonthWeeks, Weekdays, Months) onWeekdays = await StoredMonthly();
+
+        FormSelect(cut).Change("days");
+        await DayButtons(cut)[0].ClickAsync(new MouseEventArgs());
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(onWeekdays, Is.EqualTo((1, int.MinValue, (MonthWeeks)32 | MonthWeeks.Second, Weekdays.Monday, Months.None)));
+            Assert.That(await StoredMonthly(), Is.EqualTo((1, int.MinValue | 1, (MonthWeeks)32, Weekdays.Monday, Months.None)));
+        });
+    }
+
+    [Test]
+    public async Task Month_TurningADayOff_LeavesThePositionsAlone()
+    {
+        await StartWith(habit => { habit.RepeatPeriod = Period.Month; habit.RepeatMonthDays = 1; habit.RepeatMonthWeeks = MonthWeeks.Last; habit.RepeatWeekdays = Weekdays.Friday; });
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        await DayButtons(cut)[0].ClickAsync(new MouseEventArgs());
+
+        Assert.That(await StoredMonthly(), Is.EqualTo((1, 0, MonthWeeks.Last, Weekdays.Friday, Months.None)));
+    }
+
+    [Test]
+    public async Task Month_Days_AreOneTabStopMovedByTheKeys()
+    {
+        await StartWith(habit => habit.RepeatPeriod = Period.Month);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        List<(string Key, int Active)> moves = [];
+
+        foreach (string key in new[] { "ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown", "End", "ArrowRight", "ArrowDown", "ArrowUp", "Home", "a" })
+        {
+            cut.Find("[data-habits-step-16] [role='toolbar']").KeyDown(new KeyboardEventArgs { Key = key });
+            moves.Add((key, DayButtons(cut).FindIndex(x => x.GetAttribute("tabindex") == "0")));
+        }
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(moves, Is.EqualTo(new[] { ("ArrowLeft", 0), ("ArrowUp", 0), ("ArrowRight", 1), ("ArrowDown", 8), ("End", 30), ("ArrowRight", 30), ("ArrowDown", 30), ("ArrowUp", 23), ("Home", 0), ("a", 0) }));
+            Assert.That(DayButtons(cut).Count(x => x.GetAttribute("tabindex") == "0"), Is.EqualTo(1));
+            _app.JsInterop.Received(5).FocusElement(Arg.Any<ElementReference>());
+        });
+    }
+
+    [Test]
+    public async Task Month_Days_ScrollKeysArePreventedEachTimeTheGridIsCreated()
+    {
+        await StartWith(habit => habit.RepeatPeriod = Period.Month);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        int onFirstRender = _app.JsInterop.ReceivedCalls().Count(x => x.GetMethodInfo().Name == nameof(IJsInterop.PreventScrollKeys));
+
+        FormSelect(cut).Change("weekdays");
+        FormSelect(cut).Change("days");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(onFirstRender, Is.EqualTo(1));
+            _app.JsInterop.Received(2).PreventScrollKeys(Arg.Any<ElementReference>());
+        });
+    }
+
+    [Test]
+    public async Task Tour_TheDaysStepShowsForWeekMonthAndYear()
+    {
+        await StartWith();
+
+        IRenderedComponent<Habits> cut = RenderPage(_habit.Id);
+
+        TourStep step = TourOf(cut)[15];
+
+        List<bool> shown = [];
+
+        foreach (Period period in new[] { Period.Week, Period.Month, Period.Year, Period.Day })
+        {
+            cut.Find("select[aria-label='Repeat period']").Change(period.ToString());
+            shown.Add(step.Show!());
+        }
+
+        Assert.That(shown, Is.EqualTo(new[] { true, true, true, false }));
+    }
+
+    // --- the statistics block ---
+
+    private static string Readable(TimeSpan span) =>
+        span.TotalMinutes >= 1.0
+            ? (span.Days > 0 ? span.Days + " d" + (span.Hours > 0 || span.Minutes > 0 ? ", " : "") : "") +
+              (span.Hours > 0 ? span.Hours + " h" + (span.Minutes > 0 ? ", " : "") : "") +
+              (span.Minutes > 0 ? span.Minutes + " m" : "")
+            : "0 m";
+
+    // Done two days ago at noon, meant for every day: due by the end of yesterday.
+    [Test]
+    public async Task Statistics_OverdueLine_IsTheTimePastTheEndOfTheScheduledDay()
+    {
+        await StartWith(habit => { habit.RepeatWeekdays = (Weekdays)127; habit.RepeatCount = 7; habit.LastTimeDoneAt = DateTime.Today.AddDays(-2).AddHours(12); }, statistics: true);
+
+        string before = Readable(DateTime.Now - DateTime.Today);
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+        string after = Readable(DateTime.Now - DateTime.Today);
+
+        Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Contain($"Repeat interval overdue: {before}").Or.Contain($"Repeat interval overdue: {after}"));
+    }
+
+    [Test]
+    public async Task Statistics_NextScheduledDay_IsTodayUntilItIsDoneOnIt()
+    {
+        await StartWith(habit => { habit.RepeatWeekdays = (Weekdays)127; habit.RepeatCount = 7; }, statistics: true);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        string notDone = cut.Find("[data-habits-step-24]").TextContent;
+
+        _habit.LastTimeDoneAt = DateTime.Now;
+        cut.Render();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(notDone, Does.Contain($"Next scheduled day: {DateTime.Today.ToShortDateString()}"));
+            Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Contain($"Next scheduled day: {DateTime.Today.AddDays(1).ToShortDateString()}"));
+        });
+    }
+
+    [Test]
+    [SetCulture("de-DE")]
+    public async Task Statistics_NextScheduledDay_IsWrittenInTheCulture()
+    {
+        await StartWith(habit => { habit.RepeatWeekdays = (Weekdays)127; habit.RepeatCount = 7; }, statistics: true);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Contain($"Next scheduled day: {DateTime.Today:dd.MM.yyyy}"));
+    }
+
+    [Test]
+    public async Task Statistics_WithoutDays_HasNoNextScheduledDay()
+    {
+        await StartWith(statistics: true);
+
+        IRenderedComponent<HabitComponent> cut = RenderDetail();
+
+        Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Not.Contain("Next scheduled day"));
     }
 
     // --- in the new habit form ---
