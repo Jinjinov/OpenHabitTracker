@@ -141,7 +141,18 @@
         DateTime weekStart = CalendarParams.GetFirstDayOfWeek(ClientState.Settings.FirstDayOfWeek, DateTime.Today);
         DateTime weekEnd = weekStart.AddDays(7);
 
-        foreach (var group in GetHabitGroups())
+        List<(CategoryModel? Category, List<HabitModel> Habits)> groups = GetHabitGroups().Select(group => (group.Category, group.Habits.ToList())).ToList();
+
+        @* A notification opens its habit, which a search, a filter or a collapsed category can keep out of the rows. *@
+        @if (!_showSecondColumn && HabitService.SelectedHabit is HabitModel selectedHabit && selectedHabit.Id == Id && HabitService.NewHabit is null && !selectedHabit.IsDeleted
+            && !groups.Any(group => group.Category?.IsCollapsed != true && group.Habits.Contains(selectedHabit)))
+        {
+            <div class="@($"my-{ClientState.Settings.VerticalMargin}")">
+                <HabitComponent Habit="selectedHabit" CloseSelected="CloseSelected" />
+            </div>
+        }
+
+        foreach (var group in groups)
         {
             @if (ClientState.Settings.ShowGroupedByCategory)
             {

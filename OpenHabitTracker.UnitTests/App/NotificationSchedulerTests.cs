@@ -77,6 +77,137 @@ public class NotificationSchedulerTests
         await _notifications.DidNotReceive().CancelAll();
     }
 
+    // A control character, a lone half of a surrogate pair, and the characters XML allows around them.
+    private const string PastedTitle = "a\u0001b\tc\nd\re\uD800f\uDC00g😀h\u001Fi￾j";
+    private const string CleanTitle = "ab\tc\nd\refg😀hij";
+
+    [Test]
+    public async Task Rebuild_TitlesWithCharactersXmlRefuses_TheReminderLeavesThemOut()
+    {
+        UseSettings(summaryTime: null, leadMinutes: 15);
+        StoreTasks(new TaskEntity { Id = 7, Title = PastedTitle, PlannedAt = DateTime.Today.AddDays(2).AddHours(10) });
+
+        await _sut.Rebuild();
+
+        Assert.That(_replaced.Single().Title, Is.EqualTo(CleanTitle));
+    }
+
+    [Test]
+    public async Task Rebuild_TitlesWithCharactersXmlRefuses_TheDigestLeavesThemOut()
+    {
+        DateTime day = DateTime.Today.AddDays(2);
+        UseSettings(summaryTime: new TimeOnly(9, 0), leadMinutes: null);
+        StoreTasks(new TaskEntity { Id = 1, Title = PastedTitle, PlannedAt = day + TaskModel.DateOnlySentinel });
+        StoreHabits(OverdueHabit(3, "\u0002Stretch\uDFFF"));
+
+        await _sut.Rebuild();
+
+        Assert.That(_replaced.Single(x => x.NotifyAt == day.AddHours(9)).Body, Is.EqualTo($"[Tasks]: {CleanTitle}\n[Habits]: Stretch"));
+    }
+
+    [Test]
+    public async Task Rebuild_TitleWithASurrogatePairAtItsEnd_KeepsThePair()
+    {
+        UseSettings(summaryTime: null, leadMinutes: 15);
+        StoreTasks(new TaskEntity { Id = 7, Title = "Call 😀", PlannedAt = DateTime.Today.AddDays(2).AddHours(10) });
+
+        await _sut.Rebuild();
+
+        Assert.That(_replaced.Single().Title, Is.EqualTo("Call 😀"));
+    }
+
+    [Test]
+    public async Task Rebuild_CalledWhileOneRuns_StartsAfterItAndHoldsWhatChangedMeanwhile()
+    {
+        TaskCompletionSource firstReplace = new();
+        int replaces = 0;
+        List<int?> leadTimes = [];
+
+        _notifications.Replace(Arg.Any<IReadOnlyList<NotificationRequest>>()).Returns(_ =>
+        {
+            replaces++;
+            leadTimes.Add(_clientState.Settings.NotificationLeadMinutes);
+            return replaces == 1 ? firstReplace.Task : Task.CompletedTask;
+        });
+
+        UseSettings(summaryTime: null, leadMinutes: 15);
+        StoreTasks(new TaskEntity { Id = 7, Title = "Call the bank", PlannedAt = DateTime.Today.AddDays(2).AddHours(10) });
+
+        Task first = _sut.Rebuild();
+
+        Assert.That(replaces, Is.EqualTo(1), "the first rebuild has not reached Replace");
+
+        UseSettings(summaryTime: null, leadMinutes: 30);
+
+        Task second = _sut.Rebuild();
+        await Task.Delay(100);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(replaces, Is.EqualTo(1), "the second rebuild started while the first was adding");
+            Assert.That(second.IsCompleted, Is.False);
+        });
+
+        firstReplace.SetResult();
+        await Task.WhenAll(first, second);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(replaces, Is.EqualTo(2));
+            Assert.That(leadTimes, Is.EqualTo(new int?[] { 15, 30 }));
+            Assert.That(_replaced.Single().NotifyAt, Is.EqualTo(DateTime.Today.AddDays(2).AddHours(10).AddMinutes(-30)));
+        });
+    }
+
+    [Test]
+    public async Task Rebuild_FiveCallsWhileOneRuns_ShareOneRebuildAndAllEnd()
+    {
+        TaskCompletionSource firstReplace = new();
+        int replaces = 0;
+
+        _notifications.Replace(Arg.Any<IReadOnlyList<NotificationRequest>>()).Returns(_ =>
+        {
+            replaces++;
+            return replaces == 1 ? firstReplace.Task : Task.CompletedTask;
+        });
+
+        UseSettings(summaryTime: null, leadMinutes: 15);
+        StoreTasks(new TaskEntity { Id = 7, Title = "Call the bank", PlannedAt = DateTime.Today.AddDays(2).AddHours(10) });
+
+        Task first = _sut.Rebuild();
+        List<Task> waiting = Enumerable.Range(0, 5).Select(_ => _sut.Rebuild()).ToList();
+
+        firstReplace.SetResult();
+        await Task.WhenAll(waiting.Append(first));
+
+        Assert.That(replaces, Is.EqualTo(2));
+
+        await _sut.Rebuild();
+
+        Assert.That(replaces, Is.EqualTo(3), "a call after the others have ended rebuilds again");
+    }
+
+    [Test]
+    public async Task Rebuild_AfterARebuildThatThrew_RunsAndTheFirstCallerGetsTheException()
+    {
+        int replaces = 0;
+
+        _notifications.Replace(Arg.Any<IReadOnlyList<NotificationRequest>>()).Returns(_ =>
+        {
+            replaces++;
+            return replaces == 1 ? Task.FromException(new InvalidOperationException("refused")) : Task.CompletedTask;
+        });
+
+        UseSettings(summaryTime: null, leadMinutes: 15);
+        StoreTasks(new TaskEntity { Id = 7, Title = "Call the bank", PlannedAt = DateTime.Today.AddDays(2).AddHours(10) });
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => _sut.Rebuild());
+
+        await _sut.Rebuild();
+
+        Assert.That(replaces, Is.EqualTo(2));
+    }
+
     [Test]
     public async Task Rebuild_NoSettingsSavedYet_DoesNothingAndCreatesNone()
     {

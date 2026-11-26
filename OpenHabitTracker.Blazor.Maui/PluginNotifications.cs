@@ -91,7 +91,7 @@ public class PluginNotifications : INotifications
                         // An inexact alarm lands anywhere in the hour after its time, while the plugin
                         // silently drops anything later than this. Its default is one minute, which
                         // discarded most of what was scheduled.
-                        AllowedDelay = AllowedDelayFor(request)
+                        AllowedDelay = request.AllowedDelay
                     }
                 }
             };
@@ -124,16 +124,6 @@ public class PluginNotifications : INotifications
     // a disc; the Android folder names a drawable made for the status bar. The other platforms use
     // the app icon.
     protected virtual string? SmallIconName => null;
-
-    // A summary of what is due is still true hours later; a reminder for a planned time is not.
-    // An inexact alarm is delivered when the device next wakes after its time, at the latest one hour
-    // after it, so a reminder allows exactly that and anything later is dropped.
-    private static TimeSpan AllowedDelayFor(NotificationRequest request)
-    {
-        return request.Id.StartsWith("digest-", StringComparison.Ordinal)
-            ? TimeSpan.FromHours(6)
-            : TimeSpan.FromHours(1);
-    }
 
     // Digests first, then the soonest reminders, so the discard never falls on the daily summary.
     private static IEnumerable<NotificationRequest> Budgeted(IReadOnlyList<NotificationRequest> requests)

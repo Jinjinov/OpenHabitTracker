@@ -4,6 +4,8 @@ using OpenHabitTracker.Data;
 using OpenHabitTracker.Data.Entities;
 using OpenHabitTracker.Data.Models;
 using OpenHabitTracker.Services;
+using System.Text;
+using System.Xml;
 
 namespace OpenHabitTracker.App;
 
@@ -16,7 +18,38 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
     private readonly IStringLocalizer _loc = loc;
     private readonly ILogger<NotificationScheduler> _logger = logger;
 
+    // Android and Apple schedule one request at a time, so a rebuild that started while another was still
+    // adding would cancel half of it and leave the other half in place.
+    private readonly SemaphoreSlim _rebuildLock = new(1, 1);
+
+    private int _rebuildsAsked;
+    private int _rebuildsDone;
+
+    // One rebuild at a time, and the calls made while one runs share the next one, which starts after them.
     public async Task Rebuild()
+    {
+        int asked = Interlocked.Increment(ref _rebuildsAsked);
+
+        await _rebuildLock.WaitAsync();
+
+        try
+        {
+            if (_rebuildsDone >= asked)
+                return;
+
+            int covered = Volatile.Read(ref _rebuildsAsked);
+
+            await RebuildNow();
+
+            _rebuildsDone = covered;
+        }
+        finally
+        {
+            _rebuildLock.Release();
+        }
+    }
+
+    private async Task RebuildNow()
     {
         if (!_notifications.CanNotify)
             return;
@@ -53,7 +86,7 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
             settings,
             DateTime.Now);
 
-        List<NotificationRequest> requests = scheduled.Select(ToRequest).ToList();
+        List<NotificationRequest> requests = scheduled.Select(ToRequest).Select(WithoutInvalidCharacters).ToList();
 
         _logger.LogInformation("Scheduling {Count} notifications from {Tasks} tasks and {Habits} habits, lead {Lead}, summary {Summary}",
             requests.Count, _clientState.Tasks?.Count, _clientState.Habits?.Count, settings.NotificationLeadMinutes, settings.NotificationTime);
@@ -85,6 +118,36 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
             NotifyAt = scheduled.NotifyAt,
             Route = DigestRoute(scheduled)
         };
+    }
+
+    // Windows builds each notification as XML, which refuses control characters and a lone half of a
+    // surrogate pair, and a pasted title can hold either.
+    private static NotificationRequest WithoutInvalidCharacters(NotificationRequest request)
+    {
+        request.Title = WithoutInvalidCharacters(request.Title);
+        request.Body = WithoutInvalidCharacters(request.Body);
+
+        return request;
+    }
+
+    private static string WithoutInvalidCharacters(string text)
+    {
+        StringBuilder result = new(text.Length);
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (i + 1 < text.Length && XmlConvert.IsXmlSurrogatePair(text[i + 1], text[i]))
+            {
+                result.Append(text, i, 2);
+                i++;
+            }
+            else if (XmlConvert.IsXmlChar(text[i]))
+            {
+                result.Append(text[i]);
+            }
+        }
+
+        return result.ToString();
     }
 
     // One line per kind, label and titles, so the collapsed notification already reads as a list

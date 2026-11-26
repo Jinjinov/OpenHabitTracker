@@ -7,6 +7,9 @@ public abstract class RunningOnlyNotifications : INotifications, IAsyncDisposabl
 {
     private readonly TimeSpan _interval = TimeSpan.FromSeconds(30);
 
+    // The timer's ticks run on the thread pool, beside the calls from the page.
+    private readonly object _requestsLock = new();
+
     private List<NotificationRequest> _requests = new();
     private DateTime _lastTick = DateTime.Now;
 
@@ -57,11 +60,22 @@ public abstract class RunningOnlyNotifications : INotifications, IAsyncDisposabl
         _onActivated?.Invoke(route);
     }
 
+    // A request that came due since the last tick is kept for the next one, because a new set never
+    // holds a moment that has passed.
     public Task Replace(IReadOnlyList<NotificationRequest> requests)
     {
-        _requests = requests.ToList();
+        DateTime now = DateTime.Now;
 
-        if (_requests.Count > 0)
+        lock (_requestsLock)
+        {
+            List<NotificationRequest> dueAndNotShown = _requests
+                .Where(request => request.NotifyAt > _lastTick && request.NotifyAt <= now && requests.All(replacement => replacement.Id != request.Id))
+                .ToList();
+
+            _requests = [.. dueAndNotShown, .. requests];
+        }
+
+        if (requests.Count > 0)
             Start();
 
         return Task.CompletedTask;
@@ -69,7 +83,8 @@ public abstract class RunningOnlyNotifications : INotifications, IAsyncDisposabl
 
     public Task CancelAll()
     {
-        _requests.Clear();
+        lock (_requestsLock)
+            _requests.Clear();
 
         return Task.CompletedTask;
     }
@@ -125,16 +140,20 @@ public abstract class RunningOnlyNotifications : INotifications, IAsyncDisposabl
             {
                 DateTime now = DateTime.Now;
 
-                List<NotificationRequest> due = _requests.Where(request => request.NotifyAt > _lastTick && request.NotifyAt <= now).ToList();
+                List<NotificationRequest> due;
 
-                _lastTick = now;
-
-                foreach (NotificationRequest request in due)
+                lock (_requestsLock)
                 {
-                    _requests.Remove(request);
+                    due = _requests.Where(request => request.NotifyAt > _lastTick && request.NotifyAt <= now).ToList();
 
-                    await Show(request);
+                    _requests.RemoveAll(due.Contains);
+
+                    _lastTick = now;
                 }
+
+                // After the computer slept, the tick finds everything that came due meanwhile.
+                foreach (NotificationRequest request in due.Where(request => now - request.NotifyAt <= request.AllowedDelay))
+                    await Show(request);
             }
         }
         catch (OperationCanceledException)

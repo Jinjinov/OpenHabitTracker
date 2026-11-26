@@ -12,6 +12,10 @@ public class NotificationRequest
 
     // Route to open when the notification is tapped, e.g. "/tasks/42" or "/habits".
     public string Route { get; set; } = string.Empty;
+
+    // How late it may still be shown. A summary of what is due is still true hours later; a reminder for
+    // a planned time is not. An inexact Android alarm is delivered at the latest one hour after its time.
+    public TimeSpan AllowedDelay => Id.StartsWith("digest-", StringComparison.Ordinal) ? TimeSpan.FromHours(6) : TimeSpan.FromHours(1);
 }
 
 public interface INotifications

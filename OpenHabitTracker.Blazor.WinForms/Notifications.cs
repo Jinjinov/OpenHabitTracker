@@ -93,13 +93,21 @@ public sealed class Notifications(ILogger<Notifications> logger) : INotification
                 if (request.NotifyAt <= DateTime.Now)
                     continue;
 
-                ScheduledToastNotification toast = new(BuildContent(request), request.NotifyAt)
+                // One request Windows refuses must not leave every later one unscheduled.
+                try
                 {
-                    Tag = request.Id.Length <= 64 ? request.Id : request.Id.Substring(0, 64),
-                    Group = Group
-                };
+                    ScheduledToastNotification toast = new(BuildContent(request), request.NotifyAt)
+                    {
+                        Tag = request.Id.Length <= 64 ? request.Id : request.Id.Substring(0, 64),
+                        Group = Group
+                    };
 
-                notifier.AddToSchedule(toast);
+                    notifier.AddToSchedule(toast);
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Scheduling the notification {Id} failed", request.Id);
+                }
             }
         }
         catch (Exception exception)

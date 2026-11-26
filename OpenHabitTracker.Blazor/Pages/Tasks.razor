@@ -105,7 +105,18 @@
             }
         </div>
 
-        foreach (var group in GetTaskGroups())
+        List<(CategoryModel? Category, List<TaskModel> Tasks)> groups = GetTaskGroups().Select(group => (group.Category, group.Tasks.ToList())).ToList();
+
+        @* A notification opens its task, which a search, a filter or a collapsed category can keep out of the rows. *@
+        @if (!_showSecondColumn && TaskService.SelectedTask is TaskModel selectedTask && selectedTask.Id == Id && TaskService.NewTask is null && !selectedTask.IsDeleted
+            && !groups.Any(group => group.Category?.IsCollapsed != true && group.Tasks.Contains(selectedTask)))
+        {
+            <div class="@($"my-{ClientState.Settings.VerticalMargin}")">
+                <TaskComponent Task="selectedTask" CloseSelected="CloseSelected" />
+            </div>
+        }
+
+        foreach (var group in groups)
         {
             @if (ClientState.Settings.ShowGroupedByCategory)
             {

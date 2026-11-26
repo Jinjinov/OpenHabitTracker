@@ -80,7 +80,18 @@
             }
         </div>
 
-        foreach (var group in GetNoteGroups())
+        List<(CategoryModel? Category, List<NoteModel> Notes)> groups = GetNoteGroups().Select(group => (group.Category, group.Notes.ToList())).ToList();
+
+        @* A notification opens its note, which a search, a filter or a collapsed category can keep out of the rows. *@
+        @if (!_showSecondColumn && NoteService.SelectedNote is NoteModel selectedNote && selectedNote.Id == Id && NoteService.NewNote is null && !selectedNote.IsDeleted
+            && !groups.Any(group => group.Category?.IsCollapsed != true && group.Notes.Contains(selectedNote)))
+        {
+            <div class="@($"my-{ClientState.Settings.VerticalMargin}")">
+                <NoteComponent Note="selectedNote" CloseSelected="CloseSelected" />
+            </div>
+        }
+
+        foreach (var group in groups)
         {
             @if (ClientState.Settings.ShowGroupedByCategory)
             {
