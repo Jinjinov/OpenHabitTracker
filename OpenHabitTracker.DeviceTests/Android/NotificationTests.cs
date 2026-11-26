@@ -175,6 +175,66 @@ public class NotificationTests : AndroidTest
         Assert.That(WaitForElement("#task-component [data-tasks-step-7] input").GetDomProperty("value"), Is.EqualTo(title));
     }
 
+    // A habit meant for today is in today's summary whatever its ratio, and a habit meant for today that is done is not.
+    [Test]
+    public void DailySummary_HabitMeantForToday_IsListedUntilItIsDone()
+    {
+        string listed = $"Meant for today {DateTime.Now:HHmmss}";
+        string done = $"Done today {DateTime.Now:HHmmss}";
+
+        // The permissions are the setup here, not what is tested: granted directly, the summary fires on its minute.
+        ClearApp();
+        Shell("pm", "grant", AppPackage, PostNotifications);
+        SetExactAlarmPermission("allow");
+
+        LaunchApp();
+        SwitchToWebView();
+        OpenPage(HabitsPage);
+
+        // The done habit is added first, so its row is the only one and today's cell is its own.
+        AddItem(done);
+        ScheduleEveryWeekday(done);
+        CompleteToday(done);
+
+        AddItem(listed);
+        ScheduleEveryWeekday(listed);
+
+        // On the device's clock 3 minutes ahead, rounded up to a whole minute, so the summary lands at least 2 minutes out.
+        DateTime summaryAt = DeviceNow().AddMinutes(4);
+        summaryAt = new DateTime(summaryAt.Year, summaryAt.Month, summaryAt.Day, summaryAt.Hour, summaryAt.Minute, 0);
+
+        OpenSidebar("bi-gear");
+        SetChangedValue(WaitForElement("[data-settings-step-29] input[type='time']"), summaryAt.ToString("HH:mm", CultureInfo.InvariantCulture));
+        WaitForElement("#closeSidebar").Click();
+
+        Driver.Context = NativeContext;
+        Assert.That(WaitUntil(() => PendingAlarms().Any(alarm => alarm.Exact), DefaultTimeout), Is.True, "The summary is not scheduled exactly");
+
+        Driver.ExecuteScript("mobile: pressKey", new Dictionary<string, object> { ["keycode"] = 3 });
+        Driver.ExecuteScript("mobile: openNotifications");
+
+        By summary = MobileBy.AndroidUIAutomator($"new UiSelector().textContains(\"{listed}\")");
+        Assert.That(WaitUntil(() => Driver.FindElements(summary).Count > 0, TimeSpan.FromMinutes(5)), Is.True, "The summary never listed the habit meant for today");
+        Assert.That(Driver.PageSource, Does.Not.Contain(done), "The summary lists the habit already done today");
+
+        Driver.ExecuteScript("mobile: pressKey", new Dictionary<string, object> { ["keycode"] = 4 });
+    }
+
+    // Web context, on the habits page: sets the habit to repeat weekly on all seven days.
+    private void ScheduleEveryWeekday(string title)
+    {
+        Row(HabitRows, title)!.Click();
+        SetChangedValue(WaitForElement("#habit-component [data-habits-step-15] select"), "Week");
+
+        WaitForElement("#habit-component [data-habits-step-16] button");
+        foreach (IWebElement day in Driver.FindElements(By.CssSelector("#habit-component [data-habits-step-16] button")))
+            day.Click();
+
+        Assert.That(WaitUntil(() => WaitForElement("#habit-component [data-habits-step-15] input[type='number']").GetDomProperty("value") == "7", DefaultTimeout), Is.True, "The days were not chosen");
+
+        WaitForElement("[data-habits-step-11]").Click();
+    }
+
     // Android reschedules nothing after a reboot; the app registers for the boot broadcast and schedules again,
     // without being opened. Restarts the emulator, so it runs only on request.
     [Test]

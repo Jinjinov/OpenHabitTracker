@@ -348,5 +348,14 @@
   "Exact notification timing": "正確な通知時刻",
   "Open alarms & reminders": "アラームとリマインダーを開く",
   "On": "オン",
-  "Off": "オフ"
+  "Off": "オフ",
+  "Repeat on": "繰り返す日",
+  "Weekdays": "曜日",
+  "First": "第1",
+  "Second": "第2",
+  "Third": "第3",
+  "Fourth": "第4",
+  "Last": "最終",
+  "Next scheduled day": "次の予定日",
+  "scheduled": "予定日"
 }

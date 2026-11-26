@@ -348,5 +348,14 @@
   "Exact notification timing": "Tačno vreme obaveštenja",
   "Open alarms & reminders": "Otvori Alarmi i podsetnici",
   "On": "Uključeno",
-  "Off": "Isključeno"
+  "Off": "Isključeno",
+  "Repeat on": "Ponovi u",
+  "Weekdays": "Dani u nedelji",
+  "First": "Prvi",
+  "Second": "Drugi",
+  "Third": "Treći",
+  "Fourth": "Četvrti",
+  "Last": "Poslednji",
+  "Next scheduled day": "Sledeći planirani dan",
+  "scheduled": "planiran"
 }

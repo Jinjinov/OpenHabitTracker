@@ -348,5 +348,14 @@
   "Exact notification timing": "정확한 알림 시간",
   "Open alarms & reminders": "알람 및 리마인더 열기",
   "On": "켜짐",
-  "Off": "꺼짐"
+  "Off": "꺼짐",
+  "Repeat on": "반복할 날",
+  "Weekdays": "요일",
+  "First": "첫째",
+  "Second": "둘째",
+  "Third": "셋째",
+  "Fourth": "넷째",
+  "Last": "마지막",
+  "Next scheduled day": "다음 예정일",
+  "scheduled": "예정일"
 }

@@ -348,5 +348,14 @@
   "Exact notification timing": "Præcis notifikationstid",
   "Open alarms & reminders": "Åbn Alarmer og påmindelser",
   "On": "Til",
-  "Off": "Fra"
+  "Off": "Fra",
+  "Repeat on": "Gentag på",
+  "Weekdays": "Ugedage",
+  "First": "Første",
+  "Second": "Anden",
+  "Third": "Tredje",
+  "Fourth": "Fjerde",
+  "Last": "Sidste",
+  "Next scheduled day": "Næste planlagte dag",
+  "scheduled": "planlagt"
 }

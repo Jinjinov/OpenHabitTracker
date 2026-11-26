@@ -10,7 +10,7 @@
 @if (Habit.RepeatPeriod == Period.Week)
 {
     <div class="input-group flex-nowrap">
-        <span class="input-group-text bg-transparent col-4" id="@_labelId">@Loc["Repeat on"]</span>
+        <span class="input-group-text bg-transparent" id="@_labelId">@Loc["Repeat on"]</span>
         <div class="d-flex flex-grow-1" role="group" aria-labelledby="@_labelId">
             @WeekdayButtons("flex-fill px-0", "")
         </div>
@@ -19,7 +19,7 @@
 else if (Habit.RepeatPeriod is Period.Month or Period.Year)
 {
     <div class="input-group flex-nowrap">
-        <span class="input-group-text bg-transparent col-4" id="@_labelId">@Loc["Repeat on"]</span>
+        <span class="input-group-text bg-transparent" id="@_labelId">@Loc["Repeat on"]</span>
         <select class="form-select" aria-labelledby="@_labelId" value="@(_onWeekdays ? "weekdays" : "days")" @onchange="ChooseMonthlyForm">
             <option value="days">@Loc["Days"]</option>
             <option value="weekdays">@Loc["Weekdays"]</option>
@@ -55,8 +55,8 @@ else if (Habit.RepeatPeriod is Period.Month or Period.Year)
                     bool pressed = (Habit.RepeatMonthWeeks & position) != MonthWeeks.None;
 
                     <button type="button"
-                            class="@ButtonClass(pressed, "px-0")"
-                            style="width: 70px; height: 50px;"
+                            class="@ButtonClass(pressed, "flex-fill px-0 small")"
+                            style="height: 50px;"
                             aria-pressed="@(pressed ? "true" : "false")"
                             @onclick="() => TogglePosition(position)">
                         @Loc[key]
@@ -165,7 +165,9 @@ else if (Habit.RepeatPeriod is Period.Month or Period.Year)
         }
     };
 
-    static string ButtonClass(bool pressed, string extraClass) => $"btn {(pressed ? "btn-primary" : "btn-outline-primary")} rounded-0 {extraClass}";
+    // A pressed toggle is filled and active: morph fills an outline button with the same color,
+    // and draws an active one sunken.
+    static string ButtonClass(bool pressed, string extraClass) => $"btn {(pressed ? "btn-primary active" : "btn-outline-primary")} rounded-0 {extraClass}";
 
     static Weekdays ToWeekdays(DayOfWeek dayOfWeek) => (Weekdays)(1 << (((int)dayOfWeek + 6) % 7));
 

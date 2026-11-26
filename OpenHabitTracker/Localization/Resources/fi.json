@@ -348,5 +348,14 @@
   "Exact notification timing": "Tarkka ilmoitusaika",
   "Open alarms & reminders": "Avaa Hälytykset ja muistutukset",
   "On": "Käytössä",
-  "Off": "Ei käytössä"
+  "Off": "Ei käytössä",
+  "Repeat on": "Toistopäivät",
+  "Weekdays": "Viikonpäivät",
+  "First": "Ensimmäinen",
+  "Second": "Toinen",
+  "Third": "Kolmas",
+  "Fourth": "Neljäs",
+  "Last": "Viimeinen",
+  "Next scheduled day": "Seuraava suunniteltu päivä",
+  "scheduled": "suunniteltu"
 }

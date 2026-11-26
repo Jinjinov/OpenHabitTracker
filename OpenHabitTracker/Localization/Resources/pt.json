@@ -348,5 +348,14 @@
   "Exact notification timing": "Hora exata das notificações",
   "Open alarms & reminders": "Abrir Alarmes e lembretes",
   "On": "Ativada",
-  "Off": "Desativada"
+  "Off": "Desativada",
+  "Repeat on": "Repetir em",
+  "Weekdays": "Dias da semana",
+  "First": "Primeiro",
+  "Second": "Segundo",
+  "Third": "Terceiro",
+  "Fourth": "Quarto",
+  "Last": "Último",
+  "Next scheduled day": "Próximo dia planeado",
+  "scheduled": "planeado"
 }

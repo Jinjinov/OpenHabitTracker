@@ -348,5 +348,14 @@
   "Exact notification timing": "Presný čas upozornení",
   "Open alarms & reminders": "Otvoriť Budíky a pripomenutia",
   "On": "Zapnuté",
-  "Off": "Vypnuté"
+  "Off": "Vypnuté",
+  "Repeat on": "V dňoch",
+  "Weekdays": "Dni v týždni",
+  "First": "Prvý",
+  "Second": "Druhý",
+  "Third": "Tretí",
+  "Fourth": "Štvrtý",
+  "Last": "Posledný",
+  "Next scheduled day": "Ďalší naplánovaný deň",
+  "scheduled": "naplánovaný"
 }

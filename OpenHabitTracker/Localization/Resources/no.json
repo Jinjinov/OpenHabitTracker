@@ -348,5 +348,14 @@
   "Exact notification timing": "Nøyaktig varslingstid",
   "Open alarms & reminders": "Åpne Alarmer og påminnelser",
   "On": "På",
-  "Off": "Av"
+  "Off": "Av",
+  "Repeat on": "Gjenta på",
+  "Weekdays": "Ukedager",
+  "First": "Første",
+  "Second": "Andre",
+  "Third": "Tredje",
+  "Fourth": "Fjerde",
+  "Last": "Siste",
+  "Next scheduled day": "Neste planlagte dag",
+  "scheduled": "planlagt"
 }

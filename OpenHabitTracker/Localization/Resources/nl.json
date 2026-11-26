@@ -348,5 +348,14 @@
   "Exact notification timing": "Exacte meldingstijd",
   "Open alarms & reminders": "Wekkers en herinneringen openen",
   "On": "Aan",
-  "Off": "Uit"
+  "Off": "Uit",
+  "Repeat on": "Herhalen op",
+  "Weekdays": "Dagen van de week",
+  "First": "Eerste",
+  "Second": "Tweede",
+  "Third": "Derde",
+  "Fourth": "Vierde",
+  "Last": "Laatste",
+  "Next scheduled day": "Volgende geplande dag",
+  "scheduled": "gepland"
 }

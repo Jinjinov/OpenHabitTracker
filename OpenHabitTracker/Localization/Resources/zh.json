@@ -348,5 +348,14 @@
   "Exact notification timing": "精确通知时间",
   "Open alarms & reminders": "打开闹钟和提醒",
   "On": "开启",
-  "Off": "关闭"
+  "Off": "关闭",
+  "Repeat on": "重复于",
+  "Weekdays": "星期",
+  "First": "第一个",
+  "Second": "第二个",
+  "Third": "第三个",
+  "Fourth": "第四个",
+  "Last": "最后一个",
+  "Next scheduled day": "下一个计划日",
+  "scheduled": "计划日"
 }

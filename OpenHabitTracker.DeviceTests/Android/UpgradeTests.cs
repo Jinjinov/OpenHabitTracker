@@ -53,6 +53,15 @@ public class UpgradeTests : AndroidTest
         OpenPage(HabitsPage);
         Assert.That(Row(HabitRows, "Habit from the previous release"), Is.Not.Null, "The habit is gone after the update");
         Assert.That(WaitForElement("[data-habits-step-3]").Text, Does.Not.Contain(NeverDone), "The habit's completion is gone after the update");
+
+        // The previous release had no repeat days, so the habit opens with its rule as it was and no day chosen.
+        Row(HabitRows, "Habit from the previous release")!.Click();
+        Assert.That(WaitForElement("#habit-component [data-habits-step-15] select").GetDomProperty("value"), Is.EqualTo("Day"), "The repeat period changed in the update");
+        Assert.That(WaitForElement("#habit-component [data-habits-step-15] input[type='number']").GetDomProperty("value"), Is.EqualTo("1"), "The repeat count changed in the update");
+
+        SetChangedValue(WaitForElement("#habit-component [data-habits-step-15] select"), "Week");
+        WaitForElement("#habit-component [data-habits-step-16] button");
+        Assert.That(Driver.FindElements(By.CssSelector("#habit-component [data-habits-step-16] button[aria-pressed='true']")), Is.Empty, "The habit has days after the update");
     }
 
     // The highest version tag of the repository the tests are built from: bin\Debug\net10.0 is four folders below its root.

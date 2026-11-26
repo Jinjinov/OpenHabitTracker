@@ -348,5 +348,14 @@
   "Exact notification timing": "Exakt aviseringstid",
   "Open alarms & reminders": "Öppna Alarm och påminnelser",
   "On": "På",
-  "Off": "Av"
+  "Off": "Av",
+  "Repeat on": "Upprepa på",
+  "Weekdays": "Veckodagar",
+  "First": "Första",
+  "Second": "Andra",
+  "Third": "Tredje",
+  "Fourth": "Fjärde",
+  "Last": "Sista",
+  "Next scheduled day": "Nästa planerade dag",
+  "scheduled": "planerad"
 }

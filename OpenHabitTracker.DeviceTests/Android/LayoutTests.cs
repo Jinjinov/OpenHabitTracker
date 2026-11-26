@@ -79,6 +79,61 @@ public class LayoutTests : AndroidTest
             $"The strip under the page is rgb{strip}, the page above it rgb{above}");
     }
 
+    // The 31 days of a monthly habit make the habit detail and the new habit form taller than the screen;
+    // the last day, and the end of the detail, must scroll above three-button navigation's bar.
+    [Test]
+    public void MonthDays_ScrollAboveTheNavigationBar()
+    {
+        Rotate(0);
+        UseThreeButtonNavigation(true);
+
+        ClearApp();
+        LaunchApp();
+        SwitchToWebView();
+
+        OpenPage(HabitsPage);
+        AddItem("Monthly");
+        Row(HabitRows, "Monthly")!.Click();
+        SetChangedValue(WaitForElement("#habit-component [data-habits-step-15] select"), "Month");
+        WaitForElement("#habit-component [data-habits-step-16] [role='toolbar'] button");
+
+        Driver.Context = NativeContext;
+        int barTop = ScreenHeight() - NavigationBarHeight();
+
+        double lastDayInDetail = ScrollIntoViewAndMeasureBottom("#habit-component [data-habits-step-16] [role='toolbar'] button:last-child");
+        double endOfDetail = ScrollToEndAndMeasureBottom("[data-habits-step-11]");
+
+        WaitForElement("[data-habits-step-11]").Click();
+        WaitForElement("button.btn-plain.input-group").Click();
+        SetChangedValue(WaitForElement("div.input-group:has(#countInput) select"), "Month");
+        WaitForElement("div.input-group:has(#countInput) + div.input-group + div [role='toolbar'] button");
+
+        double lastDayInForm = ScrollIntoViewAndMeasureBottom("div.input-group:has(#countInput) + div.input-group + div [role='toolbar'] button:last-child");
+
+        // The scroll position lands on a fraction of a CSS pixel, as in the test above.
+        Assert.Multiple(() =>
+        {
+            Assert.That(lastDayInDetail, Is.LessThanOrEqualTo(barTop + 3), "The last day in the detail is under the navigation bar");
+            Assert.That(endOfDetail, Is.LessThanOrEqualTo(barTop + 3), "The end of the detail is under the navigation bar");
+            Assert.That(lastDayInForm, Is.LessThanOrEqualTo(barTop + 3), "The last day in the new habit form is under the navigation bar");
+        });
+    }
+
+    // Scrolls the element to the middle of its column and returns its bottom edge in screen pixels.
+    private double ScrollIntoViewAndMeasureBottom(string cssSelector)
+    {
+        System.Drawing.Rectangle webView = WebViewFrame();
+
+        Driver.Context = WebViewContext;
+        Dictionary<string, object> measured = (Dictionary<string, object>)RunScript("""
+            const element = document.querySelector(arguments[0]);
+            element.scrollIntoView({ block: 'center' });
+            return { bottom: element.getBoundingClientRect().bottom, ratio: window.devicePixelRatio };
+            """, cssSelector)!;
+
+        return webView.Top + Convert.ToDouble(measured["bottom"]) * Convert.ToDouble(measured["ratio"]);
+    }
+
     // An override size, when set, is listed after the physical one and is what the screen shows.
     private int ScreenHeight()
     {
