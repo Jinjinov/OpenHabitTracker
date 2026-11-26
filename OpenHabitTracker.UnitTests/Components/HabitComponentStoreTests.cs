@@ -102,6 +102,122 @@ public class HabitComponentStoreTests
         });
     }
 
+    private const string TimeRow = "[data-habits-step-17] input[type='time'][aria-label='Planned at']";
+
+    [TestCase(Period.Day)]
+    [TestCase(Period.Week)]
+    [TestCase(Period.Month)]
+    [TestCase(Period.Year)]
+    public async Task PlannedTime_ShowsForEveryPeriodWithTheStoredTime(Period period)
+    {
+        await StartWith(habit: habit => { habit.RepeatPeriod = period; habit.PlannedTime = new TimeOnly(7, 5); });
+
+        IRenderedComponent<HabitComponent> cut = Render();
+
+        Assert.That(cut.Find(TimeRow).GetAttribute("value"), Is.EqualTo("07:05:00"));
+    }
+
+    [Test]
+    public async Task PlannedTime_NoneStored_IsEmpty()
+    {
+        await StartWith();
+
+        IRenderedComponent<HabitComponent> cut = Render();
+
+        Assert.That(cut.Find(TimeRow).GetAttribute("value"), Is.Empty.Or.Null);
+    }
+
+    [Test]
+    public async Task PlannedTime_SetChangedAndCleared_IsStored()
+    {
+        await StartWith();
+
+        IRenderedComponent<HabitComponent> cut = Render();
+
+        cut.Find(TimeRow).Change("18:30");
+
+        Assert.That((await Stored()).PlannedTime, Is.EqualTo(new TimeOnly(18, 30)));
+
+        cut.Find(TimeRow).Change("00:00");
+
+        Assert.That((await Stored()).PlannedTime, Is.EqualTo(new TimeOnly(0, 0)));
+
+        cut.Find(TimeRow).Change("");
+
+        HabitEntity stored = await Stored();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(stored.PlannedTime, Is.Null);
+            Assert.That(_habit.PlannedTime, Is.Null);
+            Assert.That((stored.Title, stored.RepeatCount, stored.TargetQuantity), Is.EqualTo(("Run", 1, 5.0)));
+        });
+    }
+
+    [Test]
+    public async Task PlannedTime_Changed_RebuildsTheSchedule()
+    {
+        await StartWith(settings => settings.NotificationLeadMinutes = 0);
+        _app.Notifications.CanNotify.Returns(true);
+
+        IRenderedComponent<HabitComponent> cut = Render();
+
+        _app.Notifications.ClearReceivedCalls();
+
+        cut.Find(TimeRow).Change("18:30");
+
+        await _app.Notifications.Received(1).Replace(Arg.Is<IReadOnlyList<NotificationRequest>>(x => x.Any(r => r.Id.StartsWith($"habit-{_habit.Id}-") && r.NotifyAt.TimeOfDay == new TimeSpan(18, 30, 0))));
+    }
+
+    // The page passes another habit to the same component, as it does when the route changes.
+    [Test]
+    public async Task PlannedTime_ParameterChangedToAnotherHabit_IsStoredOnThatOneAlone()
+    {
+        await StartWith();
+
+        HabitModel other = new() { Title = "Read", RepeatCount = 1, RepeatInterval = 1, PlannedTime = new TimeOnly(21, 0) };
+        await _app.ClientState.AddUserData([new CategoryModel { Title = "Mind", Habits = [other] }]);
+        await _habitService.SetSelectedHabit(_habit.Id);
+
+        IRenderedComponent<HabitComponent> cut = Render();
+
+        await _habitService.SetSelectedHabit(other.Id);
+        cut.Render(parameters => parameters.Add(p => p.Habit, other));
+
+        Assert.That(cut.Find(TimeRow).GetAttribute("value"), Is.EqualTo("21:00:00"));
+
+        cut.Find(TimeRow).Change("06:15");
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That((await _app.Store.GetHabit(other.Id))!.PlannedTime, Is.EqualTo(new TimeOnly(6, 15)));
+            Assert.That((await Stored()).PlannedTime, Is.Null);
+        });
+    }
+
+    // A refresh replaces every model, and the page passes the new one to the detail.
+    [Test]
+    public async Task PlannedTime_AfterARefresh_IsStoredOnTheModelOnScreen()
+    {
+        await StartWith();
+
+        IRenderedComponent<HabitComponent> cut = Render();
+
+        await _app.ClientState.RefreshState();
+        await _habitService.SetSelectedHabit(_habit.Id);
+        HabitModel refreshed = _app.ClientState.Habits![_habit.Id];
+        cut.Render(parameters => parameters.Add(p => p.Habit, refreshed));
+
+        cut.Find(TimeRow).Change("19:45");
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(refreshed, Is.Not.SameAs(_habit));
+            Assert.That(refreshed.PlannedTime, Is.EqualTo(new TimeOnly(19, 45)));
+            Assert.That((await Stored()).PlannedTime, Is.EqualTo(new TimeOnly(19, 45)));
+        });
+    }
+
     [Test]
     public async Task Duration_SetBackToZero_StoresNoDuration()
     {
@@ -143,7 +259,7 @@ public class HabitComponentStoreTests
         IRenderedComponent<HabitComponent> cut = Render();
         long home = _app.ClientState.Categories!.Values.Single(x => x.Title == "Home").Id;
 
-        cut.Find("[data-habits-step-33] select").Change(home.ToString());
+        cut.Find("[data-habits-step-34] select").Change(home.ToString());
         cut.Find("select[aria-label='Color']").Change("bg-success-subtle");
 
         HabitEntity stored = await Stored();
@@ -166,9 +282,9 @@ public class HabitComponentStoreTests
         Assert.Multiple(() =>
         {
             Assert.That(cut.FindAll("[data-habits-step-7]"), Is.Empty);
-            Assert.That(cut.FindAll("[data-habits-step-33]"), Is.Empty);
             Assert.That(cut.FindAll("[data-habits-step-34]"), Is.Empty);
-            Assert.That(cut.Find("[data-habits-step-35]").TextContent, Does.Contain($"Created: {_habit.CreatedAt}").And.Contain($"Updated: {_habit.UpdatedAt}"));
+            Assert.That(cut.FindAll("[data-habits-step-35]"), Is.Empty);
+            Assert.That(cut.Find("[data-habits-step-36]").TextContent, Does.Contain($"Created: {_habit.CreatedAt}").And.Contain($"Updated: {_habit.UpdatedAt}"));
         });
     }
 
@@ -322,7 +438,7 @@ public class HabitComponentStoreTests
         await Assert.MultipleAsync(async () =>
         {
             Assert.That((await StoredTimes()).Single().CompletedAt, Is.Null);
-            Assert.That(cut.Find("[data-habits-step-20] span").TextContent, Is.EqualTo("00:00:00"));
+            Assert.That(cut.Find("[data-habits-step-21] span").TextContent, Is.EqualTo("00:00:00"));
         });
 
         await Click(cut, "Stop");
@@ -344,14 +460,14 @@ public class HabitComponentStoreTests
 
         IRenderedComponent<HabitComponent> cut = Render();
 
-        Assert.That(cut.Find("[data-habits-step-20] span").TextContent, Does.StartWith("02:00:0").Or.StartWith("01:59:5"));
+        Assert.That(cut.Find("[data-habits-step-21] span").TextContent, Does.StartWith("02:00:0").Or.StartWith("01:59:5"));
 
         await Click(cut, "Pause");
         await Click(cut, "Reset");
 
         Assert.Multiple(() =>
         {
-            Assert.That(cut.Find("[data-habits-step-20] span").TextContent, Is.EqualTo("00:00:00"));
+            Assert.That(cut.Find("[data-habits-step-21] span").TextContent, Is.EqualTo("00:00:00"));
             Assert.That(cut.FindAll("button[aria-label='Pause']"), Has.Count.EqualTo(1));
         });
     }
@@ -425,7 +541,7 @@ public class HabitComponentStoreTests
 
         IRenderedComponent<HabitComponent> cut = Render();
 
-        Assert.That(cut.Find("[data-habits-step-24] div").TextContent, Is.EqualTo($"Repeat interval: {text}"));
+        Assert.That(cut.Find("[data-habits-step-25] div").TextContent, Is.EqualTo($"Repeat interval: {text}"));
     }
 
     [Test]
@@ -439,8 +555,8 @@ public class HabitComponentStoreTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Contain("Repeat interval overdue: 2 d, 1 h, 30 m").Or.Contain("Repeat interval overdue: 2 d, 1 h, 31 m"));
-            Assert.That(cut.Find("[data-habits-step-27]").TextContent, Is.EqualTo($"Completed 1 times, last time on {_habit.LastTimeDoneAt}"));
+            Assert.That(cut.Find("[data-habits-step-25]").TextContent, Does.Contain("Repeat interval overdue: 2 d, 1 h, 30 m").Or.Contain("Repeat interval overdue: 2 d, 1 h, 31 m"));
+            Assert.That(cut.Find("[data-habits-step-28]").TextContent, Is.EqualTo($"Completed 1 times, last time on {_habit.LastTimeDoneAt}"));
         });
     }
 
@@ -455,8 +571,8 @@ public class HabitComponentStoreTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Not.Contain("overdue"));
-            Assert.That(cut.Find("[data-habits-step-23]").TextContent, Is.EqualTo("Elapsed time: 0 m"));
+            Assert.That(cut.Find("[data-habits-step-25]").TextContent, Does.Not.Contain("overdue"));
+            Assert.That(cut.Find("[data-habits-step-24]").TextContent, Is.EqualTo("Elapsed time: 0 m"));
         });
     }
 
@@ -467,6 +583,6 @@ public class HabitComponentStoreTests
 
         IRenderedComponent<HabitComponent> cut = Render();
 
-        Assert.That(cut.FindAll("[data-habits-step-27]"), Is.Empty);
+        Assert.That(cut.FindAll("[data-habits-step-28]"), Is.Empty);
     }
 }

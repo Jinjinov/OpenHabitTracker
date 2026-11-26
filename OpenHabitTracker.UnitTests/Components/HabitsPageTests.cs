@@ -193,6 +193,47 @@ public class HabitsPageTests
     }
 
     [Test]
+    public async Task AddNew_PlannedTime_IsStoredAndTheNextNewHabitStartsWithout()
+    {
+        await Seed(null);
+
+        IRenderedComponent<Habits> cut = _app.Ctx.Render<Habits>();
+
+        await cut.Find("button.btn-plain.input-group").ClickAsync(new MouseEventArgs());
+        cut.Find("input[placeholder='Add new habit']").Input("Stretch");
+        cut.Find("input[type='time'][aria-label='Planned at']").Change("07:15");
+        await cut.Find("button[aria-label='Save']").ClickAsync(new MouseEventArgs());
+
+        await cut.Find("button.btn-plain.input-group").ClickAsync(new MouseEventArgs());
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That((await _app.Store.GetHabits()).Single().PlannedTime, Is.EqualTo(new TimeOnly(7, 15)));
+            Assert.That(cut.Find("input[type='time'][aria-label='Planned at']").GetAttribute("value"), Is.Empty.Or.Null);
+            Assert.That(_app.Get<IHabitService>().NewHabit!.PlannedTime, Is.Null);
+        });
+    }
+
+    [Test]
+    public async Task AddNew_PlannedTimeThenClosed_StoresNothing()
+    {
+        await Seed(null);
+
+        IRenderedComponent<Habits> cut = _app.Ctx.Render<Habits>();
+
+        await cut.Find("button.btn-plain.input-group").ClickAsync(new MouseEventArgs());
+        cut.Find("input[placeholder='Add new habit']").Input("Stretch");
+        cut.Find("input[type='time'][aria-label='Planned at']").Change("07:15");
+        await cut.Find("button[aria-label='Close']").ClickAsync(new MouseEventArgs());
+
+        await Assert.MultipleAsync(async () =>
+        {
+            Assert.That(await _app.Store.GetHabits(), Is.Empty);
+            Assert.That(_app.Get<IHabitService>().NewHabit, Is.Null);
+        });
+    }
+
+    [Test]
     public async Task GroupedByCategory_TheCompletionRuleColorsTheButtonAndAClickStoresTheOtherRule()
     {
         HabitModel doneThisWeek = Daily("Done", 0);

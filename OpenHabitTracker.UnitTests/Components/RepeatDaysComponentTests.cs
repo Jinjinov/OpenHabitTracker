@@ -597,7 +597,7 @@ public class RepeatDaysComponentTests
         IRenderedComponent<HabitComponent> cut = RenderDetail();
         string after = Readable(DateTime.Now - DateTime.Today);
 
-        Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Contain($"Repeat interval overdue: {before}").Or.Contain($"Repeat interval overdue: {after}"));
+        Assert.That(cut.Find("[data-habits-step-25]").TextContent, Does.Contain($"Repeat interval overdue: {before}").Or.Contain($"Repeat interval overdue: {after}"));
     }
 
     [Test]
@@ -607,7 +607,7 @@ public class RepeatDaysComponentTests
 
         IRenderedComponent<HabitComponent> cut = RenderDetail();
 
-        string notDone = cut.Find("[data-habits-step-24]").TextContent;
+        string notDone = cut.Find("[data-habits-step-25]").TextContent;
 
         _habit.LastTimeDoneAt = DateTime.Now;
         cut.Render();
@@ -615,7 +615,7 @@ public class RepeatDaysComponentTests
         Assert.Multiple(() =>
         {
             Assert.That(notDone, Does.Contain($"Next scheduled day: {DateTime.Today.ToShortDateString()}"));
-            Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Contain($"Next scheduled day: {DateTime.Today.AddDays(1).ToShortDateString()}"));
+            Assert.That(cut.Find("[data-habits-step-25]").TextContent, Does.Contain($"Next scheduled day: {DateTime.Today.AddDays(1).ToShortDateString()}"));
         });
     }
 
@@ -627,7 +627,7 @@ public class RepeatDaysComponentTests
 
         IRenderedComponent<HabitComponent> cut = RenderDetail();
 
-        Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Contain($"Next scheduled day: {DateTime.Today:dd.MM.yyyy}"));
+        Assert.That(cut.Find("[data-habits-step-25]").TextContent, Does.Contain($"Next scheduled day: {DateTime.Today:dd.MM.yyyy}"));
     }
 
     [Test]
@@ -637,7 +637,7 @@ public class RepeatDaysComponentTests
 
         IRenderedComponent<HabitComponent> cut = RenderDetail();
 
-        Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Not.Contain("Next scheduled day"));
+        Assert.That(cut.Find("[data-habits-step-25]").TextContent, Does.Not.Contain("Next scheduled day"));
     }
 
     // --- in the new habit form ---
@@ -766,10 +766,12 @@ public class RepeatDaysComponentTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(tour, Has.Length.EqualTo(35));
+            Assert.That(tour, Has.Length.EqualTo(36));
             Assert.That(tour[15].Text, Is.EqualTo("Choose the days the habit is meant for. Without any, it repeats the set number of times."));
             Assert.That(tour[14].Text, Is.EqualTo("Set the habit's desired repeat interval."));
-            Assert.That(tour[16].Text, Is.EqualTo("Set the habit's desired duration."));
+            Assert.That(tour[16].Text, Is.EqualTo("Set the time of day the habit is meant for. While reminders are on in the settings, it reminds you before that time on the days the habit is meant for."));
+            Assert.That(tour[16].Show!(), Is.True, "the time row shows for a daily habit too");
+            Assert.That(tour[17].Text, Is.EqualTo("Set the habit's desired duration."));
             Assert.That(shownForWeek, Is.True);
             Assert.That(tour[15].Show!(), Is.False);
         });

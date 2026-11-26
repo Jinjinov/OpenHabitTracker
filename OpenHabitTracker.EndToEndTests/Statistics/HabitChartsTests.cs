@@ -36,7 +36,7 @@ public class HabitChartsTests : BaseTest
 
         await Page.Locator("[data-habits-step-2]:has-text('Charts Off Habit')").ClickAsync();
 
-        await Expect(Page.Locator("[data-habits-step-28]")).ToHaveCountAsync(0);
+        await Expect(Page.Locator("[data-habits-step-29]")).ToHaveCountAsync(0);
     }
 
     [Test]
@@ -49,11 +49,11 @@ public class HabitChartsTests : BaseTest
 
         await Page.Locator("[data-habits-step-2]:has-text('Charts On Habit')").ClickAsync();
 
-        await Expect(Page.Locator("[data-habits-step-28]")).ToHaveCountAsync(1); // target
-        await Expect(Page.Locator("[data-habits-step-29]")).ToHaveCountAsync(1); // history
-        await Expect(Page.Locator("[data-habits-step-30]")).ToHaveCountAsync(1); // calendar
-        await Expect(Page.Locator("[data-habits-step-31]")).ToHaveCountAsync(1); // best streaks
-        await Expect(Page.Locator("[data-habits-step-32]")).ToHaveCountAsync(1); // frequency
+        await Expect(Page.Locator("[data-habits-step-29]")).ToHaveCountAsync(1); // target
+        await Expect(Page.Locator("[data-habits-step-30]")).ToHaveCountAsync(1); // history
+        await Expect(Page.Locator("[data-habits-step-31]")).ToHaveCountAsync(1); // calendar
+        await Expect(Page.Locator("[data-habits-step-32]")).ToHaveCountAsync(1); // best streaks
+        await Expect(Page.Locator("[data-habits-step-33]")).ToHaveCountAsync(1); // frequency
 
         await SetShowHabitChartsAsync(false); // leave the default for other tests
     }
@@ -69,8 +69,8 @@ public class HabitChartsTests : BaseTest
         await Page.Locator("[data-habits-step-2]:has-text('Charts Independent Habit')").ClickAsync();
 
         // The text statistics block ships off; turning the charts on must not turn it on or off.
-        await Expect(Page.Locator("[data-habits-step-28]")).ToHaveCountAsync(1);
-        await Expect(Page.Locator("[data-habits-step-21]")).ToHaveCountAsync(0);
+        await Expect(Page.Locator("[data-habits-step-29]")).ToHaveCountAsync(1);
+        await Expect(Page.Locator("[data-habits-step-22]")).ToHaveCountAsync(0);
 
         await SetShowHabitChartsAsync(false);
     }
@@ -90,7 +90,7 @@ public class HabitChartsTests : BaseTest
         await Page.Locator("[data-habits-step-13] button[aria-label='Increase']").ClickAsync();
 
         // Once a day by default, so today reads one of one.
-        await Expect(Page.Locator("[data-habits-step-28]")).ToContainTextAsync("1 of 1");
+        await Expect(Page.Locator("[data-habits-step-29]")).ToContainTextAsync("1 of 1");
 
         await SetShowHabitChartsAsync(false);
     }

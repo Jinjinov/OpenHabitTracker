@@ -70,6 +70,11 @@
             <RepeatDaysComponent Habit="HabitService.NewHabit" OnChange="() => { }" />
 
             <div class="input-group">
+                <span class="input-group-text bg-transparent col-4">@Loc["Planned at"]</span>
+                <InputDate class="form-control" Type="InputDateType.Time" aria-label="@Loc["Planned at"]" @bind-Value="HabitService.NewHabit.PlannedTime" />
+            </div>
+
+            <div class="input-group">
                 <span class="input-group-text bg-transparent">@Loc["Duration"]</span>
 
                 <InputSelect class="form-select" aria-label="@Loc["Duration hours"]" @bind-Value="HabitService.NewHabit.DurationHour" TValue="int">
@@ -299,6 +304,7 @@
             new() { Text = "Set the habit's start date. Elapsed time won't count before this date.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's desired repeat interval.", Show = () => _showHabitComponent },
             new() { Text = "Choose the days the habit is meant for. Without any, it repeats the set number of times.", Show = () => _showHabitComponent && RepeatDaysComponent.ShowsDaysFor(HabitService.SelectedHabit!.RepeatPeriod) },
+            new() { Text = "Set the time of day the habit is meant for. While reminders are on in the settings, it reminds you before that time on the days the habit is meant for.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's desired duration.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's display metric.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's target quantity.", Show = () => _showHabitComponent && HabitService.SelectedHabit?.DisplayMetric == DisplayMetric.Quantity },

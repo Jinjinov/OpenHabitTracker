@@ -70,6 +70,11 @@
     }
 
     <div class="input-group" data-habits-step-17>
+        <span class="input-group-text bg-transparent col-4">@Loc["Planned at"]</span>
+        <InputDate class="form-control" Type="InputDateType.Time" aria-label="@Loc["Planned at"]" Value="Habit.PlannedTime" ValueExpression="() => Habit.PlannedTime" ValueChanged="(TimeOnly? plannedTime) => SavePlannedTime(Habit, plannedTime)" />
+    </div>
+
+    <div class="input-group" data-habits-step-18>
         <span class="input-group-text bg-transparent">@Loc["Duration"]</span>
 
         <InputSelect class="form-select" aria-label="@Loc["Duration hours"]" Value="Habit.DurationHour" ValueExpression="() => Habit.DurationHour" TValue="int" ValueChanged="(int hour) => SaveDuration(Habit, hour, Habit.DurationMinute)">
@@ -89,7 +94,7 @@
         <span class="input-group-text bg-transparent">min</span>
     </div>
 
-    <div class="input-group" data-habits-step-18>
+    <div class="input-group" data-habits-step-19>
         <span class="input-group-text bg-transparent col-4">@Loc["Display"]</span>
         <InputSelect class="form-select" aria-label="@Loc["Display"]" Value="Habit.DisplayMetric" ValueExpression="() => Habit.DisplayMetric" ValueChanged="(DisplayMetric displayMetric) => SaveDisplayMetric(Habit, displayMetric)">
             @foreach (DisplayMetric displayMetric in Enum.GetValues<DisplayMetric>())
@@ -101,13 +106,13 @@
 
     @if (Habit.DisplayMetric == DisplayMetric.Quantity)
     {
-        <div class="input-group" data-habits-step-19>
+        <div class="input-group" data-habits-step-20>
             <span class="input-group-text bg-transparent col-4">@Loc["Target quantity"]</span>
             <InputNumber class="form-control" aria-label="@Loc["Target quantity"]" Value="Habit.TargetQuantity" ValueExpression="() => Habit.TargetQuantity" ValueChanged="(double targetQuantity) => SaveTargetQuantity(Habit, targetQuantity)" />
         </div>
     }
 
-    <div class="input-group flex-nowrap" data-habits-step-20>
+    <div class="input-group flex-nowrap" data-habits-step-21>
         @if (_timer is null)
         {
             <span class="input-group-text bg-transparent flex-grow-1">@Loc["Start timer"]</span>
@@ -131,7 +136,7 @@
 
     @if (ClientState.Settings.ShowHabitStatistics)
     {
-        <div class="p-1 border rounded-0" data-habits-step-21>
+        <div class="p-1 border rounded-0" data-habits-step-22>
             <div>
                 @Loc["Current streak"]: @(Habit.CurrentStreak?.Count ?? 0) @StreakUnit(Habit.CurrentStreak?.Count ?? 0)
                 @if (Habit.CurrentStreak is not null)
@@ -147,14 +152,14 @@
                 }
             </div>
         </div>
-        <div class="p-1 border rounded-0" data-habits-step-22>
+        <div class="p-1 border rounded-0" data-habits-step-23>
             <div>@Loc["Total time spent"]: @ToReadableString(Habit.TotalTimeSpent)</div>
             <div>@Loc["Average time spent"]: @ToReadableString(Habit.AverageTimeSpent)</div>
         </div>
-        <div class="p-1 border rounded-0" data-habits-step-23>
+        <div class="p-1 border rounded-0" data-habits-step-24>
             <div>@Loc["Elapsed time"]: @ToReadableString(Habit.ElapsedTime)</div>
         </div>
-        <div class="p-1 border rounded-0" data-habits-step-24>
+        <div class="p-1 border rounded-0" data-habits-step-25>
             <div>@Loc["Repeat interval"]: @ToReadableString(Habit.DesiredInterval)</div>
             @if (Habit.GetNextScheduledDay(DateTime.Today) is DateTime nextScheduledDay)
             {
@@ -166,7 +171,7 @@
                 <div>@Loc["Repeat interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.GetIntervalToDue())</div>
             }
         </div>
-        <div class="p-1 border rounded-0" data-habits-step-25>
+        <div class="p-1 border rounded-0" data-habits-step-26>
             <div>@Loc["Average interval"]: @ToReadableString(Habit.AverageInterval)</div>
             <div>@Loc["Elapsed time to average interval ratio"]: @Habit.ElapsedTimeToAverageIntervalRatio.ToString("N0")%</div>
             @if (Habit.ElapsedTimeToAverageIntervalRatio > 100.0)
@@ -174,13 +179,13 @@
                 <div>@Loc["Average interval overdue"]: @ToReadableString(Habit.ElapsedTime - Habit.AverageInterval)</div>
             }
         </div>
-        <div class="p-1 border rounded-0" data-habits-step-26>
+        <div class="p-1 border rounded-0" data-habits-step-27>
             <div>@Loc["Average interval to repeat interval ratio"]: @Habit.AverageIntervalToRepeatIntervalRatio.ToString("N0")%</div>
         </div>
 
         @if (Habit.TimesDone is not null && Habit.LastTimeDoneAt is not null)
         {
-            <div class="p-1 border rounded-0" data-habits-step-27>
+            <div class="p-1 border rounded-0" data-habits-step-28>
                 <small>@Loc["Completed"] @Habit.TimesDone.Count @Loc["times, last time on"] @Habit.LastTimeDoneAt</small>
             </div>
         }
@@ -189,26 +194,26 @@
     @* Independent of ShowHabitStatistics on purpose: both blocks can be on, both off, or either alone. *@
     @if (ClientState.Settings.ShowHabitCharts)
     {
-        <div data-habits-step-28>
+        <div data-habits-step-29>
             <HabitTargetComponent Habit="Habit" />
         </div>
-        <div data-habits-step-29>
+        <div data-habits-step-30>
             <HabitHistoryComponent Habit="Habit" />
         </div>
-        <div data-habits-step-30>
+        <div data-habits-step-31>
             <HabitYearCalendarComponent Habit="Habit" />
         </div>
-        <div data-habits-step-31>
+        <div data-habits-step-32>
             <HabitStreaksComponent Habit="Habit" />
         </div>
-        <div data-habits-step-32>
+        <div data-habits-step-33>
             <HabitFrequencyComponent Habit="Habit" />
         </div>
     }
 
     @if (ClientState.Settings.ShowCategory)
     {
-        <div class="input-group flex-nowrap" data-habits-step-33>
+        <div class="input-group flex-nowrap" data-habits-step-34>
             <span class="input-group-text bg-transparent col-4">@Loc["Category"]</span>
             <CategoryComponent Model="Habit" OnChange="SaveModel" />
         </div>
@@ -216,7 +221,7 @@
 
     @if (ClientState.Settings.ShowColor)
     {
-        <div class="input-group flex-nowrap" data-habits-step-34>
+        <div class="input-group flex-nowrap" data-habits-step-35>
             <span class="input-group-text bg-transparent col-4">@Loc["Color"]</span>
             <ColorComponent Model="Habit" OnChange="SaveModel" />
         </div>
@@ -224,7 +229,7 @@
 
     @if (ClientState.Settings.ShowCreatedUpdated)
     {
-        <div class="p-1 border rounded-0" data-habits-step-35>
+        <div class="p-1 border rounded-0" data-habits-step-36>
             <small class="d-inline-block mx-1">@Loc["Created"]: @Habit.CreatedAt</small>
             <small class="d-inline-block mx-1">@Loc["Updated"]: @Habit.UpdatedAt</small>
         </div>
@@ -456,6 +461,13 @@
     }
 
     // The start counts the periods of a habit that repeats on its days every few weeks, months or years.
+    async Task SavePlannedTime(HabitModel habit, TimeOnly? plannedTime)
+    {
+        habit.PlannedTime = plannedTime;
+
+        await HabitService.UpdateHabit();
+    }
+
     async Task SaveStartAt(HabitModel habit, DateTime? startAt)
     {
         habit.StartAt = startAt;
