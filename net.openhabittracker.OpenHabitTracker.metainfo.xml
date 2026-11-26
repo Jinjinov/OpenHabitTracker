@@ -89,26 +89,26 @@
       <li xml:lang="sk">Úlohy s plánovanými dátumami, trvaním a meraním času</li>
       <li xml:lang="hr">Zadaci s planiranim datumima, trajanjem i praćenjem vremena</li>
       <li xml:lang="sr">Zadaci s planiranim datumima, trajanjem i praćenjem vremena</li>
-      <li>Habits with flexible repeat intervals - track repetitions, time or quantity</li>
-      <li xml:lang="de">Gewohnheiten mit flexiblen Wiederholungsintervallen - erfasst als Wiederholungen, Zeit oder Menge</li>
-      <li xml:lang="es">Hábitos con intervalos de repetición flexibles - registra repeticiones, tiempo o cantidad</li>
-      <li xml:lang="sl">Navade s prilagodljivimi intervali ponavljanja - beleži ponovitve, čas ali količino</li>
-      <li xml:lang="fr">Habitudes avec intervalles de répétition flexibles - suivies en répétitions, temps ou quantité</li>
-      <li xml:lang="pt">Hábitos com intervalos de repetição flexíveis - registados como repetições, tempo ou quantidade</li>
-      <li xml:lang="it">Abitudini con intervalli di ripetizione flessibili - registrate come ripetizioni, tempo o quantità</li>
-      <li xml:lang="ja">柔軟な繰り返し間隔を持つ習慣(回数・時間・数量で記録)</li>
-      <li xml:lang="zh_CN">重复间隔灵活的习惯,可按次数、时间或数量记录</li>
-      <li xml:lang="ko">유연한 반복 간격의 습관, 횟수·시간·수량으로 기록</li>
-      <li xml:lang="nl">Gewoontes met flexibele herhaalintervallen - bijgehouden als herhalingen, tijd of hoeveelheid</li>
-      <li xml:lang="da">Vaner med fleksible gentagelsesintervaller - registreret som gentagelser, tid eller mængde</li>
-      <li xml:lang="no">Vaner med fleksible gjentakelsesintervaller - registrert som repetisjoner, tid eller mengde</li>
-      <li xml:lang="sv">Vanor med flexibla upprepningsintervall - registrerade som repetitioner, tid eller mängd</li>
-      <li xml:lang="fi">Tavat joustavilla toistoväleillä - kirjaa toistoina, aikana tai määränä</li>
-      <li xml:lang="pl">Nawyki z elastycznymi odstępami powtarzania - zapisywane jako powtórzenia, czas lub ilość</li>
-      <li xml:lang="cs">Návyky s flexibilními intervaly opakování - zaznamenávané jako opakování, čas nebo množství</li>
-      <li xml:lang="sk">Návyky s flexibilnými intervalmi opakovania - zaznamenávané ako opakovania, čas alebo množstvo</li>
-      <li xml:lang="hr">Navike s fleksibilnim intervalima ponavljanja - bilježe se kao ponavljanja, vrijeme ili količina</li>
-      <li xml:lang="sr">Navike s fleksibilnim intervalima ponavljanja - beleže se kao ponavljanja, vreme ili količina</li>
+      <li>Habits with flexible repeat intervals or on the days you choose - track repetitions, time or quantity</li>
+      <li xml:lang="de">Gewohnheiten mit flexiblen Wiederholungsintervallen oder an frei wählbaren Tagen - erfasst als Wiederholungen, Zeit oder Menge</li>
+      <li xml:lang="es">Hábitos con intervalos de repetición flexibles o en los días que elijas - registra repeticiones, tiempo o cantidad</li>
+      <li xml:lang="sl">Navade s prilagodljivimi intervali ponavljanja ali na izbrane dneve - beleži ponovitve, čas ali količino</li>
+      <li xml:lang="fr">Habitudes avec intervalles de répétition flexibles ou aux jours de votre choix - suivies en répétitions, temps ou quantité</li>
+      <li xml:lang="pt">Hábitos com intervalos de repetição flexíveis ou em dias à escolha - registados como repetições, tempo ou quantidade</li>
+      <li xml:lang="it">Abitudini con intervalli di ripetizione flessibili o in giorni a scelta - registrate come ripetizioni, tempo o quantità</li>
+      <li xml:lang="ja">柔軟な繰り返し間隔、または選んだ日に行う習慣(回数・時間・数量で記録)</li>
+      <li xml:lang="zh_CN">重复间隔灵活或按所选日期进行的习惯,可按次数、时间或数量记录</li>
+      <li xml:lang="ko">유연한 반복 간격 또는 원하는 요일·날짜에 하는 습관, 횟수·시간·수량으로 기록</li>
+      <li xml:lang="nl">Gewoontes met flexibele herhaalintervallen of op dagen naar keuze - bijgehouden als herhalingen, tijd of hoeveelheid</li>
+      <li xml:lang="da">Vaner med fleksible gentagelsesintervaller eller på valgfrie dage - registreret som gentagelser, tid eller mængde</li>
+      <li xml:lang="no">Vaner med fleksible gjentakelsesintervaller eller på valgfrie dager - registrert som repetisjoner, tid eller mengde</li>
+      <li xml:lang="sv">Vanor med flexibla upprepningsintervall eller på valfria dagar - registrerade som repetitioner, tid eller mängd</li>
+      <li xml:lang="fi">Tavat joustavilla toistoväleillä tai valituille päiville - kirjaa toistoina, aikana tai määränä</li>
+      <li xml:lang="pl">Nawyki z elastycznymi odstępami powtarzania lub w wybrane dni - zapisywane jako powtórzenia, czas lub ilość</li>
+      <li xml:lang="cs">Návyky s flexibilními intervaly opakování nebo ve zvolené dny - zaznamenávané jako opakování, čas nebo množství</li>
+      <li xml:lang="sk">Návyky s flexibilnými intervalmi opakovania alebo vo zvolené dni - zaznamenávané ako opakovania, čas alebo množstvo</li>
+      <li xml:lang="hr">Navike s fleksibilnim intervalima ponavljanja ili u odabrane dane - bilježe se kao ponavljanja, vrijeme ili količina</li>
+      <li xml:lang="sr">Navike s fleksibilnim intervalima ponavljanja ili u izabrane dane - beleže se kao ponavljanja, vreme ili količina</li>
       <li>Checklist sub-items on both tasks and habits</li>
       <li xml:lang="de">Checklisten-Unterpunkte für Aufgaben und Gewohnheiten</li>
       <li xml:lang="es">Sublistas de verificación en tareas y hábitos</li>

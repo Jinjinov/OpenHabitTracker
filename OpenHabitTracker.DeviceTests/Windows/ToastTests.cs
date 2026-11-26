@@ -44,6 +44,113 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
             "The click did not open the reminder's task");
     }
 
+    // The summaries waiting in Windows' queue list a habit on the days it is meant for, and a changed weekday moves it to another day's summary.
+    // Three days ahead the habit meant for tomorrow is overdue and listed anyway, so the move shows on tomorrow's summary.
+    [Test]
+    public void DailySummary_WeekdayChanged_MovesTheHabitInTheQueue()
+    {
+        string title = $"Meant for a weekday {DateTime.Now:HHmmss}";
+        DateTime tomorrow = DateTime.Today.AddDays(1);
+        DateTime later = DateTime.Today.AddDays(3);
+
+        ClearData();
+        AfterTest(RemoveScheduledToasts);
+        StartApp();
+        SwitchToWebView();
+
+        OpenSidebar("bi-gear");
+        SetChangedValue(WaitForElement("[data-settings-step-29] input[type='time']"), "08:00");
+        WaitForElement("#closeSidebar").Click();
+
+        OpenPage(HabitsPage);
+        AddItem(title);
+        Row(HabitRows, title)!.Click();
+        SetChangedValue(WaitForElement("#habit-component [data-habits-step-15] select"), "Week");
+
+        ToggleWeekday(tomorrow);
+        Assert.That(WaitUntil(() => SummaryOf(tomorrow).Contains(title), DefaultTimeout), Is.True, "Tomorrow's summary does not list the habit meant for tomorrow");
+
+        ToggleWeekday(later);
+        ToggleWeekday(tomorrow);
+        Assert.That(WaitUntil(() => !SummaryOf(tomorrow).Contains(title) && SummaryOf(later).Contains(title), DefaultTimeout), Is.True,
+            $"The habit did not move from tomorrow's summary to the summary of {later:d}: {string.Join(" | ", ScheduledToasts().Values)}");
+    }
+
+    // The weekdays start on Monday, the app's first day of the week on a first start.
+    private void ToggleWeekday(DateTime day)
+    {
+        WaitForElement("#habit-component [data-habits-step-16] button");
+        Driver.FindElements(By.CssSelector("#habit-component [data-habits-step-16] button"))[((int)day.DayOfWeek + 6) % 7].Click();
+    }
+
+    // The content of the day's summary in the queue, empty when there is none.
+    private string SummaryOf(DateTime day)
+    {
+        return ScheduledToasts().GetValueOrDefault($"digest-{day:yyyyMMdd}", string.Empty);
+    }
+
+    // The app's scheduled toasts by tag, with their content on one line.
+    private Dictionary<string, string> ScheduledToasts()
+    {
+        string output = RunOnTheQueue("""
+            $scheduled | ForEach-Object { $_.Tag + "`t" + ($_.Content.GetXml() -replace "`r?`n", ' ') }
+            """);
+
+        return output.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(line => line.Split('\t', 2))
+            .ToDictionary(parts => parts[0], parts => parts.Length > 1 ? parts[1] : string.Empty);
+    }
+
+    // The summaries would fire on this PC at their time, with the app installed or not.
+    private void RemoveScheduledToasts()
+    {
+        RunOnTheQueue("""
+            $scheduled | ForEach-Object { $notifier.RemoveFromSchedule($_) }
+            """);
+    }
+
+    // Runs the script with the app's $notifier and its $scheduled toasts, through WinRT, which only Windows PowerShell loads.
+    // A new install has no queue until the app registers with Windows on its first schedule; until then Windows finds no such app (0x80070490), and the queue is empty.
+    // The script goes encoded, so its quotes and lines reach Windows PowerShell unchanged.
+    // Its error stream comes back serialized, progress records included, so a failure is told by the exit code.
+    private string RunOnTheQueue(string script)
+    {
+        string aumid = Host == WindowsHost.Msix ? Aumid : "velopack.OpenHT";
+
+        string full = $$"""
+            $ErrorActionPreference = 'Stop'
+            [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null
+            $notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('{{aumid}}')
+            try {
+                $scheduled = @($notifier.GetScheduledToastNotifications())
+            }
+            catch {
+                if ($_.Exception.InnerException.HResult -ne 0x80070490) { throw }
+                $scheduled = @()
+            }
+            {{script}}
+            """;
+
+        string encoded = Convert.ToBase64String(System.Text.Encoding.Unicode.GetBytes(full));
+
+        System.Diagnostics.ProcessStartInfo start = new("powershell.exe", ["-NoProfile", "-EncodedCommand", encoded])
+        {
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
+        };
+
+        using System.Diagnostics.Process process = System.Diagnostics.Process.Start(start)!;
+
+        Task<string> error = process.StandardError.ReadToEndAsync();
+        string output = process.StandardOutput.ReadToEnd();
+
+        Assert.That(process.WaitForExit(TimeSpan.FromMinutes(1)), Is.True, "Windows PowerShell did not finish");
+        Assert.That(process.ExitCode, Is.Zero, $"Windows PowerShell failed: {error.Result}");
+
+        return output;
+    }
+
     // Native: the notification lands in the Action Center at its time, whether or not Windows also pops it up:
     // Focus Assist, on by schedule or by a rule, holds the popup back. So once it is due, the Action Center is opened and the notification clicked there.
     // Its text holds the reminder's title. A search of the whole desktop is slow, and windows: getWindows leaves the Action Center out,

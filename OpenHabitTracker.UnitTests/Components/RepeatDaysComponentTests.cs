@@ -333,7 +333,8 @@ public class RepeatDaysComponentTests
         Assert.Multiple(() =>
         {
             Assert.That(FormSelect(cut).GetAttribute("value"), Is.EqualTo("days"));
-            Assert.That(FormSelect(cut).QuerySelectorAll("option").Select(x => x.TextContent), Is.EqualTo(new[] { "Days", "Weekdays" }));
+            Assert.That(FormSelect(cut).QuerySelectorAll("option").Select(x => x.TextContent), Is.EqualTo(new[] { "Days of the month", "Weekdays" }));
+            Assert.That(cut.Find("[data-habits-step-16] [role='toolbar']").GetAttribute("aria-label"), Is.EqualTo("Days of the month"));
             Assert.That(DayButtons(cut).Select(x => x.TextContent.Trim()), Is.EqualTo(Enumerable.Range(1, 31).Select(x => x.ToString())));
             Assert.That(DayButtons(cut).Select(x => x.GetAttribute("tabindex")), Is.EqualTo(new[] { "0" }.Concat(Enumerable.Repeat("-1", 30))));
             Assert.That(cut.FindAll("[data-habits-step-16] button[aria-label='Monday']"), Is.Empty);

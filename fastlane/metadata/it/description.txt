@@ -8,7 +8,7 @@ NOTE, COMPITI E ABITUDINI IN UN UNICO POSTO
 
 • Note con pieno supporto Markdown
 • Compiti con date pianificate, durata e tracciamento del tempo
-• Abitudini con intervalli di ripetizione flessibili - registrate come ripetizioni, tempo o quantità
+• Abitudini con intervalli di ripetizione flessibili o in giorni a scelta - registrate come ripetizioni, tempo o quantità
 • Sotto-elementi checklist per compiti e abitudini
 • Categorie, colori, priorità, ricerca, filtri e ordinamento - per note, compiti e abitudini
 • Notifiche opzionali: un riepilogo giornaliero di ciò che è in scadenza e un promemoria prima dell'ora pianificata di un compito

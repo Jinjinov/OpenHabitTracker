@@ -158,6 +158,10 @@
           "RepeatPeriod": 0,
           "Duration": "00:45:00",
           "LastTimeDoneAt": "2026-02-23T09:35:34.7765948",
+          "RepeatWeekdays": 0,
+          "RepeatMonthDays": 0,
+          "RepeatMonthWeeks": 0,
+          "RepeatMonths": 0,
           "TimesDone": [
             {
               "StartedAt": "2026-02-23T09:35:34.7765948",
@@ -228,6 +232,10 @@
           "RepeatPeriod": 0,
           "Duration": "00:20:00",
           "LastTimeDoneAt": "2026-02-24T09:35:34.7765948",
+          "RepeatWeekdays": 0,
+          "RepeatMonthDays": 0,
+          "RepeatMonthWeeks": 0,
+          "RepeatMonths": 0,
           "TimesDone": [
             {
               "StartedAt": "2026-02-22T09:35:34.7765948",
@@ -306,6 +314,10 @@
           "RepeatPeriod": 0,
           "Duration": "01:00:00",
           "LastTimeDoneAt": "2026-02-24T09:35:34.7765948",
+          "RepeatWeekdays": 0,
+          "RepeatMonthDays": 0,
+          "RepeatMonthWeeks": 0,
+          "RepeatMonths": 0,
           "TimesDone": [
             {
               "StartedAt": "2026-02-23T09:35:34.7765948",

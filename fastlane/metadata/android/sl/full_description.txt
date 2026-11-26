@@ -8,7 +8,7 @@ ZAPISKI, NALOGE IN NAVADE NA ENEM MESTU
 
 • Zapiski s polno podporo za Markdown
 • Naloge z načrtovanimi datumi, trajanjem in merjenjem časa
-• Navade s prilagodljivimi intervali ponavljanja - beleži ponovitve, čas ali količino
+• Navade s prilagodljivimi intervali ponavljanja ali na izbrane dneve - beleži ponovitve, čas ali količino
 • Kontrolni seznami s podtočkami pri nalogah in navadah
 • Kategorije, barve, prioritete, iskanje, filtri in razvrščanje - za zapiske, naloge in navade
 • Neobvezna obvestila: en dnevni povzetek tega, kar je na vrsti, in opomnik pred načrtovanim časom naloge

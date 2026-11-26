@@ -8,7 +8,7 @@ NOTAS, TAREAS Y HÁBITOS EN UN SOLO LUGAR
 
 • Notas con soporte completo de Markdown
 • Tareas con fechas planificadas, duración y registro de tiempo
-• Hábitos con intervalos de repetición flexibles - registra repeticiones, tiempo o cantidad
+• Hábitos con intervalos de repetición flexibles o en los días que elijas - registra repeticiones, tiempo o cantidad
 • Sublistas de verificación en tareas y hábitos
 • Categorías, colores, prioridades, búsqueda, filtros y ordenación - para notas, tareas y hábitos
 • Notificaciones opcionales: un resumen diario de lo pendiente y un recordatorio antes de la hora planificada de una tarea

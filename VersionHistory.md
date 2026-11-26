@@ -1,5 +1,8 @@
 # 1.2.7 - Dec 12, 2026
 
+- Added scheduled days for habits: weekdays, days of the month, weekdays of the month and months of the year
+- Improved import from HabitNow, Habitica and Habitify to keep the scheduled days of habits
+
 # 1.2.6 - Nov 11, 2026
 
 - Added multiple user accounts with separate data on the self-hosted server

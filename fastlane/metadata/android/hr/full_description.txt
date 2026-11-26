@@ -8,7 +8,7 @@ BILJEŠKE, ZADACI I NAVIKE NA JEDNOM MJESTU
 
 • Bilješke s punom podrškom za Markdown
 • Zadaci s planiranim datumima, trajanjem i praćenjem vremena
-• Navike s fleksibilnim intervalima ponavljanja - bilježe se kao ponavljanja, vrijeme ili količina
+• Navike s fleksibilnim intervalima ponavljanja ili u odabrane dane - bilježe se kao ponavljanja, vrijeme ili količina
 • Podstavke popisa (checkliste) na zadacima i navikama
 • Kategorije, boje, prioriteti, pretraživanje, filtri i sortiranje - za bilješke, zadatke i navike
 • Neobavezne obavijesti: jedan dnevni sažetak onoga što je na redu i podsjetnik prije planiranog vremena zadatka

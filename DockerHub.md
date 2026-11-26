@@ -19,8 +19,9 @@ Key features:
 - Markdown notes, rendered in the list so reading one costs no clicks
 - Tasks with a planned date and time, a duration, a checklist and a timer
 - Habits measured by how overdue they are rather than by an unbroken streak: a habit with a 10 day interval that is 2 days overdue reads 120%
+- Habits on the days you choose: Monday and Thursday, the 1st and the 15th, the last Friday of the month, or a date of the year
 - Categories and priorities across notes, tasks and habits
-- Notifications in the native apps and the web app: a daily summary of the tasks that are due and the habits that are overdue, and a reminder before a task's planned time
+- Notifications in the native apps and the web app: a daily summary of the tasks that are due, the habits meant for that day and the habits that are overdue, and a reminder before a task's planned time
 - Import and export JSON, YAML, TSV and Markdown, plus import from Google Keep (a Google Takeout ZIP), Loop Habit Tracker, HabitNow, Habitica and Habitify
 - 26 themes with dark and light mode
 - Full keyboard navigation and screen reader support

@@ -8,7 +8,7 @@ NOTER, OPGAVER OG VANER ET SAMLET STED
 
 • Noter med fuld Markdown-understøttelse
 • Opgaver med planlagte datoer, varighed og tidsregistrering
-• Vaner med fleksible gentagelsesintervaller - registreret som gentagelser, tid eller mængde
+• Vaner med fleksible gentagelsesintervaller eller på valgfrie dage - registreret som gentagelser, tid eller mængde
 • Tjekliste-underpunkter på både opgaver og vaner
 • Kategorier, farver, prioriteter, søgning, filtre og sortering - for noter, opgaver og vaner
 • Valgfrie notifikationer: én daglig oversigt over det forfaldne og en påmindelse før en opgaves planlagte tidspunkt

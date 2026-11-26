@@ -8,7 +8,7 @@ POZNÁMKY, ÚLOHY A NÁVYKY NA JEDNOM MIESTE
 
 • Poznámky s plnou podporou Markdownu
 • Úlohy s plánovanými dátumami, trvaním a meraním času
-• Návyky s flexibilnými intervalmi opakovania - zaznamenávané ako opakovania, čas alebo množstvo
+• Návyky s flexibilnými intervalmi opakovania alebo vo zvolené dni - zaznamenávané ako opakovania, čas alebo množstvo
 • Podúlohy (checklisty) pri úlohách aj návykoch
 • Kategórie, farby, priority, hľadanie, filtre a triedenie - pre poznámky, úlohy aj návyky
 • Voliteľné upozornenia: jeden denný súhrn toho, čo je na rade, a pripomenutie pred plánovaným časom úlohy

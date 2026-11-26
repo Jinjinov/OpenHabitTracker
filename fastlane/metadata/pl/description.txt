@@ -8,7 +8,7 @@ NOTATKI, ZADANIA I NAWYKI W JEDNYM MIEJSCU
 
 • Notatki z pełną obsługą Markdown
 • Zadania z planowanymi datami, czasem trwania i rejestracją czasu
-• Nawyki z elastycznymi odstępami powtarzania - zapisywane jako powtórzenia, czas lub ilość
+• Nawyki z elastycznymi odstępami powtarzania lub w wybrane dni - zapisywane jako powtórzenia, czas lub ilość
 • Podpunkty listy kontrolnej w zadaniach i nawykach
 • Kategorie, kolory, priorytety, wyszukiwanie, filtry i sortowanie - dla notatek, zadań i nawyków
 • Opcjonalne powiadomienia: jedno dzienne podsumowanie tego, co na dziś, i przypomnienie przed zaplanowaną godziną zadania

@@ -54,7 +54,9 @@ if (-not (Get-ChildItem Cert:\LocalMachine\TrustedPeople | Where-Object Thumbpri
     if ($trust.ExitCode -ne 0) { throw "The test certificate could not be trusted (exit $($trust.ExitCode))" }
 }
 
-$signtool = Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe' | Sort-Object { [version]$_.Directory.Parent.Name } | Select-Object -Last 1
+# The Windows SDK's signtool, or the one the MAUI build restores with Microsoft.Windows.SDK.BuildTools when the SDK is not installed.
+$signtool = Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe', "$env:USERPROFILE\.nuget\packages\microsoft.windows.sdk.buildtools\*\bin\*\x64\signtool.exe" -ErrorAction SilentlyContinue |
+    Sort-Object { [version]$_.Directory.Parent.Name } | Select-Object -Last 1
 & $signtool.FullName sign /fd SHA256 /sha1 $certificate.Thumbprint $msix.FullName *> "$LogFolder\sign.log"
 if ($LASTEXITCODE -ne 0) { throw "signtool could not sign $($msix.FullName), see $LogFolder\sign.log" }
 

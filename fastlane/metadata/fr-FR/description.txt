@@ -8,7 +8,7 @@ NOTES, TÂCHES ET HABITUDES AU MÊME ENDROIT
 
 • Notes avec prise en charge complète de Markdown
 • Tâches avec dates planifiées, durée et suivi du temps
-• Habitudes avec intervalles de répétition flexibles - suivies en répétitions, temps ou quantité
+• Habitudes avec intervalles de répétition flexibles ou aux jours de votre choix - suivies en répétitions, temps ou quantité
 • Sous-éléments de type checklist pour les tâches et les habitudes
 • Catégories, couleurs, priorités, recherche, filtres et tri - pour les notes, les tâches et les habitudes
 • Notifications optionnelles : un résumé quotidien de ce qui est à faire et un rappel avant l'heure prévue d'une tâche

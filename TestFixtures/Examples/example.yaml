@@ -203,6 +203,10 @@ Categories:
     RepeatPeriod: Day
     Duration: 00:45:00
     LastTimeDoneAt: 2026-02-23T09:35:34.7765948
+    RepeatWeekdays: None
+    RepeatMonthDays: 0
+    RepeatMonthWeeks: None
+    RepeatMonths: None
     TimesDone:
     - StartedAt: 2026-02-23T09:35:34.7765948
       CompletedAt: 2026-02-23T09:35:34.7765948
@@ -249,6 +253,10 @@ Categories:
     RepeatPeriod: Day
     Duration: 00:20:00
     LastTimeDoneAt: 2026-02-24T09:35:34.7765948
+    RepeatWeekdays: None
+    RepeatMonthDays: 0
+    RepeatMonthWeeks: None
+    RepeatMonths: None
     TimesDone:
     - StartedAt: 2026-02-22T09:35:34.7765948
       CompletedAt: 2026-02-22T09:35:34.7765948
@@ -304,6 +312,10 @@ Categories:
     RepeatPeriod: Day
     Duration: 01:00:00
     LastTimeDoneAt: 2026-02-24T09:35:34.7765948
+    RepeatWeekdays: None
+    RepeatMonthDays: 0
+    RepeatMonthWeeks: None
+    RepeatMonths: None
     TimesDone:
     - StartedAt: 2026-02-23T09:35:34.7765948
       CompletedAt: 2026-02-23T09:35:34.7765948

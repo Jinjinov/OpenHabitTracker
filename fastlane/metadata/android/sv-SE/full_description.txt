@@ -8,7 +8,7 @@ ANTECKNINGAR, UPPGIFTER OCH VANOR PÅ ETT STÄLLE
 
 • Anteckningar med fullt Markdown-stöd
 • Uppgifter med planerade datum, varaktighet och tidsregistrering
-• Vanor med flexibla upprepningsintervall - registrerade som repetitioner, tid eller mängd
+• Vanor med flexibla upprepningsintervall eller på valfria dagar - registrerade som repetitioner, tid eller mängd
 • Checklistor med delmoment på både uppgifter och vanor
 • Kategorier, färger, prioriteter, sökning, filter och sortering - för anteckningar, uppgifter och vanor
 • Valfria aviseringar: en daglig sammanfattning av det som ska göras och en påminnelse före en uppgifts planerade tid

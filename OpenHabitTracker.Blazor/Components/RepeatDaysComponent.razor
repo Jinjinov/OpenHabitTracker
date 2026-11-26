@@ -21,7 +21,7 @@ else if (Habit.RepeatPeriod is Period.Month or Period.Year)
     <div class="input-group flex-nowrap">
         <span class="input-group-text bg-transparent" id="@_labelId">@Loc["Repeat on"]</span>
         <select class="form-select" aria-labelledby="@_labelId" value="@(_onWeekdays ? "weekdays" : "days")" @onchange="ChooseMonthlyForm">
-            <option value="days">@Loc["Days"]</option>
+            <option value="days">@Loc["Days of the month"]</option>
             <option value="weekdays">@Loc["Weekdays"]</option>
         </select>
     </div>
@@ -70,7 +70,7 @@ else if (Habit.RepeatPeriod is Period.Month or Period.Year)
         else
         {
             @* One tab stop for the 31 days, moved by the arrow keys. *@
-            <div class="d-flex flex-wrap" role="toolbar" aria-label="@Loc["Days"]" @ref="_daysRef" @onkeydown="MoveInDays">
+            <div class="d-flex flex-wrap" role="toolbar" aria-label="@Loc["Days of the month"]" @ref="_daysRef" @onkeydown="MoveInDays">
                 @for (int day = 1; day <= 31; day++)
                 {
                     int index = day - 1;

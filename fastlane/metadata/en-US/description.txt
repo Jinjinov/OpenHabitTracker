@@ -8,7 +8,7 @@ NOTES, TASKS AND HABITS IN ONE PLACE
 
 • Notes with full Markdown support
 • Tasks with planned dates, duration and time tracking
-• Habits with flexible repeat intervals - track repetitions, time or quantity
+• Habits with flexible repeat intervals or on the days you choose - track repetitions, time or quantity
 • Checklist sub-items on both tasks and habits
 • Categories, colors, priorities, search, filters and sorting - for notes, tasks and habits
 • Optional notifications: one daily summary of what is due, and a reminder before a task's planned time
