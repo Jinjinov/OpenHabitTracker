@@ -143,7 +143,7 @@ public class HabitComponentStoreTests
         IRenderedComponent<HabitComponent> cut = Render();
         long home = _app.ClientState.Categories!.Values.Single(x => x.Title == "Home").Id;
 
-        cut.Find("[data-habits-step-32] select").Change(home.ToString());
+        cut.Find("[data-habits-step-33] select").Change(home.ToString());
         cut.Find("select[aria-label='Color']").Change("bg-success-subtle");
 
         HabitEntity stored = await Stored();
@@ -166,9 +166,9 @@ public class HabitComponentStoreTests
         Assert.Multiple(() =>
         {
             Assert.That(cut.FindAll("[data-habits-step-7]"), Is.Empty);
-            Assert.That(cut.FindAll("[data-habits-step-32]"), Is.Empty);
             Assert.That(cut.FindAll("[data-habits-step-33]"), Is.Empty);
-            Assert.That(cut.Find("[data-habits-step-34]").TextContent, Does.Contain($"Created: {_habit.CreatedAt}").And.Contain($"Updated: {_habit.UpdatedAt}"));
+            Assert.That(cut.FindAll("[data-habits-step-34]"), Is.Empty);
+            Assert.That(cut.Find("[data-habits-step-35]").TextContent, Does.Contain($"Created: {_habit.CreatedAt}").And.Contain($"Updated: {_habit.UpdatedAt}"));
         });
     }
 
@@ -322,7 +322,7 @@ public class HabitComponentStoreTests
         await Assert.MultipleAsync(async () =>
         {
             Assert.That((await StoredTimes()).Single().CompletedAt, Is.Null);
-            Assert.That(cut.Find("[data-habits-step-19] span").TextContent, Is.EqualTo("00:00:00"));
+            Assert.That(cut.Find("[data-habits-step-20] span").TextContent, Is.EqualTo("00:00:00"));
         });
 
         await Click(cut, "Stop");
@@ -344,14 +344,14 @@ public class HabitComponentStoreTests
 
         IRenderedComponent<HabitComponent> cut = Render();
 
-        Assert.That(cut.Find("[data-habits-step-19] span").TextContent, Does.StartWith("02:00:0").Or.StartWith("01:59:5"));
+        Assert.That(cut.Find("[data-habits-step-20] span").TextContent, Does.StartWith("02:00:0").Or.StartWith("01:59:5"));
 
         await Click(cut, "Pause");
         await Click(cut, "Reset");
 
         Assert.Multiple(() =>
         {
-            Assert.That(cut.Find("[data-habits-step-19] span").TextContent, Is.EqualTo("00:00:00"));
+            Assert.That(cut.Find("[data-habits-step-20] span").TextContent, Is.EqualTo("00:00:00"));
             Assert.That(cut.FindAll("button[aria-label='Pause']"), Has.Count.EqualTo(1));
         });
     }
@@ -425,7 +425,7 @@ public class HabitComponentStoreTests
 
         IRenderedComponent<HabitComponent> cut = Render();
 
-        Assert.That(cut.Find("[data-habits-step-23] div").TextContent, Is.EqualTo($"Repeat interval: {text}"));
+        Assert.That(cut.Find("[data-habits-step-24] div").TextContent, Is.EqualTo($"Repeat interval: {text}"));
     }
 
     [Test]
@@ -439,8 +439,8 @@ public class HabitComponentStoreTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(cut.Find("[data-habits-step-23]").TextContent, Does.Contain("Repeat interval overdue: 2 d, 1 h, 30 m").Or.Contain("Repeat interval overdue: 2 d, 1 h, 31 m"));
-            Assert.That(cut.Find("[data-habits-step-26]").TextContent, Is.EqualTo($"Completed 1 times, last time on {_habit.LastTimeDoneAt}"));
+            Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Contain("Repeat interval overdue: 2 d, 1 h, 30 m").Or.Contain("Repeat interval overdue: 2 d, 1 h, 31 m"));
+            Assert.That(cut.Find("[data-habits-step-27]").TextContent, Is.EqualTo($"Completed 1 times, last time on {_habit.LastTimeDoneAt}"));
         });
     }
 
@@ -455,8 +455,8 @@ public class HabitComponentStoreTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(cut.Find("[data-habits-step-23]").TextContent, Does.Not.Contain("overdue"));
-            Assert.That(cut.Find("[data-habits-step-22]").TextContent, Is.EqualTo("Elapsed time: 0 m"));
+            Assert.That(cut.Find("[data-habits-step-24]").TextContent, Does.Not.Contain("overdue"));
+            Assert.That(cut.Find("[data-habits-step-23]").TextContent, Is.EqualTo("Elapsed time: 0 m"));
         });
     }
 
@@ -467,6 +467,6 @@ public class HabitComponentStoreTests
 
         IRenderedComponent<HabitComponent> cut = Render();
 
-        Assert.That(cut.FindAll("[data-habits-step-26]"), Is.Empty);
+        Assert.That(cut.FindAll("[data-habits-step-27]"), Is.Empty);
     }
 }

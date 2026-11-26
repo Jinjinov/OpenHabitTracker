@@ -6,6 +6,9 @@ public class CalendarService : ICalendarService
 
     private const long _ticksInDay = 864_000_000_000;
 
+    // The localization keys of the weekday abbreviations, indexed by DayOfWeek.
+    public static IReadOnlyList<string> WeekdayKeys { get; } = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
     public static int GetDayOfWeek(DayOfWeek firstDayOfWeek, int dayIndex)
     {
         return (dayIndex + (int)firstDayOfWeek) % 7;

@@ -36,19 +36,22 @@ public abstract class DataAccessContractTests
     {
         await context.GetService<IMigrator>().MigrateAsync(previousMigration);
 
-        await context.Database.ExecuteSqlRawAsync(
-            "INSERT INTO \"Contents\" (\"Id\", \"UserId\", \"CategoryId\", \"Title\", \"Color\", \"Priority\", \"IsDeleted\", \"CreatedAt\", \"UpdatedAt\", \"Discriminator\", " +
-            "\"DisplayMetric\", \"Duration\", \"LastTimeDoneAt\", \"RepeatCount\", \"RepeatInterval\", \"RepeatPeriod\", \"StartAt\", \"TargetQuantity\") " +
-            $"VALUES (101, {userId}, 0, 'Run', 'bg-info', 4, 0, '2026-02-03 04:05:06', '2026-02-04 04:05:06', 'HabitEntity', 2, '00:45:00', '2026-02-05 06:07:08', 3, 2, 1, '2026-02-01 00:00:00', 2.75)");
+        await context.Database.ExecuteSqlAsync($"""
+            INSERT INTO "Contents" ("Id", "UserId", "CategoryId", "Title", "Color", "Priority", "IsDeleted", "CreatedAt", "UpdatedAt", "Discriminator",
+                "DisplayMetric", "Duration", "LastTimeDoneAt", "RepeatCount", "RepeatInterval", "RepeatPeriod", "StartAt", "TargetQuantity")
+            VALUES (101, {userId}, 0, 'Run', 'bg-info', 4, 0, '2026-02-03 04:05:06', '2026-02-04 04:05:06', 'HabitEntity', 2, '00:45:00', '2026-02-05 06:07:08', 3, 2, 1, '2026-02-01 00:00:00', 2.75)
+            """);
 
-        await context.Database.ExecuteSqlRawAsync(
-            "INSERT INTO \"Contents\" (\"Id\", \"UserId\", \"CategoryId\", \"Title\", \"Color\", \"Priority\", \"IsDeleted\", \"CreatedAt\", \"UpdatedAt\", \"Discriminator\", \"Content\") " +
-            $"VALUES (102, {userId}, 0, 'Ideas', 'bg-warning', 2, 1, '2026-02-03 04:05:06', '2026-02-04 04:05:06', 'NoteEntity', 'line 1')");
+        await context.Database.ExecuteSqlAsync($"""
+            INSERT INTO "Contents" ("Id", "UserId", "CategoryId", "Title", "Color", "Priority", "IsDeleted", "CreatedAt", "UpdatedAt", "Discriminator", "Content")
+            VALUES (102, {userId}, 0, 'Ideas', 'bg-warning', 2, 1, '2026-02-03 04:05:06', '2026-02-04 04:05:06', 'NoteEntity', 'line 1')
+            """);
 
-        await context.Database.ExecuteSqlRawAsync(
-            "INSERT INTO \"Contents\" (\"Id\", \"UserId\", \"CategoryId\", \"Title\", \"Color\", \"Priority\", \"IsDeleted\", \"CreatedAt\", \"UpdatedAt\", \"Discriminator\", " +
-            "\"CompletedAt\", \"TaskEntity_Duration\", \"PlannedAt\", \"StartedAt\") " +
-            $"VALUES (103, {userId}, 0, 'Pack', 'bg-danger', 5, 0, '2026-02-03 04:05:06', '2026-02-04 04:05:06', 'TaskEntity', '2026-02-06 10:00:00', '01:30:00', '2026-02-06 09:00:00', '2026-02-06 09:30:00')");
+        await context.Database.ExecuteSqlAsync($"""
+            INSERT INTO "Contents" ("Id", "UserId", "CategoryId", "Title", "Color", "Priority", "IsDeleted", "CreatedAt", "UpdatedAt", "Discriminator",
+                "CompletedAt", "TaskEntity_Duration", "PlannedAt", "StartedAt")
+            VALUES (103, {userId}, 0, 'Pack', 'bg-danger', 5, 0, '2026-02-03 04:05:06', '2026-02-04 04:05:06', 'TaskEntity', '2026-02-06 10:00:00', '01:30:00', '2026-02-06 09:00:00', '2026-02-06 09:30:00')
+            """);
 
         await Sut.Initialize();
     }

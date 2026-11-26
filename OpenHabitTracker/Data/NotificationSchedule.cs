@@ -79,8 +79,8 @@ public static class NotificationSchedule
                     .ToList();
 
                 List<long> habitIds = candidateHabits
-                    .Where(habit => IsDue(habit, notifyAt, settings))
-                    .OrderByDescending(habit => GetRatioAt(habit, settings.SelectedRatio, notifyAt))
+                    .Where(habit => IsScheduledAndNotDone(habit, day) || IsDue(habit, notifyAt, settings))
+                    .OrderByDescending(habit => habit.GetRatioAt(settings.SelectedRatio, notifyAt))
                     .ThenBy(habit => habit.Title)
                     .Select(habit => habit.Id)
                     .ToList();
@@ -103,30 +103,26 @@ public static class NotificationSchedule
         return settings.NotificationIncludeOverdueTasks && task.PlannedAt!.Value < notifyAt;
     }
 
+    // A completion is the only thing that lowers a ratio, and a completion rebuilds the schedule.
     private static bool IsDue(HabitModel habit, DateTime notifyAt, SettingsModel settings)
     {
-        double ratio = GetRatioAt(habit, settings.SelectedRatio, notifyAt);
+        double ratio = habit.GetRatioAt(settings.SelectedRatio, notifyAt);
 
         // An average interval of zero makes the elapsed-to-average ratio non-finite; a habit with
         // no history to average has no meaningful urgency, so it is not something to notify about.
         return double.IsFinite(ratio) && ratio >= settings.NotificationHabitThreshold;
     }
 
-    // The ratios only move one way with time, so the value at a future instant is exact arithmetic
-    // over the same inputs HabitModel uses; a completion is the only thing that lowers it, and a
-    // completion rebuilds the schedule.
-    private static double GetRatioAt(HabitModel habit, Ratio ratio, DateTime at)
+    // A habit is in the summary of each day it is meant for, as an untimed task is on its planned day,
+    // whatever its ratio.
+    private static bool IsScheduledAndNotDone(HabitModel habit, DateTime day)
     {
-        TimeSpan elapsed = habit.LastTimeDoneAt.HasValue
-            ? at - habit.LastTimeDoneAt.Value
-            : new TimeSpan(Math.Max(0L, (at - (habit.StartAt ?? habit.CreatedAt)).Ticks));
+        if (!HabitSchedule.IsScheduledOn(habit.Rule, day))
+            return false;
 
-        return ratio switch
-        {
-            Ratio.ElapsedToAverage => elapsed / habit.AverageInterval * 100.0,
-            Ratio.ElapsedToDesired => elapsed / habit.DesiredInterval * 100.0,
-            Ratio.AverageToDesired => habit.AverageInterval / habit.DesiredInterval * 100.0,
-            _ => throw new ArgumentOutOfRangeException(nameof(ratio))
-        };
+        if (habit.StartAt is DateTime startAt && day < startAt.Date)
+            return false;
+
+        return habit.LastTimeDoneAt is not DateTime doneAt || doneAt.Date < day;
     }
 }

@@ -54,18 +54,20 @@
 
             <div class="input-group">
                 <label class="input-group-text bg-transparent" for="countInput">@Loc["Repeat"]</label>
-                <InputNumber class="form-control" id="countInput" min="1" @bind-Value="HabitService.NewHabit.RepeatCount" />
+                <InputNumber class="form-control" id="countInput" min="1" readonly="@HabitService.NewHabit.HasSchedule" @bind-Value="HabitService.NewHabit.RepeatCount" />
 
                 <label class="input-group-text bg-transparent" for="intervalInput">@Loc["every"]</label>
                 <InputNumber class="form-control" id="intervalInput" min="1" @bind-Value="HabitService.NewHabit.RepeatInterval" />
 
-                <InputSelect class="form-select" aria-label="@Loc["Repeat period"]" @bind-Value="HabitService.NewHabit.RepeatPeriod">
+                <InputSelect class="form-select" aria-label="@Loc["Repeat period"]" Value="HabitService.NewHabit.RepeatPeriod" ValueExpression="() => HabitService.NewHabit.RepeatPeriod" ValueChanged="(Period period) => SetNewHabitPeriod(HabitService.NewHabit, period)">
                     @foreach (Period period in Enum.GetValues<Period>())
                     {
                         <option value="@period">@Loc[period.ToString()]</option>
                     }
                 </InputSelect>
             </div>
+
+            <RepeatDaysComponent Habit="HabitService.NewHabit" OnChange="() => { }" />
 
             <div class="input-group">
                 <span class="input-group-text bg-transparent">@Loc["Duration"]</span>
@@ -285,6 +287,7 @@
             new() { Text = "Click on a day on the large calendar to mark the habit as done.", Show = () => _showHabitComponent && ClientState.Settings.ShowLargeCalendar },
             new() { Text = "Set the habit's start date. Elapsed time won't count before this date.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's desired repeat interval.", Show = () => _showHabitComponent },
+            new() { Text = "Choose the days the habit is meant for. Without any, it repeats the set number of times.", Show = () => _showHabitComponent && RepeatDaysComponent.ShowsDaysFor(HabitService.SelectedHabit!.RepeatPeriod) },
             new() { Text = "Set the habit's desired duration.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's display metric.", Show = () => _showHabitComponent },
             new() { Text = "Set the habit's target quantity.", Show = () => _showHabitComponent && HabitService.SelectedHabit?.DisplayMetric == DisplayMetric.Quantity },
@@ -455,6 +458,15 @@
     {
         _pageStateChanged = !_pageStateChanged;
         StateHasChanged();
+    }
+
+    void SetNewHabitPeriod(HabitModel habit, Period period)
+    {
+        bool hadSchedule = habit.HasSchedule;
+
+        habit.RepeatPeriod = period;
+
+        habit.KeepRepeatCountInStep(hadSchedule);
     }
 
     async Task OnAddHabit()

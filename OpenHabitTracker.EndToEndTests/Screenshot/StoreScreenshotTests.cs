@@ -458,10 +458,10 @@ public class StoreScreenshotTests : PlaywrightTest
 
             await page.Locator("[data-main-step-5]").ClickAsync(); // habits
             await page.Locator("[data-habits-step-2]").Filter(new LocatorFilterOptions { HasTextString = "Practice Spanish" }).ClickAsync();
-            await Assertions.Expect(page.Locator("[data-habits-step-27]")).ToBeVisibleAsync();
-            await ScrollDetailToTopAsync(page, "[data-habits-step-27]"); // Target, History, Calendar
+            await Assertions.Expect(page.Locator("[data-habits-step-28]")).ToBeVisibleAsync();
+            await ScrollDetailToTopAsync(page, "[data-habits-step-28]"); // Target, History, Calendar
         }),
-        ("calendar.png", async page => await ScrollDetailToTopAsync(page, "[data-habits-step-29]")) // Calendar, Best streaks, Frequency
+        ("calendar.png", async page => await ScrollDetailToTopAsync(page, "[data-habits-step-30]")) // Calendar, Best streaks, Frequency
     ];
 
     //[Test]

@@ -21,18 +21,29 @@ public static class HabitStatistics
     // A month is not 30 days and a year is not 365: measuring in days makes a monthly habit ask for
     // 3.1 completions in a quarter and 12.2 in a year, targets that can never be met, and makes a
     // single completion in February look like a surplus because February is shorter than 30 days.
-    // Null means the metric has no target, which is a Time habit with no Duration.
+    // A habit with named days asks for one completion on each of them that falls in the window.
+    // Null means the metric has no target, which is a Time habit with no Duration, or a window without
+    // a single named day.
     public static double? GetExpected(HabitModel habit, DateTime from, DateTime to)
     {
         if (to <= from)
             return null;
 
-        double periods = GetPeriodsInRange(habit.RepeatPeriod, from, to) / Math.Max(1, habit.RepeatInterval);
+        double expectedCompletions;
 
-        if (periods <= 0)
+        if (habit.HasSchedule)
+        {
+            expectedCompletions = HabitSchedule.CountScheduledDays(habit.Rule, from, to);
+        }
+        else
+        {
+            double periods = GetPeriodsInRange(habit.RepeatPeriod, from, to) / Math.Max(1, habit.RepeatInterval);
+
+            expectedCompletions = habit.NonZeroRepeatCount * periods;
+        }
+
+        if (expectedCompletions <= 0)
             return null;
-
-        double expectedCompletions = habit.NonZeroRepeatCount * periods;
 
         return habit.DisplayMetric switch
         {
@@ -101,7 +112,9 @@ public static class HabitStatistics
             return new DayStatus { Background = background, Label = $"({sum:0.##})", Count = times.Count, Quantity = sum, TotalTime = TimeSpan.Zero };
         }
 
-        bool reached = habit.RepeatPeriod == Period.Day ? times.Count >= habit.RepeatCount : habit.RepeatCountReached(date);
+        // A habit with named days asks for one completion on its day, like a daily habit done once a day.
+        bool reached = habit.RepeatPeriod == Period.Day ? times.Count >= habit.RepeatCount
+            : habit.HasSchedule || habit.RepeatCountReached(date);
 
         return new DayStatus
         {
@@ -125,14 +138,28 @@ public static class HabitStatistics
             DateTime start = GetBucketStart(now, period, firstDayOfWeek);
             DateTime end = GetNextBucketStart(start, period);
 
-            int interval = Math.Max(1, habit.RepeatInterval);
+            double periods;
+            double due;
 
-            double periods = GetPeriodsInRange(habit.RepeatPeriod, start, end) / interval;
-            double elapsed = GetPeriodsInRange(habit.RepeatPeriod, start, now < end ? now : end) / interval;
+            if (habit.HasSchedule)
+            {
+                // A habit with named days counts them in place of its periods, today's included.
+                DateTime tomorrow = now.Date.AddDays(1);
 
-            // The period in progress counts as asked for, so a quarter wants 1 from a monthly habit
-            // the moment July starts, not once July is over.
-            double due = Math.Min(Math.Floor(elapsed) + 1, periods);
+                periods = HabitSchedule.CountScheduledDays(habit.Rule, start, end);
+                due = HabitSchedule.CountScheduledDays(habit.Rule, start, tomorrow < end ? tomorrow : end);
+            }
+            else
+            {
+                int interval = Math.Max(1, habit.RepeatInterval);
+
+                periods = GetPeriodsInRange(habit.RepeatPeriod, start, end) / interval;
+                double elapsed = GetPeriodsInRange(habit.RepeatPeriod, start, now < end ? now : end) / interval;
+
+                // The period in progress counts as asked for, so a quarter wants 1 from a monthly habit
+                // the moment July starts, not once July is over.
+                due = Math.Min(Math.Floor(elapsed) + 1, periods);
+            }
 
             rows.Add(new TargetRow
             {

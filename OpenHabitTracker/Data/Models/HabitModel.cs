@@ -40,18 +40,111 @@ public class HabitModel : ItemsModel
     // Every unbroken run, longest first. BestStreak is its first element.
     internal List<Streak> AllStreaks { get; set; } = [];
 
-    internal int NonZeroRepeatCount => Math.Max(1, RepeatCount);
+    // The days the habit is meant for, with the periods counted from its start.
+    internal RepeatRule Rule => new(RepeatPeriod, Math.Max(1, RepeatInterval), (StartAt ?? CreatedAt).Date, RepeatWeekdays, RepeatMonthDays, RepeatMonthWeeks, RepeatMonths);
 
-    internal TimeSpan ElapsedTime => LastTimeDoneAt.HasValue ? DateTime.Now - LastTimeDoneAt.Value : new TimeSpan(Math.Max(0L, (DateTime.Now - (StartAt ?? CreatedAt)).Ticks));
+    internal bool HasSchedule => HabitSchedule.HasSchedule(Rule);
+
+    // A habit with named days is done once on each of them, whatever count is stored.
+    internal int NonZeroRepeatCount => HasSchedule ? HabitSchedule.GetNamedDayCount(Rule) : Math.Max(1, RepeatCount);
+
+    internal TimeSpan ElapsedTime => GetElapsedTimeAt(DateTime.Now);
 
     // RepeatCount completions per repeat interval are one completion per this much time.
     internal TimeSpan DesiredInterval => GetRepeatInterval() / NonZeroRepeatCount;
 
-    internal double ElapsedTimeToRepeatIntervalRatio => ElapsedTime / DesiredInterval * 100.0;
+    internal double ElapsedTimeToRepeatIntervalRatio => GetRatioAt(Ratio.ElapsedToDesired, DateTime.Now);
 
-    internal double ElapsedTimeToAverageIntervalRatio => ElapsedTime / AverageInterval * 100.0;
+    internal double ElapsedTimeToAverageIntervalRatio => GetRatioAt(Ratio.ElapsedToAverage, DateTime.Now);
 
-    internal double AverageIntervalToRepeatIntervalRatio => AverageInterval / DesiredInterval * 100.0;
+    internal double AverageIntervalToRepeatIntervalRatio => GetRatioAt(Ratio.AverageToDesired, DateTime.Now);
+
+    private DateTime Reference => LastTimeDoneAt ?? StartAt ?? CreatedAt;
+
+    internal TimeSpan GetElapsedTimeAt(DateTime at) =>
+        LastTimeDoneAt.HasValue ? at - LastTimeDoneAt.Value : new TimeSpan(Math.Max(0L, (at - Reference).Ticks));
+
+    // The end of the first scheduled day after the day of the last completion, or on or after the day the
+    // habit starts when it was never done, and never before the day of StartAt. Without named days, or
+    // without such a day before the year 9999, it is one desired interval after the last completion.
+    internal DateTime GetDueAt()
+    {
+        DateTime reference = Reference;
+        TimeSpan interval = GetIntervalToDue();
+
+        // An interval typed with no upper limit can reach past the last day DateTime holds.
+        if (interval > DateTime.MaxValue - reference)
+            return DateTime.MaxValue;
+
+        if (interval < DateTime.MinValue - reference)
+            return DateTime.MinValue;
+
+        return reference + interval;
+    }
+
+    // The time from the reference to the due moment.
+    internal TimeSpan GetIntervalToDue()
+    {
+        if (HasSchedule && GetDueDay() is DateTime dueDay)
+            return dueDay.AddDays(1) - Reference;
+
+        return DesiredInterval;
+    }
+
+    private DateTime? GetDueDay()
+    {
+        RepeatRule rule = Rule;
+
+        DateTime? day = LastTimeDoneAt is DateTime done
+            ? HabitSchedule.GetNextScheduledDay(rule, done.Date)
+            : FirstScheduledDayFrom(rule, Reference.Date);
+
+        if (day is DateTime found && StartAt is DateTime startAt && found < startAt.Date)
+            day = FirstScheduledDayFrom(rule, startAt.Date);
+
+        return day;
+    }
+
+    private static DateTime? FirstScheduledDayFrom(RepeatRule rule, DateTime day) =>
+        HabitSchedule.IsScheduledOn(rule, day) ? day : HabitSchedule.GetNextScheduledDay(rule, day);
+
+    // The first scheduled day from today on, today itself left out once the habit is done on it.
+    internal DateTime? GetNextScheduledDay(DateTime today)
+    {
+        if (!HasSchedule)
+            return null;
+
+        bool doneToday = LastTimeDoneAt?.Date >= today.Date;
+
+        return doneToday ? HabitSchedule.GetNextScheduledDay(Rule, today.Date) : FirstScheduledDayFrom(Rule, today.Date);
+    }
+
+    // The ratios only move one way with time between completions, so the value at a later moment is
+    // exact, which lets the daily summary be computed days ahead.
+    internal double GetRatioAt(Ratio ratio, DateTime at)
+    {
+        TimeSpan elapsed = GetElapsedTimeAt(at);
+
+        return ratio switch
+        {
+            Ratio.ElapsedToAverage => elapsed / AverageInterval * 100.0,
+            Ratio.ElapsedToDesired => elapsed / GetIntervalToDue() * 100.0,
+            Ratio.AverageToDesired => AverageInterval / DesiredInterval * 100.0,
+            _ => throw new ArgumentOutOfRangeException(nameof(ratio))
+        };
+    }
+
+    // The count follows the named days, and goes back to 1 when a change leaves the habit without them.
+    internal void KeepRepeatCountInStep(bool hadSchedule)
+    {
+        if (HasSchedule)
+            RepeatCount = HabitSchedule.GetNamedDayCount(Rule);
+        else if (hadSchedule)
+            RepeatCount = 1;
+    }
+
+    // The averages and the streaks depend on the repeat rule as well as on the completions.
+    internal void RefreshStatistics() => OnTimesDoneChanged();
 
     internal Dictionary<DateTime, List<TimeModel>>? TimesDoneByDay { get; set; }
 
@@ -133,10 +226,21 @@ public class HabitModel : ItemsModel
             return;
         }
 
-        if (RepeatInterval == 1)
+        if (HasSchedule)
+            ComputeScheduledStreaks();
+        else if (RepeatInterval == 1)
             ComputeCalendarWindowStreaks();
         else
             ComputeGapBasedStreaks();
+    }
+
+    private void ComputeScheduledStreaks()
+    {
+        (List<Streak> runs, Streak? current) = HabitSchedule.GetStreaks(Rule, TimesDoneByDay!, DateTime.Today);
+
+        CurrentStreak = current;
+
+        SetStreaks(runs);
     }
 
     // If today's bucket is not yet complete, fall back to the previous bucket
@@ -354,13 +458,7 @@ public class HabitModel : ItemsModel
         return timesDone >= RepeatCount;
     }
 
-    public double GetRatio(Ratio ratio) => ratio switch
-    {
-        Ratio.ElapsedToAverage => ElapsedTimeToAverageIntervalRatio,
-        Ratio.ElapsedToDesired => ElapsedTimeToRepeatIntervalRatio,
-        Ratio.AverageToDesired => AverageIntervalToRepeatIntervalRatio,
-        _ => throw new ArgumentOutOfRangeException(nameof(ratio))
-    };
+    public double GetRatio(Ratio ratio) => GetRatioAt(ratio, DateTime.Now);
 
     public TimeSpan GetRepeatInterval()
     {

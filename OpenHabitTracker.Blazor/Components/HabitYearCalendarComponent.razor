@@ -40,7 +40,7 @@
 
                         <div class="d-flex align-items-center" role="row">
                             <div style="flex: 0 0 26px;" role="rowheader">
-                                <small style="font-size: 0.65rem;">@Loc[_days[DayIndex(weekday)]]</small>
+                                <small style="font-size: 0.65rem;">@Loc[OpenHabitTracker.Services.CalendarService.WeekdayKeys[DayIndex(weekday)]]</small>
                             </div>
 
                             @for (int column = 0; column < _weeks.Count; column++)
@@ -73,7 +73,6 @@
     [Parameter]
     public HabitModel Habit { get; set; } = null!;
 
-    readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
 
     List<DateTime> _weeks = new();
     ElementReference[] _cellRefs = Array.Empty<ElementReference>();

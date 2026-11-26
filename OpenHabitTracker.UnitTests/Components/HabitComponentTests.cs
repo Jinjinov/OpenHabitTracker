@@ -98,7 +98,7 @@ public class HabitComponentTests
         // HabitService.Start() is called before the loop begins (mock returns Task.CompletedTask
         // synchronously), so by the time the click task suspends at WaitForNextTickAsync the call
         // is already recorded. TearDown disposes _ctx which disposes _timer, ending the loop.
-        Task _ = cut.Find("[data-habits-step-19] button").ClickAsync(new MouseEventArgs());
+        Task _ = cut.Find("[data-habits-step-20] button").ClickAsync(new MouseEventArgs());
 
         await _habitService.Received(1).Start(_habit);
     }
@@ -139,7 +139,7 @@ public class HabitComponentTests
         Assert.Multiple(() =>
         {
             Assert.That(cut.FindAll("button[aria-label='Stop']"), Has.Count.EqualTo(1));
-            Assert.That(cut.Find("[data-habits-step-19] span.input-group-text").TextContent, Does.StartWith("00:05:"));
+            Assert.That(cut.Find("[data-habits-step-20] span.input-group-text").TextContent, Does.StartWith("00:05:"));
         });
     }
 
@@ -173,7 +173,7 @@ public class HabitComponentTests
             parameters => parameters.Add(p => p.Habit, _habit));
 
         // Not awaited, for the reason in StartTimer_ButtonClick_InvokesHabitServiceStart.
-        Task _ = cut.Find("[data-habits-step-19] button").ClickAsync(new MouseEventArgs());
+        Task _ = cut.Find("[data-habits-step-20] button").ClickAsync(new MouseEventArgs());
 
         await cut.WaitForElement("button[aria-label='Pause']").ClickAsync(new MouseEventArgs());
         await cut.WaitForElement("button[aria-label='Resume']").ClickAsync(new MouseEventArgs());
@@ -201,7 +201,7 @@ public class HabitComponentTests
         IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
             parameters => parameters.Add(p => p.Habit, _habit));
 
-        Assert.That(cut.FindAll("[data-habits-step-27]"), Is.Empty);
+        Assert.That(cut.FindAll("[data-habits-step-28]"), Is.Empty);
     }
 
     [Test]
@@ -214,11 +214,11 @@ public class HabitComponentTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(cut.FindAll("[data-habits-step-27]"), Has.Count.EqualTo(1));
             Assert.That(cut.FindAll("[data-habits-step-28]"), Has.Count.EqualTo(1));
             Assert.That(cut.FindAll("[data-habits-step-29]"), Has.Count.EqualTo(1));
             Assert.That(cut.FindAll("[data-habits-step-30]"), Has.Count.EqualTo(1));
             Assert.That(cut.FindAll("[data-habits-step-31]"), Has.Count.EqualTo(1));
+            Assert.That(cut.FindAll("[data-habits-step-32]"), Has.Count.EqualTo(1));
         });
     }
 
@@ -233,8 +233,8 @@ public class HabitComponentTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(cut.FindAll("[data-habits-step-27]"), Has.Count.EqualTo(1));
-            Assert.That(cut.FindAll("[data-habits-step-20]"), Is.Empty);
+            Assert.That(cut.FindAll("[data-habits-step-28]"), Has.Count.EqualTo(1));
+            Assert.That(cut.FindAll("[data-habits-step-21]"), Is.Empty);
         });
     }
 
@@ -318,7 +318,7 @@ public class HabitComponentTests
         IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
             parameters => parameters.Add(p => p.Habit, _habit));
 
-        AngleSharp.Dom.IElement select = cut.Find("[data-habits-step-17] select");
+        AngleSharp.Dom.IElement select = cut.Find("[data-habits-step-18] select");
 
         Assert.That(select, Is.Not.Null);
     }
@@ -331,7 +331,7 @@ public class HabitComponentTests
         IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
             parameters => parameters.Add(p => p.Habit, _habit));
 
-        Assert.That(cut.FindAll("[data-habits-step-18]"), Is.Empty);
+        Assert.That(cut.FindAll("[data-habits-step-19]"), Is.Empty);
     }
 
     [Test]
@@ -342,6 +342,6 @@ public class HabitComponentTests
         IRenderedComponent<HabitComponent> cut = _ctx.Render<HabitComponent>(
             parameters => parameters.Add(p => p.Habit, _habit));
 
-        Assert.That(cut.Find("[data-habits-step-18]"), Is.Not.Null);
+        Assert.That(cut.Find("[data-habits-step-19]"), Is.Not.Null);
     }
 }

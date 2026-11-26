@@ -1,0 +1,59 @@
+@using System.Globalization
+@using OpenHabitTracker.App
+@using OpenHabitTracker.Data
+@using OpenHabitTracker.Data.Models
+
+@inject ClientState ClientState
+@inject IStringLocalizer Loc
+
+@if (ShowsDaysFor(Habit.RepeatPeriod))
+{
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text bg-transparent col-4" id="@_labelId">@Loc["Repeat on"]</span>
+        <div class="d-flex flex-grow-1" role="group" aria-labelledby="@_labelId">
+            @for (int i = 0; i < 7; i++)
+            {
+                DayOfWeek dayOfWeek = (DayOfWeek)OpenHabitTracker.Services.CalendarService.GetDayOfWeek(ClientState.Settings.FirstDayOfWeek, i);
+                Weekdays weekday = ToWeekdays(dayOfWeek);
+                bool pressed = (Habit.RepeatWeekdays & weekday) != Weekdays.None;
+
+                <button type="button"
+                        class="@($"btn {(pressed ? "btn-primary" : "btn-outline-primary")} flex-fill px-0 rounded-0")"
+                        aria-pressed="@(pressed ? "true" : "false")"
+                        aria-label="@CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(dayOfWeek)"
+                        @onclick="() => Toggle(weekday)">
+                    @Loc[OpenHabitTracker.Services.CalendarService.WeekdayKeys[(int)dayOfWeek]]
+                </button>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public HabitModel Habit { get; set; } = null!;
+
+    // Saves the habit in the detail; the new habit form only renders again.
+    [Parameter]
+    public EventCallback OnChange { get; set; }
+
+    readonly string _labelId = $"repeat-on-{Guid.NewGuid():N}";
+
+    // The periods whose days can be chosen here.
+    public static bool ShowsDaysFor(Period period) => period == Period.Week;
+
+    static Weekdays ToWeekdays(DayOfWeek dayOfWeek) => (Weekdays)(1 << (((int)dayOfWeek + 6) % 7));
+
+    async Task Toggle(Weekdays weekday)
+    {
+        bool hadSchedule = Habit.HasSchedule;
+
+        Habit.RepeatWeekdays ^= weekday;
+
+        Habit.KeepRepeatCountInStep(hadSchedule);
+        Habit.RefreshStatistics();
+
+        await OnChange.InvokeAsync();
+    }
+}

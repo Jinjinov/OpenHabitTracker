@@ -348,6 +348,164 @@ public class NotificationScheduleTests
         });
     }
 
+    // --- habits with named days; Now is Friday 2026-07-24 ---
+
+    private static HabitModel Scheduled(Weekdays weekdays, DateTime? lastTimeDoneAt = null, long id = 1, string title = "Test", DateTime? startAt = null, Priority priority = Priority.None) => new()
+    {
+        Id = id,
+        Title = title,
+        Priority = priority,
+        RepeatCount = 1,
+        RepeatInterval = 1,
+        RepeatPeriod = Period.Week,
+        RepeatWeekdays = weekdays,
+        LastTimeDoneAt = lastTimeDoneAt,
+        StartAt = startAt,
+        CreatedAt = new DateTime(2026, 7, 20)
+    };
+
+    private static List<DateTime> DaysListing(List<ScheduledNotification> result, long habitId) =>
+        result.Where(x => x.HabitIds.Contains(habitId)).Select(x => x.NotifyAt.Date).ToList();
+
+    private static IEnumerable<DateTime> Days(DateTime from, DateTime to)
+    {
+        for (DateTime day = from; day <= to; day = day.AddDays(1))
+            yield return day;
+    }
+
+    // Done on Friday at 08:00, due by the end of Monday: listed on its days, and through the threshold once it has passed.
+    [Test]
+    public void Build_HabitWithNamedDays_IsListedOnThemAndThroughTheThreshold()
+    {
+        HabitModel habit = Scheduled(Weekdays.Monday | Weekdays.Wednesday, lastTimeDoneAt: Now);
+
+        List<ScheduledNotification> atDefault = NotificationSchedule.Build([], [habit], Settings(leadMinutes: null), Now);
+        List<ScheduledNotification> at150 = NotificationSchedule.Build([], [habit], Settings(leadMinutes: null, habitThreshold: 150), Now);
+        List<ScheduledNotification> at200 = NotificationSchedule.Build([], [habit], Settings(leadMinutes: null, habitThreshold: 200), Now);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(DaysListing(atDefault, 1), Is.EqualTo(Days(new DateTime(2026, 7, 27), new DateTime(2026, 8, 24))));
+            Assert.That(DaysListing(at150, 1), Is.EqualTo(new[] { new DateTime(2026, 7, 27), new DateTime(2026, 7, 29) }.Concat(Days(new DateTime(2026, 7, 30), new DateTime(2026, 8, 24)))));
+            Assert.That(DaysListing(at200, 1), Is.EqualTo(new[] { new DateTime(2026, 7, 27), new DateTime(2026, 7, 29) }.Concat(Days(new DateTime(2026, 8, 1), new DateTime(2026, 8, 24)))));
+        });
+    }
+
+    [Test]
+    public void Build_HabitDoneOnItsDay_IsLeftOutThatDay()
+    {
+        List<ScheduledNotification> doneToday = NotificationSchedule.Build([], [Scheduled(Weekdays.Friday | Weekdays.Monday, lastTimeDoneAt: Now)], Settings(leadMinutes: null, habitThreshold: 200), Now);
+        List<ScheduledNotification> doneYesterday = NotificationSchedule.Build([], [Scheduled(Weekdays.Friday | Weekdays.Monday, lastTimeDoneAt: Now.AddDays(-1))], Settings(leadMinutes: null, habitThreshold: 200), Now);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(DaysListing(doneToday, 1).First(), Is.EqualTo(new DateTime(2026, 7, 27)));
+            Assert.That(DaysListing(doneYesterday, 1).First(), Is.EqualTo(Now.Date));
+        });
+    }
+
+    [Test]
+    public void Build_ThresholdZero_ListsAScheduledHabitOnceEveryDay()
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Scheduled(Weekdays.Monday, lastTimeDoneAt: Now)], Settings(leadMinutes: null, habitThreshold: 0), Now);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Has.Count.EqualTo(NotificationSchedule.HorizonDays));
+            Assert.That(result.All(x => x.HabitIds.SequenceEqual([1L])), Is.True);
+        });
+    }
+
+    // Due by the end of Monday August 3, and over 200 percent from August 5.
+    [Test]
+    public void Build_StartInsideTheHorizon_IsNotListedBeforeIt()
+    {
+        HabitModel habit = Scheduled(Weekdays.Monday | Weekdays.Friday, startAt: new DateTime(2026, 8, 3));
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(leadMinutes: null, habitThreshold: 200), Now);
+
+        Assert.That(DaysListing(result, 1), Is.EqualTo(new[] { new DateTime(2026, 8, 3) }.Concat(Days(new DateTime(2026, 8, 5), new DateTime(2026, 8, 24)))));
+    }
+
+    [TestCase(Ratio.ElapsedToDesired)]
+    [TestCase(Ratio.ElapsedToAverage)]
+    [TestCase(Ratio.AverageToDesired)]
+    public void Build_NeverDoneOnItsDay_IsListedWithEveryRatio(Ratio ratio)
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Scheduled(Weekdays.Friday)], Settings(leadMinutes: null, selectedRatio: ratio), Now);
+
+        Assert.That(DaysListing(result, 1).First(), Is.EqualTo(Now.Date));
+    }
+
+    // Without completions the elapsed-to-average ratio is infinite, and it sorts before a finite one.
+    [Test]
+    public void Build_InfiniteRatioOfAScheduledHabit_ComesFirst()
+    {
+        HabitModel daily = DailyHabit(5, id: 2);
+        daily.TimesDone = [new TimeModel { StartedAt = Now.AddDays(-7) }, new TimeModel { StartedAt = Now.AddDays(-5) }];
+        daily.RefreshTimesDoneByDay();
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [daily, Scheduled(Weekdays.Friday, id: 1)], Settings(leadMinutes: null, selectedRatio: Ratio.ElapsedToAverage), Now);
+
+        Assert.That(result[0].HabitIds, Is.EqualTo(new long[] { 1, 2 }));
+    }
+
+    [Test]
+    public void Build_ScheduledHabitBelowTheMinimumPriorityOrWithTasksOnlyOrInTheTrash_IsNotListed()
+    {
+        HabitModel trashed = Scheduled((Weekdays)127, id: 3);
+        trashed.IsDeleted = true;
+
+        List<ScheduledNotification> belowPriority = NotificationSchedule.Build([], [Scheduled((Weekdays)127, priority: Priority.Low)], Settings(leadMinutes: null, minimumPriority: Priority.Medium, habitThreshold: 200), Now);
+        List<ScheduledNotification> tasksOnly = NotificationSchedule.Build([], [Scheduled((Weekdays)127)], Settings(leadMinutes: null, content: DigestContent.Tasks, habitThreshold: 200), Now);
+        List<ScheduledNotification> inTheTrash = NotificationSchedule.Build([], [trashed], Settings(leadMinutes: null, habitThreshold: 200), Now);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(belowPriority, Is.Empty);
+            Assert.That(tasksOnly, Is.Empty);
+            Assert.That(inTheTrash, Is.Empty);
+        });
+    }
+
+    [Test]
+    public void Build_SummaryTimeAlreadyPassedOnItsDay_StartsWithTheNextDay()
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Scheduled(Weekdays.Friday | Weekdays.Monday, lastTimeDoneAt: Now.AddDays(-3))], Settings(leadMinutes: null, habitThreshold: 200), Now.Date.AddHours(17));
+
+        Assert.That(DaysListing(result, 1).First(), Is.EqualTo(new DateTime(2026, 7, 27)));
+    }
+
+    [Test]
+    public void Build_TwoScheduledHabitsWithTheSameRatio_AreOrderedByTitle()
+    {
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [Scheduled(Weekdays.Friday, id: 1, title: "b"), Scheduled(Weekdays.Friday, id: 2, title: "a")], Settings(leadMinutes: null), Now);
+
+        Assert.That(result[0].HabitIds, Is.EqualTo(new long[] { 2, 1 }));
+    }
+
+    // Every second Monday from July 20, done that day: due by the end of August 3.
+    [Test]
+    public void Build_EverySecondWeek_IsListedOnItsMondaysAndThroughTheThreshold()
+    {
+        HabitModel habit = Scheduled(Weekdays.Monday, lastTimeDoneAt: new DateTime(2026, 7, 20, 8, 0, 0));
+        habit.RepeatInterval = 2;
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(leadMinutes: null, habitThreshold: 200), Now);
+
+        Assert.That(DaysListing(result, 1), Is.EqualTo(new[] { new DateTime(2026, 8, 3), new DateTime(2026, 8, 17) }.Concat(Days(new DateTime(2026, 8, 19), new DateTime(2026, 8, 24)))));
+    }
+
+    [Test]
+    public void Build_ThirtyFirst_IsListedOnTheLastDayOfFebruary()
+    {
+        HabitModel habit = new() { Id = 1, RepeatCount = 1, RepeatInterval = 1, RepeatPeriod = Period.Month, RepeatMonthDays = 1 << 30, LastTimeDoneAt = new DateTime(2027, 1, 31, 8, 0, 0), CreatedAt = new DateTime(2026, 7, 20) };
+
+        List<ScheduledNotification> result = NotificationSchedule.Build([], [habit], Settings(leadMinutes: null, habitThreshold: 200), new DateTime(2027, 2, 20, 8, 0, 0));
+
+        Assert.That(DaysListing(result, 1).First(), Is.EqualTo(new DateTime(2027, 2, 28)));
+    }
+
     // The digest leaves a timed task to its own reminder, which does not exist while reminders are off.
     [Test]
     public void Build_TimedTaskWithRemindersOff_CountsInTheDigestOfItsDay()

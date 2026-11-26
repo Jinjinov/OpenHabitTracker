@@ -10,6 +10,7 @@ public class HistoryBucket
     public required double Value { get; init; }
 
     // Expected for this bucket alone, so a short first bucket and the still-running current one
-    // are not measured against a full one. Null when the habit has no target for its metric.
+    // are not measured against a full one. Null when the habit has no target for its metric, or no
+    // named day in the bucket.
     public required double? Expected { get; init; }
 }

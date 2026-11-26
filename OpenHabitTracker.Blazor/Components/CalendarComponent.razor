@@ -30,7 +30,7 @@
                 @for (int i = 0; i < 7; i++)
                 {
                     int dayIdx = OpenHabitTracker.Services.CalendarService.GetDayOfWeek(ClientState.Settings.FirstDayOfWeek, i);
-                    string day = Loc[_days[dayIdx]];
+                    string day = Loc[OpenHabitTracker.Services.CalendarService.WeekdayKeys[dayIdx]];
                     <div @key="day" class="border d-flex" role="columnheader" scope="col" style="align-items: center; justify-content: center; height: 50px; width: 50px">@day</div>
                 }
             </div>
@@ -144,7 +144,6 @@
 
     CalendarParams _calendarParams = new();
 
-    private readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
 
     int _activeDayIndex = 0;
     ElementReference[] _dayCellRefs = Array.Empty<ElementReference>();

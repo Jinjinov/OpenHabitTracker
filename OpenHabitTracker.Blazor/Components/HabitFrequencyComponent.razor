@@ -33,7 +33,7 @@
 
                         <tr>
                             <th scope="row" class="fw-normal p-0 pe-1">
-                                <small style="font-size: 0.65rem;">@Loc[_days[(int)dayOfWeek]]</small>
+                                <small style="font-size: 0.65rem;">@Loc[OpenHabitTracker.Services.CalendarService.WeekdayKeys[(int)dayOfWeek]]</small>
                             </th>
 
                             @foreach (DateTime month in _months)
@@ -50,7 +50,7 @@
                                     {
                                         <span class="d-inline-block rounded-circle bg-primary align-middle" style="width: @ChartCss.Px(size)px; height: @ChartCss.Px(size)px;" aria-hidden="true"></span>
                                     }
-                                    <span class="visually-hidden">@month.ToString("MMMM") @Loc[_days[(int)dayOfWeek]] @HabitStatistics.Format(Habit, value)</span>
+                                    <span class="visually-hidden">@month.ToString("MMMM") @Loc[OpenHabitTracker.Services.CalendarService.WeekdayKeys[(int)dayOfWeek]] @HabitStatistics.Format(Habit, value)</span>
                                 </td>
                             }
                         </tr>
@@ -68,7 +68,6 @@
 
     const double _maxDot = 18;
 
-    readonly string[] _days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
 
     List<FrequencyCell> _cells = new();
     List<DateTime> _months = new();

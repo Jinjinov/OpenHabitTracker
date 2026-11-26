@@ -343,6 +343,32 @@ public class HabitServiceTests
         await _dataAccess.Received(1).AddHabit(Arg.Is<HabitEntity>(x => x != null && x.RepeatCount == 1 && x.RepeatInterval == 1));
     }
 
+    // The count of a habit with named days is their number, whatever was typed.
+    [TestCase(7, 3)]
+    [TestCase(0, 3)]
+    public async Task AddHabit_WithNamedDays_StoresThemAndTheirCount(int typedCount, int storedCount)
+    {
+        _clientState.Habits = new();
+        _sut.NewHabit = new HabitModel { Title = "New", RepeatCount = typedCount, RepeatInterval = 1, RepeatPeriod = Period.Week, RepeatWeekdays = Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday };
+
+        await _sut.AddHabit();
+
+        await _dataAccess.Received(1).AddHabit(Arg.Is<HabitEntity>(x => x != null && x.RepeatCount == storedCount && x.RepeatPeriod == Period.Week
+            && x.RepeatWeekdays == (Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday) && x.RepeatMonthDays == 0 && x.RepeatMonthWeeks == MonthWeeks.None && x.RepeatMonths == Months.None));
+    }
+
+    // Days of another period than the habit's are kept, and the typed count stays.
+    [Test]
+    public async Task AddHabit_WithDaysOfAnotherPeriod_KeepsThemAndTheTypedCount()
+    {
+        _clientState.Habits = new();
+        _sut.NewHabit = new HabitModel { Title = "New", RepeatCount = 2, RepeatInterval = 1, RepeatPeriod = Period.Day, RepeatWeekdays = Weekdays.Monday };
+
+        await _sut.AddHabit();
+
+        await _dataAccess.Received(1).AddHabit(Arg.Is<HabitEntity>(x => x != null && x.RepeatCount == 2 && x.RepeatWeekdays == Weekdays.Monday));
+    }
+
     [Test]
     public async Task AddHabit_AddsHabitToClientStateDictionary()
     {
@@ -1016,6 +1042,47 @@ public class HabitServiceTests
 
         Assert.That(result[0].Id, Is.EqualTo(1L));
         Assert.That(result[1].Id, Is.EqualTo(2L));
+    }
+
+    // Monday, Wednesday and Friday ask for one every 56 hours, between every day and twice a week, whatever count is stored.
+    [Test]
+    public void GetHabits_SortByRepeatInterval_HabitWithNamedDaysByTheirNumber()
+    {
+        HabitModel daily = TestData.Habit(id: 1);
+        HabitModel twiceAWeek = TestData.Habit(id: 2, repeatCount: 2, repeatPeriod: Period.Week);
+        HabitModel monWedFri = TestData.Habit(id: 3, repeatCount: 1, repeatPeriod: Period.Week);
+        monWedFri.RepeatWeekdays = Weekdays.Monday | Weekdays.Wednesday | Weekdays.Friday;
+        _clientState.Habits = TestData.HabitDict(twiceAWeek, monWedFri, daily);
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.RepeatInterval;
+
+        Assert.That(_sut.GetHabits().Select(x => x.Id), Is.EqualTo(new long[] { 1, 3, 2 }));
+    }
+
+    // Done ten days ago, a habit meant for every day is far past its day; done now, it is not near it.
+    [Test]
+    public void GetHabits_RatioFilterAndSort_ReadTheRatioOfNamedDays()
+    {
+        HabitModel overdue = TestData.Habit(id: 1, repeatPeriod: Period.Week, lastTimeDoneAt: DateTime.Now.AddDays(-10));
+        overdue.RepeatWeekdays = (Weekdays)127;
+        HabitModel justDone = TestData.Habit(id: 2, repeatPeriod: Period.Week, lastTimeDoneAt: DateTime.Now);
+        justDone.RepeatWeekdays = (Weekdays)127;
+        HabitModel plain = TestData.Habit(id: 3, repeatPeriod: Period.Day, lastTimeDoneAt: DateTime.Now.AddDays(-1.5));
+        _clientState.Habits = TestData.HabitDict(justDone, plain, overdue);
+        _clientState.Settings.SortBy[ContentType.Habit] = Sort.SelectedRatio;
+        _clientState.Settings.SelectedRatio = Ratio.ElapsedToDesired;
+
+        List<long> sorted = _sut.GetHabits().Select(x => x.Id).ToList();
+
+        _clientState.Settings.ShowOnlyOverSelectedRatioMin = true;
+        _clientState.Settings.SelectedRatioMin = 50;
+
+        List<long> filtered = _sut.GetHabits().Select(x => x.Id).ToList();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(sorted, Is.EqualTo(new long[] { 1, 3, 2 }));
+            Assert.That(filtered, Is.EqualTo(new long[] { 1, 3 }));
+        });
     }
 
     [Test]
