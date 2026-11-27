@@ -533,7 +533,7 @@
         await UpdateSettings();
 
         // The daily summary decides which habits are due on this ratio.
-        await NotificationScheduler.Rebuild();
+        _ = NotificationScheduler.Rebuild();
     }
 
     async Task SaveHideCompletedTasks(bool show)

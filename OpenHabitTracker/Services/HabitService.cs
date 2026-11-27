@@ -126,7 +126,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         await _appReview.RecordEngagement(EngagementKind.ContentCreated);
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     public async Task UpdateHabit()
@@ -143,7 +143,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
             selectedHabit.UpdatedAt = habit.UpdatedAt;
         }
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     public async Task Start(HabitModel habit)
@@ -230,7 +230,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
             await _appReview.RecordEngagement(EngagementKind.Completed);
 
-            await _notificationScheduler.Rebuild();
+            _ = _notificationScheduler.Rebuild();
 
             if (_clientState.Settings.UncheckAllItemsOnHabitDone)
             {
@@ -316,7 +316,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         await _appReview.RecordEngagement(EngagementKind.Completed);
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     public async Task RemoveTimeDone(HabitModel habit, TimeModel timeModel)
@@ -336,7 +336,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         await SetLastTimeDone(habit, last?.CompletedAt);
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     public async Task UpdateTimeDone(HabitModel habit, TimeModel time)
@@ -357,7 +357,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
 
         await SetLastTimeDone(habit, last?.CompletedAt);
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     public async Task UpdateQuantity(HabitModel habit, TimeModel time)
@@ -371,7 +371,7 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
             await _clientState.DataAccess.UpdateTime(timeEntity);
 
             // A quantity can make a habit done for its day, which takes the day's reminder away, or no longer done.
-            await _notificationScheduler.Rebuild();
+            _ = _notificationScheduler.Rebuild();
         }
     }
 
@@ -392,6 +392,6 @@ public class HabitService(ClientState clientState, ISearchFilterService searchFi
             habit.UpdatedAt = habitEntity.UpdatedAt;
         }
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 }

@@ -23,7 +23,7 @@ public class TrashService(ClientState clientState, INotificationScheduler notifi
     public async Task Restore(HabitModel model)
     {
         await RestoreModel(model);
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     private async Task RestoreModel(HabitModel model)
@@ -43,7 +43,7 @@ public class TrashService(ClientState clientState, INotificationScheduler notifi
     public async Task Restore(TaskModel model)
     {
         await RestoreModel(model);
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     private async Task RestoreModel(TaskModel model)
@@ -97,13 +97,13 @@ public class TrashService(ClientState clientState, INotificationScheduler notifi
             foreach (TaskModel model in _clientState.TrashedTasks.ToList())
                 await RestoreModel(model);
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     public async Task Delete(HabitModel model)
     {
         await DeleteModel(model);
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     private async Task DeleteModel(HabitModel model)
@@ -129,7 +129,7 @@ public class TrashService(ClientState clientState, INotificationScheduler notifi
     public async Task Delete(TaskModel model)
     {
         await DeleteModel(model);
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     private async Task DeleteModel(TaskModel model)
@@ -192,6 +192,6 @@ public class TrashService(ClientState clientState, INotificationScheduler notifi
             foreach (TaskModel model in _clientState.TrashedTasks.ToList())
                 await DeleteModel(model);
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 }

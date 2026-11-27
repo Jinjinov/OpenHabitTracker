@@ -25,8 +25,25 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
     private int _rebuildsAsked;
     private int _rebuildsDone;
 
+    private Task _lastRebuild = Task.CompletedTask;
+
+    public Task Rebuild()
+    {
+        Task rebuild = RebuildInTurn();
+
+        _lastRebuild = rebuild;
+
+        return rebuild;
+    }
+
+    // Ends when every rebuild asked for so far has ended, without asking for another.
+    public Task WhenIdle()
+    {
+        return _lastRebuild;
+    }
+
     // One rebuild at a time, and the calls made while one runs share the next one, which starts after them.
-    public async Task Rebuild()
+    private async Task RebuildInTurn()
     {
         int asked = Interlocked.Increment(ref _rebuildsAsked);
 
@@ -42,6 +59,13 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
             await RebuildNow();
 
             _rebuildsDone = covered;
+        }
+        catch (Exception exception)
+        {
+            // Most callers do not wait for the task, so the failure is logged here.
+            _logger.LogError(exception, "Notification schedule rebuild failed");
+
+            throw;
         }
         finally
         {
@@ -65,6 +89,9 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
                 return;
 
             _clientState.Settings = saved[0].ToModel();
+
+            // No page has applied the app's language in this scope, so the times would take the device's format.
+            _clientState.SetCulture();
         }
 
         SettingsModel settings = _clientState.Settings;
@@ -73,7 +100,7 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
         {
             _logger.LogInformation("Notifications off, cancelling all");
 
-            await _notifications.CancelAll();
+            await Task.Run(_notifications.CancelAll);
             return;
         }
 
@@ -91,7 +118,9 @@ public class NotificationScheduler(ClientState clientState, INotifications notif
         _logger.LogInformation("Scheduling {Count} notifications from {Tasks} tasks and {Habits} habits, lead {Lead}, summary {Summary}",
             requests.Count, _clientState.Tasks?.Count, _clientState.Habits?.Count, settings.NotificationLeadMinutes, settings.NotificationTime);
 
-        await _notifications.Replace(requests);
+        // The requests are worked out above, in the caller's context, where the UI changes the models.
+        // The platform's calls go into other processes and take up to seconds, so they run on the thread pool.
+        await Task.Run(() => _notifications.Replace(requests));
     }
 
     private NotificationRequest ToRequest(ScheduledNotification scheduled)

@@ -424,12 +424,14 @@ public class StoreIntegrationTests
         NotificationScheduler scheduler = new(clientState, notifications, services.GetRequiredService<Microsoft.Extensions.Localization.IStringLocalizer>(), Microsoft.Extensions.Logging.Abstractions.NullLogger<NotificationScheduler>.Instance);
         HabitService habitService = new(clientState, services.GetRequiredService<ISearchFilterService>(), Substitute.For<IAppReview>(), scheduler);
 
+        // The services do not wait for the platform, so each check waits for the rebuild a change asked for.
         DateTime tomorrow = DateTime.Today.AddDays(1);
         List<DateTime> HabitDays() => pending.Where(x => x.Id.StartsWith("habit-", StringComparison.Ordinal)).Select(x => x.NotifyAt).ToList();
 
         await habitService.Initialize();
         habitService.NewHabit = new HabitModel { Title = "Water", DisplayMetric = DisplayMetric.Quantity, TargetQuantity = 2, PlannedTime = new TimeOnly(20, 0) };
         await habitService.AddHabit();
+        await scheduler.WhenIdle();
 
         Assert.That(HabitDays(), Does.Contain(tomorrow.AddHours(20)), "added with a time");
 
@@ -437,6 +439,7 @@ public class StoreIntegrationTests
         await habitService.SetSelectedHabit(habit.Id);
         habit.PlannedTime = new TimeOnly(21, 30);
         await habitService.UpdateHabit();
+        await scheduler.WhenIdle();
 
         Assert.Multiple(() =>
         {
@@ -445,12 +448,14 @@ public class StoreIntegrationTests
         });
 
         await habitService.AddTimeDone(habit, tomorrow.AddHours(8), 1);
+        await scheduler.WhenIdle();
 
         Assert.That(HabitDays(), Does.Contain(tomorrow.AddHours(21).AddMinutes(30)), "half the quantity");
 
         TimeModel entry = habit.TimesDone!.Single();
         entry.Quantity = 2;
         await habitService.UpdateQuantity(habit, entry);
+        await scheduler.WhenIdle();
 
         Assert.Multiple(() =>
         {
@@ -459,11 +464,13 @@ public class StoreIntegrationTests
         });
 
         await habitService.RemoveTimeDone(habit, entry);
+        await scheduler.WhenIdle();
 
         Assert.That(HabitDays(), Does.Contain(tomorrow.AddHours(21).AddMinutes(30)), "the completion removed");
 
         habit.PlannedTime = null;
         await habitService.UpdateHabit();
+        await scheduler.WhenIdle();
 
         Assert.That(HabitDays(), Is.Empty, "the time removed");
     }

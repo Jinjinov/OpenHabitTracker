@@ -98,7 +98,71 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
             $"Done today did not leave only tomorrow's reminder: {string.Join(", ", ScheduledToasts().Keys)}");
     }
 
-    // Each completion rebuilds the whole queue before the row shows it, and ten daily habits with a planned time are a toast for each of them on each day ahead.
+    // The queue after a run of completions is the one a rebuild from nothing sets, which reminders off and on again is.
+    // The planned times are ahead today, so each completion takes today's toast of its habit away.
+    [Test]
+    public void HabitReminders_AfterCompletions_AreTheOnesARebuildFromNothingSets()
+    {
+        ClearData();
+        AfterTest(RemoveScheduledToasts);
+        StartApp();
+        SwitchToWebView();
+
+        SetReminderLeadMinutes("1");
+
+        DateTime first = MinutesAhead(60);
+        Assume.That(first.AddMinutes(6).Date, Is.EqualTo(DateTime.Today), "The planned times cross midnight");
+
+        OpenPage(HabitsPage);
+        for (int i = 0; i < 6; i++)
+            AddHabitPlannedAt($"Timed {i:D2}", first.AddMinutes(i));
+
+        for (int i = 0; i < 6; i += 2)
+            MeasureDayClick($"Timed {i:D2}");
+
+        Dictionary<string, string> afterCompletions = SettledQueue();
+
+        OpenSidebar("bi-gear");
+        WaitForElement("label[for='NotificationLead']").Click();
+        WaitForElement("#closeSidebar").Click();
+
+        Assert.That(WaitUntil(() => ScheduledToasts().Count == 0, DefaultTimeout), Is.True, "Reminders off left toasts in the queue");
+
+        SetReminderLeadMinutes("1");
+
+        Dictionary<string, string> rebuilt = SettledQueue();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(rebuilt.Keys, Is.EquivalentTo(afterCompletions.Keys));
+            Assert.That(rebuilt.Where(toast => afterCompletions.GetValueOrDefault(toast.Key) != toast.Value).Select(toast => toast.Key), Is.Empty, "Toasts whose content differs");
+            Assert.That(afterCompletions.Keys.Count(tag => tag.EndsWith($"-{DateTime.Today:yyyyMMdd}")), Is.EqualTo(3), "Today's toasts of the habits not done");
+        });
+    }
+
+    // The queue once it stops changing for two seconds, since a rebuild after a click changes it a moment later.
+    private Dictionary<string, string> SettledQueue()
+    {
+        Dictionary<string, string> previous = ScheduledToasts();
+
+        for (int i = 0; i < 30; i++)
+        {
+            Thread.Sleep(2000);
+
+            Dictionary<string, string> current = ScheduledToasts();
+
+            if (current.Count == previous.Count && current.All(toast => previous.GetValueOrDefault(toast.Key) == toast.Value))
+                return current;
+
+            previous = current;
+        }
+
+        Assert.Fail("The queue kept changing");
+        return previous;
+    }
+
+    // Ten daily habits with a planned time are a toast for each of them on each day ahead.
+    // Their times are ahead today, so each completion takes today's toast of its habit away.
     [Test]
     [Explicit("Measurement: prints how long a click on a day takes to show, with ten habits reminding and with reminders off")]
     public void DayClick_TenHabitsReminding_MeasuredAgainstRemindersOff()
@@ -110,17 +174,20 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
 
         SetReminderLeadMinutes("1");
 
+        DateTime first = MinutesAhead(60);
+        Assume.That(first.AddMinutes(10).Date, Is.EqualTo(DateTime.Today), "The planned times cross midnight");
+
         OpenPage(HabitsPage);
 
         for (int i = 0; i < 10; i++)
-            AddHabitPlannedAt($"Reminding {i:D2}", DateTime.Today.AddHours(12).AddMinutes(i));
+            AddHabitPlannedAt($"Reminding {i:D2}", first.AddMinutes(i));
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 5; i++)
             AddItem($"Clicked {i:D2}");
 
         int queued = ScheduledToasts().Count;
 
-        List<(double Cell, double Row)> reminding = Enumerable.Range(0, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
+        List<(double Cell, double Row)> reminding = Enumerable.Range(0, 5).Select(i => MeasureDayClick($"Reminding {i:D2}")).ToList();
 
         OpenSidebar("bi-gear");
         // The checkbox turns the reminders off; the clear button only sets the time before to zero.
@@ -129,7 +196,7 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
 
         Assert.That(WaitUntil(() => ScheduledToasts().Count == 0, DefaultTimeout), Is.True, "Reminders off left toasts in the queue");
 
-        List<(double Cell, double Row)> off = Enumerable.Range(5, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
+        List<(double Cell, double Row)> off = Enumerable.Range(0, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
 
         TestContext.Out.WriteLine($"{Host}, {queued} toasts queued");
         TestContext.Out.WriteLine($"Reminding: cell {string.Join(", ", reminding.Select(click => $"{click.Cell:F0}"))} ms, row {string.Join(", ", reminding.Select(click => $"{click.Row:F0}"))} ms");

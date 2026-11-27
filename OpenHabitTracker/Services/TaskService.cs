@@ -69,7 +69,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
         await _appReview.RecordEngagement(EngagementKind.ContentCreated);
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     public async Task UpdateTask()
@@ -86,7 +86,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
             selectedTask.UpdatedAt = task.UpdatedAt;
         }
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     public async Task Start(TaskModel task)
@@ -112,7 +112,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
 
         // the schedule reads only the completion, so only a completed task started again changes it
         if (wasCompleted)
-            await _notificationScheduler.Rebuild();
+            _ = _notificationScheduler.Rebuild();
     }
 
     public async Task SetStartTime(TaskModel task, DateTime startedAt)
@@ -168,7 +168,7 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
         if (!isCompleted)
             await _appReview.RecordEngagement(EngagementKind.Completed);
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
 
         // Un-completing leaves the items as they are, because some were ticked by hand before the task was done.
         if (task.Items is null || isCompleted)
@@ -204,6 +204,6 @@ public class TaskService(ClientState clientState, ISearchFilterService searchFil
             task.UpdatedAt = taskEntity.UpdatedAt;
         }
 
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 }

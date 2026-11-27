@@ -61,56 +61,139 @@ public class PluginNotifications : INotifications
         return Task.CompletedTask;
     }
 
+    // What the plugin holds, by notification number, as this process scheduled it or read it at its first Replace.
+    // The plugin's state belongs to the process, while this service belongs to a scope, so the record is static.
+    private static Dictionary<int, NotificationRequest>? _held;
+
+    // Whether exact timing was allowed when the held ones were set.
+    private static bool _heldExact;
+
+    private static readonly SemaphoreSlim _heldLock = new(1, 1);
+
+    // False where the plugin's pending list is only its own record, which can outlive the system's notifications.
+    protected virtual bool PendingListIsTheSystems => true;
+
+    // Only what changed reaches the plugin: each Show and Cancel reads and rewrites the plugin's whole stored
+    // list, and a CancelAll would also take the notifications already shown off the screen.
     public async Task Replace(IReadOnlyList<NotificationRequest> requests)
     {
-        LocalNotificationCenter.Current.CancelAll();
+        await _heldLock.WaitAsync();
 
-        int id = 1;
-
-        foreach (NotificationRequest request in Budgeted(requests))
+        try
         {
-            if (request.NotifyAt <= DateTime.Now)
-                continue;
+            DateTime now = DateTime.Now;
 
-            PluginNotificationRequest notification = new()
+            Dictionary<int, NotificationRequest> wanted = NotificationDiff.Numbered(Budgeted(requests).Where(request => request.NotifyAt > now));
+
+            bool exact = await IsExactTimingAllowed();
+
+            // A notification keeps the timing it was set with, so a permission granted or revoked since sets them all again.
+            bool setAll = _held is null ? !PendingListIsTheSystems : exact != _heldExact;
+
+            _held ??= await ReadHeld();
+            _heldExact = exact;
+
+            NotificationDiff.Changes<int> changes = NotificationDiff.Compare(_held, wanted, now);
+
+            foreach (int number in changes.Fired)
+                _held.Remove(number);
+
+            if (changes.Removed.Count > 0)
             {
-                NotificationId = id++,
-                Title = request.Title,
-                Description = request.Body,
-                ReturningData = request.Route,
-                Schedule = new NotificationRequestSchedule
-                {
-                    NotifyTime = request.NotifyAt,
-                    Android = new AndroidScheduleOptions
-                    {
-                        // Exact when the user has granted SCHEDULE_EXACT_ALARM; otherwise the plugin
-                        // falls back to an inexact alarm that still fires in Doze. ExactAllowWhileIdle
-                        // would not fire at all without the permission.
-                        ScheduleMode = AndroidScheduleMode.Default,
+                LocalNotificationCenter.Current.Cancel(changes.Removed.ToArray());
 
-                        // An inexact alarm lands anywhere in the hour after its time, while the plugin
-                        // silently drops anything later than this. Its default is one minute, which
-                        // discarded most of what was scheduled.
-                        AllowedDelay = request.AllowedDelay
-                    }
-                }
-            };
+                foreach (int number in changes.Removed)
+                    _held.Remove(number);
+            }
 
-            if (ChannelIdFor(request) is string channelId)
-                notification.Android.ChannelId = channelId;
+            // Setting one that is held again replaces it.
+            IEnumerable<int> toSet = setAll ? wanted.Keys : changes.Added;
 
-            if (SmallIconName is string smallIconName)
-                notification.Android.IconSmallName = new AndroidIcon(smallIconName);
+            foreach (int number in toSet)
+            {
+                await LocalNotificationCenter.Current.Show(ToPluginRequest(number, wanted[number]));
 
-            await LocalNotificationCenter.Current.Show(notification);
+                _held[number] = wanted[number];
+            }
+        }
+        finally
+        {
+            _heldLock.Release();
         }
     }
 
-    public Task CancelAll()
+    // The plugin keeps its pending requests across app starts. An update from a version that numbered them from 1
+    // leaves numbers no request has any more, which the first Replace removes.
+    private static async Task<Dictionary<int, NotificationRequest>> ReadHeld()
     {
-        LocalNotificationCenter.Current.CancelAll();
+        Dictionary<int, NotificationRequest> held = new();
 
-        return Task.CompletedTask;
+        foreach (PluginNotificationRequest pending in await LocalNotificationCenter.Current.GetPendingNotificationList())
+        {
+            if (pending.Schedule.NotifyTime is not DateTimeOffset notifyTime)
+                continue;
+
+            held[pending.NotificationId] = new NotificationRequest
+            {
+                Title = pending.Title ?? string.Empty,
+                Body = pending.Description ?? string.Empty,
+                Route = pending.ReturningData ?? string.Empty,
+                NotifyAt = notifyTime.LocalDateTime
+            };
+        }
+
+        return held;
+    }
+
+    private PluginNotificationRequest ToPluginRequest(int number, NotificationRequest request)
+    {
+        PluginNotificationRequest notification = new()
+        {
+            NotificationId = number,
+            Title = request.Title,
+            Description = request.Body,
+            ReturningData = request.Route,
+            Schedule = new NotificationRequestSchedule
+            {
+                NotifyTime = request.NotifyAt,
+                Android = new AndroidScheduleOptions
+                {
+                    // Exact when the user has granted SCHEDULE_EXACT_ALARM; otherwise the plugin
+                    // falls back to an inexact alarm that still fires in Doze. ExactAllowWhileIdle
+                    // would not fire at all without the permission.
+                    ScheduleMode = AndroidScheduleMode.Default,
+
+                    // An inexact alarm lands anywhere in the hour after its time, while the plugin
+                    // silently drops anything later than this. Its default is one minute, which
+                    // discarded most of what was scheduled.
+                    AllowedDelay = request.AllowedDelay
+                }
+            }
+        };
+
+        if (ChannelIdFor(request) is string channelId)
+            notification.Android.ChannelId = channelId;
+
+        if (SmallIconName is string smallIconName)
+            notification.Android.IconSmallName = new AndroidIcon(smallIconName);
+
+        return notification;
+    }
+
+    public async Task CancelAll()
+    {
+        await _heldLock.WaitAsync();
+
+        try
+        {
+            LocalNotificationCenter.Current.CancelAll();
+
+            _held = new();
+        }
+        finally
+        {
+            _heldLock.Release();
+        }
     }
 
     // Android splits these into two channels so each kind can be silenced in system settings;

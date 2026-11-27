@@ -18,6 +18,7 @@ public class NotificationSchedulerTests
     private IDataAccess _dataAccess = null!;
     private INotifications _notifications = null!;
     private ClientState _clientState = null!;
+    private OpenHabitTracker.Localization.ICultureTarget _cultureTarget = null!;
     private NotificationScheduler _sut = null!;
     private List<NotificationRequest> _replaced = null!;
 
@@ -40,7 +41,9 @@ public class NotificationSchedulerTests
         IStringLocalizer loc = Substitute.For<IStringLocalizer>();
         loc[Arg.Any<string>()].Returns(callInfo => new LocalizedString(callInfo.RequiredArg<string>(), $"[{callInfo.RequiredArg<string>()}]"));
 
-        _clientState = new(new[] { _dataAccess }, new MarkdownToHtml(new MarkdownPipelineBuilder().Build()));
+        // A rebuild from outside the UI applies the app's language, which would otherwise set the culture of the whole test process.
+        _cultureTarget = Substitute.For<OpenHabitTracker.Localization.ICultureTarget>();
+        _clientState = new(new[] { _dataAccess }, new MarkdownToHtml(new MarkdownPipelineBuilder().Build()), _cultureTarget);
         _sut = new(_clientState, _notifications, loc, NullLogger<NotificationScheduler>.Instance);
     }
 
@@ -218,6 +221,7 @@ public class NotificationSchedulerTests
     public async Task Rebuild_CalledWhileOneRuns_StartsAfterItAndHoldsWhatChangedMeanwhile()
     {
         TaskCompletionSource firstReplace = new();
+        TaskCompletionSource firstReplaceStarted = new();
         int replaces = 0;
         List<int?> leadTimes = [];
 
@@ -225,6 +229,7 @@ public class NotificationSchedulerTests
         {
             replaces++;
             leadTimes.Add(_clientState.Settings.NotificationLeadMinutes);
+            firstReplaceStarted.TrySetResult();
             return replaces == 1 ? firstReplace.Task : Task.CompletedTask;
         });
 
@@ -233,7 +238,8 @@ public class NotificationSchedulerTests
 
         Task first = _sut.Rebuild();
 
-        Assert.That(replaces, Is.EqualTo(1), "the first rebuild has not reached Replace");
+        // Replace runs on the thread pool.
+        Assert.That(await Task.WhenAny(firstReplaceStarted.Task, Task.Delay(5000)), Is.SameAs(firstReplaceStarted.Task), "the first rebuild has not reached Replace");
 
         UseSettings(summaryTime: null, leadMinutes: 30);
 
@@ -306,6 +312,97 @@ public class NotificationSchedulerTests
         Assert.That(replaces, Is.EqualTo(2));
     }
 
+    // The calls of a platform go into other processes and take up to seconds, so they never run on the caller's thread.
+    [Test]
+    public async Task Rebuild_Replace_RunsOnTheThreadPoolAndNotOnTheCallersThread()
+    {
+        int callerThread = Environment.CurrentManagedThreadId;
+        int? replaceThread = null;
+        bool? onThreadPool = null;
+        _notifications.Replace(Arg.Any<IReadOnlyList<NotificationRequest>>()).Returns(_ =>
+        {
+            replaceThread = Environment.CurrentManagedThreadId;
+            onThreadPool = Thread.CurrentThread.IsThreadPoolThread;
+            return Task.CompletedTask;
+        });
+        UseSettings(summaryTime: null, leadMinutes: 15);
+
+        await _sut.Rebuild();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(replaceThread, Is.Not.Null.And.Not.EqualTo(callerThread));
+            Assert.That(onThreadPool, Is.True);
+        });
+    }
+
+    [Test]
+    public async Task Rebuild_BothSwitchesOff_CancelsOnTheThreadPool()
+    {
+        int callerThread = Environment.CurrentManagedThreadId;
+        int? cancelThread = null;
+        _notifications.CancelAll().Returns(_ =>
+        {
+            cancelThread = Environment.CurrentManagedThreadId;
+            return Task.CompletedTask;
+        });
+        UseSettings(summaryTime: null, leadMinutes: null);
+
+        await _sut.Rebuild();
+
+        Assert.That(cancelThread, Is.Not.Null.And.Not.EqualTo(callerThread));
+    }
+
+    // Most callers do not wait for the task, so a failure is logged where it happens.
+    [Test]
+    public void Rebuild_ReplaceThrows_LogsTheError()
+    {
+        Microsoft.Extensions.Logging.ILogger<NotificationScheduler> logger = Substitute.For<Microsoft.Extensions.Logging.ILogger<NotificationScheduler>>();
+        IStringLocalizer loc = Substitute.For<IStringLocalizer>();
+        NotificationScheduler sut = new(_clientState, _notifications, loc, logger);
+        InvalidOperationException refused = new("refused");
+        _notifications.Replace(Arg.Any<IReadOnlyList<NotificationRequest>>()).Returns(Task.FromException(refused));
+        UseSettings(summaryTime: null, leadMinutes: 15);
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => sut.Rebuild());
+
+        logger.Received(1).Log(Microsoft.Extensions.Logging.LogLevel.Error, Arg.Any<Microsoft.Extensions.Logging.EventId>(), Arg.Any<Arg.AnyType>(), refused, Arg.Any<Func<Arg.AnyType, Exception?, string>>());
+    }
+
+    [Test]
+    public async Task WhenIdle_NothingAsked_IsDone()
+    {
+        await _sut.WhenIdle();
+
+        Assert.That(_sut.WhenIdle().IsCompleted, Is.True);
+    }
+
+    // A test that changes data through a service waits here for the rebuild the change asked for, without asking for one itself.
+    [Test]
+    public async Task WhenIdle_TwoRebuildsAsked_EndsWhenTheLastHasEnded()
+    {
+        TaskCompletionSource firstReplace = new();
+        int replaces = 0;
+        _notifications.Replace(Arg.Any<IReadOnlyList<NotificationRequest>>()).Returns(_ => ++replaces == 1 ? firstReplace.Task : Task.CompletedTask);
+        UseSettings(summaryTime: null, leadMinutes: 15);
+
+        Task first = _sut.Rebuild();
+        Task second = _sut.Rebuild();
+        Task idle = _sut.WhenIdle();
+
+        await Task.Delay(100);
+        Assert.That(idle.IsCompleted, Is.False);
+
+        firstReplace.SetResult();
+        await idle;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(first.IsCompleted && second.IsCompleted, Is.True);
+            Assert.That(replaces, Is.EqualTo(2));
+        });
+    }
+
     [Test]
     public async Task Rebuild_NoSettingsSavedYet_DoesNothingAndCreatesNone()
     {
@@ -325,6 +422,35 @@ public class NotificationSchedulerTests
 
         Assert.That(_clientState.Settings.Id, Is.EqualTo(4));
         await _notifications.Received(1).CancelAll();
+    }
+
+    // A rebuild in a scope of its own, with no page, applies the saved language and date and time formats before it formats any time.
+    [Test]
+    public async Task Rebuild_SettingsNotLoaded_AppliesTheSavedLanguageBeforeTheRequests()
+    {
+        _dataAccess.GetSettings().Returns(Task.FromResult<IReadOnlyList<SettingsEntity>>([new SettingsEntity { Id = 4, Culture = "de", TimeFormat = "HH:mm", NotificationLeadMinutes = 15 }]));
+        StoreHabits(TimedHabit(1, "Run", 9));
+
+        await _sut.Rebuild();
+
+        Received.InOrder(() =>
+        {
+            _cultureTarget.Apply(Arg.Is<System.Globalization.CultureInfo>(culture => culture.Name == "de" && culture.DateTimeFormat.ShortTimePattern == "HH':'mm"), Arg.Is<System.Globalization.CultureInfo>(culture => culture.Name == "de"));
+            _notifications.Replace(Arg.Any<IReadOnlyList<NotificationRequest>>());
+        });
+    }
+
+    // On the page the culture is the page's, with the patterns of its WebView, which a rebuild must not replace.
+    [Test]
+    public async Task Rebuild_SettingsLoaded_LeavesTheCultureAlone()
+    {
+        UseSettings(summaryTime: null, leadMinutes: 15);
+        StoreHabits(TimedHabit(1, "Run", 9));
+
+        await _sut.Rebuild();
+
+        await _notifications.Received(1).Replace(Arg.Any<IReadOnlyList<NotificationRequest>>());
+        _cultureTarget.DidNotReceive().Apply(Arg.Any<System.Globalization.CultureInfo>(), Arg.Any<System.Globalization.CultureInfo>());
     }
 
     [Test]

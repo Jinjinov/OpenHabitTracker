@@ -41,6 +41,10 @@ public sealed class AndroidNotifications : PluginNotifications
 
     protected override string? SmallIconName => "notification_icon";
 
+    // A force stop and a revoked exact alarm permission take the app's alarms away, and the plugin's stored list
+    // keeps them, so the first Replace of a process sets every alarm again.
+    protected override bool PendingListIsTheSystems => false;
+
     // Before Android 12 exact alarms need no permission, so there is nothing to show or open.
     public override bool CanRequestExactTiming => OperatingSystem.IsAndroidVersionAtLeast(31);
 

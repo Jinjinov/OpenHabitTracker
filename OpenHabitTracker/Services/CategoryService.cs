@@ -157,7 +157,7 @@ public class CategoryService(ClientState clientState, INotificationScheduler not
         }
 
         // The tasks and habits just trashed may have had reminders and digest entries.
-        await _notificationScheduler.Rebuild();
+        _ = _notificationScheduler.Rebuild();
     }
 
     public async Task ToggleCollapsed(CategoryModel category)

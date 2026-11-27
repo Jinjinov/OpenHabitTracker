@@ -473,7 +473,7 @@
     {
         await ClientState.UpdateSettings();
 
-        await NotificationScheduler.Rebuild();
+        _ = NotificationScheduler.Rebuild();
 
         // A setting that was just turned on may have asked for the permission and been answered.
         _notificationPermission = await Notifications.GetPermission();

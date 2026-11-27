@@ -295,8 +295,6 @@
         // A resumed window arrives from outside the renderer.
         NotificationRebuildRelay.SetRebuildAction(() => InvokeAsync(NotificationScheduler.Rebuild));
 
-        await NotificationScheduler.Rebuild();
-
         Logger.LogInformation("MainLayout.OnInitializedAsync end");
     }
 
@@ -337,7 +335,7 @@
         if (_firstRenderDone)
             await InvokeAsync(SetLook);
 
-        await NotificationScheduler.Rebuild();
+        _ = NotificationScheduler.Rebuild();
     }
 
     private async Task SetLook()
@@ -430,7 +428,9 @@
             ClientState.AutomaticTimeFormat = parts is null ? null : Localization.BrowserPatterns.ToTimePattern(parts.Time, parts.HourCycle);
             ClientState.SetCulture();
 
-            await NotificationScheduler.Rebuild();
+            // The first rebuild of a start, and only after the WebView's patterns: the times in the notifications read as
+            // everywhere else in the app, and a rebuild before them would change every text and then change it back.
+            _ = NotificationScheduler.Rebuild();
 
             SetDynamicComponentParameters();
 

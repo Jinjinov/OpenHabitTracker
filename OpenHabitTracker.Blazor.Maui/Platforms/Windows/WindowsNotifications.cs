@@ -73,36 +73,22 @@ public sealed class WindowsNotifications(ILogger<WindowsNotifications> logger) :
         return Task.FromResult(true);
     }
 
+    // What Windows holds in its queue for this app, by tag, as this process added it or read it at its first Replace,
+    // and the toast objects, which are what removes one. The queue belongs to the process, while this service
+    // belongs to a scope, so the record is static.
+    private static Dictionary<string, NotificationRequest>? _held;
+
+    private static Dictionary<string, ScheduledToastNotification> _heldToasts = new();
+
+    private static readonly object _heldLock = new();
+
+    // Only what changed reaches Windows, since every add and remove is a call into another process.
     public Task Replace(IReadOnlyList<NotificationRequest> requests)
     {
         try
         {
-            ToastNotifierCompat notifier = ToastNotificationManagerCompat.CreateToastNotifier();
-
-            RemoveAll(notifier);
-
-            foreach (NotificationRequest request in requests)
-            {
-                // Windows rejects a moment in the past, and time passes between building and adding.
-                if (request.NotifyAt <= DateTime.Now)
-                    continue;
-
-                // One request Windows refuses must not leave every later one unscheduled.
-                try
-                {
-                    ScheduledToastNotification toast = new(BuildContent(request), request.NotifyAt)
-                    {
-                        Tag = request.Id.Length <= 64 ? request.Id : request.Id.Substring(0, 64),
-                        Group = Group
-                    };
-
-                    notifier.AddToSchedule(toast);
-                }
-                catch (Exception exception)
-                {
-                    _logger.LogError(exception, "Scheduling the notification {Id} failed", request.Id);
-                }
-            }
+            lock (_heldLock)
+                ReplaceChanged(requests);
         }
         catch (Exception exception)
         {
@@ -113,11 +99,124 @@ public sealed class WindowsNotifications(ILogger<WindowsNotifications> logger) :
         return Task.CompletedTask;
     }
 
+    private void ReplaceChanged(IReadOnlyList<NotificationRequest> requests)
+    {
+        ToastNotifierCompat notifier = ToastNotificationManagerCompat.CreateToastNotifier();
+
+        DateTime now = DateTime.Now;
+
+        // Windows rejects a moment in the past, and time passes between building and adding.
+        Dictionary<string, NotificationRequest> wanted = new();
+
+        foreach (NotificationRequest request in requests)
+        {
+            if (request.NotifyAt > now)
+                wanted[TagOf(request)] = request;
+        }
+
+        _held ??= ReadHeld(notifier);
+
+        NotificationDiff.Changes<string> changes = NotificationDiff.Compare(_held, wanted, now);
+
+        foreach (string tag in changes.Fired)
+        {
+            _held.Remove(tag);
+            _heldToasts.Remove(tag);
+        }
+
+        // Before the additions: a second toast with the same tag is queued beside the first instead of replacing it.
+        foreach (string tag in changes.Removed)
+        {
+            try
+            {
+                notifier.RemoveFromSchedule(_heldToasts[tag]);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Removing the notification {Id} failed", tag);
+            }
+
+            _held.Remove(tag);
+            _heldToasts.Remove(tag);
+        }
+
+        foreach (string tag in changes.Added)
+        {
+            NotificationRequest request = wanted[tag];
+
+            // One request Windows refuses must not leave every later one unscheduled.
+            try
+            {
+                ScheduledToastNotification toast = new(BuildContent(request), request.NotifyAt)
+                {
+                    Tag = tag,
+                    Group = Group
+                };
+
+                notifier.AddToSchedule(toast);
+
+                _held[tag] = request;
+                _heldToasts[tag] = toast;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Scheduling the notification {Id} failed", request.Id);
+            }
+        }
+    }
+
+    // Windows keeps its queue across app starts. The texts are read back from the content BuildContent made.
+    // A tag queued twice keeps one toast, and the other is removed, since only one of them could be removed later.
+    private Dictionary<string, NotificationRequest> ReadHeld(ToastNotifierCompat notifier)
+    {
+        Dictionary<string, NotificationRequest> held = new();
+
+        _heldToasts = new();
+
+        foreach (ScheduledToastNotification scheduled in notifier.GetScheduledToastNotifications())
+        {
+            if (scheduled.Group != Group)
+                continue;
+
+            if (_heldToasts.ContainsKey(scheduled.Tag))
+            {
+                notifier.RemoveFromSchedule(scheduled);
+                continue;
+            }
+
+            XmlNodeList texts = scheduled.Content.GetElementsByTagName("text");
+
+            held[scheduled.Tag] = new NotificationRequest
+            {
+                Id = scheduled.Tag,
+                Title = texts.Count > 0 ? texts[0].InnerText : string.Empty,
+                Body = texts.Count > 1 ? texts[1].InnerText : string.Empty,
+                Route = scheduled.Content.DocumentElement.GetAttribute("launch"),
+                NotifyAt = scheduled.DeliveryTime.LocalDateTime
+            };
+
+            _heldToasts[scheduled.Tag] = scheduled;
+        }
+
+        return held;
+    }
+
+    private static string TagOf(NotificationRequest request)
+    {
+        return request.Id.Length <= 64 ? request.Id : request.Id.Substring(0, 64);
+    }
+
     public Task CancelAll()
     {
         try
         {
-            RemoveAll(ToastNotificationManagerCompat.CreateToastNotifier());
+            lock (_heldLock)
+            {
+                RemoveAll(ToastNotificationManagerCompat.CreateToastNotifier());
+
+                _held = new();
+                _heldToasts = new();
+            }
         }
         catch (Exception exception)
         {

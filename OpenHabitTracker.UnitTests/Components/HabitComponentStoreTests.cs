@@ -166,6 +166,9 @@ public class HabitComponentStoreTests
 
         cut.Find(TimeRow).Change("18:30");
 
+        // The save does not wait for the platform.
+        await ((NotificationScheduler)_app.Get<INotificationScheduler>()).WhenIdle();
+
         await _app.Notifications.Received(1).Replace(Arg.Is<IReadOnlyList<NotificationRequest>>(x => x.Any(r => r.Id.StartsWith($"habit-{_habit.Id}-") && r.NotifyAt.TimeOfDay == new TimeSpan(18, 30, 0))));
     }
 

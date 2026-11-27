@@ -208,7 +208,100 @@ public class NotificationTests : AndroidTest
             "Done today did not leave only tomorrow's reminder: " + string.Join(", ", PendingAlarms()));
     }
 
-    // Each completion rebuilds the whole schedule before the row shows it, and ten daily habits with a planned time fill the budget of 64 every time.
+    // A save changes only the alarms that change, so a reminder already on screen is not taken off it.
+    [Test]
+    public void HabitReminder_OnScreenWhenAnotherHabitIsDone_StaysOnScreen()
+    {
+        string title = $"On screen {DateTime.Now:HHmmss}";
+
+        StartWithPermissionsGranted();
+        StopRemindingAfterTest();
+        SetReminderLeadMinutes("1");
+
+        DateTime plannedAt = MinutesAheadOnTheDevice(2);
+        Assume.That(plannedAt.Date, Is.EqualTo(DeviceNow().Date), "The planned time crosses midnight");
+
+        OpenPage(HabitsPage);
+        AddItem("Another habit");
+        AddHabitPlannedAt(title, plannedAt);
+
+        Driver.Context = NativeContext;
+        Assert.That(WaitUntil(() => ActiveNotifications().Contains(title), TimeSpan.FromMinutes(4)), Is.True, "The reminder never arrived");
+
+        SwitchToWebView();
+        MeasureDayClick("Another habit");
+
+        Driver.Context = NativeContext;
+        Assert.That(WaitUntil(() => !ActiveNotifications().Contains(title), TimeSpan.FromSeconds(10)), Is.False, "A completion of another habit took the reminder off the screen");
+    }
+
+    // A force stop takes the app's alarms away while the plugin's stored list keeps them; the next start sets them again.
+    [Test]
+    public void HabitReminder_AppForceStopped_AlarmsAreBackAfterTheNextStart()
+    {
+        StartWithPermissionsGranted();
+        StopRemindingAfterTest();
+        SetReminderLeadMinutes("1");
+
+        OpenPage(HabitsPage);
+        AddHabitPlannedAt($"Force stopped {DateTime.Now:HHmmss}", DateTime.Today.AddHours(12));
+
+        Driver.Context = NativeContext;
+        List<string> scheduled = SettledAlarms();
+        Assert.That(scheduled, Is.Not.Empty, "Nothing is scheduled");
+
+        Shell("am", "force-stop", AppPackage);
+        Assert.That(PendingAlarms(), Is.Empty, "The force stop left alarms");
+
+        LaunchApp();
+        SwitchToWebView();
+        WaitForElement("main#main-content", StartupTimeout);
+
+        Driver.Context = NativeContext;
+        Assert.That(WaitUntil(() => AlarmMoments().SequenceEqual(scheduled), DefaultTimeout), Is.True,
+            $"The start did not set the alarms again: {string.Join(", ", AlarmMoments())}");
+    }
+
+    // The alarms after a run of completions are the ones a rebuild from nothing sets, which reminders off and on again is.
+    // The planned times are ahead today, so each completion takes today's alarm away and lets one more into the 64.
+    [Test]
+    public void HabitReminders_AfterCompletions_AreTheOnesARebuildFromNothingSets()
+    {
+        StartWithPermissionsGranted();
+        StopRemindingAfterTest();
+        SetReminderLeadMinutes("1");
+
+        DateTime first = MinutesAheadOnTheDevice(60);
+        Assume.That(first.AddMinutes(12).Date, Is.EqualTo(DeviceNow().Date), "The planned times cross midnight");
+
+        OpenPage(HabitsPage);
+        for (int i = 0; i < 12; i++)
+            AddHabitPlannedAt($"Timed {i:D2}", first.AddMinutes(i));
+
+        for (int i = 0; i < 12; i += 2)
+            MeasureDayClick($"Timed {i:D2}");
+
+        Driver.Context = NativeContext;
+        List<string> afterCompletions = SettledAlarms();
+
+        SwitchToWebView();
+        OpenSidebar("bi-gear");
+        WaitForElement("label[for='NotificationLead']").Click();
+        WaitForElement("#closeSidebar").Click();
+
+        Driver.Context = NativeContext;
+        Assert.That(WaitUntil(() => PendingAlarms().Count == 0, DefaultTimeout), Is.True, "Reminders off left alarms");
+
+        SwitchToWebView();
+        SetReminderLeadMinutes("1");
+
+        Driver.Context = NativeContext;
+        Assert.That(SettledAlarms(), Is.EqualTo(afterCompletions));
+        Assert.That(afterCompletions, Has.Count.EqualTo(64));
+    }
+
+    // Ten daily habits with a planned time fill the budget of 64. Their times are ahead today,
+    // so each completion takes today's alarm of its habit away and lets one more into the 64.
     [Test]
     [Explicit("Measurement: prints how long a click on a day takes to show, with ten habits reminding and with reminders off")]
     public void DayClick_TenHabitsReminding_MeasuredAgainstRemindersOff()
@@ -217,19 +310,22 @@ public class NotificationTests : AndroidTest
         StopRemindingAfterTest();
         SetReminderLeadMinutes("1");
 
+        DateTime first = MinutesAheadOnTheDevice(60);
+        Assume.That(first.AddMinutes(10).Date, Is.EqualTo(DeviceNow().Date), "The planned times cross midnight");
+
         OpenPage(HabitsPage);
 
         for (int i = 0; i < 10; i++)
-            AddHabitPlannedAt($"Reminding {i:D2}", DateTime.Today.AddHours(12).AddMinutes(i));
+            AddHabitPlannedAt($"Reminding {i:D2}", first.AddMinutes(i));
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 5; i++)
             AddItem($"Clicked {i:D2}");
 
         Driver.Context = NativeContext;
         Assert.That(WaitUntil(() => PendingAlarms().Count == 64, DefaultTimeout), Is.True, $"The budget is not full: {PendingAlarms().Count} alarms");
 
         SwitchToWebView();
-        List<(double Cell, double Row)> reminding = Enumerable.Range(0, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
+        List<(double Cell, double Row)> reminding = Enumerable.Range(0, 5).Select(i => MeasureDayClick($"Reminding {i:D2}")).ToList();
 
         OpenSidebar("bi-gear");
         // The checkbox turns the reminders off; the clear button only sets the time before to zero.
@@ -240,7 +336,7 @@ public class NotificationTests : AndroidTest
         Assert.That(WaitUntil(() => PendingAlarms().Count == 0, DefaultTimeout), Is.True, "Reminders off left alarms");
 
         SwitchToWebView();
-        List<(double Cell, double Row)> off = Enumerable.Range(5, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
+        List<(double Cell, double Row)> off = Enumerable.Range(0, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
 
         TestContext.Out.WriteLine($"Reminding: cell {string.Join(", ", reminding.Select(click => $"{click.Cell:F0}"))} ms, row {string.Join(", ", reminding.Select(click => $"{click.Row:F0}"))} ms");
         TestContext.Out.WriteLine($"Off: cell {string.Join(", ", off.Select(click => $"{click.Cell:F0}"))} ms, row {string.Join(", ", off.Select(click => $"{click.Row:F0}"))} ms");
@@ -400,10 +496,16 @@ public class NotificationTests : AndroidTest
     }
 
     // Put back to the default after the test; revoking it kills the app, which the test is done with by then.
+    // The switch on the system page sets the mode of the app's uid, which wins over the package's, so both are set.
     private void SetExactAlarmPermission(string mode)
     {
-        RestoreAfterTest(() => Shell("cmd", "appops", "set", AppPackage, "SCHEDULE_EXACT_ALARM", "default"));
+        RestoreAfterTest(() =>
+        {
+            Shell("cmd", "appops", "set", "--uid", AppPackage, "SCHEDULE_EXACT_ALARM", "default");
+            Shell("cmd", "appops", "set", AppPackage, "SCHEDULE_EXACT_ALARM", "default");
+        });
 
+        Shell("cmd", "appops", "set", "--uid", AppPackage, "SCHEDULE_EXACT_ALARM", mode);
         Shell("cmd", "appops", "set", AppPackage, "SCHEDULE_EXACT_ALARM", mode);
     }
 
@@ -436,6 +538,55 @@ public class NotificationTests : AndroidTest
     }
 
     // An alarm's time as dumpsys alarm shows it, at the moment or a millisecond before it, where the A52s stores some.
+    // The section of dumpsys notification that lists the notifications on screen now. The sections after it, Samsung's
+    // NotificationReminder and the history among them, also name notifications that are gone.
+    private string ActiveNotifications()
+    {
+        string dump = Shell("dumpsys", "notification", "--noredact");
+
+        int start = dump.IndexOf("  Notification List:", StringComparison.Ordinal);
+        int end = start < 0 ? -1 : dump.IndexOf("\n  ", dump.IndexOf('\n', start) + 1, StringComparison.Ordinal);
+
+        Assert.That(start, Is.Not.Negative, "dumpsys notification has no Notification List");
+
+        // Each notification of the list is indented deeper than the section names, so the list ends at the next line indented by two.
+        while (end >= 0 && end + 3 < dump.Length && dump[end + 3] == ' ')
+            end = dump.IndexOf("\n  ", end + 1, StringComparison.Ordinal);
+
+        return end < 0 ? dump[start..] : dump[start..end];
+    }
+
+    // The moments of the app's pending alarms to the nearest minute, in order: the plugin sets some a millisecond before it.
+    private List<string> AlarmMoments()
+    {
+        return PendingAlarms()
+            .Select(alarm => DateTime.ParseExact(alarm.OrigWhen, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture).AddSeconds(30))
+            .Select(moment => moment.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture))
+            .OrderBy(moment => moment, StringComparer.Ordinal)
+            .ToList();
+    }
+
+    // The alarms once they stop changing for two seconds, since a rebuild after a click sets them a moment later.
+    private List<string> SettledAlarms()
+    {
+        List<string> previous = AlarmMoments();
+
+        for (int i = 0; i < 30; i++)
+        {
+            Thread.Sleep(2000);
+
+            List<string> current = AlarmMoments();
+
+            if (current.SequenceEqual(previous))
+                return current;
+
+            previous = current;
+        }
+
+        Assert.Fail("The alarms kept changing");
+        return previous;
+    }
+
     private static bool IsAt(string origWhen, DateTime moment)
     {
         DateTime when = DateTime.ParseExact(origWhen, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);

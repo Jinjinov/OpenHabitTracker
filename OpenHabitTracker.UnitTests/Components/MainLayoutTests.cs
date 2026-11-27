@@ -191,6 +191,38 @@ public class MainLayoutTests
         });
     }
 
+    // A rebuild before the WebView's patterns would format every time with the language's pattern, and the next with the WebView's.
+    [Test]
+    public async Task Start_RebuildsOnceAndOnlyWithTheWebViewPatternsApplied()
+    {
+        BrowserDateTimeParts parts = new()
+        {
+            Date = [new() { Type = "day", Value = "14" }, new() { Type = "literal", Value = "." }, new() { Type = "month", Value = "03" }, new() { Type = "literal", Value = "." }, new() { Type = "year", Value = "2026" }],
+            Time = [new() { Type = "hour", Value = "09" }, new() { Type = "literal", Value = ":" }, new() { Type = "minute", Value = "05" }],
+            HourCycle = "h23"
+        };
+        _app.JsInterop.GetDateTimeParts().Returns(parts);
+        _app.Notifications.CanNotify.Returns(true);
+
+        List<string?> timePatternsAtReplace = [];
+        _app.Notifications.When(notifications => notifications.Replace(Arg.Any<IReadOnlyList<OpenHabitTracker.Services.NotificationRequest>>())).Do(_ =>
+        {
+            System.Globalization.CultureInfo? applied = _app.CultureTarget.ReceivedCalls()
+                .Where(call => call.GetMethodInfo().Name == nameof(OpenHabitTracker.Localization.ICultureTarget.Apply))
+                .Select(call => (System.Globalization.CultureInfo)call.GetArguments()[0]!)
+                .LastOrDefault();
+            timePatternsAtReplace.Add(applied?.DateTimeFormat.ShortTimePattern);
+        });
+
+        await _app.Start(settings => settings.NotificationLeadMinutes = 15);
+
+        IRenderedComponent<Main> cut = RenderMain();
+        cut.WaitForElement("#main-content");
+        cut.WaitForAssertion(() => Assert.That(timePatternsAtReplace, Is.Not.Empty));
+
+        Assert.That(timePatternsAtReplace, Is.EqualTo(new[] { "HH':'mm" }));
+    }
+
     [Test]
     public async Task Look_DataReplacedLater_SetsTheLookAgain()
     {

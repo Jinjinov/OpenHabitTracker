@@ -711,6 +711,26 @@ public class HabitServiceTests
         Assert.That(_clientState.Times, Has.Count.EqualTo(1));
     }
 
+    // A click on a day must not wait for the platform, whose calls can take seconds.
+    [Test]
+    public async Task AddTimeDone_RebuildStillRunning_Returns()
+    {
+        HabitModel habit = TestData.Habit(id: 1);
+        habit.TimesDone = [];
+        habit.TimesDoneByDay = new();
+        _clientState.Habits = TestData.HabitDict(habit);
+        _clientState.Times = new();
+        TaskCompletionSource rebuild = new();
+        _notificationScheduler.Rebuild().Returns(rebuild.Task);
+
+        Task added = _sut.AddTimeDone(habit, DateTime.Now);
+
+        Assert.That(await Task.WhenAny(added, Task.Delay(5000)), Is.SameAs(added), "The completion waited for the rebuild");
+        await _notificationScheduler.Received(1).Rebuild();
+
+        rebuild.SetResult();
+    }
+
     [Test]
     public async Task RemoveTimeDone_RemovesTimeModel_FromClientStateTimes()
     {
