@@ -37,6 +37,9 @@
         <!-- App Identifier -->
         <ApplicationId>net.openhabittracker</ApplicationId>
 
+        <!-- The device tests' Release build passes WebViewDevTools=true: a phone, unlike the emulator, lets no tool into the WebView of an app that does not allow it. -->
+        <DefineConstants Condition="'$(WebViewDevTools)' == 'true'">$(DefineConstants);WEBVIEW_DEVTOOLS</DefineConstants>
+
         <!--
         if ApplicationDisplayVersion != 1.0
         Assets file 'project.assets.json' doesn't have a target for 'net10.0-windows10.0.19041.0'. 

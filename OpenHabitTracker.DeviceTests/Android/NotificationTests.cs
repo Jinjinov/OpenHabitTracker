@@ -164,7 +164,7 @@ public class NotificationTests : AndroidTest
         string route = AddHabitPlannedAt(title, plannedAt);
 
         Driver.Context = NativeContext;
-        Assert.That(WaitUntil(() => PendingAlarms().Any(alarm => alarm.OrigWhen.StartsWith(plannedAt.AddMinutes(-1).ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)) && alarm.Exact), DefaultTimeout), Is.True,
+        Assert.That(WaitUntil(() => PendingAlarms().Any(alarm => IsAt(alarm.OrigWhen, plannedAt.AddMinutes(-1)) && alarm.Exact), DefaultTimeout), Is.True,
             "Today's reminder is not scheduled exactly: " + string.Join(", ", PendingAlarms()));
 
         TapNotification(title, killed);
@@ -190,21 +190,21 @@ public class NotificationTests : AndroidTest
         DateTime plannedAt = MinutesAheadOnTheDevice(30);
         Assume.That(plannedAt.Date, Is.EqualTo(DeviceNow().Date), "The planned time crosses midnight");
 
-        string today = plannedAt.AddMinutes(-1).ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-        string tomorrow = plannedAt.AddDays(1).AddMinutes(-1).ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+        DateTime today = plannedAt.AddMinutes(-1);
+        DateTime tomorrow = plannedAt.AddDays(1).AddMinutes(-1);
 
         OpenPage(HabitsPage);
         AddHabitPlannedAt(title, plannedAt);
 
         Driver.Context = NativeContext;
-        Assert.That(WaitUntil(() => PendingAlarms() is List<(string OrigWhen, bool Exact)> alarms && alarms.Any(alarm => alarm.OrigWhen.StartsWith(today)) && alarms.Any(alarm => alarm.OrigWhen.StartsWith(tomorrow)), DefaultTimeout), Is.True,
+        Assert.That(WaitUntil(() => PendingAlarms() is List<(string OrigWhen, bool Exact)> alarms && alarms.Any(alarm => IsAt(alarm.OrigWhen, today)) && alarms.Any(alarm => IsAt(alarm.OrigWhen, tomorrow)), DefaultTimeout), Is.True,
             "Today's and tomorrow's reminders are not scheduled: " + string.Join(", ", PendingAlarms()));
 
         SwitchToWebView();
         CompleteToday(title);
 
         Driver.Context = NativeContext;
-        Assert.That(WaitUntil(() => PendingAlarms() is List<(string OrigWhen, bool Exact)> alarms && !alarms.Any(alarm => alarm.OrigWhen.StartsWith(today)) && alarms.Any(alarm => alarm.OrigWhen.StartsWith(tomorrow)), DefaultTimeout), Is.True,
+        Assert.That(WaitUntil(() => PendingAlarms() is List<(string OrigWhen, bool Exact)> alarms && !alarms.Any(alarm => IsAt(alarm.OrigWhen, today)) && alarms.Any(alarm => IsAt(alarm.OrigWhen, tomorrow)), DefaultTimeout), Is.True,
             "Done today did not leave only tomorrow's reminder: " + string.Join(", ", PendingAlarms()));
     }
 
@@ -232,7 +232,8 @@ public class NotificationTests : AndroidTest
         List<(double Cell, double Row)> reminding = Enumerable.Range(0, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
 
         OpenSidebar("bi-gear");
-        WaitForElement("[data-settings-step-33] button").Click();
+        // The checkbox turns the reminders off; the clear button only sets the time before to zero.
+        WaitForElement("label[for='NotificationLead']").Click();
         WaitForElement("#closeSidebar").Click();
 
         Driver.Context = NativeContext;
@@ -432,6 +433,14 @@ public class NotificationTests : AndroidTest
     private DateTime DeviceNow()
     {
         return DateTime.ParseExact(Shell("date", "+%Y-%m-%dT%H:%M:%S").Trim(), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
+    }
+
+    // An alarm's time as dumpsys alarm shows it, at the moment or a millisecond before it, where the A52s stores some.
+    private static bool IsAt(string origWhen, DateTime moment)
+    {
+        DateTime when = DateTime.ParseExact(origWhen, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+        return (moment - when).Duration() < TimeSpan.FromSeconds(1);
     }
 
     // The app's pending alarms from dumpsys alarm. Only blocks that open with an Alarm{} header are pending;

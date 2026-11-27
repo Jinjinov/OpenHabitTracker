@@ -56,8 +56,10 @@ public static class MauiProgram
 
         builder.UseNotifications();
 
-#if DEBUG
+#if DEBUG || WEBVIEW_DEVTOOLS
         builder.Services.AddBlazorWebViewDeveloperTools();
+#endif
+#if DEBUG
         builder.Logging.AddDebug();
         //builder.Logging.SetMinimumLevel(LogLevel.Debug);
 #endif

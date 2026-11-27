@@ -28,10 +28,11 @@ $apkFolder = Join-Path $DeviceTestsFolder 'apks'
 New-Item -ItemType Directory -Force $apkFolder | Out-Null
 
 # Builds the app in the given copy of the source and returns the APK, checked to carry the test package id.
+# WebViewDevTools lets Appium into the page on a phone, which, unlike the emulator, keeps a Release build's WebView closed.
 function Build-Apk([string]$Root, [string]$LogFile) {
     Push-Location (Join-Path $Root 'OpenHabitTracker.Blazor.Maui')
     try {
-        dotnet build -f net10.0-android -c Release "-p:ApplicationId=$PackageId" *> $LogFile
+        dotnet build -f net10.0-android -c Release "-p:ApplicationId=$PackageId" "-p:WebViewDevTools=true" *> $LogFile
         if ($LASTEXITCODE -ne 0) { throw "The build failed, see $LogFile" }
     }
     finally {

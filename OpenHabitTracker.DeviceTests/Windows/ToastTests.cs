@@ -123,7 +123,8 @@ public class ToastTests(WindowsHost host) : WindowsTest(host)
         List<(double Cell, double Row)> reminding = Enumerable.Range(0, 5).Select(i => MeasureDayClick($"Clicked {i:D2}")).ToList();
 
         OpenSidebar("bi-gear");
-        WaitForElement("[data-settings-step-33] button").Click();
+        // The checkbox turns the reminders off; the clear button only sets the time before to zero.
+        WaitForElement("label[for='NotificationLead']").Click();
         WaitForElement("#closeSidebar").Click();
 
         Assert.That(WaitUntil(() => ScheduledToasts().Count == 0, DefaultTimeout), Is.True, "Reminders off left toasts in the queue");
